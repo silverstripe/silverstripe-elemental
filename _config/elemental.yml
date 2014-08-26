@@ -1,0 +1,23 @@
+---
+Name: elemental
+---
+
+ElementPage:
+  allowed_elements:
+    'ElementContent' : 'Content'
+    'ElementImage' : 'Image'
+    'ElementContact' : 'Contact'
+    'ElementList' : 'Element List'
+
+ElementList:
+  allowed_elements:
+    'ElementFile' : 'File'
+    'ElementInternalLink' : 'Internal Link'
+    'ElementExternalLink' : 'External Link'
+
+ElementImage:
+  css_styles:
+    - 'image_large' : 'Large'
+    - 'image_medium' : 'Normal'
+    - 'image_small' : 'Small'
+
