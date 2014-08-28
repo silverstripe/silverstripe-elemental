@@ -46,7 +46,9 @@ The module has 7 elements by default:
 	    - 'image_small' : 'Small'
 ````
 ## Installation
-Clone this repo in your silverstripe website root folder, run dev/build.
+Install the module through composer:
+````
+composer require dnadesign/silverstripe-elemental
+````
+Alternatively, clone this repo in your silverstripe website root folder, run dev/build.
 
-## To Do
-- move to composer
