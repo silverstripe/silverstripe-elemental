@@ -2,13 +2,6 @@
 Name: elemental
 ---
 
-ElementPage:
-  allowed_elements:
-    'ElementContent' : 'Content'
-    'ElementImage' : 'Image'
-    'ElementContact' : 'Contact'
-    'ElementList' : 'Element List'
-
 ElementList:
   allowed_elements:
     'ElementFile' : 'File'

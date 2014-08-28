@@ -1,5 +1,5 @@
 {
-	"name": "dnadesign/silvertsripe-elemental",
+	"name": "dnadesign/silverstripe-elemental",
 	"description": "Elemental pagetype and collection of Elements",
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "element", "widget"],
@@ -14,6 +14,7 @@
 	{
 		"silverstripe/framework": "~3.1",
 		"silverstripe/cms": "~3.1",
+		"silverstripe/widgets": "dev-master",
 		"ajshort/silverstripe-gridfieldextensions": "~1.0.0",
 		"ajshort/silverstripe-addressable": "dev-master"
 	}

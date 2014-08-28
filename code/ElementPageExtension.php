@@ -1,5 +1,5 @@
 <?php
-class ElementPage extends Page {
+class ElementPageExtension extends DataExtension {
 
 	private static $description = 'Page containing multiple Elements';
 
@@ -15,23 +15,20 @@ class ElementPage extends Page {
 	 *
 	 * @return FieldList
 	 */
-	public function getCMSFields(){
-		$fields = parent::getCMSFields();
+	public function updateCMSFields(FieldList $fields){
 
 		$fields->removeByName('Content');
 
-		if($this->ElementArea()->exists()){
-
 			$adder = new GridFieldAddNewMultiClass();
 
-			if(is_array($this->config()->get('allowed_elements'))){
-				$adder->setClasses($this->config()->get('allowed_elements'));
+			if(is_array($this->owner->config()->get('allowed_elements'))){
+				$adder->setClasses($this->owner->config()->get('allowed_elements'));
 			} else {
-				user_error('No widgets allowed for '.$this->ClassName);
+				user_error('No widgets allowed for '.$this->owner->ClassName);
 			}
 
 			$gridField = GridField::create('ElementArea', 'Elements',
-				$this->ElementArea()->Widgets(),
+				$this->owner->ElementArea()->Widgets(),
 				GridFieldConfig_RelationEditor::create()
 					->removeComponentsByType('GridFieldAddNewButton')
 					->addComponent($adder)
@@ -43,7 +40,6 @@ class ElementPage extends Page {
 			$paginator->setItemsPerPage(100);
 
 			$fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
-		}
 
 		return $fields;
 	}
@@ -52,11 +48,11 @@ class ElementPage extends Page {
 	 * Make sure there is always a WidgetArea sidebar for adding widgets
 	 *
 	 */
-	protected function onBeforeWrite(){
-		$elements = $this->ElementArea();
+	public function onBeforeWrite(){
+		$elements = $this->owner->ElementArea();
 		if(!$elements->isInDB()) {
 			$elements->write();
-			$this->ElementAreaID = $elements->ID;
+			$this->owner->ElementAreaID = $elements->ID;
 		}
 		// Copy widgets content to Content to enable search
 		else {
@@ -64,7 +60,7 @@ class ElementPage extends Page {
 			foreach ($elements->Items() as $element) {
 				array_push($searchableContent, strip_tags($element->Content()));
 			}
-			$this->Content = implode(' ', $searchableContent);
+			$this->owner->Content = implode(' ', $searchableContent);
 		}
 
 		parent::onBeforeWrite();
@@ -76,8 +72,8 @@ class ElementPage extends Page {
 	 * @return Page The duplicated page
 	 */
 	public function onBeforeDuplicate($duplicatePage) {
-		if($this->hasField('ElementAreaID')) {
-			$wa = $this->getComponent('ElementArea');
+		if($this->owner->hasField('ElementAreaID')) {
+			$wa = $this->owner->getComponent('ElementArea');
 			$duplicateWidgetArea = $wa->duplicate();
 
 			foreach($wa->Items() as $originalWidget) {
@@ -89,17 +85,4 @@ class ElementPage extends Page {
 		}
 		return $duplicatePage;
 	}
-
-	/**
-	 * Renders the page with the right template
-	 *
-	 * @return Html
-	 */
-	public function forTemplate() {
-		return $this->renderWith(array('ElementPage', 'Page'));
-	}
-
-}
-
-class ElementPage_Controller extends Page_Controller {
 }
