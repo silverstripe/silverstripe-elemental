@@ -1,6 +1,9 @@
 ---
 Name: elemental
 ---
+Widget:
+  extensions:
+    - 'VersionedDataObject'
 
 ElementList:
   allowed_elements:

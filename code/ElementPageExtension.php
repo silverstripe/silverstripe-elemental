@@ -19,27 +19,31 @@ class ElementPageExtension extends DataExtension {
 
 		$fields->removeByName('Content');
 
-			$adder = new GridFieldAddNewMultiClass();
+		$adder = new GridFieldAddNewMultiClass();
 
-			if(is_array($this->owner->config()->get('allowed_elements'))){
-				$adder->setClasses($this->owner->config()->get('allowed_elements'));
-			} else {
-				user_error('No widgets allowed for '.$this->owner->ClassName);
-			}
+		if(is_array($this->owner->config()->get('allowed_elements'))){
+			$adder->setClasses($this->owner->config()->get('allowed_elements'));
+		} else {
+			user_error('No widgets allowed for '.$this->owner->ClassName);
+		}
 
-			$gridField = GridField::create('ElementArea', 'Elements',
-				$this->owner->ElementArea()->Widgets(),
-				GridFieldConfig_RelationEditor::create()
-					->removeComponentsByType('GridFieldAddNewButton')
-					->addComponent($adder)
-					->removeComponentsByType('GridFieldAddExistingAutoCompleter')
-					->addComponent(new GridFieldOrderableRows())
-			);
-			$gridFieldConfig = $gridField->getConfig();
-			$paginator = $gridFieldConfig->getComponentByType('GridFieldPaginator');
-			$paginator->setItemsPerPage(100);
+		$gridField = GridField::create('ElementArea', 'Elements',
+			$this->owner->ElementArea()->Widgets(),
+			GridFieldConfig_RelationEditor::create()
+				->removeComponentsByType('GridFieldAddNewButton')
+				->addComponent($adder)
+				->removeComponentsByType('GridFieldAddExistingAutoCompleter')
+				->addComponent(new GridFieldOrderableRows())
+		);
 
-			$fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
+		$config = $gridField->getConfig();
+		$paginator = $config->getComponentByType('GridFieldPaginator');
+		$paginator->setItemsPerPage(100);
+
+		$config->removeComponentsByType('GridFieldDetailForm');
+        $config->addComponent(new VersionedDataObjectDetailsForm());
+        
+		$fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
 
 		return $fields;
 	}

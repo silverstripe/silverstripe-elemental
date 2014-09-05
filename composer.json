@@ -4,18 +4,19 @@
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "element", "widget"],
 	"license": "BSD-3-Clause",
-	"authors": [
-		{
-			"name": "Alexandre Saelens",
-			"email": "alexandre.saelens@dna.co.nz"
-		}
-	],
-	"require":
-	{
+	"authors": [{
+		"name": "Alexandre Saelens",
+		"email": "alexandre.saelens@dna.co.nz"
+	}],
+	"require": {
 		"silverstripe/framework": "~3.1",
 		"silverstripe/cms": "~3.1",
 		"silverstripe/widgets": "dev-master",
 		"ajshort/silverstripe-gridfieldextensions": "~1.0.0",
-		"ajshort/silverstripe-addressable": "dev-master"
+		"ajshort/silverstripe-addressable": "dev-master",
+		"heyday/silverstripe-versioneddataobjects": "dev-master"
+	},
+	"extra": {
+		"installer-name": "elemental"
 	}
 }

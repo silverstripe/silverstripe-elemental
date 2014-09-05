@@ -1,4 +1,5 @@
 <?php
+
 class BaseElement extends Widget {
 
 	private static $db = array(

@@ -1,4 +1,5 @@
 <?php
+
 class ElementExternalLink extends BaseElement {
 
 	private static $db = array(

@@ -1,4 +1,5 @@
 <?php
+
 class ElementContact extends BaseElement {
 
 	private static $db = array(
@@ -8,15 +9,15 @@ class ElementContact extends BaseElement {
 		'Email' => 'Varchar(255)',
 		'Website' => 'Varchar(255)',
 		/* Addressable Fields */
-		// 'Address'  => 'Varchar(255)',
-		'Address2' => 'Varchar(255)'
-		// 'Suburb'   => 'varchar(64)',
-		// 'State'    => 'Varchar(64)',
-		// 'Postcode' => 'Varchar(10)',
-		// 'Country'  => 'Varchar(2)',
+		'Address'  => 'Varchar(255)',
+		'Address2' => 'Varchar(255)',
+		'Suburb'   => 'varchar(64)',
+		'State'    => 'Varchar(64)',
+		'Postcode' => 'Varchar(10)',
+		'Country'  => 'Varchar(2)',
 		/* Geaocodable Fields */
-		// 'Lat' => 'Float',
-		// 'Lng' => 'Float'
+		'Lat' => 'Float',
+		'Lng' => 'Float'
 	);
 
 	/**
