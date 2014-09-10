@@ -14,7 +14,8 @@
 		"silverstripe/widgets": "dev-master",
 		"ajshort/silverstripe-gridfieldextensions": "~1.0.0",
 		"ajshort/silverstripe-addressable": "dev-master",
-		"heyday/silverstripe-versioneddataobjects": "dev-master"
+		"heyday/silverstripe-versioneddataobjects": "dev-master",
+		"icecaster/versioned-gridfield": "dev-master"
 	},
 	"extra": {
 		"installer-name": "elemental"
