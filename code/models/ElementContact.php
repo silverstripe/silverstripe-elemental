@@ -8,16 +8,6 @@ class ElementContact extends BaseElement {
 		'Fax' => 'Varchar(100)',
 		'Email' => 'Varchar(255)',
 		'Website' => 'Varchar(255)',
-		/* Addressable Fields */
-		'Address'  => 'Varchar(255)',
-		'Address2' => 'Varchar(255)',
-		'Suburb'   => 'varchar(64)',
-		'State'    => 'Varchar(64)',
-		'Postcode' => 'Varchar(10)',
-		'Country'  => 'Varchar(2)',
-		/* Geaocodable Fields */
-		'Lat' => 'Float',
-		'Lng' => 'Float'
 	);
 
 	/**
@@ -45,7 +35,7 @@ class ElementContact extends BaseElement {
 	*/
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
-		
+
 		$name = Textfield::create('ContactName', 'Name');
 		$fields->addFieldToTab('Root.Content',$name);
 
@@ -64,38 +54,38 @@ class ElementContact extends BaseElement {
 		$fields->addFieldToTab('Root.Content',$website);
 
 		// Addressable fields
-		$fields->insertBefore(new Tab('Address'), 'Options');
+		// $fields->insertBefore(new Tab('Address'), 'Options');
 
-		$address = TextField::create('Address', 'Address');
-		$fields->addFieldToTab('Root.Address', $address);
+		// $address = TextField::create('Address', 'Address');
+		// $fields->addFieldToTab('Root.Address', $address);
 
-		$address2 = TextField::create('Address2', 'Address extra');
-		$address2->setRightTitle('e.g PO Box 254');
-		$fields->addFieldToTab('Root.Address', $address2);
+		// $address2 = TextField::create('Address2', 'Address extra');
+		// $address2->setRightTitle('e.g PO Box 254');
+		// $fields->addFieldToTab('Root.Address', $address2);
 
-		$city = TextField::create('Suburb', 'City');
-		$fields->addFieldToTab('Root.Address', $city);
+		// $city = TextField::create('Suburb', 'City');
+		// $fields->addFieldToTab('Root.Address', $city);
 
-		$postcode = NumericField::create('Postcode', 'Postcode');
-		$fields->addFieldToTab('Root.Address', $postcode);
+		// $postcode = NumericField::create('Postcode', 'Postcode');
+		// $fields->addFieldToTab('Root.Address', $postcode);
 
-		$source = Zend_Locale::getTranslationList('territory', i18n::get_locale(), 2);
-		$country = CountryDropdownField::create('Country', 'Country', $source);
-		$fields->addFieldToTab('Root.Address', $country);
+		// $source = Zend_Locale::getTranslationList('territory', i18n::get_locale(), 2);
+		// $country = CountryDropdownField::create('Country', 'Country', $source);
+		// $fields->addFieldToTab('Root.Address', $country);
 
 		$this->extend('updateCMSFields', $fields);
 
 		// Addressable calls to updateCMSFields needs to be ovveridden
-		$fields->fieldByName('Root.Address.Suburb')->setTitle('City');
-		$fields->removeByName('State');
-		$fields->removeByName('AddressHeader');
+		// $fields->fieldByName('Root.Address.Suburb')->setTitle('City');
+		// $fields->removeByName('State');
+		// $fields->removeByName('AddressHeader');
 
 		return $fields;
-	}	
+	}
 
 }
 
-class ElementContact_Controller extends BaseElement_Controller {	
+class ElementContact_Controller extends BaseElement_Controller {
 
 	public function ObfuscatedEmail() {
 		return ($this->data()->Email) ? Email::obfuscate($this->data()->Email, 'hex') : null;

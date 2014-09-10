@@ -17,3 +17,8 @@ ElementImage:
     - 'image_medium' : 'Normal'
     - 'image_small' : 'Small'
 
+ElementContact:
+  extensions:
+    - Addressable
+    - Geocodable
+

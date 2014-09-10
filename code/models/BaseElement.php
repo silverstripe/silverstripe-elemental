@@ -57,14 +57,14 @@ class BaseElement extends Widget {
 	public function getCMSFields(){
 		$fields = FieldList::create(new TabSet('Root', new Tab('Content')));
 
-		$label = TextField::create('Label', 'Element label');
+		$label = TextField::create('Label', 'Label');
 		$label->setRightTitle('For reference only');
-		$fields->addFieldToTab('Root.Options',$label);
+		$fields->addFieldToTab('Root.Content',$label);
 
 		$class = new ReflectionMethod(get_called_class(), 'config');
 		$config = $class->invoke(NULL);
 		$styles = $config->get('css_styles');
-		
+
 		if (is_array($styles)) {
 			$class = DropdownField::create('ExtraClass', 'Extra CSS Class', $this->getStyles($styles));
 			$class->setEmptyString('-- Select --');
@@ -76,7 +76,7 @@ class BaseElement extends Widget {
 
 	/**
 	 * Note: Overloaded in {@link WidgetController}.
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	public function WidgetHolder() {
@@ -100,7 +100,7 @@ class BaseElement extends Widget {
 	* @return String
 	*/
 	public function getType() {
-		$class = get_called_class();		
+		$class = get_called_class();
 		$type = Config::inst()->get($class, 'type');
 		$type_as_class = str_replace(' ', '_', $type);
 
@@ -120,9 +120,9 @@ class BaseElement extends Widget {
 class BaseElement_Controller extends Widget_Controller {
 
 	/**
-	 * Overloaded from {@link Widget->WidgetHolder()} to allow for controller/ 
+	 * Overloaded from {@link Widget->WidgetHolder()} to allow for controller/
 	 * form linking.
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	public function WidgetHolder() {
