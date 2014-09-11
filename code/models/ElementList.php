@@ -35,7 +35,7 @@ class ElementList extends BaseElement {
 	*/
 	public function getCMSFields(){
 		$fields = parent::getCMSFields();
-		
+
 		$text = TextField::create('ListName', 'List Name');
 		$text->setRightTitle('Optional');
 		$fields->addFieldToTab('Root.Content',$text);
@@ -44,21 +44,31 @@ class ElementList extends BaseElement {
 		$desc->setRightTitle('Optional');
 		$fields->addFieldToTab('Root.Content',$desc);
 
-		$allowed_elements = ElementList::config()->get('allowed_elements');
+		if ($this->isInDB()) {
+			$allowed_elements = ElementList::config()->get('allowed_elements');
 
-		$config = GridFieldConfig_RecordEditor::create(10);
-		$config->addComponent(new GridFieldSortableRows('Sort'));
-		$models = new GridFieldAddNewMultiClass();
-		$models->setClasses($allowed_elements);
-		$config->removeComponentsByType('GridFieldAddNewButton');
-		$config->addComponent($models);
+			$config = GridFieldConfig_RecordEditor::create(10);
+			$config->addComponent(new GridFieldSortableRows('Sort'));
+			$models = new GridFieldAddNewMultiClass();
+			$models->setClasses($allowed_elements);
+			$config->removeComponentsByType('GridFieldAddNewButton');
+			$config->addComponent($models);
 
-		$widgetArea = new GridField('Elements', 'Elements', $this->Elements(), $config);
-		$fields->addFieldToTab('Root.Content',$widgetArea);
+			$config->removeComponentsByType('GridFieldDetailForm');
+       		$config->addComponent(new VersionedDataObjectDetailsForm());
 
+			$widgetArea = new GridField('Elements', 'Elements', $this->Elements(), $config);
+			$fields->addFieldToTab('Root.Content',$widgetArea);
+		} else {
+			$fields->push(LiteralField::create('warn', '<p class="message notice">Once you save this object you will be able to add items</p>'));
+		}
 		$this->extend('updateCMSFields', $fields);
 
 		return $fields;
+	}
+
+	public function getList() {
+		return $this->Elements()->sort('Sort');
 	}
 }
 

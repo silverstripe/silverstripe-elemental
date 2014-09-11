@@ -35,6 +35,10 @@ class BaseElement extends Widget {
 		return '[ '.$this->getType().' ] ' . $this->Label;
 	}
 
+	public function getTitle() {
+		return $this->Label;;
+	}
+
 	public function canView($member = null) {
 		return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
 	}
