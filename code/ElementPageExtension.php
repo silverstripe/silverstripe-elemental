@@ -33,7 +33,7 @@ class ElementPageExtension extends DataExtension {
 				->removeComponentsByType('GridFieldAddNewButton')
 				->addComponent($adder)
 				->removeComponentsByType('GridFieldAddExistingAutoCompleter')
-				->addComponent(new GridFieldOrderableRows())
+				->addComponent(new GridFieldSortableRows('Sort'))
 		);
 
 		$config = $gridField->getConfig();
@@ -42,7 +42,7 @@ class ElementPageExtension extends DataExtension {
 
 		$config->removeComponentsByType('GridFieldDetailForm');
         $config->addComponent(new VersionedDataObjectDetailsForm());
-        
+
 		$fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
 
 		return $fields;
