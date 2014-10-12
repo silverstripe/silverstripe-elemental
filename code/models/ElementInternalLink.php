@@ -1,4 +1,8 @@
 <?php
+
+/**
+ * @package elemental
+ */
 class ElementInternalLink extends BaseElement {
 
 	private static $db = array(
@@ -11,52 +15,20 @@ class ElementInternalLink extends BaseElement {
 		'InternalLink' => 'SiteTree'
 	);
 
-	/**
-	 * @var string
-	*/
-	private static $type = "Internal Link";
-
- 	/**
-	 * @var string
-	*/
 	private static $title = "Internal Link Element";
 
-	/**
-	* @var string
-	*/
-	private static $cmsTitle = "Internal Link Element";
-
-	/**
-	* @var string
-	*/
 	private static $description = "Link to an internal source";
 
-	/**
-	* Defines the fields shown to the CMS users
-	*/
-	public function getCMSFields(){
-		$fields = parent::getCMSFields();
+	public function getCMSFields() {
+		$this->beforeUpdateCMSFields(function($fields) {
+			$fields->addFieldsToTab('Root.Main', array(
+				TreeDropdownField::create('InternalLinkID', 'Link To', 'SiteTree'),
+				CheckboxField::create('NewWindow', 'Open in a new window'),
+				$text = TextField::create('LinkText', 'Link Text'),
+				$desc = TextareaField::create('LinkDescription', 'Link Description')
+			));
+		});
 
-		$tree = TreeDropdownField::create('InternalLinkID', 'Link To', 'SiteTree');
-		$fields->addFieldToTab('Root.Content',$tree);
-
-		$newWindow = CheckboxField::create('NewWindow', 'Open in a new window');
-		$fields->addFieldToTab('Root.Content',$newWindow);
-
-		$text = TextField::create('LinkText', 'Link Text');
-		$text->setRightTitle('Optional');
-		$fields->addFieldToTab('Root.Content',$text);
-
-		$desc = TextareaField::create('LinkDescription', 'Link Description');
-		$desc->setRightTitle('Optional');
-		$fields->addFieldToTab('Root.Content',$desc);
-
-		$this->extend('updateCMSFields', $fields);
-
-		return $fields;
+		return parent::getCMSFields();
 	}
-}
-
-class ElementInternalLink_Controller extends BaseElement_Controller {
-
 }

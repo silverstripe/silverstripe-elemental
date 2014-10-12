@@ -1,5 +1,11 @@
 <?php
-class ElementImage extends BaseElement {
+
+/**
+ * Image tiles can link to a certain page.
+ *
+ * @package elemental
+ */
+class ElementImage extends ElementInternalLink {
 
 	private static $db = array(
 		'Caption' => 'Varchar(255)'
@@ -9,50 +15,22 @@ class ElementImage extends BaseElement {
 		'Image' => 'Image'
 	);
 
-	/**
-	 * @var string
-	*/
-	private static $type = "Image";
-
- 	/**
-	 * @var string
-	*/
 	private static $title = "Image Element";
 
-	/**
-	* @var string
-	*/
-	private static $cmsTitle = "Image Element";
+	public function getCMSFields() {
+		$this->beforeUpdateCMSFields(function($fields) {
+			$uploadField = UploadField::create('Image', 'Image')
+				->setAllowedFileCategories('image')
+				->setAllowedMaxFileNumber(1)
+				->setFolderName('Uploads/images')
+				->setRightTitle('Image size should be at least 1000px');
+			$fields->addFieldToTab('Root.Main',$uploadField);
 
-	/**
-	* @var string
-	*/
-	private static $description = "Image";
+			$caption = TextField::create('Caption', 'Caption');
+			$caption->setRightTitle('Optional');
+			$fields->addFieldToTab('Root.Main',$caption);
+		});
 
-	/**
-	* Defines the fields shown to the CMS users
-	*/
-	public function getCMSFields(){
-		$fields = parent::getCMSFields();
-
-		$uploadField = UploadField::create('Image', 'Image')
-			->setAllowedFileCategories('image')
-			->setAllowedMaxFileNumber(1)
-			->setFolderName('Uploads/images')
-			->setRightTitle('Image size should be at least 1000px');
-		$fields->addFieldToTab('Root.Content',$uploadField);
-
-		$caption = TextField::create('Caption', 'Caption');
-		$caption->setRightTitle('Optional');
-		$fields->addFieldToTab('Root.Content',$caption);
-
-		$this->extend('updateCMSFields', $fields);
-
-		return $fields;
+		return parent::getCMSFields();;
 	}
-
-}
-
-class ElementImage_Controller extends BaseElement_Controller {
-
 }

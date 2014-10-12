@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @package elemental
+ */
 class BaseElement extends Widget {
 
 	private static $db = array(
@@ -8,7 +11,7 @@ class BaseElement extends Widget {
 	);
 
 	private static $has_one = array(
-		'List' => 'ElementList'
+		'List' => 'ElementList' // optional.
 	);
 
  	/**
@@ -19,24 +22,34 @@ class BaseElement extends Widget {
 	/**
 	* @var string
 	*/
-	private static $cmsTitle = "Base Element";
-
-	/**
-	 * @var string
-	*/
-	private static $type = "Base";
-
-	/**
-	* @var string
-	*/
 	private static $description = "Base class for elements";
 
+	public function getCMSFields() {
+		$fields = $this->scaffoldFormFields(array(
+			'includeRelations' => ($this->ID > 0),
+			'tabbed' => true,
+			'ajaxSafe' => true
+		));
+
+		$fields->removeByName('ListID');
+		$fields->removeByName('ParentID');
+		$fields->removeByName('Sort');
+
+		$this->extend('updateCMSFields', $fields);
+
+		return $fields;
+	}
+
 	public function CMSTitle() {
-		return '[ '.$this->getType().' ] ' . $this->Label;
+		return sprintf('%s %s', $this->config()->get('title'), $this->Label);
 	}
 
 	public function getTitle() {
-		return $this->Label;;
+		return $this->Label;
+	}
+
+	public function i18n_singular_name() {
+		return _t(__CLASS__, $this->config()->title);
 	}
 
 	public function canView($member = null) {
@@ -56,29 +69,6 @@ class BaseElement extends Widget {
 	}
 
 	/**
-	* Defines the fields shown to the CMS users
-	*/
-	public function getCMSFields(){
-		$fields = FieldList::create(new TabSet('Root', new Tab('Content')));
-
-		$label = TextField::create('Label', 'Label');
-		$label->setRightTitle('For reference only');
-		$fields->addFieldToTab('Root.Content',$label);
-
-		$class = new ReflectionMethod(get_called_class(), 'config');
-		$config = $class->invoke(NULL);
-		$styles = $config->get('css_styles');
-
-		if (is_array($styles)) {
-			$class = DropdownField::create('ExtraClass', 'Extra CSS Class', $this->getStyles($styles));
-			$class->setEmptyString('-- Select --');
-			$fields->addFieldToTab('Root.Options',$class);
-		}
-
-		return $fields;
-	}
-
-	/**
 	 * Note: Overloaded in {@link WidgetController}.
 	 *
 	 * @return string HTML
@@ -89,38 +79,31 @@ class BaseElement extends Widget {
 
 	/**
 	 * Default way to render widget in templates.
+	 *
 	 * @return string HTML
 	 */
-	public function forTemplate($holder = true){
-		if($holder){
+	public function forTemplate($holder = true) {
+		if($holder) {
 			return $this->WidgetHolder();
 		}
+
 		return $this->Content();
 	}
 
 	/**
-	* Return type of Element (injected in template class)
-	*
-	* @return String
-	*/
-	public function getType() {
-		$class = get_called_class();
-		$type = Config::inst()->get($class, 'type');
-		$type_as_class = str_replace(' ', '_', $type);
-
-		return strtolower($type_as_class);
-	}
-
-	/**
-	* Flatten style array for dropdown
-	*/
+	 * Flatten style array for dropdown
+	 */
 	private function getStyles($array) {
 		$result = call_user_func_array('array_merge', $array);
+
 		return $result;
 	}
 
 }
 
+/**
+ * @package elemental
+ */
 class BaseElement_Controller extends Widget_Controller {
 
 	/**
@@ -132,5 +115,4 @@ class BaseElement_Controller extends Widget_Controller {
 	public function WidgetHolder() {
 		return $this->renderWith("ElementHolder");
 	}
-
 }

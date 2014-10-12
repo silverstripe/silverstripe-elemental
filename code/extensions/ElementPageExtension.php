@@ -1,13 +1,16 @@
 <?php
+
+/**
+ * @package elemental
+ */
 class ElementPageExtension extends DataExtension {
 
-	private static $description = 'Page containing multiple Elements';
+	private static $elements_title = 'Elements';
 
-	private static $db = array(
-	);
+	private static $db = array();
 
 	private static $has_one = array(
-		'ElementArea' => 'WidgetArea'
+		'ElementArea' => 'ElementalArea'
 	);
 
 	/**
@@ -15,25 +18,41 @@ class ElementPageExtension extends DataExtension {
 	 *
 	 * @return FieldList
 	 */
-	public function updateCMSFields(FieldList $fields){
-
+	public function updateCMSFields(FieldList $fields) {
 		$fields->removeByName('Content');
 
 		$adder = new GridFieldAddNewMultiClass();
 
-		if(is_array($this->owner->config()->get('allowed_elements'))){
+		if(is_array($this->owner->config()->get('allowed_elements'))) {
 			$adder->setClasses($this->owner->config()->get('allowed_elements'));
 		} else {
-			user_error('No widgets allowed for '.$this->owner->ClassName);
+			$classes = ClassInfo::subclassesFor('BaseElement');
+			$list = array();
+			unset($classes['BaseElement']);
+
+			foreach($classes as $class) {
+				$list[$class] = singleton($class)->i18n_singular_name();
+			}
+
+			$adder->setClasses($list);
 		}
 
-		$gridField = GridField::create('ElementArea', 'Elements',
-			$this->owner->ElementArea()->Widgets(),
+		$area = $this->owner->ElementArea();
+
+		if(!$area->exists() || !$area->isInDB()) {
+			$area->write();
+
+			$this->owner->ElementAreaID = $area->ID;
+			$this->owner->write();
+		}
+
+		$gridField = GridField::create('ElementArea',
+			Config::inst()->get("ElementPageExtension",'elements_title'),
+			$this->owner->ElementArea()->Elements(),
 			GridFieldConfig_RelationEditor::create()
 				->removeComponentsByType('GridFieldAddNewButton')
 				->addComponent($adder)
-				->removeComponentsByType('GridFieldAddExistingAutoCompleter')
-				->addComponent(new GridFieldSortableRows('Sort'))
+				->addComponent(new GridFieldOrderableRows())
 		);
 
 		$config = $gridField->getConfig();
@@ -41,7 +60,13 @@ class ElementPageExtension extends DataExtension {
 		$paginator->setItemsPerPage(100);
 
 		$config->removeComponentsByType('GridFieldDetailForm');
-        $config->addComponent(new VersionedDataObjectDetailsForm());
+		$config->addComponent(new VersionedDataObjectDetailsForm());
+
+		$autocomplete = $config->getComponentByType("GridFieldAddExistingAutocompleter");
+		$autocomplete->setSearchList(BaseElement::get());
+		$autocomplete->setSearchFields(array(
+			'ClassName', 'Label'
+		));
 
 		$fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
 
@@ -52,8 +77,9 @@ class ElementPageExtension extends DataExtension {
 	 * Make sure there is always a WidgetArea sidebar for adding widgets
 	 *
 	 */
-	public function onBeforeWrite(){
+	public function onBeforeWrite() {
 		$elements = $this->owner->ElementArea();
+
 		if(!$elements->isInDB()) {
 			$elements->write();
 			$this->owner->ElementAreaID = $elements->ID;
@@ -87,6 +113,13 @@ class ElementPageExtension extends DataExtension {
 			}
 			$duplicatePage->ElementAreaID = $duplicateWidgetArea->ID;
 		}
+
 		return $duplicatePage;
+	}
+
+	public function onAfterPublish() {
+		foreach($this->owner->ElementArea()->Elements() as $widget) {
+			$widget->publish('Stage', 'Live');
+		}
 	}
 }
