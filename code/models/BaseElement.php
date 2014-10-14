@@ -34,6 +34,9 @@ class BaseElement extends Widget {
 		$fields->removeByName('ListID');
 		$fields->removeByName('ParentID');
 		$fields->removeByName('Sort');
+		$fields->removeByName('ExtraClass');
+		
+		$fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
 
 		$this->extend('updateCMSFields', $fields);
 
@@ -41,7 +44,7 @@ class BaseElement extends Widget {
 	}
 
 	public function CMSTitle() {
-		return sprintf('%s %s', $this->config()->get('title'), $this->Label);
+		return sprintf('%s %s', $this->config()->get('title'), ($this->Label) ? ' - '. $this->Label : "");
 	}
 
 	public function getTitle() {
@@ -68,43 +71,15 @@ class BaseElement extends Widget {
 		return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
 	}
 
-	/**
-	 * Note: Overloaded in {@link WidgetController}.
-	 *
-	 * @return string HTML
-	 */
 	public function WidgetHolder() {
 		return $this->renderWith("ElementHolder");
-	}
-
-	/**
-	 * Default way to render widget in templates.
-	 *
-	 * @return string HTML
-	 */
-	public function forTemplate($holder = true) {
-		if($holder) {
-			return $this->WidgetHolder();
-		}
-
-		return $this->Content();
-	}
-
-	/**
-	 * Flatten style array for dropdown
-	 */
-	private function getStyles($array) {
-		$result = call_user_func_array('array_merge', $array);
-
-		return $result;
-	}
-
+   	}
 }
 
 /**
  * @package elemental
  */
-class BaseElement_Controller extends Widget_Controller {
+class BaseElement_Controller extends WidgetController {
 
 	/**
 	 * Overloaded from {@link Widget->WidgetHolder()} to allow for controller/
