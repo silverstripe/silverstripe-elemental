@@ -5,12 +5,6 @@ Widget:
   extensions:
     - 'VersionedDataObject'
 
-ElementList:
-  allowed_elements:
-    'ElementFile' : 'File'
-    'ElementInternalLink' : 'Internal Link'
-    'ElementExternalLink' : 'External Link'
-
 ElementImage:
   css_styles:
     - 'image_large' : 'Large'
