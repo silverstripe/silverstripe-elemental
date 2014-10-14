@@ -7,6 +7,13 @@ class ElementPageExtension extends DataExtension {
 
 	private static $elements_title = 'Elements';
 
+	/**
+	 * @config
+	 *
+	 * @var array $ignored_classes Classes to ignore adding elements too.
+	 */
+	private static $ignored_classes = array();
+
 	private static $db = array();
 
 	private static $has_one = array(
@@ -19,12 +26,23 @@ class ElementPageExtension extends DataExtension {
 	 * @return FieldList
 	 */
 	public function updateCMSFields(FieldList $fields) {
+		// redirector pages should not have elements
+		if(is_a($this->owner, 'RedirectorPage')) {
+			return;
+		} else if($ignored = Config::inst()->get('ElementPageExtension', 'ignored_classes')) {
+			foreach($ignored as $check) {
+				if(is_a($this->owner, $check)) {
+					return;
+				}
+			}
+		}
+
 		$fields->removeByName('Content');
 
 		$adder = new GridFieldAddNewMultiClass();
 
 		if(is_array($this->owner->config()->get('allowed_elements'))) {
-			$adder->setClasses($this->owner->config()->get('allowed_elements'));
+			$list = $this->owner->config()->get('allowed_elements');
 		} else {
 			$classes = ClassInfo::subclassesFor('BaseElement');
 			$list = array();
@@ -33,9 +51,11 @@ class ElementPageExtension extends DataExtension {
 			foreach($classes as $class) {
 				$list[$class] = singleton($class)->i18n_singular_name();
 			}
-
-			$adder->setClasses($list);
 		}
+
+		asort($list);
+
+		$adder->setClasses($list);
 
 		$area = $this->owner->ElementArea();
 
@@ -84,12 +104,14 @@ class ElementPageExtension extends DataExtension {
 			$elements->write();
 			$this->owner->ElementAreaID = $elements->ID;
 		}
-		// Copy widgets content to Content to enable search
 		else {
+			// Copy widgets content to Content to enable search
 			$searchableContent = array();
+			
 			foreach ($elements->Items() as $element) {
 				array_push($searchableContent, strip_tags($element->Content()));
 			}
+
 			$this->owner->Content = implode(' ', $searchableContent);
 		}
 
@@ -97,7 +119,7 @@ class ElementPageExtension extends DataExtension {
 	}
 
 	/**
-	 * If the page is duplicated, copy the widgets across too
+	 * If the page is duplicated, copy the widgets across too.
 	 *
 	 * @return Page The duplicated page
 	 */
@@ -111,6 +133,7 @@ class ElementPageExtension extends DataExtension {
 				$widget->ParentID = $duplicateWidgetArea->ID;
 				$widget->write();
 			}
+			
 			$duplicatePage->ElementAreaID = $duplicateWidgetArea->ID;
 		}
 
