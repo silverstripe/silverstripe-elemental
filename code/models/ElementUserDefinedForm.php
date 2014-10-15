@@ -15,6 +15,12 @@ class ElementUserDefinedForm extends BaseElement {
 		if($this->Form()->exists()) {
 			$controller = new UserDefinedForm_Controller($this->Form());
 
+			$current = Controller::curr();
+
+			if($current && $current->getAction() == 'finished') {
+				return $controller->renderWith('ReceivedFormSubmission');
+			}
+
 			$form = $controller->Form();
 
 			return $form;
