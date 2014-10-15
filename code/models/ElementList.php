@@ -16,6 +16,10 @@ class ElementList extends BaseElement {
 		'Elements' => 'BaseElement'
 	);
 
+	private static $extensions = array(
+		'ElementPublishChildren'
+	);
+
 	private static $title = "Element List Element";
 
 	private static $description = "Orderable list of elements";
@@ -74,11 +78,5 @@ class ElementList extends BaseElement {
 		});
 
 		return parent::getCMSFields();
-	}
-
-	public function onAfterPublish() {
-		foreach($this->Elements() as $widget) {
-			$widget->publish('Stage', 'Live');
-		}
 	}
 }
