@@ -38,9 +38,31 @@ class BaseElement extends Widget {
 		
 		$fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
 
+
+		if(!is_a($this, 'ElementList')) {
+			$lists = ElementList::get()->filter('ParentID', $this->ParentID);
+
+			if($lists->exists()) {
+				$fields->addFieldToTab('Root.Main', 
+					$move = new DropdownField('MoveToListID', 'Move this to another list', $lists->map('ID', 'CMSTitle'), '')
+				);
+
+				$move->setEmptyString('Select a list..');
+				$move->setHasEmptyDefault(true);
+			}
+		}
+
 		$this->extend('updateCMSFields', $fields);
 
 		return $fields;
+	}
+
+	public function onBeforeWrite() {
+		parent::onBeforeWrite();
+
+		if($this->MoveToListID) {
+			$this->ListID = $this->MoveToListID;
+		}
 	}
 
 	public function CMSTitle() {
@@ -73,6 +95,10 @@ class BaseElement extends Widget {
 
 	public function WidgetHolder() {
 		return $this->renderWith("ElementHolder");
+   	}
+
+   	public function getWidget() {
+   		return $this;
    	}
 }
 
