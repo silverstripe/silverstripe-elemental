@@ -92,3 +92,8 @@ database and reload the CMS.
 
 MyElement will be rendered into a MyElement.ss template.
 
+### Screenshots
+
+![Overview](docs/images/overview.png)
+
+![Detail](docs/images/detail.png)
