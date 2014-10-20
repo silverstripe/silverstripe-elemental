@@ -15,7 +15,7 @@ class ElementContact extends BaseElement {
 
 	private static $extensions = array(
 		'Addressable',
-	'Geocodable'
+		'Geocodable'
     );
 
  	/**

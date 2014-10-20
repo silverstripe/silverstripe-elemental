@@ -8,7 +8,7 @@
 class ElementImage extends ElementInternalLink {
 
 	private static $db = array(
-		'Caption' => 'Varchar(255)'
+		'Caption' => 'HTMLText'
 	);
 
 	private static $has_one = array(
@@ -26,11 +26,12 @@ class ElementImage extends ElementInternalLink {
 				->setRightTitle('Image size should be at least 1000px');
 			$fields->addFieldToTab('Root.Main',$uploadField);
 
-			$caption = TextField::create('Caption', 'Caption');
+			$caption = HTMLEditorField::create('Caption', 'Caption');
 			$caption->setRightTitle('Optional');
-			$fields->addFieldToTab('Root.Main',$caption);
+
+			$fields->addFieldToTab('Root.Main', $caption);
 		});
 
-		return parent::getCMSFields();;
+		return parent::getCMSFields();
 	}
 }

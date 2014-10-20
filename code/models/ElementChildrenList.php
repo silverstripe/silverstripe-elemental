@@ -8,5 +8,5 @@ class ElementChildrenList extends BaseElement {
 		'ParentPage' => 'SiteTree'
 	);
 
-	private static $title = "Show Children Element";
+	private static $title = "Show a list of pages in a list.";
 }

@@ -6,7 +6,13 @@
 class ElementContent extends BaseElement {
 
 	private static $db = array(
-		'HTML' => 'HTMLText'
+		'HTML' => 'HTMLText',
+		'Style' => 'Varchar'
+	);
+
+	private static $styles = array(
+		'Feature',
+		'Smaller'
 	);
 
 	private static $title = "Generic Content";
