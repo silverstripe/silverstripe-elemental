@@ -37,7 +37,9 @@ class ElementPageExtension extends DataExtension {
 			}
 		}
 
-		$fields->removeByName('Content');
+		// add an empty holder for content as some module explicitly use insert
+		// after content.
+		$fields->replaceField('Content', new LiteralField('Content', ''));
 
 		$adder = new GridFieldAddNewMultiClass();
 
