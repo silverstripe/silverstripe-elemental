@@ -5,21 +5,24 @@
 This module extends a page type to swap the content area for a GridField and manageable elements (widgets) to compose
 a page out of rather than a single text field.
 
-The module has 7 elements by default and can be extended with your own instances of `BaseElement`
-
-- File
-- Internal Link
-- External Link
-- Image
-- Content (HTML)
-- Contact
-- List (by default, list of Internal/External links and File)
-
 Versioning and search indexing are supported out of the box.
+
+The module provides basic markup for each of the widgets but you will likely need to provide your own styles. Replace
+the `$Content` variable with `$ElementArea` and rely on the markup of the individual widgets.
 
 ## Installation
 
 	composer require "dnadesign/silverstripe-elemental" "dev-master"
+
+Extend any page type with the ElementPageExtension and define allowed elements. This can be done via the SilverStripe
+`YAML` config API
+
+**mysite/_config/app.yml**
+
+	Page:
+	  extensions:
+	    - ElementPageExtension
+
 
 ## Requirements
 
@@ -29,26 +32,17 @@ Versioning and search indexing are supported out of the box.
 
 ## Configuration
 
-Extend any page type with the ElementPageExtension and define allowed elements. This can be done via the SilverStripe
-`YAML` config API
+### Limit Allowed Elements
 
-**mysite/_config/app.yml**
+You may wish to only enable certain elements for the CMS authors to choose from rather than the full set.
 
-```
-	Page:
-	  extensions:
-	    - ElementPageExtension
-	  allowed_elements:
-	    'ElementContent' : 'Content'
-	    'ElementImage' : 'Image'
-	    'ElementContact' : 'Contact'
-	    'ElementList' : 'Element List'
-	    'ElementExternalLink' : 'External Link'
-	    'ElementInternalLink' : 'Internal Link'
-	    'ElementFile' : 'File'
 ````
+	Page:
+	  allowed_elements:
+		- 'ElementContent'
 
-By default, all Element List can contain Internal/External links and File. To add / remove allowed elements in list.
+By default, an Element List can contain nested Elements. To set allowed elements in list use the `allowed_elements`
+flag.
 
 ````
 	ElementList:
@@ -69,7 +63,7 @@ classes:
 	    - 'image_small' : 'Small'
 ````
 
-### Defining your own element.
+### Defining your own elements.
 
 An element is as simple as a class which extends `BaseElement`. After you add the class, ensure you have rebuilt your
 database and reload the CMS.
@@ -79,6 +73,7 @@ database and reload the CMS.
 	class MyElement extends BaseElement {
 
 		private static $title = "My Element";
+
 		private static $description = "My Custom Element";
 
 		public function getCMSFields() {
@@ -86,9 +81,5 @@ database and reload the CMS.
 		}
 	}
 
-	class MyElement_Controller extends BaseElement_Controller {
-
-	}
-
-MyElement will be rendered into a MyElement.ss template.
+MyElement will be rendered into a `MyElement.ss` template.
 
