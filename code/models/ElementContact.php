@@ -8,6 +8,7 @@ class ElementContact extends BaseElement {
 	private static $db = array(
 		'ContactName' => 'Varchar(255)',
 		'Phone' => 'Varchar(100)',
+		'Mobile' => 'Varchar(100)',
 		'Fax' => 'Varchar(100)',
 		'Email' => 'Varchar(255)',
 		'Website' => 'Varchar(255)',
@@ -28,6 +29,7 @@ class ElementContact extends BaseElement {
 			$fields->addFieldsToTab('Root.Main', array(
 				Textfield::create('ContactName', 'Name'),
 				TextField::create('Phone', 'Phone'),
+				TextField::create('Mobile', 'Mobile'),
 				TextField::create('Fax', 'Fax'),
 				EmailField::create('Email', 'Email'),
 				$website = TextField::create('Website', 'Website')
