@@ -2,6 +2,8 @@
 	<h3>$ListName</h3>
 <% end_if %>
 
+$ListDescription
+
 <% if $Widget.Elements %>
 	<ul class="$ClassName <% if $ExtraClass %> $ExtraClass<% end_if %>">
 		<% loop $Widget.Elements %>
