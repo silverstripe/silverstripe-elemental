@@ -9,7 +9,7 @@ class ElementList extends BaseElement {
 
 	private static $db = array(
 		'ListName' => 'Varchar(255)',
-		'ListDescription' => 'Text'
+		'ListDescription' => 'HTMLText'
 	);
 
 	private static $has_many = array(
@@ -31,7 +31,7 @@ class ElementList extends BaseElement {
 			$text->setRightTitle('Optional');
 			$fields->addFieldToTab('Root.Main',$text);
 
-			$desc = TextareaField::create('ListDescription', 'List Description');
+			$desc = HTMLEditorField::create('ListDescription', 'List Description');
 			$desc->setRightTitle('Optional');
 			$fields->addFieldToTab('Root.Main',$desc);
 
