@@ -143,8 +143,12 @@ class ElementPageExtension extends DataExtension {
 	}
 
 	public function onAfterPublish() {
-		foreach($this->owner->ElementArea()->Elements() as $widget) {
-			$widget->publish('Stage', 'Live');
+		if($id = $this->owner->ElementAreaID) {
+			$widgets = Versioned::get_by_stage('BaseElement', 'Stage', "ParentID = '$id'");
+
+			foreach($widgets as $widget) {
+				$widget->publish('Stage', 'Live');
+			}
 		}
 	}
 }
