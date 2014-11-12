@@ -21,10 +21,10 @@ class ElementContent extends BaseElement {
 
 	public function getCMSFields() {
 		$styles = $this->config()->get('styles');
-		
-		$this->beforeUpdateCMSFields(function($fields) use ($styles) {
-			$fields->insertAfter(new HtmlEditorField('HTML', 'Content'), 'Label');
-			$fields->insertAfter($styles = new DropdownField('Style', 'Style', $styles), 'Label');
+
+		$this->beforeUpdateCMSFields(function($fields) {
+			$fields->addFieldsToTab('Root.Main', new HtmlEditorField('HTML', 'Content'));
+			$fields->addFieldsToTab('Root.Main', $styles = new DropdownField('Style', 'Style', $styles));
 
 			$styles->setEmptyString('Select a custom style..');
 		});
