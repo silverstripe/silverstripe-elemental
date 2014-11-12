@@ -20,9 +20,11 @@ class ElementContent extends BaseElement {
 	private static $description = "Blocks of text with heading, blockquote, list and paragraph styles";
 
 	public function getCMSFields() {
-		$this->beforeUpdateCMSFields(function($fields) {
+		$styles = $this->config()->get('styles');
+		
+		$this->beforeUpdateCMSFields(function($fields) use ($styles) {
 			$fields->addFieldsToTab('Root.Main', new HtmlEditorField('HTML', 'Content'));
-			$fields->addFieldsToTab('Root.Main', $styles = new DropdownField('Style', 'Style', $this->config()->get('styles')));
+			$fields->addFieldsToTab('Root.Main', $styles = new DropdownField('Style', 'Style', $styles));
 
 			$styles->setEmptyString('Select a custom style..');
 		});
