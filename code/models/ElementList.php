@@ -26,7 +26,11 @@ class ElementList extends BaseElement {
 
 
 	public function getCMSFields() {
-		$this->beforeUpdateCMSFields(function($fields) {
+		$elements = $this->Elements();
+		$isInDb = $this->isInDB();
+		$allowed = $this->config()->get('allowed_elements');
+
+		$this->beforeUpdateCMSFields(function($fields) use ($elements, $isInDb, $allowed) {
 			$text = TextField::create('ListName', 'List Name');
 			$text->setRightTitle('Optional');
 			$fields->addFieldToTab('Root.Main',$text);
@@ -35,11 +39,11 @@ class ElementList extends BaseElement {
 			$desc->setRightTitle('Optional');
 			$fields->addFieldToTab('Root.Main',$desc);
 
-			if ($this->isInDB()) {
+			if ($isInDb) {
 				$adder = new GridFieldAddNewMultiClass();
 
-				if(is_array($this->config()->get('allowed_elements'))) {
-					$list = $this->config()->get('allowed_elements');
+				if(is_array($allowed)) {
+					$list = $allowed;
 				} else {
 					$classes = ClassInfo::subclassesFor('BaseElement');
 					$list = array();
@@ -65,7 +69,7 @@ class ElementList extends BaseElement {
 				$widgetArea = new GridField(
 					'Elements', 
 					Config::inst()->get("ElementPageExtension",'elements_title'), 
-					$this->Elements(), 
+					$elements, 
 					$config
 				);
 
