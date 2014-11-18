@@ -22,8 +22,7 @@ class ElementImage extends ElementInternalLink {
 			$uploadField = UploadField::create('Image', 'Image')
 				->setAllowedFileCategories('image')
 				->setAllowedMaxFileNumber(1)
-				->setFolderName('Uploads/images')
-				->setRightTitle('Image size should be at least 1000px');
+				->setFolderName('Uploads/images');
 			$fields->addFieldToTab('Root.Main',$uploadField);
 
 			$caption = HTMLEditorField::create('Caption', 'Caption');

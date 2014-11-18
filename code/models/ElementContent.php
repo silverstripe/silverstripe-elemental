@@ -23,8 +23,8 @@ class ElementContent extends BaseElement {
 		$styles = $this->config()->get('styles');
 		
 		$this->beforeUpdateCMSFields(function($fields) use ($styles) {
-			$fields->addFieldsToTab('Root.Main', new HtmlEditorField('HTML', 'Content'));
-			$fields->addFieldsToTab('Root.Main', $styles = new DropdownField('Style', 'Style', $styles));
+			$fields->insertAfter(new HtmlEditorField('HTML', 'Content'), 'Label');
+			$fields->insertAfter($styles = new DropdownField('Style', 'Style', $styles), 'Label');
 
 			$styles->setEmptyString('Select a custom style..');
 		});

@@ -70,7 +70,7 @@ class BaseElement extends Widget {
 	}
 
 	public function getTitle() {
-		return $this->Label;
+		return ($this->Label) ? $this->Label : '#' . $this->ID;
 	}
 
 	public function i18n_singular_name() {
