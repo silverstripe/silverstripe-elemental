@@ -18,7 +18,6 @@ class ElementFile extends BaseElement {
 	public function getCMSFields() {
 		$this->beforeUpdateCMSFields(function($fields) {
 
-			$fields->removeByName('File');
 			$desc = TextareaField::create('FileDescription', 'Description');
 			$desc->setRightTitle('Optional');
 			$fields->addFieldToTab('Root.Main', $desc);
