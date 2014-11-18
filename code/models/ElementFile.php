@@ -17,14 +17,16 @@ class ElementFile extends BaseElement {
 
 	public function getCMSFields() {
 		$this->beforeUpdateCMSFields(function($fields) {
+
+			$fields->removeByName('File');
 			$desc = TextareaField::create('FileDescription', 'Description');
 			$desc->setRightTitle('Optional');
-			$fields->addFieldToTab('Root.Content', $desc);
+			$fields->addFieldToTab('Root.Main', $desc);
 
-			$uploadField = UploadField::create('FileID', 'File')
+			$uploadField = UploadField::create('File', 'File')
 				->setAllowedMaxFileNumber(1)
 				->setFolderName('Uploads/files');
-			$fields->addFieldToTab('Root.Content', $uploadField);
+			$fields->addFieldToTab('Root.Main', $uploadField);
 		});
 
 		return parent::getCMSFields();
