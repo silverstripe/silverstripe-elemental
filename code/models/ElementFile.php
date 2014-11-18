@@ -27,6 +27,6 @@ class ElementFile extends BaseElement {
 			$fields->addFieldToTab('Root.Content', $uploadField);
 		});
 
-		return $fields;
+		return parent::getCMSFields();
 	}
 }
