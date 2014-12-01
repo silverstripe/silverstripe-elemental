@@ -12,8 +12,8 @@
 		"silverstripe/framework": "~3.1",
 		"silverstripe/cms": "~3.1",
 		"silverstripe/widgets": "dev-master",
-		"ajshort/silverstripe-gridfieldextensions": "~1.0.0",
-		"ajshort/silverstripe-addressable": "dev-master",
+		"silverstripe-australia/silverstripe-gridfieldextensions": "~1.0.0",
+		"silverstripe-australia/silverstripe-addressable": "dev-master",
 		"heyday/silverstripe-versioneddataobjects": "dev-master"
 	},
 	"extra": {
