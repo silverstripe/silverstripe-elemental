@@ -62,7 +62,8 @@ class BaseElement extends Widget {
 
 		if(!$this->Sort) {
 			$parentID = ($this->ParentID) ? $this->ParentID : 0;
-			$this->Sort = DB::query("SELECT MAX(\"Sort\") + 1 FROM \"BaseElement\" WHERE \"ParentID\" = $parentID")->value();
+			
+			$this->Sort = DB::query("SELECT MAX(\"Sort\") + 1 FROM \"Widget\" WHERE \"ParentID\" = $parentID")->value();
 		}
 
 		if($this->MoveToListID) {
