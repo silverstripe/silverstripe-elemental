@@ -73,6 +73,7 @@ class ElementPageExtension extends DataExtension {
 			$this->owner->ElementArea()->Elements(),
 			GridFieldConfig_RelationEditor::create()
 				->removeComponentsByType('GridFieldAddNewButton')
+				->removeComponentsByType('GridFieldAddExistingAutocompleter')
 				->addComponent($adder)
 				->addComponent(new GridFieldOrderableRows())
 		);
@@ -83,12 +84,6 @@ class ElementPageExtension extends DataExtension {
 
 		$config->removeComponentsByType('GridFieldDetailForm');
 		$config->addComponent(new VersionedDataObjectDetailsForm());
-
-		$autocomplete = $config->getComponentByType("GridFieldAddExistingAutocompleter");
-		$autocomplete->setSearchList(BaseElement::get());
-		$autocomplete->setSearchFields(array(
-			'ClassName', 'Label'
-		));
 
 		$fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
 
@@ -109,7 +104,7 @@ class ElementPageExtension extends DataExtension {
 		else {
 			// Copy widgets content to Content to enable search
 			$searchableContent = array();
-			
+
 			foreach ($elements->Items() as $element) {
 				array_push($searchableContent, strip_tags($element->Content()));
 			}
@@ -135,7 +130,7 @@ class ElementPageExtension extends DataExtension {
 				$widget->ParentID = $duplicateWidgetArea->ID;
 				$widget->write();
 			}
-			
+
 			$duplicatePage->ElementAreaID = $duplicateWidgetArea->ID;
 		}
 
@@ -158,7 +153,7 @@ class ElementPageExtension extends DataExtension {
 
 			foreach($widgets as $widget) {
 				if(!in_array($widget->ID, $staged)) {
-					$widget->deleteFromStage('Live');	
+					$widget->deleteFromStage('Live');
 				}
 			}
 		}
