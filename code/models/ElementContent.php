@@ -11,8 +11,6 @@ class ElementContent extends BaseElement {
 	);
 
 	private static $styles = array(
-		'Feature',
-		'Smaller'
 	);
 
 	private static $title = "Generic Content";
@@ -22,15 +20,20 @@ class ElementContent extends BaseElement {
 	public function getCMSFields() {
 		$styles = $this->config()->get('styles');
 
-		$this->beforeUpdateCMSFields(function($fields) use ($styles) {
-			$fields->addFieldsToTab('Root.Main', new HtmlEditorField('HTML', 'Content'));
-			$fields->addFieldsToTab('Root.Main', $styles = new DropdownField('Style', 'Style', $styles));
+		$fields = parent::getCMSFields();
 
-			$styles->setEmptyString('Select a custom style..');
-		});
+		if (count($styles) > 0) {
+			$this->beforeUpdateCMSFields(function($fields) use ($styles) {
+				$fields->addFieldsToTab('Root.Main', new HtmlEditorField('HTML', 'Content'));
+				$fields->addFieldsToTab('Root.Main', $styles = new DropdownField('Style', 'Style', $styles));
 
+				$styles->setEmptyString('Select a custom style..');
+			});
+		} else {
+			$fields->removeByName('Style');
+		}
 
-		return parent::getCMSFields();
+		return $fields;
 	}
 
 	public function getCssStyle() {
