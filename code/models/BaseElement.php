@@ -35,7 +35,7 @@ class BaseElement extends Widget {
 		$fields->removeByName('ParentID');
 		$fields->removeByName('Sort');
 		$fields->removeByName('ExtraClass');
-		
+
 		$fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
 
 
@@ -43,7 +43,7 @@ class BaseElement extends Widget {
 			$lists = ElementList::get()->filter('ParentID', $this->ParentID);
 
 			if($lists->exists()) {
-				$fields->addFieldToTab('Root.Main', 
+				$fields->addFieldToTab('Root.Main',
 					$move = new DropdownField('MoveToListID', 'Move this to another list', $lists->map('ID', 'CMSTitle'), '')
 				);
 
@@ -62,15 +62,13 @@ class BaseElement extends Widget {
 
 		if(!$this->Sort) {
 			$parentID = ($this->ParentID) ? $this->ParentID : 0;
-			
+
 			$this->Sort = DB::query("SELECT MAX(\"Sort\") + 1 FROM \"Widget\" WHERE \"ParentID\" = $parentID")->value();
 		}
 
 		if($this->MoveToListID) {
 			$this->ListID = $this->MoveToListID;
 		}
-
-
 	}
 
 	public function CMSTitle() {
