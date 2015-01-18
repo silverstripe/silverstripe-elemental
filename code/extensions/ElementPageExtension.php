@@ -95,6 +95,14 @@ class ElementPageExtension extends DataExtension {
 	 *
 	 */
 	public function onBeforeWrite() {
+		if($ignored = Config::inst()->get('ElementPageExtension', 'ignored_classes')) {
+			foreach($ignored as $check) {
+				if(is_a($this->owner, $check)) {
+					return;
+				}
+			}
+		}
+
 		$elements = $this->owner->ElementArea();
 
 		if(!$elements->isInDB()) {
