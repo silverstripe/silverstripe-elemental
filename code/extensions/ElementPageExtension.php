@@ -128,21 +128,20 @@ class ElementPageExtension extends DataExtension {
 	 *
 	 * @return Page The duplicated page
 	 */
-	public function onBeforeDuplicate($duplicatePage) {
-		if($this->owner->hasField('ElementAreaID')) {
+	public function onAfterDuplicate($dup) {
+		// var_dump($page->ID, $this->owner->ID);
+		// exit('DUMP');
+		if($this->owner->ID != 0 && $this->owner->ID < $dup->ID) {
 			$wa = $this->owner->getComponent('ElementArea');
-			$duplicateWidgetArea = $wa->duplicate();
-
+			$duplicateWidgetArea = $wa->duplicate(false);
+			$duplicateWidgetArea->write();
 			foreach($wa->Items() as $originalWidget) {
 				$widget = $originalWidget->duplicate(false);
 				$widget->ParentID = $duplicateWidgetArea->ID;
 				$widget->write();
 			}
-
-			$duplicatePage->ElementAreaID = $duplicateWidgetArea->ID;
+			$dup->ElementAreaID = $duplicateWidgetArea->ID;
 		}
-
-		return $duplicatePage;
 	}
 
 	public function onAfterPublish() {

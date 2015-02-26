@@ -101,11 +101,11 @@ class BaseElement extends Widget {
 
 	public function WidgetHolder() {
 		return $this->renderWith("ElementHolder");
-   	}
+  }
 
-   	public function getWidget() {
+  public function getWidget() {
    		return $this;
-   	}
+  }
 }
 
 /**
