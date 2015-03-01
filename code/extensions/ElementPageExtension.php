@@ -128,19 +128,25 @@ class ElementPageExtension extends DataExtension {
 	 *
 	 * @return Page The duplicated page
 	 */
-	public function onAfterDuplicate($dup) {
+	public function onAfterDuplicate($duplicatePage) {
 		// var_dump($page->ID, $this->owner->ID);
 		// exit('DUMP');
-		if($this->owner->ID != 0 && $this->owner->ID < $dup->ID) {
-			$wa = $this->owner->getComponent('ElementArea');
-			$duplicateWidgetArea = $wa->duplicate(false);
+		if($this->owner->ID != 0 && $this->owner->ID < $duplicatePage->ID) {
+			
+			$originalWidgetArea = $this->owner->getComponent('ElementArea');
+			$duplicateWidgetArea = $originalWidgetArea->duplicate(false);
 			$duplicateWidgetArea->write();
-			foreach($wa->Items() as $originalWidget) {
-				$widget = $originalWidget->duplicate(false);
-				$widget->ParentID = $duplicateWidgetArea->ID;
-				$widget->write();
+			$duplicatePage->ElementAreaID = $duplicateWidgetArea->ID;
+			$duplicatePage->write();
+
+			foreach($originalWidgetArea->Items() as $originalWidget) {
+				$duplicateWidget = $originalWidget->duplicate(true);
+
+				// manually set the ParentID of each widget, so we don't get versioning issues
+				DB::query(sprintf("UPDATE Widget SET ParentID = %d WHERE ID = %d", $duplicateWidgetArea->ID, $duplicateWidget->ID));
+
 			}
-			$dup->ElementAreaID = $duplicateWidgetArea->ID;
+
 		}
 	}
 
