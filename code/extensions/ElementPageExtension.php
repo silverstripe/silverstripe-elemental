@@ -74,6 +74,8 @@ class ElementPageExtension extends DataExtension {
 			GridFieldConfig_RelationEditor::create()
 				->removeComponentsByType('GridFieldAddNewButton')
 				->removeComponentsByType('GridFieldAddExistingAutocompleter')
+				->removeComponentsByType('GridFieldDeleteAction')
+				->addComponent(new GridFieldDeleteAction(false))
 				->addComponent($adder)
 				->addComponent(new GridFieldOrderableRows())
 		);
