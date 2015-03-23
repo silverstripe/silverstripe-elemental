@@ -116,9 +116,9 @@ class ElementPageExtension extends DataExtension {
 			$searchableContent = array();
 
 			foreach ($elements->Items() as $element) {
-				array_push($searchableContent, strip_tags($element->Content()));
+				array_push($searchableContent, strip_tags($element->Content(), '<a>'));
 			}
-
+						
 			$this->owner->Content = implode(' ', $searchableContent);
 		}
 
