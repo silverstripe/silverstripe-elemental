@@ -8,7 +8,6 @@
 class ElementList extends BaseElement {
 
 	private static $db = array(
-		'ListName' => 'Varchar(255)',
 		'ListDescription' => 'HTMLText'
 	);
 
@@ -31,10 +30,6 @@ class ElementList extends BaseElement {
 		$allowed = $this->config()->get('allowed_elements');
 
 		$this->beforeUpdateCMSFields(function($fields) use ($elements, $isInDb, $allowed) {
-			$text = TextField::create('ListName', 'List Name');
-			$text->setRightTitle('Optional');
-			$fields->addFieldToTab('Root.Main',$text);
-
 			$desc = HTMLEditorField::create('ListDescription', 'List Description');
 			$desc->setRightTitle('Optional');
 			$fields->addFieldToTab('Root.Main',$desc);

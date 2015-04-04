@@ -1,6 +1,6 @@
 <% with Widget %>
-	<% if $Label %>
-		<h3>$Label</h3>
+	<% if $Title %>
+		<h3>$Title</h3>
 	<% end_if %>
 
 	<% if ChildrenList %>

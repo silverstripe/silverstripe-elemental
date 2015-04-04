@@ -6,7 +6,6 @@
 class BaseElement extends Widget {
 
 	private static $db = array(
-		'Label' => 'Varchar(255)',
 		'ExtraClass' => 'Varchar(255)'
 	);
 
@@ -71,16 +70,24 @@ class BaseElement extends Widget {
 		}
 	}
 
-	public function CMSTitle() {
-		return sprintf('%s %s', $this->config()->get('title'), ($this->Label) ? ' - '. $this->Label : "");
+	public function i18n_singular_name() {
+		return _t(__CLASS__, $this->config()->title);
 	}
 
 	public function getTitle() {
-		return ($this->Label) ? $this->Label : '#' . $this->ID;
+		if($title = $this->getField('Title')) {
+			return $title;
+		} else {
+			if(!$this->isInDb()) {
+				return;
+			}
+			
+			return $this->config()->title;
+		}
 	}
 
-	public function i18n_singular_name() {
-		return _t(__CLASS__, $this->config()->title);
+	public function getCMSTitle() {
+		return $this->getTitle();
 	}
 
 	public function canView($member = null) {
@@ -101,11 +108,11 @@ class BaseElement extends Widget {
 
 	public function WidgetHolder() {
 		return $this->renderWith("ElementHolder");
-  }
+	}
 
-  public function getWidget() {
-   		return $this;
-  }
+	public function getWidget() {
+		return $this;
+	}
 }
 
 /**
