@@ -6,7 +6,8 @@
 class BaseElement extends Widget {
 
 	private static $db = array(
-		'ExtraClass' => 'Varchar(255)'
+		'ExtraClass' => 'Varchar(255)',
+		'HideTitle' => 'Boolean'
 	);
 
 	private static $has_one = array(
@@ -112,6 +113,10 @@ class BaseElement extends Widget {
 
 	public function getWidget() {
 		return $this;
+	}
+
+	public function ControllerTop() {
+		return Controller::curr();
 	}
 }
 
