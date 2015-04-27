@@ -118,6 +118,11 @@ class BaseElement extends Widget {
 	public function ControllerTop() {
 		return Controller::curr();
 	}
+
+	public function getPage() {
+		$area = $this->Parent();
+		return $area->getOwnerPage();
+	}
 }
 
 /**
