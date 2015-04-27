@@ -1,5 +1,7 @@
-<% if $ListName %>
-	<h3>$ListName</h3>
+<% if $Title %>
+	<% if not HideTitle %>
+		<h3>$Title</h3>
+	<% end_if %>
 <% end_if %>
 
 $ListDescription
