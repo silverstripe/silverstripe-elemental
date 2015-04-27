@@ -121,7 +121,12 @@ class BaseElement extends Widget {
 
 	public function getPage() {
 		$area = $this->Parent();
-		return $area->getOwnerPage();
+		
+		if($area instanceof ElementalArea) {		
+			return $area->getOwnerPage();
+		}
+
+		return null;
 	}
 }
 
