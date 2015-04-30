@@ -24,6 +24,12 @@ class BaseElement extends Widget {
 	*/
 	private static $description = "Base class for elements";
 
+	/**
+	* @var boolean
+	*/
+	protected $enable_title_in_template = false;
+
+
 	public function getCMSFields() {
 		$fields = $this->scaffoldFormFields(array(
 			'includeRelations' => ($this->ID > 0),
@@ -36,8 +42,17 @@ class BaseElement extends Widget {
 		$fields->removeByName('Sort');
 		$fields->removeByName('ExtraClass');
 
-		$fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
+		/** Title
+		* By default, the Title is used for reference only
+		* Set $enable_title_in_template to true  when using title in template
+		*/
+		if(!$this->enable_title_in_template) {
+			$fields->removeByName('HideTitle');
+			$title = $fields->fieldByName('Root.Main.Title');
+			$title->setRightTitle('For reference only. Does not appear in the template.');
+		}
 
+		$fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
 
 		if(!is_a($this, 'ElementList')) {
 			$lists = ElementList::get()->filter('ParentID', $this->ParentID);

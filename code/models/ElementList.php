@@ -23,6 +23,7 @@ class ElementList extends BaseElement {
 
 	private static $description = "Orderable list of elements";
 
+	protected $enable_title_in_template = true;
 
 	public function getCMSFields() {
 		$elements = $this->Elements();

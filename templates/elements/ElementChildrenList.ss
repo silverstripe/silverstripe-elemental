@@ -1,5 +1,5 @@
 <% with Widget %>
-	<% if $Title %>
+	<% if $Title && not HideTitle %>
 		<h3>$Title</h3>
 	<% end_if %>
 
