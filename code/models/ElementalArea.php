@@ -18,14 +18,26 @@ class ElementalArea extends WidgetArea {
 	}
 
 	/**
-	* Return the page that holds this element area
+	* Return an ArrayList of pages with the Element Page Extension
 	*
-	* @return DataObject
+	* @return ArrayList
 	*/
 	public function getOwnerPage() {
-		$pages = Page::get();
-		$owner = $pages->find('ElementAreaID', $this->ID);
-		
-		return $owner;
+
+	    foreach (get_declared_classes() as $class) {
+	        if (is_subclass_of($class, 'SiteTree')) {
+	        	$object = singleton($class);
+	        	if ($object->hasExtension('ElementPageExtension')) {
+	        		$page = $class::get()->filter('ElementAreaID', $this->ID);
+	        		if ($page->exists()) {
+	        			return $page->First();
+	        		}
+	        	}
+	        }
+	    }
+
+	    return false;
 	}
+
+
 }
