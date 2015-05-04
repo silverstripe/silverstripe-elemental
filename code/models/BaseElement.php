@@ -49,7 +49,9 @@ class BaseElement extends Widget {
 		if(!$this->enable_title_in_template) {
 			$fields->removeByName('HideTitle');
 			$title = $fields->fieldByName('Root.Main.Title');
-			$title->setRightTitle('For reference only. Does not appear in the template.');
+			if ($title) {
+				$title->setRightTitle('For reference only. Does not appear in the template.');
+			}
 		}
 
 		$fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
