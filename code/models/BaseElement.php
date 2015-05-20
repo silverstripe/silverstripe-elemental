@@ -94,7 +94,7 @@ class BaseElement extends Widget {
 
 	public function getTitle() {
 		if($title = $this->getField('Title')) {
-			return $title;
+			return $this->config()->title . ': ' . $title;
 		} else {
 			if(!$this->isInDb()) {
 				return;
