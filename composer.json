@@ -14,7 +14,8 @@
 		"silverstripe/widgets": "~1.1.0",
 		"silverstripe-australia/gridfieldextensions": "~1.0.0",
 		"silverstripe-australia/addressable": "dev-master",
-		"heyday/silverstripe-versioneddataobjects": "dev-master"
+		"heyday/silverstripe-versioneddataobjects": "dev-master",
+		"undefinedoffset/sortablegridfield": "1.0.6"
 	},
 	"extra": {
 		"installer-name": "elemental"

@@ -77,7 +77,7 @@ class ElementPageExtension extends DataExtension {
 				->removeComponentsByType('GridFieldDeleteAction')
 				->addComponent(new GridFieldDeleteAction(false))
 				->addComponent($adder)
-				->addComponent(new GridFieldOrderableRows())
+				->addComponent(new GridFieldSortableRows('Sort'))
 		);
 
 		$config = $gridField->getConfig();

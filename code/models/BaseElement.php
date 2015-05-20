@@ -94,7 +94,7 @@ class BaseElement extends Widget {
 
 	public function getTitle() {
 		if($title = $this->getField('Title')) {
-			return $this->config()->title . ': ' . $title;
+			return $title;
 		} else {
 			if(!$this->isInDb()) {
 				return;
@@ -105,7 +105,14 @@ class BaseElement extends Widget {
 	}
 
 	public function getCMSTitle() {
-		return $this->getTitle();
+		if($title = $this->getField('Title')) {
+			return $this->config()->title . ': ' . $title;
+		} else {
+			if(!$this->isInDb()) {
+				return;
+			}
+			return $this->config()->title;
+		}
 	}
 
 	public function canView($member = null) {

@@ -55,7 +55,7 @@ class ElementList extends BaseElement {
 				$adder->setClasses($list);
 
 				$config = GridFieldConfig_RecordEditor::create(100);
-				$config->addComponent(new GridFieldOrderableRows());
+				$config->addComponent(new GridFieldSortableRows('Sort'));
 				$config->removeComponentsByType('GridFieldAddNewButton');
 				$config->addComponent($adder);
 
