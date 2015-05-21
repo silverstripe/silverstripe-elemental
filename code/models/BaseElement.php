@@ -20,6 +20,15 @@ class BaseElement extends Widget {
 	private static $title = "Base Element";
 
 	/**
+	 * @var array
+	 */
+	private static $summary_fields = array(
+		'ID',
+		'Title',
+		'Type'
+	);
+
+	/**
 	* @var string
 	*/
 	private static $description = "Base class for elements";
@@ -90,6 +99,10 @@ class BaseElement extends Widget {
 
 	public function i18n_singular_name() {
 		return _t(__CLASS__, $this->config()->title);
+	}
+
+	public function getType() {
+		return $this->i18n_singular_name();
 	}
 
 	public function getTitle() {
