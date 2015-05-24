@@ -46,6 +46,7 @@ class BaseElement extends Widget {
 			'ajaxSafe' => true
 		));
 
+		$fields->insertAfter(new ReadonlyField('Type'), 'Title');
 		$fields->removeByName('ListID');
 		$fields->removeByName('ParentID');
 		$fields->removeByName('Sort');
