@@ -17,6 +17,12 @@
 		"heyday/silverstripe-versioneddataobjects": "dev-master",
 		"undefinedoffset/sortablegridfield": "1.0.6"
 	},
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://packages.cwp.govt.nz/"
+		}
+	],
 	"extra": {
 		"installer-name": "elemental"
 	}
