@@ -15,6 +15,8 @@ class ElementFile extends BaseElement {
 
 	private static $title = "File Element";
 
+	protected $enable_title_in_template = true;
+
 	public function getCMSFields() {
 		$this->beforeUpdateCMSFields(function($fields) {
 
