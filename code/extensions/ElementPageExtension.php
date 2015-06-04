@@ -41,7 +41,7 @@ class ElementPageExtension extends DataExtension {
 		// after content.
 		$fields->replaceField('Content', new LiteralField('Content', ''));
 
-		$adder = new GridFieldAddNewMultiClass();
+		$adder = new ElementalGridFieldAddNewMultiClass();
 
 		if(is_array($this->owner->config()->get('allowed_elements'))) {
 			$list = $this->owner->config()->get('allowed_elements');
@@ -56,7 +56,6 @@ class ElementPageExtension extends DataExtension {
 		}
 
 		asort($list);
-
 		$adder->setClasses($list);
 
 		$area = $this->owner->ElementArea();
