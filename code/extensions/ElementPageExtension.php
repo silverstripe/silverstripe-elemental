@@ -51,7 +51,11 @@ class ElementPageExtension extends DataExtension {
 			unset($classes['BaseElement']);
 
 			foreach($classes as $class) {
-				$list[$class] = singleton($class)->i18n_singular_name();
+				$inst = singleton($class);
+
+				if($inst->canCreate()) {
+					$list[$class] = singleton($class)->i18n_singular_name();
+				}
 			}
 		}
 

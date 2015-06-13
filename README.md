@@ -48,8 +48,6 @@ flag.
 	ElementList:
 	  allowed_elements:
 	    'ElementFile' : 'File'
-	    'ElementInternalLink' : 'Internal Link'
-	    'ElementExternalLink' : 'External Link'
 ````
 
 Extra CSS classes can be configure in the `YAML` config file. By default, the Image element comes with 3 optional

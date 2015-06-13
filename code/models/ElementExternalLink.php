@@ -3,37 +3,30 @@
 /**
  * @package elemental
  */
-class ElementExternalLink extends BaseElement {
+class ElementExternalLink extends ElementLink {
 
-	private static $db = array(
-		'LinkText' => 'Varchar(255)',
-		'LinkDescription' => 'Text',
-		'LinkURL' => 'Varchar(255)',
-		'NewWindow' => 'Boolean'
-	);
+	public function __construct($record = null, $isSingleton = false, $model = null) {
+		parent::__construct($record, $isSingleton, $model);
 
-	private static $title = "External Link Element";
+		$this->ClassName = "ElementLink";
+		$this->write();
+	}
 
-	private static $description = "Link to an external source";
+	public function canCreate($member = null) {
+		return false;
+	}
+}
 
-	public function getCMSFields() {
-		$this->beforeUpdateCMSFields(function($fields) {
-			$url = TextField::create('LinkURL', 'Link URL');
-			$url->setRightTitle('Including protocol e.g: '.Director::absoluteBaseURL());
-			$fields->addFieldToTab('Root.Main',$url);
+class ElementInternalLink extends ElementLink {
 
-			$newWindow = CheckboxField::create('NewWindow', 'Open in a new window');
-			$fields->addFieldToTab('Root.Main',$newWindow);
+	public function __construct($record = null, $isSingleton = false, $model = null) {
+		parent::__construct($record, $isSingleton, $model);
 
-			$text = TextField::create('LinkText', 'Link Text');
-			$text->setRightTitle('Optional');
-			$fields->addFieldToTab('Root.Main',$text);
+		$this->ClassName = "ElementLink";
+		$this->write();
+	}
 
-			$desc = TextareaField::create('LinkDescription', 'Link Description');
-			$desc->setRightTitle('Optional');
-			$fields->addFieldToTab('Root.Main',$desc);
-		});
-
-		return parent::getCMSFields();
+	public function canCreate($member = null) {
+		return false;
 	}
 }
