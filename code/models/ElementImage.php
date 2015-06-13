@@ -5,7 +5,7 @@
  *
  * @package elemental
  */
-class ElementImage extends ElementInternalLink {
+class ElementImage extends ElementLink {
 
 	private static $db = array(
 		'Caption' => 'HTMLText'
