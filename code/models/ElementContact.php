@@ -40,14 +40,11 @@ class ElementContact extends BaseElement {
 
 		return parent::getCMSFields();
 	}
-}
 
-/**
- * @package elemental
- */
-class ElementContact_Controller extends BaseElement_Controller {
-
+	/**
+	* Return the obfuscated email
+	*/
 	public function ObfuscatedEmail() {
-		return ($this->data()->Email) ? Email::obfuscate($this->data()->Email, 'hex') : null;
+		return ($this->Email) ? Email::obfuscate($this->Email, 'hex') : null;
 	}
 }
