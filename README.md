@@ -29,6 +29,7 @@ Extend any page type with the ElementPageExtension and define allowed elements. 
 - Silverstripe 3.1
 - [ajshort/silverstripe-gridfieldextensions](https://github.com/ajshort/silverstripe-gridfieldextensions)
 - [ajshort/silverstripe-addressable](https://github.com/ajshort/silverstripe-addressable)
+- [undefinedoffset/sortablegridfield](https://github.com/UndefinedOffset/SortableGridField)
 
 ## Configuration
 
