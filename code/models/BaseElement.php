@@ -25,7 +25,7 @@ class BaseElement extends Widget {
 	private static $summary_fields = array(
 		'ID',
 		'Title',
-		'Type'
+		'ElementType'
 	);
 
 	/**
@@ -102,7 +102,7 @@ class BaseElement extends Widget {
 		return _t(__CLASS__, $this->config()->title);
 	}
 
-	public function getType() {
+	public function getElementType() {
 		return $this->i18n_singular_name();
 	}
 
