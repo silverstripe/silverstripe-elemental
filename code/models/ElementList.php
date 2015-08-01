@@ -15,6 +15,10 @@ class ElementList extends BaseElement {
 		'Elements' => 'BaseElement'
 	);
 
+	private static $duplicate_relations = array(
+		'Elements'
+	);
+
 	private static $extensions = array(
 		'ElementPublishChildren'
 	);

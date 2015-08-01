@@ -130,14 +130,14 @@ class ElementPageExtension extends DataExtension {
 
 	/**
 	 * If the page is duplicated, copy the widgets across too.
+	 * Gets called twice from either direction, due to bad DataObject
+	 * and SiteTree code, hence the weird if statement
 	 *
 	 * @return Page The duplicated page
 	 */
 	public function onAfterDuplicate($duplicatePage) {
-		// var_dump($page->ID, $this->owner->ID);
-		// exit('DUMP');
 		if($this->owner->ID != 0 && $this->owner->ID < $duplicatePage->ID) {
-			
+
 			$originalWidgetArea = $this->owner->getComponent('ElementArea');
 			$duplicateWidgetArea = $originalWidgetArea->duplicate(false);
 			$duplicateWidgetArea->write();
@@ -149,9 +149,27 @@ class ElementPageExtension extends DataExtension {
 
 				// manually set the ParentID of each widget, so we don't get versioning issues
 				DB::query(sprintf("UPDATE Widget SET ParentID = %d WHERE ID = %d", $duplicateWidgetArea->ID, $duplicateWidget->ID));
-
 			}
+		}
+	}
 
+	/**
+	 * If the page is duplicated across subsites, copy the widgets across too.
+	 *
+	 * @return Page The duplicated page
+	 */
+	public function onAfterDuplicateToSubsite($originalPage) {
+		$originalWidgetArea = $originalPage->getComponent('ElementArea');
+		$duplicateWidgetArea = $originalWidgetArea->duplicate(false);
+		$duplicateWidgetArea->write();
+		$this->owner->ElementAreaID = $duplicateWidgetArea->ID;
+		$this->owner->write();
+
+		foreach($originalWidgetArea->Items() as $originalWidget) {
+			$duplicateWidget = $originalWidget->duplicate(true);
+
+			// manually set the ParentID of each widget, so we don't get versioning issues
+			DB::query(sprintf("UPDATE Widget SET ParentID = %d WHERE ID = %d", $duplicateWidgetArea->ID, $duplicateWidget->ID));
 		}
 	}
 

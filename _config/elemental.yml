@@ -5,6 +5,10 @@ Widget:
   extensions:
     - 'VersionedDataObject'
 
+BaseElement:
+  extensions:
+    - 'ElementDuplicationExtension'
+
 ElementImage:
   css_styles:
     - 'image_large' : 'Large'
