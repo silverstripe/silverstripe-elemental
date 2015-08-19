@@ -100,6 +100,10 @@ class ElementPageExtension extends DataExtension {
 	 *
 	 */
 	public function onBeforeWrite() {
+		// enable theme incase elements are being rendered with templates stored in theme folder
+		$originalThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
+		Config::inst()->update('SSViewer', 'theme_enabled', true);
+	
 		if($ignored = Config::inst()->get('ElementPageExtension', 'ignored_classes')) {
 			foreach($ignored as $check) {
 				if(is_a($this->owner, $check)) {
@@ -124,6 +128,9 @@ class ElementPageExtension extends DataExtension {
 						
 			$this->owner->Content = implode(' ', $searchableContent);
 		}
+
+		// set theme_enabled back to what it was
+		Config::inst()->update('SSViewer', 'theme_enabled', $originalThemeEnabled);
 
 		parent::onBeforeWrite();
 	}
