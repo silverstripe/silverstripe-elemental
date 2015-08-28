@@ -113,7 +113,7 @@ class BaseElement extends Widget {
 			if(!$this->isInDb()) {
 				return;
 			}
-			
+
 			return $this->config()->title;
 		}
 	}
@@ -153,14 +153,18 @@ class BaseElement extends Widget {
 		return $this;
 	}
 
+	public function addRequirements() {
+		return false;
+	}
+
 	public function ControllerTop() {
 		return Controller::curr();
 	}
 
 	public function getPage() {
 		$area = $this->Parent();
-		
-		if($area instanceof ElementalArea) {		
+
+		if($area instanceof ElementalArea) {
 			return $area->getOwnerPage();
 		}
 
@@ -180,6 +184,8 @@ class BaseElement_Controller extends WidgetController {
 	 * @return string HTML
 	 */
 	public function WidgetHolder() {
-		return $this->getWidget()->WidgetHolder();
+		$widget = $this->getWidget();
+		$widget->addRequirements();
+		return $widget->WidgetHolder();
 	}
 }
