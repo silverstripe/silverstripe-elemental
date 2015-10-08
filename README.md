@@ -42,13 +42,17 @@ You may wish to only enable certain elements for the CMS authors to choose from 
 	  allowed_elements:
 		- 'ElementContent'
 
+````
+
 By default, an Element List can contain nested Elements. To set allowed elements in list use the `allowed_elements`
 flag.
 
 ````
+
 	ElementList:
 	  allowed_elements:
 	    'ElementFile' : 'File'
+
 ````
 
 Extra CSS classes can be configure in the `YAML` config file. By default, the Image element comes with 3 optional
