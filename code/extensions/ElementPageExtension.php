@@ -59,7 +59,12 @@ class ElementPageExtension extends DataExtension {
 			}
 		}
 
-		asort($list);
+		if(method_exists($this->owner, 'sortElementalOptions')) {
+			$this->owner->sortElementalOptions($list);
+		} else {
+			asort($list);
+		}
+
 		$adder->setClasses($list);
 
 		$area = $this->owner->ElementArea();
