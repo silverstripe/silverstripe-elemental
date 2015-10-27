@@ -58,7 +58,6 @@ class ElementPageExtension extends DataExtension {
 				}
 			}
 		}
-
 		if(method_exists($this->owner, 'sortElementalOptions')) {
 			$this->owner->sortElementalOptions($list);
 		} else {
