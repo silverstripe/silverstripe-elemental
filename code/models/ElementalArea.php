@@ -11,7 +11,7 @@ class ElementalArea extends WidgetArea {
 		$list = new HasManyList('BaseElement', $result->getForeignKey());
 		$list->setDataModel($this->model);
 		$list->sort('Sort ASC');
-		
+
 		$list = $list->forForeignID($this->ID);
 
 		return $list;
@@ -24,19 +24,28 @@ class ElementalArea extends WidgetArea {
 	*/
 	public function getOwnerPage() {
 
-	    foreach (get_declared_classes() as $class) {
-	        if (is_subclass_of($class, 'SiteTree')) {
-	        	$object = singleton($class);
-	        	if ($object->hasExtension('ElementPageExtension')) {
-	        		$page = $class::get()->filter('ElementAreaID', $this->ID);
-	        		if ($page->exists()) {
-	        			return $page->First();
-	        		}
-	        	}
-	        }
-	    }
+    foreach (get_declared_classes() as $class) {
+      if (is_subclass_of($class, 'SiteTree')) {
+				$object = singleton($class);
+				$classes = ClassInfo::subclassesFor('ElementPageExtension');
+				$isElemental = false;
 
-	    return false;
+				foreach($classes as $extension) {
+					if($object->hasExtension($extension)) $isElemental = true;
+				}
+
+				if($isElemental) {
+					$page = $class::get()->filter('ElementAreaID', $this->ID);
+					if($page && $page->exists()) {
+						return $page->first();
+					}
+				}
+			}
+
+		}
+
+		return false;
+
 	}
 
 
