@@ -10,8 +10,14 @@ class ElementalArea extends WidgetArea {
 
 		$list = new HasManyList('BaseElement', $result->getForeignKey());
 		$list->setDataModel($this->model);
+<<<<<<< HEAD
 		$list->sort('Sort ASC');
 
+=======
+		$list = $list->filter('Enabled', 1);
+		$list = $list->sort('Sort ASC');
+		
+>>>>>>> cc1bacfcf799bd97344a8219f8850b3a15cce8f7
 		$list = $list->forForeignID($this->ID);
 
 		return $list;
