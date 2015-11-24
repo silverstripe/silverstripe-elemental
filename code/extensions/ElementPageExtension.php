@@ -116,25 +116,28 @@ class ElementPageExtension extends DataExtension {
 			}
 		}
 
-		$elements = $this->owner->ElementArea();
+		if ($this->owner->hasMethod('ElementArea')) {
+			$elements = $this->owner->ElementArea();
 
-		if(!$elements->isInDB()) {
-			$elements->write();
-			$this->owner->ElementAreaID = $elements->ID;
-		}
-		else {
-			// Copy widgets content to Content to enable search
-			$searchableContent = array();
-
-			foreach ($elements->Items() as $element) {
-
-				if($element->config()->exclude_from_content) continue;
-				array_push($searchableContent, strip_tags($element->Content(), '<a>'));
-
+			if(!$elements->isInDB()) {
+				$elements->write();
+				$this->owner->ElementAreaID = $elements->ID;
 			}
+			else {
+				// Copy widgets content to Content to enable search
+				$searchableContent = array();
 
-			$this->owner->Content = implode(' ', $searchableContent);
+				foreach ($elements->Items() as $element) {
+
+					if($element->config()->exclude_from_content) continue;
+					array_push($searchableContent, strip_tags($element->Content(), '<a>'));
+
+				}
+
+				$this->owner->Content = implode(' ', $searchableContent);
+			}
 		}
+		
 
 		// set theme_enabled back to what it was
 		Config::inst()->update('SSViewer', 'theme_enabled', $originalThemeEnabled);
@@ -208,4 +211,34 @@ class ElementPageExtension extends DataExtension {
 			}
 		}
 	}
+
+    /**
+     * Roll back all changes if the parent page has a rollback event
+     *
+     * Only do rollback if it's the 'cancel draft changes' rollback, not a specific version
+     * rollback. 
+     *
+     * @param string $version
+     * @return null
+     */
+    public function onBeforeRollback($version) {
+        if ($version !== 'Live') {
+            // we don't yet have a smart way of rolling back to a specific version
+            return;
+        }
+        if($id = $this->owner->ElementAreaID) {
+			$widgets = Versioned::get_by_stage('BaseElement', 'Live', "ParentID = '$id'");
+			$staged = array();
+
+			foreach($widgets as $widget) {
+				$staged[] = $widget->ID;
+
+                $widget->invokeWithExtensions('onBeforeRollback', $widget);
+
+                $widget->publish("Live", "Stage", false);
+
+                $widget->invokeWithExtensions('onAfterRollback', $widget);
+			}
+		}
+    }
 }
