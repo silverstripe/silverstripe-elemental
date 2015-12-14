@@ -33,6 +33,10 @@ class ElementContent extends BaseElement {
 			$fields->removeByName('Style');
 		}
 
+		if ($this->isEndofLine('ElementContent') && $this->hasExtension('VersionViewerDataObject')) {
+			$fields = $this->addVersionViewer($fields, $this);
+		}
+
 		return $fields;
 	}
 
