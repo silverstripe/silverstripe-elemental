@@ -3,50 +3,50 @@
 /**
  * @package elemental
  */
-class ElementalArea extends WidgetArea {
+class ElementalArea extends WidgetArea
+{
 
-	public function Elements() {
-		$result = $this->getComponents('Widgets');
+    public function Elements()
+    {
+        $result = $this->getComponents('Widgets');
 
-		$list = new HasManyList('BaseElement', $result->getForeignKey());
-		$list->setDataModel($this->model);
-		$list->sort('Sort ASC');
+        $list = new HasManyList('BaseElement', $result->getForeignKey());
+        $list->setDataModel($this->model);
+        $list->sort('Sort ASC');
 
-		$list = $list->forForeignID($this->ID);
+        $list = $list->forForeignID($this->ID);
 
-		return $list;
-	}
+        return $list;
+    }
 
-	/**
-	* Return an ArrayList of pages with the Element Page Extension
-	*
-	* @return ArrayList
-	*/
-	public function getOwnerPage() {
+    /**
+    * Return an ArrayList of pages with the Element Page Extension
+    *
+    * @return ArrayList
+    */
+    public function getOwnerPage()
+    {
+        foreach (get_declared_classes() as $class) {
+            if (is_subclass_of($class, 'SiteTree')) {
+                $object = singleton($class);
+                $classes = ClassInfo::subclassesFor('ElementPageExtension');
+                $isElemental = false;
 
-    foreach (get_declared_classes() as $class) {
-      if (is_subclass_of($class, 'SiteTree')) {
-				$object = singleton($class);
-				$classes = ClassInfo::subclassesFor('ElementPageExtension');
-				$isElemental = false;
+                foreach ($classes as $extension) {
+                    if ($object->hasExtension($extension)) {
+                        $isElemental = true;
+                    }
+                }
 
-				foreach($classes as $extension) {
-					if($object->hasExtension($extension)) $isElemental = true;
-				}
+                if ($isElemental) {
+                    $page = $class::get()->filter('ElementAreaID', $this->ID);
+                    if ($page && $page->exists()) {
+                        return $page->first();
+                    }
+                }
+            }
+        }
 
-				if($isElemental) {
-					$page = $class::get()->filter('ElementAreaID', $this->ID);
-					if($page && $page->exists()) {
-						return $page->first();
-					}
-				}
-			}
-
-		}
-
-		return false;
-
-	}
-
-
+        return false;
+    }
 }
