@@ -17,6 +17,9 @@
 		"heyday/silverstripe-versioneddataobjects": "dev-master",
 		"undefinedoffset/sortablegridfield": "dev-master"
 	},
+	"suggest": {
+		"bluehousegroup/silverstripe-data-object-version-viewer": "Allows viewing of version history for data objects inside of the SilverStripe CMS"
+	},
 	"extra": {
 		"installer-name": "elemental"
 	}

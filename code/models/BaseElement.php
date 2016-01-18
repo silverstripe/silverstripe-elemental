@@ -83,8 +83,31 @@ class BaseElement extends Widget
 
         $this->extend('updateCMSFields', $fields);
 
+        if ($this->IsInDB()) {
+            if ($this->isEndofLine('BaseElement') && $this->hasExtension('VersionViewerDataObject')) {
+                $fields = $this->addVersionViewer($fields, $this);
+            }
+        }
+
         return $fields;
     }
+
+    /**
+     * Version viewer must only be added at if this is the final getCMSFields for a class.
+     * in order to avoid having to rename all fields from eg Root.Main to Root.Current.Main
+     * To do this we test if getCMSFields is from the current class
+     */
+    public function isEndofLine($className)
+    {
+        $methodFromClass = ClassInfo::has_method_from(
+            $this->ClassName, 'getCMSFields', $className
+        );
+
+        if($methodFromClass) {
+            return true;
+        }
+    }
+
 
     public function onBeforeWrite()
     {
@@ -185,25 +208,5 @@ class BaseElement extends Widget
         }
 
         return null;
-    }
-}
-
-/**
- * @package elemental
- */
-class BaseElement_Controller extends WidgetController
-{
-
-    /**
-     * Overloaded from {@link Widget->WidgetHolder()} to allow for controller/
-     * form linking.
-     *
-     * @return string HTML
-     */
-    public function WidgetHolder()
-    {
-        $widget = $this->getWidget();
-        $widget->addRequirements();
-        return $widget->WidgetHolder();
     }
 }
