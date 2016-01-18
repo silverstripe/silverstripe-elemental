@@ -3,27 +3,29 @@
 /**
  * @package elemental
  */
-class ElementUserDefinedForm extends BaseElement {
-	
-	private static $has_one = array(
-		'Form' => 'UserDefinedForm'
-	);
+class ElementUserDefinedForm extends BaseElement
+{
+    
+    private static $has_one = array(
+        'Form' => 'UserDefinedForm'
+    );
 
-	private static $title = "Form Element";
+    private static $title = "Form Element";
 
-	public function ElementForm() {
-		if($this->Form()->exists()) {
-			$controller = new UserDefinedForm_Controller($this->Form());
+    public function ElementForm()
+    {
+        if ($this->Form()->exists()) {
+            $controller = new UserDefinedForm_Controller($this->Form());
 
-			$current = Controller::curr();
+            $current = Controller::curr();
 
-			if($current && $current->getAction() == 'finished') {
-				return $controller->renderWith('ReceivedFormSubmission');
-			}
+            if ($current && $current->getAction() == 'finished') {
+                return $controller->renderWith('ReceivedFormSubmission');
+            }
 
-			$form = $controller->Form();
+            $form = $controller->Form();
 
-			return $form;
-		}
-	}
+            return $form;
+        }
+    }
 }
