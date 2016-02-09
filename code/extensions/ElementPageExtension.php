@@ -133,13 +133,14 @@ class ElementPageExtension extends DataExtension
                     if ($element->config()->exclude_from_content) {
                         continue;
                     }
-                    array_push($searchableContent, strip_tags($element->Content(), '<a>'));
+
+                    array_push($searchableContent, strip_tags($element->WidgetHolder(), '<a>'));
                 }
 
-                $this->owner->Content = implode(' ', $searchableContent);
+                $this->owner->Content = trim(implode(' ', $searchableContent));
             }
         }
-        
+
 
         // set theme_enabled back to what it was
         Config::inst()->update('SSViewer', 'theme_enabled', $originalThemeEnabled);
