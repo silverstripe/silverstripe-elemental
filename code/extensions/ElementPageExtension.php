@@ -221,7 +221,7 @@ class ElementPageExtension extends DataExtension
      * Roll back all changes if the parent page has a rollback event
      *
      * Only do rollback if it's the 'cancel draft changes' rollback, not a specific version
-     * rollback. 
+     * rollback.
      *
      * @param string $version
      * @return null

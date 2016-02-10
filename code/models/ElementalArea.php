@@ -20,6 +20,13 @@ class ElementalArea extends WidgetArea
     }
 
     /**
+     * @return HasManyList
+     */
+    public function ItemsToRender() {
+        return $this->Elements();
+    }
+
+    /**
     * Return an ArrayList of pages with the Element Page Extension
     *
     * @return ArrayList
