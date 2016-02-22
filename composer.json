@@ -17,6 +17,9 @@
 		"heyday/silverstripe-versioneddataobjects": "~1.0",
 		"undefinedoffset/sortablegridfield": "~0.5"
 	},
+    "require-dev": {
+        "phpunit/PHPUnit": "~3.7@stable"
+    },
 	"suggest": {
 		"bluehousegroup/silverstripe-data-object-version-viewer": "Allows viewing of version history for data objects inside of the SilverStripe CMS"
 	},
