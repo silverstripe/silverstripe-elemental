@@ -85,4 +85,24 @@ class ElementList extends BaseElement
 
         return parent::getCMSFields();
     }
+
+    /**
+     * Used in template instead of {@link Widgets()} to wrap each widget in its
+     * controller, making it easier to access and process form logic and
+     * actions stored in {@link WidgetController}.
+     *
+     * @return SS_List - Collection of {@link WidgetController} instances.
+     */
+    public function WidgetControllers() {
+        $controllers = new ArrayList();
+
+        foreach($this->Elements()->filter('Enabled', 1) as $widget) {
+            $controller = $widget->getController();
+
+            $controller->init();
+            $controllers->push($controller);
+        }
+
+        return $controllers;
+    }
 }

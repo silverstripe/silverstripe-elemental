@@ -1,11 +1,17 @@
 # SilverStripe Elemental
 
+[![Build Status](http://img.shields.io/travis/dnadesign/silverstripe-elemental.svg?style=flat-square)](https://travis-ci.org/dnadesign/silverstripe-elemental)
+[![Version](http://img.shields.io/packagist/v/dnadesign/silverstripe-elemental.svg?style=flat-square)](https://packagist.org/packages/dnadesign/silverstripe-elemental)
+[![License](http://img.shields.io/packagist/l/dnadesign/silverstripe-elemental.svg?style=flat-square)](LICENSE.md)
+
 ## Introduction
 
 This module extends a page type to swap the content area for a GridField and manageable elements (widgets) to compose
-a page out of rather than a single text field.
+a page out of rather than a single text field. Features supported:
 
-Versioning and search indexing are supported out of the box.
+* Versioning of element
+* Search indexed element content
+* Ability to add, remove supported elements per page.
 
 The module provides basic markup for each of the widgets but you will likely need to provide your own styles. Replace
 the `$Content` variable with `$ElementArea` and rely on the markup of the individual widgets.
@@ -15,7 +21,7 @@ the `$Content` variable with `$ElementArea` and rely on the markup of the indivi
 	composer require "dnadesign/silverstripe-elemental" "dev-master"
 
 Extend any page type with the ElementPageExtension and define allowed elements. This can be done via the SilverStripe
-`YAML` config API
+`YAML` config API.
 
 **mysite/_config/app.yml**
 
@@ -23,15 +29,15 @@ Extend any page type with the ElementPageExtension and define allowed elements. 
 	  extensions:
 	    - ElementPageExtension
 
-
-## Requirements
-
-- Silverstripe 3.1
-- [ajshort/silverstripe-gridfieldextensions](https://github.com/ajshort/silverstripe-gridfieldextensions)
-- [ajshort/silverstripe-addressable](https://github.com/ajshort/silverstripe-addressable)
-- [undefinedoffset/sortablegridfield](https://github.com/UndefinedOffset/SortableGridField)
+In your page type template use `$ElementArea` to render the elements to the page.
 
 ## Configuration
+
+### Customize HTML and Markup
+
+The basic element area is rendered into the standard `WidgetArea` template. This loops over each of the widget
+controller instances. Each controller instance will render `$WidgetHolder` which represented the widget contained within
+a holder `div`. The wrapper div is the `ElementHolder.ss` template.
 
 ### Limit Allowed Elements
 
@@ -80,11 +86,15 @@ database and reload the CMS.
 		private static $description = "My Custom Element";
 
 		public function getCMSFields() {
-			// ...
+			$fields = parent::getCMSFields();
+
+            // ...
+
+            return $fields;
 		}
 	}
 
-MyElement will be rendered into a `MyElement.ss` template.
+`MyElement` will be rendered into a `MyElement.ss` template with the `ElementHolder.ss` wrapper.
 
 ### Screenshots
 

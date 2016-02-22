@@ -54,10 +54,6 @@ class BaseElement extends Widget
         $fields->removeByName('Sort');
         $fields->removeByName('ExtraClass');
 
-        /** Title
-        * By default, the Title is used for reference only
-        * Set $enable_title_in_template to true  when using title in template
-        */
         if (!$this->enable_title_in_template) {
             $fields->removeByName('HideTitle');
             $title = $fields->fieldByName('Root.Main.Title');
@@ -179,21 +175,6 @@ class BaseElement extends Widget
         return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
     }
 
-    public function WidgetHolder()
-    {
-        return $this->renderWith("ElementHolder");
-    }
-
-    public function getWidget()
-    {
-        return $this;
-    }
-
-    public function addRequirements()
-    {
-        return false;
-    }
-
     public function ControllerTop()
     {
         return Controller::curr();
@@ -208,5 +189,15 @@ class BaseElement extends Widget
         }
 
         return null;
+    }
+
+    /**
+     * Override the {@link Widget::forTemplate()} method so that holders are not rendered twice. The controller should
+     * render with widget inside the
+     *
+     * @return HTML
+     */
+    public function forTemplate($holder = true) {
+        return $this->renderWith($this->class);
     }
 }
