@@ -17,7 +17,9 @@ class ElementPublishChildren extends DataExtension
         }
 
         // remove any elements that are on live but not in draft.
-        $widgets = Versioned::get_by_stage('BaseElement', 'Live', "ParentID = '". $this->owner->ID ."' OR ListID = '".$this->owner->ID."'");
+        $widgets = Versioned::get_by_stage('BaseElement', 'Live', sprintf(
+            "ListID = '%$1s'", $this->owner->ID
+        ));
 
         foreach ($widgets as $widget) {
             if (!in_array($widget->ID, $staged)) {
