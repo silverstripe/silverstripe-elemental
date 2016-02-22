@@ -5,7 +5,6 @@
  */
 class ElementalArea extends WidgetArea
 {
-
     public function Elements()
     {
         $result = $this->getComponents('Widgets');
@@ -15,6 +14,9 @@ class ElementalArea extends WidgetArea
         $list->sort('Sort ASC');
 
         $list = $list->forForeignID($this->ID);
+        $list = $list->filter(array(
+            'Enabled' => 1
+        ));
 
         return $list;
     }
