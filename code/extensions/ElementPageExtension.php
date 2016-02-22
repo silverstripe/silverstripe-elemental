@@ -6,6 +6,11 @@
 class ElementPageExtension extends DataExtension
 {
 
+    /**
+     * @config
+     *
+     * @var string $elements_title Title of the element in the CMS.
+     */
     private static $elements_title = 'Elements';
 
     /**
@@ -15,6 +20,9 @@ class ElementPageExtension extends DataExtension
      */
     private static $ignored_classes = array();
 
+    /**
+     * @var array $db
+     */
     private static $db = array();
 
     private static $has_one = array(
@@ -24,7 +32,7 @@ class ElementPageExtension extends DataExtension
     /**
      * Setup the CMS Fields
      *
-     * @return FieldList
+     * @param FieldList
      */
     public function updateCMSFields(FieldList $fields)
     {

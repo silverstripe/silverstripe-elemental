@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @package elemental
+ */
 class ElementChildrenList extends BaseElement
 {
 

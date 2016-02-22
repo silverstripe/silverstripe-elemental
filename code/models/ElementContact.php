@@ -25,6 +25,9 @@ class ElementContact extends BaseElement
      */
     private static $title = "Contact Element";
 
+    /**
+     * @return FieldList
+     */
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(function ($fields) {
@@ -44,8 +47,10 @@ class ElementContact extends BaseElement
     }
 
     /**
-    * Return the obfuscated email
-    */
+     * Return the obfuscated email.
+     *
+     * @return string
+     */
     public function ObfuscatedEmail()
     {
         return ($this->Email) ? Email::obfuscate($this->Email, 'hex') : null;

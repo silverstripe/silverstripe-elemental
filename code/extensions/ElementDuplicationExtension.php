@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @package elemental
+ */
 class ElementDuplicationExtension extends Extension
 {
 

@@ -11,8 +11,7 @@ class ElementContent extends BaseElement
         'Style' => 'Varchar'
     );
 
-    private static $styles = array(
-    );
+    private static $styles = array();
 
     private static $title = "Generic Content";
 

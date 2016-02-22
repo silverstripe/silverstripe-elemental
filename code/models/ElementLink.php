@@ -5,7 +5,6 @@
  */
 class ElementLink extends BaseElement
 {
-
     private static $db = array(
         'LinkText' => 'Varchar(255)',
         'LinkDescription' => 'Text',
