@@ -16,14 +16,17 @@ class ElementPublishChildren extends DataExtension
             $widget->publish('Stage', 'Live');
         }
 
-        // remove any elements that are on live but not in draft.
-        $widgets = Versioned::get_by_stage('BaseElement', 'Live', sprintf(
-            "ListID = '%s'", $this->owner->ID
-        ));
+        if($this->owner->ID) {
 
-        foreach ($widgets as $widget) {
-            if (!in_array($widget->ID, $staged)) {
-                $widget->deleteFromStage('Live');
+            // remove any elements that are on live but not in draft.
+            $widgets = Versioned::get_by_stage('BaseElement', 'Live', sprintf(
+                "ListID = '%s'", $this->owner->ID
+            ));
+
+            foreach ($widgets as $widget) {
+                if (!in_array($widget->ID, $staged)) {
+                    $widget->deleteFromStage('Live');
+                }
             }
         }
     }
