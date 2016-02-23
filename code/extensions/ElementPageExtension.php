@@ -142,7 +142,10 @@ class ElementPageExtension extends DataExtension
                         continue;
                     }
 
-                    array_push($searchableContent, strip_tags($element->WidgetHolder(), '<a>'));
+                    $controller = $element->getController();
+                    $controller->init();
+
+                    array_push($searchableContent, $controller->WidgetHolder());
                 }
 
                 $this->owner->Content = trim(implode(' ', $searchableContent));
