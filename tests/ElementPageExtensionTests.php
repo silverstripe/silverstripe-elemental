@@ -21,23 +21,12 @@ class ElementPageExtensionTests extends FunctionalTest {
         $this->assertNotNull($elementarea);
 
 
-        $elementarea = $page->getCMSFields()->dataFieldByName('Content');
+        $content = $page->getCMSFields()->dataFieldByName('Content');
         $this->assertNull($content);
 
-        $redirect = $this->objFromFixture('Page', 'elementredirectpage');
-        $elementarea = $page->getCMSFields()->dataFieldByName('ElementArea');
+        $redirect = $this->objFromFixture('RedirectorPage', 'elementredirectpage');
+        $elementarea = $redirect->getCMSFields()->dataFieldByName('ElementArea');
         $this->assertNull($elementarea);
     }
 
-    public function testDuplicatePageCopiesContent() {
-
-    }
-
-    public function testPublishingPagePublishesElement() {
-
-    }
-
-    public function testElementalArea() {
-
-    }
 }
