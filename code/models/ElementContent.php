@@ -21,8 +21,6 @@ class ElementContent extends BaseElement
     {
         $styles = $this->config()->get('styles');
 
-        $fields = parent::getCMSFields();
-
         if (count($styles) > 0) {
             $this->beforeUpdateCMSFields(function ($fields) use ($styles) {
                 $fields->addFieldsToTab('Root.Main', new HtmlEditorField('HTML', 'Content'));
@@ -31,8 +29,12 @@ class ElementContent extends BaseElement
                 $styles->setEmptyString('Select a custom style..');
             });
         } else {
-            $fields->removeByName('Style');
+            $this->beforeUpdateCMSFields(function ($fields) {
+                $fields->removeByName('Style');
+            });
         }
+
+        $fields = parent::getCMSFields();
 
         if ($this->isEndofLine('ElementContent') && $this->hasExtension('VersionViewerDataObject')) {
             $fields = $this->addVersionViewer($fields, $this);
