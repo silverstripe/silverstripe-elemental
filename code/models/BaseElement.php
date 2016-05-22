@@ -53,7 +53,7 @@ class BaseElement extends Widget
             'ajaxSafe' => true
         ));
 
-        $fields->insertAfter(new ReadonlyField('Type'), 'Title');
+        $fields->insertAfter(new ReadonlyField('ClassNameTranslated', _t('BaseElement.TYPE', 'Type'), $this->i18n_singular_name()), 'Title');
         $fields->removeByName('ListID');
         $fields->removeByName('ParentID');
         $fields->removeByName('Sort');

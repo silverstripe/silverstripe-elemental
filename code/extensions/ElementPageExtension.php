@@ -11,7 +11,7 @@ class ElementPageExtension extends DataExtension
      *
      * @var string $elements_title Title of the element in the CMS.
      */
-    private static $elements_title = 'Elements';
+    private static $elements_title = 'Content Blocks';
 
     /**
      * @config
