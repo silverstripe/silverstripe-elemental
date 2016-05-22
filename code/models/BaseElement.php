@@ -5,7 +5,6 @@
  */
 class BaseElement extends Widget
 {
-
     private static $db = array(
         'ExtraClass' => 'Varchar(255)',
         'HideTitle' => 'Boolean'
@@ -17,26 +16,32 @@ class BaseElement extends Widget
 
     /**
      * @var string
-    */
-    private static $title = "Base Element";
+     */
+    private static $title = "Content Block";
+
+    /**
+     * @var string
+     */
+    private static $singular_name = 'Content Block';
+
 
     /**
      * @var array
      */
     private static $summary_fields = array(
-        'ID',
-        'Title',
-        'ElementType'
+        'ID' => 'ID',
+        'Title' => 'Title',
+        'ElementType' => 'Type'
     );
 
     /**
     * @var string
     */
-    private static $description = "Base class for elements";
+    private static $description = "Base class for content blocks";
 
     /**
-    * @var boolean
-    */
+     * @var boolean
+     */
     protected $enable_title_in_template = false;
 
 

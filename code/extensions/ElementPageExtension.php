@@ -39,7 +39,7 @@ class ElementPageExtension extends DataExtension
         // redirector pages should not have elements
         if (is_a($this->owner, 'RedirectorPage')) {
             return;
-        } elseif ($ignored = Config::inst()->get('ElementPageExtension', 'ignored_classes')) {
+        } else if ($ignored = Config::inst()->get('ElementPageExtension', 'ignored_classes')) {
             foreach ($ignored as $check) {
                 if (is_a($this->owner, $check)) {
                     return;
@@ -53,27 +53,7 @@ class ElementPageExtension extends DataExtension
 
         $adder = new ElementalGridFieldAddNewMultiClass();
 
-        if (is_array($this->owner->config()->get('allowed_elements'))) {
-            $list = $this->owner->config()->get('allowed_elements');
-        } else {
-            $classes = ClassInfo::subclassesFor('BaseElement');
-            $list = array();
-            unset($classes['BaseElement']);
-
-            foreach ($classes as $class) {
-                $inst = singleton($class);
-
-                if ($inst->canCreate()) {
-                    $list[$class] = singleton($class)->i18n_singular_name();
-                }
-            }
-        }
-        if (method_exists($this->owner, 'sortElementalOptions')) {
-            $this->owner->sortElementalOptions($list);
-        } else {
-            asort($list);
-        }
-
+        $list = $this->getAvailableTypes();
         $adder->setClasses($list);
 
         $area = $this->owner->ElementArea();
@@ -107,6 +87,31 @@ class ElementPageExtension extends DataExtension
         $fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
 
         return $fields;
+    }
+
+    public function getAvailableTypes() {
+        if (is_array($this->owner->config()->get('allowed_elements'))) {
+            $list = $this->owner->config()->get('allowed_elements');
+        } else {
+            $classes = ClassInfo::subclassesFor('BaseElement');
+            $list = array();
+            unset($classes['BaseElement']);
+
+            foreach ($classes as $class) {
+                $inst = singleton($class);
+
+                if ($inst->canCreate()) {
+                    $list[$class] = singleton($class)->i18n_singular_name();
+                }
+            }
+        }
+        if (method_exists($this->owner, 'sortElementalOptions')) {
+            $this->owner->sortElementalOptions($list);
+        } else {
+            asort($list);
+        }
+
+        return $list;
     }
 
     /**

@@ -9,7 +9,7 @@
 This module extends a page type to swap the content area for a GridField and manageable elements (widgets) to compose
 a page out of rather than a single text field. Features supported:
 
-* Versioning of element
+* Versioning of elements
 * Search indexed element content
 * Ability to add, remove supported elements per page.
 
@@ -96,8 +96,12 @@ database and reload the CMS.
 
 `MyElement` will be rendered into a `MyElement.ss` template with the `ElementHolder.ss` wrapper.
 
-### Screenshots
+## Screenshots
 
 ![Overview](docs/images/overview.png)
 
 ![Detail](docs/images/detail.png)
+
+## Credits
+
+CMS Icon blocks by Creative Stall from the Noun Project
