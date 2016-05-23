@@ -8,6 +8,7 @@ class ElementalArea extends WidgetArea
     public function Elements()
     {
         $result = $this->getComponents('Widgets');
+
         if ($result instanceof UnsavedRelationList) {
             return array();
         }

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @package elemental
+ */
 class ElementalAdmin extends ModelAdmin {
 
     private static $managed_models = array(
@@ -21,5 +24,17 @@ class ElementalAdmin extends ModelAdmin {
         $grid->getConfig()->removeComponentsByType('GridFieldAddNewButton');
 
         return $form;
+    }
+
+    /**
+     * Exclude our linked elements
+     *
+     * @return DataList
+     */
+    public function getList() {
+        $list = parent::getList();
+        $list = $list->exclude('ClassName', 'ElementVirtualLinked');
+
+        return $list;
     }
 }

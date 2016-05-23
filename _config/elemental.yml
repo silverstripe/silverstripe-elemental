@@ -16,3 +16,6 @@ ElementImage:
     - 'image_small' : 'Small'
 
 
+LeftAndMain:
+  extra_requirements_css:
+    - 'elemental/css/elemental-admin.css'

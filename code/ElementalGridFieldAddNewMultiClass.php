@@ -10,6 +10,8 @@ class ElementalGridFieldAddNewMultiClass extends GridFieldAddNewMultiClass
     {
         $classes = parent::getClasses($grid);
 
+        unset($classes['ElementVirtualLinked']);
+
         return $classes;
     }
 }

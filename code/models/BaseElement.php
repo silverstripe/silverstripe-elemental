@@ -5,13 +5,26 @@
  */
 class BaseElement extends Widget
 {
+    /**
+     * @var array $db
+     */
     private static $db = array(
         'ExtraClass' => 'Varchar(255)',
         'HideTitle' => 'Boolean'
     );
 
+    /**
+     * @var array $has_one
+     */
     private static $has_one = array(
         'List' => 'ElementList' // optional.
+    );
+
+    /**
+     * @var array $has_many
+     */
+    private static $has_many = array(
+        'VirtualClones' => 'ElementVirtualLinked'
     );
 
     /**
@@ -24,7 +37,6 @@ class BaseElement extends Widget
      */
     private static $singular_name = 'Content Block';
 
-
     /**
      * @var array
      */
@@ -33,11 +45,6 @@ class BaseElement extends Widget
         'Title' => 'Title',
         'ElementType' => 'Type'
     );
-
-    /**
-    * @var string
-    */
-    private static $description = "Base class for content blocks";
 
     /**
      * @var boolean
@@ -62,6 +69,7 @@ class BaseElement extends Widget
         if (!$this->enable_title_in_template) {
             $fields->removeByName('HideTitle');
             $title = $fields->fieldByName('Root.Main.Title');
+
             if ($title) {
                 $title->setRightTitle('For reference only. Does not appear in the template.');
             }
@@ -204,5 +212,17 @@ class BaseElement extends Widget
      */
     public function forTemplate($holder = true) {
         return $this->renderWith($this->class);
+    }
+
+    /**
+     * @return string
+     */
+    public function getEditLink() {
+        return Controller::join_links(
+            Director::absoluteBaseURL(),
+            'admin/elemental/BaseElement/EditForm/field/BaseElement/item',
+            $this->ID,
+            'edit'
+        );
     }
 }

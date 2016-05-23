@@ -25,6 +25,9 @@ class ElementPageExtension extends DataExtension
      */
     private static $db = array();
 
+    /**
+     * @var array $has_one
+     */
     private static $has_one = array(
         'ElementArea' => 'ElementalArea'
     );
@@ -36,15 +39,8 @@ class ElementPageExtension extends DataExtension
      */
     public function updateCMSFields(FieldList $fields)
     {
-        // redirector pages should not have elements
-        if (is_a($this->owner, 'RedirectorPage')) {
-            return;
-        } else if ($ignored = Config::inst()->get('ElementPageExtension', 'ignored_classes')) {
-            foreach ($ignored as $check) {
-                if (is_a($this->owner, $check)) {
-                    return;
-                }
-            }
+        if(!$this->supportsElemental()) {
+            return false;
         }
 
         // add an empty holder for content as some module explicitly use insert
@@ -70,9 +66,10 @@ class ElementPageExtension extends DataExtension
             $this->owner->ElementArea()->Elements(),
             GridFieldConfig_RelationEditor::create()
                 ->removeComponentsByType('GridFieldAddNewButton')
-                ->removeComponentsByType('GridFieldAddExistingAutocompleter')
                 ->removeComponentsByType('GridFieldDeleteAction')
-                ->addComponent(new GridFieldDeleteAction(false))
+                ->removeComponentsByType('GridFieldAddExistingAutocompleter')
+                ->addComponent(new ElementalGridFieldAddExistingAutocompleter())
+                ->addComponent(new ElementalGridFieldDeleteAction())
                 ->addComponent($adder)
                 ->addComponent(new GridFieldSortableRows('Sort'))
         );
@@ -89,6 +86,9 @@ class ElementPageExtension extends DataExtension
         return $fields;
     }
 
+    /**
+     * @return array
+     */
     public function getAvailableTypes() {
         if (is_array($this->owner->config()->get('allowed_elements'))) {
             $list = $this->owner->config()->get('allowed_elements');
@@ -120,16 +120,12 @@ class ElementPageExtension extends DataExtension
      */
     public function onBeforeWrite()
     {
-        // enable theme incase elements are being rendered with templates stored in theme folder
+        // enable theme in case elements are being rendered with templates stored in theme folder
         $originalThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
         Config::inst()->update('SSViewer', 'theme_enabled', true);
 
-        if ($ignored = Config::inst()->get('ElementPageExtension', 'ignored_classes')) {
-            foreach ($ignored as $check) {
-                if (is_a($this->owner, $check)) {
-                    return;
-                }
-            }
+        if(!$this->supportsElemental()) {
+            return;
         }
 
         if ($this->owner->hasMethod('ElementArea')) {
@@ -142,15 +138,18 @@ class ElementPageExtension extends DataExtension
                 // Copy widgets content to Content to enable search
                 $searchableContent = array();
 
-                foreach ($elements->Items() as $element) {
+                foreach ($elements->Elements() as $element) {
                     if ($element->config()->exclude_from_content) {
                         continue;
                     }
 
                     $controller = $element->getController();
-                    $controller->init();
 
-                    array_push($searchableContent, $controller->WidgetHolder());
+                    foreach ($elements->Items() as $element) {
+                        $controller->init();
+
+                        array_push($searchableContent, $controller->WidgetHolder());
+                    }
                 }
 
                 $this->owner->Content = trim(implode(' ', $searchableContent));
@@ -165,9 +164,26 @@ class ElementPageExtension extends DataExtension
     }
 
     /**
+     * @return boolean
+     */
+    public function supportsElemental() {
+        if (is_a($this->owner, 'RedirectorPage')) {
+            return false;
+        } else if ($ignored = Config::inst()->get('ElementPageExtension', 'ignored_classes')) {
+            foreach ($ignored as $check) {
+                if (is_a($this->owner, $check)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * If the page is duplicated, copy the widgets across too.
-     * Gets called twice from either direction, due to bad DataObject
-     * and SiteTree code, hence the weird if statement
+     *
+     * Gets called twice from either direction, due to bad DataObject and SiteTree code, hence the weird if statement
      *
      * @return Page The duplicated page
      */
@@ -210,6 +226,9 @@ class ElementPageExtension extends DataExtension
         }
     }
 
+    /**
+     * Publish
+     */
     public function onAfterPublish()
     {
         if ($id = $this->owner->ElementAreaID) {
