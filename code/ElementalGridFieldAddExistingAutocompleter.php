@@ -29,20 +29,21 @@ class ElementalGridFieldAddExistingAutocompleter extends GridFieldAddExistingAut
      */
     public function getManipulatedData(GridField $gridField, SS_List $dataList)
     {
-        $objectID = $gridField->State->GridFieldAddRelation(null);
 
-        if(empty($objectID)) {
+        if(!$gridField->State->GridFieldAddRelation) {
             return $dataList;
         }
+        $objectID = Convert::raw2sql($gridField->State->GridFieldAddRelation);
+        if($objectID) {
+            $object = DataObject::get_by_id($dataList->dataclass(), $objectID);
 
-        $object = DataObject::get_by_id($dataList->dataclass(), $objectID);
+            if($object) {
+                $virtual = new ElementVirtualLinked();
+                $virtual->LinkedElementID = $object->ID;
+                $virtual->write();
 
-        if($object) {
-            $virtual = new ElementVirtualLinked();
-            $virtual->LinkedElementID = $object->ID;
-            $virtual->write();
-
-            $dataList->add($virtual);
+                $dataList->add($virtual);
+            }
         }
 
         $gridField->State->GridFieldAddRelation = null;
