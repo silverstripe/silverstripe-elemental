@@ -1,3 +1,18 @@
 .ss-gridfield-add-new-multi-class {
     clear: both;
 }
+
+.cms .field input.ui-autocomplete-input.ui-autocomplete-loading {
+    background-image: url(../../framework/images/progressbar_blue.gif);
+    background-repeat: no-repeat;
+    background-position: 96% center;
+    background-size: 30px;
+}
+
+.cms table.ss-gridfield-table tr[data-class="ElementVirtualLinked"] {
+    background: #eee;
+    font-style: italic;
+}
+    .cms table.ss-gridfield-table tr[data-class="ElementVirtualLinked"] td {
+        color: #999;
+    }

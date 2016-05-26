@@ -90,6 +90,20 @@ class BaseElement extends Widget
             }
         }
 
+
+        if($virtual = $fields->dataFieldByName('VirtualClones')) {
+            $virtual->getConfig()
+                ->removeComponentsByType('GridFieldAddExistingAutocompleter')
+                ->removeComponentsByType('GridFieldAddNewButton');
+
+            $virtual->getConfig()
+                ->getComponentByType('GridFieldDataColumns')
+                ->setDisplayFields(array(
+                    'Parent.getOwnerPage.Title' => 'Title',
+                    'Parent.getOwnerPage.Link' => 'Link'
+                ));
+        }
+
         $this->extend('updateCMSFields', $fields);
 
         if ($this->IsInDB()) {
@@ -224,5 +238,10 @@ class BaseElement extends Widget
             $this->ID,
             'edit'
         );
+    }
+
+    public function onBeforeVersionedPublish()
+    {
+
     }
 }
