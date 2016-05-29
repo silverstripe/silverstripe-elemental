@@ -92,9 +92,14 @@ class BaseElement extends Widget
 
 
         if($virtual = $fields->dataFieldByName('VirtualClones')) {
-            $virtual->getConfig()
-                ->removeComponentsByType('GridFieldAddExistingAutocompleter')
-                ->removeComponentsByType('GridFieldAddNewButton');
+            $tab = $fields->findOrMakeTab('Root.VirtualClones');
+            $tab->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'));
+
+            $virtual
+                ->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'))
+                ->getConfig()
+                    ->removeComponentsByType('GridFieldAddExistingAutocompleter')
+                    ->removeComponentsByType('GridFieldAddNewButton');
 
             $virtual->getConfig()
                 ->getComponentByType('GridFieldDataColumns')
