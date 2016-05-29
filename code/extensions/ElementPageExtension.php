@@ -81,7 +81,7 @@ class ElementPageExtension extends DataExtension
         $config->removeComponentsByType('GridFieldDetailForm');
         $config->addComponent(new VersionedDataObjectDetailsForm());
 
-        $fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
+        $fields->addFieldToTab('Root.Main', $gridField);
 
         return $fields;
     }
