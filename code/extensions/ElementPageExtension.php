@@ -138,6 +138,7 @@ class ElementPageExtension extends DataExtension
                 // Copy widgets content to Content to enable search
                 $searchableContent = array();
 
+                Requirements::clear();
                 foreach ($elements->Elements() as $element) {
                     if ($element->config()->exclude_from_content) {
                         continue;
@@ -151,6 +152,7 @@ class ElementPageExtension extends DataExtension
                         array_push($searchableContent, $controller->WidgetHolder());
                     }
                 }
+                Requirements::restore();
 
                 $this->owner->Content = trim(implode(' ', $searchableContent));
             }
