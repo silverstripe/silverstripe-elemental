@@ -16,7 +16,7 @@ class ElementChildrenList extends BaseElement
 
     private static $title = "Show a list of pages in a list.";
 
-    protected $enable_title_in_template = true;
+    private static $enable_title_in_template = true;
 
     public function getChildrenList()
     {

@@ -49,7 +49,7 @@ class BaseElement extends Widget
     /**
      * @var boolean
      */
-    protected $enable_title_in_template = false;
+    private static $enable_title_in_template = false;
 
 
     public function getCMSFields()
@@ -66,7 +66,7 @@ class BaseElement extends Widget
         $fields->removeByName('Sort');
         $fields->removeByName('ExtraClass');
 
-        if (!$this->enable_title_in_template) {
+        if (!$this->config()->enable_title_in_template) {
             $fields->removeByName('HideTitle');
             $title = $fields->fieldByName('Root.Main.Title');
 
