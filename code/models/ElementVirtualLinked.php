@@ -34,6 +34,10 @@ class ElementVirtualLinked extends BaseElement {
         );
 
         $fields = new FieldList(
+            new TabSet('Root', $main = new Tab('Main'))
+        );
+
+        $main->push(
             new LiteralField('Existing', $message)
         );
 

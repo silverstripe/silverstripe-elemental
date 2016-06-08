@@ -6,7 +6,7 @@
 class ElementalGridFieldDeleteAction extends GridFieldDeleteAction {
 
     public function getColumnContent($gridField, $record, $columnName) {
-        if($record instanceof ElementVirtualLinked) {
+        if($record instanceof ElementVirtualLinked || $record->VirtualClones()->count() > 0) {
             if(!$record->canEdit()) return;
 
             $field = GridField_FormAction::create($gridField, 'UnlinkRelation'.$record->ID, false,

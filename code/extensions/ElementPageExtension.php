@@ -50,7 +50,9 @@ class ElementPageExtension extends DataExtension
         $adder = new ElementalGridFieldAddNewMultiClass();
 
         $list = $this->getAvailableTypes();
-        $adder->setClasses($list);
+        if($list) {
+            $adder->setClasses($list);
+        }
 
         $area = $this->owner->ElementArea();
 
@@ -105,6 +107,7 @@ class ElementPageExtension extends DataExtension
                 }
             }
         }
+
         if (method_exists($this->owner, 'sortElementalOptions')) {
             $this->owner->sortElementalOptions($list);
         } else {
