@@ -3,7 +3,7 @@ Name: elemental
 ---
 Widget:
   extensions:
-    - 'VersionedDataObject'
+    - 'BaseElementExtension'
 
 BaseElement:
   extensions:
@@ -15,7 +15,7 @@ ElementImage:
     - 'image_medium' : 'Normal'
     - 'image_small' : 'Small'
 
-
 LeftAndMain:
   extra_requirements_css:
     - 'elemental/css/elemental-admin.css'
+

@@ -187,26 +187,6 @@ class BaseElement extends Widget
         }
     }
 
-    public function canView($member = null)
-    {
-        return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
-    }
-
-    public function canEdit($member = null)
-    {
-        return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
-    }
-
-    public function canDelete($member = null)
-    {
-        return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
-    }
-
-    public function canCreate($member = null)
-    {
-        return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
-    }
-
     public function ControllerTop()
     {
         return Controller::curr();
@@ -229,7 +209,8 @@ class BaseElement extends Widget
      *
      * @return HTML
      */
-    public function forTemplate($holder = true) {
+    public function forTemplate($holder = true)
+    {
         return $this->renderWith($this->class);
     }
 
