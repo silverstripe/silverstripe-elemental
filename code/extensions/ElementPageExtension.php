@@ -172,6 +172,10 @@ class ElementPageExtension extends DataExtension
      * @return boolean
      */
     public function supportsElemental() {
+        if (method_exists($this->owner, 'includeElemental')) {
+            return $this->owner->includeElemental();
+        }
+
         if (is_a($this->owner, 'RedirectorPage')) {
             return false;
         } else if ($ignored = Config::inst()->get('ElementPageExtension', 'ignored_classes')) {
