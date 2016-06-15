@@ -37,6 +37,9 @@ class ElementList extends BaseElement
         $allowed = $this->config()->get('allowed_elements');
 
         $this->beforeUpdateCMSFields(function ($fields) use ($elements, $isInDb, $allowed) {
+            $fields->removeByName('Root.Elements');
+            $fields->removeByName('Elements');
+
             $desc = HTMLEditorField::create('ListDescription', 'List Description');
             $desc->setRightTitle('Optional');
             $fields->addFieldToTab('Root.Main', $desc);
@@ -79,8 +82,6 @@ class ElementList extends BaseElement
             } else {
                 $fields->addFieldToTab('Root.Main', LiteralField::create('warn', '<p class="message notice">Once you save this object you will be able to add items</p>'));
             }
-
-            $fields->removeByName('Root.Elements');
         });
 
         return parent::getCMSFields();
