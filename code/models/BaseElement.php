@@ -81,7 +81,7 @@ class BaseElement extends Widget
             $lists = ElementList::get()->filter('ParentID', $this->ParentID);
 
             if ($lists->exists()) {
-                $fields->addFieldToTab('Root.Main',
+                $fields->addFieldToTab('Root.Settings',
                     $move = new DropdownField('MoveToListID', 'Move this to another list', $lists->map('ID', 'CMSTitle'), '')
                 );
 
