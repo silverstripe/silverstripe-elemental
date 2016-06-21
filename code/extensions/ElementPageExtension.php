@@ -55,7 +55,6 @@ class ElementPageExtension extends DataExtension
         }
 
         $area = $this->owner->ElementArea();
-
         if ($this->owner->exists() && (!$area->exists() || !$area->isInDB())) {
             $area->write();
 
@@ -63,15 +62,9 @@ class ElementPageExtension extends DataExtension
             $this->owner->write();
         }
 
-        $elements = $this->owner->ElementArea()->Elements();
-        if (!$elements || $elements instanceof ArrayList || $elements instanceof UnsavedRelationList) {
-            // Allow gridfield to render on an unsaved DataObject
-            $elements = new UnsavedRelationList('ElementalArea', 'Widgets', 'BaseElement');
-        }
-
         $gridField = GridField::create('ElementArea',
             Config::inst()->get("ElementPageExtension", 'elements_title'),
-            $elements,
+            $area->Elements(),
             GridFieldConfig_RelationEditor::create()
                 ->removeComponentsByType('GridFieldAddNewButton')
                 ->removeComponentsByType('GridFieldDeleteAction')

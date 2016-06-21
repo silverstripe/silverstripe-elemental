@@ -10,7 +10,12 @@ class ElementalArea extends WidgetArea
         $result = $this->getComponents('Widgets');
 
         if ($result instanceof UnsavedRelationList) {
-            return array();
+            // Setup a proper UnsavedRelationList so that an page using this extension can be created 
+            // programmatically and have unsaved/saved BaseElement records attached to it.
+            
+            // NOTE(SilbinaryWolf): Able to set protected var 'dataClass' due to ViewableData using magic get/set for properties
+            $result->dataClass = 'BaseElement'; // Change from 'Widget' to 'BaseElement'
+            return $result;
         }
 
         $list = new HasManyList('BaseElement', $result->getForeignKey());
