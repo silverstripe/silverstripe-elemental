@@ -100,6 +100,21 @@ class ElementPageExtension extends DataExtension
     public function getAvailableTypes() {
         if (is_array($this->owner->config()->get('allowed_elements'))) {
             $list = $this->owner->config()->get('allowed_elements');
+
+            if($this->owner->config()->get('sort_types_alphabetically') !== false) {
+                $sorted = array();
+
+                foreach ($list as $class) {
+                    $inst = singleton($class);
+
+                    if ($inst->canCreate()) {
+                        $sorted[$class] = singleton($class)->i18n_singular_name();
+                    }
+                }
+
+                $list = $sorted;
+                asort($list);
+            }
         } else {
             $classes = ClassInfo::subclassesFor('BaseElement');
             $list = array();
@@ -112,12 +127,12 @@ class ElementPageExtension extends DataExtension
                     $list[$class] = singleton($class)->i18n_singular_name();
                 }
             }
+
+            asort($list);
         }
 
         if (method_exists($this->owner, 'sortElementalOptions')) {
             $this->owner->sortElementalOptions($list);
-        } else {
-            asort($list);
         }
 
         return $list;
