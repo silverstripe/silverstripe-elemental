@@ -30,14 +30,15 @@ class ElementList extends BaseElement
 
     private static $enable_title_in_template = true;
 
+    /**
+     * @return FieldList
+     */
     public function getCMSFields()
     {
         $elements = $this->Elements();
         $isInDb = $this->isInDB();
-        $allowed = $this->config()->get('allowed_elements');
-        $disallowed = (array) $this->config()->get('disallowed_elements');
 
-        $this->beforeUpdateCMSFields(function ($fields) use ($elements, $isInDb, $allowed, $disallowed) {
+        $this->beforeUpdateCMSFields(function ($fields) use ($elements, $isInDb) {
             $fields->removeByName('Root.Elements');
             $fields->removeByName('Elements');
 
@@ -45,27 +46,15 @@ class ElementList extends BaseElement
             $desc->setRightTitle('Optional');
             $fields->addFieldToTab('Root.Main', $desc);
 
+
             if ($isInDb) {
-                $adder = new GridFieldAddNewMultiClass();
+                $adder = new ElementalGridFieldAddNewMultiClass();
 
-                if (is_array($allowed)) {
-                    $list = $allowed;
-                } else {
-                    $classes = ClassInfo::subclassesFor('BaseElement');
-                    $list = array();
-                    unset($classes['BaseElement']);
+                $list = $this->getAvailableTypes();
 
-                    foreach ($classes as $class) {
-                        if (in_array($class, $disallowed)) {
-                            continue;
-                        }
-                        $list[$class] = singleton($class)->i18n_singular_name();
-                    }
+                if($list) {
+                    $adder->setClasses($list);
                 }
-
-                asort($list);
-
-                $adder->setClasses($list);
 
                 $config = GridFieldConfig_RecordEditor::create(100);
                 $config->addComponent(new GridFieldSortableRows('Sort'));
@@ -89,6 +78,52 @@ class ElementList extends BaseElement
         });
 
         return parent::getCMSFields();
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailableTypes() {
+        if (is_array($this->config()->get('allowed_elements'))) {
+            $list = $this->config()->get('allowed_elements');
+
+            if($this->config()->get('sort_types_alphabetically') !== false) {
+                $sorted = array();
+
+                foreach ($list as $class) {
+                    $inst = singleton($class);
+
+                    if ($inst->canCreate()) {
+                        $sorted[$class] = singleton($class)->i18n_singular_name();
+                    }
+                }
+
+                $list = $sorted;
+                asort($list);
+            }
+        } else {
+            $classes = ClassInfo::subclassesFor('BaseElement');
+            $list = array();
+            unset($classes['BaseElement']);
+
+            $disallowedElements = (array) $this->config()->get('disallowed_elements');
+
+            foreach ($classes as $class) {
+                $inst = singleton($class);
+
+                if (!in_array($class, $disallowedElements) && $inst->canCreate()) {
+                    $list[$class] = singleton($class)->i18n_singular_name();
+                }
+            }
+
+            asort($list);
+        }
+
+        if (method_exists($this, 'sortElementalOptions')) {
+            $this->sortElementalOptions($list);
+        }
+
+        return $list;
     }
 
     /**
