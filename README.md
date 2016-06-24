@@ -50,8 +50,16 @@ You may wish to only enable certain elements for the CMS authors to choose from 
 
 ````
 
+Likewise, you can exclude certain elements from being used.
+
+````
+    Page:
+      disallowed_elements:
+        - 'ElementContact'
+````
+
 By default, an Element List can contain nested Elements. To set allowed elements in list use the `allowed_elements`
-flag.
+flag. The `disallowed_elements` configuration flag works here too.
 
 ````
 
