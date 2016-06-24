@@ -35,8 +35,9 @@ class ElementList extends BaseElement
         $elements = $this->Elements();
         $isInDb = $this->isInDB();
         $allowed = $this->config()->get('allowed_elements');
+        $disallowed = (array) $this->config()->get('disallowed_elements');
 
-        $this->beforeUpdateCMSFields(function ($fields) use ($elements, $isInDb, $allowed) {
+        $this->beforeUpdateCMSFields(function ($fields) use ($elements, $isInDb, $allowed, $disallowed) {
             $fields->removeByName('Root.Elements');
             $fields->removeByName('Elements');
 
@@ -55,6 +56,9 @@ class ElementList extends BaseElement
                     unset($classes['BaseElement']);
 
                     foreach ($classes as $class) {
+                        if (in_array($class, $disallowed)) {
+                            continue;
+                        }
                         $list[$class] = singleton($class)->i18n_singular_name();
                     }
                 }

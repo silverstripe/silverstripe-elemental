@@ -120,10 +120,12 @@ class ElementPageExtension extends DataExtension
             $list = array();
             unset($classes['BaseElement']);
 
+            $disallowedElements = (array) $this->owner->config()->get('disallowed_elements');
+
             foreach ($classes as $class) {
                 $inst = singleton($class);
 
-                if ($inst->canCreate()) {
+                if (!in_array($class, $disallowedElements) && $inst->canCreate()) {
                     $list[$class] = singleton($class)->i18n_singular_name();
                 }
             }
