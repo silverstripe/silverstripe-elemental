@@ -47,6 +47,17 @@ class BaseElement extends Widget
     );
 
     /**
+     * @var array
+     */
+    private static $searchable_fields = array(
+        'ID' => array(
+            'field' => 'NumericField'
+        ),
+        'Title',
+        'LastEdited'
+    );
+
+    /**
      * @var boolean
      */
     private static $enable_title_in_template = false;
@@ -152,16 +163,25 @@ class BaseElement extends Widget
         }
     }
 
+    /**
+     * @return string
+     */
     public function i18n_singular_name()
     {
         return _t(__CLASS__, $this->config()->title);
     }
 
+    /**
+     * @return string
+     */
     public function getElementType()
     {
         return $this->i18n_singular_name();
     }
 
+    /**
+     * @return string
+     */
     public function getTitle()
     {
         if ($title = $this->getField('Title')) {
@@ -175,6 +195,9 @@ class BaseElement extends Widget
         }
     }
 
+    /**
+     * @return string
+     */
     public function getCMSTitle()
     {
         if ($title = $this->getField('Title')) {
