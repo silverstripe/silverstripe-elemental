@@ -15,6 +15,13 @@ class ElementPageExtension extends DataExtension
 
     /**
      * @config
+     * 
+     * @var boolean $disable_element_publish_button Disable publish / unpublish buttons in GridFieldDetailForm.
+     */
+    private static $disable_element_publish_button = false;
+
+    /**
+     * @config
      *
      * @var array $ignored_classes Classes to ignore adding elements too.
      */
@@ -79,8 +86,10 @@ class ElementPageExtension extends DataExtension
         $paginator = $config->getComponentByType('GridFieldPaginator');
         $paginator->setItemsPerPage(100);
 
-        $config->removeComponentsByType('GridFieldDetailForm');
-        $config->addComponent(new VersionedDataObjectDetailsForm());
+        if (!$this->owner->config()->disable_element_publish_button) {
+            $config->removeComponentsByType('GridFieldDetailForm');
+            $config->addComponent($obj = new VersionedDataObjectDetailsForm());
+        }
 
         $fields->addFieldToTab('Root.Main', $gridField);
 
