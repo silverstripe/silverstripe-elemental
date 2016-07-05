@@ -21,6 +21,20 @@ class ElementPageExtension extends DataExtension
     private static $ignored_classes = array();
 
     /**
+     * @config
+     *
+     * @var boolean
+     */
+    private static $copy_element_content_to_contentfield = true;
+
+    /**
+     * @config
+     *
+     * @var boolean
+     */
+    private static $clear_contentfield = false;
+
+    /**
      * @var array $db
      */
     private static $db = array();
@@ -147,7 +161,7 @@ class ElementPageExtension extends DataExtension
             return;
         }
 
-        if ($this->owner->hasMethod('ElementArea')) {
+        if ($this->owner->hasMethod('ElementArea') && Config::inst()->get(__CLASS__, 'copy_element_content_to_contentfield')) {
             $elements = $this->owner->ElementArea();
 
             if (!$elements->isInDB()) {
@@ -174,6 +188,10 @@ class ElementPageExtension extends DataExtension
                 Requirements::restore();
 
                 $this->owner->Content = trim(implode(' ', $searchableContent));
+            }
+        } else {
+            if(Config::inst()->get(__CLASS__, 'clear_contentfield')) {
+                $this->owner->Content = '';
             }
         }
 

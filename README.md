@@ -10,7 +10,6 @@ This module extends a page type to swap the content area for a GridField and man
 a page out of rather than a single text field. Features supported:
 
 * Versioning of elements
-* Search indexed element content
 * Ability to add, remove supported elements per page.
 
 The module provides basic markup for each of the widgets but you will likely need to provide your own styles. Replace
@@ -103,6 +102,76 @@ database and reload the CMS.
 	}
 
 `MyElement` will be rendered into a `MyElement.ss` template with the `ElementHolder.ss` wrapper.
+
+### Implementing search
+
+Composing your page of elements means that searching the page for content will require you to add some additional logic
+as SilverStripe would normally expect content to live in a single `Content` field. By default, elemental will copy all
+elements into the `$Content` field on save so search works as designed however this has one limitation, if you share
+elements between pages, publishing on page A will not update the searched content on page B.
+
+To get around this, we can use the `ElementalSolrIndexer` class (given you're using the
+[FulltextSearchable module](https://github.com/silverstripe-labs/silverstripe-fulltextsearch)). This class can help add
+some smarts to the Solr indexing so that it understands our content.
+
+First step is to define a custom Solr index
+
+```
+<?php
+
+class CustomSolrSearchIndex extends SolrSearchIndex {
+
+    public function getFieldDefinitions() {
+        $xml = parent::getFieldDefinitions();
+
+        // adds any required XML configuration
+        $indexer = new ElementalSolrIndexer();
+        $xml = $indexer->updateFieldDefinition($xml);
+
+        return $xml;
+    }
+
+    protected function _addAs($object, $base, $options)
+    {
+        // boiler plate from parent::_addAd since we can't
+        // call the parent function to modify this document.
+
+        $includeSubs = $options['include_children'];
+
+        $doc = new Apache_Solr_Document();
+        $doc->setField('_documentid', $this->getDocumentID($object, $base, $includeSubs));
+        $doc->setField('ID', $object->ID);
+        $doc->setField('ClassName', $object->ClassName);
+
+        foreach (SearchIntrospection::hierarchy(get_class($object), false) as $class) {
+            $doc->addField('ClassHierarchy', $class);
+        }
+
+        foreach ($this->getFieldsIterator() as $name => $field) {
+            if ($field['base'] == $base) {
+                $this->_addField($doc, $object, $field);
+            }
+        }
+
+        // custom code for adding in the Elemental smarts
+        $indexer = new ElementalSolrIndexer();
+        $indexer->elementPageChanged($object, $doc);
+
+
+        try {
+            $this->getService()->addDocument($doc);
+        } catch (Exception $e) {
+            SS_Log::log($e, SS_Log::WARN);
+            return false;
+        }
+
+        return $doc;
+    }
+}
+
+After setting up your SolrSearchIndex, run `sake dev/tasks/Solr_Configure`.
+
+```
 
 ## Screenshots
 
