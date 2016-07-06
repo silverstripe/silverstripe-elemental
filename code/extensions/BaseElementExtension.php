@@ -9,7 +9,7 @@ class BaseElementExtension extends VersionedDataObject
      */
     public function canView($member = null)
     {
-        return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
+        return (Permission::check('CMS_ACCESS_CMSMain', 'any', $member)) ? true : null;
     }
 
     /**
@@ -17,7 +17,7 @@ class BaseElementExtension extends VersionedDataObject
      */
     public function canEdit($member = null)
     {
-        return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
+        return (Permission::check('CMS_ACCESS_CMSMain', 'any', $member)) ? true : null;
     }
 
     /**
@@ -25,7 +25,7 @@ class BaseElementExtension extends VersionedDataObject
      */
     public function canDelete($member = null)
     {
-        return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
+        return (Permission::check('CMS_ACCESS_CMSMain', 'any', $member)) ? true : null;
     }
 
     /**
@@ -33,6 +33,6 @@ class BaseElementExtension extends VersionedDataObject
      */
     public function canCreate($member = null)
     {
-        return Permission::check('CMS_ACCESS_CMSMain', 'any', $member);
+        return (Permission::check('CMS_ACCESS_CMSMain', 'any', $member)) ? true : null;
     }
 }
