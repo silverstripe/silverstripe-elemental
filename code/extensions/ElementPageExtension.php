@@ -15,7 +15,7 @@ class ElementPageExtension extends DataExtension
 
     /**
      * @config
-     * 
+     *
      * @var boolean $disable_element_publish_button Disable publish / unpublish buttons in GridFieldDetailForm.
      */
     private static $disable_element_publish_button = false;
@@ -61,7 +61,7 @@ class ElementPageExtension extends DataExtension
     public function updateCMSFields(FieldList $fields)
     {
         if(!$this->supportsElemental()) {
-            return false;
+            return;
         }
 
         // add an empty holder for content as some module explicitly use insert
@@ -162,13 +162,14 @@ class ElementPageExtension extends DataExtension
      */
     public function onBeforeWrite()
     {
+        if(!$this->supportsElemental()) {
+            return;
+        }
+
         // enable theme in case elements are being rendered with templates stored in theme folder
         $originalThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
         Config::inst()->update('SSViewer', 'theme_enabled', true);
 
-        if(!$this->supportsElemental()) {
-            return;
-        }
 
         if ($this->owner->hasMethod('ElementArea') && Config::inst()->get(__CLASS__, 'copy_element_content_to_contentfield')) {
             $elements = $this->owner->ElementArea();
