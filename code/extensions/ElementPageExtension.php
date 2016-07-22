@@ -182,19 +182,18 @@ class ElementPageExtension extends DataExtension
                 $searchableContent = array();
 
                 Requirements::clear();
+
                 foreach ($elements->Elements() as $element) {
                     if ($element->config()->exclude_from_content) {
                         continue;
                     }
 
                     $controller = $element->getController();
+                    $controller->init();
 
-                    foreach ($elements->Items() as $element) {
-                        $controller->init();
-
-                        array_push($searchableContent, $controller->WidgetHolder());
-                    }
+                    array_push($searchableContent, $controller->WidgetHolder());
                 }
+                
                 Requirements::restore();
 
                 $this->owner->Content = trim(implode(' ', $searchableContent));
