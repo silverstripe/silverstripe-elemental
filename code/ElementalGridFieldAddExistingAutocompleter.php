@@ -33,16 +33,24 @@ class ElementalGridFieldAddExistingAutocompleter extends GridFieldAddExistingAut
         if(!$gridField->State->GridFieldAddRelation) {
             return $dataList;
         }
+
         $objectID = Convert::raw2sql($gridField->State->GridFieldAddRelation);
+
         if($objectID) {
             $object = DataObject::get_by_id($dataList->dataclass(), $objectID);
 
             if($object) {
-                $virtual = new ElementVirtualLinked();
-                $virtual->LinkedElementID = $object->ID;
-                $virtual->write();
+                // if the object is currently not linked then we want to link to
+                // the original, otherwise link to a clone
+                if(!$object->ParentID) {
+                    $dataList->add($object);
+                } else {
+                    $virtual = new ElementVirtualLinked();
+                    $virtual->LinkedElementID = $object->ID;
+                    $virtual->write();
 
-                $dataList->add($virtual);
+                    $dataList->add($virtual);
+                }
             }
         }
 

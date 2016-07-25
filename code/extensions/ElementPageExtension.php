@@ -90,11 +90,15 @@ class ElementPageExtension extends DataExtension
                 ->removeComponentsByType('GridFieldAddNewButton')
                 ->removeComponentsByType('GridFieldDeleteAction')
                 ->removeComponentsByType('GridFieldAddExistingAutocompleter')
-                ->addComponent(new ElementalGridFieldAddExistingAutocompleter())
+                ->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter())
                 ->addComponent(new ElementalGridFieldDeleteAction())
                 ->addComponent($adder)
                 ->addComponent(new GridFieldSortableRows('Sort'))
         );
+
+        if($list) {
+            $autocomplete->setSearchList(BaseElement::get()->filter('ClassName', array_keys($list)));
+        }
 
         $config = $gridField->getConfig();
         $paginator = $config->getComponentByType('GridFieldPaginator');

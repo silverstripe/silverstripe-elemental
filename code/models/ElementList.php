@@ -59,7 +59,14 @@ class ElementList extends BaseElement
                 $config = GridFieldConfig_RecordEditor::create(100);
                 $config->addComponent(new GridFieldSortableRows('Sort'));
                 $config->removeComponentsByType('GridFieldAddNewButton');
+                $config->removeComponentsByType('GridFieldDeleteAction');
+                $config->addComponent(new ElementalGridFieldDeleteAction());
                 $config->addComponent($adder);
+                $config->addComponent($autocompleter = new ElementalGridFieldAddExistingAutocompleter());
+
+                if($list) {
+                    $autocompleter->setSearchList(BaseElement::get()->filter('ClassName', array_keys($list)));
+                }
 
                 $config->removeComponentsByType('GridFieldDetailForm');
                 $config->addComponent(new VersionedDataObjectDetailsForm());
