@@ -69,7 +69,7 @@ class ElementList extends BaseElement
                 }
 
                 $config->removeComponentsByType('GridFieldDetailForm');
-                $config->addComponent(new VersionedDataObjectDetailsForm());
+                $config->addComponent(new Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm());
 
                 $widgetArea = new GridField(
                     'Elements',

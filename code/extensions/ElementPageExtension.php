@@ -106,7 +106,7 @@ class ElementPageExtension extends DataExtension
 
         if (!$this->owner->config()->disable_element_publish_button) {
             $config->removeComponentsByType('GridFieldDetailForm');
-            $config->addComponent($obj = new VersionedDataObjectDetailsForm());
+            $config->addComponent($obj = new Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm());
         }
 
         $fields->addFieldToTab('Root.Main', $gridField);
@@ -197,7 +197,7 @@ class ElementPageExtension extends DataExtension
 
                     array_push($searchableContent, $controller->WidgetHolder());
                 }
-                
+
                 Requirements::restore();
 
                 $this->owner->Content = trim(implode(' ', $searchableContent));
