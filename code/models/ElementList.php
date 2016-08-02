@@ -65,7 +65,9 @@ class ElementList extends BaseElement
                 $config->addComponent($autocompleter = new ElementalGridFieldAddExistingAutocompleter());
 
                 if($list) {
-                    $autocompleter->setSearchList(BaseElement::get()->filter('ClassName', array_keys($list)));
+                    $autocompleter->setSearchList(
+                        BaseElement::get()->filter('ClassName', array_keys($list))
+                    );
                 }
 
                 $config->removeComponentsByType('GridFieldDetailForm');

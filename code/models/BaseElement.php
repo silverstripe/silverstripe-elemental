@@ -103,21 +103,33 @@ class BaseElement extends Widget
 
 
         if($virtual = $fields->dataFieldByName('VirtualClones')) {
-            $tab = $fields->findOrMakeTab('Root.VirtualClones');
-            $tab->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'));
+            if($this->Parent()->exists() && $this->Parent()->getOwnerPage()->exists()) {
+                $tab = $fields->findOrMakeTab('Root.VirtualClones');
+                $tab->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'));
 
-            $virtual
-                ->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'))
-                ->getConfig()
-                    ->removeComponentsByType('GridFieldAddExistingAutocompleter')
-                    ->removeComponentsByType('GridFieldAddNewButton');
+                $tab->push(new LiteralField('DisplaysOnPage', sprintf(
+                    "<p>The original content block appears on <a href='%s'>%s</a></p>",
+                    $this->Parent()->getOwnerPage()->Link(),
+                    $this->Parent()->getOwnerPage()->MenuTitle
+                )));
 
-            $virtual->getConfig()
-                ->getComponentByType('GridFieldDataColumns')
-                ->setDisplayFields(array(
-                    'Parent.getOwnerPage.Title' => 'Title',
-                    'Parent.getOwnerPage.Link' => 'Link'
-                ));
+                $virtual->setConfig(new GridFieldConfig_Base());
+                $virtual
+                    ->setTitle(_t('BaseElement.OTHERPAGES', 'Other pages'))
+                    ->getConfig()
+                        ->removeComponentsByType('GridFieldAddExistingAutocompleter')
+                        ->removeComponentsByType('GridFieldAddNewButton')
+                        ->removeComponentsByType('GridFieldDeleteAction')
+                        ->removeComponentsByType('GridFieldDetailForm')
+                        ->addComponent(new ElementalGridFieldDeleteAction());
+
+                $virtual->getConfig()
+                    ->getComponentByType('GridFieldDataColumns')
+                    ->setDisplayFields(array(
+                        'Parent.getOwnerPage.Title' => 'Title',
+                        'Parent.getOwnerPage.Link' => 'Link'
+                    ));
+            }
         }
 
         $this->extend('updateCMSFields', $fields);
