@@ -10,12 +10,14 @@ class ElementalGridFieldDeleteAction extends GridFieldDeleteAction {
 
         $field = new CompositeField();
 
-        $field->push(GridField_FormAction::create($gridField, 'UnlinkRelation'.$record->ID, false,
-                    "unlinkrelation", array('RecordID' => $record->ID))
-            ->addExtraClass('gridfield-button-unlink')
-            ->setAttribute('title', _t('GridAction.UnlinkRelation', "Unlink"))
-            ->setAttribute('data-icon', 'chain--minus')
-        );
+		if($record->getClassName() != "ElementVirtualLinked") {
+            $field->push(GridField_FormAction::create($gridField, 'UnlinkRelation'.$record->ID, false,
+                        "unlinkrelation", array('RecordID' => $record->ID))
+                ->addExtraClass('gridfield-button-unlink')
+                ->setAttribute('title', _t('GridAction.UnlinkRelation', "Unlink"))
+                ->setAttribute('data-icon', 'chain--minus')
+            );
+		}
 
 
         if($record->canDelete() && $record->VirtualClones()->count() == 0) {
