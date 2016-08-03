@@ -126,8 +126,8 @@ class BaseElement extends Widget
                 $virtual->getConfig()
                     ->getComponentByType('GridFieldDataColumns')
                     ->setDisplayFields(array(
-                        'Parent.getOwnerPage.Title' => 'Title',
-                        'Parent.getOwnerPage.Link' => 'Link'
+                        'getPage.Title' => 'Title',
+                        'getPage.Link' => 'Link'
                     ));
             }
         }

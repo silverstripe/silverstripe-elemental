@@ -60,6 +60,7 @@ class ElementList extends BaseElement
                 $config->addComponent(new GridFieldSortableRows('Sort'));
                 $config->removeComponentsByType('GridFieldAddNewButton');
                 $config->removeComponentsByType('GridFieldDeleteAction');
+                $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
                 $config->addComponent(new ElementalGridFieldDeleteAction());
                 $config->addComponent($adder);
                 $config->addComponent($autocompleter = new ElementalGridFieldAddExistingAutocompleter());

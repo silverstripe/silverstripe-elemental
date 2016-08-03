@@ -40,9 +40,9 @@ class ElementalGridFieldAddExistingAutocompleter extends GridFieldAddExistingAut
             $object = DataObject::get_by_id($dataList->dataclass(), $objectID);
 
             if($object) {
-                // if the object is currently not linked then we want to link to
+                // if the object is currently not linked to either a page or another list then we want to link to
                 // the original, otherwise link to a clone
-                if(!$object->ParentID) {
+                if(!$object->ParentID && !$object->ListID) {
                     $dataList->add($object);
                 } else {
                     $virtual = new ElementVirtualLinked();
