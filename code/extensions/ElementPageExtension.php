@@ -88,10 +88,12 @@ class ElementPageExtension extends DataExtension
             $area->AllElements(),
             GridFieldConfig_RelationEditor::create()
                 ->removeComponentsByType('GridFieldAddNewButton')
+                ->removeComponentsByType('GridFieldSortableHeader')
                 ->removeComponentsByType('GridFieldDeleteAction')
                 ->removeComponentsByType('GridFieldAddExistingAutocompleter')
                 ->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter())
                 ->addComponent(new ElementalGridFieldDeleteAction())
+                ->addComponent(new GridFieldTitleHeader())
                 ->addComponent($adder)
                 ->addComponent(new GridFieldSortableRows('Sort'))
         );
