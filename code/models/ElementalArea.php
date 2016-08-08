@@ -5,7 +5,13 @@
  */
 class ElementalArea extends WidgetArea
 {
-    public function Elements()
+    /**
+     * Returns all the {@link BaseElement} instances in this area, regardless if
+     * they are enabled or not.
+     *
+     * @return HasManyList
+     */
+    public function AllElements()
     {
         $result = $this->getComponents('Widgets');
 
@@ -23,6 +29,20 @@ class ElementalArea extends WidgetArea
         $list->sort('Sort ASC');
 
         $list = $list->forForeignID($this->ID);
+
+        return $list;
+    }
+
+    /**
+     * Returns the {@link BaseElement} instances that should be displayed to the
+     * user.
+     *
+     * @return HasManyList
+     */
+    public function Elements()
+    {
+        $list = $this->AllElements();
+
         $list = $list->filter(array(
             'Enabled' => 1
         ));
@@ -31,9 +51,12 @@ class ElementalArea extends WidgetArea
     }
 
     /**
+     * Override {@link WidgetArea::ItemsToRender}
+     *
      * @return HasManyList
      */
-    public function ItemsToRender() {
+    public function ItemsToRender()
+    {
         return $this->Elements();
     }
 

@@ -85,7 +85,7 @@ class ElementPageExtension extends DataExtension
 
         $gridField = GridField::create('ElementArea',
             Config::inst()->get("ElementPageExtension", 'elements_title'),
-            $area->Elements(),
+            $area->AllElements(),
             GridFieldConfig_RelationEditor::create()
                 ->removeComponentsByType('GridFieldAddNewButton')
                 ->removeComponentsByType('GridFieldDeleteAction')
@@ -197,7 +197,7 @@ class ElementPageExtension extends DataExtension
 
                     array_push($searchableContent, $controller->WidgetHolder());
                 }
-                
+
                 Requirements::restore();
 
                 $this->owner->Content = trim(implode(' ', $searchableContent));
