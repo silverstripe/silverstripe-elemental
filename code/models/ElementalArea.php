@@ -43,9 +43,11 @@ class ElementalArea extends WidgetArea
     {
         $list = $this->AllElements();
 
-        $list = $list->filter(array(
-            'Enabled' => 1
-        ));
+        if(!($list instanceof UnsavedRelationList)) {
+            $list = $list->filter(array(
+                'Enabled' => 1
+            ));
+        }
 
         return $list;
     }
