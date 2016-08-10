@@ -103,7 +103,7 @@ class BaseElement extends Widget
 
 
         if($virtual = $fields->dataFieldByName('VirtualClones')) {
-            if($this->Parent()->exists() && $this->Parent()->getOwnerPage()->exists()) {
+            if($this->Parent() && $this->Parent()->exists() && $this->Parent()->getOwnerPage() && $this->Parent()->getOwnerPage()->exists()) {
                 $tab = $fields->findOrMakeTab('Root.VirtualClones');
                 $tab->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'));
 
