@@ -120,6 +120,10 @@ class ElementList extends BaseElement
 
             $disallowedElements = (array) $this->config()->get('disallowed_elements');
 
+            if (!in_array('ElementVirtualLinked', $disallowedElements)) {
+                array_push($disallowedElements, 'ElementVirtualLinked');
+            }
+
             foreach ($classes as $class) {
                 $inst = singleton($class);
 
