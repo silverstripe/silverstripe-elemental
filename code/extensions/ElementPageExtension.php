@@ -1,5 +1,7 @@
 <?php
 
+use \Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm;
+
 /**
  * @package elemental
  */

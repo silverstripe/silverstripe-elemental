@@ -1,5 +1,7 @@
 <?php
 
+use \Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm;
+
 /**
  * A list contains nested {@link BaseElement} such as a list of related files.
  *

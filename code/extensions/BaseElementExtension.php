@@ -1,4 +1,7 @@
 <?php
+
+use \Heyday\VersionedDataObjects\VersionedDataObject;
+
 /**
  * @package elemental
  */
