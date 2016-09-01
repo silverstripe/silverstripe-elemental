@@ -1,9 +1,11 @@
 <?php
 
+use \Heyday\VersionedDataObjects\VersionedModelAdmin;
+
 /**
  * @package elemental
  */
-class ElementalAdmin extends ModelAdmin {
+class ElementalAdmin extends VersionedModelAdmin {
 
     private static $managed_models = array(
         'BaseElement'
