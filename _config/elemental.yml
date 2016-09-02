@@ -8,6 +8,7 @@ Widget:
 BaseElement:
   extensions:
     - 'ElementDuplicationExtension'
+  better_buttons_enabled: false
 
 ElementImage:
   css_styles:
