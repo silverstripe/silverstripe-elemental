@@ -265,4 +265,50 @@ class BaseElement extends Widget
     {
 
     }
+
+    public static function all_allowed_elements() {
+        $classes = array();
+
+        // get all dataobject with the elemental extension
+        foreach(ClassInfo::subclassesFor('DataObject') as $className) {
+            if(Object::has_extension($className, 'ElementPageExtension')) {
+               $classes[] = $className;
+            }
+        }
+
+        // get all allowd_elements for these classes
+        $allowed = array();
+        foreach($classes as $className) {
+            $allowed = array_merge($allowed, Config::inst()->get($className, 'allowed_elements'));
+        }
+
+       // $allowed[] = 'ElementVirtualLinked';
+        $allowed = array_unique($allowed);
+
+        $elements = array();
+        foreach($allowed as $className) {
+            $elements[$className] = _t($className, Config::inst()->get($className, 'title'));
+        }
+
+        asort($elements);
+
+        return $elements;
+    }
+
+    public function getDefaultSearchContext()
+    {
+        $fields = $this->scaffoldSearchFields();
+
+        $elements = BaseElement::all_allowed_elements();
+
+        $fields->push(DropdownField::create('ClassName', 'Element Type', $elements)
+            ->setEmptyString('All types'));
+        $filters = $this->owner->defaultSearchFilters();
+
+        return new SearchContext(
+            $this->owner->class,
+            $fields,
+            $filters
+        );
+    }
 }

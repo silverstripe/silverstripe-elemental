@@ -12,6 +12,15 @@
  * @package elemental
  */
 class ElementVirtualLinked extends BaseElement {
+    /**
+     * @var string
+     */
+    private static $title = 'Virtual linked Block';
+
+    /**
+     * @var string
+     */
+    private static $singular_name = 'Virtual linked Block';
 
     private static $has_one = array(
         'LinkedElement' => 'BaseElement'

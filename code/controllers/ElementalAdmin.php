@@ -35,7 +35,7 @@ class ElementalAdmin extends VersionedModelAdmin {
      */
     public function getList() {
         $list = parent::getList();
-        $list = $list->exclude('ClassName', 'ElementVirtualLinked');
+        //$list = $list->exclude('ClassName', 'ElementVirtualLinked');
 
         return $list;
     }
