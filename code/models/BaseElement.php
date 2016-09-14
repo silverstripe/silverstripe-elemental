@@ -54,7 +54,8 @@ class BaseElement extends Widget
             'field' => 'NumericField'
         ),
         'Title',
-        'LastEdited'
+        'LastEdited',
+        'ClassName'
     );
 
     /**
