@@ -227,8 +227,11 @@ class ElementPageExtension extends DataExtension
      * @return boolean
      */
     public function supportsElemental() {
-        if (method_exists($this->owner, 'includeElemental')) {
-            return $this->owner->includeElemental();
+        if ($this->owner->hasMethod('includeElemental')) {
+            $res = $this->owner->includeElemental();
+            if ($res !== null) {
+                return $res;
+            }
         }
 
         if (is_a($this->owner, 'RedirectorPage')) {
