@@ -113,7 +113,11 @@ class ElementPageExtension extends DataExtension
             $config->addComponent($obj = new VersionedDataObjectDetailsForm());
         }
 
-        $fields->addFieldToTab('Root.Main', $gridField);
+        if ($this->owner instanceof SiteTree && $fields->findOrMakeTab('Root.Main')->fieldByName('Metadata')) {
+            $fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
+        } else {
+            $fields->addFieldToTab('Root.Main', $gridField);
+        }
 
         return $fields;
     }
