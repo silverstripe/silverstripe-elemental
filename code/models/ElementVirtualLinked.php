@@ -54,4 +54,8 @@ class ElementVirtualLinked extends BaseElement {
 
         return $fields;
     }
+
+    public function getExtraClass() {
+        return $this->LinkedElement()->ClassName . ' ' . $this->getField('ExtraClass');
+    }
 }
