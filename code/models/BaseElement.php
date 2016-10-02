@@ -184,6 +184,64 @@ class BaseElement extends Widget
     }
 
     /**
+     * Ensure that if there are elements that are virtualised from this element
+     * that we move the original element to replace one of the virtual elements
+     * But only if it's a delete not an unpublish
+     */
+    public function onBeforeDelete() {
+        parent::onBeforeDelete();
+
+        if(Versioned::get_reading_mode() == 'Stage.Stage') {
+            $firstVirtual = false;
+            $allVirtual = $this->getVirtualLinkedElements();
+            if ($this->getPublishedVirtualLinkedElements()->Count() > 0) {
+                // choose the first one
+                $firstVirtual = $this->getPublishedVirtualLinkedElements()->First();
+                $wasPublished = true;
+            } else if ($allVirtual->Count() > 0) {
+                // choose the first one
+                $firstVirtual = $this->getVirtualLinkedElements()->First();
+                $wasPublished = false;
+            }
+            if ($firstVirtual) {
+                $origParentID = $this->ParentID;
+                $origSort = $this->Sort;
+
+                $clone = $this->duplicate(false);
+
+                // set clones values to first virtual's values
+                $clone->ParentID = $firstVirtual->ParentID;
+                $clone->Sort = $firstVirtual->Sort;
+
+                $clone->write();
+                if ($wasPublished) {
+                    $clone->doPublish();
+                    $firstVirtual->doUnpublish();
+                }
+
+                // clone has a new ID, so need to repoint
+                // all the other virtual elements
+                foreach($allVirtual as $virtual) {
+                    if ($virtual->ID == $firstVirtual->ID) {
+                        continue;
+                    }
+                    $pub = false;
+                    if ($virtual->isPublished()) {
+                        $pub = true;
+                    }
+                    $virtual->LinkedElementID = $clone->ID;
+                    $virtual->write();
+                    if ($pub) {
+                        $virtual->doPublish();
+                    }
+                }
+
+                $firstVirtual->delete();
+            }
+        }
+    }
+
+    /**
      * @return string
      */
     public function i18n_singular_name()

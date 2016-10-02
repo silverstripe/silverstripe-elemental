@@ -228,6 +228,48 @@ class ElementPageExtension extends DataExtension
     }
 
     /**
+     * Ensure that if there are elements that belong to this page
+     * and are virtualised (Virtual Element links to them), that we move the
+     * original element to replace one of the virtual elements
+     * But only if it's a delete not an unpublish
+     */
+    public function onAfterDelete() {
+        if(Versioned::get_reading_mode() == 'Stage.Stage') {
+            $area = $this->owner->ElementArea();
+            foreach ($area->Widgets() as $element) {
+                $firstVirtual = false;
+                if ($element->getPublishedVirtualLinkedElements()->Count() > 0) {
+                    // choose the first one
+                    $firstVirtual = $element->getPublishedVirtualLinkedElements()->First();
+                    $wasPublished = true;
+                } else if ($element->getVirtualLinkedElements()->Count() > 0) {
+                    // choose the first one
+                    $firstVirtual = $element->getVirtualLinkedElements()->First();
+                    $wasPublished = false;
+                }
+                if ($firstVirtual) {
+                    $origParentID = $element->ParentID;
+                    $origSort = $element->Sort;
+
+                    // change element to first's values
+                    $element->ParentID = $firstVirtual->ParentID;
+                    $element->Sort = $firstVirtual->Sort;
+
+                    $firstVirtual->ParentID = $origParentID;
+                    $firstVirtual->Sort = $origSort;
+                    // write
+                    $element->write();
+                    $firstVirtual->write();
+                    if ($wasPublished) {
+                        $element->doPublish();
+                        $firstVirtual->doPublish();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * @return boolean
      */
     public function supportsElemental() {
