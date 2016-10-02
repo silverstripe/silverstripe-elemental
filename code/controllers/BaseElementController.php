@@ -17,4 +17,32 @@ class BaseElement_Controller extends WidgetController
     {
         return $this->renderWith("ElementHolder");
     }
+
+
+    public function Link($action = null)
+    {
+
+        if($this->data()->virtualOwner) {
+          $controller = new BaseElement_Controller($this->data()->virtualOwner);
+          return $controller->Link($action);
+        }
+
+        return Parent::Link($action);
+    }
+
+
+    /**
+     * if this is a virtual request, change the hash if set.
+     */
+    public function redirect($url, $code=302) {
+
+      if($this->data()->virtualOwner) {
+        $parts = explode('#', $url);
+        if(isset($parts[1])) {
+          $url = $parts[0] . '#' . $this->data()->virtualOwner->ID;
+        }
+      }
+
+      return parent::redirect($url, $code);
+    }
 }

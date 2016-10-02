@@ -63,6 +63,12 @@ class BaseElement extends Widget
      */
     private static $enable_title_in_template = false;
 
+    /**
+     * @var Object
+     * The virtual owner VirtualLinkedElement
+     */
+    public $virtualOwner;
+
 
     public function getCMSFields()
     {
@@ -231,6 +237,10 @@ class BaseElement extends Widget
 
     public function getPage()
     {
+        if ($this->virtualOwner) {
+            return $this->virtualOwner->getPage();
+        }
+
         $area = $this->Parent();
 
         if ($area instanceof ElementalArea) {
@@ -268,7 +278,7 @@ class BaseElement extends Widget
 
     }
 
-    public static function all_allowed_elements() {
+		public static function all_allowed_elements() {
         $classes = array();
 
         // get all dataobject with the elemental extension
@@ -316,4 +326,30 @@ class BaseElement extends Widget
             $filters
         );
     }
+
+    public function setVirtualOwner(ElementVirtualLinked $virtualOwner) {
+        $this->virtualOwner = $virtualOwner;
+    }
+
+    /**
+     * Finds and returns elements
+     * that are virtual elements which link to this element
+     */
+    public function getVirtualLinkedElements() {
+        return ElementVirtualLinked::get()->filter('LinkedElementID', $this->ID);
+    }
+
+    /**
+     * Finds and returns published elements
+     * that are virtual elements which link to this element
+     */
+    public function getPublishedVirtualLinkedElements() {
+        $current = Versioned::get_reading_mode();
+        Versioned::set_reading_mode('Stage.Live');
+        $v = $this->getVirtualLinkedElements();
+        Versioned::set_reading_mode($current);
+        return $v;
+    }
 }
+
+
