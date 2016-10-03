@@ -280,7 +280,10 @@ class BaseElement extends Widget
         // get all allowd_elements for these classes
         $allowed = array();
         foreach($classes as $className) {
-            $allowed = array_merge($allowed, Config::inst()->get($className, 'allowed_elements'));
+            $allowed_elements = Config::inst()->get($className, 'allowed_elements');
+            if ($allowed_elements) {
+                $allowed = array_merge($allowed, $allowed_elements);
+            }
         }
 
        // $allowed[] = 'ElementVirtualLinked';
