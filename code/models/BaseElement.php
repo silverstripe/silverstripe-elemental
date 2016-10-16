@@ -108,10 +108,11 @@ class BaseElement extends Widget
                 $tab = $fields->findOrMakeTab('Root.VirtualClones');
                 $tab->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'));
 
+                $ownerPage = $this->Parent()->getOwnerPage();
                 $tab->push(new LiteralField('DisplaysOnPage', sprintf(
                     "<p>The original content block appears on <a href='%s'>%s</a></p>",
-                    $this->Parent()->getOwnerPage()->Link(),
-                    $this->Parent()->getOwnerPage()->MenuTitle
+                    ($ownerPage->hasMethod('CMSEditLink') && $ownerPage->canEdit()) ? $ownerPage->CMSEditLink() : $ownerPage->Link(),
+                    $ownerPage->MenuTitle
                 )));
 
                 $virtual->setConfig(new GridFieldConfig_Base());
