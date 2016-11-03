@@ -46,9 +46,11 @@ class ElementVirtualLinked extends BaseElement {
             new TabSet('Root', $main = new Tab('Main'))
         );
 
-        $main->push(
-            new LiteralField('Existing', $message)
-        );
+        if ($this->isInvalidPublishState()) {
+            $warning = 'Error: The original block is not published. This block will not work on the live site until you click the link below and publish it.';
+            $main->push(new LiteralField('WarningHeader', '<p class="message error">' .$warning. '</p>'));
+        }
+        $main->push(new LiteralField('Existing', $message));
 
         $this->extend('updateCMSFields', $fields);
 
@@ -57,5 +59,39 @@ class ElementVirtualLinked extends BaseElement {
 
     public function getExtraClass() {
         return $this->LinkedElement()->ClassName . ' ' . $this->getField('ExtraClass');
+    }
+
+    /**
+     * Detect when a user has published a ElementVirtualLinked block
+     * but has not published the LinkedElement block. 
+     */
+    public function isInvalidPublishState() {
+        $block = $this->LinkedElement();
+        return (!$block->isPublished() && $this->isPublished());
+    }
+
+    public function getCMSPublishedState() {
+        if ($this->isInvalidPublishState()) {
+            $colour = '#C00';
+            $text = 'Error';
+            $html = new HTMLText('PublishedState');
+            $html->setValue(sprintf(
+                '<span style="color: %s;">%s</span>',
+                $colour,
+                htmlentities($text)
+            ));
+            return $html;
+        }
+
+        $publishedState = null;
+        foreach($this->extension_instances as $instance) {
+            if (method_exists($instance, 'getCMSPublishedState')) {
+                $instance->setOwner($this);
+                $publishedState = $instance->getCMSPublishedState();
+                $instance->clearOwner();
+                break;
+            }
+        }
+        return $publishedState;
     }
 }
