@@ -29,9 +29,9 @@ class ElementalSolrIndexer {
                     $dirty[$clone->ID] = $clone->ID;
                 }
             }
-        }
 
-        $this->publishDirtyClones($dirty);
+             $this->publishDirtyClones($dirty);
+        }
     }
 
     /**
