@@ -104,6 +104,9 @@ class ElementPageExtension extends DataExtension
             $autocomplete->setSearchList(BaseElement::get()->filter('ClassName', array_keys($list)));
         }
 
+        $autocomplete->setResultsFormat('($ID) $Title');
+        $autocomplete->setSearchFields(array('ID', 'Title'));
+
         $config = $gridField->getConfig();
         $paginator = $config->getComponentByType('GridFieldPaginator');
         $paginator->setItemsPerPage(100);
