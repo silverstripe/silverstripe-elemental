@@ -248,6 +248,10 @@ class BaseElement extends Widget
      */
     public function forTemplate($holder = true)
     {
+        $config = SiteConfig::current_site_config();
+        
+        if ($config->Theme) Config::inst()->update('SSViewer', 'theme', $config->Theme);
+        
         return $this->renderWith($this->class);
     }
 
