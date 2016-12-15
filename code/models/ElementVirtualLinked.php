@@ -36,6 +36,11 @@ class ElementVirtualLinked extends BaseElement {
         return _t(__CLASS__, $this->LinkedElement()->config()->title);
     }
 
+    public function __construct($record = null, $isSingleton = false, $model = null) {
+        parent::__construct($record, $isSingleton, $model);
+        $this->LinkedElement()->setVirtualOwner($this);
+    }
+
     public function getCMSFields() {
         $message = sprintf('<p>%s</p><p><a href="%2$s">%2$s</a></p>',
              _t('ElementVirtualLinked.DESCRIBE', 'This is a virtual copy of a block. To edit, visit'),
@@ -57,8 +62,69 @@ class ElementVirtualLinked extends BaseElement {
         return $fields;
     }
 
-    public function getExtraClass() {
-        return $this->LinkedElement()->ClassName . ' ' . $this->getField('ExtraClass');
+}
+
+class ElementVirtualLinked_Controller extends BaseElement_Controller {
+
+    protected $controllerClass;
+
+    public function __construct($widget) {
+        parent::__construct($widget);
+
+        $controllerClass = get_class($this->LinkedElement()) . '_Controller';
+        if(class_exists($controllerClass)) {
+            $this->controllerClass = $controllerClass;
+        } else {
+            $this->controllerClass = 'BaseElement_Controller';
+        }
+    }
+
+    /**
+     * Returns the current widget in scope rendered into its' holder
+     *
+     * @return HTML
+     */
+    public function WidgetHolder()
+    {
+        return $this->renderWith("ElementHolder_VirtualLinked");
+    }
+
+    public function __call($method, $arguments) {
+        try {
+           $retVal = parent::__call($method, $arguments);
+
+        } catch (Exception $e) {
+            $controller = new $this->controllerClass($this->LinkedElement());
+            $retVal = call_user_func_array(array($controller, $method), $arguments);
+        }
+        return $retVal;
+    }
+
+    public function hasMethod($action) {
+        if(parent::hasMethod($action)) {
+            return true;
+        }
+
+        $controller = new $this->controllerClass($this->LinkedElement());
+        return $controller->hasMethod($action);
+    }
+
+    public function hasAction($action) {
+        if(parent::hasAction($action)) {
+            return true;
+        }
+
+        $controller = new $this->controllerClass($this->LinkedElement());
+        return $controller->hasAction($action);
+    }
+
+    public function checkAccessAction($action) {
+        if(parent::checkAccessAction($action)) {
+            return true;
+        }
+
+        $controller = new $this->controllerClass($this->LinkedElement());
+        return $controller->checkAccessAction($action);
     }
 
     /**
