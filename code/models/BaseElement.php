@@ -64,6 +64,28 @@ class BaseElement extends Widget
     private static $enable_title_in_template = false;
 
     /**
+     * Enable for backwards compatibility
+     * 
+     * @var boolean
+     */
+    private static $disable_pretty_anchor_name = false;
+
+    /**
+     * Store used anchor names, this is to avoid title clashes
+     * when calling 'getAnchor'
+     *
+     * @var array
+     */
+    protected static $_used_anchors = array();
+
+    /**
+     * For caching 'getAnchor'
+     *
+     * @var string
+     */
+    protected $_anchor = null;
+
+    /**
      * @var Object
      * The virtual owner VirtualLinkedElement
      */
@@ -271,6 +293,43 @@ class BaseElement extends Widget
 
             return $this->config()->title;
         }
+    }
+
+    /**
+     * Get a unique anchor name
+     *
+     * @return string
+     */
+    public function getAnchor() {
+        if ($this->_anchor !== null) {
+            return $this->_anchor;
+        }
+
+        $anchorTitle = '';
+        if (!$this->config()->disable_pretty_anchor_name) {
+            if ($this->hasMethod('getAnchorTitle')) {
+                $anchorTitle = $this->getAnchorTitle();
+            } else if ($this->config()->enable_title_in_template) {
+                $anchorTitle = $this->getField('Title');
+            }
+        }
+        if (!$anchorTitle) {
+            $anchorTitle = 'e'.$this->ID;
+        }
+
+        $filter = URLSegmentFilter::create();
+        $titleAsURL = $filter->filter($anchorTitle);
+
+        // Ensure that this anchor name isn't already in use
+        // ie. If two elemental blocks have the same title, it'll append '-2', '-3'
+        $result = $titleAsURL;
+        $count = 1;
+        while (isset(self::$_used_anchors[$result]) && self::$_used_anchors[$result] !== $this->ID) {
+            ++$count;
+            $result = $titleAsURL.'-'.$count;
+        }
+        self::$_used_anchors[$result] = $this->ID;
+        return $this->_anchor = $result;
     }
 
     /**
