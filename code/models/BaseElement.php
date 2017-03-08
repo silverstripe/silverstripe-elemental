@@ -10,7 +10,8 @@ class BaseElement extends Widget
      */
     private static $db = array(
         'ExtraClass' => 'Varchar(255)',
-        'HideTitle' => 'Boolean'
+        'HideTitle' => 'Boolean',
+        'AvailableGlobally' => 'Boolean'
     );
 
     /**
@@ -55,7 +56,8 @@ class BaseElement extends Widget
         ),
         'Title',
         'LastEdited',
-        'ClassName'
+        'ClassName',
+        'AvailableGlobally'
     );
 
     /**
@@ -65,7 +67,7 @@ class BaseElement extends Widget
 
     /**
      * Enable for backwards compatibility
-     * 
+     *
      * @var boolean
      */
     private static $disable_pretty_anchor_name = false;
@@ -105,6 +107,7 @@ class BaseElement extends Widget
         $fields->removeByName('ParentID');
         $fields->removeByName('Sort');
         $fields->removeByName('ExtraClass');
+        $fields->removeByName('AvailableGlobally');
 
         if (!$this->config()->enable_title_in_template) {
             $fields->removeByName('HideTitle');
@@ -116,6 +119,7 @@ class BaseElement extends Widget
         }
 
         $fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
+        $fields->addFieldToTab('Root.Settings', new CheckboxField('AvailableGlobally', 'Available globally - can be linked to multiple pages'));
 
         if (!is_a($this, 'ElementList')) {
             $lists = ElementList::get()->filter('ParentID', $this->ParentID);
@@ -376,9 +380,9 @@ class BaseElement extends Widget
     public function forTemplate($holder = true)
     {
         $config = SiteConfig::current_site_config();
-        
+
         if ($config->Theme) Config::inst()->update('SSViewer', 'theme', $config->Theme);
-        
+
         return $this->renderWith($this->class);
     }
 
@@ -472,5 +476,3 @@ class BaseElement extends Widget
         return $v;
     }
 }
-
-
