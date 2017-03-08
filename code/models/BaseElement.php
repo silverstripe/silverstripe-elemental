@@ -11,7 +11,7 @@ class BaseElement extends Widget
     private static $db = array(
         'ExtraClass' => 'Varchar(255)',
         'HideTitle' => 'Boolean',
-        'AvailableGlobally' => 'Boolean'
+        'AvailableGlobally' => 'Boolean(1)'
     );
 
     /**
@@ -93,6 +93,16 @@ class BaseElement extends Widget
      */
     public $virtualOwner;
 
+    /**
+     * @config
+     * Elements available globally by default
+     */
+     private static $default_global_elements = true;
+
+     public function populateDefaults() {
+        $this->AvailableGlobally = $this->config()->get('default_global_elements');
+        parent::populateDefaults();
+     }
 
     public function getCMSFields()
     {
