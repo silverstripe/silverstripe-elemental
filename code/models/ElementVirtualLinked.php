@@ -11,7 +11,8 @@
  *
  * @package elemental
  */
-class ElementVirtualLinked extends BaseElement {
+class ElementVirtualLinked extends BaseElement
+{
     /**
      * @var string
      */
@@ -36,15 +37,18 @@ class ElementVirtualLinked extends BaseElement {
         return _t(__CLASS__, $this->LinkedElement()->config()->title);
     }
 
-    public function __construct($record = null, $isSingleton = false, $model = null) {
+    public function __construct($record = null, $isSingleton = false, $model = null)
+    {
         parent::__construct($record, $isSingleton, $model);
         $this->LinkedElement()->setVirtualOwner($this);
     }
 
-    public function getCMSFields() {
-        $message = sprintf('<p>%s</p><p><a href="%2$s">%2$s</a></p>',
-             _t('ElementVirtualLinked.DESCRIBE', 'This is a virtual copy of a block. To edit, visit'),
-             $this->LinkedElement()->getEditLink()
+    public function getCMSFields()
+    {
+        $message = sprintf(
+            '<p>%s</p><p><a href="%2$s">%2$s</a></p>',
+            _t('ElementVirtualLinked.DESCRIBE', 'This is a virtual copy of a block. To edit, visit'),
+            $this->LinkedElement()->getEditLink()
         );
 
         $fields = new FieldList(
@@ -62,17 +66,55 @@ class ElementVirtualLinked extends BaseElement {
         return $fields;
     }
 
+
+    /**
+     * Detect when a user has published a ElementVirtualLinked block
+     * but has not published the LinkedElement block.
+     */
+    public function isInvalidPublishState()
+    {
+        $block = $this->LinkedElement();
+        return (!$block->isPublished() && $this->isPublished());
+    }
+
+    public function getCMSPublishedState()
+    {
+        if ($this->isInvalidPublishState()) {
+            $colour = '#C00';
+            $text = 'Error';
+            $html = new HTMLText('PublishedState');
+            $html->setValue(sprintf(
+                '<span style="color: %s;">%s</span>',
+                $colour,
+                htmlentities($text)
+            ));
+            return $html;
+        }
+
+        $publishedState = null;
+        foreach ($this->extension_instances as $instance) {
+            if (method_exists($instance, 'getCMSPublishedState')) {
+                $instance->setOwner($this);
+                $publishedState = $instance->getCMSPublishedState();
+                $instance->clearOwner();
+                break;
+            }
+        }
+        return $publishedState;
+    }
 }
 
-class ElementVirtualLinked_Controller extends BaseElement_Controller {
+class ElementVirtualLinked_Controller extends BaseElement_Controller
+{
 
     protected $controllerClass;
 
-    public function __construct($widget) {
+    public function __construct($widget)
+    {
         parent::__construct($widget);
 
         $controllerClass = get_class($this->LinkedElement()) . '_Controller';
-        if(class_exists($controllerClass)) {
+        if (class_exists($controllerClass)) {
             $this->controllerClass = $controllerClass;
         } else {
             $this->controllerClass = 'BaseElement_Controller';
@@ -89,10 +131,10 @@ class ElementVirtualLinked_Controller extends BaseElement_Controller {
         return $this->renderWith("ElementHolder_VirtualLinked");
     }
 
-    public function __call($method, $arguments) {
+    public function __call($method, $arguments)
+    {
         try {
-           $retVal = parent::__call($method, $arguments);
-
+            $retVal = parent::__call($method, $arguments);
         } catch (Exception $e) {
             $controller = new $this->controllerClass($this->LinkedElement());
             $retVal = call_user_func_array(array($controller, $method), $arguments);
@@ -100,8 +142,9 @@ class ElementVirtualLinked_Controller extends BaseElement_Controller {
         return $retVal;
     }
 
-    public function hasMethod($action) {
-        if(parent::hasMethod($action)) {
+    public function hasMethod($action)
+    {
+        if (parent::hasMethod($action)) {
             return true;
         }
 
@@ -109,8 +152,9 @@ class ElementVirtualLinked_Controller extends BaseElement_Controller {
         return $controller->hasMethod($action);
     }
 
-    public function hasAction($action) {
-        if(parent::hasAction($action)) {
+    public function hasAction($action)
+    {
+        if (parent::hasAction($action)) {
             return true;
         }
 
@@ -118,46 +162,13 @@ class ElementVirtualLinked_Controller extends BaseElement_Controller {
         return $controller->hasAction($action);
     }
 
-    public function checkAccessAction($action) {
-        if(parent::checkAccessAction($action)) {
+    public function checkAccessAction($action)
+    {
+        if (parent::checkAccessAction($action)) {
             return true;
         }
 
         $controller = new $this->controllerClass($this->LinkedElement());
         return $controller->checkAccessAction($action);
-    }
-
-    /**
-     * Detect when a user has published a ElementVirtualLinked block
-     * but has not published the LinkedElement block. 
-     */
-    public function isInvalidPublishState() {
-        $block = $this->LinkedElement();
-        return (!$block->isPublished() && $this->isPublished());
-    }
-
-    public function getCMSPublishedState() {
-        if ($this->isInvalidPublishState()) {
-            $colour = '#C00';
-            $text = 'Error';
-            $html = new HTMLText('PublishedState');
-            $html->setValue(sprintf(
-                '<span style="color: %s;">%s</span>',
-                $colour,
-                htmlentities($text)
-            ));
-            return $html;
-        }
-
-        $publishedState = null;
-        foreach($this->extension_instances as $instance) {
-            if (method_exists($instance, 'getCMSPublishedState')) {
-                $instance->setOwner($this);
-                $publishedState = $instance->getCMSPublishedState();
-                $instance->clearOwner();
-                break;
-            }
-        }
-        return $publishedState;
     }
 }
