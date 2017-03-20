@@ -79,6 +79,16 @@ classes:
 	    - 'image_small' : 'Small'
 ````
 
+### Limiting global elements
+
+By default any element is available to be linked to multiple pages. This can be
+changed with the "Available globally" checkbox in the settings tab of each element.
+The default can be changed so that global elements are opt-in:
+````
+	BaseElement:
+	  default_global_elements: false
+````
+
 ### Defining your own elements.
 
 An element is as simple as a class which extends `BaseElement`. After you add the class, ensure you have rebuilt your

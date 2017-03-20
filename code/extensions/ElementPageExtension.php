@@ -100,9 +100,11 @@ class ElementPageExtension extends DataExtension
                 ->addComponent(new GridFieldSortableRows('Sort'))
         );
 
+        $searchList = BaseElement::get()->filter('AvailableGlobally', true);
         if($list) {
-            $autocomplete->setSearchList(BaseElement::get()->filter('ClassName', array_keys($list)));
+            $searchList = $searchList->filter('ClassName', array_keys($list));
         }
+        $autocomplete->setSearchList($searchList);
 
         $autocomplete->setResultsFormat('($ID) $Title');
         $autocomplete->setSearchFields(array('ID', 'Title'));
