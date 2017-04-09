@@ -8,6 +8,17 @@
 		"name": "Alexandre Saelens",
 		"email": "alexandre.saelens@dna.co.nz"
 	}],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/jules0x/silverstripe-addressable"
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/jules0x/SortableGridField"
+		}
+
+	],
 	"require": {
 		"silverstripe/framework": "^4.0",
 		"silverstripe/cms": "^4.0",
