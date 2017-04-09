@@ -4,7 +4,6 @@ namespace DNADesign\Elemental\Models;
 
 use HtmlEditorField;
 use DropdownField;
-use DNADesign\Elemental\Models\ElementContent;
 
 
 
