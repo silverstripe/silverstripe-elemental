@@ -1,5 +1,15 @@
 <?php
 
+namespace DNADesign\Elemental\Extensions;
+
+use Extension;
+
+
+use DNADesign\Elemental\Models\ElementalArea;
+use DNADesign\Elemental\Models\ElementVirtualLinked;
+
+
+
 class ElementalContentControllerExtension extends Extension
 {
    /**

@@ -1,5 +1,11 @@
 <?php
 
+namespace DNADesign\Elemental\Models;
+
+use TextareaField;
+use UploadField;
+
+
 /**
  * @package elemental
  */

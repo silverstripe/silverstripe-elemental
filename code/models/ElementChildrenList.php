@@ -1,5 +1,10 @@
 <?php
 
+namespace DNADesign\Elemental\Models;
+
+
+
+
 /**
  * @package elemental
  */

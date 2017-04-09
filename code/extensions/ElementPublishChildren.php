@@ -1,5 +1,13 @@
 <?php
 
+namespace DNADesign\Elemental\Extensions;
+
+use DataExtension;
+use Versioned;
+use DNADesign\Elemental\Models\BaseElement;
+
+
+
 /**
  * @package elemental
  */
@@ -48,7 +56,7 @@ class ElementPublishChildren extends DataExtension
         }
 
         if($this->owner->ID) {
-
+						// remove any elements that are on live but not in draft.
             foreach ($items as $item) {
                 if(!self::is_versioned($item)) {
                     continue;

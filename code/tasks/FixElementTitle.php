@@ -1,4 +1,15 @@
 <?php
+
+namespace DNADesign\Elemental\Tasks;
+
+use BuildTask;
+
+use DB;
+use Convert;
+use Versioned;
+use DNADesign\Elemental\Models\BaseElement;
+
+
 class FixElementTitle extends BuildTask
 {
 

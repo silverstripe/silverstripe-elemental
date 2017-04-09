@@ -1,5 +1,13 @@
 <?php
 
+namespace DNADesign\Elemental\Models;
+
+use HtmlEditorField;
+use DropdownField;
+use DNADesign\Elemental\Models\ElementContent;
+
+
+
 /**
  * @package elemental
  */
@@ -36,7 +44,7 @@ class ElementContent extends BaseElement
 
         $fields = parent::getCMSFields();
 
-        if ($this->isEndofLine('ElementContent') && $this->hasExtension('VersionViewerDataObject')) {
+        if ($this->isEndofLine(ElementContent::class) && $this->hasExtension('VersionViewerDataObject')) {
             $fields = $this->addVersionViewer($fields, $this);
         }
 

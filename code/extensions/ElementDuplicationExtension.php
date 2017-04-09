@@ -1,5 +1,11 @@
 <?php
 
+namespace DNADesign\Elemental\Extensions;
+
+use Extension;
+use Config;
+
+
 /**
  * @package elemental
  */

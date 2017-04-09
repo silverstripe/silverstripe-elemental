@@ -1,5 +1,11 @@
 <?php
 
+namespace DNADesign\Elemental\Models;
+
+use UploadField;
+use HTMLEditorField;
+
+
 /**
  * Image tiles can link to a certain page.
  *

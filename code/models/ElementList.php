@@ -1,5 +1,31 @@
 <?php
 
+namespace DNADesign\Elemental\Models;
+
+
+use \Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm;
+use HTMLEditorField;
+
+use GridFieldConfig_RecordEditor;
+use GridFieldSortableRows;
+use GridFieldTitleHeader;
+
+
+use GridField;
+use Config;
+use LiteralField;
+use ClassInfo;
+use ArrayList;
+use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Extensions\ElementPublishChildren;
+use DNADesign\Elemental\ElementalGridFieldAddNewMultiClass;
+use DNADesign\Elemental\ElementalGridFieldDeleteAction;
+use DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter;
+use DNADesign\Elemental\Extensions\ElementPageExtension;
+use DNADesign\Elemental\Models\ElementVirtualLinked;
+
+
+
 /**
  * A list contains nested {@link BaseElement} such as a list of related files.
  *
@@ -13,11 +39,15 @@ class ElementList extends BaseElement
     );
 
     private static $has_many = array(
-        'Elements' => 'BaseElement'
+        'Elements' => BaseElement::class
     );
 
     private static $duplicate_relations = array(
         'Elements'
+    );
+
+    private static $extensions = array(
+        ElementPublishChildren::class
     );
 
     private static $title = "Element List Element";
@@ -42,6 +72,7 @@ class ElementList extends BaseElement
             $desc->setRightTitle('Optional');
             $desc->setRows(5);
             $fields->addFieldToTab('Root.Main', $desc);
+
 
             if ($isInDb) {
                 $adder = new ElementalGridFieldAddNewMultiClass('buttons-before-left');
@@ -77,7 +108,7 @@ class ElementList extends BaseElement
 
                 $widgetArea = new GridField(
                     'Elements',
-                    Config::inst()->get("ElementPageExtension", 'elements_title'),
+                    Config::inst()->get(ElementPageExtension::class, 'elements_title'),
                     $elements,
                     $config
                 );
@@ -113,14 +144,14 @@ class ElementList extends BaseElement
                 asort($list);
             }
         } else {
-            $classes = ClassInfo::subclassesFor('BaseElement');
+            $classes = ClassInfo::subclassesFor(BaseElement::class);
             $list = array();
-            unset($classes['BaseElement']);
+            unset($classes[BaseElement::class]);
 
             $disallowedElements = (array) $this->config()->get('disallowed_elements');
 
-            if (!in_array('ElementVirtualLinked', $disallowedElements)) {
-                array_push($disallowedElements, 'ElementVirtualLinked');
+            if (!in_array(ElementVirtualLinked::class, $disallowedElements)) {
+                array_push($disallowedElements, ElementVirtualLinked::class);
             }
 
             foreach ($classes as $class) {

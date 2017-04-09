@@ -1,4 +1,14 @@
 <?php
+
+namespace DNADesign\Elemental;
+
+use GridFieldAddExistingAutocompleter;
+use GridField;
+use SS_List;
+use Convert;
+use DataObject;
+use ElementVirtualLinked;
+
 /**
  * This class is is responsible for adding objects to another object's has_many
  * and many_many relation, as defined by the {@link RelationList} passed to the

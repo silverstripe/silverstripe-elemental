@@ -1,5 +1,10 @@
 <?php
 
+namespace DNADesign\Elemental\Controllers;
+
+use WidgetController;
+
+
 /**
  * Each {@link BaseElement} is wrapped inside a controller in order to provide
  * form submission handling and {@link Link()} method support.
@@ -27,7 +32,7 @@ class BaseElement_Controller extends WidgetController
           return $controller->Link($action);
         }
 
-        return Parent::Link($action);
+        return parent::Link($action);
     }
 
     /**

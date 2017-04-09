@@ -1,5 +1,13 @@
 <?php
 
+namespace DNADesign\Elemental\Models;
+
+use Textfield;
+use EmailField;
+use Director;
+use Email;
+
+
 /**
  * @package elemental
  */
