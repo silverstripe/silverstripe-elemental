@@ -1,5 +1,36 @@
 <?php
 
+namespace DNADesign\Elemental\Extensions;
+
+
+use \Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm;
+use DataExtension;
+use FieldList;
+use LiteralField;
+
+use GridField;
+use Config;
+use GridFieldConfig_RelationEditor;
+
+
+use GridFieldTitleHeader;
+use GridFieldSortableRows;
+
+use SiteTree;
+use ClassInfo;
+use Requirements;
+use Versioned;
+use DB;
+use DNADesign\Elemental\Models\ElementalArea;
+use DNADesign\Elemental\ElementalGridFieldAddNewMultiClass;
+use DNADesign\Elemental\Extensions\ElementPageExtension;
+use DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter;
+use DNADesign\Elemental\ElementalGridFieldDeleteAction;
+use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\ElementVirtualLinked;
+
+
+
 /**
  * @package elemental
  */
@@ -43,7 +74,7 @@ class ElementPageExtension extends DataExtension
      * @var array $has_one
      */
     private static $has_one = array(
-        'ElementArea' => 'ElementalArea'
+        'ElementArea' => ElementalArea::class
     );
 
     /**
@@ -77,7 +108,7 @@ class ElementPageExtension extends DataExtension
         }
 
         $gridField = GridField::create('ElementArea',
-            Config::inst()->get('ElementPageExtension', 'elements_title'),
+            Config::inst()->get(ElementPageExtension::class, 'elements_title'),
             $area->AllElements(),
             $config = GridFieldConfig_RelationEditor::create()
                 ->removeComponentsByType('GridFieldAddNewButton')
@@ -116,7 +147,6 @@ class ElementPageExtension extends DataExtension
         return $fields;
     }
 
-
     /**
      * @return array
      */
@@ -143,14 +173,14 @@ class ElementPageExtension extends DataExtension
                 asort($list);
             }
         } else {
-            $classes = ClassInfo::subclassesFor('BaseElement');
+            $classes = ClassInfo::subclassesFor(BaseElement::class);
             $list = array();
-            unset($classes['BaseElement']);
+            unset($classes[BaseElement::class]);
 
             $disallowedElements = (array) $this->owner->config()->get('disallowed_elements');
 
-            if (!in_array('ElementVirtualLinked', $disallowedElements)) {
-                array_push($disallowedElements, 'ElementVirtualLinked');
+            if (!in_array(ElementVirtualLinked::class, $disallowedElements)) {
+                array_push($disallowedElements, ElementVirtualLinked::class);
             }
 
             foreach ($classes as $class) {
@@ -185,6 +215,7 @@ class ElementPageExtension extends DataExtension
         $originalThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
         Config::inst()->update('SSViewer', 'theme_enabled', true);
 
+
         if ($this->owner->hasMethod('ElementArea') && Config::inst()->get(__CLASS__, 'copy_element_content_to_contentfield')) {
             $elements = $this->owner->ElementArea();
 
@@ -218,6 +249,7 @@ class ElementPageExtension extends DataExtension
             }
         }
 
+
         // set theme_enabled back to what it was
         Config::inst()->update('SSViewer', 'theme_enabled', $originalThemeEnabled);
 
@@ -250,7 +282,7 @@ class ElementPageExtension extends DataExtension
 
         if (is_a($this->owner, 'RedirectorPage')) {
             return false;
-        } else if ($ignored = Config::inst()->get('ElementPageExtension', 'ignored_classes')) {
+        } else if ($ignored = Config::inst()->get(ElementPageExtension::class, 'ignored_classes')) {
             foreach ($ignored as $check) {
                 if (is_a($this->owner, $check)) {
                     return false;
@@ -313,7 +345,7 @@ class ElementPageExtension extends DataExtension
     public function onAfterPublish()
     {
         if ($id = $this->owner->ElementAreaID) {
-            $widgets = Versioned::get_by_stage('BaseElement', 'Stage', "ParentID = '$id'");
+            $widgets = Versioned::get_by_stage(BaseElement::class, 'Stage', "ParentID = '$id'");
             $staged = array();
 
             foreach ($widgets as $widget) {
@@ -323,7 +355,7 @@ class ElementPageExtension extends DataExtension
             }
 
             // remove any elements that are on live but not in draft.
-            $widgets = Versioned::get_by_stage('BaseElement', 'Live', "ParentID = '$id'");
+            $widgets = Versioned::get_by_stage(BaseElement::class, 'Live', "ParentID = '$id'");
 
             foreach ($widgets as $widget) {
                 if (!in_array($widget->ID, $staged)) {
@@ -349,7 +381,7 @@ class ElementPageExtension extends DataExtension
             return;
         }
         if ($id = $this->owner->ElementAreaID) {
-            $widgets = Versioned::get_by_stage('BaseElement', 'Live', "ParentID = '$id'");
+            $widgets = Versioned::get_by_stage(BaseElement::class, 'Live', "ParentID = '$id'");
             $staged = array();
 
             foreach ($widgets as $widget) {

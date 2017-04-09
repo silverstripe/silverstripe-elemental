@@ -1,5 +1,16 @@
 <?php
 
+namespace DNADesign\Elemental\Tests;
+
+use FunctionalTest;
+use Config;
+
+
+use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\ElementalArea;
+
+
+
 /**
  * @package elemental
  * @subpackage tests
@@ -13,7 +24,7 @@ class ElementAnchorTests extends FunctionalTest {
      * Test to ensure backwards compatibility with old Anchor IDs.
      */
     public function testDisablePrettyAnchor() {
-        Config::inst()->update('BaseElement', 'disable_pretty_anchor_name', true);
+        Config::inst()->update(BaseElement::class, 'disable_pretty_anchor_name', true);
 
         $area = ElementalArea::create();
         $area->Widgets()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 1)));
@@ -33,7 +44,7 @@ class ElementAnchorTests extends FunctionalTest {
      * Test the stop-clashing logic if two BaseElement classes have the same $Title.
      */
     public function testSameTitle() {
-        Config::inst()->update('BaseElement', 'enable_title_in_template', true);
+        Config::inst()->update(BaseElement::class, 'enable_title_in_template', true);
 
         $area = ElementalArea::create();
         $area->Widgets()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 1)));

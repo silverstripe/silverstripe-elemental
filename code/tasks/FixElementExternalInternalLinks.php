@@ -1,4 +1,13 @@
 <?php
+
+namespace DNADesign\Elemental\Tasks;
+
+use BuildTask;
+use DB;
+use Convert;
+use DNADesign\Elemental\Models\ElementLink;
+
+
 class FixElementExternalInternalLinks extends BuildTask
 {
 
@@ -14,10 +23,10 @@ class FixElementExternalInternalLinks extends BuildTask
         DB::query('UPDATE "Widget_versions" SET "ClassName" = \'ElementLink\' WHERE "ClassName" IN (\'ElementInternalLink\',\'ElementExternalLink\')');
 
         $tables = array(
-            'ElementInternalLink' => 'ElementLink',
+            'ElementInternalLink' => ElementLink::class,
             'ElementInternalLink_versions' => 'ElementLink_versions',
             'ElementInternalLink_Live' => 'ElementLink_Live',
-            'ElementExternalLink' => 'ElementLink',
+            'ElementExternalLink' => ElementLink::class,
             'ElementExternalLink_versions' => 'ElementLink_versions',
             'ElementExternalLink_Live' => 'ElementLink_Live'
         );

@@ -1,12 +1,15 @@
 <?php
 
+namespace DNADesign\Elemental\Controllers;
+use DNADesign\Elemental\Models\BaseElement;
+
 /**
  * @package elemental
  */
 class ElementalAdmin extends ModelAdmin {
 
     private static $managed_models = array(
-        'BaseElement'
+        BaseElement::class
     );
 
     private static $menu_title = 'Content Elements';

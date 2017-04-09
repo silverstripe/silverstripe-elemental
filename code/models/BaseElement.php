@@ -1,5 +1,33 @@
 <?php
 
+namespace DNADesign\Elemental\Models;
+
+use Widget;
+use ReadonlyField;
+use TextField;
+use CheckboxField;
+use DropdownField;
+use LiteralField;
+use GridFieldConfig_Base;
+
+use ClassInfo;
+use DB;
+use Versioned;
+use URLSegmentFilter;
+use Controller;
+use SiteConfig;
+use Config;
+use Director;
+use Object;
+use SearchContext;
+use DNADesign\Elemental\Models\ElementList;
+use DNADesign\Elemental\Models\ElementVirtualLinked;
+use DNADesign\Elemental\ElementalGridFieldDeleteAction;
+use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Extensions\ElementPageExtension;
+
+
+
 /**
  * @package elemental
  */
@@ -18,14 +46,14 @@ class BaseElement extends Widget implements CMSPreviewable
      * @var array $has_one
      */
     private static $has_one = array(
-        'List' => 'ElementList' // optional.
+        'List' => ElementList::class // optional.
     );
 
     /**
      * @var array $has_many
      */
     private static $has_many = array(
-        'VirtualClones' => 'ElementVirtualLinked'
+        'VirtualClones' => ElementVirtualLinked::class
     );
 
     /**
@@ -132,7 +160,7 @@ class BaseElement extends Widget implements CMSPreviewable
         $fields->addFieldToTab('Root.Settings', new CheckboxField('AvailableGlobally', 'Available globally - can be linked to multiple pages'));
         $fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
 
-        if (!is_a($this, 'ElementList')) {
+        if (!is_a($this, ElementList::class)) {
             $lists = ElementList::get()->filter('ParentID', $this->ParentID);
 
             if ($lists->exists()) {
@@ -189,7 +217,7 @@ class BaseElement extends Widget implements CMSPreviewable
         $this->extend('updateCMSFields', $fields);
 
         if ($this->IsInDB()) {
-            if ($this->isEndofLine('BaseElement') && $this->hasExtension('VersionViewerDataObject')) {
+            if ($this->isEndofLine(BaseElement::class) && $this->hasExtension('VersionViewerDataObject')) {
                 $fields = $this->addVersionViewer($fields, $this);
             }
         }
@@ -570,7 +598,7 @@ class BaseElement extends Widget implements CMSPreviewable
 
         // get all dataobject with the elemental extension
         foreach(ClassInfo::subclassesFor('DataObject') as $className) {
-            if(Object::has_extension($className, 'ElementPageExtension')) {
+            if(Object::has_extension($className, ElementPageExtension::class)) {
                $classes[] = $className;
             }
         }

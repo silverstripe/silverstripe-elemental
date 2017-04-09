@@ -1,5 +1,11 @@
 <?php
 
+namespace DNADesign\Elemental;
+
+use GridFieldAddNewMultiClass;
+use GridField;
+
+
 /**
  * @package elemental
  */

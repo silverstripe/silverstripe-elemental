@@ -1,5 +1,14 @@
 <?php
 
+namespace DNADesign\Elemental\Models;
+
+use TextField;
+use Director;
+use TreeDropdownField;
+use CheckboxField;
+use TextareaField;
+
+
 /**
  * @package elemental
  */

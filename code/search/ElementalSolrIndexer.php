@@ -1,5 +1,10 @@
 <?php
 
+namespace DNADesign\Elemental\Search;
+
+
+
+
 class ElementalSolrIndexer {
 
     const ELEMENTAL_FIELD_NAME = 'Elemental_Element';

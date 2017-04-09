@@ -1,5 +1,11 @@
 <?php
 
+namespace DNADesign\Elemental\Models;
+
+use UserDefinedForm_Controller;
+use Controller;
+
+
 /**
  * @package elemental
  */

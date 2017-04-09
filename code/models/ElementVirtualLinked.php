@@ -1,5 +1,18 @@
 <?php
 
+namespace DNADesign\Elemental\Models;
+
+use FieldList;
+use TabSet;
+use Tab;
+use LiteralField;
+use HTMLText;
+use BaseElement_Controller;
+use Exception;
+use DNADesign\Elemental\Models\BaseElement;
+
+
+
 /**
  * Virtual Linked Element.
  *
@@ -24,7 +37,7 @@ class ElementVirtualLinked extends BaseElement
     private static $singular_name = 'Virtual linked Element';
 
     private static $has_one = array(
-        'LinkedElement' => 'BaseElement'
+        'LinkedElement' => BaseElement::class
     );
 
     public function getTitle()

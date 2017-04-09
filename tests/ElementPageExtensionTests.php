@@ -1,5 +1,13 @@
 <?php
 
+namespace DNADesign\Elemental\Tests;
+
+use FunctionalTest;
+use Page;
+use DNADesign\Elemental\Extensions\ElementPageExtension;
+
+
+
 /**
  * @package elemental
  * @subpackage tests
@@ -11,7 +19,7 @@ class ElementPageExtensionTests extends FunctionalTest {
     public function setUp() {
         parent::setUp();
 
-        Page::add_extension('ElementPageExtension');
+        Page::add_extension(ElementPageExtension::class);
     }
 
     public function testUpdateCmsFields() {
