@@ -8,6 +8,8 @@
 		"name": "Alexandre Saelens",
 		"email": "alexandre.saelens@dna.co.nz"
 	}],
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"repositories": [
 		{
 			"type": "vcs",
