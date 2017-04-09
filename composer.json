@@ -9,19 +9,16 @@
 		"email": "alexandre.saelens@dna.co.nz"
 	}],
 	"require": {
-		"silverstripe/framework": "~3.1",
-		"silverstripe/cms": "~3.1",
-		"silverstripe/widgets": "~1.1",
-		"silverstripe-australia/gridfieldextensions": "~1.0",
-		"silverstripe-australia/addressable": "~1.0",
-		"heyday/silverstripe-versioneddataobjects": "~2.0",
-		"undefinedoffset/sortablegridfield": "~0.5",
+		"silverstripe/framework": "^4.0",
+		"silverstripe/cms": "^4.0",
+		"silverstripe/widgets": "dev-master",
+		"silverstripe-australia/gridfieldextensions": "dev-master",
+		"silverstripe-australia/addressable": "dev-master",
+		"heyday/silverstripe-versioneddataobjects": "dev-master",
+		"undefinedoffset/sortablegridfield": "dev-master",
 		"unclecheese/betterbuttons": "^1.3.14",
 		"arillo/silverstripe-dataobject-preview": "*",
 		"unclecheese/display-logic": "^1"
-	},
-	"require-dev": {
-		"phpunit/PHPUnit": "~3.7@stable"
 	},
 	"suggest": {
 		"bluehousegroup/silverstripe-data-object-version-viewer": "Allows viewing of version history for data objects inside of the SilverStripe CMS"
