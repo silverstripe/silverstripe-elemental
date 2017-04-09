@@ -1,0 +1,27 @@
+mappings:
+  ElementalGridFieldAddExistingAutocompleter: DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter
+  ElementalGridFieldAddNewMultiClass: DNADesign\Elemental\ElementalGridFieldAddNewMultiClass
+  ElementalGridFieldDeleteAction: DNADesign\Elemental\ElementalGridFieldDeleteAction
+  BaseElementExtension: DNADesign\Elemental\Extensions\BaseElementExtension
+  ElementalContentControllerExtension: DNADesign\Elemental\Extensions\ElementalContentControllerExtension
+  ElementDuplicationExtension: DNADesign\Elemental\Extensions\ElementDuplicationExtension
+  ElementPageExtension: DNADesign\Elemental\Extensions\ElementPageExtension
+  ElementPublishChildren: DNADesign\Elemental\Extensions\ElementPublishChildren
+  BaseElement: DNADesign\Elemental\Models\BaseElement
+  ElementalArea: DNADesign\Elemental\Models\ElementalArea
+  ElementChildrenList: DNADesign\Elemental\Models\ElementChildrenList
+  ElementContact: DNADesign\Elemental\Models\ElementContact
+  ElementContent: DNADesign\Elemental\Models\ElementContent
+  ElementFile: DNADesign\Elemental\Models\ElementFile
+  ElementImage: DNADesign\Elemental\Models\ElementImage
+  ElementLink: DNADesign\Elemental\Models\ElementLink
+  ElementList: DNADesign\Elemental\Models\ElementList
+  ElementSocialIcons: DNADesign\Elemental\Models\ElementSocialIcons
+  ElementUserDefinedForm: DNADesign\Elemental\Models\ElementUserDefinedForm
+  ElementVirtualLinked: DNADesign\Elemental\Models\ElementVirtualLinked
+  ElementVirtualLinked_Controller: DNADesign\Elemental\Models\ElementVirtualLinked_Controller
+  ElementalSolrIndexer: DNADesign\Elemental\Search\ElementalSolrIndexer
+  FixElementExternalInternalLinks: DNADesign\Elemental\Tasks\FixElementExternalInternalLinks
+  FixElementTitle: DNADesign\Elemental\Tasks\FixElementTitle
+  BaseElement_Controller: DNADesign\Elemental\Controllers\BaseElement_Controller
+  ElementalAdmin: DNADesign\Elemental\Controllers\ElementalAdmin
