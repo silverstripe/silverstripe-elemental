@@ -10,6 +10,11 @@
 	}],
 	"minimum-stability": "dev",
 	"prefer-stable": true,
+	"require": {
+		"silverstripe/framework": "^4.0",
+		"silverstripe/cms": "^4.0",
+		"silverstripe/widgets": "dev-master"
+	},
 	"repositories": [
 		{
 			"type": "vcs",
