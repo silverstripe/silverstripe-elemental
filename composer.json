@@ -13,7 +13,7 @@
 	"repositories": [
 		{
 			"type": "vcs",
-			"url": "https://github.com/jules0x/silverstripe-addressable"
+			"url": "https://github.com/jules0x/addressable"
 		},
 		{
 			"type": "vcs",
@@ -25,7 +25,9 @@
 		"silverstripe/cms": "^4.0",
 		"silverstripe/widgets": "dev-master",
 		"silverstripe-australia/gridfieldextensions": "dev-master",
-		"heyday/silverstripe-versioneddataobjects": "dev-master"
+		"heyday/silverstripe-versioneddataobjects": "dev-master",
+		"silverstripe-australia/addressable": "dev-master",
+		"undefinedoffset/sortablegridfield": "dev-master"
 	},
 	"suggest": {
 		"bluehousegroup/silverstripe-data-object-version-viewer": "Allows viewing of version history for data objects inside of the SilverStripe CMS"
