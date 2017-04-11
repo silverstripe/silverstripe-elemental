@@ -25,9 +25,7 @@
 		"silverstripe/cms": "^4.0",
 		"silverstripe/widgets": "dev-master",
 		"silverstripe-australia/gridfieldextensions": "dev-master",
-		"silverstripe-australia/addressable": "dev-master",
-		"heyday/silverstripe-versioneddataobjects": "dev-master",
-		"undefinedoffset/sortablegridfield": "dev-master"
+		"heyday/silverstripe-versioneddataobjects": "dev-master"
 	},
 	"suggest": {
 		"bluehousegroup/silverstripe-data-object-version-viewer": "Allows viewing of version history for data objects inside of the SilverStripe CMS"
