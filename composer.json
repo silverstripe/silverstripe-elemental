@@ -13,7 +13,7 @@
 	"repositories": [
 		{
 			"type": "vcs",
-			"url": "https://github.com/jules0x/addressable"
+			"url": "https://github.com/jules0x/silverstripe-addressable"
 		},
 		{
 			"type": "vcs",
@@ -26,7 +26,7 @@
 		"silverstripe/widgets": "dev-master",
 		"silverstripe-australia/gridfieldextensions": "dev-master",
 		"heyday/silverstripe-versioneddataobjects": "dev-master",
-		"silverstripe-australia/addressable": "dev-master",
+		"silverstripe-australia/silverstripe-addressable": "dev-master",
 		"undefinedoffset/sortablegridfield": "dev-master"
 	},
 	"suggest": {
