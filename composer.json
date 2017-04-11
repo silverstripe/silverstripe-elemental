@@ -26,7 +26,6 @@
 		"silverstripe/widgets": "dev-master",
 		"silverstripe-australia/gridfieldextensions": "dev-master",
 		"heyday/silverstripe-versioneddataobjects": "dev-master",
-		"silverstripe-australia/silverstripe-addressable": "dev-master",
 		"undefinedoffset/sortablegridfield": "dev-master"
 	},
 	"suggest": {
