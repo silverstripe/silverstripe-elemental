@@ -2,7 +2,7 @@
 
 namespace DNADesign\Elemental\Extensions;
 
-use Extension;
+use SilverStripe\Assets\Tests\FileMigrationHelperTest\Extension;
 use Config;
 
 

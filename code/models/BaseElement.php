@@ -2,28 +2,28 @@
 
 namespace DNADesign\Elemental\Models;
 
-use Widget;
-use ReadonlyField;
-use TextField;
-use CheckboxField;
-use DropdownField;
-use LiteralField;
-use GridFieldConfig_Base;
+use SilverStripe\Widgets\Model\Widget;
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\GridField\GridFieldConfig_Base;
 
-use ClassInfo;
-use DB;
-use Versioned;
-use URLSegmentFilter;
-use Controller;
-use SiteConfig;
-use Config;
-use Director;
-use Object;
-use SearchContext;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\ORM\DB;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\Parsers\URLSegmentFilter;
+use SilverStripe\Control\Controller;
+use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\Object;
+use SilverStripe\ORM\Search\SearchContext;
+use SilverStripe\Forms\NumericField;
 use DNADesign\Elemental\Models\ElementList;
 use DNADesign\Elemental\Models\ElementVirtualLinked;
 use DNADesign\Elemental\ElementalGridFieldDeleteAction;
-use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Extensions\ElementPageExtension;
 
 
@@ -79,11 +79,10 @@ class BaseElement extends Widget implements CMSPreviewable
      * @var array
      */
     private static $searchable_fields = array(
-        'ClassName',
-        'Title',
         'ID' => array(
             'field' => 'NumericField'
         ),
+        'Title',
         'LastEdited',
         'AvailableGlobally'
     );
@@ -125,12 +124,12 @@ class BaseElement extends Widget implements CMSPreviewable
      * @config
      * Elements available globally by default
      */
-    private static $default_global_elements = true;
+     private static $default_global_elements = true;
 
-    public function populateDefaults() {
+     public function populateDefaults() {
         $this->AvailableGlobally = $this->config()->get('default_global_elements');
         parent::populateDefaults();
-    }
+     }
 
     public function getCMSFields()
     {
@@ -172,6 +171,7 @@ class BaseElement extends Widget implements CMSPreviewable
                 $move->setHasEmptyDefault(true);
             }
         }
+
 
         if($virtual = $fields->dataFieldByName('VirtualClones')) {
             if ($this->VirtualClones()->Count() > 0) {
@@ -448,7 +448,7 @@ class BaseElement extends Widget implements CMSPreviewable
         $titleAsURL = $filter->filter($anchorTitle);
 
         // Ensure that this anchor name isn't already in use
-        // ie. If two elements have the same title, it'll append '-2', '-3'
+        // ie. If two elemental blocks have the same title, it'll append '-2', '-3'
         $result = $titleAsURL;
         $count = 1;
         while (isset(self::$_used_anchors[$result]) && self::$_used_anchors[$result] !== $this->ID) {
@@ -513,7 +513,7 @@ class BaseElement extends Widget implements CMSPreviewable
             Config::inst()->update('SSViewer', 'theme', $config->Theme);
         }
 
-       return $this->renderWith($this->class);
+        return $this->renderWith($this->class);
     }
 
     public function WidgetHolder()
@@ -593,7 +593,7 @@ class BaseElement extends Widget implements CMSPreviewable
         return $html;
     }
 
-    public static function all_allowed_elements() {
+		public static function all_allowed_elements() {
         $classes = array();
 
         // get all dataobject with the elemental extension

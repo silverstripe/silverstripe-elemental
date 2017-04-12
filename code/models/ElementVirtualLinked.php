@@ -7,7 +7,7 @@ use TabSet;
 use Tab;
 use LiteralField;
 use HTMLText;
-use BaseElement_Controller;
+use DNADesign\Elemental\Controllers\BaseElement_Controller;
 use Exception;
 use DNADesign\Elemental\Models\BaseElement;
 

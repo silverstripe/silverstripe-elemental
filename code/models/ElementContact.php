@@ -24,8 +24,8 @@ class ElementContact extends BaseElement
     );
 
     private static $extensions = array(
-        'Addressable',
-        'Geocodable'
+        'SilverStripe\Addressable\Addressable',
+        'SilverStripe\Addressable\Geocodable'
     );
 
     /**

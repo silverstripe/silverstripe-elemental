@@ -2,7 +2,7 @@
 
 namespace DNADesign\Elemental\Extensions;
 
-use DataExtension;
+use SilverStripe\ORM\DataExtension;
 use Versioned;
 use DNADesign\Elemental\Models\BaseElement;
 

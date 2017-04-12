@@ -2,7 +2,7 @@
 
 namespace DNADesign\Elemental\Tasks;
 
-use BuildTask;
+use SilverStripe\Dev\BuildTask;
 
 use DB;
 use Convert;
