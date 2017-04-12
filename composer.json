@@ -10,22 +10,11 @@
 	}],
 	"minimum-stability": "dev",
 	"prefer-stable": true,
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/jules0x/silverstripe-addressable"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/jules0x/SortableGridField"
-		}
-	],
 	"require": {
 		"silverstripe/framework": "^4.0",
 		"silverstripe/cms": "^4.0",
 		"silverstripe/widgets": "dev-master",
-		"silverstripe-australia/gridfieldextensions": "dev-master",
-		"heyday/silverstripe-versioneddataobjects": "dev-master"
+		"silverstripe-australia/gridfieldextensions": "dev-master"
 	},
 	"suggest": {
 		"bluehousegroup/silverstripe-data-object-version-viewer": "Allows viewing of version history for data objects inside of the SilverStripe CMS"
