@@ -2,7 +2,7 @@
 
 namespace DNADesign\Elemental\Models;
 
-use WidgetArea;
+use SilverStripe\Widgets\Model\WidgetArea;
 use UnsavedRelationList;
 use HasManyList;
 use Versioned;

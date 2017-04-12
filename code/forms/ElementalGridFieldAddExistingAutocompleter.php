@@ -2,12 +2,12 @@
 
 namespace DNADesign\Elemental;
 
-use GridFieldAddExistingAutocompleter;
-use GridField;
-use SS_List;
-use Convert;
-use DataObject;
-use ElementVirtualLinked;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\ORM\SS_List;
+use SilverStripe\Core\Convert;
+use SilverStripe\ORM\DataObject;
+use DNADesign\Elemental\Models\ElementVirtualLinked;
 
 /**
  * This class is is responsible for adding objects to another object's has_many

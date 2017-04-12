@@ -4,9 +4,9 @@ namespace DNADesign\Elemental\Extensions;
 
 
 use \Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm;
-use DataExtension;
-use FieldList;
-use LiteralField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\LiteralField;
 
 use GridField;
 use Config;
@@ -23,7 +23,6 @@ use Versioned;
 use DB;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\ElementalGridFieldAddNewMultiClass;
-use DNADesign\Elemental\Extensions\ElementPageExtension;
 use DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter;
 use DNADesign\Elemental\ElementalGridFieldDeleteAction;
 use DNADesign\Elemental\Models\BaseElement;

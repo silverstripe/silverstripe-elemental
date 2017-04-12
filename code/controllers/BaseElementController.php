@@ -2,7 +2,7 @@
 
 namespace DNADesign\Elemental\Controllers;
 
-use WidgetController;
+use SilverStripe\Widgets\Controllers\WidgetController;
 
 
 /**

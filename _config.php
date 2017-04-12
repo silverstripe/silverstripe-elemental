@@ -1,5 +1,5 @@
 <?php
 
 //
-ContentController::remove_extension('WidgetContentControllerExtension');
-ContentController::add_extension('ElementalContentControllerExtension');
+\SilverStripe\CMS\Controllers\ContentController::remove_extension('\DNADesign\Elemental\Extensions\WidgetContentControllerExtension');
+\SilverStripe\CMS\Controllers\ContentController::add_extension('\DNADesign\Elemental\Extensions\ElementalContentControllerExtension');
