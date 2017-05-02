@@ -50,7 +50,7 @@ class ElementList extends BaseElement
 
 
             if ($isInDb) {
-                $adder = new ElementalGridFieldAddNewMultiClass();
+                $adder = new ElementalGridFieldAddNewMultiClass('buttons-before-left');
 
                 $list = $this->getAvailableTypes();
 
@@ -67,7 +67,7 @@ class ElementList extends BaseElement
                 $config->addComponent(new GridFieldTitleHeader());
                 $config->addComponent(new ElementalGridFieldDeleteAction());
                 $config->addComponent($adder);
-                $config->addComponent($autocompleter = new ElementalGridFieldAddExistingAutocompleter());
+                $config->addComponent($autocompleter = new ElementalGridFieldAddExistingAutocompleter('buttons-before-right'));
 
                 if($list) {
                     $autocompleter->setSearchList(

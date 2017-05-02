@@ -70,7 +70,7 @@ class ElementPageExtension extends DataExtension
         // after content.
         $fields->replaceField('Content', new LiteralField('Content', ''));
 
-        $adder = new ElementalGridFieldAddNewMultiClass();
+        $adder = new ElementalGridFieldAddNewMultiClass('buttons-before-left');
 
         $list = $this->getAvailableTypes();
         if($list) {
@@ -93,7 +93,7 @@ class ElementPageExtension extends DataExtension
                 ->removeComponentsByType('GridFieldSortableHeader')
                 ->removeComponentsByType('GridFieldDeleteAction')
                 ->removeComponentsByType('GridFieldAddExistingAutocompleter')
-                ->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter())
+                ->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter('buttons-before-right'))
                 ->addComponent(new ElementalGridFieldDeleteAction())
                 ->addComponent(new GridFieldTitleHeader())
                 ->addComponent($adder)
