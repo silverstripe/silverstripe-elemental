@@ -14,7 +14,7 @@ class ElementFile extends BaseElement
         'File' => 'File'
     );
 
-    private static $title = "File Element";
+    private static $title = 'File Element';
 
     private static $enable_title_in_template = true;
 

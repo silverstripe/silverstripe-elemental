@@ -14,7 +14,7 @@ class ElementChildrenList extends BaseElement
         'ParentPage' => 'SiteTree'
     );
 
-    private static $title = "Show a list of pages in a list.";
+    private static $title = 'Show a list of pages in a list.';
 
     private static $enable_title_in_template = true;
 

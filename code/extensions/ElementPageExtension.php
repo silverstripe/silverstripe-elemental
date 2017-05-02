@@ -1,7 +1,5 @@
 <?php
 
-use \Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm;
-
 /**
  * @package elemental
  */
@@ -14,13 +12,6 @@ class ElementPageExtension extends DataExtension
      * @var string $elements_title Title of the element in the CMS.
      */
     private static $elements_title = 'Content Blocks';
-
-    /**
-     * @config
-     *
-     * @var boolean $disable_element_publish_button Disable publish / unpublish buttons in GridFieldDetailForm.
-     */
-    private static $disable_element_publish_button = false;
 
     /**
      * @config
@@ -86,19 +77,22 @@ class ElementPageExtension extends DataExtension
         }
 
         $gridField = GridField::create('ElementArea',
-            Config::inst()->get("ElementPageExtension", 'elements_title'),
+            Config::inst()->get('ElementPageExtension', 'elements_title'),
             $area->AllElements(),
-            GridFieldConfig_RelationEditor::create()
+            $config = GridFieldConfig_RelationEditor::create()
                 ->removeComponentsByType('GridFieldAddNewButton')
                 ->removeComponentsByType('GridFieldSortableHeader')
                 ->removeComponentsByType('GridFieldDeleteAction')
                 ->removeComponentsByType('GridFieldAddExistingAutocompleter')
                 ->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter('buttons-before-right'))
-                ->addComponent(new ElementalGridFieldDeleteAction())
                 ->addComponent(new GridFieldTitleHeader())
                 ->addComponent($adder)
                 ->addComponent(new GridFieldSortableRows('Sort'))
         );
+
+        if ($this->owner->canArchive()) {
+            $config->addComponent(new ElementalGridFieldDeleteAction());
+        }
 
         $searchList = BaseElement::get()->filter('AvailableGlobally', true);
         if($list) {
@@ -113,11 +107,6 @@ class ElementPageExtension extends DataExtension
         $paginator = $config->getComponentByType('GridFieldPaginator');
         $paginator->setItemsPerPage(100);
 
-        if (!$this->owner->config()->disable_element_publish_button) {
-            $config->removeComponentsByType('GridFieldDetailForm');
-            $config->addComponent($obj = new VersionedDataObjectDetailsForm());
-        }
-
         if ($this->owner instanceof SiteTree && $fields->findOrMakeTab('Root.Main')->fieldByName('Metadata')) {
             $fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
         } else {
@@ -126,6 +115,7 @@ class ElementPageExtension extends DataExtension
 
         return $fields;
     }
+
 
     /**
      * @return array
@@ -191,7 +181,6 @@ class ElementPageExtension extends DataExtension
         $originalThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
         Config::inst()->update('SSViewer', 'theme_enabled', true);
 
-
         if ($this->owner->hasMethod('ElementArea') && Config::inst()->get(__CLASS__, 'copy_element_content_to_contentfield')) {
             $elements = $this->owner->ElementArea();
 
@@ -224,7 +213,6 @@ class ElementPageExtension extends DataExtension
                 $this->owner->Content = '';
             }
         }
-
 
         // set theme_enabled back to what it was
         Config::inst()->update('SSViewer', 'theme_enabled', $originalThemeEnabled);
@@ -394,7 +382,7 @@ class ElementPageExtension extends DataExtension
 
                 $widget->invokeWithExtensions('onBeforeRollback', $widget);
 
-                $widget->publish("Live", "Stage", false);
+                $widget->publish('Live', 'Stage', false);
 
                 $widget->invokeWithExtensions('onAfterRollback', $widget);
             }

@@ -1,7 +1,5 @@
 <?php
 
-use \Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm;
-
 /**
  * A list contains nested {@link BaseElement} such as a list of related files.
  *
@@ -20,10 +18,6 @@ class ElementList extends BaseElement
 
     private static $duplicate_relations = array(
         'Elements'
-    );
-
-    private static $extensions = array(
-        'ElementPublishChildren'
     );
 
     private static $title = "Element List Element";
@@ -48,7 +42,6 @@ class ElementList extends BaseElement
             $desc->setRightTitle('Optional');
             $fields->addFieldToTab('Root.Main', $desc);
 
-
             if ($isInDb) {
                 $adder = new ElementalGridFieldAddNewMultiClass('buttons-before-left');
 
@@ -65,18 +58,21 @@ class ElementList extends BaseElement
                 $config->removeComponentsByType('GridFieldDeleteAction');
                 $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
                 $config->addComponent(new GridFieldTitleHeader());
-                $config->addComponent(new ElementalGridFieldDeleteAction());
                 $config->addComponent($adder);
-                $config->addComponent($autocompleter = new ElementalGridFieldAddExistingAutocompleter('buttons-before-right'));
+                $config->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter('buttons-before-right'));
 
-                if($list) {
-                    $autocompleter->setSearchList(
-                        BaseElement::get()->filter('ClassName', array_keys($list))
-                    );
+                if ($this->owner->canDelete()) {
+                    $config->addComponent(new ElementalGridFieldDeleteAction());
                 }
 
-                $config->removeComponentsByType('GridFieldDetailForm');
-                $config->addComponent(new VersionedDataObjectDetailsForm());
+                $searchList = BaseElement::get()->filter('AvailableGlobally', true);
+                if($list) {
+                    $searchList = $searchList->filter('ClassName', array_keys($list));
+                }
+                $autocomplete->setSearchList($searchList);
+
+                $autocomplete->setResultsFormat('($ID) $Title');
+                $autocomplete->setSearchFields(array('ID', 'Title'));
 
                 $widgetArea = new GridField(
                     'Elements',
