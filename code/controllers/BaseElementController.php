@@ -15,7 +15,7 @@ class BaseElement_Controller extends WidgetController
      */
     public function WidgetHolder()
     {
-        return $this->renderWith("ElementHolder");
+        return $this->renderWith('ElementHolder');
     }
 
 
@@ -29,7 +29,6 @@ class BaseElement_Controller extends WidgetController
 
         return Parent::Link($action);
     }
-
 
     /**
      * if this is a virtual request, change the hash if set.

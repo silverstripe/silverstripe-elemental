@@ -1,3 +1,10 @@
 <div class="element $ClassName<% if $ExtraClass %> $ExtraClass<% end_if %>" id="$Anchor">
-    $Widget
+	<% uncached %>
+		<% if canEdit %>
+			<div style="position: relative">
+				<a href="$CMSEditLink" style="position: absolute; right: 0; top: 0; padding: 5px 10px; background: #0071c4; color: white;">Edit</a>
+			</div>
+		<% end_if %>
+	<% end_uncached %>
+	$Widget
 </div>

@@ -3,7 +3,7 @@
 /**
  * @package elemental
  */
-class BaseElement extends Widget
+class BaseElement extends Widget implements CMSPreviewable
 {
     /**
      * @var array $db
@@ -195,7 +195,38 @@ class BaseElement extends Widget
             }
         }
 
+
+        $fields->push($liveLinkField = new HiddenField("AbsoluteLink", false, Director::absoluteURL($this->PreviewLink())));
+        $fields->push($liveLinkField = new HiddenField('LiveLink', false, Director::absoluteURL($this->Link())));
+        $fields->push($stageLinkField = new HiddenField('StageLink', false, Director::absoluteURL($this->PreviewLink())));
+
         return $fields;
+    }
+
+    public function Link() {
+        /* TODO
+            Use smarter template rendering to just show this element
+        */
+        return $this->getPage()->Link() . '#' . $this->getAnchor();
+    }
+
+    public function CMSEditLink($inList = false) {
+        if ($this->ListID) {
+            if ($parentLink = $this->List()->CMSEditLink(true)) {
+                return Controller::join_links($parentLink, 'ItemEditForm/field/Elements/item/', $this->ID, 'edit');
+            }
+        }
+        if (!$this->getPage()) {
+            return false;
+        }
+        if ($inList) {
+            return Controller::join_links(singleton('CMSPageEditController')->Link('EditForm'), $this->getPage()->ID, 'field/ElementArea/item/', $this->ID);
+        }
+        return Controller::join_links(singleton('CMSPageEditController')->Link('EditForm'), $this->getPage()->ID, 'field/ElementArea/item/', $this->ID, 'edit');
+    }
+
+    public function PreviewLink($action = null){
+        return $this->Link();
     }
 
     /**
@@ -409,6 +440,11 @@ class BaseElement extends Widget
         if ($config->Theme) Config::inst()->update('SSViewer', 'theme', $config->Theme);
 
         return $this->renderWith($this->class);
+    }
+
+    public function WidgetHolder()
+    {
+        return $this->renderWith("ElementHolder");
     }
 
     /**
