@@ -31,7 +31,7 @@ class BaseElement extends Widget
     /**
      * @var string
      */
-    private static $title = "Content Block";
+    private static $title = 'Content Block';
 
     /**
      * @var string
@@ -128,8 +128,9 @@ class BaseElement extends Widget
             }
         }
 
-        $fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
+        $fields->addFieldToTab('Root.Settings', new CheckboxField('Enabled'));
         $fields->addFieldToTab('Root.Settings', new CheckboxField('AvailableGlobally', 'Available globally - can be linked to multiple pages'));
+        $fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
 
         if (!is_a($this, 'ElementList')) {
             $lists = ElementList::get()->filter('ParentID', $this->ParentID);
@@ -144,18 +145,25 @@ class BaseElement extends Widget
             }
         }
 
-
         if($virtual = $fields->dataFieldByName('VirtualClones')) {
-            if($this->Parent() && $this->Parent()->exists() && $this->Parent()->getOwnerPage() && $this->Parent()->getOwnerPage()->exists()) {
+            if ($this->VirtualClones()->Count() > 0) {
                 $tab = $fields->findOrMakeTab('Root.VirtualClones');
                 $tab->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'));
 
-                $ownerPage = $this->Parent()->getOwnerPage();
-                $tab->push(new LiteralField('DisplaysOnPage', sprintf(
-                    "<p>The original content block appears on <a href='%s'>%s</a></p>",
-                    ($ownerPage->hasMethod('CMSEditLink') && $ownerPage->canEdit()) ? $ownerPage->CMSEditLink() : $ownerPage->Link(),
-                    $ownerPage->MenuTitle
-                )));
+                if ($ownerPage = $this->getPage()) {
+                    $fields->addFieldToTab(
+                        'Root.VirtualClones',
+                        new LiteralField(
+                            'DisplaysOnPage',
+                            sprintf(
+                                "<p>The original content block appears on <a href='%s'>%s</a></p>",
+                                ($ownerPage->hasMethod('CMSEditLink') && $ownerPage->canEdit()) ? $ownerPage->CMSEditLink() : $ownerPage->Link(),
+                                $ownerPage->MenuTitle
+                            )
+                        ),
+                        'VirtualClones'
+                    );
+                }
 
                 $virtual->setConfig(new GridFieldConfig_Base());
                 $virtual
@@ -171,8 +179,11 @@ class BaseElement extends Widget
                     ->getComponentByType('GridFieldDataColumns')
                     ->setDisplayFields(array(
                         'getPage.Title' => 'Title',
-                        'getPage.Link' => 'Link'
+                        'PageLink' => 'Used on',
+                        'ParentCMSEditLink' => 'Edit'
                     ));
+            } else {
+                $fields->removeByName('VirtualClones');
             }
         }
 
@@ -372,6 +383,10 @@ class BaseElement extends Widget
             return $this->virtualOwner->getPage();
         }
 
+        if ($this->ListID) {
+            return $this->List()->getPage();
+        }
+
         $area = $this->Parent();
 
         if ($area instanceof ElementalArea) {
@@ -400,20 +415,73 @@ class BaseElement extends Widget
      * @return string
      */
     public function getEditLink() {
+        return $this->CMSEditLink();
+    }
+
+    /**
+     * @return string
+     */
+    public function CMSEditLink($inList = false) {
+        if ($this->ListID) {
+            if ($parentLink = $this->List()->CMSEditLink(true)) {
+                return Controller::join_links(
+                    $parentLink,
+                    'ItemEditForm/field/Elements/item/',
+                    $this->ID,
+                    'edit'
+                );
+            }
+        }
+        if (!$this->getPage()) {
+            return Controller::join_links(
+                Director::absoluteBaseURL(),
+                'admin/elemental/BaseElement/EditForm/field/BaseElement/item',
+                $this->ID,
+                'edit'
+            );
+        }
+        $link = Controller::join_links(
+            singleton('CMSPageEditController')->Link('EditForm'),
+            $this->getPage()->ID,
+            'field/ElementArea/item/',
+            $this->ID
+        );
+        if ($inList) {
+            return $link;
+        }
         return Controller::join_links(
-            Director::absoluteBaseURL(),
-            'admin/elemental/BaseElement/EditForm/field/BaseElement/item',
-            $this->ID,
+            $link,
             'edit'
         );
     }
 
-    public function onBeforeVersionedPublish()
-    {
-
+    public function PageLink() {
+        if ($page = $this->getPage()) {
+            $html = new HTMLText('PageLink');
+            $html->setValue('<a href="' . $page->Link() . '">' . $page->Title . '</a>');
+            return $html;
+        }
     }
 
-		public static function all_allowed_elements() {
+    public function PageCMSEditLink() {
+        if ($page = $this->getPage()) {
+            $html = new HTMLText('UsedOn');
+            $html->setValue('<a href="' . $page->CMSEditLink() . '">' . $page->Title . '</a>');
+            return $html;
+        }
+    }
+
+    public function ParentCMSEditLink() {
+        $html = new HTMLText('ParentCMSEditLink');
+        if ($this->ListID) {
+            $html->setValue('<a href="' . $this->List()->CMSEditLink() . '">' . $this->List()->Title . '</a>');
+        } elseif ($page = $this->getPage()) {
+            $html->setValue('<a href="' . $page->CMSEditLink() . '">' . $page->Title . '</a>');
+        }
+        return $html;
+    }
+
+    public static function all_allowed_elements() {
         $classes = array();
 
         // get all dataobject with the elemental extension

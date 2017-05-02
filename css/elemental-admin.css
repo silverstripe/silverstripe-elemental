@@ -10,8 +10,11 @@
 }
 
 .cms table.ss-gridfield-table tr[data-class="ElementVirtualLinked"] {
-    background: #eee;
+    background: #f4f4f4;
     font-style: italic;
+}
+.cms table.ss-gridfield-table tr[data-class="ElementVirtualLinked"].even {
+    background: #e8e8e8;
 }
     .cms table.ss-gridfield-table tr[data-class="ElementVirtualLinked"] td {
         color: #999;
