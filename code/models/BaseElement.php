@@ -219,6 +219,14 @@ class BaseElement extends Widget implements CMSPreviewable
         );
     }
 
+    public function isCMSPreview() {
+        $c = Controller::curr();
+        if($c->getRequest()->requestVar('CMSPreview')) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Version viewer must only be added at if this is the final getCMSFields for a class.
      * in order to avoid having to rename all fields from eg Root.Main to Root.Current.Main
