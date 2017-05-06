@@ -23,17 +23,38 @@ class ElementLink extends BaseElement
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(function ($fields) {
-            $url = TextField::create('LinkURL', 'Link URL');
-            $url->setRightTitle('Including protocol e.g: '.Director::absoluteBaseURL());
-            $fields->addFieldToTab('Root.Main', $url);
+            $fields->removeByName('InternalLinkID');
+            $currentLinkType = false;
+            if ($this->InternalLinkID) {
+                $currentLinkType = 'internal';
+            } else if ($this->LinkURL) {
+                $currentLinkType = 'external';
+            }
+            $fields->addFieldsToTab(
+                'Root.Main',
+                array(
+                    $linkType = OptionsetField::create(
+                        'LinkType',
+                        'Link type',
+                        array('internal' => 'Internal page', 'external' => 'External website'),
+                        $currentLinkType
+                    ),
+                    $url = TextField::create('LinkURL', 'Link URL'),
+                    $internalLink = DisplayLogicWrapper::create(
+                        TreeDropdownField::create('InternalLinkID', 'Link To', 'SiteTree')
+                    ),
+                    $newWindow = CheckboxField::create('NewWindow', 'Open in a new window'),
+                ),
+                'LinkText'
+            );
 
+            $url->setRightTitle('Including protocol e.g: ' . Director::absoluteBaseURL());
+            $internalLink->setName('InternalLinkWrapper')->displayIf('LinkType')->isEqualTo('internal');
+            $url->displayIf('LinkType')->isEqualTo('external');
+            $newWindow->displayIf('LinkType')->isNotEmpty();
+            $fields->dataFieldByName('LinkText')->setTitle('Link Label')->displayIf('LinkType')->isNotEmpty();
+            $fields->dataFieldByName('LinkDescription')->displayIf('LinkType')->isNotEmpty();
 
-            $fields->addFieldsToTab('Root.Main', array(
-                TreeDropdownField::create('InternalLinkID', 'Link To', 'SiteTree'),
-                CheckboxField::create('NewWindow', 'Open in a new window'),
-                $text = TextField::create('LinkText', 'Link Text'),
-                $desc = TextareaField::create('LinkDescription', 'Link Description')
-            ));
         });
 
         return parent::getCMSFields();

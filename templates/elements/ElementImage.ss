@@ -1,5 +1,9 @@
 
-<% if InternalLink %><a class="internal_link" href="$InternalLink.Link" <% if NewWindow %>target="_blank"<% end_if %>><% end_if %>
+<% if InternalLink %>
+	<a class="link--internal" href="$InternalLink.Link" <% if NewWindow %>target="_blank"<% end_if %>>
+<% else_if LinkURL %>
+	<a class="link--external" href="$LinkURL" <% if NewWindow %>target="_blank"<% end_if %>>
+<% end_if %>
 
 <figure class="$Type<% if $ExtraClass %> $ExtraClass<% end_if %>">
 	<img src="$Image.URL" alt="$Image.Title" />
@@ -7,4 +11,4 @@
 	<% if LinkDescription %><div class="link-description">$LinkDescription</div><% end_if %>
 </figure>
 
-<% if InternalLink %></a><% end_if %>
+<% if InternalLink || LinkURL %></a><% end_if %>
