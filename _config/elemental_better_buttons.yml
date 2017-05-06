@@ -1,0 +1,16 @@
+---
+Name: elemental_better_buttons
+---
+
+Injector:
+  GridFieldBetterButtonsItemRequest:
+    class: BetterBetterButtons
+
+BetterButtonsActions:
+  edit:
+    BetterButtonFrontendLinksAction: false
+  versioned_edit:
+    BetterButtonFrontendLinksAction: false
+
+Widget:
+  better_buttons_versioned_enabled: false

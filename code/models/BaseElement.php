@@ -195,8 +195,7 @@ class BaseElement extends Widget implements CMSPreviewable
             }
         }
 
-
-        $fields->push($liveLinkField = new HiddenField("AbsoluteLink", false, Director::absoluteURL($this->PreviewLink())));
+        $fields->push($liveLinkField = new HiddenField('AbsoluteLink', false, Director::absoluteURL($this->PreviewLink())));
         $fields->push($liveLinkField = new HiddenField('LiveLink', false, Director::absoluteURL($this->Link())));
         $fields->push($stageLinkField = new HiddenField('StageLink', false, Director::absoluteURL($this->PreviewLink())));
 
@@ -210,23 +209,14 @@ class BaseElement extends Widget implements CMSPreviewable
         return $this->getPage()->Link() . '#' . $this->getAnchor();
     }
 
-    public function CMSEditLink($inList = false) {
-        if ($this->ListID) {
-            if ($parentLink = $this->List()->CMSEditLink(true)) {
-                return Controller::join_links($parentLink, 'ItemEditForm/field/Elements/item/', $this->ID, 'edit');
-            }
-        }
-        if (!$this->getPage()) {
-            return false;
-        }
-        if ($inList) {
-            return Controller::join_links(singleton('CMSPageEditController')->Link('EditForm'), $this->getPage()->ID, 'field/ElementArea/item/', $this->ID);
-        }
-        return Controller::join_links(singleton('CMSPageEditController')->Link('EditForm'), $this->getPage()->ID, 'field/ElementArea/item/', $this->ID, 'edit');
-    }
-
     public function PreviewLink($action = null){
-        return $this->Link();
+        return Controller::join_links(
+            Director::baseURL(),
+            'cms-preview',
+            'show',
+            $this->ClassName,
+            $this->ID
+        );
     }
 
     /**
