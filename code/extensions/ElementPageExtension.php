@@ -122,7 +122,11 @@ class ElementPageExtension extends DataExtension
      */
     public function getAvailableTypes() {
         if (is_array($this->owner->config()->get('allowed_elements'))) {
-            $list = $this->owner->config()->get('allowed_elements');
+            if ($this->owner->config()->get('stop_element_inheritance')) {
+                $list = $this->owner->config()->get('allowed_elements', Config::UNINHERITED);
+            } else {
+                $list = $this->owner->config()->get('allowed_elements');
+            }
 
             if($this->owner->config()->get('sort_types_alphabetically') !== false) {
                 $sorted = array();
