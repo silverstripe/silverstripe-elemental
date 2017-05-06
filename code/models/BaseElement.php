@@ -31,12 +31,12 @@ class BaseElement extends Widget implements CMSPreviewable
     /**
      * @var string
      */
-    private static $title = 'Content Block';
+    private static $title = 'Content Element';
 
     /**
      * @var string
      */
-    private static $singular_name = 'Content Block';
+    private static $singular_name = 'Content Element';
 
     /**
      * @var array
@@ -156,7 +156,7 @@ class BaseElement extends Widget implements CMSPreviewable
                         new LiteralField(
                             'DisplaysOnPage',
                             sprintf(
-                                "<p>The original content block appears on <a href='%s'>%s</a></p>",
+                                "<p>The original content element appears on <a href='%s'>%s</a></p>",
                                 ($ownerPage->hasMethod('CMSEditLink') && $ownerPage->canEdit()) ? $ownerPage->CMSEditLink() : $ownerPage->Link(),
                                 $ownerPage->MenuTitle
                             )
@@ -375,7 +375,7 @@ class BaseElement extends Widget implements CMSPreviewable
         $titleAsURL = $filter->filter($anchorTitle);
 
         // Ensure that this anchor name isn't already in use
-        // ie. If two elemental blocks have the same title, it'll append '-2', '-3'
+        // ie. If two elements have the same title, it'll append '-2', '-3'
         $result = $titleAsURL;
         $count = 1;
         while (isset(self::$_used_anchors[$result]) && self::$_used_anchors[$result] !== $this->ID) {

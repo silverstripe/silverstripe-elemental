@@ -13,9 +13,9 @@ class ElementContent extends BaseElement
 
     private static $styles = array();
 
-    private static $title = "Content Block";
+    private static $title = "Content Element";
 
-    private static $description = "Block of text with heading, blockquote, list and paragraph styles";
+    private static $description = "Element with text with heading, blockquote, list and paragraph styles";
 
     public function getCMSFields()
     {
