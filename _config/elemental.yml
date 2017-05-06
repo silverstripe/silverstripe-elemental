@@ -22,13 +22,3 @@ ElementalList:
 LeftAndMain:
   extra_requirements_css:
     - 'elemental/css/elemental-admin.css'
-
-Injector:
-  GridFieldBetterButtonsItemRequest:
-    class: BetterBetterButtons
-
-BetterButtonsActions:
-  edit:
-    BetterButtonFrontendLinksAction: false
-  versioned_edit:
-    BetterButtonFrontendLinksAction: false

@@ -19,5 +19,7 @@ class BetterBetterButtons extends GridFieldBetterButtonsItemRequest
             $actions->removeByName('action_doDelete');
             $actions->removeByName('action_cancelDelete');
         }
+        // other it doesn't use the multi class add and just creates a Base Element
+        $actions->removeByName('action_doNew');
     }
 }
