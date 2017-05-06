@@ -6,11 +6,17 @@ Injector:
   GridFieldBetterButtonsItemRequest:
     class: BetterBetterButtons
 
-BetterButtonsActions:
-  edit:
-    BetterButtonFrontendLinksAction: false
+BetterButtonsUtils:
   versioned_edit:
-    BetterButtonFrontendLinksAction: false
+    BetterButton_New: false
 
-Widget:
-  better_buttons_versioned_enabled: false
+BetterButtonsActions:
+  versioned_create:
+    BetterButton_SaveDraft: true
+    BetterButton_Publish: false
+  versioned_edit:
+    BetterButton_Publish: false
+    Group_Versioning: false
+    BetterButtonFrontendLinksAction: false
+    BetterButton_Delete: true
+    BetterButton_SaveAndClose: true
