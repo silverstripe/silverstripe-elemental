@@ -40,6 +40,7 @@ class ElementList extends BaseElement
 
             $desc = HTMLEditorField::create('ListDescription', 'List Description');
             $desc->setRightTitle('Optional');
+            $desc->setRows(5);
             $fields->addFieldToTab('Root.Main', $desc);
 
             if ($isInDb) {
