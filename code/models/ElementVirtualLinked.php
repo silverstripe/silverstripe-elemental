@@ -16,12 +16,12 @@ class ElementVirtualLinked extends BaseElement
     /**
      * @var string
      */
-    private static $title = 'Virtual linked Block';
+    private static $title = 'Virtual linked Element';
 
     /**
      * @var string
      */
-    private static $singular_name = 'Virtual linked Block';
+    private static $singular_name = 'Virtual linked Element';
 
     private static $has_one = array(
         'LinkedElement' => 'BaseElement'
@@ -47,7 +47,7 @@ class ElementVirtualLinked extends BaseElement
     {
         $message = sprintf(
             '<p>%s</p><p><a href="%2$s">%2$s</a></p>',
-            _t('ElementVirtualLinked.DESCRIBE', 'This is a virtual copy of a block. To edit, visit'),
+            _t('ElementVirtualLinked.DESCRIBE', 'This is a virtual copy of an element. To edit, visit'),
             $this->LinkedElement()->getEditLink()
         );
 
@@ -56,7 +56,7 @@ class ElementVirtualLinked extends BaseElement
         );
 
         if ($this->isInvalidPublishState()) {
-            $warning = 'Error: The original block is not published. This block will not work on the live site until you click the link below and publish it.';
+            $warning = 'Error: The original element is not published. This element will not work on the live site until you click the link below and publish it.';
             $main->push(new LiteralField('WarningHeader', '<p class="message error">' .$warning. '</p>'));
         }
         $main->push(new LiteralField('Existing', $message));
@@ -68,13 +68,13 @@ class ElementVirtualLinked extends BaseElement
 
 
     /**
-     * Detect when a user has published a ElementVirtualLinked block
-     * but has not published the LinkedElement block.
+     * Detect when a user has published a ElementVirtualLinked
+     * but has not published the LinkedElement.
      */
     public function isInvalidPublishState()
     {
-        $block = $this->LinkedElement();
-        return (!$block->isPublished() && $this->isPublished());
+        $element = $this->LinkedElement();
+        return (!$element->isPublished() && $this->isPublished());
     }
 
     public function getCMSPublishedState()

@@ -9,7 +9,7 @@ class ElementalAdmin extends ModelAdmin {
         'BaseElement'
     );
 
-    private static $menu_title = 'Content Blocks';
+    private static $menu_title = 'Content Elements';
 
     private static $url_segment = 'elemental';
 
