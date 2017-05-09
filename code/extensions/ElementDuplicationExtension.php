@@ -13,8 +13,9 @@ class ElementDuplicationExtension extends Extension
     public function onAfterDuplicate($original, $doWrite=true)
     {
         $thisClass = $this->owner->ClassName;
-        $duplicateRelations = Config::inst()->get($thisClass, 'duplicate_relations');
 
+        // Duplicate has_one's and has_many's
+        $duplicateRelations = Config::inst()->get($thisClass, 'duplicate_relations');
         if ($duplicateRelations && !empty($duplicateRelations)) {
             foreach ($duplicateRelations as $relation) {
                 $items = $original->$relation();
@@ -22,6 +23,17 @@ class ElementDuplicationExtension extends Extension
                     $duplicateItem = $item->duplicate(false);
                     $duplicateItem->{$thisClass.'ID'} = $this->owner->ID;
                     $duplicateItem->write();
+                }
+            }
+        }
+
+        // Duplicate many_many's
+        $duplicateManyManyRelations = Config::inst()->get($thisClass, 'duplicate_many_many_relations');
+        if($duplicateManyManyRelations && !empty($duplicateManyManyRelations)) {
+            foreach($duplicateManyManyRelations as $relation) {
+                $items = $original->$relation();
+                foreach($items as $item) {
+                    $this->owner->$relation()->add($item);
                 }
             }
         }
