@@ -97,12 +97,12 @@ class BaseElement extends Widget implements CMSPreviewable
      * @config
      * Elements available globally by default
      */
-     private static $default_global_elements = true;
+    private static $default_global_elements = true;
 
-     public function populateDefaults() {
+    public function populateDefaults() {
         $this->AvailableGlobally = $this->config()->get('default_global_elements');
         parent::populateDefaults();
-     }
+    }
 
     public function getCMSFields()
     {
