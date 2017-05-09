@@ -476,7 +476,6 @@ class BaseElement extends Widget implements CMSPreviewable
         }
         $link = Controller::join_links(
             singleton('CMSPageEditController')->Link('EditForm'),
-            $this->getPage()->ID,
             'field/ElementArea/item/',
             $this->ID
         );
