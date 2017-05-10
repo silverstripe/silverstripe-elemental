@@ -206,7 +206,9 @@ class BaseElement extends Widget implements CMSPreviewable
         /* TODO
             Use smarter template rendering to just show this element
         */
-        return $this->getPage()->Link() . '#' . $this->getAnchor();
+        if($page = $this->getPage) {
+            return $page->Link() . '#' . $this->getAnchor();
+        }
     }
 
     public function PreviewLink($action = null){
