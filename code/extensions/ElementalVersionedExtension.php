@@ -21,7 +21,7 @@ class ElementalVersionedExtension extends VersionedDataObject
      */
     public function updateSummaryFields(&$fields)
     {
-        if(isset($fields['CMSPublishedState']) {
+        if(isset($fields['CMSPublishedState'])) {
             unset($fields['CMSPublishedState']);
         }
     }
