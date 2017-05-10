@@ -220,9 +220,11 @@ class BaseElement extends Widget implements CMSPreviewable
     }
 
     public function isCMSPreview() {
-        $c = Controller::curr();
-        if($c->getRequest()->requestVar('CMSPreview')) {
-            return true;
+        if(Controller::has_curr()) {
+            $c = Controller::curr();
+            if($c->getRequest()->requestVar('CMSPreview')) {
+                return true;
+            }
         }
         return false;
     }
@@ -403,7 +405,7 @@ class BaseElement extends Widget implements CMSPreviewable
 
     public function ControllerTop()
     {
-        return Controller::curr();
+        return (Controller::has_curr()) ? Controller::curr() : null;
     }
 
     public function getPage()
@@ -435,9 +437,12 @@ class BaseElement extends Widget implements CMSPreviewable
     {
         $config = SiteConfig::current_site_config();
 
-        if ($config->Theme) Config::inst()->update('SSViewer', 'theme', $config->Theme);
+        if ($config->Theme) {
+            Config::inst()->update('SSViewer', 'theme_enabled', true);
+            Config::inst()->update('SSViewer', 'theme', $config->Theme);
+        }
 
-        return $this->renderWith($this->class);
+       return $this->renderWith($this->class);
     }
 
     public function WidgetHolder()
