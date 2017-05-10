@@ -6,26 +6,56 @@
 class ElementPublishChildren extends DataExtension
 {
 
+    public function getPublishableItems() {
+        $config = $this->owner->config();
+
+        $items = new ArrayList();
+        if($config->publishable_items) {
+            foreach($config->publishable_items as $item) {
+                $objects = $this->owner->$item();
+                if($objects instanceof ManyManyList || $item instanceof HasManyList) {
+                    foreach($objects as $object) {
+                        $items->push($object);
+                    }
+                } else {
+                    $items->push($objects);
+                }
+            }
+        }
+
+        // also, check for PublishableItems(), which can return a bunch of objects
+        if($this->owner->hasMethod('PublishableSubItems')) {
+            $items->merge($this->owner->PublishableSubItems());
+        }
+        $items->removeDuplicates();
+
+        return $items;
+    }
+
     public function onBeforeVersionedPublish()
     {
         $staged = array();
+        $items = $this->getPublishableItems();
 
-        foreach ($this->owner->Elements() as $widget) {
-            $staged[] = $widget->ID;
+        foreach ($items as $item) {
+             // check for versioning
+            if(!Object::has_extension($item->class, 'Versioned')) {
+                continue;
+            }
 
-            $widget->publish('Stage', 'Live');
+            $staged[] = $item->ID;
+            $item->publish('Stage', 'Live');
         }
 
         if($this->owner->ID) {
 
-            // remove any elements that are on live but not in draft.
-            $widgets = Versioned::get_by_stage('BaseElement', 'Live', sprintf(
-                "ListID = '%s'", $this->owner->ID
-            ));
+            foreach ($items as $item) {
+                if(!Object::has_extension($item->class, 'Versioned')) {
+                    continue;
+                }
 
-            foreach ($widgets as $widget) {
-                if (!in_array($widget->ID, $staged)) {
-                    $widget->deleteFromStage('Live');
+                if (!in_array($item->ID, $staged)) {
+                    $item->deleteFromStage('Live');
                 }
             }
         }
