@@ -39,9 +39,11 @@ class ElementPublishChildren extends DataExtension
 
         foreach ($items as $item) {
              // check for versioning
-            if(!Object::has_extension($item->class, 'Versioned')) {
+            if(!self::is_versioned($item)) {
                 continue;
             }
+
+
 
             $staged[] = $item->ID;
             $item->publish('Stage', 'Live');
@@ -50,7 +52,7 @@ class ElementPublishChildren extends DataExtension
         if($this->owner->ID) {
 
             foreach ($items as $item) {
-                if(!Object::has_extension($item->class, 'Versioned')) {
+                if(!self::is_versioned($item)) {
                     continue;
                 }
 
@@ -59,5 +61,27 @@ class ElementPublishChildren extends DataExtension
                 }
             }
         }
+    }
+
+    /**
+     * Determin if a class has any extension that is  a sublcass of Versioned
+     * @param  [type]  $class [description]
+     * @return boolean        [description]
+     */
+    public static function is_versioned($class) {
+
+        if(is_object($class)) {
+            $class = get_class($class);
+        }
+
+        $versionClasses = ClassInfo::subclassesFor('Versioned');
+
+        foreach($versionClasses as $versionClass) {
+            if(Object::has_extension($class, $versionClass)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
