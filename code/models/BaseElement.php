@@ -230,8 +230,8 @@ class BaseElement extends Widget implements CMSPreviewable
                 }
             }
         } else {
-            if($master == $this->LinkedElement()) {
-                $usage = $master->getUsage();
+            if($element = $this->LinkedElement()) {
+                $usage = $element->getUsage();
             }
         }
 
