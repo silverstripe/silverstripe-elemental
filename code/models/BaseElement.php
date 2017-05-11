@@ -44,7 +44,10 @@ class BaseElement extends Widget implements CMSPreviewable
     private static $summary_fields = array(
         'ID' => 'ID',
         'Title' => 'Title',
-        'ElementType' => 'Type'
+        'ElementType' => 'Type',
+        'Enabled' => 'Enabled',
+        'AvailableGlobally' => 'Available Globally',
+        'UsageSummary' => 'Used on'
     );
 
     /**
@@ -57,6 +60,7 @@ class BaseElement extends Widget implements CMSPreviewable
         'Title',
         'LastEdited',
         'ClassName',
+        'Enabled',
         'AvailableGlobally'
     );
 
@@ -200,6 +204,51 @@ class BaseElement extends Widget implements CMSPreviewable
         $fields->push($stageLinkField = new HiddenField('StageLink', false, Director::absoluteURL($this->PreviewLink())));
 
         return $fields;
+    }
+
+    /**
+     * get all instances where this element is used
+     *
+     * @return ArrayList
+     */
+    public function getUsage() {
+        $usage = new ArrayList();
+
+        // get virtualised pages
+        if(!$this instanceof ElementVirtualLinked) {
+            if($master = $this->getPage()) {
+                $master->setField('ElementType', null);
+                $usage->push($master);
+            }
+
+            $linkedElements = ElementVirtualLinked::get()->filter('LinkedElementID', $this->ID);
+            foreach($linkedElements as $element) {
+                $area = $element->Parent();
+                if ($area instanceof ElementalArea && $linked = $area->getOwnerPage()) {
+                    $linked->setField('ElementType', 'Linked');
+                    $usage->push($linked);
+                }
+            }
+        } else {
+            if($master == $this->LinkedElement()) {
+                $usage = $master->getUsage();
+            }
+        }
+
+        $usage->removeDuplicates();
+
+        $this->extend('UpdateUsage', $usage);
+        return $usage;
+    }
+
+    public function UsageSummary() {
+        $usage = $this->getUsage();
+        $arr = array();
+        foreach($usage as $page) {
+            $type = ($page->ElementType) ? sprintf("<em> - %s</em>", $page->ElementType) : null;
+            $arr[] = sprintf("<a href=\"%s\" target=\"blank\">%s</a> %s", $page->CMSEditLink(), $page->Title, $type);
+        }
+        return DBField::create_field('HTMLText', implode('<br>', $arr));
     }
 
     public function Link() {
