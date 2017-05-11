@@ -207,39 +207,41 @@ class BaseElement extends Widget implements CMSPreviewable
     }
 
     /**
-     * get all instances where this element is used
+     * get all pages where this element is used
      *
      * @return ArrayList
      */
     public function getUsage() {
         $usage = new ArrayList();
 
-        // get virtualised pages
-        if(!$this instanceof ElementVirtualLinked) {
-            if($master = $this->getPage()) {
-                $master->setField('ElementType', null);
-                $usage->push($master);
+        if($this instanceof ElementVirtualLinked) {
+            if($master = $this->LinkedElement()) {
+               return $master->getUsage();
             }
 
-            $linkedElements = ElementVirtualLinked::get()->filter('LinkedElementID', $this->ID);
-            foreach($linkedElements as $element) {
-                $area = $element->Parent();
-                if ($area instanceof ElementalArea && $linked = $area->getOwnerPage()) {
-                    $linked->setField('ElementType', 'Linked');
-                    $usage->push($linked);
-                }
+            return $usage;
+        }
+        if($area = $this->Parent()) {
+            if($area instanceof ElementalArea && $page = $area->getOwnerPage()) {
+                $page->setField('ElementType', 'Master');
+                $usage->push($page);
             }
-        } else {
-            if($element = $this->LinkedElement()) {
-                $usage = $element->getUsage();
+        }
+
+        $linkedElements = ElementVirtualLinked::get()->filter('LinkedElementID', $this->ID);
+        foreach($linkedElements as $element) {
+            $area = $element->Parent();
+            if ($area instanceof ElementalArea && $page = $area->getOwnerPage()) {
+                $page->setField('ElementType', 'Linked');
+                $usage->push($page);
             }
         }
 
         $usage->removeDuplicates();
-
-        $this->extend('UpdateUsage', $usage);
         return $usage;
     }
+
+
 
     public function UsageSummary() {
         $usage = $this->getUsage();
@@ -248,7 +250,9 @@ class BaseElement extends Widget implements CMSPreviewable
             $type = ($page->ElementType) ? sprintf("<em> - %s</em>", $page->ElementType) : null;
             $arr[] = sprintf("<a href=\"%s\" target=\"blank\">%s</a> %s", $page->CMSEditLink(), $page->Title, $type);
         }
-        return DBField::create_field('HTMLText', implode('<br>', $arr));
+        $html = DBField::create_field('HTMLText', implode('<br>', $arr));
+
+        return $html;
     }
 
     public function Link() {
