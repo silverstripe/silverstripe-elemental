@@ -60,11 +60,11 @@ class ElementAnchorTests extends FunctionalTest {
     public function testVirtualElementAnchor() {
         Config::inst()->update('BaseElement', 'enable_title_in_template', true);
 
-        $baseElement1 = BaseElement::create(array('Title' => 'Element 1', 'Sort' => 1));
+        $baseElement1 = BaseElement::create(array('Title' => 'Element 2', 'Sort' => 1));
         $baseElement1->write();
-        $baseElement2 = BaseElement::create(array('Title' => 'Element 1', 'Sort' => 2));
+        $baseElement2 = BaseElement::create(array('Title' => 'Element 2', 'Sort' => 2));
         $baseElement2->write();
-        $baseElement3 = BaseElement::create(array('Title' => 'Element 1', 'Sort' => 3));
+        $baseElement3 = BaseElement::create(array('Title' => 'Element 2', 'Sort' => 3));
         $baseElement3->write();
         $virtElement1 = ElementVirtualLinked::create(array('LinkedElementID' => $baseElement2->ID));
         $virtElement1->write();
@@ -84,9 +84,9 @@ class ElementAnchorTests extends FunctionalTest {
             $record->getAnchor();
         }
 
-        $this->assertEquals('element-1-5', $recordSet[0]->getAnchor());
-        $this->assertEquals('element-1-6', $recordSet[1]->getAnchor());
-        $this->assertEquals('element-1-7', $recordSet[2]->getAnchor());
+        $this->assertEquals('element-2', $recordSet[0]->getAnchor());
+        $this->assertEquals('element-2-2', $recordSet[1]->getAnchor());
+        $this->assertEquals('element-2-3', $recordSet[2]->getAnchor());
     }
 
 }
