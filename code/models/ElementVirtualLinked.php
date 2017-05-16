@@ -102,6 +102,23 @@ class ElementVirtualLinked extends BaseElement
         }
         return $publishedState;
     }
+
+
+    /**
+     * Get a unique anchor name
+     *
+     * @return string
+     */
+    public function getAnchor() {
+        $linkedElement = $this->LinkedElement();
+
+        if ($linkedElement && $linkedElement->exists()) {
+            return $linkedElement->getAnchor();
+        }
+
+        // generic fallback
+        return 'e'.$this->ID;
+    }
 }
 
 class ElementVirtualLinked_Controller extends BaseElement_Controller
