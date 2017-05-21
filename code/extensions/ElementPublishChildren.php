@@ -13,7 +13,8 @@ class ElementPublishChildren extends DataExtension
         if($config->publishable_items) {
             foreach($config->publishable_items as $item) {
                 $objects = $this->owner->$item();
-                if($objects instanceof ManyManyList || $item instanceof HasManyList) {
+
+                if($objects instanceof ManyManyList || $objects instanceof HasManyList) {
                     foreach($objects as $object) {
                         $items->push($object);
                     }
@@ -36,14 +37,11 @@ class ElementPublishChildren extends DataExtension
     {
         $staged = array();
         $items = $this->getPublishableItems();
-
         foreach ($items as $item) {
              // check for versioning
             if(!self::is_versioned($item)) {
                 continue;
             }
-
-
 
             $staged[] = $item->ID;
             $item->publish('Stage', 'Live');
