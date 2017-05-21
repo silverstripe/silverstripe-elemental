@@ -15,9 +15,11 @@ ElementImage:
     - 'image_medium' : 'Normal'
     - 'image_small' : 'Small'
 
-ElementalList:
+ElementList:
   extensions:
-    ElementPublishChildren
+    - ElementPublishChildren
+  publishable_items:
+    - Elements
 
 LeftAndMain:
   extra_requirements_css:
