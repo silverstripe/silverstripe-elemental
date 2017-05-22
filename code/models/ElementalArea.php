@@ -5,6 +5,10 @@
  */
 class ElementalArea extends WidgetArea
 {
+    private static $db = array(
+        'OwnerClassName' => 'Varchar'
+    );
+
     /**
      * Returns all the {@link BaseElement} instances in this area, regardless if
      * they are enabled or not.
@@ -69,6 +73,14 @@ class ElementalArea extends WidgetArea
     */
     public function getOwnerPage()
     {
+        if ($this->OwnerClassName) {
+            $class = $this->OwnerClassName;
+            $page = $class::get()->filter('ElementAreaID', $this->ID);
+            if ($page && $page->exists()) {
+                return $page->first();
+            }
+        }
+
         $originalMode = Versioned::current_stage();
         Versioned::reading_stage('Stage');
 
@@ -83,6 +95,8 @@ class ElementalArea extends WidgetArea
                 $page = $class::get()->filter('ElementAreaID', $this->ID);
                 if ($page && $page->exists()) {
                     Versioned::reading_stage($originalMode);
+                    $this->OwnerClassName = $class;
+                    $this->write();
                     return $page->first();
                 }
             }
