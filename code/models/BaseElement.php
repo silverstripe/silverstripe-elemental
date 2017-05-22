@@ -45,22 +45,18 @@ class BaseElement extends Widget implements CMSPreviewable
         'ID' => 'ID',
         'Title' => 'Title',
         'ElementType' => 'Type',
-        'Enabled' => 'Enabled',
-        'AvailableGlobally' => 'Available Globally',
-        'UsageSummary' => 'Used on'
     );
 
     /**
      * @var array
      */
     private static $searchable_fields = array(
+        'ClassName',
+        'Title',
         'ID' => array(
             'field' => 'NumericField'
         ),
-        'Title',
         'LastEdited',
-        'ClassName',
-        'Enabled',
         'AvailableGlobally'
     );
 
@@ -183,8 +179,7 @@ class BaseElement extends Widget implements CMSPreviewable
                     ->getComponentByType('GridFieldDataColumns')
                     ->setDisplayFields(array(
                         'getPage.Title' => 'Title',
-                        'PageLink' => 'Used on',
-                        'ParentCMSEditLink' => 'Edit'
+                        'ParentCMSEditLink' => 'Used on'
                     ));
             } else {
                 $fields->removeByName('VirtualClones');
@@ -214,17 +209,12 @@ class BaseElement extends Widget implements CMSPreviewable
     public function getUsage() {
         $usage = new ArrayList();
 
-        if($this instanceof ElementVirtualLinked) {
-            if($master = $this->LinkedElement()) {
-               return $master->getUsage();
-            }
-
-            return $usage;
-        }
-        if($area = $this->Parent()) {
-            if($area instanceof ElementalArea && $page = $area->getOwnerPage()) {
+        if($page = $this->getPage()) {
+            $usage->push($page);
+            if ($this->virtualOwner) {
+                $page->setField('ElementType', 'Linked');
+            } else {
                 $page->setField('ElementType', 'Master');
-                $usage->push($page);
             }
         }
 
