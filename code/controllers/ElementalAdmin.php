@@ -25,7 +25,7 @@ class ElementalAdmin extends ModelAdmin {
         $config->removeComponentsByType('GridFieldAddNewButton');
         $dataCols = $config->getComponentByType('GridFieldDataColumns');
         $fields = $dataCols->getDisplayFields($grid);
-        $fields['PageCMSEditLink'] = 'Used on';
+        $fields['UsageSummary'] = 'Usage Summary';
         $dataCols->setDisplayFields($fields);
         return $form;
     }
