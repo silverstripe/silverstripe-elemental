@@ -72,24 +72,18 @@ class ElementalArea extends WidgetArea
         $originalMode = Versioned::current_stage();
         Versioned::reading_stage('Stage');
 
-        foreach (get_declared_classes() as $class) {
-            if (is_subclass_of($class, 'SiteTree')) {
-                $object = singleton($class);
-                $classes = ClassInfo::subclassesFor('ElementPageExtension');
-                $isElemental = false;
+        foreach (ClassInfo::getValidSubClasses('SiteTree') as $class) {
+            $isElemental = false;
 
-                foreach ($classes as $extension) {
-                    if ($object->hasExtension($extension)) {
-                        $isElemental = true;
-                    }
-                }
+            if (Object::has_extension($class, 'ElementPageExtension')) {
+                $isElemental = true;
+            }
 
-                if ($isElemental) {
-                    $page = $class::get()->filter('ElementAreaID', $this->ID);
-                    if ($page && $page->exists()) {
-                        Versioned::reading_stage($originalMode);
-                        return $page->first();
-                    }
+            if ($isElemental) {
+                $page = $class::get()->filter('ElementAreaID', $this->ID);
+                if ($page && $page->exists()) {
+                    Versioned::reading_stage($originalMode);
+                    return $page->first();
                 }
             }
         }
