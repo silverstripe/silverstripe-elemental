@@ -160,4 +160,15 @@ class ElementList extends BaseElement
 
         return $controllers;
     }
+
+    /**
+     * Ensure that we tidy up Elements if we delete this list
+     */
+    public function onAfterDelete() {
+        if(Versioned::get_reading_mode() == 'Stage.Stage') {
+            foreach ($this->Elements() as $element) {
+                $element->delete();
+            }
+        }
+    }
 }
