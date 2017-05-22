@@ -5,7 +5,8 @@ use \Heyday\VersionedDataObjects\VersionedDataObject;
 /**
  * @package elemental
  */
-class BaseElementExtension extends VersionedDataObject
+
+class BaseElementExtension extends Heyday\VersionedDataObjects\VersionedDataObject
 {
     /**
      * {@inheritDoc}

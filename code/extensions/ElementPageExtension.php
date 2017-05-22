@@ -115,7 +115,7 @@ class ElementPageExtension extends DataExtension
 
         if (!$this->owner->config()->disable_element_publish_button) {
             $config->removeComponentsByType('GridFieldDetailForm');
-            $config->addComponent($obj = new VersionedDataObjectDetailsForm());
+            $config->addComponent($obj = new Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm());
         }
 
         if ($this->owner instanceof SiteTree && $fields->findOrMakeTab('Root.Main')->fieldByName('Metadata')) {
