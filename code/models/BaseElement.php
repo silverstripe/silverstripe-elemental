@@ -231,8 +231,6 @@ class BaseElement extends Widget implements CMSPreviewable
         return $usage;
     }
 
-
-
     public function UsageSummary() {
         $usage = $this->getUsage();
         $arr = array();
@@ -516,7 +514,7 @@ class BaseElement extends Widget implements CMSPreviewable
                 );
             }
         }
-        if (!$this->getPage()) {
+        if (!$this->getPage() || $this->config()->editlink_modeladmin) {
             return Controller::join_links(
                 Director::absoluteBaseURL(),
                 'admin/elemental/BaseElement/EditForm/field/BaseElement/item',
@@ -524,12 +522,14 @@ class BaseElement extends Widget implements CMSPreviewable
                 'edit'
             );
         }
+
         $link = Controller::join_links(
             singleton('CMSPageEditController')->Link('EditForm'),
             $this->getPage()->ID,
             'field/ElementArea/item/',
             $this->ID
         );
+
         if ($inList) {
             return $link;
         }
