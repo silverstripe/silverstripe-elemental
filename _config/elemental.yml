@@ -9,12 +9,6 @@ BaseElement:
   extensions:
     - 'ElementDuplicationExtension'
 
-ElementImage:
-  css_styles:
-    - 'image_large' : 'Large'
-    - 'image_medium' : 'Normal'
-    - 'image_small' : 'Small'
-
 ElementList:
   extensions:
     - ElementPublishChildren
