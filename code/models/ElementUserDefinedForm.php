@@ -11,9 +11,9 @@ use Controller;
  */
 class ElementUserDefinedForm extends BaseElement
 {
-    
+
     private static $has_one = array(
-        'Form' => 'UserDefinedForm'
+        'Form' => UserDefinedForm::class
     );
 
     private static $title = "Form Element";

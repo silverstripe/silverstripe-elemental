@@ -2,8 +2,6 @@
 
 namespace DNADesign\Elemental\Extensions;
 
-
-use \Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
@@ -11,8 +9,6 @@ use SilverStripe\Forms\LiteralField;
 use GridField;
 use Config;
 use GridFieldConfig_RelationEditor;
-
-
 use GridFieldTitleHeader;
 use GridFieldSortableRows;
 
@@ -27,8 +23,6 @@ use DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter;
 use DNADesign\Elemental\ElementalGridFieldDeleteAction;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementVirtualLinked;
-
-
 
 /**
  * @package elemental

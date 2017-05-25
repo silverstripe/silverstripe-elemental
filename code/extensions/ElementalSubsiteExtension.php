@@ -10,7 +10,7 @@ class ElementSubsiteExtension extends DataExtension
 {
 
     private static $has_one = array(
-        'Subsite' => 'Subsite'
+        'Subsite' => Subsite::class
     );
 
     public function updateCMSFields(FieldList $fields) {
