@@ -1,6 +1,6 @@
 <?php
 
-use \Heyday\VersionedDataObjects\VersionedDataObject;
+use SilverStripe\Versioned;
 
 /**
  * @package elemental
@@ -13,18 +13,8 @@ use \Heyday\VersionedDataObjects\VersionedDataObject;
  * Has to extend VersionedDataObject rather than suppliment so that we can overwrite the canXs
  * Otherwise the Versioned canXs fail when these check suceed, the fail overides
  */
-class ElementalVersionedExtension extends VersionedDataObject
+class ElementalVersionedExtension extends Versioned
 {
-
-    /**
-     * @param array $fields
-     */
-    public function updateSummaryFields(&$fields)
-    {
-        if(isset($fields['CMSPublishedState'])) {
-            unset($fields['CMSPublishedState']);
-        }
-    }
 
     /**
      * Basic permissions, defaults to page perms where possible

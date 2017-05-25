@@ -10,8 +10,6 @@ use ClassInfo;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Extensions\ElementPageExtension;
 
-
-
 /**
  * @package elemental
  */
