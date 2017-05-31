@@ -318,7 +318,7 @@ class ElementPageExtension extends DataExtension
                 $duplicateWidget = $originalWidget->duplicate(true);
 
                 // manually set the ParentID of each widget, so we don't get versioning issues
-                DB::query(sprintf("UPDATE Widget SET ParentID = %d WHERE ID = %d", $duplicateWidgetArea->ID, $duplicateWidget->ID));
+                DB::query(sprintf("UPDATE \"Widget\" SET \"ParentID\" = '%d' WHERE \"ID\" = '%d'", $duplicateWidgetArea->ID, $duplicateWidget->ID));
             }
         }
     }
@@ -340,7 +340,7 @@ class ElementPageExtension extends DataExtension
             $duplicateWidget = $originalWidget->duplicate(true);
 
             // manually set the ParentID of each widget, so we don't get versioning issues
-            DB::query(sprintf("UPDATE Widget SET ParentID = %d WHERE ID = %d", $duplicateWidgetArea->ID, $duplicateWidget->ID));
+            DB::query(sprintf("UPDATE \"Widget|\" SET \"ParentID\" = '%d' WHERE \"ID\" = '%d'", $duplicateWidgetArea->ID, $duplicateWidget->ID));
         }
     }
 
@@ -350,7 +350,7 @@ class ElementPageExtension extends DataExtension
     public function onAfterPublish()
     {
         if ($id = $this->owner->ElementAreaID) {
-            $widgets = Versioned::get_by_stage('BaseElement', 'Stage', "ParentID = '$id'");
+            $widgets = Versioned::get_by_stage('BaseElement', 'Stage', "\"ParentID\" = '$id'");
             $staged = array();
 
             foreach ($widgets as $widget) {
@@ -360,7 +360,7 @@ class ElementPageExtension extends DataExtension
             }
 
             // remove any elements that are on live but not in draft.
-            $widgets = Versioned::get_by_stage('BaseElement', 'Live', "ParentID = '$id'");
+            $widgets = Versioned::get_by_stage('BaseElement', 'Live', "\"ParentID\" = '$id'");
 
             foreach ($widgets as $widget) {
                 if (!in_array($widget->ID, $staged)) {
@@ -386,7 +386,7 @@ class ElementPageExtension extends DataExtension
             return;
         }
         if ($id = $this->owner->ElementAreaID) {
-            $widgets = Versioned::get_by_stage('BaseElement', 'Live', "ParentID = '$id'");
+            $widgets = Versioned::get_by_stage('BaseElement', 'Live', "\"ParentID\" = '$id'");
             $staged = array();
 
             foreach ($widgets as $widget) {
