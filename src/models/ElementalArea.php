@@ -1,14 +1,15 @@
 <?php
 
-namespace DNADesign\Elemental\Models;
+namespace SilverStripe\Elemental\Models;
 
 use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\HasManyList;
-use DNADesign\Elemental\Models\BaseElement;
-use DNADesign\Elemental\Extensions\ElementPageExtension;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Elemental\Models\BaseElement;
+use SilverStripe\Elemental\Extensions\ElementPageExtension;
 
 /**
  * @package elemental
@@ -52,18 +53,17 @@ class ElementalArea extends DataObject
 
         $originalMode = Versioned::get_stage();
         Versioned::set_stage('Stage');
-
-        foreach (ClassInfo::getValidSubClasses('SiteTree') as $class) {
+        foreach (ClassInfo::getValidSubClasses('SilverStripe\CMS\Model\SiteTree') as $class) {
             $isElemental = false;
 
-            if (Object::has_extension($class, 'ElementPageExtension')) {
+            if (Extensible::has_extension($class, 'SilverStripe\Elemental\Extensions\ElementPageExtension')) {
                 $isElemental = true;
             }
 
             if ($isElemental) {
                 $page = $class::get()->filter('ElementalAreaID', $this->ID);
                 if ($page && $page->exists()) {
-                    Versioned::reading_stage($originalMode);
+                    Versioned::set_stage($originalMode);
                     $this->OwnerClassName = $class;
                     $this->write();
                     return $page->first();

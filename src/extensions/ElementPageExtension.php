@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\Extensions;
+namespace SilverStripe\Elemental\Extensions;
 
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
@@ -16,12 +16,12 @@ use SilverStripe\ORM\DB;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Requirements;
 
-use DNADesign\Elemental\Forms\ElementalGridFieldAddExistingAutocompleter;
-use DNADesign\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
-use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
-use DNADesign\Elemental\Models\BaseElement;
-use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Models\ElementVirtualLinked;
+use SilverStripe\Elemental\Forms\ElementalGridFieldAddExistingAutocompleter;
+use SilverStripe\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
+use SilverStripe\Elemental\Forms\ElementalGridFieldDeleteAction;
+use SilverStripe\Elemental\Models\BaseElement;
+use SilverStripe\Elemental\Models\ElementalArea;
+use SilverStripe\Elemental\Models\ElementVirtualLinked;
 
 /**
  * @package elemental

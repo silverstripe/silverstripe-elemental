@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\Models;
+namespace SilverStripe\Elemental\Models;
 
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
@@ -15,20 +15,24 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
+use SilverStripe\ORM\FieldType\DBField;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\Search\SearchContext;
 use SilverStripe\Security\Permission;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 
-use DNADesign\Elemental\Controllers\ElementController;
-use DNADesign\Elemental\Models\ElementList;
-use DNADesign\Elemental\Models\ElementVirtualLinked;
-use DNADesign\Elemental\ElementalGridFieldDeleteAction;
-use DNADesign\Elemental\Extensions\ElementPageExtension;
+use SilverStripe\Elemental\Controllers\ElementController;
+use SilverStripe\Elemental\Models\ElementList;
+use SilverStripe\Elemental\Models\ElementVirtualLinked;
+use SilverStripe\Elemental\Forms\ElementalGridFieldDeleteAction;
+use SilverStripe\Elemental\Extensions\ElementPageExtension;
+use SilverStripe\Elemental\Extensions\ElementDuplicationExtension;
 
 /**
  * @package elemental
@@ -59,6 +63,11 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     private static $has_many = array(
         'VirtualClones' => ElementVirtualLinked::class
+    );
+
+    private static $extensions = array(
+        Versioned::class,
+        ElementDuplicationExtension::class
     );
 
     private static $table_name = 'Element';
@@ -103,7 +112,7 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     private static $searchable_fields = array(
         'ID' => array(
-            'field' => 'NumericField'
+            'field' => 'SilverStripe\Forms\NumericField'
         ),
         'Title',
         'LastEdited',
@@ -274,14 +283,14 @@ class BaseElement extends DataObject implements CMSPreviewable
                 $virtual
                     ->setTitle(_t('BaseElement.OTHERPAGES', 'Other pages'))
                     ->getConfig()
-                        ->removeComponentsByType('GridFieldAddExistingAutocompleter')
-                        ->removeComponentsByType('GridFieldAddNewButton')
-                        ->removeComponentsByType('GridFieldDeleteAction')
-                        ->removeComponentsByType('GridFieldDetailForm')
+                        ->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter')
+                        ->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldAddNewButton')
+                        ->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldDeleteAction')
+                        ->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldDetailForm')
                         ->addComponent(new ElementalGridFieldDeleteAction());
 
                 $virtual->getConfig()
-                    ->getComponentByType('GridFieldDataColumns')
+                    ->getComponentByType('SilverStripe\Forms\GridField\GridFieldDataColumns')
                     ->setDisplayFields(array(
                         'getPage.Title' => 'Title',
                         'ParentCMSEditLink' => 'Used on'
@@ -416,7 +425,8 @@ class BaseElement extends DataObject implements CMSPreviewable
             $type = ($page->ElementType) ? sprintf("<em> - %s</em>", $page->ElementType) : null;
             $arr[] = sprintf("<a href=\"%s\" target=\"blank\">%s</a> %s", $page->CMSEditLink(), $page->Title, $type);
         }
-        $html = DBField::create_field('HTMLText', implode('<br>', $arr));
+        $html = DBHTMLText::create('UsageSummary');
+        $html->setValue(implode('<br>', $arr));
 
         return $html;
     }
@@ -633,10 +643,15 @@ class BaseElement extends DataObject implements CMSPreviewable
         return (Controller::has_curr()) ? Controller::curr() : null;
     }
 
-    public function getPage()
+    public function getPage($discard_virtualisation = false)
     {
-        if ($this->virtualOwner) {
+
+        if (!$discard_virtualisation && $this->virtualOwner) {
             return $this->virtualOwner->getPage();
+        }
+
+        if ($discard_virtualisation && $this instanceof ElementVirtualLinked) {
+            return $this->LinkedElement()->getPage(true);
         }
 
         if ($this->ListID) {
@@ -685,8 +700,8 @@ class BaseElement extends DataObject implements CMSPreviewable
         }
 
         $link = Controller::join_links(
-            singleton('CMSPageEditController')->Link('EditForm'),
-            $this->getPage()->ID,
+            singleton('SilverStripe\CMS\Controllers\CMSPageEditController')->Link('EditForm'),
+            $this->getPage(true)->ID,
             'field/ElementalArea/item/',
             $this->ID
         );
@@ -720,7 +735,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
     public function ParentCMSEditLink()
     {
-        $html = new HTMLText('ParentCMSEditLink');
+        $html = new DBHTMLText('ParentCMSEditLink');
         if ($this->ListID) {
             $html->setValue('<a href="' . $this->List()->CMSEditLink() . '">' . $this->List()->Title . '</a>');
         } elseif ($page = $this->getPage()) {
@@ -773,7 +788,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         $filters = $this->owner->defaultSearchFilters();
 
         return new SearchContext(
-            $this->owner->class,
+            self::class,
             $fields,
             $filters
         );

@@ -1,13 +1,13 @@
 <?php
 
-namespace DNADesign\Elemental\Tests;
+namespace SilverStripe\Elemental\Tests;
 
 use FunctionalTest;
 use Config;
 
 
-use DNADesign\Elemental\Models\BaseElement;
-use DNADesign\Elemental\Models\ElementalArea;
+use SilverStripe\Elemental\Models\BaseElement;
+use SilverStripe\Elemental\Models\ElementalArea;
 
 
 

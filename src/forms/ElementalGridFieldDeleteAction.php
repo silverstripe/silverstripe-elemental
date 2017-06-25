@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\Forms;
+namespace SilverStripe\Elemental\Forms;
 
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridField_FormAction;

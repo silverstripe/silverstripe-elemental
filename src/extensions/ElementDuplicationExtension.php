@@ -1,15 +1,14 @@
 <?php
 
-namespace DNADesign\Elemental\Extensions;
+namespace SilverStripe\Elemental\Extensions;
 
-use SilverStripe\Assets\Tests\FileMigrationHelperTest\Extension;
-use Config;
+use SilverStripe\ORM\DataExtension;
 
 
 /**
  * @package elemental
  */
-class ElementDuplicationExtension extends Extension
+class ElementDuplicationExtension extends DataExtension
 {
 
     /**

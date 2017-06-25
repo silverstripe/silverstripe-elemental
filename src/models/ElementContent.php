@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\Models;
+namespace SilverStripe\Elemental\Models;
 
 use HtmlEditorField;
 use DropdownField;
@@ -17,6 +17,8 @@ class ElementContent extends BaseElement
         'HTML' => 'HTMLText',
         'Style' => 'Varchar'
     );
+
+    private static $table_name = 'ElementContent';
 
     private static $styles = array();
 

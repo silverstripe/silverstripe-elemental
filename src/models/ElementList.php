@@ -1,14 +1,14 @@
 <?php
 
-namespace DNADesign\Elemental\Models;
+namespace SilverStripe\Elemental\Models;
 
-use DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter;
-use DNADesign\Elemental\ElementalGridFieldAddNewMultiClass;
-use DNADesign\Elemental\ElementalGridFieldDeleteAction;
-use DNADesign\Elemental\Extensions\ElementPageExtension;
-use DNADesign\Elemental\Extensions\ElementPublishChildren;
-use DNADesign\Elemental\Models\BaseElement;
-use DNADesign\Elemental\Models\ElementVirtualLinked;
+use SilverStripe\Elemental\ElementalGridFieldAddExistingAutocompleter;
+use SilverStripe\Elemental\ElementalGridFieldAddNewMultiClass;
+use SilverStripe\Elemental\ElementalGridFieldDeleteAction;
+use SilverStripe\Elemental\Extensions\ElementPageExtension;
+use SilverStripe\Elemental\Extensions\ElementPublishChildren;
+use SilverStripe\Elemental\Models\BaseElement;
+use SilverStripe\Elemental\Models\ElementVirtualLinked;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\LiteralField;
@@ -32,12 +32,18 @@ class ElementList extends BaseElement
         'Elements' => BaseElement::class
     );
 
+    private static $extensions = array(
+        ElementPublishChildren::class
+    );
+
+    private static $table_name = 'ElementList';
+
     private static $duplicate_relations = array(
         'Elements'
     );
 
-    private static $extensions = array(
-        ElementPublishChildren::class
+    private static $publishable_items = array(
+        'Elements'
     );
 
     private static $title = "Element List Element";

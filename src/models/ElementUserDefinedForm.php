@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\Models;
+namespace SilverStripe\Elemental\Models;
 
 use UserDefinedForm_Controller;
 use Controller;
@@ -15,6 +15,8 @@ class ElementUserDefinedForm extends BaseElement
     private static $has_one = array(
         'Form' => UserDefinedForm::class
     );
+
+    private static $table_name = 'ElementForm';
 
     private static $title = "Form Element";
 

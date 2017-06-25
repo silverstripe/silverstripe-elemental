@@ -1,15 +1,15 @@
 <?php
 
-namespace DNADesign\Elemental\Models;
+namespace SilverStripe\Elemental\Models;
 
-use FieldList;
-use TabSet;
-use Tab;
-use LiteralField;
-use HTMLText;
-use DNADesign\Elemental\Controllers\Element_Controller;
-use Exception;
-use DNADesign\Elemental\Models\BaseElement;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\TabSet;
+use SilverStripe\Forms\Tab;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\Elemental\Controllers\Element_Controller;
+// use Exception;
+use SilverStripe\Elemental\Models\BaseElement;
 
 
 
@@ -26,6 +26,12 @@ use DNADesign\Elemental\Models\BaseElement;
  */
 class ElementVirtualLinked extends BaseElement
 {
+    private static $has_one = array(
+        'LinkedElement' => BaseElement::class
+    );
+
+    private static $table_name = 'ElementVirtual';
+
     /**
      * @var string
      */
@@ -36,9 +42,11 @@ class ElementVirtualLinked extends BaseElement
      */
     private static $singular_name = 'Virtual linked Element';
 
-    private static $has_one = array(
-        'LinkedElement' => BaseElement::class
-    );
+    public function __construct($record = null, $isSingleton = false, $model = null)
+    {
+        parent::__construct($record, $isSingleton, $model);
+        $this->LinkedElement()->setVirtualOwner($this);
+    }
 
     public function getTitle()
     {
@@ -48,12 +56,6 @@ class ElementVirtualLinked extends BaseElement
     public function i18n_singular_name()
     {
         return _t(__CLASS__, $this->LinkedElement()->config()->title);
-    }
-
-    public function __construct($record = null, $isSingleton = false, $model = null)
-    {
-        parent::__construct($record, $isSingleton, $model);
-        $this->LinkedElement()->setVirtualOwner($this);
     }
 
     public function getCMSFields()
@@ -79,6 +81,9 @@ class ElementVirtualLinked extends BaseElement
         return $fields;
     }
 
+    public function getElementType() {
+        return 'Virtual: ' . $this->LinkedElement()->getElementType();
+    }
 
     /**
      * Detect when a user has published a ElementVirtualLinked
@@ -95,7 +100,7 @@ class ElementVirtualLinked extends BaseElement
         if ($this->isInvalidPublishState()) {
             $colour = '#C00';
             $text = 'Error';
-            $html = new HTMLText('PublishedState');
+            $html = new DBHTMLText('PublishedState');
             $html->setValue(sprintf(
                 '<span style="color: %s;">%s</span>',
                 $colour,
@@ -139,9 +144,9 @@ class ElementVirtualLinked_Controller extends Element_Controller
 
     protected $controllerClass;
 
-    public function __construct($widget)
+    public function __construct($element)
     {
-        parent::__construct($widget);
+        parent::__construct($element);
 
         $controllerClass = get_class($this->LinkedElement()) . '_Controller';
         if (class_exists($controllerClass)) {
@@ -156,13 +161,15 @@ class ElementVirtualLinked_Controller extends Element_Controller
      *
      * @return HTML
      */
-    public function WidgetHolder()
+    public function ElementHolder()
     {
-        return $this->renderWith("ElementHolder_VirtualLinked");
+        return $this->renderWith('ElementHolder_VirtualLinked');
     }
 
     public function __call($method, $arguments)
     {
+        var_dump($method);
+        die();
         try {
             $retVal = parent::__call($method, $arguments);
         } catch (Exception $e) {

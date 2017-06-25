@@ -1,10 +1,10 @@
 <?php
 
-namespace DNADesign\Elemental\Tests;
+namespace SilverStripe\Elemental\Tests;
 
 use FunctionalTest;
 use Page;
-use DNADesign\Elemental\Extensions\ElementPageExtension;
+use SilverStripe\Elemental\Extensions\ElementPageExtension;
 
 
 

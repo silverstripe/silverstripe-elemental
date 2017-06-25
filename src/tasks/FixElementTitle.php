@@ -1,13 +1,13 @@
 <?php
 
-namespace DNADesign\Elemental\Tasks;
+namespace SilverStripe\Elemental\Tasks;
 
 use SilverStripe\Dev\BuildTask;
 
 use DB;
 use Convert;
 use Versioned;
-use DNADesign\Elemental\Models\BaseElement;
+use SilverStripe\Elemental\Models\BaseElement;
 
 
 class FixElementTitle extends BuildTask
