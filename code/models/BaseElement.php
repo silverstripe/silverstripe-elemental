@@ -2,7 +2,6 @@
 
 namespace DNADesign\Elemental\Models;
 
-use SilverStripe\Widgets\Model\Widget;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\CheckboxField;
@@ -21,6 +20,8 @@ use SilverStripe\Control\Director;
 use SilverStripe\Core\Object;
 use SilverStripe\ORM\Search\SearchContext;
 use SilverStripe\Forms\NumericField;
+
+use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Models\ElementList;
 use DNADesign\Elemental\Models\ElementVirtualLinked;
 use DNADesign\Elemental\ElementalGridFieldDeleteAction;
@@ -31,14 +32,16 @@ use DNADesign\Elemental\Extensions\ElementPageExtension;
 /**
  * @package elemental
  */
-class BaseElement extends Widget implements CMSPreviewable
+class BaseElement implements CMSPreviewable
 {
     /**
      * @var array $db
      */
     private static $db = array(
+        'Title' => 'Varchar(255)',
+        'Sort' => 'Int',
+        'Enabled' => 'Boolean',
         'ExtraClass' => 'Varchar(255)',
-        'HideTitle' => 'Boolean',
         'AvailableGlobally' => 'Boolean(1)'
     );
 
@@ -55,6 +58,23 @@ class BaseElement extends Widget implements CMSPreviewable
     private static $has_many = array(
         'VirtualClones' => ElementVirtualLinked::class
     );
+
+    /**
+     * @var array
+     */
+    private static $defaults = array(
+        'Enabled' => true,
+    );
+
+    /**
+     * @var ElementController
+     */
+    protected $controller;
+
+    /**
+     * @var string
+     */
+    private static $default_sort = 'Sort';
 
     /**
      * @var string
@@ -86,11 +106,6 @@ class BaseElement extends Widget implements CMSPreviewable
         'LastEdited',
         'AvailableGlobally'
     );
-
-    /**
-     * @var boolean
-     */
-    private static $enable_title_in_template = false;
 
     /**
      * Enable for backwards compatibility
@@ -126,13 +141,12 @@ class BaseElement extends Widget implements CMSPreviewable
      */
      private static $default_global_elements = true;
 
-     public function populateDefaults() {
+    public function populateDefaults() {
         $this->AvailableGlobally = $this->config()->get('default_global_elements');
         parent::populateDefaults();
-     }
+    }
 
-    public function getCMSFields()
-    {
+    public function getCMSFields() {
         $fields = $this->scaffoldFormFields(array(
             'includeRelations' => ($this->ID > 0),
             'tabbed' => true,
@@ -146,13 +160,10 @@ class BaseElement extends Widget implements CMSPreviewable
         $fields->removeByName('ExtraClass');
         $fields->removeByName('AvailableGlobally');
 
-        if (!$this->config()->enable_title_in_template) {
-            $fields->removeByName('HideTitle');
-            $title = $fields->fieldByName('Root.Main.Title');
+        $title = $fields->fieldByName('Root.Main.Title');
 
-            if ($title) {
-                $title->setRightTitle('For reference only. Does not appear in the template.');
-            }
+        if ($title) {
+            $title->setRightTitle('For reference only. Does not appear in the template.');
         }
 
         $fields->addFieldToTab('Root.Settings', new CheckboxField('Enabled'));
@@ -227,6 +238,70 @@ class BaseElement extends Widget implements CMSPreviewable
         $fields->push($stageLinkField = new HiddenField('StageLink', false, Director::absoluteURL($this->PreviewLink())));
 
         return $fields;
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @return WidgetController
+     */
+    public function getController()
+    {
+        if ($this->controller) {
+            return $this->controller;
+        }
+
+        foreach (array_reverse(ClassInfo::ancestry($this->class)) as $widgetClass) {
+            $controllerClass = "{$widgetClass}Controller";
+            if (class_exists($controllerClass)) {
+                break;
+            }
+        }
+
+        if (!class_exists($controllerClass)) {
+            throw new Exception("Could not find controller class for $this->classname");
+        }
+
+        $this->controller = Injector::inst()->create($controllerClass, $this);
+
+        return $this->controller;
+    }
+
+    /**
+     * Note: Overloaded in {@link WidgetController}.
+     *
+     * @return string HTML
+     */
+    public function ElementHolder()
+    {
+        return $this->renderWith("ElementHolder");
+    }
+
+    /**
+     * Default way to render widget in templates.
+     * @return string HTML
+     */
+    public function forTemplate($holder = true)
+    {
+        if ($holder) {
+            return $this->ElementHolder();
+        }
+
+        return $this->Render();
+    }
+
+    /**
+     * Renders the element in a custom template with the same name as the
+     * current class. This should be the main point of output customization.
+     *
+     * Invoked from within ElementHolder.ss, which contains the "framing" around
+     * the custom content, like a title.
+     *
+     * @return string HTML
+     */
+    public function Render()
+    {
+        return $this->renderWith(array_reverse(ClassInfo::ancestry($this->class)));
     }
 
     /**
@@ -665,4 +740,92 @@ class BaseElement extends Widget implements CMSPreviewable
         Versioned::set_reading_mode($current);
         return $v;
     }
+
+    /**
+     * Basic permissions, defaults to page perms where possible
+     */
+    public function canView($member = null)
+    {
+        if ($this->hasMethod('getPage')) {
+            if($page = $this->getPage()) {
+                return $page->canView($member);
+            }
+        }
+
+        if(Director::is_cli()) return true;
+
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+    }
+
+    /**
+     * Basic permissions, defaults to page perms where possible
+     */
+    public function canEdit($member = null)
+    {
+        if ($this->hasMethod('getPage')) {
+            if ($page = $this->getPage()) {
+                return $page->canEdit($member);
+            }
+        }
+
+        if(Director::is_cli()) return true;
+
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+    }
+
+    /**
+     * Basic permissions, defaults to page perms where possible
+     * Uses archive not delete so that current stage is respected
+     * i.e if a widget is not published, then it can be deleted by someone who
+     * doesn't have publishing permissions
+     */
+    public function canDelete($member = null)
+    {
+        if ($this->hasMethod('getPage')) {
+            if ($page = $this->getPage()) {
+                return $page->canArchive($member);
+            }
+        }
+
+        if(Director::is_cli()) return true;
+
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+    }
+
+    /**
+     * Basic permissions, defaults to page perms where possible
+     */
+    public function canCreate($member = null)
+    {
+        if(Director::is_cli()) return true;
+
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+    }
+
+    /**
+     * Handles unpublishing as VersionedDataObjects doesn't
+     * Modelled on SiteTree::doUnpublish
+     * Has to be applied here, rather than BaseElement so that it goes against Widget
+     */
+    // public function doUnpublish() {
+    //     if(!$this->owner->ID) return false;
+
+    //     $this->owner->extend('onBeforeUnpublish');
+
+    //     $origStage = Versioned::get_reading_mode();
+    //     Versioned::set_reading_mode('Stage.Live');
+
+    //     // This way our ID won't be unset
+    //     $clone = clone $this->owner;
+    //     $clone->delete();
+
+    //     Versioned::set_reading_mode($origStage);
+
+    //     $virtualLinkedElements = $this->owner->getPublishedVirtualLinkedElements();
+    //     if ($virtualLinkedElements) foreach($virtualLinkedElements as $vle) $vle->doUnpublish();
+
+    //     $this->owner->extend('onAfterUnpublish');
+
+    //     return true;
+    // }
 }

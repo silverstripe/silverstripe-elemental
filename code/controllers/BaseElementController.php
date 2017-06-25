@@ -18,7 +18,7 @@ class BaseElement_Controller extends WidgetController
      *
      * @return HTML
      */
-    public function WidgetHolder()
+    public function ElementHolder()
     {
         return $this->renderWith('ElementHolder');
     }
