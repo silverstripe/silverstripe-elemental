@@ -2,26 +2,25 @@
 
 namespace DNADesign\Elemental\Extensions;
 
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
+use SilverStripe\GridFieldExtensions\GridFieldTitleHeader;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DB;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\Requirements;
 
-use GridField;
-use Config;
-use GridFieldConfig_RelationEditor;
-use GridFieldTitleHeader;
-use GridFieldSortableRows;
-
-use SiteTree;
-use ClassInfo;
-use Requirements;
-use Versioned;
-use DB;
-use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\ElementalGridFieldAddNewMultiClass;
-use DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter;
-use DNADesign\Elemental\ElementalGridFieldDeleteAction;
+use DNADesign\Elemental\Forms\ElementalGridFieldAddExistingAutocompleter;
+use DNADesign\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
+use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
 use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementVirtualLinked;
 
 /**
@@ -93,25 +92,27 @@ class ElementPageExtension extends DataExtension
         }
 
         $area = $this->owner->ElementArea();
-        if ($this->owner->exists() && (!$area->exists() || !$area->isInDB())) {
-            $area->write();
+        // if ($this->owner->exists() && (!$area->exists() || !$area->isInDB())) {
+        //     $area->write();
 
-            $this->owner->ElementAreaID = $area->ID;
-            $this->owner->write();
-        }
+        //     $this->owner->ElementAreaID = $area->ID;
+        //     $this->owner->write();
+        // }
 
         $gridField = GridField::create('ElementArea',
             Config::inst()->get(ElementPageExtension::class, 'elements_title'),
-            $area->AllElements(),
+            $area->Elements(),
             $config = GridFieldConfig_RelationEditor::create()
-                ->removeComponentsByType('GridFieldAddNewButton')
-                ->removeComponentsByType('GridFieldSortableHeader')
-                ->removeComponentsByType('GridFieldDeleteAction')
-                ->removeComponentsByType('GridFieldAddExistingAutocompleter')
+                ->removeComponentsByType(array(
+                    'SilverStripe\Forms\GridField\GridFieldAddNewButton',
+                    'SilverStripe\Forms\GridField\GridFieldSortableHeader',
+                    'SilverStripe\Forms\GridField\GridFieldDeleteAction',
+                    'SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter'
+                ))
                 ->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter('buttons-before-right'))
                 ->addComponent(new GridFieldTitleHeader())
                 ->addComponent($adder)
-                ->addComponent(new GridFieldSortableRows('Sort'))
+                ->addComponent(new GridFieldOrderableRows('Sort'))
         );
 
         if ($this->owner->canArchive()) {
@@ -128,8 +129,10 @@ class ElementPageExtension extends DataExtension
         $autocomplete->setSearchFields(array('ID', 'Title'));
 
         $config = $gridField->getConfig();
-        $paginator = $config->getComponentByType('GridFieldPaginator');
-        $paginator->setItemsPerPage(100);
+        $paginator = $config->getComponentByType('SilverStripe\Forms\GridField\GridFieldPaginator');
+        if ($paginator) {
+            $paginator->setItemsPerPage(100);
+        }
 
         if ($this->owner instanceof SiteTree && $fields->findOrMakeTab('Root.Main')->fieldByName('Metadata')) {
             $fields->addFieldToTab('Root.Main', $gridField, 'Metadata');

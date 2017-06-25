@@ -24,7 +24,7 @@ Extend any page type with the ElementPageExtension and define allowed elements. 
 
 **mysite/_config/app.yml**
 
-	Page:
+	ElementPage:
 	  extensions:
 	    - ElementPageExtension
 
@@ -43,7 +43,7 @@ a holder `div`. The wrapper div is the `ElementHolder.ss` template.
 You may wish to only enable certain elements for the CMS authors to choose from rather than the full set.
 
 ````
-	Page:
+	ElementPage:
 	  allowed_elements:
 		- 'ElementContent'
 
@@ -52,7 +52,7 @@ You may wish to only enable certain elements for the CMS authors to choose from 
 Likewise, you can exclude certain elements from being used.
 
 ````
-    Page:
+    ElementPage:
       disallowed_elements:
         - 'ElementContact'
 ````
@@ -66,17 +66,6 @@ flag. The `disallowed_elements` configuration flag works here too.
 	  allowed_elements:
 	    'ElementFile' : 'File'
 
-````
-
-Extra CSS classes can be configure in the `YAML` config file. By default, the Image element comes with 3 optional
-classes:
-
-````
-	ElementImage:
-	  css_styles:
-	    - 'image_large' : 'Large'
-	    - 'image_medium' : 'Normal'
-	    - 'image_small' : 'Small'
 ````
 
 ### Limiting global elements

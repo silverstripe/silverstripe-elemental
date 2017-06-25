@@ -1,5 +1,7 @@
 <?php
 
+use SilverStripe\Dev\BuildTask;
+
 class ResetGloballyEnabledElements extends BuildTask
 {
 
