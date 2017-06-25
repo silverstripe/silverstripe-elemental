@@ -28,7 +28,7 @@ use DNADesign\Elemental\Models\BaseElement;
  *
  * @package widgets
  */
-class ElementController extends Controller
+class Element_Controller extends Controller
 {
     /**
      * @var Element
@@ -73,7 +73,7 @@ class ElementController extends Controller
     public function Link($action = null)
     {
         if($this->data()->virtualOwner) {
-          $controller = new BaseElement_Controller($this->data()->virtualOwner);
+          $controller = new Element_Controller($this->data()->virtualOwner);
           return $controller->Link($action);
         }
 
@@ -109,7 +109,7 @@ class ElementController extends Controller
      *
      * @return string HTML
      */
-    public function Render()
+    public function RenderElement()
     {
         return $this->renderWith(array_reverse(ClassInfo::ancestry($this->element->class)));
     }

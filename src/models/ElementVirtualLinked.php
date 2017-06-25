@@ -7,7 +7,7 @@ use TabSet;
 use Tab;
 use LiteralField;
 use HTMLText;
-use DNADesign\Elemental\Controllers\BaseElement_Controller;
+use DNADesign\Elemental\Controllers\Element_Controller;
 use Exception;
 use DNADesign\Elemental\Models\BaseElement;
 
@@ -134,7 +134,7 @@ class ElementVirtualLinked extends BaseElement
     }
 }
 
-class ElementVirtualLinked_Controller extends BaseElement_Controller
+class ElementVirtualLinked_Controller extends Element_Controller
 {
 
     protected $controllerClass;
@@ -147,7 +147,7 @@ class ElementVirtualLinked_Controller extends BaseElement_Controller
         if (class_exists($controllerClass)) {
             $this->controllerClass = $controllerClass;
         } else {
-            $this->controllerClass = 'BaseElement_Controller';
+            $this->controllerClass = 'Element_Controller';
         }
     }
 

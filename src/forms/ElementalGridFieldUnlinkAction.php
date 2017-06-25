@@ -1,5 +1,9 @@
 <?php
 
+namespace DNADesign\Elemental\Forms;
+
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+
 /**
  * @package elemental
  */

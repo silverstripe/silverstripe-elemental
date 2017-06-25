@@ -2,24 +2,27 @@
 
 namespace DNADesign\Elemental\Models;
 
-use SilverStripe\Forms\ReadonlyField;
-use SilverStripe\Forms\TextField;
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Object;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\GridField\GridFieldConfig_Base;
-
-use SilverStripe\Core\ClassInfo;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\NumericField;
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\CMSPreviewable;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
+use SilverStripe\ORM\Search\SearchContext;
+use SilverStripe\Security\Permission;
+use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
-use SilverStripe\Control\Controller;
-use SilverStripe\SiteConfig\SiteConfig;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Control\Director;
-use SilverStripe\Core\Object;
-use SilverStripe\ORM\Search\SearchContext;
-use SilverStripe\Forms\NumericField;
 
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Models\ElementList;
@@ -27,12 +30,10 @@ use DNADesign\Elemental\Models\ElementVirtualLinked;
 use DNADesign\Elemental\ElementalGridFieldDeleteAction;
 use DNADesign\Elemental\Extensions\ElementPageExtension;
 
-
-
 /**
  * @package elemental
  */
-class BaseElement implements CMSPreviewable
+class BaseElement extends DataObject implements CMSPreviewable
 {
     /**
      * @var array $db
@@ -40,7 +41,6 @@ class BaseElement implements CMSPreviewable
     private static $db = array(
         'Title' => 'Varchar(255)',
         'Sort' => 'Int',
-        'Enabled' => 'Boolean',
         'ExtraClass' => 'Varchar(255)',
         'AvailableGlobally' => 'Boolean(1)'
     );
@@ -49,6 +49,7 @@ class BaseElement implements CMSPreviewable
      * @var array $has_one
      */
     private static $has_one = array(
+        'Parent' => ElementalArea::class,
         'List' => ElementList::class // optional.
     );
 
@@ -139,14 +140,77 @@ class BaseElement implements CMSPreviewable
      * @config
      * Elements available globally by default
      */
-     private static $default_global_elements = true;
+    private static $default_global_elements = true;
 
-    public function populateDefaults() {
+    /**
+     * Basic permissions, defaults to page perms where possible
+     */
+    public function canView($member = null)
+    {
+        if ($this->hasMethod('getPage')) {
+            if($page = $this->getPage()) {
+                return $page->canView($member);
+            }
+        }
+
+        if(Director::is_cli()) return true;
+
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+    }
+
+    /**
+     * Basic permissions, defaults to page perms where possible
+     */
+    public function canEdit($member = null)
+    {
+        if ($this->hasMethod('getPage')) {
+            if ($page = $this->getPage()) {
+                return $page->canEdit($member);
+            }
+        }
+
+        if(Director::is_cli()) return true;
+
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+    }
+
+    /**
+     * Basic permissions, defaults to page perms where possible
+     * Uses archive not delete so that current stage is respected
+     * i.e if a widget is not published, then it can be deleted by someone who
+     * doesn't have publishing permissions
+     */
+    public function canDelete($member = null)
+    {
+        if ($this->hasMethod('getPage')) {
+            if ($page = $this->getPage()) {
+                return $page->canArchive($member);
+            }
+        }
+
+        if(Director::is_cli()) return true;
+
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+    }
+
+    /**
+     * Basic permissions, defaults to page perms where possible
+     */
+    public function canCreate($member = NULL, $context = Array())
+    {
+        if(Director::is_cli()) return true;
+
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+    }
+
+    public function populateDefaults()
+    {
         $this->AvailableGlobally = $this->config()->get('default_global_elements');
         parent::populateDefaults();
     }
 
-    public function getCMSFields() {
+    public function getCMSFields()
+    {
         $fields = $this->scaffoldFormFields(array(
             'includeRelations' => ($this->ID > 0),
             'tabbed' => true,
@@ -283,11 +347,18 @@ class BaseElement implements CMSPreviewable
      */
     public function forTemplate($holder = true)
     {
+        $config = SiteConfig::current_site_config();
+
+        if ($config->Theme) {
+            Config::inst()->update('SSViewer', 'theme_enabled', true);
+            Config::inst()->update('SSViewer', 'theme', $config->Theme);
+        }
+
         if ($holder) {
             return $this->ElementHolder();
         }
 
-        return $this->Render();
+        return $this->RenderElement();
     }
 
     /**
@@ -299,7 +370,7 @@ class BaseElement implements CMSPreviewable
      *
      * @return string HTML
      */
-    public function Render()
+    public function RenderElement()
     {
         return $this->renderWith(array_reverse(ClassInfo::ancestry($this->class)));
     }
@@ -309,7 +380,8 @@ class BaseElement implements CMSPreviewable
      *
      * @return ArrayList
      */
-    public function getUsage() {
+    public function getUsage()
+    {
         $usage = new ArrayList();
 
         if($page = $this->getPage()) {
@@ -334,7 +406,8 @@ class BaseElement implements CMSPreviewable
         return $usage;
     }
 
-    public function UsageSummary() {
+    public function UsageSummary()
+    {
         $usage = $this->getUsage();
         $arr = array();
         foreach($usage as $page) {
@@ -346,7 +419,8 @@ class BaseElement implements CMSPreviewable
         return $html;
     }
 
-    public function Link() {
+    public function Link()
+    {
         /* TODO
             Use smarter template rendering to just show this element
         */
@@ -355,7 +429,8 @@ class BaseElement implements CMSPreviewable
         }
     }
 
-    public function PreviewLink($action = null){
+    public function PreviewLink($action = null)
+    {
         return Controller::join_links(
             Director::baseURL(),
             'cms-preview',
@@ -365,7 +440,8 @@ class BaseElement implements CMSPreviewable
         );
     }
 
-    public function isCMSPreview() {
+    public function isCMSPreview()
+    {
         if(Controller::has_curr()) {
             $c = Controller::curr();
             if($c->getRequest()->requestVar('CMSPreview')) {
@@ -391,7 +467,6 @@ class BaseElement implements CMSPreviewable
         }
     }
 
-
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
@@ -399,7 +474,7 @@ class BaseElement implements CMSPreviewable
         if (!$this->Sort) {
             $parentID = ($this->ParentID) ? $this->ParentID : 0;
 
-            $this->Sort = DB::query("SELECT MAX(\"Sort\") + 1 FROM \"Widget\" WHERE \"ParentID\" = $parentID")->value();
+            $this->Sort = DB::query("SELECT MAX(\"Sort\") + 1 FROM \"BaseElement\" WHERE \"ParentID\" = $parentID")->value();
         }
 
         if ($this->MoveToListID) {
@@ -412,7 +487,8 @@ class BaseElement implements CMSPreviewable
      * that we move the original element to replace one of the virtual elements
      * But only if it's a delete not an unpublish
      */
-    public function onBeforeDelete() {
+    public function onBeforeDelete()
+    {
         parent::onBeforeDelete();
 
         if(Versioned::get_reading_mode() == 'Stage.Stage') {
@@ -502,7 +578,8 @@ class BaseElement implements CMSPreviewable
      *
      * @return string
      */
-    public function getAnchor() {
+    public function getAnchor()
+    {
         if ($this->_anchor !== null) {
             return $this->_anchor;
         }
@@ -574,39 +651,18 @@ class BaseElement implements CMSPreviewable
     }
 
     /**
-     * Override the {@link Widget::forTemplate()} method so that holders are not rendered twice. The controller should
-     * render with widget inside the
-     *
-     * @return HTML
-     */
-    public function forTemplate($holder = true)
-    {
-        $config = SiteConfig::current_site_config();
-
-        if ($config->Theme) {
-            Config::inst()->update('SSViewer', 'theme_enabled', true);
-            Config::inst()->update('SSViewer', 'theme', $config->Theme);
-        }
-
-        return $this->renderWith($this->class);
-    }
-
-    public function WidgetHolder()
-    {
-        return $this->renderWith("ElementHolder");
-    }
-
-    /**
      * @return string
      */
-    public function getEditLink() {
+    public function getEditLink()
+    {
         return $this->CMSEditLink();
     }
 
     /**
      * @return string
      */
-    public function CMSEditLink($inList = false) {
+    public function CMSEditLink($inList = false)
+    {
         if ($this->ListID) {
             if ($parentLink = $this->List()->CMSEditLink(true)) {
                 return Controller::join_links(
@@ -642,7 +698,8 @@ class BaseElement implements CMSPreviewable
         );
     }
 
-    public function PageLink() {
+    public function PageLink()
+    {
         if ($page = $this->getPage()) {
             $html = new HTMLText('PageLink');
             $html->setValue('<a href="' . $page->Link() . '">' . $page->Title . '</a>');
@@ -650,7 +707,8 @@ class BaseElement implements CMSPreviewable
         }
     }
 
-    public function PageCMSEditLink() {
+    public function PageCMSEditLink()
+    {
         if ($page = $this->getPage()) {
             $html = new HTMLText('UsedOn');
             $html->setValue('<a href="' . $page->CMSEditLink() . '">' . $page->Title . '</a>');
@@ -658,7 +716,8 @@ class BaseElement implements CMSPreviewable
         }
     }
 
-    public function ParentCMSEditLink() {
+    public function ParentCMSEditLink()
+    {
         $html = new HTMLText('ParentCMSEditLink');
         if ($this->ListID) {
             $html->setValue('<a href="' . $this->List()->CMSEditLink() . '">' . $this->List()->Title . '</a>');
@@ -668,7 +727,8 @@ class BaseElement implements CMSPreviewable
         return $html;
     }
 
-		public static function all_allowed_elements() {
+    public static function all_allowed_elements()
+    {
         $classes = array();
 
         // get all dataobject with the elemental extension
@@ -717,7 +777,8 @@ class BaseElement implements CMSPreviewable
         );
     }
 
-    public function setVirtualOwner(ElementVirtualLinked $virtualOwner) {
+    public function setVirtualOwner(ElementVirtualLinked $virtualOwner)
+    {
         $this->virtualOwner = $virtualOwner;
     }
 
@@ -725,7 +786,8 @@ class BaseElement implements CMSPreviewable
      * Finds and returns elements
      * that are virtual elements which link to this element
      */
-    public function getVirtualLinkedElements() {
+    public function getVirtualLinkedElements()
+    {
         return ElementVirtualLinked::get()->filter('LinkedElementID', $this->ID);
     }
 
@@ -733,7 +795,8 @@ class BaseElement implements CMSPreviewable
      * Finds and returns published elements
      * that are virtual elements which link to this element
      */
-    public function getPublishedVirtualLinkedElements() {
+    public function getPublishedVirtualLinkedElements()
+    {
         $current = Versioned::get_reading_mode();
         Versioned::set_reading_mode('Stage.Live');
         $v = $this->getVirtualLinkedElements();
@@ -741,65 +804,9 @@ class BaseElement implements CMSPreviewable
         return $v;
     }
 
-    /**
-     * Basic permissions, defaults to page perms where possible
-     */
-    public function canView($member = null)
+    public function getMimeType()
     {
-        if ($this->hasMethod('getPage')) {
-            if($page = $this->getPage()) {
-                return $page->canView($member);
-            }
-        }
-
-        if(Director::is_cli()) return true;
-
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
-    }
-
-    /**
-     * Basic permissions, defaults to page perms where possible
-     */
-    public function canEdit($member = null)
-    {
-        if ($this->hasMethod('getPage')) {
-            if ($page = $this->getPage()) {
-                return $page->canEdit($member);
-            }
-        }
-
-        if(Director::is_cli()) return true;
-
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
-    }
-
-    /**
-     * Basic permissions, defaults to page perms where possible
-     * Uses archive not delete so that current stage is respected
-     * i.e if a widget is not published, then it can be deleted by someone who
-     * doesn't have publishing permissions
-     */
-    public function canDelete($member = null)
-    {
-        if ($this->hasMethod('getPage')) {
-            if ($page = $this->getPage()) {
-                return $page->canArchive($member);
-            }
-        }
-
-        if(Director::is_cli()) return true;
-
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
-    }
-
-    /**
-     * Basic permissions, defaults to page perms where possible
-     */
-    public function canCreate($member = null)
-    {
-        if(Director::is_cli()) return true;
-
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+        return 'text/html';
     }
 
     /**

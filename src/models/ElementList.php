@@ -4,11 +4,11 @@ namespace DNADesign\Elemental\Models;
 
 
 use \Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm;
-use HTMLEditorField;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 
-use GridFieldConfig_RecordEditor;
-use GridFieldSortableRows;
-use GridFieldTitleHeader;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
+use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
+use SilverStripe\GridFieldExtensions\GridFieldTitleHeader;
 
 
 use GridField;
@@ -126,7 +126,8 @@ class ElementList extends BaseElement
     /**
      * @return array
      */
-    public function getAvailableTypes() {
+    public function getAvailableTypes()
+    {
         if (is_array($this->config()->get('allowed_elements'))) {
             $list = $this->config()->get('allowed_elements');
 
@@ -180,7 +181,8 @@ class ElementList extends BaseElement
      *
      * @return SS_List - Collection of {@link WidgetController} instances.
      */
-    public function ElementControllers() {
+    public function ElementControllers()
+    {
         $controllers = new ArrayList();
 
         foreach($this->Elements()->filter('Enabled', 1) as $element) {
@@ -196,7 +198,8 @@ class ElementList extends BaseElement
     /**
      * Ensure that we tidy up Elements if we delete this list
      */
-    public function onAfterDelete() {
+    public function onAfterDelete()
+    {
         if(Versioned::get_reading_mode() == 'Stage.Stage') {
             foreach ($this->Elements() as $element) {
                 $element->delete();

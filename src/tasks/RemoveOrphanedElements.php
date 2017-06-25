@@ -1,5 +1,7 @@
 <?php
 
+use SilverStripe\Dev\BuildTask;
+
 class RemoveOrphanedElements extends BuildTask
 {
 
