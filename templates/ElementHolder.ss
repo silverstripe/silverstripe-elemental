@@ -6,5 +6,5 @@
 			</div>
 		<% end_if %>
 	<% end_uncached %>
-	$Widget
+	$Render
 </div>

@@ -13,7 +13,6 @@
 	"require": {
 		"silverstripe/framework": "^4.0",
 		"silverstripe/cms": "^4.0",
-		"silverstripe/widgets": "dev-master",
 		"silverstripe-australia/gridfieldextensions": "dev-master"
 	},
 	"suggest": {

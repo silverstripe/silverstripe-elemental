@@ -13,7 +13,7 @@ use DNADesign\Elemental\Extensions\ElementPageExtension;
 /**
  * @package elemental
  */
-class ElementalArea extends WidgetArea
+class ElementalArea extends DataObject
 {
     private static $db = array(
         'OwnerClassName' => 'Varchar'
