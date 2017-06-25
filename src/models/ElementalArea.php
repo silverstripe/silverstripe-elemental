@@ -44,7 +44,7 @@ class ElementalArea extends DataObject
     {
         if ($this->OwnerClassName) {
             $class = $this->OwnerClassName;
-            $page = $class::get()->filter('ElementAreaID', $this->ID);
+            $page = $class::get()->filter('ElementalAreaID', $this->ID);
             if ($page && $page->exists()) {
                 return $page->first();
             }
@@ -61,7 +61,7 @@ class ElementalArea extends DataObject
             }
 
             if ($isElemental) {
-                $page = $class::get()->filter('ElementAreaID', $this->ID);
+                $page = $class::get()->filter('ElementalAreaID', $this->ID);
                 if ($page && $page->exists()) {
                     Versioned::reading_stage($originalMode);
                     $this->OwnerClassName = $class;

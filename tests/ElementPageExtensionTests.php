@@ -25,16 +25,16 @@ class ElementPageExtensionTests extends FunctionalTest {
     public function testUpdateCmsFields() {
         $page = $this->objFromFixture('Page', 'elementaldemo');
 
-        $elementarea = $page->getCMSFields()->dataFieldByName('ElementArea');
-        $this->assertNotNull($elementarea);
+        $elementalArea = $page->getCMSFields()->dataFieldByName('ElementalArea');
+        $this->assertNotNull($elementalArea);
 
 
         $content = $page->getCMSFields()->dataFieldByName('Content');
         $this->assertNull($content);
 
         $redirect = $this->objFromFixture('RedirectorPage', 'elementredirectpage');
-        $elementarea = $redirect->getCMSFields()->dataFieldByName('ElementArea');
-        $this->assertNull($elementarea);
+        $elementalArea = $redirect->getCMSFields()->dataFieldByName('ElementalArea');
+        $this->assertNull($elementalArea);
     }
 
 }

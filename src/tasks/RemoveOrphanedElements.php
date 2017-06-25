@@ -11,12 +11,12 @@ class RemoveOrphanedElements extends BuildTask
 
     public function run($request)
     {
-        $elementAreas = ElementalArea::get();
+        $elementalAreas = ElementalArea::get();
         $deleteCount = 0;
-        foreach($elementAreas as $elementArea) {
-            if ($elementArea->getOwnerPage() == false) {
+        foreach($elementalAreas as $elementalArea) {
+            if ($elementalArea->getOwnerPage() == false) {
                 $deleteCount++;
-                $elementArea->delete();
+                $elementalArea->delete();
             }
         }
         echo 'Found ' . $deleteCount . ' areas no longer used';
