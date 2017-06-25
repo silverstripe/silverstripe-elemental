@@ -2,29 +2,18 @@
 
 namespace DNADesign\Elemental\Models;
 
-
-use \Heyday\VersionedDataObjects\VersionedDataObjectDetailsForm;
-use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
-
-use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
-use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
-use SilverStripe\GridFieldExtensions\GridFieldTitleHeader;
-
-
-use GridField;
-use Config;
-use LiteralField;
-use ClassInfo;
-use ArrayList;
-use DNADesign\Elemental\Models\BaseElement;
-use DNADesign\Elemental\Extensions\ElementPublishChildren;
+use DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter;
 use DNADesign\Elemental\ElementalGridFieldAddNewMultiClass;
 use DNADesign\Elemental\ElementalGridFieldDeleteAction;
-use DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter;
 use DNADesign\Elemental\Extensions\ElementPageExtension;
+use DNADesign\Elemental\Extensions\ElementPublishChildren;
+use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementVirtualLinked;
-
-
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
+use SilverStripe\GridFieldExtensions\GridFieldTitleHeader;
 
 /**
  * A list contains nested {@link BaseElement} such as a list of related files.
