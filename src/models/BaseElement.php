@@ -687,7 +687,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         $link = Controller::join_links(
             singleton('CMSPageEditController')->Link('EditForm'),
             $this->getPage()->ID,
-            'field/ElementArea/item/',
+            'field/ElementalArea/item/',
             $this->ID
         );
 

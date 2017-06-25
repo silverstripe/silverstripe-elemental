@@ -22,10 +22,10 @@ class ElementalSolrIndexer {
      *
      */
     public function elementPageChanged($object, $doc) {
-        if($object->hasMethod('ElementArea')) {
+        if($object->hasMethod('ElementalArea')) {
             $dirty = array();
 
-            foreach($object->ElementArea()->WidgetControllers() as $element) {
+            foreach($object->ElementalArea()->ElementControllers() as $element) {
                 $doc->addField(self::ELEMENTAL_FIELD_NAME . '_ID', $element->ID);
 
                 // if this page has virtual clones on another page make sure that we also update the Solr index for

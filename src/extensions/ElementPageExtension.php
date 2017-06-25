@@ -48,25 +48,20 @@ class ElementPageExtension extends DataExtension
      *
      * @var boolean
      */
-    private static $copy_element_content_to_contentfield = true;
-
-    /**
-     * @config
-     *
-     * @var boolean
-     */
     private static $clear_contentfield = false;
 
     /**
      * @var array $db
      */
-    private static $db = array();
+    private static $db = array(
+        'ElementContent' => 'HTMLText'
+    );
 
     /**
      * @var array $has_one
      */
     private static $has_one = array(
-        'ElementArea' => ElementalArea::class
+        'ElementalArea' => ElementalArea::class
     );
 
     /**
@@ -91,15 +86,9 @@ class ElementPageExtension extends DataExtension
             $adder->setClasses($list);
         }
 
-        $area = $this->owner->ElementArea();
-        // if ($this->owner->exists() && (!$area->exists() || !$area->isInDB())) {
-        //     $area->write();
+        $area = $this->owner->ElementalArea();
 
-        //     $this->owner->ElementAreaID = $area->ID;
-        //     $this->owner->write();
-        // }
-
-        $gridField = GridField::create('ElementArea',
+        $gridField = GridField::create('ElementalArea',
             Config::inst()->get(ElementPageExtension::class, 'elements_title'),
             $area->Elements(),
             $config = GridFieldConfig_RelationEditor::create()
@@ -212,12 +201,12 @@ class ElementPageExtension extends DataExtension
         Config::inst()->update('SSViewer', 'theme_enabled', true);
 
 
-        if ($this->owner->hasMethod('ElementArea') && Config::inst()->get(__CLASS__, 'copy_element_content_to_contentfield')) {
-            $elements = $this->owner->ElementArea();
+        if ($this->owner->hasMethod('ElementalArea')) {
+            $elements = $this->owner->ElementalArea();
 
             if (!$elements->isInDB()) {
                 $elements->write();
-                $this->owner->ElementAreaID = $elements->ID;
+                $this->owner->ElementalAreaID = $elements->ID;
             } else {
                 // Copy widgets content to Content to enable search
                 $searchableContent = array();
@@ -232,12 +221,12 @@ class ElementPageExtension extends DataExtension
                     $controller = $element->getController();
                     $controller->init();
 
-                    array_push($searchableContent, $controller->WidgetHolder());
+                    array_push($searchableContent, Convert::html2raw($controller->ElementHolder()));
                 }
 
                 Requirements::restore();
 
-                $this->owner->Content = trim(implode(' ', $searchableContent));
+                $this->owner->ElementContent = trim(implode(' ', $searchableContent));
             }
         } else {
             if(Config::inst()->get(__CLASS__, 'clear_contentfield')) {
@@ -260,7 +249,7 @@ class ElementPageExtension extends DataExtension
      */
     public function onBeforeDelete() {
         if(Versioned::get_reading_mode() == 'Stage.Stage') {
-            $area = $this->owner->ElementArea();
+            $area = $this->owner->ElementalArea();
             $area->delete();
         }
     }
@@ -299,10 +288,10 @@ class ElementPageExtension extends DataExtension
     public function onAfterDuplicate($duplicatePage)
     {
         if ($this->owner->ID != 0 && $this->owner->ID < $duplicatePage->ID) {
-            $originalWidgetArea = $this->owner->getComponent('ElementArea');
+            $originalWidgetArea = $this->owner->getComponent('ElementalArea');
             $duplicateWidgetArea = $originalWidgetArea->duplicate(false);
             $duplicateWidgetArea->write();
-            $duplicatePage->ElementAreaID = $duplicateWidgetArea->ID;
+            $duplicatePage->ElementalAreaID = $duplicateWidgetArea->ID;
             $duplicatePage->write();
 
             foreach ($originalWidgetArea->Items() as $originalWidget) {
@@ -321,10 +310,10 @@ class ElementPageExtension extends DataExtension
      */
     public function onAfterDuplicateToSubsite($originalPage)
     {
-        $originalWidgetArea = $originalPage->getComponent('ElementArea');
+        $originalWidgetArea = $originalPage->getComponent('ElementalArea');
         $duplicateWidgetArea = $originalWidgetArea->duplicate(false);
         $duplicateWidgetArea->write();
-        $this->owner->ElementAreaID = $duplicateWidgetArea->ID;
+        $this->owner->ElementalAreaID = $duplicateWidgetArea->ID;
         $this->owner->write();
 
         foreach ($originalWidgetArea->Items() as $originalWidget) {
@@ -340,7 +329,7 @@ class ElementPageExtension extends DataExtension
      */
     public function onAfterPublish()
     {
-        if ($id = $this->owner->ElementAreaID) {
+        if ($id = $this->owner->ElementalAreaID) {
             $widgets = Versioned::get_by_stage(BaseElement::class, 'Stage', "ParentID = '$id'");
             $staged = array();
 
@@ -376,7 +365,7 @@ class ElementPageExtension extends DataExtension
             // we don't yet have a smart way of rolling back to a specific version
             return;
         }
-        if ($id = $this->owner->ElementAreaID) {
+        if ($id = $this->owner->ElementalAreaID) {
             $widgets = Versioned::get_by_stage(BaseElement::class, 'Live', "ParentID = '$id'");
             $staged = array();
 
