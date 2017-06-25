@@ -50,29 +50,8 @@ class ElementController extends Controller
     }
 
     /**
-     * @param string $action
-     * @return string
-     */
-    public function Link($action = null)
-    {
-        $id = ($this->element) ? $this->element->ID : null;
-        $segment = Controller::join_links('element', $id, $action);
-
-        $page = Director::get_current_page();
-        if ($page && !($page instanceof WidgetController)) {
-            return $page->Link($segment);
-        }
-
-        if ($controller = $this->getParentController()) {
-            return $controller->Link($segment);
-        }
-
-        return $segment;
-    }
-
-    /**
-     * Cycles up the controller stack until it finds a non-widget controller
-     * This is needed becauseController::currreturns the widget controller,
+     * Cycles up the controller stack until it finds an Element controller
+     * This is needed becauseController::currreturns the element controller,
      * which means anyLinkfunction turns into endless loop.
      *
      * @return Controller
@@ -85,6 +64,35 @@ class ElementController extends Controller
             }
         }
         return false;
+    }
+
+    /**
+     * @param string $action
+     * @return string
+     */
+    public function Link($action = null)
+    {
+        if($this->data()->virtualOwner) {
+          $controller = new BaseElement_Controller($this->data()->virtualOwner);
+          return $controller->Link($action);
+        }
+
+        return parent::Link($action);
+    }
+
+    /**
+     * if this is a virtual request, change the hash if set.
+     */
+    public function redirect($url, $code=302) {
+
+      if($this->data()->virtualOwner) {
+        $parts = explode('#', $url);
+        if(isset($parts[1])) {
+          $url = $parts[0] . '#' . $this->data()->virtualOwner->ID;
+        }
+      }
+
+      return parent::redirect($url, $code);
     }
 
     /**
