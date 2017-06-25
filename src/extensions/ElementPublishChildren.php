@@ -1,10 +1,10 @@
 <?php
 
-namespace DNADesign\Elemental\Extensions;
+namespace SilverStripe\Elemental\Extensions;
 
 use SilverStripe\ORM\DataExtension;
 use Versioned;
-use DNADesign\Elemental\Models\BaseElement;
+use SilverStripe\Elemental\Models\BaseElement;
 
 
 

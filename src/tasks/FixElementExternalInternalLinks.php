@@ -1,11 +1,11 @@
 <?php
 
-namespace DNADesign\Elemental\Tasks;
+namespace SilverStripe\Elemental\Tasks;
 
 use SilverStripe\Dev\BuildTask;
 use DB;
 use Convert;
-use DNADesign\Elemental\Models\ElementLink;
+use SilverStripe\Elemental\Models\ElementLink;
 
 
 class FixElementExternalInternalLinks extends BuildTask

@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\Controllers;
+namespace SilverStripe\Elemental\Controllers;
 
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Control\Controller;
@@ -8,7 +8,7 @@ use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\i18n\i18n;
 use SilverStripe\Security\Member;
-use DNADesign\Elemental\Models\BaseElement;
+use SilverStripe\Elemental\Models\BaseElement;
 
 /**
  * Optional controller for every widget which has its own logic, e.g. in forms.

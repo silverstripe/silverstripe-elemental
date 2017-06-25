@@ -1,13 +1,13 @@
 <?php
 
-namespace DNADesign\Elemental\Forms;
+namespace SilverStripe\Elemental\Forms;
 
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\ORM\SS_List;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DataObject;
-use DNADesign\Elemental\Models\ElementVirtualLinked;
+use SilverStripe\Elemental\Models\ElementVirtualLinked;
 
 /**
  * This class is is responsible for adding objects to another object's has_many

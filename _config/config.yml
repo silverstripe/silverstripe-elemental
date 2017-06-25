@@ -2,17 +2,6 @@
 Name: elemental
 ---
 
-BaseElement:
-  extensions:
-    - 'Versioned'
-    - 'ElementDuplicationExtension'
-
-ElementList:
-  extensions:
-    - ElementPublishChildren
-  publishable_items:
-    - Elements
-
 LeftAndMain:
   extra_requirements_css:
     - 'elemental/css/elemental-admin.css'
