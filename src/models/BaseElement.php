@@ -41,6 +41,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     private static $db = array(
         'Title' => 'Varchar(255)',
         'Sort' => 'Int',
+        'Enabled' => 'Int',
         'ExtraClass' => 'Varchar(255)',
         'AvailableGlobally' => 'Boolean(1)'
     );
@@ -93,7 +94,6 @@ class BaseElement extends DataObject implements CMSPreviewable
      * @var array
      */
     private static $summary_fields = array(
-        'ID' => 'ID',
         'Title' => 'Title',
         'ElementType' => 'Type',
     );
@@ -476,7 +476,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         if (!$this->Sort) {
             $parentID = ($this->ParentID) ? $this->ParentID : 0;
 
-            $this->Sort = DB::query("SELECT MAX(\"Sort\") + 1 FROM \"BaseElement\" WHERE \"ParentID\" = $parentID")->value();
+            $this->Sort = DB::query("SELECT MAX(\"Sort\") + 1 FROM \"Element\" WHERE \"ParentID\" = $parentID")->value();
         }
 
         if ($this->MoveToListID) {

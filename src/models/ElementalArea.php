@@ -26,13 +26,13 @@ class ElementalArea extends DataObject
     private static $table_name = 'ElementalArea';
 
     /**
-     * Override {@link WidgetArea::ItemsToRender}
-     *
      * @return HasManyList
      */
     public function ItemsToRender()
     {
-        return $this->Elements();
+        return $this->Elements(array(
+            'Enabled' => 1
+        ));
     }
 
     /**
