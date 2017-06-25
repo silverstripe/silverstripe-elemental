@@ -23,6 +23,8 @@ class ElementalArea extends DataObject
         'Elements' => BaseElement::class
     );
 
+    private static $table_name = 'ElementalArea';
+
     /**
      * Override {@link WidgetArea::ItemsToRender}
      *

@@ -60,6 +60,8 @@ class BaseElement extends DataObject implements CMSPreviewable
         'VirtualClones' => ElementVirtualLinked::class
     );
 
+    private static $table_name = 'Element';
+
     /**
      * @var array
      */

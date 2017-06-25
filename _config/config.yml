@@ -1,12 +1,10 @@
 ---
 Name: elemental
 ---
-Widget:
-  extensions:
-    - 'ElementalVersionedExtension'
 
 BaseElement:
   extensions:
+    - 'Versioned'
     - 'ElementDuplicationExtension'
 
 ElementList:
