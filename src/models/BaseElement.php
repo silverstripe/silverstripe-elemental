@@ -2,6 +2,7 @@
 
 namespace SilverStripe\Elemental\Models;
 
+use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
@@ -9,7 +10,12 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Object;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldConfig_Base;
+use SilverStripe\Forms\GridField\GridFieldDataColumns;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\NumericField;
@@ -283,14 +289,14 @@ class BaseElement extends DataObject implements CMSPreviewable
                 $virtual
                     ->setTitle(_t('BaseElement.OTHERPAGES', 'Other pages'))
                     ->getConfig()
-                        ->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter')
-                        ->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldAddNewButton')
-                        ->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldDeleteAction')
-                        ->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldDetailForm')
+                        ->removeComponentsByType(GridFieldAddExistingAutocompleter::class)
+                        ->removeComponentsByType(GridFieldAddNewButton::class)
+                        ->removeComponentsByType(GridFieldDeleteAction::class)
+                        ->removeComponentsByType(GridFieldDetailForm::class)
                         ->addComponent(new ElementalGridFieldDeleteAction());
 
                 $virtual->getConfig()
-                    ->getComponentByType('SilverStripe\Forms\GridField\GridFieldDataColumns')
+                    ->getComponentByType(GridFieldDataColumns::class)
                     ->setDisplayFields(array(
                         'getPage.Title' => 'Title',
                         'ParentCMSEditLink' => 'Used on'
@@ -326,8 +332,8 @@ class BaseElement extends DataObject implements CMSPreviewable
             return $this->controller;
         }
 
-        foreach (array_reverse(ClassInfo::ancestry($this->class)) as $widgetClass) {
-            $controllerClass = "{$widgetClass}Controller";
+        foreach (array_reverse(ClassInfo::ancestry($this->class)) as $elementClass) {
+            $controllerClass = "{$elementClass}Controller";
             if (class_exists($controllerClass)) {
                 break;
             }
@@ -700,7 +706,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         }
 
         $link = Controller::join_links(
-            singleton('SilverStripe\CMS\Controllers\CMSPageEditController')->Link('EditForm'),
+            singleton(CMSPageEditController::class)->Link('EditForm'),
             $this->getPage(true)->ID,
             'field/ElementalArea/item/',
             $this->ID

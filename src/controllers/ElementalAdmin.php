@@ -4,6 +4,8 @@ namespace SilverStripe\Elemental\Controllers;
 
 use SilverStripe\Elemental\Models\BaseElement;
 use SilverStripe\Admin\ModelAdmin;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
+use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\NumericField;
 
 /**
@@ -28,8 +30,8 @@ class ElementalAdmin extends ModelAdmin {
             ->dataFieldByName($this->sanitiseClassName($this->modelClass));
 
         $config = $grid->getConfig();
-        $config->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldAddNewButton');
-        $dataCols = $config->getComponentByType('SilverStripe\Forms\GridField\GridFieldDataColumns');
+        $config->removeComponentsByType(GridFieldAddNewButton::class);
+        $dataCols = $config->getComponentByType(GridFieldDataColumns::class);
         $fields = $dataCols->getDisplayFields($grid);
         $fields['UsageSummary'] = 'Usage Summary';
         $dataCols->setDisplayFields($fields);

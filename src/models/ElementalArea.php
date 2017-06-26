@@ -8,6 +8,8 @@ use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\HasManyList;
 use SilverStripe\Core\Extensible;
+use SilverStripe\CMS\Model\SiteTree;
+
 use SilverStripe\Elemental\Models\BaseElement;
 use SilverStripe\Elemental\Extensions\ElementPageExtension;
 
@@ -53,10 +55,10 @@ class ElementalArea extends DataObject
 
         $originalMode = Versioned::get_stage();
         Versioned::set_stage('Stage');
-        foreach (ClassInfo::getValidSubClasses('SilverStripe\CMS\Model\SiteTree') as $class) {
+        foreach (ClassInfo::getValidSubClasses(SiteTree::class) as $class) {
             $isElemental = false;
 
-            if (Extensible::has_extension($class, 'SilverStripe\Elemental\Extensions\ElementPageExtension')) {
+            if (Extensible::has_extension($class, ElementPageExtension::class)) {
                 $isElemental = true;
             }
 
