@@ -5,12 +5,18 @@ namespace SilverStripe\Elemental\Extensions;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
+
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+use SilverStripe\Forms\GridField\GridFieldPaginator;
+use SilverStripe\Forms\GridField\GridFieldSortableHeader;
+use SilverStripe\Forms\LiteralField;
 use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
 use SilverStripe\GridFieldExtensions\GridFieldTitleHeader;
-use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DB;
 use SilverStripe\Versioned\Versioned;
@@ -93,10 +99,10 @@ class ElementPageExtension extends DataExtension
             $area->Elements(),
             $config = GridFieldConfig_RelationEditor::create()
                 ->removeComponentsByType(array(
-                    'SilverStripe\Forms\GridField\GridFieldAddNewButton',
-                    'SilverStripe\Forms\GridField\GridFieldSortableHeader',
-                    'SilverStripe\Forms\GridField\GridFieldDeleteAction',
-                    'SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter'
+                    GridFieldAddNewButton::class,
+                    GridFieldSortableHeader::class,
+                    GridFieldDeleteAction::class,
+                    GridFieldAddExistingAutocompleter::class
                 ))
                 ->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter('buttons-before-right'))
                 ->addComponent(new GridFieldTitleHeader())
@@ -118,7 +124,7 @@ class ElementPageExtension extends DataExtension
         $autocomplete->setSearchFields(array('ID', 'Title'));
 
         $config = $gridField->getConfig();
-        $paginator = $config->getComponentByType('SilverStripe\Forms\GridField\GridFieldPaginator');
+        $paginator = $config->getComponentByType(GridFieldPaginator::class);
         if ($paginator) {
             $paginator->setItemsPerPage(100);
         }
