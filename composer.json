@@ -13,7 +13,8 @@
 	"require": {
 		"silverstripe/framework": "^4.0",
 		"silverstripe/cms": "^4.0",
-		"silverstripe-australia/gridfieldextensions": "dev-master"
+		"silverstripe-australia/gridfieldextensions": "dev-master",
+		"arillo/silverstripe-dataobject-preview": "*",
 	},
 	"suggest": {
 		"bluehousegroup/silverstripe-data-object-version-viewer": "Allows viewing of version history for data objects inside of the SilverStripe CMS"
