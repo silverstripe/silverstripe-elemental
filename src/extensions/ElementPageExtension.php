@@ -139,6 +139,8 @@ class ElementPageExtension extends DataExtension
     }
 
     /**
+     * Get the available element types for this page type,
+     * Uses allowed_elements, stop_element_inheritance, disallowed_elements in order to get to correct list
      * @return array
      */
     public function getAvailableTypes() {
@@ -202,49 +204,56 @@ class ElementPageExtension extends DataExtension
             return;
         }
 
+        if ($this->owner->hasMethod('ElementalArea')) {
+            $this->renderElementalSearchContent();
+        }
+
+        parent::onBeforeWrite();
+    }
+
+    /**
+     * Render the elements out and push into ElementContent so that Solr can use that field for searching
+     *
+     */
+    public function renderElementalSearchContent() {
         // enable theme in case elements are being rendered with templates stored in theme folder
         $originalThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
         Config::inst()->update('SSViewer', 'theme_enabled', true);
 
+        $elements = $this->owner->ElementalArea();
 
-        if ($this->owner->hasMethod('ElementalArea')) {
-            $elements = $this->owner->ElementalArea();
+        if (!$elements->isInDB()) {
+            $elements->write();
+            $this->owner->ElementalAreaID = $elements->ID;
+        } else {
+            // Copy widgets content to Content to enable search
+            $searchableContent = array();
 
-            if (!$elements->isInDB()) {
-                $elements->write();
-                $this->owner->ElementalAreaID = $elements->ID;
-            } else {
-                // Copy widgets content to Content to enable search
-                $searchableContent = array();
+            Requirements::clear();
 
-                Requirements::clear();
-
-                foreach ($elements->Elements() as $element) {
-                    if ($element->config()->exclude_from_content) {
-                        continue;
-                    }
-
-                    $controller = $element->getController();
-                    $controller->init();
-
-                    array_push($searchableContent, Convert::html2raw($controller->ElementHolder()));
+            foreach ($elements->Elements() as $element) {
+                if ($element->config()->exclude_from_content) {
+                    continue;
                 }
 
-                Requirements::restore();
+                $controller = $element->getController();
+                $controller->init();
 
-                $this->owner->ElementContent = trim(implode(' ', $searchableContent));
+                // concert to raw so that html parts of template aren't matched in search results, e.g link hrefs
+                array_push($searchableContent, Convert::html2raw($controller->ElementHolder()));
             }
-        } else {
-            if(Config::inst()->get(__CLASS__, 'clear_contentfield')) {
-                $this->owner->Content = '';
-            }
+
+            Requirements::restore();
+
+            $this->owner->ElementContent = trim(implode(' ', $searchableContent));
         }
 
+        if(Config::inst()->get(__CLASS__, 'clear_contentfield')) {
+            $this->owner->Content = '';
+        }
 
         // set theme_enabled back to what it was
         Config::inst()->update('SSViewer', 'theme_enabled', $originalThemeEnabled);
-
-        parent::onBeforeWrite();
     }
 
     /**

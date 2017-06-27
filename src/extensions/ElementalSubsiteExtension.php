@@ -1,6 +1,6 @@
 <?php
 
-use  SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataExtension;
 
 /**
  * @package elemental
