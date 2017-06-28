@@ -1,6 +1,11 @@
 <?php
 
+namespace SilverStripe\Elemental\Extensions;
+
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\ORM\DataQuery;
+use SilverStripe\Forms\FieldList;
 
 /**
  * @package elemental
@@ -15,7 +20,7 @@ class ElementSubsiteExtension extends DataExtension
         'Subsite' => Subsite::class
     );
 
-    public function updateCMSFields(SilverStripe\Forms\FieldList $fields) {
+    public function updateCMSFields(FieldList $fields) {
 
         // add SubsiteID if Subsites is installed andf Elemental has a subsite
         if(class_exists('Subsite')) {
@@ -26,7 +31,7 @@ class ElementSubsiteExtension extends DataExtension
     /**
      * Update any requests for elements to limit the results to the current site
      */
-    public function augmentSQL(SilverStripe\ORM\Queries\SQLSelect $query, SilverStripe\ORM\DataQuery $dataQuery = NULL) {
+    public function augmentSQL(SQLSelect $query, DataQuery $dataQuery = NULL) {
 
         if(!class_exists('Subsite')) {
             return;
