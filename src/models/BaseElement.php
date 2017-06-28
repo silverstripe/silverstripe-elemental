@@ -8,6 +8,7 @@ use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Object;
+use SilverStripe\DataObjectPreview\Controllers\DataObjectPreviewController;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
@@ -158,6 +159,39 @@ class BaseElement extends DataObject implements CMSPreviewable
      * Elements available globally by default
      */
     private static $default_global_elements = true;
+
+    public static function all_allowed_elements()
+    {
+        $classes = array();
+
+        // get all dataobject with the elemental extension
+        foreach(ClassInfo::subclassesFor('DataObject') as $className) {
+            if(Object::has_extension($className, ElementPageExtension::class)) {
+               $classes[] = $className;
+            }
+        }
+
+        // get all allowd_elements for these classes
+        $allowed = array();
+        foreach($classes as $className) {
+            $allowed_elements = Config::inst()->get($className, 'allowed_elements');
+            if ($allowed_elements) {
+                $allowed = array_merge($allowed, $allowed_elements);
+            }
+        }
+
+       // $allowed[] = 'ElementVirtualLinked';
+        $allowed = array_unique($allowed);
+
+        $elements = array();
+        foreach($allowed as $className) {
+            $elements[$className] = _t($className, Config::inst()->get($className, 'title'));
+        }
+
+        asort($elements);
+
+        return $elements;
+    }
 
     /**
      * Basic permissions, defaults to page perms where possible
@@ -429,7 +463,7 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function ElementHolder()
     {
-        return $this->renderWith("ElementHolder");
+        return $this->renderWith('ElementHolder');
     }
 
     /**
@@ -452,6 +486,10 @@ class BaseElement extends DataObject implements CMSPreviewable
         return $this->RenderElement();
     }
 
+    public function previewRender() {
+        return $this->forTemplate();
+    }
+
     /**
      * Renders the element in a custom template with the same name as the
      * current class. This should be the main point of output customization.
@@ -463,7 +501,18 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function RenderElement()
     {
-        return $this->renderWith(array_reverse(ClassInfo::ancestry($this->class)));
+        $classes = array_reverse(ClassInfo::ancestry($this->ClassName));
+        $templates = array();
+        foreach($classes as $key => $value) {
+            $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value);
+            $templates[] = DataObjectPreviewController::stripNamespacing($value);
+        }
+
+        return $this->renderWith($templates);
+    }
+
+    public function SimpleClassName() {
+        return DataObjectPreviewController::stripNamespacing($this->ClassName);
     }
 
     /**
@@ -558,8 +607,6 @@ class BaseElement extends DataObject implements CMSPreviewable
             return true;
         }
     }
-
-
 
     /**
      * @return string
@@ -752,38 +799,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         return $html;
     }
 
-    public static function all_allowed_elements()
-    {
-        $classes = array();
 
-        // get all dataobject with the elemental extension
-        foreach(ClassInfo::subclassesFor('DataObject') as $className) {
-            if(Object::has_extension($className, ElementPageExtension::class)) {
-               $classes[] = $className;
-            }
-        }
-
-        // get all allowd_elements for these classes
-        $allowed = array();
-        foreach($classes as $className) {
-            $allowed_elements = Config::inst()->get($className, 'allowed_elements');
-            if ($allowed_elements) {
-                $allowed = array_merge($allowed, $allowed_elements);
-            }
-        }
-
-       // $allowed[] = 'ElementVirtualLinked';
-        $allowed = array_unique($allowed);
-
-        $elements = array();
-        foreach($allowed as $className) {
-            $elements[$className] = _t($className, Config::inst()->get($className, 'title'));
-        }
-
-        asort($elements);
-
-        return $elements;
-    }
 
     public function getDefaultSearchContext()
     {
