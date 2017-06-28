@@ -3,9 +3,8 @@
 namespace SilverStripe\Elemental\Extensions;
 
 use SilverStripe\ORM\DataExtension;
-use Versioned;
+use SilverStripe\Versioned\Versioned;
 use SilverStripe\Elemental\Models\BaseElement;
-
 
 
 /**
@@ -80,7 +79,7 @@ class ElementPublishChildren extends DataExtension
             $class = get_class($class);
         }
 
-        $versionClasses = ClassInfo::subclassesFor('Versioned');
+        $versionClasses = ClassInfo::subclassesFor(Versioned::class);
 
         foreach($versionClasses as $versionClass) {
             if(Object::has_extension($class, $versionClass)) {
