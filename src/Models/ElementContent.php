@@ -1,11 +1,9 @@
 <?php
 
-namespace SilverStripe\Elemental\Models;
+namespace DNADesign\Elemental\Models;
 
-use HtmlEditorField;
-use DropdownField;
-
-
+use SilverStripe\Forms\HTMLEditor\HtmlEditorField;
+use SilverStripe\Forms\DropdownField;
 
 /**
  * @package elemental

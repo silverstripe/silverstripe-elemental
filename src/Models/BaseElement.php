@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\Elemental\Models;
+namespace DNADesign\Elemental\Models;
 
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Control\Controller;
@@ -34,12 +34,12 @@ use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 
-use SilverStripe\Elemental\Controllers\ElementController;
-use SilverStripe\Elemental\Models\ElementList;
-use SilverStripe\Elemental\Models\ElementVirtualLinked;
-use SilverStripe\Elemental\Forms\ElementalGridFieldDeleteAction;
-use SilverStripe\Elemental\Extensions\ElementPageExtension;
-use SilverStripe\Elemental\Extensions\ElementDuplicationExtension;
+use DNADesign\Elemental\Controllers\ElementController;
+use DNADesign\Elemental\Models\ElementList;
+use DNADesign\Elemental\Models\ElementVirtualLinked;
+use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
+use DNADesign\Elemental\Extensions\ElementPageExtension;
+use DNADesign\Elemental\Extensions\ElementDuplicationExtension;
 
 /**
  * @package elemental

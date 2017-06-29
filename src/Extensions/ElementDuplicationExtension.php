@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\Elemental\Extensions;
+namespace DNADesign\Elemental\Extensions;
 
 use SilverStripe\ORM\DataExtension;
 

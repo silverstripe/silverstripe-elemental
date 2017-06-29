@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\Elemental\Search;
+namespace DNADesign\Elemental\Search;
 
 
 
