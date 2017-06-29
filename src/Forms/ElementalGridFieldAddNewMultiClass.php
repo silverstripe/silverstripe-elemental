@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\Elemental\Forms;
+namespace DNADesign\Elemental\Forms;
 
 use SilverStripe\GridFieldExtensions\GridFieldAddNewMultiClass;
 use SilverStripe\Forms\GridField\GridField;

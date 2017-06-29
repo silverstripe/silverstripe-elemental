@@ -1,10 +1,9 @@
 <?php
 
-namespace SilverStripe\Elemental\Models;
+namespace DNADesign\Elemental\Models;
 
 use UserDefinedForm_Controller;
-use Controller;
-
+use SilverStripe\Control\Controller;
 
 /**
  * @package elemental

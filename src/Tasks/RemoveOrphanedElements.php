@@ -1,5 +1,7 @@
 <?php
 
+namespace DNADesign\Elemental\Tasks;
+
 use SilverStripe\Dev\BuildTask;
 
 class RemoveOrphanedElements extends BuildTask

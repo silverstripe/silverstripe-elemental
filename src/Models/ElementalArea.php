@@ -1,6 +1,6 @@
 <?php
 
-namespace SilverStripe\Elemental\Models;
+namespace DNADesign\Elemental\Models;
 
 use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
@@ -10,8 +10,8 @@ use SilverStripe\ORM\HasManyList;
 use SilverStripe\Core\Extensible;
 use SilverStripe\CMS\Model\SiteTree;
 
-use SilverStripe\Elemental\Models\BaseElement;
-use SilverStripe\Elemental\Extensions\ElementPageExtension;
+use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Extensions\ElementPageExtension;
 
 /**
  * @package elemental

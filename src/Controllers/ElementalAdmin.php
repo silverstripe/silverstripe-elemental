@@ -1,8 +1,9 @@
 <?php
 
-namespace SilverStripe\Elemental\Controllers;
+namespace DNADesign\Elemental\Controllers;
 
-use SilverStripe\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\BaseElement;
+
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;

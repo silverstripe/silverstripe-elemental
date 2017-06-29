@@ -1,11 +1,17 @@
 <?php
 
-namespace SilverStripe\Elemental\Extensions;
+namespace DNADesign\Elemental\Extensions;
+
+use DNADesign\Elemental\Forms\ElementalGridFieldAddExistingAutocompleter;
+use DNADesign\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
+use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
+use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\ElementalArea;
+use DNADesign\Elemental\Models\ElementVirtualLinked;
 
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
-
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
@@ -21,13 +27,6 @@ use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DB;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Requirements;
-
-use SilverStripe\Elemental\Forms\ElementalGridFieldAddExistingAutocompleter;
-use SilverStripe\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
-use SilverStripe\Elemental\Forms\ElementalGridFieldDeleteAction;
-use SilverStripe\Elemental\Models\BaseElement;
-use SilverStripe\Elemental\Models\ElementalArea;
-use SilverStripe\Elemental\Models\ElementVirtualLinked;
 
 /**
  * @package elemental
