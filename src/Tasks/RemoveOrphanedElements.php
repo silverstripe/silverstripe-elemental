@@ -24,7 +24,7 @@ class RemoveOrphanedElements extends BuildTask
         echo 'Found ' . $deleteCount . ' areas no longer used';
 
         $bogusNoAreas = BaseElement::get()
-            ->leftJoin('WidgetArea', 'ea.ID = Widget.ParentID', 'ea')
+            ->leftJoin('ElementalArea', 'ea.ID = ElementalArea.ParentID', 'ea')
             ->where('ea.ID IS NULL and BaseElement.ListID = 0');
         echo 'Found ' . $bogusNoAreas->Count() . ' bogus areas';
         foreach($bogusNoAreas as $bogus) {

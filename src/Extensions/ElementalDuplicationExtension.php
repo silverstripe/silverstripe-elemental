@@ -8,7 +8,7 @@ use SilverStripe\ORM\DataExtension;
 /**
  * @package elemental
  */
-class ElementDuplicationExtension extends DataExtension
+class ElementalDuplicationExtension extends DataExtension
 {
 
     /**

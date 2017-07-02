@@ -17,7 +17,7 @@ class ElementUserDefinedForm extends BaseElement
 
     private static $table_name = 'ElementForm';
 
-    private static $title = "Form Element";
+    private static $title = 'Form Element';
 
     public function ElementForm()
     {
