@@ -16,9 +16,8 @@ use DNADesign\Elemental\Models\BaseElement;
 /**
  * Virtual Linked Element.
  *
- * As elemental is based on widgets which have a natural has_one relation to an
- * object, this is a workaround for allowing the same element to be linked to
- * multiple pages.
+ * As elemental is based on a natural has_one relation to an object,
+ * this allows the same element to be linked to multiple pages.
  *
  * {@see ElementalGridFieldAddExistingAutocompleter}
  *
@@ -157,7 +156,7 @@ class ElementVirtualLinked_Controller extends Element_Controller
     }
 
     /**
-     * Returns the current widget in scope rendered into its' holder
+     * Returns the current element in scope rendered into its' holder
      *
      * @return HTML
      */

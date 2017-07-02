@@ -12,22 +12,18 @@ use SilverStripe\i18n\i18n;
 use SilverStripe\Security\Member;
 
 /**
- * Optional controller for every widget which has its own logic, e.g. in forms.
+ * Optional controller for every element which has its own logic, e.g. in forms.
  *
- * It always handles a single widget, usually passed in as a database
+ * It always handles a single element, usually passed in as a database
  * identifier through the controller URL. Needs to be constructed as a nested
  * controller within a {@link ContentController}.
  *
  * ## Forms
  * You can add forms like in any other SilverStripe controller. If you need
- * access to the widget from within a form, you can use
- * `$this->controller->getWidget()` inside the form logic.
+ * access to the element from within a form, you can use
+ * `$this->controller->getElement()` inside the form logic.
  *
- * Note: Widget controllers currently only work on {@link Page} objects,
- * because the logic is implemented in {@link ContentController->handleWidget()}.
- * Copy this logic and the URL rules to enable it for other controllers.
- *
- * @package widgets
+ * @package Elemental
  */
 class Element_Controller extends Controller
 {
@@ -36,9 +32,8 @@ class Element_Controller extends Controller
      */
     protected $element;
 
-
     /**
-     * @param Widget $widget
+     * @param BaseElement $element
      */
     public function __construct($element = null)
     {
@@ -116,13 +111,10 @@ class Element_Controller extends Controller
     }
 
     /**
-     * Overloaded from {@link Widget->WidgetHolder()} to allow for controller/
-     * form linking.
-     *
      * @return string HTML
      */
     public function ElementHolder()
     {
-        return $this->renderWith("ElementHolder");
+        return $this->renderWith('ElementHolder');
     }
 }

@@ -11,7 +11,7 @@ use SilverStripe\Versioned\Versioned;
 /**
  * @package elemental
  */
-class ElementPublishChildren extends DataExtension
+class ElementalPublishChildren extends DataExtension
 {
 
     public function getPublishableItems() {

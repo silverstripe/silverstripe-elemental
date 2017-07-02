@@ -31,7 +31,7 @@ use SilverStripe\View\Requirements;
 /**
  * @package elemental
  */
-class ElementPageExtension extends DataExtension
+class ElementalPageExtension extends DataExtension
 {
 
     /**
@@ -194,7 +194,7 @@ class ElementPageExtension extends DataExtension
     }
 
     /**
-     * Make sure there is always a WidgetArea sidebar for adding widgets
+     * Make sure there is always an ElementalArea for adding Elements
      *
      */
     public function onBeforeWrite()
@@ -225,7 +225,7 @@ class ElementPageExtension extends DataExtension
             $elements->write();
             $this->owner->ElementalAreaID = $elements->ID;
         } else {
-            // Copy widgets content to Content to enable search
+            // Copy elements content to ElementContent to enable search
             $searchableContent = array();
 
             Requirements::clear();
@@ -293,7 +293,7 @@ class ElementPageExtension extends DataExtension
     }
 
     /**
-     * If the page is duplicated, copy the widgets across too.
+     * If the page is duplicated, copy the elements across too.
      *
      * Gets called twice from either direction, due to bad DataObject and SiteTree code, hence the weird if statement
      *
@@ -302,39 +302,39 @@ class ElementPageExtension extends DataExtension
     public function onAfterDuplicate($duplicatePage)
     {
         if ($this->owner->ID != 0 && $this->owner->ID < $duplicatePage->ID) {
-            $originalWidgetArea = $this->owner->getComponent('ElementalArea');
-            $duplicateWidgetArea = $originalWidgetArea->duplicate(false);
-            $duplicateWidgetArea->write();
-            $duplicatePage->ElementalAreaID = $duplicateWidgetArea->ID;
+            $originalElementalArea = $this->owner->getComponent('ElementalArea');
+            $duplicateElementalArea = $originalElementalArea->duplicate(false);
+            $duplicateElementalArea->write();
+            $duplicatePage->ElementalAreaID = $duplicateElementalArea->ID;
             $duplicatePage->write();
 
-            foreach ($originalWidgetArea->Items() as $originalWidget) {
-                $duplicateWidget = $originalWidget->duplicate(true);
+            foreach ($originalElementalArea->Items() as $originalElement) {
+                $duplicateElement = $originalElement->duplicate(true);
 
-                // manually set the ParentID of each widget, so we don't get versioning issues
-                DB::query(sprintf("UPDATE \"Widget\" SET \"ParentID\" = '%d' WHERE \"ID\" = '%d'", $duplicateWidgetArea->ID, $duplicateWidget->ID));
+                // manually set the ParentID of each element, so we don't get versioning issues
+                DB::query(sprintf("UPDATE Element SET ParentID = %d WHERE ID = %d", $duplicateElementalArea->ID, $duplicateElement->ID));
             }
         }
     }
 
     /**
-     * If the page is duplicated across subsites, copy the widgets across too.
+     * If the page is duplicated across subsites, copy the elements across too.
      *
      * @return Page The duplicated page
      */
     public function onAfterDuplicateToSubsite($originalPage)
     {
-        $originalWidgetArea = $originalPage->getComponent('ElementalArea');
-        $duplicateWidgetArea = $originalWidgetArea->duplicate(false);
-        $duplicateWidgetArea->write();
-        $this->owner->ElementalAreaID = $duplicateWidgetArea->ID;
+        $originalElementalArea = $originalPage->getComponent('ElementalArea');
+        $duplicateElementalArea = $originalElementalArea->duplicate(false);
+        $duplicateElementalArea->write();
+        $this->owner->ElementalAreaID = $duplicateElementalArea->ID;
         $this->owner->write();
 
-        foreach ($originalWidgetArea->Items() as $originalWidget) {
-            $duplicateWidget = $originalWidget->duplicate(true);
+        foreach ($originalElementalArea->Items() as $originalElement) {
+            $duplicateElement = $originalElement->duplicate(true);
 
-            // manually set the ParentID of each widget, so we don't get versioning issues
-            DB::query(sprintf("UPDATE \"Widget|\" SET \"ParentID\" = '%d' WHERE \"ID\" = '%d'", $duplicateWidgetArea->ID, $duplicateWidget->ID));
+            // manually set the ParentID of each element, so we don't get versioning issues
+            DB::query(sprintf("UPDATE Element SET ParentID = %d WHERE ID = %d", $duplicateElementalArea->ID, $duplicateElement->ID));
         }
     }
 
@@ -344,21 +344,21 @@ class ElementPageExtension extends DataExtension
     public function onAfterPublish()
     {
         if ($id = $this->owner->ElementalAreaID) {
-            $widgets = Versioned::get_by_stage(BaseElement::class, 'Stage', "ParentID = '$id'");
+            $elements = Versioned::get_by_stage(BaseElement::class, 'Stage', "ParentID = '$id'");
             $staged = array();
 
-            foreach ($widgets as $widget) {
-                $staged[] = $widget->ID;
+            foreach ($elements as $element) {
+                $staged[] = $element->ID;
 
-                $widget->publish('Stage', 'Live');
+                $element->publish('Stage', 'Live');
             }
 
             // remove any elements that are on live but not in draft.
-            $widgets = Versioned::get_by_stage(BaseElement::class, 'Live', "ParentID = '$id'");
+            $elements = Versioned::get_by_stage(BaseElement::class, 'Live', "ParentID = '$id'");
 
-            foreach ($widgets as $widget) {
-                if (!in_array($widget->ID, $staged)) {
-                    $widget->deleteFromStage('Live');
+            foreach ($elements as $element) {
+                if (!in_array($element->ID, $staged)) {
+                    $element->deleteFromStage('Live');
                 }
             }
         }
@@ -380,17 +380,17 @@ class ElementPageExtension extends DataExtension
             return;
         }
         if ($id = $this->owner->ElementalAreaID) {
-            $widgets = Versioned::get_by_stage(BaseElement::class, 'Live', "ParentID = '$id'");
+            $elements = Versioned::get_by_stage(BaseElement::class, 'Live', "ParentID = '$id'");
             $staged = array();
 
-            foreach ($widgets as $widget) {
-                $staged[] = $widget->ID;
+            foreach ($elements as $element) {
+                $staged[] = $element->ID;
 
-                $widget->invokeWithExtensions('onBeforeRollback', $widget);
+                $element->invokeWithExtensions('onBeforeRollback', $element);
 
-                $widget->publish('Live', 'Stage', false);
+                $element->publish('Live', 'Stage', false);
 
-                $widget->invokeWithExtensions('onAfterRollback', $widget);
+                $element->invokeWithExtensions('onAfterRollback', $element);
             }
         }
     }

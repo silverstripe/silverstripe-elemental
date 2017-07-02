@@ -5,8 +5,8 @@ namespace DNADesign\Elemental\Models;
 use DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter;
 use DNADesign\Elemental\ElementalGridFieldAddNewMultiClass;
 use DNADesign\Elemental\ElementalGridFieldDeleteAction;
-use DNADesign\Elemental\Extensions\ElementPageExtension;
-use DNADesign\Elemental\Extensions\ElementPublishChildren;
+use DNADesign\Elemental\Extensions\ElementalPageExtension;
+use DNADesign\Elemental\Extensions\ElementalPublishChildren;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementVirtualLinked;
 
@@ -34,7 +34,7 @@ class ElementList extends BaseElement
     );
 
     private static $extensions = array(
-        ElementPublishChildren::class
+        ElementalPublishChildren::class
     );
 
     private static $table_name = 'ElementList';
@@ -47,9 +47,9 @@ class ElementList extends BaseElement
         'Elements'
     );
 
-    private static $title = "Element List Element";
+    private static $title = 'Element List Element';
 
-    private static $description = "Orderable list of elements";
+    private static $description = 'Orderable list of elements';
 
     private static $enable_title_in_template = true;
 
@@ -103,14 +103,14 @@ class ElementList extends BaseElement
                 $autocomplete->setResultsFormat('($ID) $Title');
                 $autocomplete->setSearchFields(array('ID', 'Title'));
 
-                $widgetArea = new GridField(
+                $elementArea = new GridField(
                     'Elements',
                     Config::inst()->get(ElementPageExtension::class, 'elements_title'),
                     $elements,
                     $config
                 );
 
-                $fields->addFieldToTab('Root.Main', $widgetArea);
+                $fields->addFieldToTab('Root.Main', $elementArea);
             } else {
                 $fields->addFieldToTab('Root.Main', LiteralField::create('warn', '<p class="message notice">Once you save this object you will be able to add items</p>'));
             }
@@ -171,11 +171,11 @@ class ElementList extends BaseElement
     }
 
     /**
-     * Used in template instead of {@link Widgets()} to wrap each element in its
+     * Used in template instead of {@link Elements()} to wrap each element in its
      * controller, making it easier to access and process form logic and
-     * actions stored in {@link WidgetController}.
+     * actions stored in {@link ElementController}.
      *
-     * @return SS_List - Collection of {@link WidgetController} instances.
+     * @return SS_List - Collection of {@link ElementController} instances.
      */
     public function ElementControllers()
     {

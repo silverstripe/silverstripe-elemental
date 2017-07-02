@@ -31,23 +31,13 @@ class ElementalAdmin extends ModelAdmin {
             ->dataFieldByName($this->sanitiseClassName($this->modelClass));
 
         $config = $grid->getConfig();
+        // remove add button, as elements are created in the page dialog
         $config->removeComponentsByType(GridFieldAddNewButton::class);
+        // add new field which isn't shown in page dialog
         $dataCols = $config->getComponentByType(GridFieldDataColumns::class);
         $fields = $dataCols->getDisplayFields($grid);
         $fields['UsageSummary'] = 'Usage Summary';
         $dataCols->setDisplayFields($fields);
         return $form;
     }
-
-    // /**
-    //  * Exclude our linked elements
-    //  *
-    //  * @return DataList
-    //  */
-    // public function getList() {
-    //     $list = parent::getList();
-    //     //$list = $list->exclude('ClassName', 'ElementVirtualLinked');
-
-    //     return $list;
-    // }
 }
