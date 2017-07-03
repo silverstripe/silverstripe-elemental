@@ -14,7 +14,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
-use SilverStripe\GridFieldExtensions\GridFieldTitleHeader;
+use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 
 /**
  * A list contains nested {@link BaseElement} such as a list of related files.

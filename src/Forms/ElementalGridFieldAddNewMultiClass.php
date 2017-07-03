@@ -2,9 +2,8 @@
 
 namespace DNADesign\Elemental\Forms;
 
-use SilverStripe\GridFieldExtensions\GridFieldAddNewMultiClass;
 use SilverStripe\Forms\GridField\GridField;
-
+use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 
 /**
  * @package elemental

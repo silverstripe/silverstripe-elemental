@@ -21,8 +21,8 @@ use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
-use SilverStripe\GridFieldExtensions\GridFieldTitleHeader;
+use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
+use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DB;
 use SilverStripe\Versioned\Versioned;
@@ -194,25 +194,8 @@ class ElementalPageExtension extends DataExtension
     }
 
     /**
-     * Make sure there is always an ElementalArea for adding Elements
-     *
-     */
-    public function onBeforeWrite()
-    {
-        if(!$this->supportsElemental()) {
-            return;
-        }
-
-        if ($this->owner->hasMethod('ElementalArea')) {
-            $this->renderElementalSearchContent();
-        }
-
-        parent::onBeforeWrite();
-    }
-
-    /**
      * Render the elements out and push into ElementContent so that Solr can use that field for searching
-     *
+     * SS4 branch not tested, as still waiting for fulltextsearch to get an upgrade
      */
     public function renderElementalSearchContent() {
         // enable theme in case elements are being rendered with templates stored in theme folder
@@ -256,19 +239,6 @@ class ElementalPageExtension extends DataExtension
     }
 
     /**
-     * Ensure that if there are elements that belong to this page
-     * and are virtualised (Virtual Element links to them), that we move the
-     * original element to replace one of the virtual elements
-     * But only if it's a delete not an unpublish
-     */
-    public function onBeforeDelete() {
-        if(Versioned::get_reading_mode() == 'Stage.Stage') {
-            $area = $this->owner->ElementalArea();
-            $area->delete();
-        }
-    }
-
-    /**
      * @return boolean
      */
     public function supportsElemental() {
@@ -290,6 +260,36 @@ class ElementalPageExtension extends DataExtension
         }
 
         return true;
+    }
+
+    /**
+     * Make sure there is always an ElementalArea for adding Elements
+     *
+     */
+    public function onBeforeWrite()
+    {
+        if(!$this->supportsElemental()) {
+            return;
+        }
+
+        if ($this->owner->hasMethod('ElementalArea')) {
+            $this->renderElementalSearchContent();
+        }
+
+        parent::onBeforeWrite();
+    }
+
+    /**
+     * Ensure that if there are elements that belong to this page
+     * and are virtualised (Virtual Element links to them), that we move the
+     * original element to replace one of the virtual elements
+     * But only if it's a delete not an unpublish
+     */
+    public function onBeforeDelete() {
+        if(Versioned::get_reading_mode() == 'Stage.Stage') {
+            $area = $this->owner->ElementalArea();
+            $area->delete();
+        }
     }
 
     /**
