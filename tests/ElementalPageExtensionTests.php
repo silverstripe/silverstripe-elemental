@@ -2,17 +2,14 @@
 
 namespace DNADesign\Elemental\Tests;
 
-use FunctionalTest;
-use Page;
+use SilverStripe\Dev\FunctionalTest;
 use DNADesign\Elemental\Extensions\ElementPageExtension;
-
-
 
 /**
  * @package elemental
  * @subpackage tests
  */
-class ElementPageExtensionTests extends FunctionalTest {
+class ElementalPageExtensionTests extends FunctionalTest {
 
     protected static $fixture_file = 'elemental/tests/fixtures.yml';
 
