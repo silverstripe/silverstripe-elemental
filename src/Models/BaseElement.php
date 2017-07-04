@@ -581,11 +581,14 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function RenderElement()
     {
-        $classes = array_reverse(ClassInfo::ancestry($this->ClassName));
+        $classes = ClassInfo::ancestry($this->ClassName);
+        $classes[self::class] = self::class;
+        $classes = array_reverse($classes);
         $templates = array();
         foreach($classes as $key => $value) {
             $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value);
             $templates[] = DataObjectPreviewController::stripNamespacing($value);
+            if ($value == BaseElement::class) break;
         }
 
         return $this->renderWith($templates);
