@@ -11,7 +11,7 @@ use SilverStripe\Core\Extensible;
 use SilverStripe\CMS\Model\SiteTree;
 
 use DNADesign\Elemental\Models\BaseElement;
-use DNADesign\Elemental\Extensions\ElementPageExtension;
+use DNADesign\Elemental\Extensions\ElementalPageExtension;
 
 /**
  * @package elemental
@@ -27,6 +27,16 @@ class ElementalArea extends DataObject
     );
 
     private static $table_name = 'ElementalArea';
+
+    public static function elemental_page_types() {
+        $elementalClasses = array();
+        foreach (ClassInfo::getValidSubClasses(SiteTree::class) as $class) {
+            if (Extensible::has_extension($class, ElementalPageExtension::class)) {
+               $elementalClasses[] = $class;
+            }
+        }
+        return $elementalClasses;
+    }
 
     /**
      * @return HasManyList
@@ -55,25 +65,20 @@ class ElementalArea extends DataObject
 
         $originalMode = Versioned::get_stage();
         Versioned::set_stage('Stage');
-        foreach (ClassInfo::getValidSubClasses(SiteTree::class) as $class) {
-            $isElemental = false;
-
-            if (Extensible::has_extension($class, ElementPageExtension::class)) {
-                $isElemental = true;
-            }
-
-            if ($isElemental) {
-                $page = $class::get()->filter('ElementalAreaID', $this->ID);
-                if ($page && $page->exists()) {
-                    Versioned::set_stage($originalMode);
-                    $this->OwnerClassName = $class;
-                    $this->write();
-                    return $page->first();
-                }
+        $elementalPageTypes = self::elemental_page_types();
+        foreach($elementalPageTypes as $elementalPageType) {
+            $page = $elementalPageType::get()->filter('ElementalAreaID', $this->ID);
+            if ($page && $page->exists()) {
+                Versioned::set_stage($originalMode);
+                $this->OwnerClassName = $elementalPageType;
+                $this->write();
+                return $page->first();
             }
         }
 
         Versioned::set_stage($originalMode);
         return false;
     }
+
+
 }
