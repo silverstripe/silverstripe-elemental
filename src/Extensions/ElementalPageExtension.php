@@ -23,6 +23,7 @@ use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\LiteralField;
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
+use SilverStripe\View\SSViewer;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DB;
 use SilverStripe\Versioned\Versioned;
@@ -200,7 +201,7 @@ class ElementalPageExtension extends DataExtension
     public function renderElementalSearchContent() {
         // enable theme in case elements are being rendered with templates stored in theme folder
         $originalThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
-        Config::inst()->update('SSViewer', 'theme_enabled', true);
+        SSViewer::config()->update('theme_enabled', true);
 
         $elements = $this->owner->ElementalArea();
 
