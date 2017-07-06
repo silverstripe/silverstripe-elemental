@@ -10,6 +10,7 @@ use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementVirtualLinked;
 
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\Convert;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
@@ -21,13 +22,13 @@ use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\LiteralField;
-use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
-use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
-use SilverStripe\View\SSViewer;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DB;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Requirements;
+use SilverStripe\View\SSViewer;
+use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
+use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 
 /**
  * @package elemental
@@ -70,6 +71,55 @@ class ElementalPageExtension extends DataExtension
         'ElementalArea' => ElementalArea::class
     );
 
+    private static $owns = array(
+        'ElementalArea'
+    );
+
+    /**
+     * Get the available element types for this page type,
+     * Uses allowed_elements, stop_element_inheritance, disallowed_elements in order to get to correct list
+     * @return array
+     */
+    public static function get_available_types_for_class($class)
+    {
+        $config = $class::config();
+
+        if (is_array($config->get('allowed_elements'))) {
+            if ($config->get('stop_element_inheritance')) {
+                $availableClasses = $config->get('allowed_elements', Config::UNINHERITED);
+            } else {
+                $availableClasses = $config->get('allowed_elements');
+            }
+
+        } else {
+            $availableClasses = ClassInfo::subclassesFor(BaseElement::class);
+            unset($availableClasses[BaseElement::class]);
+        }
+
+        $disallowedElements = (array) $config->get('disallowed_elements');
+
+        if (!in_array(ElementVirtualLinked::class, $disallowedElements)) {
+            array_push($disallowedElements, ElementVirtualLinked::class);
+        }
+
+        $list = array();
+        foreach ($availableClasses as $availableClass) {
+            $inst = singleton($availableClass);
+
+            if (!in_array($availableClass, $disallowedElements) && $inst->canCreate()) {
+                $list[$availableClass] = $inst->i18n_singular_name();
+            }
+        }
+
+        if (method_exists($class, 'sortElementalOptions')) {
+            $this->owner->sortElementalOptions($list);
+        } else if($config->get('sort_types_alphabetically') !== false) {
+            asort($list);
+        }
+
+        return $list;
+    }
+
     /**
      * Setup the CMS Fields
      *
@@ -87,7 +137,7 @@ class ElementalPageExtension extends DataExtension
 
         $adder = new ElementalGridFieldAddNewMultiClass('buttons-before-left');
 
-        $list = $this->getAvailableTypes();
+        $list = self::get_available_types_for_class($this->owner->ClassName);
         if($list) {
             $adder->setClasses($list);
         }
@@ -139,110 +189,75 @@ class ElementalPageExtension extends DataExtension
     }
 
     /**
-     * Get the available element types for this page type,
-     * Uses allowed_elements, stop_element_inheritance, disallowed_elements in order to get to correct list
-     * @return array
+     * Make sure there is always an ElementalArea for adding Elements
+     *
      */
-    public function getAvailableTypes() {
-        if (is_array($this->owner->config()->get('allowed_elements'))) {
-            if ($this->owner->config()->get('stop_element_inheritance')) {
-                $list = $this->owner->config()->get('allowed_elements', Config::UNINHERITED);
-            } else {
-                $list = $this->owner->config()->get('allowed_elements');
-            }
+    public function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
 
-            if($this->owner->config()->get('sort_types_alphabetically') !== false) {
-                $sorted = array();
-
-                foreach ($list as $class) {
-                    $inst = singleton($class);
-
-                    if ($inst->canCreate()) {
-                        $sorted[$class] = singleton($class)->i18n_singular_name();
-                    }
-                }
-
-                $list = $sorted;
-                asort($list);
-            }
-        } else {
-            $classes = ClassInfo::subclassesFor(BaseElement::class);
-            $list = array();
-            unset($classes[BaseElement::class]);
-
-            $disallowedElements = (array) $this->owner->config()->get('disallowed_elements');
-
-            if (!in_array(ElementVirtualLinked::class, $disallowedElements)) {
-                array_push($disallowedElements, ElementVirtualLinked::class);
-            }
-
-            foreach ($classes as $class) {
-                $inst = singleton($class);
-
-                if (!in_array($class, $disallowedElements) && $inst->canCreate()) {
-                    $list[$class] = singleton($class)->i18n_singular_name();
-                }
-            }
-
-            asort($list);
+        if(!$this->supportsElemental()) {
+            return;
         }
 
-        if (method_exists($this->owner, 'sortElementalOptions')) {
-            $this->owner->sortElementalOptions($list);
+        $elements = $this->owner->ElementalAreaID;
+
+        if (!$this->owner->ElementalAreaID) {
+            $elements = new ElementalArea();
+            $elements->OwnerClassName = $this->owner->ClassName;
+            $elements->write();
+            $this->owner->ElementalAreaID = $elements->ID;
         }
 
-        return $list;
+        $this->renderElementalSearchContent();
     }
 
     /**
      * Render the elements out and push into ElementContent so that Solr can use that field for searching
      * SS4 branch not tested, as still waiting for fulltextsearch to get an upgrade
      */
-    public function renderElementalSearchContent() {
+    public function renderElementalSearchContent()
+    {
         // enable theme in case elements are being rendered with templates stored in theme folder
-        $originalThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
-        SSViewer::config()->update('theme_enabled', true);
+        $viewer_config = SSViewer::config();
+        $originalThemeEnabled = $viewer_config->get('theme_enabled');
+        $viewer_config->update('theme_enabled', true);
 
         $elements = $this->owner->ElementalArea();
 
-        if (!$elements->isInDB()) {
-            $elements->write();
-            $this->owner->ElementalAreaID = $elements->ID;
-        } else {
-            // Copy elements content to ElementContent to enable search
-            $searchableContent = array();
+        // Copy elements content to ElementContent to enable search
+        $searchableContent = array();
 
-            Requirements::clear();
+        Requirements::clear();
 
-            foreach ($elements->Elements() as $element) {
-                if ($element->config()->exclude_from_content) {
-                    continue;
-                }
-
-                $controller = $element->getController();
-                $controller->init();
-
-                // concert to raw so that html parts of template aren't matched in search results, e.g link hrefs
-                array_push($searchableContent, Convert::html2raw($controller->ElementHolder()));
+        foreach ($elements->Elements() as $element) {
+            if ($element->config()->exclude_from_content) {
+                continue;
             }
 
-            Requirements::restore();
+            $controller = $element->getController();
 
-            $this->owner->ElementContent = trim(implode(' ', $searchableContent));
+            // concert to raw so that html parts of template aren't matched in search results, e.g link hrefs
+            array_push($searchableContent, Convert::html2raw($controller->ElementHolder()));
         }
 
-        if(Config::inst()->get(__CLASS__, 'clear_contentfield')) {
+        Requirements::restore();
+
+        $this->owner->ElementContent = trim(implode(' ', $searchableContent));
+
+        if(Config::inst()->get(self::class, 'clear_contentfield')) {
             $this->owner->Content = '';
         }
 
         // set theme_enabled back to what it was
-        Config::inst()->update('SSViewer', 'theme_enabled', $originalThemeEnabled);
+        $viewer_config->update('SSViewer', 'theme_enabled', $originalThemeEnabled);
     }
 
     /**
      * @return boolean
      */
-    public function supportsElemental() {
+    public function supportsElemental()
+    {
         if ($this->owner->hasMethod('includeElemental')) {
             $res = $this->owner->includeElemental();
             if ($res !== null) {
@@ -261,117 +276,5 @@ class ElementalPageExtension extends DataExtension
         }
 
         return true;
-    }
-
-    /**
-     * Make sure there is always an ElementalArea for adding Elements
-     *
-     */
-    public function onBeforeWrite()
-    {
-        if(!$this->supportsElemental()) {
-            return;
-        }
-
-        if ($this->owner->hasMethod('ElementalArea')) {
-            $this->renderElementalSearchContent();
-        }
-
-        parent::onBeforeWrite();
-    }
-
-    /**
-     * Ensure that if there are elements that belong to this page
-     * and are virtualised (Virtual Element links to them), that we move the
-     * original element to replace one of the virtual elements
-     * But only if it's a delete not an unpublish
-     */
-    public function onBeforeDelete() {
-        if(Versioned::get_reading_mode() == 'Stage.Stage') {
-            $area = $this->owner->ElementalArea();
-            $area->delete();
-        }
-    }
-
-    /**
-     * If the page is duplicated, copy the elements across too.
-     *
-     * Gets called twice from either direction, due to bad DataObject and SiteTree code, hence the weird if statement
-     *
-     * @return Page The duplicated page
-     */
-    public function onAfterDuplicate($duplicatePage)
-    {
-        if ($this->owner->ID != 0 && $this->owner->ID < $duplicatePage->ID) {
-            $originalElementalArea = $this->owner->getComponent('ElementalArea');
-            $duplicateElementalArea = $originalElementalArea->duplicate(false);
-            $duplicateElementalArea->write();
-            $duplicatePage->ElementalAreaID = $duplicateElementalArea->ID;
-            $duplicatePage->write();
-
-            foreach ($originalElementalArea->Items() as $originalElement) {
-                $duplicateElement = $originalElement->duplicate(true);
-
-                // manually set the ParentID of each element, so we don't get versioning issues
-                DB::query(sprintf("UPDATE Element SET ParentID = %d WHERE ID = %d", $duplicateElementalArea->ID, $duplicateElement->ID));
-            }
-        }
-    }
-
-    /**
-     * Publish
-     */
-    public function onAfterPublish()
-    {
-        if ($id = $this->owner->ElementalAreaID) {
-            $elements = Versioned::get_by_stage(BaseElement::class, 'Stage', "ParentID = '$id'");
-            $staged = array();
-
-            foreach ($elements as $element) {
-                $staged[] = $element->ID;
-
-                $element->publish('Stage', 'Live');
-            }
-
-            // remove any elements that are on live but not in draft.
-            $elements = Versioned::get_by_stage(BaseElement::class, 'Live', "ParentID = '$id'");
-
-            foreach ($elements as $element) {
-                if (!in_array($element->ID, $staged)) {
-                    $element->deleteFromStage('Live');
-                }
-            }
-        }
-    }
-
-    /**
-     * Roll back all changes if the parent page has a rollback event
-     *
-     * Only do rollback if it's the 'cancel draft changes' rollback, not a specific version
-     * rollback.
-     *
-     * @param string $version
-     * @return null
-     */
-    public function onBeforeRollback($version)
-    {
-        if ($version !== 'Live') {
-            // we don't yet have a smart way of rolling back to a specific version
-            return;
-        }
-        if ($id = $this->owner->ElementalAreaID) {
-            $elements = Versioned::get_by_stage(BaseElement::class, 'Live', "ParentID = '$id'");
-            $staged = array();
-
-            foreach ($elements as $element) {
-                $staged[] = $element->ID;
-
-                $element->invokeWithExtensions('onBeforeRollback', $element);
-
-                $element->publish('Live', 'Stage', false);
-
-                $element->invokeWithExtensions('onAfterRollback', $element);
-            }
-        }
     }
 }

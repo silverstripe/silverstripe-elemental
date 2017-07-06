@@ -2,16 +2,16 @@
 
 namespace DNADesign\Elemental\Models;
 
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\TabSet;
-use SilverStripe\Forms\Tab;
-use SilverStripe\Forms\LiteralField;
-use SilverStripe\ORM\FieldType\DBHTMLText;
 use DNADesign\Elemental\Controllers\ElementController;
-use Exception;
 use DNADesign\Elemental\Models\BaseElement;
 
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\Tab;
+use SilverStripe\Forms\TabSet;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 
+use Exception;
 
 /**
  * Virtual Linked Element.

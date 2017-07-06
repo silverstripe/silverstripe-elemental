@@ -27,6 +27,14 @@ class ElementalArea extends DataObject
         'Elements' => BaseElement::class
     );
 
+    private static $extensions = array(
+        Versioned::class
+    );
+
+    private static $owns = array(
+        'Elements'
+    );
+
     private static $table_name = 'ElementalArea';
 
     public static function elemental_page_types() {
@@ -39,6 +47,10 @@ class ElementalArea extends DataObject
         return $elementalClasses;
     }
 
+    public function forTemplate() {
+        return $this->renderWith('ElementalArea');
+    }
+
     /**
      * @return HasManyList
      */
@@ -47,10 +59,6 @@ class ElementalArea extends DataObject
         return $this->Elements(array(
             'Enabled' => 1
         ));
-    }
-
-    public function forTemplate() {
-        return $this->renderWith('ElementalArea');
     }
 
     /**
@@ -67,8 +75,6 @@ class ElementalArea extends DataObject
         if (!is_null($items)){
             foreach ($items as $element) {
                 $controller = $element->getController();
-
-                $controller->doInit();
                 $controllers->push($controller);
             }
         }

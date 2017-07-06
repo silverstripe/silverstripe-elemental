@@ -2,18 +2,27 @@
 
 namespace DNADesign\Elemental\Models;
 
-use DNADesign\Elemental\ElementalGridFieldAddExistingAutocompleter;
-use DNADesign\Elemental\ElementalGridFieldAddNewMultiClass;
-use DNADesign\Elemental\ElementalGridFieldDeleteAction;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Extensions\ElementalPublishChildren;
+use DNADesign\Elemental\Forms\ElementalGridFieldAddExistingAutocompleter;
+use DNADesign\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
+use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementVirtualLinked;
 
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+use SilverStripe\Forms\GridField\GridFieldPaginator;
+use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\GridFieldExtensions\GridFieldOrderableRows;
+use SilverStripe\ORM\ArrayList;
+use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 
 /**
@@ -33,25 +42,29 @@ class ElementList extends BaseElement
         'Elements' => BaseElement::class
     );
 
-    private static $extensions = array(
-        ElementalPublishChildren::class
+    private static $owns = array(
+        'Elements'
     );
 
     private static $table_name = 'ElementList';
-
-    private static $duplicate_relations = array(
-        'Elements'
-    );
-
-    private static $publishable_items = array(
-        'Elements'
-    );
 
     private static $title = 'Element List';
 
     private static $description = 'Orderable list of elements';
 
     private static $enable_title_in_template = true;
+
+    /**
+     * Ensure that we tidy up Elements if we delete this list
+     */
+    public function onAfterDelete()
+    {
+        if(Versioned::get_reading_mode() == 'Stage.Stage') {
+            foreach ($this->Elements() as $element) {
+                $element->delete();
+            }
+        }
+    }
 
     /**
      * @return FieldList
@@ -70,25 +83,26 @@ class ElementList extends BaseElement
             $desc->setRows(5);
             $fields->addFieldToTab('Root.Main', $desc);
 
-
             if ($isInDb) {
                 $adder = new ElementalGridFieldAddNewMultiClass('buttons-before-left');
 
-                $list = $this->getAvailableTypes();
+                $list = ElementalPageExtension::get_available_types_for_class(self::class);
 
                 if($list) {
                     $adder->setClasses($list);
                 }
 
-                $config = GridFieldConfig_RecordEditor::create(100);
-                $config->addComponent(new GridFieldSortableRows('Sort'));
-                $config->removeComponentsByType('GridFieldAddNewButton');
-                $config->removeComponentsByType('GridFieldSortableHeader');
-                $config->removeComponentsByType('GridFieldDeleteAction');
-                $config->removeComponentsByType('GridFieldAddExistingAutocompleter');
-                $config->addComponent(new GridFieldTitleHeader());
-                $config->addComponent($adder);
-                $config->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter('buttons-before-right'));
+                $config = GridFieldConfig_RecordEditor::create(100)
+                    ->removeComponentsByType(array(
+                        GridFieldAddNewButton::class,
+                        GridFieldSortableHeader::class,
+                        GridFieldDeleteAction::class,
+                        GridFieldAddExistingAutocompleter::class
+                    ))
+                    ->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter('buttons-before-right'))
+                    ->addComponent(new GridFieldTitleHeader())
+                    ->addComponent($adder)
+                    ->addComponent(new GridFieldOrderableRows('Sort'));
 
                 if ($this->owner->canDelete()) {
                     $config->addComponent(new ElementalGridFieldDeleteAction());
@@ -120,54 +134,13 @@ class ElementList extends BaseElement
     }
 
     /**
-     * @return array
+     * @return HasManyList
      */
-    public function getAvailableTypes()
+    public function ItemsToRender()
     {
-        if (is_array($this->config()->get('allowed_elements'))) {
-            $list = $this->config()->get('allowed_elements');
-
-            if($this->config()->get('sort_types_alphabetically') !== false) {
-                $sorted = array();
-
-                foreach ($list as $class) {
-                    $inst = singleton($class);
-
-                    if ($inst->canCreate()) {
-                        $sorted[$class] = singleton($class)->i18n_singular_name();
-                    }
-                }
-
-                $list = $sorted;
-                asort($list);
-            }
-        } else {
-            $classes = ClassInfo::subclassesFor(BaseElement::class);
-            $list = array();
-            unset($classes[BaseElement::class]);
-
-            $disallowedElements = (array) $this->config()->get('disallowed_elements');
-
-            if (!in_array(ElementVirtualLinked::class, $disallowedElements)) {
-                array_push($disallowedElements, ElementVirtualLinked::class);
-            }
-
-            foreach ($classes as $class) {
-                $inst = singleton($class);
-
-                if (!in_array($class, $disallowedElements) && $inst->canCreate()) {
-                    $list[$class] = singleton($class)->i18n_singular_name();
-                }
-            }
-
-            asort($list);
-        }
-
-        if (method_exists($this, 'sortElementalOptions')) {
-            $this->sortElementalOptions($list);
-        }
-
-        return $list;
+        return $this->Elements(array(
+            'Enabled' => 1
+        ));
     }
 
     /**
@@ -175,31 +148,18 @@ class ElementList extends BaseElement
      * controller, making it easier to access and process form logic and
      * actions stored in {@link ElementController}.
      *
-     * @return SS_List - Collection of {@link ElementController} instances.
+     * @return ArrayList - Collection of {@link ElementController} instances.
      */
     public function ElementControllers()
     {
         $controllers = new ArrayList();
-
-        foreach($this->Elements()->filter('Enabled', 1) as $element) {
-            $controller = $element->getController();
-
-            $controller->init();
-            $controllers->push($controller);
-        }
-
-        return $controllers;
-    }
-
-    /**
-     * Ensure that we tidy up Elements if we delete this list
-     */
-    public function onAfterDelete()
-    {
-        if(Versioned::get_reading_mode() == 'Stage.Stage') {
-            foreach ($this->Elements() as $element) {
-                $element->delete();
+        $items = $this->ItemsToRender();
+        if (!is_null($items)){
+            foreach ($items as $element) {
+                $controller = $element->getController();
+                $controllers->push($controller);
             }
         }
+        return $controllers;
     }
 }
