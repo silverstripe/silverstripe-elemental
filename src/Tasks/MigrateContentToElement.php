@@ -2,9 +2,10 @@
 
 namespace DNADesign\Elemental\Tasks;
 
-use SilverStripe\Dev\BuildTask;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
+
+use SilverStripe\Dev\BuildTask;
 
 class MigrateContentToElement extends BuildTask
 {

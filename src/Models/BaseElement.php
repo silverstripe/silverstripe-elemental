@@ -76,8 +76,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     );
 
     private static $extensions = array(
-        Versioned::class,
-        ElementalDuplicationExtension::class
+        Versioned::class
     );
 
     private static $table_name = 'Element';
@@ -525,7 +524,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         }
 
         $this->controller = Injector::inst()->create(self::$controller_class, $this);
-
+        $this->controller->doInit();
         return $this->controller;
     }
 
