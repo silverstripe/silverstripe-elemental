@@ -7,7 +7,7 @@ use SilverStripe\Forms\TabSet;
 use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use DNADesign\Elemental\Controllers\Element_Controller;
+use DNADesign\Elemental\Controllers\ElementController;
 use Exception;
 use DNADesign\Elemental\Models\BaseElement;
 
@@ -138,22 +138,8 @@ class ElementVirtualLinked extends BaseElement
     }
 }
 
-class ElementVirtualLinked_Controller extends Element_Controller
+class ElementVirtualLinkedController extends ElementController
 {
-
-    protected $controllerClass;
-
-    public function __construct($element)
-    {
-        parent::__construct($element);
-
-        $controllerClass = get_class($this->LinkedElement()) . '_Controller';
-        if (class_exists($controllerClass)) {
-            $this->controllerClass = $controllerClass;
-        } else {
-            $this->controllerClass = 'Element_Controller';
-        }
-    }
 
     /**
      * Returns the current element in scope rendered into its' holder
@@ -172,7 +158,7 @@ class ElementVirtualLinked_Controller extends Element_Controller
         try {
             $retVal = parent::__call($method, $arguments);
         } catch (Exception $e) {
-            $controller = new $this->controllerClass($this->LinkedElement());
+            $controller = $this->LinkedElement()->getController();
             $retVal = call_user_func_array(array($controller, $method), $arguments);
         }
         return $retVal;
@@ -184,7 +170,7 @@ class ElementVirtualLinked_Controller extends Element_Controller
             return true;
         }
 
-        $controller = new $this->controllerClass($this->LinkedElement());
+        $controller = $this->LinkedElement()->getController();
         return $controller->hasMethod($action);
     }
 
@@ -194,7 +180,7 @@ class ElementVirtualLinked_Controller extends Element_Controller
             return true;
         }
 
-        $controller = new $this->controllerClass($this->LinkedElement());
+        $controller = $this->LinkedElement()->getController();
         return $controller->hasAction($action);
     }
 
@@ -204,7 +190,7 @@ class ElementVirtualLinked_Controller extends Element_Controller
             return true;
         }
 
-        $controller = new $this->controllerClass($this->LinkedElement());
+        $controller = $this->LinkedElement()->getController();
         return $controller->checkAccessAction($action);
     }
 }

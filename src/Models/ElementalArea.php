@@ -7,6 +7,7 @@ use SilverStripe\Versioned\Versioned;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\HasManyList;
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\Core\Extensible;
 use SilverStripe\CMS\Model\SiteTree;
 
@@ -46,6 +47,32 @@ class ElementalArea extends DataObject
         return $this->Elements(array(
             'Enabled' => 1
         ));
+    }
+
+    public function forTemplate() {
+        return $this->renderWith('ElementalArea');
+    }
+
+    /**
+     * Used in template instead of {@link Elements()} to wrap each element in its
+     * controller, making it easier to access and process form logic and
+     * actions stored in {@link ElementController}.
+     *
+     * @return ArrayList - Collection of {@link ElementController} instances.
+     */
+    public function ElementControllers()
+    {
+        $controllers = new ArrayList();
+        $items = $this->ItemsToRender();
+        if (!is_null($items)){
+            foreach ($items as $element) {
+                $controller = $element->getController();
+
+                $controller->doInit();
+                $controllers->push($controller);
+            }
+        }
+        return $controllers;
     }
 
     /**

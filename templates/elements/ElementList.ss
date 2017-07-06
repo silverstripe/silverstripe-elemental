@@ -6,11 +6,11 @@
 
 $ListDescription
 
-<% if $WidgetControllers %>
+<% if $ElementControllers %>
 	<ul class="$ClassName <% if $ExtraClass %> $ExtraClass<% end_if %>">
-		<% loop $WidgetControllers %>
+		<% loop $ElementControllers %>
 			<li class="nested_element nested_element__{$ClassName.LowerCase}">
-				$WidgetHolder
+				$ElementHolder
 			</li>
 		<% end_loop %>
 	</ul>
