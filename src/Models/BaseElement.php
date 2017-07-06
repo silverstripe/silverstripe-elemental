@@ -33,6 +33,9 @@ use SilverStripe\Security\Permission;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
+use SilverStripe\Core\Injector\Injector;
+
+use Exception;
 
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Models\ElementList;
@@ -78,6 +81,8 @@ class BaseElement extends DataObject implements CMSPreviewable
     );
 
     private static $table_name = 'Element';
+
+    private static $controller_class = ElementController::class;
 
     /**
      * @var array
@@ -515,18 +520,11 @@ class BaseElement extends DataObject implements CMSPreviewable
             return $this->controller;
         }
 
-        foreach (array_reverse(ClassInfo::ancestry($this->class)) as $elementClass) {
-            $controllerClass = '{$elementClass}Controller';
-            if (class_exists($controllerClass)) {
-                break;
-            }
+        if (!class_exists(self::$controller_class)) {
+            throw new Exception('Could not find controller class ' . self::$controller_class . ' as defined in ' . self::class);
         }
 
-        if (!class_exists($controllerClass)) {
-            throw new Exception("Could not find controller class for $this->classname");
-        }
-
-        $this->controller = Injector::inst()->create($controllerClass, $this);
+        $this->controller = Injector::inst()->create(self::$controller_class, $this);
 
         return $this->controller;
     }
@@ -581,6 +579,10 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function RenderElement()
     {
+        return $this->renderWith($this->getRenderTemplates());
+    }
+
+    public function getRenderTemplates() {
         $classes = ClassInfo::ancestry($this->ClassName);
         $classes[self::class] = self::class;
         $classes = array_reverse($classes);
@@ -590,8 +592,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             $templates[] = DataObjectPreviewController::stripNamespacing($value);
             if ($value == BaseElement::class) break;
         }
-
-        return $this->renderWith($templates);
+        return $templates;
     }
 
     public function SimpleClassName() {

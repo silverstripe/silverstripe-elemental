@@ -25,7 +25,7 @@ use SilverStripe\Security\Member;
  *
  * @package Elemental
  */
-class Element_Controller extends Controller
+class ElementController extends Controller
 {
     /**
      * @var Element
@@ -47,7 +47,7 @@ class Element_Controller extends Controller
 
     /**
      * Cycles up the controller stack until it finds an Element controller
-     * This is needed becauseController::currreturns the element controller,
+     * This is needed becauseController::curr returns the element controller,
      * which means anyLinkfunction turns into endless loop.
      *
      * @return Controller
@@ -100,14 +100,14 @@ class Element_Controller extends Controller
     }
 
     /**
-     * Overloaded from {@link Element->Content()} to allow for controller / form
+     * Overloaded from {@link Element->RenderElement()} to allow for controller / form
      * linking.
      *
      * @return string HTML
      */
     public function RenderElement()
     {
-        return $this->renderWith(array_reverse(ClassInfo::ancestry($this->element->class)));
+        return $this->renderWith($this->element->getRenderTemplates());
     }
 
     /**

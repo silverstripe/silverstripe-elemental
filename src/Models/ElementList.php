@@ -47,7 +47,7 @@ class ElementList extends BaseElement
         'Elements'
     );
 
-    private static $title = 'Element List Element';
+    private static $title = 'Element List';
 
     private static $description = 'Orderable list of elements';
 

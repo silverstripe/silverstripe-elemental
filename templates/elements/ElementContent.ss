@@ -1,3 +1,3 @@
-<div class="element_content__content <% if Style %>element_content__$CssStyle<% end_if %>">
+<div class="elementcontent-content <% if Style %>elementcontent--$CssStyle<% end_if %>">
 	$HTML
 </div>
