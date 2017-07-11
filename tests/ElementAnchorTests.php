@@ -24,10 +24,10 @@ class ElementAnchorTests extends FunctionalTest {
         Config::inst()->update(BaseElement::class, 'disable_pretty_anchor_name', true);
 
         $area = ElementalArea::create();
-        $area->Widgets()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 1)));
-        $area->Widgets()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 2)));
-        $area->Widgets()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 3)));
-        $area->Widgets()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 4)));
+        $area->Elements()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 1)));
+        $area->Elements()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 2)));
+        $area->Elements()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 3)));
+        $area->Elements()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 4)));
         $area->write();
 
         $recordSet = $area->Elements()->toArray();
@@ -44,10 +44,10 @@ class ElementAnchorTests extends FunctionalTest {
         Config::inst()->update(BaseElement::class, 'enable_title_in_template', true);
 
         $area = ElementalArea::create();
-        $area->Widgets()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 1)));
-        $area->Widgets()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 2)));
-        $area->Widgets()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 3)));
-        $area->Widgets()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 4)));
+        $area->Elements()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 1)));
+        $area->Elements()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 2)));
+        $area->Elements()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 3)));
+        $area->Elements()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 4)));
         $area->write();
 
         $recordSet = $area->Elements()->toArray();

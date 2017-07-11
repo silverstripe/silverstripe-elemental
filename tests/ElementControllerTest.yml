@@ -1,0 +1,10 @@
+DNADesign\Elemental\Tests\ElementControllerTest\TestElement:
+  element1:
+    Title: Element 1
+DNADesign\Elemental\Models\ElementArea:
+  area1:
+    Elements: =>DNADesign\Elemental\Tests\ElementControllerTest\TestElement.element1
+DNADesign\Elemental\Tests\ElementControllerTest\TestPage:
+  page1:
+    Title: Page 1
+    ElementControllerTestSidebar: =>DNADesign\Elemental\Models\ElementalArea.area1

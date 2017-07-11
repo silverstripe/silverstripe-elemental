@@ -1,0 +1,6 @@
+Page:
+  elementaldemo:
+    Title: Test Elemental
+SilverStripe\CMS\Model\RedirectorPage:
+  elementredirectpage:
+    Title: Redirector Page
