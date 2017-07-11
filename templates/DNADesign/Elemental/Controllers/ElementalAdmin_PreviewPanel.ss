@@ -10,5 +10,5 @@
 		</div>
 	</div>
 	<div class="toolbar toolbar--south cms-content-controls cms-preview-controls qwe"></div>
-	<div class="cms-preview-overlay ui-widget-overlay-light"></div>
+	<div class="cms-preview-overlay ui-element-overlay-light"></div>
 </div>

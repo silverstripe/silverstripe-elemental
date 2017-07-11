@@ -6,14 +6,14 @@
 
 ## Introduction
 
-This module extends a page type to swap the content area for a GridField and manageable elements (widgets) to compose
+This module extends a page type to swap the content area for a GridField and manageable elements to compose
 a page out of rather than a single text field. Features supported:
 
 * Versioning of elements
 * Ability to add, remove supported elements per page.
 
-The module provides basic markup for each of the widgets but you will likely need to provide your own styles. Replace
-the `$Content` variable with `$ElementArea` and rely on the markup of the individual widgets.
+The module provides basic markup for each of the elements but you will likely need to provide your own styles. Replace
+the `$Content` variable with `$ElementArea` and rely on the markup of the individual elements.
 
 ## Installation
 
@@ -34,8 +34,8 @@ In your page type template use `$ElementArea` to render the elements to the page
 
 ### Customize HTML and Markup
 
-The basic element area is rendered into the standard `WidgetArea` template. This loops over each of the widget
-controller instances. Each controller instance will render `$WidgetHolder` which represented the widget contained within
+The basic element area is rendered into the standard `ElementArea` template. This loops over each of the element
+controller instances. Each controller instance will render `$ElementHolder` which represented the element contained within
 a holder `div`. The wrapper div is the `ElementHolder.ss` template.
 
 ### Limit Allowed Elements
