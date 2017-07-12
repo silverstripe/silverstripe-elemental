@@ -563,7 +563,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         return $this->RenderElement();
     }
 
-    public function previewRender() {
+    public function renderPreview() {
         return $this->forTemplate();
     }
 
