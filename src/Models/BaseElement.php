@@ -587,6 +587,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         $classes = array_reverse($classes);
         $templates = array();
         foreach($classes as $key => $value) {
+            $templates[] = $value;
             $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value);
             $templates[] = DataObjectPreviewController::stripNamespacing($value);
             if ($value == BaseElement::class) break;
