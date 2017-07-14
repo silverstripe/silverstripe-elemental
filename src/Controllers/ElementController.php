@@ -73,7 +73,20 @@ class ElementController extends Controller
           return $controller->Link($action);
         }
 
-        return parent::Link($action);
+        $id = ($this->element) ? $this->element->ID : null;
+
+        $segment = Controller::join_links('element', $id, $action);
+
+        $page = Director::get_current_page();
+        if($page && !($page instanceof ElementController)) {
+            return $page->Link($segment);
+        }
+
+        if ($controller = $this->getParentController()) {
+            return $controller->Link($segment);
+        }
+
+        return $segment;
     }
 
     /**
