@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\Tests\ElementControllerTest;
+namespace DNADesign\Elemental\Tests;
 
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\Forms\FieldList;
