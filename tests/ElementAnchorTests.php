@@ -13,9 +13,6 @@ use DNADesign\Elemental\Models\ElementalArea;
  * @subpackage tests
  */
 class ElementAnchorTests extends FunctionalTest {
-    public function setUp() {
-        parent::setUp();
-    }
 
     /**
      * Test to ensure backwards compatibility with old Anchor IDs.
