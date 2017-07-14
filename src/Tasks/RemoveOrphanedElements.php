@@ -22,7 +22,7 @@ class RemoveOrphanedElements extends BuildTask
             }
         }
         echo 'Found ' . $deleteCount . ' areas no longer used';
-
+        // TODO: needs rewriting for multiple elemental areas
         $bogusNoAreas = BaseElement::get()
             ->leftJoin('ElementalArea', 'ea.ID = ElementalArea.ParentID', 'ea')
             ->where('ea.ID IS NULL and BaseElement.ListID = 0');

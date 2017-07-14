@@ -2,17 +2,20 @@
 
 namespace DNADesign\Elemental\Models;
 
-use SilverStripe\ORM\UnsavedRelationList;
-use SilverStripe\Versioned\Versioned;
+use DNADesign\Elemental\Extensions\ElementalAreasExtension;
+use DNADesign\Elemental\Models\BaseElement;
+
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Convert;
+use SilverStripe\Core\Extensible;
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\HasManyList;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\Core\Extensible;
-use SilverStripe\CMS\Model\SiteTree;
-
-use DNADesign\Elemental\Models\BaseElement;
-use DNADesign\Elemental\Extensions\ElementalPageExtension;
+use SilverStripe\ORM\UnsavedRelationList;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\Requirements;
+use SilverStripe\View\SSViewer;
 
 /**
  * @package elemental
@@ -20,7 +23,8 @@ use DNADesign\Elemental\Extensions\ElementalPageExtension;
 class ElementalArea extends DataObject
 {
     private static $db = array(
-        'OwnerClassName' => 'Varchar'
+        'OwnerClassName' => 'Varchar',
+        'SearchContent' => 'HTMLText'
     );
 
     private static $has_many = array(
@@ -41,14 +45,57 @@ class ElementalArea extends DataObject
     {
         $elementalClasses = array();
         foreach (ClassInfo::getValidSubClasses(SiteTree::class) as $class) {
-            if (Extensible::has_extension($class, ElementalPageExtension::class)) {
+            if (Extensible::has_extension($class, ElementalAreasExtension::class)) {
                $elementalClasses[] = $class;
             }
         }
         return $elementalClasses;
     }
 
-    public function forTemplate() {
+    public function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
+        // $this->SearchContent = $this->renderSearchContent();
+    }
+
+    /**
+     * Render the elements out and push into ElementContent so that Solr can use that field for searching
+     * SS4 branch not tested, as still waiting for fulltextsearch to get an upgrade
+     */
+    public function renderSearchContent()
+    {
+        // enable theme in case elements are being rendered with templates stored in theme folder
+        $viewer_config = SSViewer::config();
+        $originalThemeEnabled = $viewer_config->get('theme_enabled');
+        $viewer_config->update('theme_enabled', true);
+
+        // Copy elements content to ElementContent to enable search
+        $searchableContent = array();
+
+        Requirements::clear();
+
+        foreach ($this->Elements() as $element) {
+            if ($element->config()->exclude_from_content) {
+                continue;
+            }
+
+            $controller = $element->getController();
+
+            // concert to raw so that html parts of template aren't matched in search results, e.g link hrefs
+            array_push($searchableContent, Convert::html2raw($controller->ElementHolder()));
+        }
+
+        Requirements::restore();
+
+        $renderedSearchContent = trim(implode(' ', $searchableContent));
+
+        // set theme_enabled back to what it was
+        $viewer_config->update('SSViewer', 'theme_enabled', $originalThemeEnabled);
+        return $renderedSearchContent;
+    }
+
+    public function forTemplate()
+    {
         return $this->renderWith('ElementalArea');
     }
 
@@ -91,28 +138,36 @@ class ElementalArea extends DataObject
     {
         if ($this->OwnerClassName) {
             $class = $this->OwnerClassName;
-            $page = $class::get()->filter('ElementalAreaID', $this->ID);
-            if ($page && $page->exists()) {
-                return $page->first();
+            $elementalAreaRelations = ElementalAreasExtension::get_elemental_area_relations(singleton($class));
+            foreach($elementalAreaRelations as $eaRelationship) {
+                $areaID = $eaRelationship . 'ID';
+                $page = $class::get()->filter($areaID, $this->ID);
+                if ($page && $page->exists()) {
+                    return $page->first();
+                }
             }
         }
 
         $originalMode = Versioned::get_stage();
-        Versioned::set_stage('Stage');
+        if (!$originalMode) {
+            $originalMode = Versioned::DRAFT;
+        }
+        Versioned::set_stage(Versioned::DRAFT);
         $elementalPageTypes = self::elemental_page_types();
         foreach($elementalPageTypes as $elementalPageType) {
-            $page = $elementalPageType::get()->filter('ElementalAreaID', $this->ID);
-            if ($page && $page->exists()) {
-                Versioned::set_stage($originalMode);
-                $this->OwnerClassName = $elementalPageType;
-                $this->write();
-                return $page->first();
+            $elementalAreaRelations = ElementalAreasExtension::get_elemental_area_relations(singleton($elementalPageType));
+            foreach($elementalAreaRelations as $eaRelationship) {
+                $areaID = $eaRelationship . 'ID';
+                $page = $elementalPageType::get()->filter($areaID, $this->ID);
+                if ($page && $page->exists()) {
+                    Versioned::set_stage($originalMode);
+                    $this->OwnerClassName = $elementalPageType;
+                    $this->write();
+                    return $page->first();
+                }
             }
         }
-
         Versioned::set_stage($originalMode);
         return false;
     }
-
-
 }
