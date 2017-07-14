@@ -37,7 +37,8 @@ class ElementalArea extends DataObject
 
     private static $table_name = 'ElementalArea';
 
-    public static function elemental_page_types() {
+    public static function elemental_page_types()
+    {
         $elementalClasses = array();
         foreach (ClassInfo::getValidSubClasses(SiteTree::class) as $class) {
             if (Extensible::has_extension($class, ElementalPageExtension::class)) {
