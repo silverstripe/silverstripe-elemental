@@ -519,11 +519,13 @@ class BaseElement extends DataObject implements CMSPreviewable
             return $this->controller;
         }
 
-        if (!class_exists(self::$controller_class)) {
-            throw new Exception('Could not find controller class ' . self::$controller_class . ' as defined in ' . self::class);
+        $controllerClass = self::config()->controller_class;
+
+        if (!class_exists($controllerClass)) {
+            throw new Exception('Could not find controller class ' . $controllerClass . ' as defined in ' . static::class);
         }
 
-        $this->controller = Injector::inst()->create(self::$controller_class, $this);
+        $this->controller = Injector::inst()->create($controllerClass, $this);
         $this->controller->doInit();
         return $this->controller;
     }
