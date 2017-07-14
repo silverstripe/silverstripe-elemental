@@ -41,8 +41,6 @@ use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Models\ElementList;
 use DNADesign\Elemental\Models\ElementVirtualLinked;
 use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
-use DNADesign\Elemental\Extensions\ElementalPageExtension;
-use DNADesign\Elemental\Extensions\ElementalDuplicationExtension;
 
 /**
  * @package elemental
