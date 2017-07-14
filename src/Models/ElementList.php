@@ -2,7 +2,7 @@
 
 namespace DNADesign\Elemental\Models;
 
-use DNADesign\Elemental\Extensions\ElementalPageExtension;
+use DNADesign\Elemental\Extensions\ElementalAreasExtension;
 use DNADesign\Elemental\Extensions\ElementalPublishChildren;
 use DNADesign\Elemental\Forms\ElementalGridFieldAddExistingAutocompleter;
 use DNADesign\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
@@ -86,7 +86,7 @@ class ElementList extends BaseElement
             if ($isInDb) {
                 $adder = new ElementalGridFieldAddNewMultiClass('buttons-before-left');
 
-                $list = ElementalPageExtension::get_available_types_for_class(self::class);
+                $list = ElementalAreasExtension::get_available_types_for_class(self::class);
 
                 if($list) {
                     $adder->setClasses($list);

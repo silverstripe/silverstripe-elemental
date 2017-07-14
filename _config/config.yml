@@ -5,3 +5,9 @@ Name: elemental
 LeftAndMain:
   extra_requirements_css:
     - 'elemental/css/elemental-admin.css'
+
+SilverStripe\CMS\Controllers\ContentController:
+  extensions:
+    - DNADesign\Elemental\Extensions\ElementalContentControllerExtension
+  url_handlers:
+    'element/$ID!': 'handleElement'
