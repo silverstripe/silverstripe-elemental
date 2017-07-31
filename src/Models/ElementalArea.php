@@ -56,7 +56,7 @@ class ElementalArea extends DataObject
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-         $this->owner->SearchContent = $this->renderSearchContent();
+         $this->SearchContent = $this->renderSearchContent();
     }
 
     /**
