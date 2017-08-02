@@ -5,6 +5,7 @@ namespace DNADesign\Elemental\Controllers;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\CMS\Controllers\CMSSiteTreeFilter;
 use SilverStripe\Forms\DateField;
+use SilverStripe\ORM\ArrayList;
 
 class ElementalAreaCMSSiteTreeFilter extends CMSSiteTreeFilter {
 
@@ -18,8 +19,11 @@ class ElementalAreaCMSSiteTreeFilter extends CMSSiteTreeFilter {
 	{
 		$elements = ElementalArea::get();
 		$elements = $this->applyDefaultFilters($elements);
-
-		return $elements;
+		$pages = new ArrayList();
+		foreach($elements as $element) {
+			$pages->push($element->getOwnerPage());
+		}
+		return $pages;
 	}
 
 	protected function applyDefaultFilters($query)
