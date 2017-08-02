@@ -105,9 +105,7 @@ class ElementalAreasExtension extends DataExtension
             }
         }
 
-        if (method_exists($class, 'sortElementalOptions')) {
-            $this->owner->sortElementalOptions($list);
-        } else if($config->get('sort_types_alphabetically') !== false) {
+        if($config->get('sort_types_alphabetically') !== false) {
             asort($list);
         }
 
@@ -219,12 +217,17 @@ class ElementalAreasExtension extends DataExtension
         $elementalAreaRelations = self::get_elemental_area_relations($this->owner);
         foreach($elementalAreaRelations as $eaRelationship) {
             $areaID = $eaRelationship . 'ID';
+
             if (!$this->owner->$areaID) {
                 $area = new ElementalArea();
                 $area->OwnerClassName = $this->owner->ClassName;
                 $area->write();
                 $this->owner->$areaID = $area->ID;
-            }
+            } else {
+            	if ($area = ElementalArea::get()->filter('ID', $this->owner->$areaID)->first()) {
+					$area->write();
+				}
+			}
         }
 
         if(Config::inst()->get(self::class, 'clear_contentfield')) {

@@ -16,6 +16,7 @@ use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
+use Page;
 
 /**
  * @package elemental
@@ -55,7 +56,7 @@ class ElementalArea extends DataObject
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-        // $this->SearchContent = $this->renderSearchContent();
+         $this->SearchContent = $this->renderSearchContent();
     }
 
     /**
@@ -98,6 +99,18 @@ class ElementalArea extends DataObject
     {
         return $this->renderWith('ElementalArea');
     }
+
+	/**
+	 * Necessary to display results in CMS site search
+	 *
+	 * @return string
+	 */
+	public function Breadcrumbs() {
+		$ownerClassName = $this->OwnerClassName;
+		if($owner = $ownerClassName::get()->filter('ElementalAreaID', $this->ID)->first()) {
+			return '<a href="' . $owner->CMSEditLink() . '">' . $owner->Title . '</a>';
+		}
+	}
 
     /**
      * @return HasManyList
