@@ -167,26 +167,26 @@ class BaseElement extends DataObject implements CMSPreviewable
         $classes = array();
 
         // get all dataobject with the elemental extension
-        foreach(ClassInfo::subclassesFor('DataObject') as $className) {
-            if(Object::has_extension($className, ElementPageExtension::class)) {
-               $classes[] = $className;
+        foreach (ClassInfo::subclassesFor('DataObject') as $className) {
+            if (Object::has_extension($className, ElementPageExtension::class)) {
+                $classes[] = $className;
             }
         }
 
         // get all allowd_elements for these classes
         $allowed = array();
-        foreach($classes as $className) {
+        foreach ($classes as $className) {
             $allowed_elements = Config::inst()->get($className, 'allowed_elements');
             if ($allowed_elements) {
                 $allowed = array_merge($allowed, $allowed_elements);
             }
         }
 
-       // $allowed[] = 'ElementVirtualLinked';
+        // $allowed[] = 'ElementVirtualLinked';
         $allowed = array_unique($allowed);
 
         $elements = array();
-        foreach($allowed as $className) {
+        foreach ($allowed as $className) {
             $elements[$className] = _t($className, Config::inst()->get($className, 'title'));
         }
 
@@ -201,12 +201,14 @@ class BaseElement extends DataObject implements CMSPreviewable
     public function canView($member = null)
     {
         if ($this->hasMethod('getPage')) {
-            if($page = $this->getPage()) {
+            if ($page = $this->getPage()) {
                 return $page->canView($member);
             }
         }
 
-        if(Director::is_cli()) return true;
+        if (Director::is_cli()) {
+            return true;
+        }
 
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
@@ -222,7 +224,9 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
         }
 
-        if(Director::is_cli()) return true;
+        if (Director::is_cli()) {
+            return true;
+        }
 
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
@@ -241,7 +245,9 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
         }
 
-        if(Director::is_cli()) return true;
+        if (Director::is_cli()) {
+            return true;
+        }
 
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
@@ -249,9 +255,11 @@ class BaseElement extends DataObject implements CMSPreviewable
     /**
      * Basic permissions, defaults to page perms where possible
      */
-    public function canCreate($member = NULL, $context = Array())
+    public function canCreate($member = null, $context = array())
     {
-        if(Director::is_cli()) return true;
+        if (Director::is_cli()) {
+            return true;
+        }
 
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
@@ -267,10 +275,10 @@ class BaseElement extends DataObject implements CMSPreviewable
         parent::onBeforeWrite();
 
         if ($areaID = $this->ParentID) {
-        	if ($elementalArea = ElementalArea::get()->filter('ID', $areaID)->first()) {
-        		$elementalArea->write();
-			}
-		}
+            if ($elementalArea = ElementalArea::get()->filter('ID', $areaID)->first()) {
+                $elementalArea->write();
+            }
+        }
 
         if (!$this->Sort) {
             $parentID = ($this->ParentID) ? $this->ParentID : 0;
@@ -292,14 +300,14 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         parent::onBeforeDelete();
 
-        if(Versioned::get_reading_mode() == 'Stage.Stage') {
+        if (Versioned::get_reading_mode() == 'Stage.Stage') {
             $firstVirtual = false;
             $allVirtual = $this->getVirtualLinkedElements();
             if ($this->getPublishedVirtualLinkedElements()->Count() > 0) {
                 // choose the first one
                 $firstVirtual = $this->getPublishedVirtualLinkedElements()->First();
                 $wasPublished = true;
-            } else if ($allVirtual->Count() > 0) {
+            } elseif ($allVirtual->Count() > 0) {
                 // choose the first one
                 $firstVirtual = $this->getVirtualLinkedElements()->First();
                 $wasPublished = false;
@@ -322,7 +330,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
                 // clone has a new ID, so need to repoint
                 // all the other virtual elements
-                foreach($allVirtual as $virtual) {
+                foreach ($allVirtual as $virtual) {
                     if ($virtual->ID == $firstVirtual->ID) {
                         continue;
                     }
@@ -371,7 +379,8 @@ class BaseElement extends DataObject implements CMSPreviewable
             $lists = ElementList::get()->filter('ParentID', $this->ParentID);
 
             if ($lists->exists()) {
-                $fields->addFieldToTab('Root.Settings',
+                $fields->addFieldToTab(
+                    'Root.Settings',
                     $move = new DropdownField('MoveToListID', 'Move this to another list', $lists->map('ID', 'CMSTitle'), '')
                 );
 
@@ -380,7 +389,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
         }
 
-        if($virtual = $fields->dataFieldByName('VirtualClones')) {
+        if ($virtual = $fields->dataFieldByName('VirtualClones')) {
             if ($this->VirtualClones()->Count() > 0) {
                 $tab = $fields->findOrMakeTab('Root.VirtualClones');
                 $tab->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'));
@@ -443,10 +452,10 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         $fields = $this->scaffoldSearchFields();
         $elements = BaseElement::all_allowed_elements();
-        if(!$elements) {
+        if (!$elements) {
             $elements = ClassInfo::subclassesFor(self::class);
         }
-        foreach($elements as $key => $value) {
+        foreach ($elements as $key => $value) {
             if ($key == self::class) {
                 unset($elements[$key]);
                 continue;
@@ -569,7 +578,8 @@ class BaseElement extends DataObject implements CMSPreviewable
         return $this->RenderElement();
     }
 
-    public function renderPreview() {
+    public function renderPreview()
+    {
         return $this->forTemplate();
     }
 
@@ -587,21 +597,25 @@ class BaseElement extends DataObject implements CMSPreviewable
         return $this->renderWith($this->getRenderTemplates());
     }
 
-    public function getRenderTemplates() {
+    public function getRenderTemplates()
+    {
         $classes = ClassInfo::ancestry($this->ClassName);
         $classes[self::class] = self::class;
         $classes = array_reverse($classes);
         $templates = array();
-        foreach($classes as $key => $value) {
+        foreach ($classes as $key => $value) {
             $templates[] = $value;
             $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value);
             $templates[] = DataObjectPreviewController::stripNamespacing($value);
-            if ($value == BaseElement::class) break;
+            if ($value == BaseElement::class) {
+                break;
+            }
         }
         return $templates;
     }
 
-    public function SimpleClassName() {
+    public function SimpleClassName()
+    {
         return DataObjectPreviewController::stripNamespacing($this->ClassName);
     }
 
@@ -648,7 +662,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         if (!$this->config()->disable_pretty_anchor_name) {
             if ($this->hasMethod('getAnchorTitle')) {
                 $anchorTitle = $this->getAnchorTitle();
-            } else if ($this->config()->enable_title_in_template) {
+            } elseif ($this->config()->enable_title_in_template) {
                 $anchorTitle = $this->getField('Title');
             }
         }
@@ -680,7 +694,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         $usage = new ArrayList();
 
-        if($page = $this->getPage()) {
+        if ($page = $this->getPage()) {
             $usage->push($page);
             if ($this->virtualOwner) {
                 $page->setField('ElementType', 'Linked');
@@ -690,7 +704,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         }
 
         $linkedElements = ElementVirtualLinked::get()->filter('LinkedElementID', $this->ID);
-        foreach($linkedElements as $element) {
+        foreach ($linkedElements as $element) {
             $area = $element->Parent();
             if ($area instanceof ElementalArea && $page = $area->getOwnerPage()) {
                 $page->setField('ElementType', 'Linked');
@@ -706,7 +720,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         $usage = $this->getUsage();
         $arr = array();
-        foreach($usage as $page) {
+        foreach ($usage as $page) {
             $type = ($page->ElementType) ? sprintf("<em> - %s</em>", $page->ElementType) : null;
             $arr[] = sprintf("<a href=\"%s\" target=\"blank\">%s</a> %s", $page->CMSEditLink(), $page->Title, $type);
         }
@@ -718,7 +732,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
     public function Link()
     {
-        if($page = $this->getPage()) {
+        if ($page = $this->getPage()) {
             return $page->Link() . '#' . $this->getAnchor();
         }
     }
@@ -736,9 +750,9 @@ class BaseElement extends DataObject implements CMSPreviewable
 
     public function isCMSPreview()
     {
-        if(Controller::has_curr()) {
+        if (Controller::has_curr()) {
             $c = Controller::curr();
-            if($c->getRequest()->requestVar('CMSPreview')) {
+            if ($c->getRequest()->requestVar('CMSPreview')) {
                 return true;
             }
         }
@@ -831,10 +845,12 @@ class BaseElement extends DataObject implements CMSPreviewable
     public function isEndofLine($className)
     {
         $methodFromClass = ClassInfo::has_method_from(
-            $this->ClassName, 'getCMSFields', $className
+            $this->ClassName,
+            'getCMSFields',
+            $className
         );
 
-        if($methodFromClass) {
+        if ($methodFromClass) {
             return true;
         }
     }

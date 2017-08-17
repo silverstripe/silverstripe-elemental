@@ -10,7 +10,6 @@ use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
  */
 class ElementalGridFieldAddNewMultiClass extends GridFieldAddNewMultiClass
 {
-
     public function getClasses(GridField $grid)
     {
         $classes = parent::getClasses($grid);

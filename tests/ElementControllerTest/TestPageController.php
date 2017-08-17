@@ -11,5 +11,6 @@ use SilverStripe\View\SSViewer;
  * @package cms
  * @subpackage tests
  */
-class TestPageController extends PageController implements TestOnly {
+class TestPageController extends PageController implements TestOnly
+{
 }

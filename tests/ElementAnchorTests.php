@@ -12,12 +12,14 @@ use DNADesign\Elemental\Models\ElementalArea;
  * @package elemental
  * @subpackage tests
  */
-class ElementAnchorTests extends FunctionalTest {
+class ElementAnchorTests extends FunctionalTest
+{
 
     /**
      * Test to ensure backwards compatibility with old Anchor IDs.
      */
-    public function testDisablePrettyAnchor() {
+    public function testDisablePrettyAnchor()
+    {
         Config::inst()->update(BaseElement::class, 'disable_pretty_anchor_name', true);
 
         $area = ElementalArea::create();
@@ -37,7 +39,8 @@ class ElementAnchorTests extends FunctionalTest {
     /**
      * Test the stop-clashing logic if two BaseElement classes have the same $Title.
      */
-    public function testSameTitle() {
+    public function testSameTitle()
+    {
         Config::inst()->update(BaseElement::class, 'enable_title_in_template', true);
 
         $area = ElementalArea::create();

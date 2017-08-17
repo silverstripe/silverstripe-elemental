@@ -80,7 +80,8 @@ class ElementVirtualLinked extends BaseElement
         return $fields;
     }
 
-    public function getElementType() {
+    public function getElementType()
+    {
         return 'Virtual: ' . $this->LinkedElement()->getElementType();
     }
 

@@ -4,7 +4,6 @@ namespace DNADesign\Elemental\Extensions;
 
 use SilverStripe\ORM\DataExtension;
 
-
 /**
  * @package elemental
  */
@@ -34,10 +33,10 @@ class ElementalDuplicationExtension extends DataExtension
 
         // Duplicate many_many's
         $duplicateManyManyRelations = Config::inst()->get($thisClass, 'duplicate_many_many_relations');
-        if($duplicateManyManyRelations && !empty($duplicateManyManyRelations)) {
-            foreach($duplicateManyManyRelations as $relation) {
+        if ($duplicateManyManyRelations && !empty($duplicateManyManyRelations)) {
+            foreach ($duplicateManyManyRelations as $relation) {
                 $items = $original->$relation();
-                foreach($items as $item) {
+                foreach ($items as $item) {
                     $this->owner->$relation()->add($item);
                 }
             }

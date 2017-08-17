@@ -7,67 +7,65 @@ use SilverStripe\CMS\Controllers\CMSSiteTreeFilter;
 use SilverStripe\Forms\DateField;
 use SilverStripe\ORM\ArrayList;
 
-class ElementalAreaCMSSiteTreeFilter extends CMSSiteTreeFilter {
+class ElementalAreaCMSSiteTreeFilter extends CMSSiteTreeFilter
+{
+    public static function title()
+    {
+        return _t('DNADesign\\Elemental\\Controllers\\CMSSiteTreeFilter_Search.Title', "All Elemental content");
+    }
 
+    public function getFilteredPages()
+    {
+        $elements = ElementalArea::get();
+        $elements = $this->applyDefaultFilters($elements);
+        $pages = new ArrayList();
+        foreach ($elements as $element) {
+            $pages->push($element->getOwnerPage());
+        }
+        return $pages;
+    }
 
-	public static function title()
-	{
-		return _t('DNADesign\\Elemental\\Controllers\\CMSSiteTreeFilter_Search.Title', "All Elemental content");
-	}
+    protected function applyDefaultFilters($query)
+    {
+        $sng = ElementalArea::singleton();
+        foreach ($this->params as $name => $val) {
+            if (empty($val)) {
+                continue;
+            }
+            switch ($name) {
+                case 'Term':
 
-	public function getFilteredPages()
-	{
-		$elements = ElementalArea::get();
-		$elements = $this->applyDefaultFilters($elements);
-		$pages = new ArrayList();
-		foreach($elements as $element) {
-			$pages->push($element->getOwnerPage());
-		}
-		return $pages;
-	}
+                    $query = $query->filterAny(array(
+                        'SearchContent:PartialMatch' => $val
+                    ));
+                    break;
 
-	protected function applyDefaultFilters($query)
-	{
-		$sng = ElementalArea::singleton();
-		foreach ($this->params as $name => $val) {
-			if (empty($val)) {
-				continue;
-			}
-			switch ($name) {
-				case 'Term':
+                case 'LastEditedFrom':
+                    $fromDate = new DateField(null, null, $val);
+                    $query = $query->filter("LastEdited:GreaterThanOrEqual", $fromDate->dataValue().' 00:00:00');
+                    break;
 
-					$query = $query->filterAny(array(
-						'SearchContent:PartialMatch' => $val
-					));
-					break;
+                case 'LastEditedTo':
+                    $toDate = new DateField(null, null, $val);
+                    $query = $query->filter("LastEdited:LessThanOrEqual", $toDate->dataValue().' 23:59:59');
+                    break;
 
-				case 'LastEditedFrom':
-					$fromDate = new DateField(null, null, $val);
-					$query = $query->filter("LastEdited:GreaterThanOrEqual", $fromDate->dataValue().' 00:00:00');
-					break;
+                case 'ClassName':
+                    if ($val != 'All') {
+                        $query = $query->filter('ClassName', $val);
+                    }
+                    break;
 
-				case 'LastEditedTo':
-					$toDate = new DateField(null, null, $val);
-					$query = $query->filter("LastEdited:LessThanOrEqual", $toDate->dataValue().' 23:59:59');
-					break;
+                default:
+                    $field = $sng->dbObject($name);
 
-				case 'ClassName':
-					if ($val != 'All') {
-						$query = $query->filter('ClassName', $val);
-					}
-					break;
-
-				default:
-					$field = $sng->dbObject($name);
-
-					if ($field) {
-						$filter = $field->defaultSearchFilter();
-						$filter->setValue($val);
-						$query = $query->alterDataQuery(array($filter, 'apply'));
-					}
-			}
-		}
-		return $query;
-	}
-
+                    if ($field) {
+                        $filter = $field->defaultSearchFilter();
+                        $filter->setValue($val);
+                        $query = $query->alterDataQuery(array($filter, 'apply'));
+                    }
+            }
+        }
+        return $query;
+    }
 }

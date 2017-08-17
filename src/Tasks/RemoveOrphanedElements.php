@@ -6,7 +6,6 @@ use SilverStripe\Dev\BuildTask;
 
 class RemoveOrphanedElements extends BuildTask
 {
-
     protected $title = 'Remove Orphaned Elements';
 
     protected $description = 'Tidy up the database and remove elements that no longer belong to a valid page or list.';
@@ -15,7 +14,7 @@ class RemoveOrphanedElements extends BuildTask
     {
         $elementalAreas = ElementalArea::get();
         $deleteCount = 0;
-        foreach($elementalAreas as $elementalArea) {
+        foreach ($elementalAreas as $elementalArea) {
             if ($elementalArea->getOwnerPage() == false) {
                 $deleteCount++;
                 $elementalArea->delete();
@@ -27,7 +26,7 @@ class RemoveOrphanedElements extends BuildTask
             ->leftJoin('ElementalArea', 'ea.ID = ElementalArea.ParentID', 'ea')
             ->where('ea.ID IS NULL and BaseElement.ListID = 0');
         echo 'Found ' . $bogusNoAreas->Count() . ' bogus areas';
-        foreach($bogusNoAreas as $bogus) {
+        foreach ($bogusNoAreas as $bogus) {
             $bogus->delete();
         }
 
@@ -35,10 +34,9 @@ class RemoveOrphanedElements extends BuildTask
             ->leftJoin('ElementList', 'el.ID = BaseElement.ListID', 'el')
             ->where('el.ID IS NULL and BaseElement.ListID > 0');
         echo 'Found ' . $bogusNoLists->Count() . ' bogus lists';
-        foreach($bogusNoLists as $bogus) {
+        foreach ($bogusNoLists as $bogus) {
             echo $bogus->ListID;
             // $bogus->delete();
         }
     }
-
 }

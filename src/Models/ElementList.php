@@ -33,7 +33,6 @@ use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
  */
 class ElementList extends BaseElement
 {
-
     private static $db = array(
         'HideTitle' => 'Boolean',
         'ListDescription' => 'HTMLText'
@@ -60,7 +59,7 @@ class ElementList extends BaseElement
      */
     public function onAfterDelete()
     {
-        if(Versioned::get_reading_mode() == 'Stage.Stage') {
+        if (Versioned::get_reading_mode() == 'Stage.Stage') {
             foreach ($this->Elements() as $element) {
                 $element->delete();
             }
@@ -89,7 +88,7 @@ class ElementList extends BaseElement
 
                 $list = ElementalAreasExtension::get_available_types_for_class(self::class);
 
-                if($list) {
+                if ($list) {
                     $adder->setClasses($list);
                 }
 
@@ -110,7 +109,7 @@ class ElementList extends BaseElement
                 }
 
                 $searchList = BaseElement::get()->filter('AvailableGlobally', true);
-                if($list) {
+                if ($list) {
                     $searchList = $searchList->filter('ClassName', array_keys($list));
                 }
                 $autocomplete->setSearchList($searchList);
@@ -155,7 +154,7 @@ class ElementList extends BaseElement
     {
         $controllers = new ArrayList();
         $items = $this->ItemsToRender();
-        if (!is_null($items)){
+        if (!is_null($items)) {
             foreach ($items as $element) {
                 $controller = $element->getController();
                 $controllers->push($controller);

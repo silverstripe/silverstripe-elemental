@@ -10,7 +10,6 @@ use SilverStripe\Forms\DropdownField;
  */
 class ElementContent extends BaseElement
 {
-
     private static $db = array(
         'HTML' => 'HTMLText',
         'Style' => 'Varchar'

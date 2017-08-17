@@ -68,9 +68,9 @@ class ElementController extends Controller
      */
     public function Link($action = null)
     {
-        if($this->data()->virtualOwner) {
-          $controller = new Element_Controller($this->data()->virtualOwner);
-          return $controller->Link($action);
+        if ($this->data()->virtualOwner) {
+            $controller = new Element_Controller($this->data()->virtualOwner);
+            return $controller->Link($action);
         }
 
         $id = ($this->element) ? $this->element->ID : null;
@@ -78,7 +78,7 @@ class ElementController extends Controller
         $segment = Controller::join_links('element', $id, $action);
 
         $page = Director::get_current_page();
-        if($page && !($page instanceof ElementController)) {
+        if ($page && !($page instanceof ElementController)) {
             return $page->Link($segment);
         }
 
@@ -92,16 +92,16 @@ class ElementController extends Controller
     /**
      * if this is a virtual request, change the hash if set.
      */
-    public function redirect($url, $code=302) {
-
-      if($this->data()->virtualOwner) {
-        $parts = explode('#', $url);
-        if(isset($parts[1])) {
-          $url = $parts[0] . '#' . $this->data()->virtualOwner->ID;
+    public function redirect($url, $code=302)
+    {
+        if ($this->data()->virtualOwner) {
+            $parts = explode('#', $url);
+            if (isset($parts[1])) {
+                $url = $parts[0] . '#' . $this->data()->virtualOwner->ID;
+            }
         }
-      }
 
-      return parent::redirect($url, $code);
+        return parent::redirect($url, $code);
     }
 
     /**
