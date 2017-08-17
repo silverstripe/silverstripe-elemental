@@ -11,17 +11,19 @@ use Page;
  * @package elemental
  * @subpackage tests
  */
-class ElementalPageExtensionTests extends FunctionalTest {
-
+class ElementalPageExtensionTests extends FunctionalTest
+{
     protected static $fixture_file = 'elemental/tests/ElementalPageExtensionTests.yml';
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         Page::add_extension(ElementalPageExtension::class);
     }
 
-    public function testUpdateCmsFields() {
+    public function testUpdateCmsFields()
+    {
         $page = $this->objFromFixture('Page', 'elementaldemo');
 
         $elementalArea = $page->getCMSFields()->dataFieldByName('ElementalArea');
@@ -35,5 +37,4 @@ class ElementalPageExtensionTests extends FunctionalTest {
 
         $this->assertNull($elementalArea);
     }
-
 }

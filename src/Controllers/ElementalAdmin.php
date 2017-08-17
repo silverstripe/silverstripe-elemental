@@ -12,8 +12,8 @@ use SilverStripe\Forms\NumericField;
 /**
  * @package elemental
  */
-class ElementalAdmin extends ModelAdmin {
-
+class ElementalAdmin extends ModelAdmin
+{
     private static $managed_models = array(
         BaseElement::class
     );
@@ -24,7 +24,8 @@ class ElementalAdmin extends ModelAdmin {
 
     private static $menu_icon = 'elemental/images/blocks.svg';
 
-    public function getEditForm($id = null, $fields = null) {
+    public function getEditForm($id = null, $fields = null)
+    {
         $form = parent::getEditForm($id, $fields);
 
         $grid = $form->Fields()

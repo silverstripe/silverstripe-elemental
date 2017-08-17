@@ -12,8 +12,8 @@ use DNADesign\Elemental\Extensions\ElementalPageExtension;
  * @package cms
  * @subpackage tests
  */
-class TestPage extends Page implements TestOnly {
-
+class TestPage extends Page implements TestOnly
+{
     private static $table_name = 'TestPage';
 
     private static $extensions = array(

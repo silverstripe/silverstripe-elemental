@@ -19,8 +19,8 @@ use SilverStripe\Versioned\Versioned;
  * @package elements
  * @subpackage tests
  */
-class ElementControllerTest extends FunctionalTest {
-
+class ElementControllerTest extends FunctionalTest
+{
     protected static $fixture_file = 'ElementControllerTest.yml';
 
     protected static $extra_dataobjects = array(
@@ -34,7 +34,8 @@ class ElementControllerTest extends FunctionalTest {
         parent::setUp();
     }
 
-    public function testElementFormRendering() {
+    public function testElementFormRendering()
+    {
         $this->logInWithPermission('ADMIN');
         $page = $this->objFromFixture(TestPage::class, 'page1');
         $page->doPublish();
@@ -50,7 +51,8 @@ class ElementControllerTest extends FunctionalTest {
         );
     }
 
-    public function testElementFormSubmission() {
+    public function testElementFormSubmission()
+    {
         $this->logInWithPermission('ADMIN');
         $page = $this->objFromFixture(TestPage::class, 'page1');
         $page->doPublish();

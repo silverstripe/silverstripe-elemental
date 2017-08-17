@@ -36,7 +36,7 @@ class ElementalContentControllerExtension extends Extension
     public function handleElement()
     {
         $id = $this->owner->getRequest()->param('ID');
-        if(!$id) {
+        if (!$id) {
             user_error('No element ID supplied', E_USER_ERROR);
             return false;
         }
@@ -45,7 +45,7 @@ class ElementalContentControllerExtension extends Extension
 
         $elementalAreaRelations = ElementalAreasExtension::get_elemental_area_relations($elementOwner);
 
-        if(!$elementalAreaRelations) {
+        if (!$elementalAreaRelations) {
             user_error(get_class($this->owner) . ' has no ElementalArea relationships', E_USER_ERROR);
             return false;
         }
@@ -56,7 +56,7 @@ class ElementalContentControllerExtension extends Extension
                 ->First();
 
             if ($element) {
-               return $element->getController();
+                return $element->getController();
             }
         }
 

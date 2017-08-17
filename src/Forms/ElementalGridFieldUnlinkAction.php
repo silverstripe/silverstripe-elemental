@@ -8,13 +8,17 @@ use SilverStripe\Forms\GridField\GridField_FormAction;
 /**
  * @package elemental
  */
-class ElementalGridFieldUnlinkAction extends GridFieldDeleteAction {
+class ElementalGridFieldUnlinkAction extends GridFieldDeleteAction
+{
+    public function getColumnContent($gridField, $record, $columnName)
+    {
+        if (!$record->canDelete()) {
+            return;
+        }
 
-    public function getColumnContent($gridField, $record, $columnName) {
-        if(!$record->canDelete()) return;
-
-        if(!$record instanceof ElementVirtualLinked) {
-            $field = GridField_FormAction::create($gridField,
+        if (!$record instanceof ElementVirtualLinked) {
+            $field = GridField_FormAction::create(
+                $gridField,
                     'UnlinkRelation'.$record->ID,
                     false,
                     'unlinkrelation',

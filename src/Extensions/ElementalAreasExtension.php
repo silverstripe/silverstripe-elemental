@@ -84,7 +84,6 @@ class ElementalAreasExtension extends DataExtension
             } else {
                 $availableClasses = $config->get('allowed_elements');
             }
-
         } else {
             $availableClasses = ClassInfo::subclassesFor(BaseElement::class);
             unset($availableClasses[BaseElement::class]);
@@ -105,17 +104,18 @@ class ElementalAreasExtension extends DataExtension
             }
         }
 
-        if($config->get('sort_types_alphabetically') !== false) {
+        if ($config->get('sort_types_alphabetically') !== false) {
             asort($list);
         }
 
         return $list;
     }
 
-    public static function get_elemental_area_relations(SiteTree $elementOwner) {
+    public static function get_elemental_area_relations(SiteTree $elementOwner)
+    {
         $hasOnes = $elementOwner->hasOne();
 
-        if(!$hasOnes) {
+        if (!$hasOnes) {
             return false;
         }
 
@@ -138,7 +138,7 @@ class ElementalAreasExtension extends DataExtension
      */
     public function updateCMSFields(FieldList $fields)
     {
-        if(!$this->supportsElemental()) {
+        if (!$this->supportsElemental()) {
             return;
         }
 
@@ -147,17 +147,18 @@ class ElementalAreasExtension extends DataExtension
         $fields->replaceField('Content', new LiteralField('Content', ''));
 
         $elementalAreaRelations = self::get_elemental_area_relations($this->owner);
-        foreach($elementalAreaRelations as $eaRelationship) {
+        foreach ($elementalAreaRelations as $eaRelationship) {
             $adder = new ElementalGridFieldAddNewMultiClass('buttons-before-left');
 
             $list = self::get_available_types_for_class($this->owner->ClassName);
-            if($list) {
+            if ($list) {
                 $adder->setClasses($list);
             }
 
             $area = $this->owner->$eaRelationship();
 
-            $gridField = GridField::create($eaRelationship,
+            $gridField = GridField::create(
+                $eaRelationship,
                 Config::inst()->get(ElementPageExtension::class, $eaRelationship),
                 $area->Elements(),
                 $config = GridFieldConfig_RelationEditor::create()
@@ -178,7 +179,7 @@ class ElementalAreasExtension extends DataExtension
             }
 
             $searchList = BaseElement::get()->filter('AvailableGlobally', true);
-            if($list) {
+            if ($list) {
                 $searchList = $searchList->filter('ClassName', array_keys($list));
             }
             $autocomplete->setSearchList($searchList);
@@ -210,12 +211,12 @@ class ElementalAreasExtension extends DataExtension
     {
         parent::onBeforeWrite();
 
-        if(!$this->supportsElemental()) {
+        if (!$this->supportsElemental()) {
             return;
         }
 
         $elementalAreaRelations = self::get_elemental_area_relations($this->owner);
-        foreach($elementalAreaRelations as $eaRelationship) {
+        foreach ($elementalAreaRelations as $eaRelationship) {
             $areaID = $eaRelationship . 'ID';
 
             if (!$this->owner->$areaID) {
@@ -224,13 +225,13 @@ class ElementalAreasExtension extends DataExtension
                 $area->write();
                 $this->owner->$areaID = $area->ID;
             } else {
-            	if ($area = ElementalArea::get()->filter('ID', $this->owner->$areaID)->first()) {
-					$area->write();
-				}
-			}
+                if ($area = ElementalArea::get()->filter('ID', $this->owner->$areaID)->first()) {
+                    $area->write();
+                }
+            }
         }
 
-        if(Config::inst()->get(self::class, 'clear_contentfield')) {
+        if (Config::inst()->get(self::class, 'clear_contentfield')) {
             $this->owner->Content = '';
         }
     }
@@ -249,7 +250,7 @@ class ElementalAreasExtension extends DataExtension
 
         if (is_a($this->owner, RedirectorPage::class) || is_a($this->owner, VirtualPage::class)) {
             return false;
-        } else if ($ignored = Config::inst()->get(ElementPageExtension::class, 'ignored_classes')) {
+        } elseif ($ignored = Config::inst()->get(ElementPageExtension::class, 'ignored_classes')) {
             foreach ($ignored as $check) {
                 if (is_a($this->owner, $check)) {
                     return false;

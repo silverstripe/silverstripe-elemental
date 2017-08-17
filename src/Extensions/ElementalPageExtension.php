@@ -9,7 +9,6 @@ use DNADesign\Elemental\Models\ElementalArea;
  */
 class ElementalPageExtension extends ElementalAreasExtension
 {
-
     private static $has_one = array(
         'ElementalArea' => ElementalArea::class
     );
