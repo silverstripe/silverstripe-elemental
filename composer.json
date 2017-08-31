@@ -13,7 +13,7 @@
 	"require": {
 		"silverstripe/framework": "^4.0",
 		"silverstripe/cms": "^4.0",
-		"symbiote/silverstripe-gridfieldextensions": "dev-master",
+		"symbiote/silverstripe-gridfieldextensions": "^3.0",
 		"arillo/silverstripe-dataobject-preview": "*"
 	},
 	"suggest": {
