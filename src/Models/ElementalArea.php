@@ -56,7 +56,8 @@ class ElementalArea extends DataObject
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-         $this->SearchContent = $this->renderSearchContent();
+        // this is currently throwing errors on write. Given search isn't working at all on ss4 yet, disable for now
+//      $this->SearchContent = $this->renderSearchContent();
     }
 
     /**

@@ -266,8 +266,8 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         parent::onBeforeWrite();
 
-        if ($areaID = $this->ParentID) {
-        	if ($elementalArea = ElementalArea::get()->filter('ID', $areaID)->first()) {
+        if($areaID = $this->ParentID) {
+        	if ($elementalArea = ElementalArea::get()->byID($areaID)) {
         		$elementalArea->write();
 			}
 		}
