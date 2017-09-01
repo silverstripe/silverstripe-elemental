@@ -2,7 +2,7 @@
 Name: elemental
 ---
 
-LeftAndMain:
+SilverStripe\Admin\LeftAndMain:
   extra_requirements_css:
     - 'elemental/css/elemental-admin.css'
 

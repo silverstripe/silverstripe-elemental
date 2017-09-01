@@ -2,6 +2,18 @@
     clear: both;
 }
 
+.elemental-add-existing-autocompleter {
+    max-width: 50%;
+}
+
+.elemental-add-existing-autocompleter > span:first-child {
+    max-width: calc(100% - 117px);
+}
+
+.elemental-add-existing-autocompleter > span:first-child input {
+    max-width: 100%;
+}
+
 .cms .field input.ui-autocomplete-input.ui-autocomplete-loading {
     background-image: url(../../framework/images/progressbar_blue.gif);
     background-repeat: no-repeat;
