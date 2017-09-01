@@ -34,6 +34,8 @@ use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 class ElementList extends BaseElement
 {
 
+    private static $icon = 'elemental/images/list.svg';
+
     private static $db = array(
         'HideTitle' => 'Boolean',
         'ListDescription' => 'HTMLText'

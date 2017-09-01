@@ -11,6 +11,8 @@ use SilverStripe\Forms\DropdownField;
 class ElementContent extends BaseElement
 {
 
+    private static $icon = 'elemental/images/content.svg';
+
     private static $db = array(
         'HTML' => 'HTMLText',
         'Style' => 'Varchar'

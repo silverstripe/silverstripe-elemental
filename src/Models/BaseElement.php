@@ -47,6 +47,8 @@ use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
  */
 class BaseElement extends DataObject implements CMSPreviewable
 {
+
+    private static $icon = 'elemental/images/base.svg';
     /**
      * @var array $db
      */
@@ -112,6 +114,7 @@ class BaseElement extends DataObject implements CMSPreviewable
      * @var array
      */
     private static $summary_fields = array(
+        'ElementIcon' => 'ElementIcon',
         'Title' => 'Title',
         'ElementType' => 'Type',
     );
@@ -898,4 +901,9 @@ class BaseElement extends DataObject implements CMSPreviewable
 
     //     return true;
     // }
+
+    public function ElementIcon() {
+        $icon = $this->config()->get('icon');
+        return DBField::create_field('HTMLVarchar', '<img width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" />');
+    }
 }

@@ -25,6 +25,9 @@ use Exception;
  */
 class ElementVirtualLinked extends BaseElement
 {
+
+    private static $icon = 'elemental/images/virtual.svg';
+
     private static $has_one = array(
         'LinkedElement' => BaseElement::class
     );
