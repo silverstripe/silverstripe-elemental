@@ -47,3 +47,41 @@
 th.col-ElementIcon {
     opacity: 0;
 }
+
+/* Style the chosen dropdown for element icons */
+.el-chosen .chosen-container .chosen-results {
+    padding: 0;
+    margin: 0;
+}
+
+.el-chosen .chosen-container-single .chosen-single abbr {
+    top: 11px;
+}
+
+.chosen-container .chosen-results li.el-icon {
+    font-size: 12px;
+    line-height: 18px;
+    padding: 7px 16px 7px 6px;
+    color: #0071c4;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.chosen-container .chosen-results li.el-icon.highlighted  {
+    background: #F6F7F8;
+}
+
+.chosen-container .chosen-results li.el-icon.result-selected {
+    background: #e6eaed;
+    color: #66727d;
+}
+
+.chosen-container .chosen-results li.el-icon:before {
+    content: '';
+    display:inline-block;
+    height: 14px;
+    width: 30px;
+}
+
+
+

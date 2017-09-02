@@ -7,7 +7,6 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Object;
 use SilverStripe\DataObjectPreview\Controllers\DataObjectPreviewController;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
@@ -19,7 +18,6 @@ use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\ArrayList;
@@ -38,8 +36,6 @@ use SilverStripe\Core\Injector\Injector;
 use Exception;
 
 use DNADesign\Elemental\Controllers\ElementController;
-use DNADesign\Elemental\Models\ElementList;
-use DNADesign\Elemental\Models\ElementVirtualLinked;
 use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
 
 /**

@@ -14,7 +14,8 @@
 		"silverstripe/framework": "^4.0",
 		"silverstripe/cms": "^4.0",
 		"symbiote/silverstripe-gridfieldextensions": "3.0.x-dev",
-		"arillo/silverstripe-dataobject-preview": "*"
+		"arillo/silverstripe-dataobject-preview": "*",
+		"dnadesign/silverstripe-advanceddropdowns": "^2.0"
 	},
 	"suggest": {
 		"bluehousegroup/silverstripe-data-object-version-viewer": "Allows viewing of version history for data objects inside of the SilverStripe CMS",
