@@ -10,7 +10,6 @@ use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementVirtualLinked;
 
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Core\Convert;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
@@ -25,8 +24,6 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\ORM\DataExtension;
-use SilverStripe\ORM\DB;
-use SilverStripe\Versioned\Versioned;
 
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
