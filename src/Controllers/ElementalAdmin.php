@@ -47,11 +47,11 @@ class ElementalAdmin extends ModelAdmin {
         // remove virtual elements from this list, they aren't very useful is this context, and create clutter
         if($this->sanitiseClassName($this->modelClass) ===  $this->sanitiseClassName(BaseElement::class)) {
             $list = $grid->getList()->exclude(['ClassName' => ElementVirtualLinked::class]);
-        } else {
+            $grid->setList($list);
+        } else if ($this->sanitiseClassName($this->modelClass) ===  $this->sanitiseClassName(ElementVirtualLinked::class)) {
             $list = $grid->getList()->filter(['ClassName' => ElementVirtualLinked::class]);
+            $grid->setList($list);
         }
-
-        $grid->setList($list);
 
         return $form;
     }
