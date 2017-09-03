@@ -40,6 +40,13 @@ class ElementalArea extends DataObject
         'Elements'
     );
 
+    /**
+     * @var array
+     */
+    private static $summary_fields = array(
+        'Title' => 'Title'
+    );
+
     private static $table_name = 'ElementalArea';
 
     public static function elemental_page_types()
@@ -183,5 +190,11 @@ class ElementalArea extends DataObject
         }
         Versioned::set_stage($originalMode);
         return false;
+    }
+
+    public function getTitle() {
+        $count = $this->Elements()->Count();
+        $el = $count === 1 ? 'element' : 'elements';
+        return 'Holder for ' . $count. ' content ' . $el;
     }
 }
