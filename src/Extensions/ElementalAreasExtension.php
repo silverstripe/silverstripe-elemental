@@ -155,7 +155,7 @@ class ElementalAreasExtension extends DataExtension
             $area = $this->owner->$eaRelationship();
 
             $gridField = GridField::create($eaRelationship,
-                Config::inst()->get(ElementPageExtension::class, $eaRelationship),
+                Config::inst()->get(ElementalPageExtension::class, $eaRelationship),
                 $area->Elements(),
                 $config = GridFieldConfig_RelationEditor::create()
                     ->removeComponentsByType(array(
@@ -246,7 +246,7 @@ class ElementalAreasExtension extends DataExtension
 
         if (is_a($this->owner, RedirectorPage::class) || is_a($this->owner, VirtualPage::class)) {
             return false;
-        } else if ($ignored = Config::inst()->get(ElementPageExtension::class, 'ignored_classes')) {
+        } else if ($ignored = Config::inst()->get(ElementalPageExtension::class, 'ignored_classes')) {
             foreach ($ignored as $check) {
                 if (is_a($this->owner, $check)) {
                     return false;

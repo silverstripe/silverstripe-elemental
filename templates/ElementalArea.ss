@@ -1,3 +1,3 @@
-<% loop ElementControllers %>
+<% loop $ElementControllers %>
 	$ElementHolder
 <% end_loop %>

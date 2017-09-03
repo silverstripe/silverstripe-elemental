@@ -606,7 +606,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     public function SimpleClassName() {
-        return DataObjectPreviewController::stripNamespacing($this->ClassName);
+        return $this->sanitiseClassName(DataObjectPreviewController::stripNamespacing($this->ClassName),'');
     }
 
     public function getPage($discard_virtualisation = false)
@@ -818,9 +818,9 @@ class BaseElement extends DataObject implements CMSPreviewable
      * Sanitise a model class' name for inclusion in a link
      * @return string
      */
-    protected function sanitiseClassName($class)
+    protected function sanitiseClassName($class, $delimiter = '-')
     {
-        return str_replace('\\', '-', $class);
+        return str_replace('\\', $delimiter, $class);
     }
 
     /**
