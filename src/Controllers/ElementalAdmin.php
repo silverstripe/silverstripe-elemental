@@ -4,10 +4,10 @@ namespace DNADesign\Elemental\Controllers;
 
 use DNADesign\Elemental\Models\BaseElement;
 
+use DNADesign\Elemental\Models\ElementVirtualLinked;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
-use SilverStripe\Forms\NumericField;
 
 /**
  * @package elemental
@@ -38,6 +38,14 @@ class ElementalAdmin extends ModelAdmin {
         $fields = $dataCols->getDisplayFields($grid);
         $fields['UsageSummary'] = 'Usage Summary';
         $dataCols->setDisplayFields($fields);
+
+        // remove virtual elements from this list, they aren't very useful is this context, and create clutter
+        if($this->sanitiseClassName($this->modelClass) ===  $this->sanitiseClassName(BaseElement::class)) {
+            $list = $grid->getList()->exclude(['ClassName' => ElementVirtualLinked::class]);
+
+            $grid->setList($list);
+        }
+        
         return $form;
     }
 }
