@@ -15,7 +15,12 @@ use SilverStripe\Forms\GridField\GridFieldDataColumns;
 class ElementalAdmin extends ModelAdmin {
 
     private static $managed_models = array(
-        BaseElement::class
+        BaseElement::class => [
+            'title' => 'Content Elements'
+        ],
+        ElementVirtualLinked::class => [
+            'title' => 'Linked Elements'
+        ]
     );
 
     private static $menu_title = 'Content Elements';
@@ -42,10 +47,12 @@ class ElementalAdmin extends ModelAdmin {
         // remove virtual elements from this list, they aren't very useful is this context, and create clutter
         if($this->sanitiseClassName($this->modelClass) ===  $this->sanitiseClassName(BaseElement::class)) {
             $list = $grid->getList()->exclude(['ClassName' => ElementVirtualLinked::class]);
-
-            $grid->setList($list);
+        } else {
+            $list = $grid->getList()->filter(['ClassName' => ElementVirtualLinked::class]);
         }
-        
+
+        $grid->setList($list);
+
         return $form;
     }
 }
