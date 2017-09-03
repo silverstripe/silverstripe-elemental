@@ -899,13 +899,24 @@ class BaseElement extends DataObject implements CMSPreviewable
     //     return true;
     // }
 
-
     public function ElementSummary() {
+
+        if($this->ClassName === ElementVirtualLinked::class && $linked = $this->LinkedElement()) {
+            return $linked->ElementSummary();
+        }
+
         return '';
     }
 
+
     public function ElementIcon() {
         $icon = $this->config()->get('icon');
+
+        if($this->ClassName === ElementVirtualLinked::class && $linked = $this->LinkedElement()) {
+            $linkedIcon = $linked->config()->get('icon');
+            return DBField::create_field('HTMLVarchar', '<span class="el-icongroup"><img width="16px" src="' . Director::absoluteBaseURL() . $linkedIcon . '" alt="" /><img class="el-icon--virtual" width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" /></span>');
+        }
+
         return DBField::create_field('HTMLVarchar', '<img width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" />');
     }
 

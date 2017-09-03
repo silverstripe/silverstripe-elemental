@@ -170,5 +170,4 @@ class ElementList extends BaseElement
     public function ElementSummary() {
         return DBField::create_field('HTMLText', $this->ListDescription)->Summary();
     }
-
 }

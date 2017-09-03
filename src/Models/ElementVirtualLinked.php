@@ -9,6 +9,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
+use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 
 use Exception;
@@ -31,6 +32,8 @@ class ElementVirtualLinked extends BaseElement
     private static $has_one = array(
         'LinkedElement' => BaseElement::class
     );
+
+    private static $description = 'reused element';
 
     private static $table_name = 'ElementVirtual';
 

@@ -94,4 +94,12 @@ td.col-ElementSummary {
     width: 30px;
 }
 
+.el-icongroup {
+    position: relative;
+}
+.el-icon--virtual {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+}
 
