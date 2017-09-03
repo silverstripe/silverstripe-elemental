@@ -112,7 +112,8 @@ class BaseElement extends DataObject implements CMSPreviewable
     private static $summary_fields = array(
         'ElementIcon' => 'ElementIcon',
         'Title' => 'Title',
-        'ElementType' => 'Type',
+        'ElementSummary' => 'Summary',
+        'ElementTypeNice' => 'Type',
     );
 
     /**
@@ -898,8 +899,18 @@ class BaseElement extends DataObject implements CMSPreviewable
     //     return true;
     // }
 
+
+    public function ElementSummary() {
+        return '';
+    }
+
     public function ElementIcon() {
         $icon = $this->config()->get('icon');
         return DBField::create_field('HTMLVarchar', '<img width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" />');
+    }
+
+    public function ElementTypeNice() {
+        $description = $this->config()->get('description');
+        return DBField::create_field('HTMLVarchar', $this->ElementType .' <span class="el-description"> &mdash; ' . $description . '</span>');
     }
 }

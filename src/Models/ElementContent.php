@@ -4,6 +4,7 @@ namespace DNADesign\Elemental\Models;
 
 use SilverStripe\Forms\HTMLEditor\HtmlEditorField;
 use SilverStripe\Forms\DropdownField;
+use SilverStripe\ORM\FieldType\DBField;
 
 /**
  * @package elemental
@@ -24,7 +25,7 @@ class ElementContent extends BaseElement
 
     private static $title = 'Content Element';
 
-    private static $description = 'Element with text with heading, blockquote, list and paragraph styles';
+    private static $description = 'HTML text block';
 
     public function getCMSFields()
     {
@@ -60,5 +61,9 @@ class ElementContent extends BaseElement
         if (isset($styles[$style])) {
             return strtolower($styles[$style]);
         }
+    }
+
+    public function ElementSummary() {
+        return DBField::create_field('HTMLText', $this->HTML)->Summary();
     }
 }
