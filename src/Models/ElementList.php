@@ -63,7 +63,7 @@ class ElementList extends BaseElement
      */
     public function onAfterDelete()
     {
-        if(Versioned::get_reading_mode() == 'Stage.Stage') {
+        if (Versioned::get_reading_mode() == 'Stage.Stage') {
             foreach ($this->Elements() as $element) {
                 $element->delete();
             }
@@ -92,7 +92,7 @@ class ElementList extends BaseElement
 
                 $list = ElementalAreasExtension::get_available_types_for_class(self::class);
 
-                if($list) {
+                if ($list) {
                     $adder->setClasses($list);
                 }
 
@@ -113,7 +113,7 @@ class ElementList extends BaseElement
                 }
 
                 $searchList = BaseElement::get()->filter('AvailableGlobally', true);
-                if($list) {
+                if ($list) {
                     $searchList = $searchList->filter('ClassName', array_keys($list));
                 }
                 $autocomplete->setSearchList($searchList);
@@ -130,7 +130,8 @@ class ElementList extends BaseElement
 
                 $fields->addFieldToTab('Root.Main', $elementArea);
             } else {
-                $fields->addFieldToTab('Root.Main', LiteralField::create('warn', '<p class="message notice">Once you save this object you will be able to add items</p>'));
+                $fields->addFieldToTab('Root.Main', LiteralField::create('warn',
+                    '<p class="message notice">Once you save this object you will be able to add items</p>'));
             }
         });
 
@@ -158,16 +159,26 @@ class ElementList extends BaseElement
     {
         $controllers = new ArrayList();
         $items = $this->ItemsToRender();
-        if (!is_null($items)){
+        if (!is_null($items)) {
             foreach ($items as $element) {
                 $controller = $element->getController();
                 $controllers->push($controller);
             }
         }
+
         return $controllers;
     }
 
-    public function ElementSummary() {
-        return DBField::create_field('HTMLText', $this->ListDescription)->Summary();
+    /**
+     * @return DBField
+     */
+    public function ElementSummary()
+    {
+        $count = $this->Elements()->Count();
+        $suffix = $count === 1 ? 'element': 'elements';
+        $summary = $this->ListDescription ? DBField::create_field('HTMLText', $this->ListDescription)->Summary(10) . '<br />': '';
+
+        return DBField::create_field('HTMLText', $summary . ' <span class="el-meta">Contains ' . $count . ' ' . $suffix . '</span>');
     }
+
 }

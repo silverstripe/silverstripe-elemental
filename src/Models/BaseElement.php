@@ -44,6 +44,10 @@ use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
 class BaseElement extends DataObject implements CMSPreviewable
 {
 
+    /**
+     * Override this on your custom elements to specify a cms icon
+     * @var string
+     */
     private static $icon = 'elemental/images/base.svg';
     /**
      * @var array $db
@@ -899,8 +903,14 @@ class BaseElement extends DataObject implements CMSPreviewable
     //     return true;
     // }
 
-    public function ElementSummary() {
 
+    /**
+     * This can be overridden on child elements to create a summary for display in gridfields.
+     * @return string
+     */
+    public function ElementSummary()
+    {
+        // fallback to the Linked Element for Virtual element summaries
         if($this->ClassName === ElementVirtualLinked::class && $linked = $this->LinkedElement()) {
             return $linked->ElementSummary();
         }
@@ -909,6 +919,10 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
 
+    /**
+     * Generate markup for element type icons suitable for use in gridfields
+     * @return DBField
+     */
     public function ElementIcon() {
         $icon = $this->config()->get('icon');
 
@@ -920,6 +934,10 @@ class BaseElement extends DataObject implements CMSPreviewable
         return DBField::create_field('HTMLVarchar', '<img width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" />');
     }
 
+    /**
+     * Generate markup for element type, with description suitable for use in gridfields
+     * @return DBField
+     */
     public function ElementTypeNice() {
         $description = $this->config()->get('description');
         return DBField::create_field('HTMLVarchar', $this->ElementType .' <span class="el-description"> &mdash; ' . $description . '</span>');

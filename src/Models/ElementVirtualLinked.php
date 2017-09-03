@@ -33,7 +33,8 @@ class ElementVirtualLinked extends BaseElement
         'LinkedElement' => BaseElement::class
     );
 
-    private static $description = 'reused element';
+    private static $description = 'Reused element';
+
 
     private static $table_name = 'ElementVirtual';
 
@@ -199,4 +200,5 @@ class ElementVirtualLinkedController extends ElementController
         $controller = $this->LinkedElement()->getController();
         return $controller->checkAccessAction($action);
     }
+
 }
