@@ -754,6 +754,7 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function CMSEditLink($inList = false)
     {
+
         if ($this->ListID) {
             if ($parentLink = $this->List()->CMSEditLink(true)) {
                 return Controller::join_links(
@@ -765,28 +766,61 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
         }
         if (!$this->getPage() || $this->config()->editlink_modeladmin) {
+
+            $className = $this->sanitiseClassName(BaseElement::class);
+
             return Controller::join_links(
                 Director::absoluteBaseURL(),
-                'admin/elemental/BaseElement/EditForm/field/BaseElement/item',
+                'admin/elemental/' . $className . '/EditForm/field/' .  $className . '/item',
                 $this->ID,
                 'edit'
             );
         }
 
+       $relationName = $this->getAreaRelationName();
+
         $link = Controller::join_links(
             singleton(CMSPageEditController::class)->Link('EditForm'),
             $this->getPage(true)->ID,
-            'field/ElementalArea/item/',
+            'field/' . $relationName . '/item/',
             $this->ID
         );
 
         if ($inList) {
             return $link;
         }
+
         return Controller::join_links(
             $link,
             'edit'
         );
+    }
+
+    /**
+     * Retrieve a elemental area relation for creating cms links
+     * @return string - the name of a valid elemental area relation
+     */
+    public function getAreaRelationName() {
+        $page = $this->getPage(true);
+        $has_one = $page->config()->get('has_one');
+        $area = $this->Parent();
+
+        foreach($has_one as $relationName => $relationClass) {
+            if ($relationClass === $area->ClassName) {
+                return $relationName;
+            }
+        }
+
+        return 'ElementalArea';
+    }
+
+    /**
+     * Sanitise a model class' name for inclusion in a link
+     * @return string
+     */
+    protected function sanitiseClassName($class)
+    {
+        return str_replace('\\', '-', $class);
     }
 
     /**
