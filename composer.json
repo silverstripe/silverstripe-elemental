@@ -12,8 +12,8 @@
 		"silverstripe/framework": "~3.1",
 		"silverstripe/cms": "~3.1",
 		"silverstripe/widgets": "~1.1",
-		"silverstripe-australia/gridfieldextensions": "~1.0",
-		"silverstripe-australia/addressable": "~1.0",
+		"symbiote/silverstripe-gridfieldextensions": "~1.0",
+		"symbiote/silverstripe-addressable": "~1.0",
 		"heyday/silverstripe-versioneddataobjects": "~2.0",
 		"undefinedoffset/sortablegridfield": "~0.5"
 	},
