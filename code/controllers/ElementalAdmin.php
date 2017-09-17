@@ -1,11 +1,9 @@
 <?php
 
-use \Heyday\VersionedDataObjects\VersionedModelAdmin;
-
 /**
  * @package elemental
  */
-class ElementalAdmin extends VersionedModelAdmin {
+class ElementalAdmin extends ModelAdmin {
 
     private static $managed_models = array(
         'BaseElement'
@@ -15,7 +13,7 @@ class ElementalAdmin extends VersionedModelAdmin {
 
     private static $url_segment = 'elemental';
 
-    private static $menu_icon = "elemental/images/blocks.svg";
+    private static $menu_icon = 'elemental/images/blocks.svg';
 
     public function getEditForm($id = null, $fields = null) {
         $form = parent::getEditForm($id, $fields);
@@ -23,8 +21,12 @@ class ElementalAdmin extends VersionedModelAdmin {
         $grid = $form->Fields()
             ->dataFieldByName($this->sanitiseClassName($this->modelClass));
 
-        $grid->getConfig()->removeComponentsByType('GridFieldAddNewButton');
-
+        $config = $grid->getConfig();
+        $config->removeComponentsByType('GridFieldAddNewButton');
+        $dataCols = $config->getComponentByType('GridFieldDataColumns');
+        $fields = $dataCols->getDisplayFields($grid);
+        $fields['PageCMSEditLink'] = 'Used on';
+        $dataCols->setDisplayFields($fields);
         return $form;
     }
 

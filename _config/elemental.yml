@@ -3,7 +3,7 @@ Name: elemental
 ---
 Widget:
   extensions:
-    - 'BaseElementExtension'
+    - 'ElementalVersionedExtension'
 
 BaseElement:
   extensions:
@@ -15,7 +15,20 @@ ElementImage:
     - 'image_medium' : 'Normal'
     - 'image_small' : 'Small'
 
+ElementalList:
+  extensions:
+    ElementPublishChildren
+
 LeftAndMain:
   extra_requirements_css:
     - 'elemental/css/elemental-admin.css'
 
+Injector:
+  GridFieldBetterButtonsItemRequest:
+    class: BetterBetterButtons
+
+BetterButtonsActions:
+  edit:
+    BetterButtonFrontendLinksAction: false
+  versioned_edit:
+    BetterButtonFrontendLinksAction: false
