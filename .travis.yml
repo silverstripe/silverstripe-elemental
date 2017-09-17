@@ -2,6 +2,8 @@ language: php
 php:
  - 5.3
 
+dist: precise
+
 env:
   matrix:
    - DB=MYSQL CORE_RELEASE=3.1
