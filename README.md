@@ -17,16 +17,20 @@ the `$Content` variable with `$ElementArea` and rely on the markup of the indivi
 
 ## Installation
 
-	composer require "dnadesign/silverstripe-elemental" "dev-master"
+```
+composer require "dnadesign/silverstripe-elemental" "dev-master"
+```
 
 Extend any page type with the ElementPageExtension and define allowed elements. This can be done via the SilverStripe
 `YAML` config API.
 
-**mysite/_config/app.yml**
+**mysite/\_config/app.yml**
 
-	ElementPage:
-	  extensions:
-	    - ElementPageExtension
+```yaml
+ElementPage:
+  extensions:
+    - ElementPageExtension
+```
 
 In your page type template use `$ElementArea` to render the elements to the page.
 
@@ -42,63 +46,66 @@ a holder `div`. The wrapper div is the `ElementHolder.ss` template.
 
 You may wish to only enable certain elements for the CMS authors to choose from rather than the full set.
 
-````
-	ElementPage:
-	  allowed_elements:
-		- 'ElementContent'
-
-````
+```yaml
+ElementPage:
+  allowed_elements:
+    - DNADesign\Elemental\Models\ElementContent
+```
 
 Likewise, you can exclude certain elements from being used.
 
-````
-    ElementPage:
-      disallowed_elements:
-        - 'ElementContact'
-````
+```yaml
+ElementPage:
+  disallowed_elements:
+    - YourCompany\YourModule\Elements\ElementContact
+```
 
 By default, an Element List can contain nested Elements. To set allowed elements in list use the `allowed_elements`
 flag. The `disallowed_elements` configuration flag works here too.
 
-````
-
-	ElementList:
-	  allowed_elements:
-	    'ElementFile' : 'File'
-
-````
+```yaml
+DNADesign\Elemental\Models\ElementList:
+  allowed_elements:
+    YourCompany\YourModule\Elements\ElementFile: File
+```
 
 ### Limiting global elements
 
 By default any element is available to be linked to multiple pages. This can be
 changed with the "Available globally" checkbox in the settings tab of each element.
 The default can be changed so that global elements are opt-in:
-````
-	BaseElement:
-	  default_global_elements: false
-````
+
+```yaml
+DNADesign\Elemental\Models\BaseElement:
+  default_global_elements: false
+```
 
 ### Defining your own elements.
 
 An element is as simple as a class which extends `BaseElement`. After you add the class, ensure you have rebuilt your
 database and reload the CMS.
 
-	<?php
+```php
+<?php
 
-	class MyElement extends BaseElement {
+use DNADesign\Elemental\Models\BaseElement;
 
-		private static $title = "My Element";
+class MyElement extends BaseElement
+{
+    private static $title = "My Element";
 
-		private static $description = "My Custom Element";
+    private static $description = "My Custom Element";
 
-		public function getCMSFields() {
-			$fields = parent::getCMSFields();
+	public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
 
-            // ...
+        // ...
 
-            return $fields;
-		}
-	}
+        return $fields;
+    }
+}
+```
 
 `MyElement` will be rendered into a `MyElement.ss` template with the `ElementHolder.ss` wrapper.
 
@@ -115,12 +122,13 @@ some smarts to the Solr indexing so that it understands our content.
 
 First step is to define a custom Solr index
 
-```
+```php
 <?php
 
-class CustomSolrSearchIndex extends SolrSearchIndex {
-
-    public function getFieldDefinitions() {
+class CustomSolrSearchIndex extends SolrSearchIndex
+{
+    public function getFieldDefinitions()
+    {
         $xml = parent::getFieldDefinitions();
 
         // adds any required XML configuration
@@ -167,10 +175,9 @@ class CustomSolrSearchIndex extends SolrSearchIndex {
         return $doc;
     }
 }
+```
 
 After setting up your SolrSearchIndex, run `sake dev/tasks/Solr_Configure`.
-
-```
 
 ## Screenshots
 

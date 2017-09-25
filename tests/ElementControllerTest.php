@@ -2,24 +2,25 @@
 
 namespace DNADesign\Elemental\Tests;
 
-use SilverStripe\Dev\FunctionalTest;
 use DNADesign\Elemental\Models\BaseElement;
+use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Dev\TestOnly;
-use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\Form;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\TextField;
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Tests\TestPage;
 use DNADesign\Elemental\Tests\TestElement;
+use DNADesign\Elemental\Tests\TestPage;
 use SilverStripe\Versioned\Versioned;
 
 /**
  * @package elements
  * @subpackage tests
  */
-class ElementControllerTest extends FunctionalTest {
+class ElementControllerTest extends FunctionalTest
+{
 
     protected static $fixture_file = 'ElementControllerTest.yml';
 
@@ -28,16 +29,17 @@ class ElementControllerTest extends FunctionalTest {
         TestElement::class
     );
 
-    public function setUp()
+    protected function setUp()
     {
         Versioned::set_stage(Versioned::DRAFT);
         parent::setUp();
     }
 
-    public function testElementFormRendering() {
+    public function testElementFormRendering()
+    {
         $this->logInWithPermission('ADMIN');
         $page = $this->objFromFixture(TestPage::class, 'page1');
-        $page->doPublish();
+        $page->publishRecursive();
 
         $element = $this->objFromFixture(TestElement::class, 'element1');
 
@@ -50,10 +52,11 @@ class ElementControllerTest extends FunctionalTest {
         );
     }
 
-    public function testElementFormSubmission() {
+    public function testElementFormSubmission()
+    {
         $this->logInWithPermission('ADMIN');
         $page = $this->objFromFixture(TestPage::class, 'page1');
-        $page->doPublish();
+        $page->publishRecursive();
 
         $element = $this->objFromFixture(TestElement::class, 'element1');
 

@@ -5,11 +5,8 @@ namespace DNADesign\Elemental\Tests;
 use SilverStripe\Dev\TestOnly;
 use DNADesign\Elemental\Models\BaseElement;
 
-/**
- * @package elements
- * @subpackage tests
- */
-class TestElement extends BaseElement implements TestOnly {
+class TestElement extends BaseElement implements TestOnly
+{
 
     private static $table_name = 'TestElement';
 

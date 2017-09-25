@@ -130,8 +130,10 @@ class ElementList extends BaseElement
 
                 $fields->addFieldToTab('Root.Main', $elementArea);
             } else {
-                $fields->addFieldToTab('Root.Main', LiteralField::create('warn',
-                    '<p class="message notice">Once you save this object you will be able to add items</p>'));
+                $fields->addFieldToTab('Root.Main', LiteralField::create(
+                    'warn',
+                    '<p class="message notice">Once you save this object you will be able to add items</p>'
+                ));
             }
         });
 
@@ -180,5 +182,4 @@ class ElementList extends BaseElement
 
         return DBField::create_field('HTMLText', $summary . ' <span class="el-meta">Contains ' . $count . ' ' . $suffix . '</span>');
     }
-
 }

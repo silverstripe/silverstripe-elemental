@@ -87,7 +87,8 @@ class ElementVirtualLinked extends BaseElement
         return $fields;
     }
 
-    public function getElementType() {
+    public function getElementType()
+    {
         return 'Virtual: ' . $this->LinkedElement()->getElementType();
     }
 
@@ -133,7 +134,8 @@ class ElementVirtualLinked extends BaseElement
      *
      * @return string
      */
-    public function getAnchor() {
+    public function getAnchor()
+    {
         $linkedElement = $this->LinkedElement();
 
         if ($linkedElement && $linkedElement->exists()) {
@@ -200,5 +202,4 @@ class ElementVirtualLinkedController extends ElementController
         $controller = $this->LinkedElement()->getController();
         return $controller->checkAccessAction($action);
     }
-
 }

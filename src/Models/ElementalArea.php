@@ -54,7 +54,7 @@ class ElementalArea extends DataObject
         $elementalClasses = array();
         foreach (ClassInfo::getValidSubClasses(SiteTree::class) as $class) {
             if (Extensible::has_extension($class, ElementalAreasExtension::class)) {
-               $elementalClasses[] = $class;
+                $elementalClasses[] = $class;
             }
         }
         return $elementalClasses;
@@ -108,17 +108,18 @@ class ElementalArea extends DataObject
         return $this->renderWith('ElementalArea');
     }
 
-	/**
-	 * Necessary to display results in CMS site search
-	 *
-	 * @return string
-	 */
-	public function Breadcrumbs() {
-		$ownerClassName = $this->OwnerClassName;
-		if($owner = $ownerClassName::get()->filter('ElementalAreaID', $this->ID)->first()) {
-			return '<a href="' . $owner->CMSEditLink() . '">' . $owner->Title . '</a>';
-		}
-	}
+    /**
+     * Necessary to display results in CMS site search
+     *
+     * @return string
+     */
+    public function Breadcrumbs()
+    {
+        $ownerClassName = $this->OwnerClassName;
+        if ($owner = $ownerClassName::get()->filter('ElementalAreaID', $this->ID)->first()) {
+            return '<a href="' . $owner->CMSEditLink() . '">' . $owner->Title . '</a>';
+        }
+    }
 
     /**
      * @return HasManyList
@@ -141,7 +142,7 @@ class ElementalArea extends DataObject
     {
         $controllers = new ArrayList();
         $items = $this->ItemsToRender();
-        if (!is_null($items)){
+        if (!is_null($items)) {
             foreach ($items as $element) {
                 $controller = $element->getController();
                 $controllers->push($controller);
@@ -160,7 +161,7 @@ class ElementalArea extends DataObject
         if ($this->OwnerClassName) {
             $class = $this->OwnerClassName;
             $elementalAreaRelations = ElementalAreasExtension::get_elemental_area_relations(singleton($class));
-            foreach($elementalAreaRelations as $eaRelationship) {
+            foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
                 $page = $class::get()->filter($areaID, $this->ID);
                 if ($page && $page->exists()) {
@@ -175,9 +176,9 @@ class ElementalArea extends DataObject
         }
         Versioned::set_stage(Versioned::DRAFT);
         $elementalPageTypes = self::elemental_page_types();
-        foreach($elementalPageTypes as $elementalPageType) {
+        foreach ($elementalPageTypes as $elementalPageType) {
             $elementalAreaRelations = ElementalAreasExtension::get_elemental_area_relations(singleton($elementalPageType));
-            foreach($elementalAreaRelations as $eaRelationship) {
+            foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
                 $page = $elementalPageType::get()->filter($areaID, $this->ID);
                 if ($page && $page->exists()) {
@@ -192,7 +193,8 @@ class ElementalArea extends DataObject
         return false;
     }
 
-    public function getTitle() {
+    public function getTitle()
+    {
         $count = $this->Elements()->Count();
         $el = $count === 1 ? 'element' : 'elements';
         return 'Holder for ' . $count. ' content ' . $el;

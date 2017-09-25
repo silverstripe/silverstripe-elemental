@@ -10,7 +10,6 @@ use SilverStripe\View\ArrayData;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 use Symbiote\GridFieldExtensions\GridFieldExtensions;
 
-
 /**
  * @package elemental
  */
@@ -43,7 +42,7 @@ class ElementalGridFieldAddNewMultiClass extends GridFieldAddNewMultiClass
         
         $preppedClasses = [];
 
-        foreach($classes as $key => $value) {
+        foreach ($classes as $key => $value) {
             $preppedClasses[$key] = [
                 'Title' => $value,
                 'Attributes' => ['class'=>'el-icon ' . strtolower($key)]
@@ -68,5 +67,4 @@ class ElementalGridFieldAddNewMultiClass extends GridFieldAddNewMultiClass
             $this->getFragment() => $data->renderWith(parent::class)
         );
     }
-
 }

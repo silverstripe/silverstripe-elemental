@@ -2,23 +2,24 @@
 
 namespace DNADesign\Elemental\Tests;
 
-use SilverStripe\Dev\FunctionalTest;
-use SilverStripe\Core\Config\Config;
-
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Dev\FunctionalTest;
 
 /**
  * @package elemental
  * @subpackage tests
  */
-class ElementAnchorTests extends FunctionalTest {
+class ElementAnchorTests extends FunctionalTest
+{
 
     /**
      * Test to ensure backwards compatibility with old Anchor IDs.
      */
-    public function testDisablePrettyAnchor() {
-        Config::inst()->update(BaseElement::class, 'disable_pretty_anchor_name', true);
+    public function testDisablePrettyAnchor()
+    {
+        Config::modify()->set(BaseElement::class, 'disable_pretty_anchor_name', true);
 
         $area = ElementalArea::create();
         $area->Elements()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 1)));
@@ -37,8 +38,9 @@ class ElementAnchorTests extends FunctionalTest {
     /**
      * Test the stop-clashing logic if two BaseElement classes have the same $Title.
      */
-    public function testSameTitle() {
-        Config::inst()->update(BaseElement::class, 'enable_title_in_template', true);
+    public function testSameTitle()
+    {
+        Config::modify()->set(BaseElement::class, 'enable_title_in_template', true);
 
         $area = ElementalArea::create();
         $area->Elements()->add(BaseElement::create(array('Title' => 'Element 1', 'Sort' => 1)));
@@ -62,8 +64,9 @@ class ElementAnchorTests extends FunctionalTest {
     /**
      * Test virtual element Anchor ID.
      */
-    public function testVirtualElementAnchor() {
-        Config::inst()->update('BaseElement', 'enable_title_in_template', true);
+    public function testVirtualElementAnchor()
+    {
+        Config::modify()->set(BaseElement::class, 'enable_title_in_template', true);
 
         $baseElement1 = BaseElement::create(array('Title' => 'Element 2', 'Sort' => 1));
         $baseElement1->write();
@@ -93,5 +96,4 @@ class ElementAnchorTests extends FunctionalTest {
         $this->assertEquals('element-2-2', $recordSet[1]->getAnchor());
         $this->assertEquals('element-2-3', $recordSet[2]->getAnchor());
     }
-
 }
