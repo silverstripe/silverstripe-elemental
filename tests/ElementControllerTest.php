@@ -11,18 +11,16 @@ use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\TextField;
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Tests\TestElement;
-use DNADesign\Elemental\Tests\TestPage;
+use DNADesign\Elemental\Tests\ElementControllerTest\TestElement;
+use DNADesign\Elemental\Tests\ElementControllerTest\TestPage;
 use SilverStripe\Versioned\Versioned;
 
-/**
- * @package elements
- * @subpackage tests
- */
 class ElementControllerTest extends FunctionalTest
 {
 
     protected static $fixture_file = 'ElementControllerTest.yml';
+
+    protected static $use_draft_site = true;
 
     protected static $extra_dataobjects = array(
         TestPage::class,
@@ -39,7 +37,6 @@ class ElementControllerTest extends FunctionalTest
     {
         $this->logInWithPermission('ADMIN');
         $page = $this->objFromFixture(TestPage::class, 'page1');
-        $page->publishRecursive();
 
         $element = $this->objFromFixture(TestElement::class, 'element1');
 
@@ -56,7 +53,6 @@ class ElementControllerTest extends FunctionalTest
     {
         $this->logInWithPermission('ADMIN');
         $page = $this->objFromFixture(TestPage::class, 'page1');
-        $page->publishRecursive();
 
         $element = $this->objFromFixture(TestElement::class, 'element1');
 

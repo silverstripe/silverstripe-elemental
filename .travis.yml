@@ -18,8 +18,8 @@ before_script:
   - phpenv config-rm xdebug.ini
 
   - composer install --prefer-dist
-  - composer require --prefer-dist --no-update silverstripe/recipe-cms:1.0.x-dev
-  - if [[ $DB == PGSQL ]]; then composer require --prefer-dist --no-update silverstripe/postgresql:2.0.x-dev; fi
+  - composer require --prefer-dist --no-update silverstripe/installer 4.0.x-dev
+  - if [[ $DB == PGSQL ]]; then composer require --prefer-dist --no-update silverstripe/postgresql 2.0.x-dev; fi
   - composer update
 
 script:

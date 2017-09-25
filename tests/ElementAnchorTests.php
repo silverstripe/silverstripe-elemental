@@ -7,10 +7,6 @@ use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 
-/**
- * @package elemental
- * @subpackage tests
- */
 class ElementAnchorTests extends FunctionalTest
 {
 

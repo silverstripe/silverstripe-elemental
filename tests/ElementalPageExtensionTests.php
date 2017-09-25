@@ -7,10 +7,6 @@ use Page;
 use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\Dev\FunctionalTest;
 
-/**
- * @package elemental
- * @subpackage tests
- */
 class ElementalPageExtensionTests extends FunctionalTest
 {
 

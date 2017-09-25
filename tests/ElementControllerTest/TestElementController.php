@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\Tests;
+namespace DNADesign\Elemental\Tests\ElementControllerTest;
 
 use DNADesign\Elemental\Controllers\ElementController;
 use SilverStripe\Dev\TestOnly;
