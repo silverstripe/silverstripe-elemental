@@ -1,11 +1,14 @@
 DNADesign\Elemental\Models\ElementalArea:
   area1:
     Title: Bogus
-DNADesign\Elemental\Tests\TestPage:
+
+DNADesign\Elemental\Tests\ElementControllerTest\TestPage:
   page1:
     Title: Page 1
+    URLSegment: test-page
     ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area1
-DNADesign\Elemental\Tests\TestElement:
+
+DNADesign\Elemental\Tests\ElementControllerTest\TestElement:
   element1:
     Title: Element 1
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.area1

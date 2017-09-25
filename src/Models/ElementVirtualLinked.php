@@ -2,17 +2,13 @@
 
 namespace DNADesign\Elemental\Models;
 
-use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Models\BaseElement;
-
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-
-use Exception;
 
 /**
  * Virtual Linked Element.
@@ -87,7 +83,8 @@ class ElementVirtualLinked extends BaseElement
         return $fields;
     }
 
-    public function getElementType() {
+    public function getElementType()
+    {
         return 'Virtual: ' . $this->LinkedElement()->getElementType();
     }
 
@@ -133,7 +130,8 @@ class ElementVirtualLinked extends BaseElement
      *
      * @return string
      */
-    public function getAnchor() {
+    public function getAnchor()
+    {
         $linkedElement = $this->LinkedElement();
 
         if ($linkedElement && $linkedElement->exists()) {
@@ -143,62 +141,4 @@ class ElementVirtualLinked extends BaseElement
         // generic fallback
         return 'e'.$this->ID;
     }
-}
-
-class ElementVirtualLinkedController extends ElementController
-{
-
-    /**
-     * Returns the current element in scope rendered into its' holder
-     *
-     * @return HTML
-     */
-    public function ElementHolder()
-    {
-        return $this->renderWith('ElementHolder_VirtualLinked');
-    }
-
-    public function __call($method, $arguments)
-    {
-        var_dump($method);
-        die();
-        try {
-            $retVal = parent::__call($method, $arguments);
-        } catch (Exception $e) {
-            $controller = $this->LinkedElement()->getController();
-            $retVal = call_user_func_array(array($controller, $method), $arguments);
-        }
-        return $retVal;
-    }
-
-    public function hasMethod($action)
-    {
-        if (parent::hasMethod($action)) {
-            return true;
-        }
-
-        $controller = $this->LinkedElement()->getController();
-        return $controller->hasMethod($action);
-    }
-
-    public function hasAction($action)
-    {
-        if (parent::hasAction($action)) {
-            return true;
-        }
-
-        $controller = $this->LinkedElement()->getController();
-        return $controller->hasAction($action);
-    }
-
-    public function checkAccessAction($action)
-    {
-        if (parent::checkAccessAction($action)) {
-            return true;
-        }
-
-        $controller = $this->LinkedElement()->getController();
-        return $controller->checkAccessAction($action);
-    }
-
 }

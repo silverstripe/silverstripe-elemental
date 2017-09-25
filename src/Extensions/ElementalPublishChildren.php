@@ -7,23 +7,23 @@ use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Versioned\Versioned;
 
-
 /**
  * @package elemental
  */
 class ElementalPublishChildren extends DataExtension
 {
 
-    public function getPublishableItems() {
+    public function getPublishableItems()
+    {
         $config = $this->owner->config();
 
         $items = new ArrayList();
-        if($config->publishable_items) {
-            foreach($config->publishable_items as $item) {
+        if ($config->publishable_items) {
+            foreach ($config->publishable_items as $item) {
                 $objects = $this->owner->$item();
 
-                if($objects instanceof ManyManyList || $objects instanceof HasManyList) {
-                    foreach($objects as $object) {
+                if ($objects instanceof ManyManyList || $objects instanceof HasManyList) {
+                    foreach ($objects as $object) {
                         $items->push($object);
                     }
                 } else {
@@ -33,7 +33,7 @@ class ElementalPublishChildren extends DataExtension
         }
 
         // also, check for PublishableItems(), which can return a bunch of objects
-        if($this->owner->hasMethod('PublishableSubItems')) {
+        if ($this->owner->hasMethod('PublishableSubItems')) {
             $items->merge($this->owner->PublishableSubItems());
         }
         $items->removeDuplicates();
@@ -47,7 +47,7 @@ class ElementalPublishChildren extends DataExtension
         $items = $this->getPublishableItems();
         foreach ($items as $item) {
              // check for versioning
-            if(!self::is_versioned($item)) {
+            if (!self::is_versioned($item)) {
                 continue;
             }
 
@@ -55,10 +55,10 @@ class ElementalPublishChildren extends DataExtension
             $item->publish('Stage', 'Live');
         }
 
-        if($this->owner->ID) {
+        if ($this->owner->ID) {
             // remove any elements that are on live but not in draft.
             foreach ($items as $item) {
-                if(!self::is_versioned($item)) {
+                if (!self::is_versioned($item)) {
                     continue;
                 }
 
@@ -74,16 +74,17 @@ class ElementalPublishChildren extends DataExtension
      * @param  [type]  $class [description]
      * @return boolean        [description]
      */
-    public static function is_versioned($class) {
+    public static function is_versioned($class)
+    {
 
-        if(is_object($class)) {
+        if (is_object($class)) {
             $class = get_class($class);
         }
 
         $versionClasses = ClassInfo::subclassesFor(Versioned::class);
 
-        foreach($versionClasses as $versionClass) {
-            if(Object::has_extension($class, $versionClass)) {
+        foreach ($versionClasses as $versionClass) {
+            if (Object::has_extension($class, $versionClass)) {
                 return true;
             }
         }

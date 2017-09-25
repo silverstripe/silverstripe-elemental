@@ -3,7 +3,6 @@
 namespace DNADesign\Elemental\Controllers;
 
 use DNADesign\Elemental\Models\BaseElement;
-
 use DNADesign\Elemental\Models\ElementVirtualLinked;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
@@ -12,7 +11,8 @@ use SilverStripe\Forms\GridField\GridFieldDataColumns;
 /**
  * @package elemental
  */
-class ElementalAdmin extends ModelAdmin {
+class ElementalAdmin extends ModelAdmin
+{
 
     private static $managed_models = array(
         BaseElement::class => [
@@ -29,7 +29,8 @@ class ElementalAdmin extends ModelAdmin {
 
     private static $menu_icon = 'elemental/images/blocks.svg';
 
-    public function getEditForm($id = null, $fields = null) {
+    public function getEditForm($id = null, $fields = null)
+    {
         $form = parent::getEditForm($id, $fields);
 
         $grid = $form->Fields()
@@ -45,10 +46,10 @@ class ElementalAdmin extends ModelAdmin {
         $dataCols->setDisplayFields($fields);
 
         // remove virtual elements from this list, they aren't very useful is this context, and create clutter
-        if($this->sanitiseClassName($this->modelClass) ===  $this->sanitiseClassName(BaseElement::class)) {
+        if ($this->sanitiseClassName($this->modelClass) ===  $this->sanitiseClassName(BaseElement::class)) {
             $list = $grid->getList()->exclude(['ClassName' => ElementVirtualLinked::class]);
             $grid->setList($list);
-        } else if ($this->sanitiseClassName($this->modelClass) ===  $this->sanitiseClassName(ElementVirtualLinked::class)) {
+        } elseif ($this->sanitiseClassName($this->modelClass) ===  $this->sanitiseClassName(ElementVirtualLinked::class)) {
             $list = $grid->getList()->filter(['ClassName' => ElementVirtualLinked::class]);
             $grid->setList($list);
         }

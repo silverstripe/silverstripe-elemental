@@ -2,27 +2,25 @@
 
 namespace DNADesign\Elemental\Tests;
 
-use SilverStripe\Dev\FunctionalTest;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
-use SilverStripe\CMS\Model\RedirectorPage;
 use Page;
+use SilverStripe\CMS\Model\RedirectorPage;
+use SilverStripe\Dev\FunctionalTest;
 
-/**
- * @package elemental
- * @subpackage tests
- */
-class ElementalPageExtensionTests extends FunctionalTest {
+class ElementalPageExtensionTests extends FunctionalTest
+{
 
-    protected static $fixture_file = 'elemental/tests/ElementalPageExtensionTests.yml';
+    protected static $fixture_file = 'ElementalPageExtensionTests.yml';
 
-    public function setUp() {
-        parent::setUp();
+    protected static $required_extensions = [
+        Page::class => [
+            ElementalPageExtension::class,
+        ],
+    ];
 
-        Page::add_extension(ElementalPageExtension::class);
-    }
-
-    public function testUpdateCmsFields() {
-        $page = $this->objFromFixture('Page', 'elementaldemo');
+    public function testUpdateCmsFields()
+    {
+        $page = $this->objFromFixture(Page::class, 'elementaldemo');
 
         $elementalArea = $page->getCMSFields()->dataFieldByName('ElementalArea');
         $this->assertNotNull($elementalArea);
@@ -35,5 +33,4 @@ class ElementalPageExtensionTests extends FunctionalTest {
 
         $this->assertNull($elementalArea);
     }
-
 }

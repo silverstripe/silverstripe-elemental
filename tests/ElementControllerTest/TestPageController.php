@@ -1,15 +1,12 @@
 <?php
 
-namespace DNADesign\Elemental\Tests;
+namespace DNADesign\Elemental\Tests\ElementControllerTest;
 
 use PageController;
 use ReflectionClass;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\View\SSViewer;
 
-/**
- * @package cms
- * @subpackage tests
- */
-class TestPageController extends PageController implements TestOnly {
+class TestPageController extends PageController implements TestOnly
+{
 }

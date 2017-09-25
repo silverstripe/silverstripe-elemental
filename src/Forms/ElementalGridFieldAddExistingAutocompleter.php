@@ -29,7 +29,8 @@ use SilverStripe\ORM\SS_List;
  * @package forms
  * @subpackage fields-gridfield
  */
-class ElementalGridFieldAddExistingAutocompleter extends GridFieldAddExistingAutocompleter {
+class ElementalGridFieldAddExistingAutocompleter extends GridFieldAddExistingAutocompleter
+{
 
     /**
      * If an object ID is set, add the object to the list
@@ -41,19 +42,19 @@ class ElementalGridFieldAddExistingAutocompleter extends GridFieldAddExistingAut
     public function getManipulatedData(GridField $gridField, SS_List $dataList)
     {
 
-        if(!$gridField->State->GridFieldAddRelation) {
+        if (!$gridField->State->GridFieldAddRelation) {
             return $dataList;
         }
 
         $objectID = Convert::raw2sql($gridField->State->GridFieldAddRelation);
 
-        if($objectID) {
+        if ($objectID) {
             $object = DataObject::get_by_id($dataList->dataclass(), $objectID);
 
-            if($object) {
+            if ($object) {
                 // if the object is currently not linked to either a page or another list then we want to link to
                 // the original, otherwise link to a clone
-                if(!$object->ParentID && !$object->ListID) {
+                if (!$object->ParentID && !$object->ListID) {
                     $dataList->add($object);
                 } else {
                     $virtual = new ElementVirtualLinked();
