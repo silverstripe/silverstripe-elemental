@@ -610,7 +610,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value);
             $templates[] = DataObjectPreviewController::stripNamespacing($value);
             if ($value == BaseElement::class) {
-                break;
+                continue;
             }
         }
         return $templates;
