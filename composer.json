@@ -21,7 +21,7 @@
         "silverstripe/framework": "^4.0",
         "silverstripe/cms": "^4.0",
         "silverstripe/versioned": "^1.0",
-        "symbiote/silverstripe-gridfieldextensions": "^3.0",
+        "symbiote/silverstripe-gridfieldextensions": "3.0.x-dev",
         "arillo/silverstripe-dataobject-preview": "4.0.x-dev",
         "dnadesign/silverstripe-advanceddropdowns": "^2.0"
     },
