@@ -1,0 +1,41 @@
+en:
+  DNADesign\ElementalArchetypes\Controllers\SkeletonAdmin:
+    MENUTITLE: 'Element Skeletons'
+  DNADesign\Elemental\Controllers\CMSSiteTreeFilter_Search:
+    Title: 'All Elemental content'
+  DNADesign\Elemental\Controllers\ElementalAdmin:
+    MENUTITLE: 'Content Elements'
+  DNADesign\Elemental\Models\BaseElement:
+    OTHERPAGES: 'Other pages'
+    PLURALNAME: 'Content Elements'
+    PLURALS:
+      one: 'A Content Element'
+      other: '{count} Content Elements'
+    SINGULARNAME: 'Content Element'
+    TYPE: Type
+    VIRTUALTABTITLE: 'Linked To'
+  DNADesign\Elemental\Models\ElementContent:
+    PLURALNAME: 'Content Elements'
+    PLURALS:
+      one: 'A Content Element'
+      other: '{count} Content Elements'
+    SINGULARNAME: 'Content Element'
+  DNADesign\Elemental\Models\ElementList:
+    PLURALNAME: 'Content Elements'
+    PLURALS:
+      one: 'A Content Element'
+      other: '{count} Content Elements'
+    SINGULARNAME: 'Content Element'
+  DNADesign\Elemental\Models\ElementVirtualLinked:
+    DESCRIBE: 'This is a virtual copy of an element.'
+    PLURALNAME: 'Virtual linked Elements'
+    PLURALS:
+      one: 'A Virtual linked Element'
+      other: '{count} Virtual linked Elements'
+    SINGULARNAME: 'Virtual linked Element'
+  DNADesign\Elemental\Models\ElementalArea:
+    PLURALNAME: 'Elemental Areas'
+    PLURALS:
+      one: 'An Elemental Area'
+      other: '{count} Elemental Areas'
+    SINGULARNAME: 'Elemental Area'

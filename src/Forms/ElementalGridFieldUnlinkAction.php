@@ -26,7 +26,7 @@ class ElementalGridFieldUnlinkAction extends GridFieldDeleteAction
                 array('RecordID' => $record->ID)
             )
                 ->addExtraClass('gridfield-button-unlink')
-                ->setAttribute('title', _t('GridAction.UnlinkRelation', 'Unlink'))
+                ->setAttribute('title', _t('SilverStripe\\Forms\\GridField\\GridFieldDeleteAction.UnlinkRelation', 'Unlink'))
                 ->setAttribute('data-icon', 'chain--minus');
 
             return $field->Field();

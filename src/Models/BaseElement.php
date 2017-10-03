@@ -360,7 +360,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             'ajaxSafe' => true
         ));
 
-        $fields->insertAfter(new ReadonlyField('ClassNameTranslated', _t('BaseElement.TYPE', 'Type'), $this->i18n_singular_name()), 'Title');
+        $fields->insertAfter(new ReadonlyField('ClassNameTranslated', _t(__CLASS__ . '.TYPE', 'Type'), $this->i18n_singular_name()), 'Title');
         $fields->removeByName('ListID');
         $fields->removeByName('ParentID');
         $fields->removeByName('Sort');
@@ -394,7 +394,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         if ($virtual = $fields->dataFieldByName('VirtualClones')) {
             if ($this->VirtualClones()->Count() > 0) {
                 $tab = $fields->findOrMakeTab('Root.VirtualClones');
-                $tab->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'));
+                $tab->setTitle(_t(__CLASS__ . '.VIRTUALTABTITLE', 'Linked To'));
 
                 if ($ownerPage = $this->getPage()) {
                     $fields->addFieldToTab(
@@ -413,7 +413,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
                 $virtual->setConfig(new GridFieldConfig_Base());
                 $virtual
-                    ->setTitle(_t('BaseElement.OTHERPAGES', 'Other pages'))
+                    ->setTitle(_t(__CLASS__ . '.OTHERPAGES', 'Other pages'))
                     ->getConfig()
                         ->removeComponentsByType(GridFieldAddExistingAutocompleter::class)
                         ->removeComponentsByType(GridFieldAddNewButton::class)

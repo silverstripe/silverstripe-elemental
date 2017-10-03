@@ -26,8 +26,8 @@ class ElementalGridFieldDeleteAction extends GridFieldDeleteAction
                 array('RecordID' => $record->ID)
             )
                 ->addExtraClass('action gridfield-button-delete btn--icon-md font-icon-trash-bin btn--no-text grid-field__icon-action form-group--no-label')
-                ->setAttribute('title', _t('GridAction.Delete', 'Delete'))
-                ->setDescription(_t('GridAction.DELETE_DESCRIPTION', 'Delete'));
+                ->setAttribute('title', _t('SilverStripe\\Forms\\GridField\\GridFieldDeleteAction.Delete', 'Delete'))
+                ->setDescription(_t('SilverStripe\\Forms\\GridField\\GridFieldDeleteAction.DELETE_DESCRIPTION', 'Delete'));
             return $field->Field();
         }
     }

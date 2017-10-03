@@ -64,7 +64,7 @@ class ElementVirtualLinked extends BaseElement
     {
         $message = sprintf(
             '<p>%s</p><p><a href="%2$s">Click here to edit the original</a></p>',
-            _t('ElementVirtualLinked.DESCRIBE', 'This is a virtual copy of an element.'),
+            _t(__CLASS__ . '.DESCRIBE', 'This is a virtual copy of an element.'),
             $this->LinkedElement()->getEditLink()
         );
 
