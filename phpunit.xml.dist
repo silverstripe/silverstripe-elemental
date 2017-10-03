@@ -1,6 +1,6 @@
-<phpunit bootstrap="cms/tests/bootstrap.php" colors="true">
+<phpunit bootstrap="vendor/silverstripe/framework/tests/bootstrap.php" colors="true">
     <testsuite name="Default">
-        <directory>tests/</directory>
+        <directory>tests</directory>
     </testsuite>
 
     <filter>
