@@ -145,9 +145,7 @@ class ElementList extends BaseElement
      */
     public function ItemsToRender()
     {
-        return $this->Elements(array(
-            'Enabled' => 1
-        ));
+        return $this->Elements();
     }
 
     /**

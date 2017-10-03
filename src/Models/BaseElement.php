@@ -35,10 +35,8 @@ use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\View\SSViewer;
 
-/**
- * @package elemental
- */
 class BaseElement extends DataObject implements CMSPreviewable
 {
 
@@ -47,46 +45,39 @@ class BaseElement extends DataObject implements CMSPreviewable
      * @var string
      */
     private static $icon = 'elemental/images/base.svg';
+
     /**
      * @var array $db
      */
-    private static $db = array(
+    private static $db = [
         'Title' => 'Varchar(255)',
         'Sort' => 'Int',
-        'Enabled' => 'Int',
         'ExtraClass' => 'Varchar(255)',
         'AvailableGlobally' => 'Boolean(1)'
-    );
+    ];
 
     /**
      * @var array $has_one
      */
-    private static $has_one = array(
+    private static $has_one = [
         'Parent' => ElementalArea::class,
         'List' => ElementList::class // optional.
-    );
+    ];
 
     /**
      * @var array $has_many
      */
-    private static $has_many = array(
+    private static $has_many = [
         'VirtualClones' => ElementVirtualLinked::class
-    );
+    ];
 
-    private static $extensions = array(
+    private static $extensions = [
         Versioned::class
-    );
+    ];
 
     private static $table_name = 'Element';
 
     private static $controller_class = ElementController::class;
-
-    /**
-     * @var array
-     */
-    private static $defaults = array(
-        'Enabled' => true,
-    );
 
     /**
      * @var ElementController
@@ -111,12 +102,12 @@ class BaseElement extends DataObject implements CMSPreviewable
     /**
      * @var array
      */
-    private static $summary_fields = array(
+    private static $summary_fields = [
         'ElementIcon' => 'ElementIcon',
         'Title' => 'Title',
         'ElementSummary' => 'Summary',
         'ElementTypeNice' => 'Type',
-    );
+    ];
 
     /**
      * @var array
@@ -169,7 +160,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         $classes = array();
 
         // get all dataobject with the elemental extension
-        foreach (ClassInfo::subclassesFor('DataObject') as $className) {
+        foreach (ClassInfo::subclassesFor(DataObject::class) as $className) {
             if (Object::has_extension($className, ElementPageExtension::class)) {
                 $classes[] = $className;
             }
@@ -198,7 +189,11 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * Basic permissions, defaults to page perms where possible
+     * Basic permissions, defaults to page perms where possible.
+     *
+     * @param Member $member
+     *
+     * @return boolean
      */
     public function canView($member = null)
     {
@@ -216,7 +211,11 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * Basic permissions, defaults to page perms where possible
+     * Basic permissions, defaults to page perms where possible.
+     *
+     * @param Member $member
+     *
+     * @return boolean
      */
     public function canEdit($member = null)
     {
@@ -234,10 +233,15 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * Basic permissions, defaults to page perms where possible
-     * Uses archive not delete so that current stage is respected
-     * i.e if a element is not published, then it can be deleted by someone who
-     * doesn't have publishing permissions
+     * Basic permissions, defaults to page perms where possible.
+     *
+     * Uses archive not delete so that current stage is respected i.e if a
+     * element is not published, then it can be deleted by someone who doesn't
+     * have publishing permissions.
+     *
+     * @param Member $member
+     *
+     * @return boolean
      */
     public function canDelete($member = null)
     {
@@ -373,7 +377,6 @@ class BaseElement extends DataObject implements CMSPreviewable
             $title->setRightTitle('For reference only. Does not appear in the template.');
         }
 
-        $fields->addFieldToTab('Root.Settings', new CheckboxField('Enabled'));
         $fields->addFieldToTab('Root.Settings', new CheckboxField('AvailableGlobally', 'Available globally - can be linked to multiple pages'));
         $fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
 
@@ -569,8 +572,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         $config = SiteConfig::current_site_config();
 
         if ($config->Theme) {
-            Config::inst()->update('SSViewer', 'theme_enabled', true);
-            Config::inst()->update('SSViewer', 'theme', $config->Theme);
+            Config::modify()->merge(SSViewer::class, 'themes', [$config->Theme]);
         }
 
         if ($holder) {
@@ -924,36 +926,9 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * Handles unpublishing as VersionedDataObjects doesn't
-     * Modelled on SiteTree::doUnpublish
-     * Has to be applied here, rather than BaseElement so that it goes against Element
-     * TODO: check if required
-     */
-    // public function doUnpublish() {
-    //     if(!$this->owner->ID) return false;
-
-    //     $this->owner->extend('onBeforeUnpublish');
-
-    //     $origStage = Versioned::get_reading_mode();
-    //     Versioned::set_reading_mode('Stage.Live');
-
-    //     // This way our ID won't be unset
-    //     $clone = clone $this->owner;
-    //     $clone->delete();
-
-    //     Versioned::set_reading_mode($origStage);
-
-    //     $virtualLinkedElements = $this->owner->getPublishedVirtualLinkedElements();
-    //     if ($virtualLinkedElements) foreach($virtualLinkedElements as $vle) $vle->doUnpublish();
-
-    //     $this->owner->extend('onAfterUnpublish');
-
-    //     return true;
-    // }
-
-
-    /**
-     * This can be overridden on child elements to create a summary for display in gridfields.
+     * This can be overridden on child elements to create a summary for display
+     * in GridFields.
+     *
      * @return string
      */
     public function ElementSummary()
@@ -968,7 +943,8 @@ class BaseElement extends DataObject implements CMSPreviewable
 
 
     /**
-     * Generate markup for element type icons suitable for use in gridfields
+     * Generate markup for element type icons suitable for use in GridFields.
+     *
      * @return DBField
      */
     public function ElementIcon()
@@ -984,7 +960,9 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * Generate markup for element type, with description suitable for use in gridfields
+     * Generate markup for element type, with description suitable for use in
+     * GridFields.
+     *
      * @return DBField
      */
     public function ElementTypeNice()

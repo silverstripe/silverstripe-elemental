@@ -1,13 +1,15 @@
 # SilverStripe Elemental
 
 [![Build Status](http://img.shields.io/travis/dnadesign/silverstripe-elemental.svg?style=flat-square)](https://travis-ci.org/dnadesign/silverstripe-elemental)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dnadesign/silverstripe-elemental/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dnadesign/silverstripe-elemental/?branch=master)
+[![codecov](https://codecov.io/gh/dnadesign/silverstripe-elemental/branch/master/graph/badge.svg)](https://codecov.io/gh/dnadesign/silverstripe-elemental)
 [![Version](http://img.shields.io/packagist/v/dnadesign/silverstripe-elemental.svg?style=flat-square)](https://packagist.org/packages/dnadesign/silverstripe-elemental)
 [![License](http://img.shields.io/packagist/l/dnadesign/silverstripe-elemental.svg?style=flat-square)](LICENSE.md)
 
 ## Introduction
 
-This module extends a page type to swap the content area for a GridField and manageable elements to compose
-a page out of rather than a single text field. Features supported:
+This module extends a page type to swap the content area for a GridField and manageable elements to compose a page out
+of rather than a single text field. Features supported:
 
 * Versioning of elements
 * Ability to add, remove supported elements per page.
@@ -29,7 +31,7 @@ Extend any page type with the ElementPageExtension and define allowed elements. 
 ```yaml
 ElementPage:
   extensions:
-    - ElementPageExtension
+    - DNADesign\Elemental\Extensions\ElementPageExtension
 ```
 
 In your page type template use `$ElementArea` to render the elements to the page.
