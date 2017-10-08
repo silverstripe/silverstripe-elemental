@@ -4,7 +4,7 @@ dist: trusty
 
 env:
   global:
-    - COMPOSER_ROOT_VERSION=4.0.x-dev
+    - COMPOSER_ROOT_VERSION=2.x-dev
 
 matrix:
   include:

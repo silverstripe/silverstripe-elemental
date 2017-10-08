@@ -4,14 +4,8 @@ namespace DNADesign\Elemental\Extensions;
 
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
-
 use SilverStripe\Core\Extension;
 
-/**
- * Add this to ContentController to enable elements
- *
- * @package widgets
- */
 class ElementalContentControllerExtension extends Extension
 {
     /**
@@ -43,7 +37,7 @@ class ElementalContentControllerExtension extends Extension
         /** @var SiteTree $elementOwner */
         $elementOwner = $this->owner->data();
 
-        $elementalAreaRelations = ElementalAreasExtension::get_elemental_area_relations($elementOwner);
+        $elementalAreaRelations = $this->owner->getElementalRelations();
 
         if (!$elementalAreaRelations) {
             user_error(get_class($this->owner) . ' has no ElementalArea relationships', E_USER_ERROR);

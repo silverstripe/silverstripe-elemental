@@ -62,16 +62,7 @@ ElementPage:
     - YourCompany\YourModule\Elements\ElementContact
 ```
 
-By default, an Element List can contain nested Elements. To set allowed elements in list use the `allowed_elements`
-flag. The `disallowed_elements` configuration flag works here too.
-
-```yaml
-DNADesign\Elemental\Models\ElementList:
-  allowed_elements:
-    YourCompany\YourModule\Elements\ElementFile: File
-```
-
-### Limiting global elements
+### Limiting Global Elements
 
 By default any element is available to be linked to multiple pages. This can be
 changed with the "Available globally" checkbox in the settings tab of each element.

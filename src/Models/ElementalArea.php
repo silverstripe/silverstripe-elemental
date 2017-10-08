@@ -16,6 +16,8 @@ use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
+use SilverStripe\Core\Injector\Injector;
+
 use Page;
 
 /**
@@ -23,57 +25,79 @@ use Page;
  */
 class ElementalArea extends DataObject
 {
-    private static $db = array(
-        'OwnerClassName' => 'Varchar',
+    /**
+     * @var array
+     */
+    private static $db = [
+        'OwnerClassName' => 'Varchar(255)',
         'SearchContent' => 'HTMLText'
-    );
-
-    private static $has_many = array(
-        'Elements' => BaseElement::class
-    );
-
-    private static $extensions = array(
-        Versioned::class
-    );
-
-    private static $owns = array(
-        'Elements'
-    );
+    ];
 
     /**
      * @var array
      */
-    private static $summary_fields = array(
-        'Title' => 'Title'
-    );
+    private static $has_many = [
+        'Elements' => BaseElement::class
+    ];
 
+    /**
+     * @var array
+     */
+    private static $extensions = [
+        Versioned::class
+    ];
+
+    /**
+     * @var array
+     */
+    private static $owns = [
+        'Elements'
+    ];
+
+    /**
+     * @var array
+     */
+    private static $summary_fields = [
+        'Title' => 'Title'
+    ];
+
+    /**
+     * @var string
+     */
     private static $table_name = 'ElementalArea';
 
-    public static function elemental_page_types()
+    /**
+     * @return array
+     */
+    public function supportedPageTypes()
     {
-        $elementalClasses = array();
+        $elementalClasses = [];
+
         foreach (ClassInfo::getValidSubClasses(SiteTree::class) as $class) {
             if (Extensible::has_extension($class, ElementalAreasExtension::class)) {
                 $elementalClasses[] = $class;
             }
         }
+
         return $elementalClasses;
     }
 
+    /**
+     *
+     */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-        // this is currently throwing errors on write. Given search isn't working at all on ss4 yet, disable for now
-//      $this->SearchContent = $this->renderSearchContent();
+
+        $this->SearchContent = $this->renderSearchContent();
     }
 
     /**
-     * Render the elements out and push into ElementContent so that Solr can use that field for searching
-     * SS4 branch not tested, as still waiting for fulltextsearch to get an upgrade
+     * Render the elements out and push into ElementContent so that Solr can
+     * index.
      */
     public function renderSearchContent()
     {
-        // enable theme in case elements are being rendered with templates stored in theme folder
         $viewer_config = SSViewer::config();
         $originalThemeEnabled = $viewer_config->get('theme_enabled');
         $viewer_config->update('theme_enabled', true);
@@ -103,35 +127,34 @@ class ElementalArea extends DataObject
         return $renderedSearchContent;
     }
 
+    /**
+     * @return HTMLText
+     */
     public function forTemplate()
     {
         return $this->renderWith('ElementalArea');
     }
 
     /**
-     * Necessary to display results in CMS site search
+     * Necessary to display results in CMS site search.
      *
-     * @return string
+     * @return HTMLText
      */
     public function Breadcrumbs()
     {
         $ownerClassName = $this->OwnerClassName;
+
         if ($owner = $ownerClassName::get()->filter('ElementalAreaID', $this->ID)->first()) {
-            return '<a href="' . $owner->CMSEditLink() . '">' . $owner->Title . '</a>';
+            return DBField::create_field('HTMLText', sprintf(
+                '<a href="%s">%s</a>',
+                $owner->CMSEditLink(), $owner->Title
+            ));
         }
     }
 
     /**
-     * @return HasManyList
-     */
-    public function ItemsToRender()
-    {
-        return $this->Elements();
-    }
-
-    /**
-     * Used in template instead of {@link Elements()} to wrap each element in its
-     * controller, making it easier to access and process form logic and
+     * Used in template instead of {@link Elements()} to wrap each element in
+     * its' controller, making it easier to access and process form logic and
      * actions stored in {@link ElementController}.
      *
      * @return ArrayList - Collection of {@link ElementController} instances.
@@ -139,29 +162,32 @@ class ElementalArea extends DataObject
     public function ElementControllers()
     {
         $controllers = new ArrayList();
-        $items = $this->ItemsToRender();
+        $items = $this->Elements();
+
         if (!is_null($items)) {
             foreach ($items as $element) {
                 $controller = $element->getController();
                 $controllers->push($controller);
             }
         }
+
         return $controllers;
     }
 
     /**
-    * Return an ArrayList of pages with the Element Page Extension
-    *
-    * @return ArrayList
-    */
+     *
+     */
     public function getOwnerPage()
     {
         if ($this->OwnerClassName) {
             $class = $this->OwnerClassName;
-            $elementalAreaRelations = ElementalAreasExtension::get_elemental_area_relations(singleton($class));
+            $elementalAreaRelations = Injector::inst()->get($class)->getElementalRelations();
+
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
+
                 $page = $class::get()->filter($areaID, $this->ID);
+
                 if ($page && $page->exists()) {
                     return $page->first();
                 }
@@ -169,32 +195,32 @@ class ElementalArea extends DataObject
         }
 
         $originalMode = Versioned::get_stage();
+
         if (!$originalMode) {
             $originalMode = Versioned::DRAFT;
         }
+
         Versioned::set_stage(Versioned::DRAFT);
-        $elementalPageTypes = self::elemental_page_types();
-        foreach ($elementalPageTypes as $elementalPageType) {
-            $elementalAreaRelations = ElementalAreasExtension::get_elemental_area_relations(singleton($elementalPageType));
+
+        foreach ($this->supportedPageTypes() as $class) {
+            $elementalAreaRelations = Injector::inst()->get($class)->getElementalRelations();
+
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
                 $page = $elementalPageType::get()->filter($areaID, $this->ID);
+
                 if ($page && $page->exists()) {
                     Versioned::set_stage($originalMode);
                     $this->OwnerClassName = $elementalPageType;
                     $this->write();
+
                     return $page->first();
                 }
             }
         }
-        Versioned::set_stage($originalMode);
-        return false;
-    }
 
-    public function getTitle()
-    {
-        $count = $this->Elements()->Count();
-        $el = $count === 1 ? 'element' : 'elements';
-        return 'Holder for ' . $count. ' content ' . $el;
+        Versioned::set_stage($originalMode);
+
+        return false;
     }
 }

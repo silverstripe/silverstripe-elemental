@@ -4,17 +4,19 @@ namespace DNADesign\Elemental\Extensions;
 
 use DNADesign\Elemental\Models\ElementalArea;
 
-/**
- * @package elemental
- */
 class ElementalPageExtension extends ElementalAreasExtension
 {
-
-    private static $has_one = array(
+    /**
+     * @var array
+     */
+    private static $has_one = [
         'ElementalArea' => ElementalArea::class
-    );
+    ];
 
-    private static $owns = array(
+    /**
+     * @var array
+     */
+    private static $owns = [
         'ElementalArea'
-    );
+    ];
 }

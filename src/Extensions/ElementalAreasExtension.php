@@ -2,36 +2,22 @@
 
 namespace DNADesign\Elemental\Extensions;
 
-use DNADesign\Elemental\Forms\ElementalGridFieldAddExistingAutocompleter;
-use DNADesign\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
-use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Models\ElementVirtualLinked;
-
+use DNADesign\Elemental\ElementalEditor;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
-use SilverStripe\Forms\GridField\GridFieldAddNewButton;
-use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
-use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripe\Forms\GridField\GridFieldPaginator;
-use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\ORM\DataExtension;
 
-use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
-use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
-
 /**
- * This extension handles most of the relationships between pages and element area
- * It doesn't add an ElementArea to the page however.
- * Because of this, developers can add multiple ElementAreas.
+ * This extension handles most of the relationships between pages and element
+ * area, it doesn't add an ElementArea to the page however. Because of this,
+ * developers can add multiple {@link ElementArea} areas to to a page.
  *
  * If you want multiple ElementalAreas add them as has_ones, add this extensions
  * and MAKE SURE you don't forget to add ElementAreas to $owns, otherwise they
@@ -57,10 +43,13 @@ class ElementalAreasExtension extends DataExtension
      *
      * @var array $ignored_classes Classes to ignore adding elements too.
      */
-    private static $ignored_classes = array();
+    private static $ignored_classes = [];
 
     /**
      * @config
+     *
+     * On saving the element area, should Elemental reset the main website
+     * `$Content` field.
      *
      * @var boolean
      */
@@ -68,12 +57,15 @@ class ElementalAreasExtension extends DataExtension
 
     /**
      * Get the available element types for this page type,
-     * Uses allowed_elements, stop_element_inheritance, disallowed_elements in order to get to correct list
+     *
+     * Uses allowed_elements, stop_element_inheritance, disallowed_elements in
+     * order to get to correct list.
+     *
      * @return array
      */
-    public static function get_available_types_for_class($class)
+    public function getElementalTypes()
     {
-        $config = $class::config();
+        $config = $this->owner->config();
 
         if (is_array($config->get('allowed_elements'))) {
             if ($config->get('stop_element_inheritance')) {
@@ -83,20 +75,19 @@ class ElementalAreasExtension extends DataExtension
             }
         } else {
             $availableClasses = ClassInfo::subclassesFor(BaseElement::class);
-            unset($availableClasses[BaseElement::class]);
         }
 
         $disallowedElements = (array) $config->get('disallowed_elements');
-
-        if (!in_array(ElementVirtualLinked::class, $disallowedElements)) {
-            array_push($disallowedElements, ElementVirtualLinked::class);
-        }
-
         $list = array();
+
         foreach ($availableClasses as $availableClass) {
             $inst = singleton($availableClass);
 
             if (!in_array($availableClass, $disallowedElements) && $inst->canCreate()) {
+                if ($inst->hasMethod('canCreateBlock') && !$inst->canCreateBlock()) {
+                    continue;
+                }
+
                 $list[$availableClass] = $inst->i18n_singular_name();
             }
         }
@@ -105,19 +96,28 @@ class ElementalAreasExtension extends DataExtension
             asort($list);
         }
 
+        if (isset($list[BaseElement::class])) {
+            unset($list[BaseElement::class]);
+        }
+
+        $this->owner->invokeWithExtensions(
+            'updateAvailableTypesForClass', $class, $list
+        );
+
+
         return $list;
     }
 
-    public static function get_elemental_area_relations(SiteTree $elementOwner)
+    public function getElementalRelations()
     {
-        $hasOnes = $elementOwner->hasOne();
+        $hasOnes = $this->owner->hasOne();
 
         if (!$hasOnes) {
             return false;
         }
 
         // find ElementalArea relations
-        $elementalAreaRelations = array();
+        $elementalAreaRelations = [];
 
         foreach ($hasOnes as $hasOneName => $hasOneClass) {
             if ($hasOneClass == ElementalArea::class || is_subclass_of($hasOneClass, ElementalArea::class)) {
@@ -143,57 +143,18 @@ class ElementalAreasExtension extends DataExtension
         // after content.
         $fields->replaceField('Content', new LiteralField('Content', ''));
 
-        $elementalAreaRelations = self::get_elemental_area_relations($this->owner);
+        $elementalAreaRelations = $this->owner->getElementalRelations();
+
         foreach ($elementalAreaRelations as $eaRelationship) {
-            $adder = new ElementalGridFieldAddNewMultiClass('buttons-before-left');
-
-            $list = self::get_available_types_for_class($this->owner->ClassName);
-            if ($list) {
-                $adder->setClasses($list);
-            }
-
             $area = $this->owner->$eaRelationship();
 
-            $gridField = GridField::create(
-                $eaRelationship,
-                Config::inst()->get(ElementalPageExtension::class, $eaRelationship),
-                $area->Elements(),
-                $config = GridFieldConfig_RelationEditor::create()
-                    ->removeComponentsByType(array(
-                        GridFieldAddNewButton::class,
-                        GridFieldSortableHeader::class,
-                        GridFieldDeleteAction::class,
-                        GridFieldAddExistingAutocompleter::class
-                    ))
-                    ->addComponent($autocomplete = new ElementalGridFieldAddExistingAutocompleter('buttons-before-right'))
-                    ->addComponent(new GridFieldTitleHeader())
-                    ->addComponent($adder)
-                    ->addComponent(new GridFieldOrderableRows('Sort'))
-            );
-
-            if ($this->owner->canArchive()) {
-                $config->addComponent(new ElementalGridFieldDeleteAction());
-            }
-
-            $searchList = BaseElement::get()->filter('AvailableGlobally', true);
-            if ($list) {
-                $searchList = $searchList->filter('ClassName', array_keys($list));
-            }
-            $autocomplete->setSearchList($searchList);
-
-            $autocomplete->setResultsFormat('($ID) $Title');
-            $autocomplete->setSearchFields(array('ID', 'Title'));
-
-            $config = $gridField->getConfig();
-            $paginator = $config->getComponentByType(GridFieldPaginator::class);
-            if ($paginator) {
-                $paginator->setItemsPerPage(100);
-            }
+            $editor = ElementalEditor::create($eaRelationship, $area);
+            $editor->setTypes($this->getElementalTypes());
 
             if ($this->owner instanceof SiteTree && $fields->findOrMakeTab('Root.Main')->fieldByName('Metadata')) {
-                $fields->addFieldToTab('Root.Main', $gridField, 'Metadata');
+                $fields->addFieldToTab('Root.Main', $editor->getField(), 'Metadata');
             } else {
-                $fields->addFieldToTab('Root.Main', $gridField);
+                $fields->addFieldToTab('Root.Main', $editor->getField());
             }
         }
 
@@ -212,12 +173,13 @@ class ElementalAreasExtension extends DataExtension
             return;
         }
 
-        $elementalAreaRelations = self::get_elemental_area_relations($this->owner);
+        $elementalAreaRelations = $this->owner->getElementalRelations();
+
         foreach ($elementalAreaRelations as $eaRelationship) {
             $areaID = $eaRelationship . 'ID';
 
             if (!$this->owner->$areaID) {
-                $area = new ElementalArea();
+                $area = ElementalArea::create();
                 $area->OwnerClassName = $this->owner->ClassName;
                 $area->write();
                 $this->owner->$areaID = $area->ID;
@@ -247,7 +209,7 @@ class ElementalAreasExtension extends DataExtension
 
         if (is_a($this->owner, RedirectorPage::class) || is_a($this->owner, VirtualPage::class)) {
             return false;
-        } elseif ($ignored = Config::inst()->get(ElementalPageExtension::class, 'ignored_classes')) {
+        } else if ($ignored = Config::inst()->get(ElementalPageExtension::class, 'ignored_classes')) {
             foreach ($ignored as $check) {
                 if (is_a($this->owner, $check)) {
                     return false;
