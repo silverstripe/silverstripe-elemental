@@ -207,11 +207,11 @@ class ElementalArea extends DataObject
 
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
-                $page = $elementalPageType::get()->filter($areaID, $this->ID);
+                $page = $class::get()->filter($areaID, $this->ID);
 
                 if ($page && $page->exists()) {
                     Versioned::set_stage($originalMode);
-                    $this->OwnerClassName = $elementalPageType;
+                    $this->OwnerClassName = $class;
                     $this->write();
 
                     return $page->first();
