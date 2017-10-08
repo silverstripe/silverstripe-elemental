@@ -303,6 +303,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         $fields = $this->scaffoldSearchFields();
         $elements = BaseElement::all_allowed_elements();
+
         if (!$elements) {
             $elements = ClassInfo::subclassesFor(self::class);
         }
@@ -314,8 +315,11 @@ class BaseElement extends DataObject implements CMSPreviewable
             $elements[$key] = DataObjectPreviewController::stripNamespacing($value);
         }
 
-        $fields->push(DropdownField::create('ClassName', 'Element Type', $elements)
-            ->setEmptyString('All types'));
+        $fields->push(
+            DropdownField::create('ClassName', _t(__CLASS__.'.ELEMENTTYPE', 'Element Type'), $elements)
+                ->setEmptyString(_t(__CLASS__.'.ALL', 'All types'))
+        );
+
         $filters = $this->owner->defaultSearchFilters();
 
         return new SearchContext(
@@ -353,21 +357,6 @@ class BaseElement extends DataObject implements CMSPreviewable
                 return;
             }
 
-            return $this->config()->title;
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function getCMSTitle()
-    {
-        if ($title = $this->getField('Title')) {
-            return $this->config()->title . ': ' . $title;
-        } else {
-            if (!$this->isInDb()) {
-                return;
-            }
             return $this->config()->title;
         }
     }
