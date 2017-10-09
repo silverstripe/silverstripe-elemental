@@ -33,6 +33,14 @@ class ElementalEditor {
     protected $name;
 
     /**
+     * By default, no need for a title on the editor. If there is more than one
+     * area then use `setTitle` to describe.
+     *
+     * @var string
+     */
+    protected $title = '';
+
+    /**
      * @var array
      */
     protected $types = [];
@@ -67,13 +75,23 @@ class ElementalEditor {
     }
 
     /**
+     * @param string
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
      * @return GridField
      */
     public function getField()
     {
         $gridField = GridField::create(
             $this->name,
-            Config::inst()->get(ElementalPageExtension::class, $this->name),
+            $this->title,
             $this->getArea()->Elements(),
             $config = GridFieldConfig_RelationEditor::create()
                 ->removeComponentsByType(array(
