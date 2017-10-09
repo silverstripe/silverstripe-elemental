@@ -148,6 +148,16 @@ class ElementalAreasExtension extends DataExtension
         foreach ($elementalAreaRelations as $eaRelationship) {
             $area = $this->owner->$eaRelationship();
 
+            // if area isn't in the database then force a write so the blocks have a parent ID.
+            if (!$area->isInDb()) {
+                $area->write();
+
+                $key = $eaRelationship . 'ID';
+
+                $this->owner->{$key} = $area->ID;
+                $this->owner->write();
+            }
+
             $editor = ElementalEditor::create($eaRelationship, $area);
             $editor->setTypes($this->getElementalTypes());
 
