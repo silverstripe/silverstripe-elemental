@@ -362,6 +362,18 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
+     * @param ElementController
+     *
+     * @return $this
+     */
+    public function setController($controller)
+    {
+        $this->controller = $controller;
+
+        return $this;
+    }
+
+    /**
      * @throws Exception
      *
      * @return ElementController
