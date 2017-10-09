@@ -114,21 +114,10 @@ class ElementController extends Controller
     }
 
     /**
-     * Overloaded from {@link Element->RenderElement()} to allow for controller / form
-     * linking.
-     *
-     * @return string HTML
-     */
-    public function RenderElement()
-    {
-        return $this->renderWith($this->element->getRenderTemplates());
-    }
-
-    /**
      * @return string HTML
      */
     public function ElementHolder()
     {
-        return $this->renderWith('ElementHolder');
+        return $this->element->renderWith('ElementHolder');
     }
 }

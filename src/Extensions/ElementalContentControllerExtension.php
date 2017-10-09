@@ -9,31 +9,21 @@ use SilverStripe\Core\Extension;
 class ElementalContentControllerExtension extends Extension
 {
     /**
-     *
      * @var array
      */
     private static $allowed_actions = array(
         'handleElement'
     );
 
-    /**
-     * Handles widgets attached to a page through one or more {@link WidgetArea}
-     * elements.
-     *
-     * Iterated through each $has_one relation with a {@link WidgetArea} and
-     * looks for connected widgets by their database identifier.
-     *
-     * Assumes URLs in the following format: <URLSegment>/element/<Element-ID>.
-     *
-     * @return RequestHandler
-     */
     public function handleElement()
     {
         $id = $this->owner->getRequest()->param('ID');
+
         if (!$id) {
             user_error('No element ID supplied', E_USER_ERROR);
             return false;
         }
+
         /** @var SiteTree $elementOwner */
         $elementOwner = $this->owner->data();
 
