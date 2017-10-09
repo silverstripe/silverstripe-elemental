@@ -98,10 +98,6 @@ class ElementalArea extends DataObject
      */
     public function renderSearchContent()
     {
-        $viewer_config = SSViewer::config();
-        $originalThemeEnabled = $viewer_config->get('theme_enabled');
-        $viewer_config->update('theme_enabled', true);
-
         // Copy elements content to ElementContent to enable search
         $searchableContent = array();
 
@@ -122,8 +118,6 @@ class ElementalArea extends DataObject
 
         $renderedSearchContent = trim(implode(' ', $searchableContent));
 
-        // set theme_enabled back to what it was
-        $viewer_config->update('SSViewer', 'theme_enabled', $originalThemeEnabled);
         return $renderedSearchContent;
     }
 
@@ -132,7 +126,7 @@ class ElementalArea extends DataObject
      */
     public function forTemplate()
     {
-        return $this->renderWith('ElementalArea');
+        return $this->renderWith(static::class);
     }
 
     /**
