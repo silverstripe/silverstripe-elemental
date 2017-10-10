@@ -709,7 +709,15 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         $icon = $this->config()->get('icon');
 
-        return DBField::create_field('HTMLVarchar', '<img width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" />');
+        if ($icon) {
+            if (strpos($icon, ':') !== false) {
+                $parts = explode(':', $icon);
+
+                $icon = ModuleLoader::getModule($parts[0])->getRelativeResourcePath($paths[1]);
+            }
+
+            return DBField::create_field('HTMLVarchar', '<img width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" />');
+        }
     }
 
     /**
