@@ -37,7 +37,6 @@ use SilverStripe\ORM\DataExtension;
  */
 class ElementalAreasExtension extends DataExtension
 {
-
     /**
      * @config
      *
@@ -100,10 +99,7 @@ class ElementalAreasExtension extends DataExtension
             unset($list[BaseElement::class]);
         }
 
-        $this->owner->invokeWithExtensions(
-            'updateAvailableTypesForClass', $class, $list
-        );
-
+        $this->owner->invokeWithExtensions('updateAvailableTypesForClass', $class, $list);
 
         return $list;
     }
@@ -193,10 +189,8 @@ class ElementalAreasExtension extends DataExtension
                 $area->OwnerClassName = $this->owner->ClassName;
                 $area->write();
                 $this->owner->$areaID = $area->ID;
-            } else {
-                if ($area = ElementalArea::get()->filter('ID', $this->owner->$areaID)->first()) {
-                    $area->write();
-                }
+            } elseif ($area = ElementalArea::get()->filter('ID', $this->owner->$areaID)->first()) {
+                $area->write();
             }
         }
 
@@ -212,6 +206,7 @@ class ElementalAreasExtension extends DataExtension
     {
         if ($this->owner->hasMethod('includeElemental')) {
             $res = $this->owner->includeElemental();
+
             if ($res !== null) {
                 return $res;
             }
@@ -219,7 +214,7 @@ class ElementalAreasExtension extends DataExtension
 
         if (is_a($this->owner, RedirectorPage::class) || is_a($this->owner, VirtualPage::class)) {
             return false;
-        } else if ($ignored = Config::inst()->get(ElementalPageExtension::class, 'ignored_classes')) {
+        } elseif ($ignored = Config::inst()->get(ElementalPageExtension::class, 'ignored_classes')) {
             foreach ($ignored as $check) {
                 if (is_a($this->owner, $check)) {
                     return false;

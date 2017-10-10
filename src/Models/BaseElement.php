@@ -37,7 +37,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     private static $icon = 'elemental/images/base.svg';
 
     /**
-     * @var array $db
+     * @var array
      */
     private static $db = [
         'Title' => 'Varchar(255)',
@@ -46,14 +46,14 @@ class BaseElement extends DataObject implements CMSPreviewable
     ];
 
     /**
-     * @var array $has_one
+     * @var array
      */
     private static $has_one = [
         'Parent' => ElementalArea::class
     ];
 
     /**
-     * @var array $extensions
+     * @var array
      */
     private static $extensions = [
         Versioned::class
@@ -673,7 +673,9 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         if ($page = $this->getPage()) {
             return DBField::create_field('HTMLText', sprintf(
-                '<a href="%s">%s</a>', $page->CMSEditLink(), $page->Title
+                '<a href="%s">%s</a>',
+                $page->CMSEditLink(),
+                $page->Title
             ));
         }
     }

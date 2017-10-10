@@ -13,22 +13,23 @@ use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\GridField\GridFieldPageCount;
+use SilverStripe\Core\Injector\Injector;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
-class ElementalEditor {
-
+class ElementalEditor
+{
     use Extensible;
     use Injectable;
 
     /**
-     * @var ElementalArea
+     * @var ElementalArea $area
      */
     protected $area;
 
     /**
-     * @var string
+     * @var string $name
      */
     protected $name;
 
@@ -36,17 +37,18 @@ class ElementalEditor {
      * By default, no need for a title on the editor. If there is more than one
      * area then use `setTitle` to describe.
      *
-     * @var string
+     * @var string $title
      */
     protected $title = '';
 
     /**
-     * @var array
+     * @var array $type
      */
     protected $types = [];
 
     /**
-     * @param ElementalArea
+     * @param string $name
+     * @param ElementalArea $area
      */
     public function __construct($name, ElementalArea $area)
     {
@@ -55,7 +57,7 @@ class ElementalEditor {
     }
 
     /**
-     * @param array
+     * @param array $types
      *
      * @return $this
      */
@@ -75,7 +77,9 @@ class ElementalEditor {
     }
 
     /**
-     * @param string
+     * @param string $title
+     *
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -107,7 +111,7 @@ class ElementalEditor {
         );
 
         if ($this->types) {
-            $adder = new ElementalGridFieldAddNewMultiClass('toolbar-header-left');
+            $adder = Injector::inst()->create(ElementalGridFieldAddNewMultiClass::class, 'toolbar-header-left');
             $adder->setClasses($this->types);
 
             $config->addComponent($adder);

@@ -28,7 +28,7 @@ use SilverStripe\Security\Member;
 class ElementController extends Controller
 {
     /**
-     * @var Element
+     * @var BaseElement $element
      */
     protected $element;
 
@@ -63,49 +63,6 @@ class ElementController extends Controller
     }
 
     /**
-     * @param string $action
-     * @return string
-     */
-    public function Link($action = null)
-    {
-        if ($this->data()->virtualOwner) {
-            $controller = new Element_Controller($this->data()->virtualOwner);
-            return $controller->Link($action);
-        }
-
-        $id = ($this->element) ? $this->element->ID : null;
-
-        $segment = Controller::join_links('element', $id, $action);
-
-        $page = Director::get_current_page();
-        if ($page && !($page instanceof ElementController)) {
-            return $page->Link($segment);
-        }
-
-        if ($controller = $this->getParentController()) {
-            return $controller->Link($segment);
-        }
-
-        return $segment;
-    }
-
-    /**
-     * if this is a virtual request, change the hash if set.
-     */
-    public function redirect($url, $code = 302)
-    {
-
-        if ($this->data()->virtualOwner) {
-            $parts = explode('#', $url);
-            if (isset($parts[1])) {
-                $url = $parts[0] . '#' . $this->data()->virtualOwner->ID;
-            }
-        }
-
-        return parent::redirect($url, $code);
-    }
-
-    /**
      * @return Element
      */
     public function getElement()
@@ -119,5 +76,27 @@ class ElementController extends Controller
     public function ElementHolder()
     {
         return $this->element->renderWith('ElementHolder');
+    }
+
+    /**
+     * @param string $action
+     *
+     * @return string
+     */
+    public function Link($action = null)
+    {
+        $id = ($this->element) ? $this->element->ID : null;
+        $segment = Controller::join_links('element', $id, $action);
+        $page = Director::get_current_page();
+
+        if ($page && !($page instanceof ElementController)) {
+            return $page->Link($segment);
+        }
+
+        if ($controller = $this->getParentController()) {
+            return $controller->Link($segment);
+        }
+
+        return $segment;
     }
 }

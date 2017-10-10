@@ -17,16 +17,12 @@ use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
 use SilverStripe\Core\Injector\Injector;
-
 use Page;
 
-/**
- * @package elemental
- */
 class ElementalArea extends DataObject
 {
     /**
-     * @var array
+     * @var array $db
      */
     private static $db = [
         'OwnerClassName' => 'Varchar(255)',
@@ -34,7 +30,7 @@ class ElementalArea extends DataObject
     ];
 
     /**
-     * @var array
+     * @var array $has_many
      */
     private static $has_many = [
         'Elements' => BaseElement::class
@@ -141,7 +137,8 @@ class ElementalArea extends DataObject
         if ($owner = $ownerClassName::get()->filter('ElementalAreaID', $this->ID)->first()) {
             return DBField::create_field('HTMLText', sprintf(
                 '<a href="%s">%s</a>',
-                $owner->CMSEditLink(), $owner->Title
+                $owner->CMSEditLink(),
+                $owner->Title
             ));
         }
     }
@@ -151,7 +148,7 @@ class ElementalArea extends DataObject
      * its' controller, making it easier to access and process form logic and
      * actions stored in {@link ElementController}.
      *
-     * @return ArrayList - Collection of {@link ElementController} instances.
+     * @return ArrayList
      */
     public function ElementControllers()
     {
