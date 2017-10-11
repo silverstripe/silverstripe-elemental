@@ -375,7 +375,11 @@ class BaseElement extends DataObject implements CMSPreviewable
 
         $fields->addFieldToTab('Root.Settings', new CheckboxField('Enabled'));
         $fields->addFieldToTab('Root.Settings', new CheckboxField('AvailableGlobally', 'Available globally - can be linked to multiple pages'));
-        $fields->addFieldToTab('Root.Settings', new TextField('ExtraClass', 'Extra CSS Classes to add'));
+        $fields->addFieldToTab(
+            'Root.Settings',
+            TextField::create('ExtraClass', _t(__CLASS__ . '.ExtraCssClassesLabel', 'Custom CSS classes'))
+                ->setAttribute('placeholder', _t(__CLASS__ . '.ExtraCssClassesPlaceholder', 'my_class another_class'))
+        );
 
         if (!is_a($this, ElementList::class)) {
             $lists = ElementList::get()->filter('ParentID', $this->ParentID);
