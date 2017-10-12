@@ -53,6 +53,13 @@ class ElementalArea extends DataObject
     /**
      * @var array
      */
+    private static $cascade_deletes = [
+        'Elements'
+    ];
+
+    /**
+     * @var array
+     */
     private static $summary_fields = [
         'Title' => 'Title'
     ];
