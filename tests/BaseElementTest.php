@@ -2,13 +2,37 @@
 
 namespace DNADesign\Elemental\Tests;
 
-use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\ElementalArea;
+use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Tests\Src\TestElement;
+use DNADesign\Elemental\Tests\Src\TestPage;
 use SilverStripe\Core\Config\Config;
+use Page;
+use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\Dev\FunctionalTest;
+use DNADesign\Elemental\Models\ElementContent;
 
-class ElementAnchorTests extends FunctionalTest
+class BaseElementTest extends FunctionalTest
 {
+    protected static $fixture_file = 'ElementalPageExtensionTests.yml';
+
+    protected static $required_extensions = [
+        Page::class => [
+            ElementalPageExtension::class,
+        ]
+    ];
+
+    protected static $extra_dataobjects = [
+        TestPage::class
+    ];
+
+    public function testSimpleClassName()
+    {
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+
+        $this->assertEquals('dnadesign__elemental__models__elementcontent', $element->getSimpleClassName());
+    }
 
     /**
      * Test to ensure backwards compatibility with old Anchor IDs.
@@ -57,39 +81,28 @@ class ElementAnchorTests extends FunctionalTest
         $this->assertEquals('element-1-4', $recordSet[3]->getAnchor());
     }
 
-    /**
-     * Test virtual element Anchor ID.
-     */
-    public function testVirtualElementAnchor()
+    public function testGetAllowedElementClasses()
     {
-        Config::modify()->set(BaseElement::class, 'enable_title_in_template', true);
+        $this->markTestIncomplete();
+    }
 
-        $baseElement1 = BaseElement::create(array('Title' => 'Element 2', 'Sort' => 1));
-        $baseElement1->write();
-        $baseElement2 = BaseElement::create(array('Title' => 'Element 2', 'Sort' => 2));
-        $baseElement2->write();
-        $baseElement3 = BaseElement::create(array('Title' => 'Element 2', 'Sort' => 3));
-        $baseElement3->write();
-        $virtElement1 = ElementVirtualLinked::create(array('LinkedElementID' => $baseElement2->ID));
-        $virtElement1->write();
-        $virtElement2 = ElementVirtualLinked::create(array('LinkedElementID' => $baseElement3->ID));
-        $virtElement2->write();
+    public function testGetCmsFields()
+    {
+        $this->markTestIncomplete();
+    }
 
-        $area = ElementalArea::create();
-        $area->Widgets()->add($baseElement1);
-        $area->Widgets()->add($virtElement1);
-        $area->Widgets()->add($virtElement2);
-        $area->write();
+    public function testGetController()
+    {
+        $this->markTestIncomplete();
+    }
 
-        $recordSet = $area->Elements()->toArray();
-        foreach ($recordSet as $record) {
-            // NOTE: This puts it into the $_anchor protected variable
-            //       and caches it.
-            $record->getAnchor();
-        }
+    public function testLink()
+    {
+        $this->markTestIncomplete();
+    }
 
-        $this->assertEquals('element-2', $recordSet[0]->getAnchor());
-        $this->assertEquals('element-2-2', $recordSet[1]->getAnchor());
-        $this->assertEquals('element-2-3', $recordSet[2]->getAnchor());
+    public function testGetIcon()
+    {
+        $this->markTestIncomplete();
     }
 }

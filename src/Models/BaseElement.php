@@ -4,7 +4,6 @@ namespace DNADesign\Elemental\Models;
 
 use Exception;
 use DNADesign\Elemental\Controllers\ElementController;
-use DNADesign\Elemental\Forms\ElementalGridFieldDeleteAction;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
@@ -13,14 +12,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\DataObjectPreview\Controllers\DataObjectPreviewController;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
-use SilverStripe\Forms\GridField\GridFieldAddNewButton;
-use SilverStripe\Forms\GridField\GridFieldConfig_Base;
-use SilverStripe\Forms\GridField\GridFieldDataColumns;
-use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\ArrayList;
@@ -28,65 +20,59 @@ use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\FieldType\DBField;
-use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\Search\SearchContext;
 use SilverStripe\Security\Permission;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\View\SSViewer;
 
-/**
- * @package elemental
- */
 class BaseElement extends DataObject implements CMSPreviewable
 {
-
     /**
      * Override this on your custom elements to specify a cms icon
      * @var string
      */
     private static $icon = 'elemental/images/base.svg';
-    /**
-     * @var array $db
-     */
-    private static $db = array(
-        'Title' => 'Varchar(255)',
-        'Sort' => 'Int',
-        'Enabled' => 'Int',
-        'ExtraClass' => 'Varchar(255)',
-        'AvailableGlobally' => 'Boolean(1)'
-    );
-
-    /**
-     * @var array $has_one
-     */
-    private static $has_one = array(
-        'Parent' => ElementalArea::class,
-        'List' => ElementList::class // optional.
-    );
-
-    /**
-     * @var array $has_many
-     */
-    private static $has_many = array(
-        'VirtualClones' => ElementVirtualLinked::class
-    );
-
-    private static $extensions = array(
-        Versioned::class
-    );
-
-    private static $table_name = 'Element';
-
-    private static $controller_class = ElementController::class;
 
     /**
      * @var array
      */
-    private static $defaults = array(
-        'Enabled' => true,
-    );
+    private static $db = [
+        'Title' => 'Varchar(255)',
+        'Sort' => 'Int',
+        'ExtraClass' => 'Varchar(255)'
+    ];
+
+    /**
+     * @var array
+     */
+    private static $has_one = [
+        'Parent' => ElementalArea::class
+    ];
+
+    /**
+     * @var array
+     */
+    private static $extensions = [
+        Versioned::class
+    ];
+
+    /**
+     * @var string
+     */
+    private static $table_name = 'Element';
+
+    /**
+     * @var string
+     */
+    private static $controller_class = ElementController::class;
+
+    /**
+     * @var string
+     */
+    private static $controller_template = 'ElementHolder';
 
     /**
      * @var ElementController
@@ -111,24 +97,22 @@ class BaseElement extends DataObject implements CMSPreviewable
     /**
      * @var array
      */
-    private static $summary_fields = array(
-        'ElementIcon' => 'ElementIcon',
+    private static $summary_fields = [
+        'Icon' => 'Icon',
         'Title' => 'Title',
-        'ElementSummary' => 'Summary',
-        'ElementTypeNice' => 'Type',
-    );
+        'Summary' => 'Summary'
+    ];
 
     /**
      * @var array
      */
-    private static $searchable_fields = array(
-        'ID' => array(
+    private static $searchable_fields = [
+        'ID' => [
             'field' => 'SilverStripe\Forms\NumericField'
-        ),
+        ],
         'Title',
-        'LastEdited',
-        'AvailableGlobally'
-    );
+        'LastEdited'
+    ];
 
     /**
      * Enable for backwards compatibility
@@ -143,7 +127,7 @@ class BaseElement extends DataObject implements CMSPreviewable
      *
      * @var array
      */
-    protected static $_used_anchors = array();
+    protected static $_used_anchors = [];
 
     /**
      * For caching 'getAnchor'
@@ -153,52 +137,47 @@ class BaseElement extends DataObject implements CMSPreviewable
     protected $_anchor = null;
 
     /**
-     * @var Object
-     * The virtual owner VirtualLinkedElement
+     * @return array
      */
-    public $virtualOwner;
-
-    /**
-     * @config
-     * Elements available globally by default
-     */
-    private static $default_global_elements = true;
-
-    public static function all_allowed_elements()
+    public function getAllowedElementClasses()
     {
-        $classes = array();
+        $classes = [];
 
-        // get all dataobject with the elemental extension
-        foreach (ClassInfo::subclassesFor('DataObject') as $className) {
-            if (Object::has_extension($className, ElementPageExtension::class)) {
+        foreach (ClassInfo::subclassesFor(DataObject::class) as $className) {
+            if (Injector::inst()->get($className)->hasExtension(ElementPageExtension::class)) {
                 $classes[] = $className;
             }
         }
 
-        // get all allowd_elements for these classes
-        $allowed = array();
+        $allowed = [];
+
         foreach ($classes as $className) {
-            $allowed_elements = Config::inst()->get($className, 'allowed_elements');
-            if ($allowed_elements) {
-                $allowed = array_merge($allowed, $allowed_elements);
+            $elements = Config::inst()->get($className, 'allowed_elements');
+
+            if ($elements) {
+                $allowed = array_merge($allowed, $elements);
             }
         }
 
-       // $allowed[] = 'ElementVirtualLinked';
         $allowed = array_unique($allowed);
 
-        $elements = array();
+        $elements = [];
+
         foreach ($allowed as $className) {
             $elements[$className] = _t($className, Config::inst()->get($className, 'title'));
         }
 
-        asort($elements);
+        $this->invokeWithExtensions('updateAllowedElementClasses', $elements);
 
         return $elements;
     }
 
     /**
-     * Basic permissions, defaults to page perms where possible
+     * Basic permissions, defaults to page perms where possible.
+     *
+     * @param Member $member
+     *
+     * @return boolean
      */
     public function canView($member = null)
     {
@@ -208,15 +187,15 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
         }
 
-        if (Director::is_cli()) {
-            return true;
-        }
-
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
 
     /**
-     * Basic permissions, defaults to page perms where possible
+     * Basic permissions, defaults to page perms where possible.
+     *
+     * @param Member $member
+     *
+     * @return boolean
      */
     public function canEdit($member = null)
     {
@@ -226,18 +205,19 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
         }
 
-        if (Director::is_cli()) {
-            return true;
-        }
-
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
 
     /**
-     * Basic permissions, defaults to page perms where possible
-     * Uses archive not delete so that current stage is respected
-     * i.e if a element is not published, then it can be deleted by someone who
-     * doesn't have publishing permissions
+     * Basic permissions, defaults to page perms where possible.
+     *
+     * Uses archive not delete so that current stage is respected i.e if a
+     * element is not published, then it can be deleted by someone who doesn't
+     * have publishing permissions.
+     *
+     * @param Member $member
+     *
+     * @return boolean
      */
     public function canDelete($member = null)
     {
@@ -247,31 +227,25 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
         }
 
-        if (Director::is_cli()) {
-            return true;
-        }
-
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
 
     /**
-     * Basic permissions, defaults to page perms where possible
+     * Basic permissions, defaults to page perms where possible.
+     *
+     * @param Member $member
+     * @param array $context
+     *
+     * @return boolean
      */
     public function canCreate($member = null, $context = array())
     {
-        if (Director::is_cli()) {
-            return true;
-        }
-
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
 
-    public function populateDefaults()
-    {
-        $this->AvailableGlobally = $this->config()->get('default_global_elements');
-        parent::populateDefaults();
-    }
-
+    /**
+     *
+     */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
@@ -285,73 +259,13 @@ class BaseElement extends DataObject implements CMSPreviewable
         if (!$this->Sort) {
             $parentID = ($this->ParentID) ? $this->ParentID : 0;
 
-            $this->Sort = DB::query("SELECT MAX(\"Sort\") + 1 FROM \"Element\" WHERE \"ParentID\" = $parentID")->value();
-        }
-
-        if ($this->MoveToListID) {
-            $this->ListID = $this->MoveToListID;
+            $this->Sort = static::get()->max('Sort') + 1;
         }
     }
 
     /**
-     * Ensure that if there are elements that are virtualised from this element
-     * that we move the original element to replace one of the virtual elements
-     * But only if it's a delete not an unpublish
+     * @return FieldList
      */
-    public function onBeforeDelete()
-    {
-        parent::onBeforeDelete();
-
-        if (Versioned::get_reading_mode() == 'Stage.Stage') {
-            $firstVirtual = false;
-            $allVirtual = $this->getVirtualLinkedElements();
-            if ($this->getPublishedVirtualLinkedElements()->Count() > 0) {
-                // choose the first one
-                $firstVirtual = $this->getPublishedVirtualLinkedElements()->First();
-                $wasPublished = true;
-            } elseif ($allVirtual->Count() > 0) {
-                // choose the first one
-                $firstVirtual = $this->getVirtualLinkedElements()->First();
-                $wasPublished = false;
-            }
-            if ($firstVirtual) {
-                $origParentID = $this->ParentID;
-                $origSort = $this->Sort;
-
-                $clone = $this->duplicate(false);
-
-                // set clones values to first virtual's values
-                $clone->ParentID = $firstVirtual->ParentID;
-                $clone->Sort = $firstVirtual->Sort;
-
-                $clone->write();
-                if ($wasPublished) {
-                    $clone->doPublish();
-                    $firstVirtual->doUnpublish();
-                }
-
-                // clone has a new ID, so need to repoint
-                // all the other virtual elements
-                foreach ($allVirtual as $virtual) {
-                    if ($virtual->ID == $firstVirtual->ID) {
-                        continue;
-                    }
-                    $pub = false;
-                    if ($virtual->isPublished()) {
-                        $pub = true;
-                    }
-                    $virtual->LinkedElementID = $clone->ID;
-                    $virtual->write();
-                    if ($pub) {
-                        $virtual->doPublish();
-                    }
-                }
-
-                $firstVirtual->delete();
-            }
-        }
-    }
-
     public function getCMSFields()
     {
         $fields = $this->scaffoldFormFields(array(
@@ -360,84 +274,20 @@ class BaseElement extends DataObject implements CMSPreviewable
             'ajaxSafe' => true
         ));
 
-        $fields->insertAfter(new ReadonlyField('ClassNameTranslated', _t('BaseElement.TYPE', 'Type'), $this->i18n_singular_name()), 'Title');
         $fields->removeByName('ListID');
         $fields->removeByName('ParentID');
         $fields->removeByName('Sort');
         $fields->removeByName('ExtraClass');
-        $fields->removeByName('AvailableGlobally');
 
         $title = $fields->fieldByName('Root.Main.Title');
-
-        if ($title) {
-            $title->setRightTitle('For reference only. Does not appear in the template.');
-        }
-
-        $fields->addFieldToTab('Root.Settings', new CheckboxField('Enabled'));
-        $fields->addFieldToTab('Root.Settings', new CheckboxField('AvailableGlobally', 'Available globally - can be linked to multiple pages'));
         $fields->addFieldToTab(
             'Root.Settings',
             TextField::create('ExtraClass', _t(__CLASS__ . '.ExtraCssClassesLabel', 'Custom CSS classes'))
                 ->setAttribute('placeholder', _t(__CLASS__ . '.ExtraCssClassesPlaceholder', 'my_class another_class'))
         );
 
-        if (!is_a($this, ElementList::class)) {
-            $lists = ElementList::get()->filter('ParentID', $this->ParentID);
-
-            if ($lists->exists()) {
-                $fields->addFieldToTab(
-                    'Root.Settings',
-                    $move = new DropdownField('MoveToListID', 'Move this to another list', $lists->map('ID', 'CMSTitle'), '')
-                );
-
-                $move->setEmptyString('Select a list..');
-                $move->setHasEmptyDefault(true);
-            }
-        }
-
-        if ($virtual = $fields->dataFieldByName('VirtualClones')) {
-            if ($this->VirtualClones()->Count() > 0) {
-                $tab = $fields->findOrMakeTab('Root.VirtualClones');
-                $tab->setTitle(_t('BaseElement.VIRTUALTABTITLE', 'Linked To'));
-
-                if ($ownerPage = $this->getPage()) {
-                    $fields->addFieldToTab(
-                        'Root.VirtualClones',
-                        new LiteralField(
-                            'DisplaysOnPage',
-                            sprintf(
-                                "<p>The original content element appears on <a href='%s'>%s</a></p>",
-                                ($ownerPage->hasMethod('CMSEditLink') && $ownerPage->canEdit()) ? $ownerPage->CMSEditLink() : $ownerPage->Link(),
-                                $ownerPage->MenuTitle
-                            )
-                        ),
-                        'VirtualClones'
-                    );
-                }
-
-                $virtual->setConfig(new GridFieldConfig_Base());
-                $virtual
-                    ->setTitle(_t('BaseElement.OTHERPAGES', 'Other pages'))
-                    ->getConfig()
-                        ->removeComponentsByType(GridFieldAddExistingAutocompleter::class)
-                        ->removeComponentsByType(GridFieldAddNewButton::class)
-                        ->removeComponentsByType(GridFieldDeleteAction::class)
-                        ->removeComponentsByType(GridFieldDetailForm::class)
-                        ->addComponent(new ElementalGridFieldDeleteAction());
-
-                $virtual->getConfig()
-                    ->getComponentByType(GridFieldDataColumns::class)
-                    ->setDisplayFields(array(
-                        'getPage.Title' => 'Title',
-                        'ParentCMSEditLink' => 'Used on'
-                    ));
-            } else {
-                $fields->removeByName('VirtualClones');
-            }
-        }
-
         if ($this->IsInDB()) {
-            if ($this->isEndofLine(BaseElement::class) && $this->hasExtension('VersionViewerDataObject')) {
+            if ($this->hasExtension('VersionViewerDataObject')) {
                 $fields = $this->addVersionViewer($fields, $this);
             }
         }
@@ -458,6 +308,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         $fields = $this->scaffoldSearchFields();
         $elements = BaseElement::all_allowed_elements();
+
         if (!$elements) {
             $elements = ClassInfo::subclassesFor(self::class);
         }
@@ -469,8 +320,11 @@ class BaseElement extends DataObject implements CMSPreviewable
             $elements[$key] = DataObjectPreviewController::stripNamespacing($value);
         }
 
-        $fields->push(DropdownField::create('ClassName', 'Element Type', $elements)
-            ->setEmptyString('All types'));
+        $fields->push(
+            DropdownField::create('ClassName', _t(__CLASS__.'.ELEMENTTYPE', 'Element Type'), $elements)
+                ->setEmptyString(_t(__CLASS__.'.ALL', 'All types'))
+        );
+
         $filters = $this->owner->defaultSearchFilters();
 
         return new SearchContext(
@@ -491,7 +345,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     /**
      * @return string
      */
-    public function getElementType()
+    public function getType()
     {
         return $this->i18n_singular_name();
     }
@@ -513,18 +367,15 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * @return string
+     * @param ElementController
+     *
+     * @return $this
      */
-    public function getCMSTitle()
+    public function setController($controller)
     {
-        if ($title = $this->getField('Title')) {
-            return $this->config()->title . ': ' . $title;
-        } else {
-            if (!$this->isInDb()) {
-                return;
-            }
-            return $this->config()->title;
-        }
+        $this->controller = $controller;
+
+        return $this;
     }
 
     /**
@@ -549,103 +400,72 @@ class BaseElement extends DataObject implements CMSPreviewable
         return $this->controller;
     }
 
-    public function ControllerTop()
+    /**
+     * @return Controller
+     */
+    public function Top()
     {
         return (Controller::has_curr()) ? Controller::curr() : null;
     }
 
     /**
-     * Element holder used to wrap each element in a consistent way
+     * Default way to render element in templates. Note that all blocks should
+     * be rendered through their {@link ElementController} class as this
+     * contains the holder styles.
      *
-     * @return string HTML
-     */
-    public function ElementHolder()
-    {
-        return $this->renderWith('ElementHolder');
-    }
-
-    /**
-     * Default way to render element in templates.
      * @return string HTML
      */
     public function forTemplate($holder = true)
     {
-        $config = SiteConfig::current_site_config();
+        $templates = $this->getRenderTemplates();
 
-        if ($config->Theme) {
-            Config::inst()->update('SSViewer', 'theme_enabled', true);
-            Config::inst()->update('SSViewer', 'theme', $config->Theme);
+        if ($templates) {
+            return $this->renderWith($templates);
         }
-
-        if ($holder) {
-            return $this->ElementHolder();
-        }
-
-        return $this->RenderElement();
-    }
-
-    public function renderPreview()
-    {
-        return $this->forTemplate();
     }
 
     /**
-     * Renders the element in a custom template with the same name as the
-     * current class. This should be the main point of output customization.
-     *
-     * Invoked from within ElementHolder.ss, which contains the "framing" around
-     * the custom content, like a title.
-     *
-     * @return string HTML
+     * @return array
      */
-    public function RenderElement()
-    {
-        return $this->renderWith($this->getRenderTemplates());
-    }
-
     public function getRenderTemplates()
     {
         $classes = ClassInfo::ancestry($this->ClassName);
-        $classes[self::class] = self::class;
+        $classes[static::class] = static::class;
         $classes = array_reverse($classes);
         $templates = array();
+
         foreach ($classes as $key => $value) {
-            $templates[] = $value;
-            $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value);
-            $templates[] = DataObjectPreviewController::stripNamespacing($value);
             if ($value == BaseElement::class) {
                 continue;
             }
+
+            if ($value == DataObject::class) {
+                break;
+            }
+
+            $templates[] = $value;
+            $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value);
+            $templates[] = DataObjectPreviewController::stripNamespacing($value);
         }
+
         return $templates;
     }
 
-    public function SimpleClassName()
+    /**
+     * @return string
+     */
+    public function getSimpleClassName()
     {
-        return $this->sanitiseClassName(DataObjectPreviewController::stripNamespacing($this->ClassName), '');
+        return strtolower($this->sanitiseClassName($this->ClassName, '__'));
     }
 
-    public function getPage($discard_virtualisation = false)
+    /**
+     * @return SiteTree
+     */
+    public function getPage()
     {
-
-        // used on
-        if (!$discard_virtualisation && $this->virtualOwner) {
-            return $this->virtualOwner->getPage();
-        }
-
-        // discard_virtualisation used when we need to link back to the
-        // original items page
-        if ($discard_virtualisation && $this instanceof ElementVirtualLinked) {
-            return $this->LinkedElement()->getPage(true);
-        }
-
-        // if this element belongs to a list return the list's page
-        if ($this->ListID) {
-            return $this->List()->getPage();
-        }
-
-        // return the elemental area's page
         $area = $this->Parent();
+
         if ($area instanceof ElementalArea) {
             return $area->getOwnerPage();
         }
@@ -692,106 +512,76 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * get all pages where this element is used
+     * @param string $action
      *
-     * @return ArrayList
+     * @return string
      */
-    public function getUsage()
-    {
-        $usage = new ArrayList();
-
-        if ($page = $this->getPage()) {
-            $usage->push($page);
-            if ($this->virtualOwner) {
-                $page->setField('ElementType', 'Linked');
-            } else {
-                $page->setField('ElementType', 'Master');
-            }
-        }
-
-        $linkedElements = ElementVirtualLinked::get()->filter('LinkedElementID', $this->ID);
-        foreach ($linkedElements as $element) {
-            $area = $element->Parent();
-            if ($area instanceof ElementalArea && $page = $area->getOwnerPage()) {
-                $page->setField('ElementType', 'Linked');
-                $usage->push($page);
-            }
-        }
-
-        $usage->removeDuplicates();
-        return $usage;
-    }
-
-    public function UsageSummary()
-    {
-        $usage = $this->getUsage();
-        $arr = array();
-        foreach ($usage as $page) {
-            $type = ($page->ElementType) ? sprintf("<em> - %s</em>", $page->ElementType) : null;
-            $arr[] = sprintf("<a href=\"%s\" target=\"blank\">%s</a> %s", $page->CMSEditLink(), $page->Title, $type);
-        }
-        $html = DBHTMLText::create('UsageSummary');
-        $html->setValue(implode('<br>', $arr));
-
-        return $html;
-    }
-
-    public function Link()
+    public function AbsoluteLink($action = null)
     {
         if ($page = $this->getPage()) {
-            return $page->Link() . '#' . $this->getAnchor();
+            $link = $page->AbsoluteLink($action) . '#' . $this->getAnchor();
+
+            return $link;
         }
     }
 
-    public function PreviewLink($action = null)
+    /**
+     * @param string $action
+     *
+     * @return string
+     */
+    public function Link($action = null)
     {
-        return Controller::join_links(
+        if ($page = $this->getPage()) {
+            $link = $page->Link($action) . '#' . $this->getAnchor();
+
+            $this->extend('updateLink', $link);
+
+            return $link;
+        }
+    }
+
+    /**
+     * @param string $action
+     *
+     * @return string
+     */
+    public function PreviewLink($action = 'show')
+    {
+        $link = Controller::join_links(
             Director::baseURL(),
             'cms-preview',
-            'show',
+            $action,
             urlencode($this->ClassName),
             $this->ID
         );
+
+        $this->extend('updatePreviewLink', $link);
+
+        return $link;
     }
 
+    /**
+     * @return boolean
+     */
     public function isCMSPreview()
     {
         if (Controller::has_curr()) {
             $c = Controller::curr();
+
             if ($c->getRequest()->requestVar('CMSPreview')) {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * @return string
      */
-    public function CMSEditLink($inList = false)
+    public function CMSEditLink()
     {
-
-        if ($this->ListID) {
-            if ($parentLink = $this->List()->CMSEditLink(true)) {
-                return Controller::join_links(
-                    $parentLink,
-                    'ItemEditForm/field/Elements/item/',
-                    $this->ID,
-                    'edit'
-                );
-            }
-        }
-        if (!$this->getPage() || $this->config()->editlink_modeladmin) {
-            $className = $this->sanitiseClassName(BaseElement::class);
-
-            return Controller::join_links(
-                Director::absoluteBaseURL(),
-                'admin/elemental/' . $className . '/EditForm/field/' .  $className . '/item',
-                $this->ID,
-                'edit'
-            );
-        }
-
         $relationName = $this->getAreaRelationName();
 
         $link = Controller::join_links(
@@ -813,6 +603,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
     /**
      * Retrieve a elemental area relation for creating cms links
+     *
      * @return string - the name of a valid elemental area relation
      */
     public function getAreaRelationName()
@@ -831,7 +622,8 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * Sanitise a model class' name for inclusion in a link
+     * Sanitise a model class' name for inclusion in a link.
+     *
      * @return string
      */
     protected function sanitiseClassName($class, $delimiter = '-')
@@ -847,153 +639,70 @@ class BaseElement extends DataObject implements CMSPreviewable
         return $this->CMSEditLink();
     }
 
-    public function PageLink()
-    {
-        if ($page = $this->getPage()) {
-            $html = new HTMLText('PageLink');
-            $html->setValue('<a href="' . $page->Link() . '">' . $page->Title . '</a>');
-            return $html;
-        }
-    }
-
+    /**
+     * @return HTMLText
+     */
     public function PageCMSEditLink()
     {
         if ($page = $this->getPage()) {
-            $html = new HTMLText('UsedOn');
-            $html->setValue('<a href="' . $page->CMSEditLink() . '">' . $page->Title . '</a>');
-            return $html;
+            return DBField::create_field('HTMLText', sprintf(
+                '<a href="%s">%s</a>',
+                $page->CMSEditLink(),
+                $page->Title
+            ));
         }
     }
 
-    public function ParentCMSEditLink()
-    {
-        $html = new DBHTMLText('ParentCMSEditLink');
-        if ($this->ListID) {
-            $html->setValue('<a href="' . $this->List()->CMSEditLink() . '">' . $this->List()->Title . '</a>');
-        } elseif ($page = $this->getPage()) {
-            $html->setValue('<a href="' . $page->CMSEditLink() . '">' . $page->Title . '</a>');
-        }
-        return $html;
-    }
-
     /**
-     * TODO: check is required for new version of the module
-     * Version viewer must only be added at if this is the final getCMSFields for a class.
-     * in order to avoid having to rename all fields from eg Root.Main to Root.Current.Main
-     * To do this we test if getCMSFields is from the current class
+     * @return string
      */
-    public function isEndofLine($className)
-    {
-        $methodFromClass = ClassInfo::has_method_from(
-            $this->ClassName,
-            'getCMSFields',
-            $className
-        );
-
-        if ($methodFromClass) {
-            return true;
-        }
-    }
-
-    public function setVirtualOwner(ElementVirtualLinked $virtualOwner)
-    {
-        $this->virtualOwner = $virtualOwner;
-    }
-
-    /**
-     * Finds and returns elements
-     * that are virtual elements which link to this element
-     */
-    public function getVirtualLinkedElements()
-    {
-        return ElementVirtualLinked::get()->filter('LinkedElementID', $this->ID);
-    }
-
-    /**
-     * Finds and returns published elements
-     * that are virtual elements which link to this element
-     */
-    public function getPublishedVirtualLinkedElements()
-    {
-        $current = Versioned::get_reading_mode();
-        Versioned::set_reading_mode('Stage.Live');
-        $v = $this->getVirtualLinkedElements();
-        Versioned::set_reading_mode($current);
-        return $v;
-    }
-
     public function getMimeType()
     {
         return 'text/html';
     }
 
     /**
-     * Handles unpublishing as VersionedDataObjects doesn't
-     * Modelled on SiteTree::doUnpublish
-     * Has to be applied here, rather than BaseElement so that it goes against Element
-     * TODO: check if required
-     */
-    // public function doUnpublish() {
-    //     if(!$this->owner->ID) return false;
-
-    //     $this->owner->extend('onBeforeUnpublish');
-
-    //     $origStage = Versioned::get_reading_mode();
-    //     Versioned::set_reading_mode('Stage.Live');
-
-    //     // This way our ID won't be unset
-    //     $clone = clone $this->owner;
-    //     $clone->delete();
-
-    //     Versioned::set_reading_mode($origStage);
-
-    //     $virtualLinkedElements = $this->owner->getPublishedVirtualLinkedElements();
-    //     if ($virtualLinkedElements) foreach($virtualLinkedElements as $vle) $vle->doUnpublish();
-
-    //     $this->owner->extend('onAfterUnpublish');
-
-    //     return true;
-    // }
-
-
-    /**
-     * This can be overridden on child elements to create a summary for display in gridfields.
+     * This can be overridden on child elements to create a summary for display
+     * in GridFields.
+     *
      * @return string
      */
-    public function ElementSummary()
+    public function getSummary()
     {
-        // fallback to the Linked Element for Virtual element summaries
-        if ($this->ClassName === ElementVirtualLinked::class && $linked = $this->LinkedElement()) {
-            return $linked->ElementSummary();
-        }
-
         return '';
     }
 
 
     /**
-     * Generate markup for element type icons suitable for use in gridfields
+     * Generate markup for element type icons suitable for use in GridFields.
+     *
      * @return DBField
      */
-    public function ElementIcon()
+    public function getIcon()
     {
         $icon = $this->config()->get('icon');
 
-        if ($this->ClassName === ElementVirtualLinked::class && $linked = $this->LinkedElement()) {
-            $linkedIcon = $linked->config()->get('icon');
-            return DBField::create_field('HTMLVarchar', '<span class="el-icongroup"><img width="16px" src="' . Director::absoluteBaseURL() . $linkedIcon . '" alt="" /><img class="el-icon--virtual" width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" /></span>');
-        }
+        if ($icon) {
+            if (strpos($icon, ':') !== false) {
+                $parts = explode(':', $icon);
 
-        return DBField::create_field('HTMLVarchar', '<img width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" />');
+                $icon = ModuleLoader::getModule($parts[0])->getRelativeResourcePath($paths[1]);
+            }
+
+            return DBField::create_field('HTMLVarchar', '<img width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" />');
+        }
     }
 
     /**
-     * Generate markup for element type, with description suitable for use in gridfields
+     * Generate markup for element type, with description suitable for use in
+     * GridFields.
+     *
      * @return DBField
      */
-    public function ElementTypeNice()
+    public function getTypeNice()
     {
         $description = $this->config()->get('description');
+
         return DBField::create_field('HTMLVarchar', $this->ElementType .' <span class="el-description"> &mdash; ' . $description . '</span>');
     }
 }

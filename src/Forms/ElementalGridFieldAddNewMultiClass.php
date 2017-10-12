@@ -10,21 +10,8 @@ use SilverStripe\View\ArrayData;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 use Symbiote\GridFieldExtensions\GridFieldExtensions;
 
-/**
- * @package elemental
- */
 class ElementalGridFieldAddNewMultiClass extends GridFieldAddNewMultiClass
 {
-
-    public function getClasses(GridField $grid)
-    {
-        $classes = parent::getClasses($grid);
-
-        unset($classes['ElementVirtualLinked']);
-
-        return $classes;
-    }
-
     /**
      * Overridden to swap out dropdown for advancedropdown, so we can define element icons
      *
@@ -39,7 +26,7 @@ class ElementalGridFieldAddNewMultiClass extends GridFieldAddNewMultiClass
         }
 
         GridFieldExtensions::include_requirements();
-        
+
         $preppedClasses = [];
 
         foreach ($classes as $key => $value) {

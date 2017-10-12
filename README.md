@@ -1,13 +1,15 @@
 # SilverStripe Elemental
 
 [![Build Status](http://img.shields.io/travis/dnadesign/silverstripe-elemental.svg?style=flat-square)](https://travis-ci.org/dnadesign/silverstripe-elemental)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dnadesign/silverstripe-elemental/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dnadesign/silverstripe-elemental/?branch=master)
+[![codecov](https://codecov.io/gh/dnadesign/silverstripe-elemental/branch/master/graph/badge.svg)](https://codecov.io/gh/dnadesign/silverstripe-elemental)
 [![Version](http://img.shields.io/packagist/v/dnadesign/silverstripe-elemental.svg?style=flat-square)](https://packagist.org/packages/dnadesign/silverstripe-elemental)
 [![License](http://img.shields.io/packagist/l/dnadesign/silverstripe-elemental.svg?style=flat-square)](LICENSE.md)
 
 ## Introduction
 
-This module extends a page type to swap the content area for a GridField and manageable elements to compose
-a page out of rather than a single text field. Features supported:
+This module extends a page type to swap the content area for a GridField and manageable elements to compose a page out
+of rather than a single text field. Features supported:
 
 * Versioning of elements
 * Ability to add, remove supported elements per page.
@@ -29,7 +31,7 @@ Extend any page type with the ElementPageExtension and define allowed elements. 
 ```yaml
 ElementPage:
   extensions:
-    - ElementPageExtension
+    - DNADesign\Elemental\Extensions\ElementPageExtension
 ```
 
 In your page type template use `$ElementArea` to render the elements to the page.
@@ -60,16 +62,7 @@ ElementPage:
     - YourCompany\YourModule\Elements\ElementContact
 ```
 
-By default, an Element List can contain nested Elements. To set allowed elements in list use the `allowed_elements`
-flag. The `disallowed_elements` configuration flag works here too.
-
-```yaml
-DNADesign\Elemental\Models\ElementList:
-  allowed_elements:
-    YourCompany\YourModule\Elements\ElementFile: File
-```
-
-### Limiting global elements
+### Limiting Global Elements
 
 By default any element is available to be linked to multiple pages. This can be
 changed with the "Available globally" checkbox in the settings tab of each element.
@@ -80,7 +73,7 @@ DNADesign\Elemental\Models\BaseElement:
   default_global_elements: false
 ```
 
-### Defining your own elements.
+### Defining your own Elements.
 
 An element is as simple as a class which extends `BaseElement`. After you add the class, ensure you have rebuilt your
 database and reload the CMS.
@@ -106,6 +99,8 @@ class MyElement extends BaseElement
     }
 }
 ```
+
+### Defining your own HTML
 
 `MyElement` will be rendered into a `MyElement.ss` template with the `ElementHolder.ss` wrapper.
 

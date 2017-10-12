@@ -4,3 +4,6 @@ Page:
 SilverStripe\CMS\Model\RedirectorPage:
   elementredirectpage:
     Title: Redirector Page
+DNADesign\Elemental\Models\ElementContent:
+  content1:
+    Title: Test Content

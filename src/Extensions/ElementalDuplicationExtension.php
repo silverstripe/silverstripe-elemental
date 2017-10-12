@@ -3,10 +3,8 @@
 namespace DNADesign\Elemental\Extensions;
 
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Config;
 
-/**
- * @package elemental
- */
 class ElementalDuplicationExtension extends DataExtension
 {
 

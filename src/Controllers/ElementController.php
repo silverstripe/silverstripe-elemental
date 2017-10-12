@@ -28,81 +28,19 @@ use SilverStripe\Security\Member;
 class ElementController extends Controller
 {
     /**
-     * @var Element
+     * @var BaseElement $element
      */
     protected $element;
 
     /**
      * @param BaseElement $element
      */
-    public function __construct($element = null)
+    public function __construct(BaseElement $element)
     {
-        if ($element) {
-            $this->element = $element;
-            $this->failover = $element;
-        }
+        $this->element = $element;
+        $this->failover = $element;
 
         parent::__construct();
-    }
-
-    /**
-     * Cycles up the controller stack until it finds an Element controller
-     * This is needed becauseController::curr returns the element controller,
-     * which means anyLinkfunction turns into endless loop.
-     *
-     * @return Controller
-     */
-    public function getParentController()
-    {
-        foreach (Controller::$controller_stack as $controller) {
-            if (!($controller instanceof ElementController)) {
-                return $controller;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param string $action
-     * @return string
-     */
-    public function Link($action = null)
-    {
-        if ($this->data()->virtualOwner) {
-            $controller = new Element_Controller($this->data()->virtualOwner);
-            return $controller->Link($action);
-        }
-
-        $id = ($this->element) ? $this->element->ID : null;
-
-        $segment = Controller::join_links('element', $id, $action);
-
-        $page = Director::get_current_page();
-        if ($page && !($page instanceof ElementController)) {
-            return $page->Link($segment);
-        }
-
-        if ($controller = $this->getParentController()) {
-            return $controller->Link($segment);
-        }
-
-        return $segment;
-    }
-
-    /**
-     * if this is a virtual request, change the hash if set.
-     */
-    public function redirect($url, $code = 302)
-    {
-
-        if ($this->data()->virtualOwner) {
-            $parts = explode('#', $url);
-            if (isset($parts[1])) {
-                $url = $parts[0] . '#' . $this->data()->virtualOwner->ID;
-            }
-        }
-
-        return parent::redirect($url, $code);
     }
 
     /**
@@ -114,21 +52,41 @@ class ElementController extends Controller
     }
 
     /**
-     * Overloaded from {@link Element->RenderElement()} to allow for controller / form
-     * linking.
+     * Renders the managed {@link BaseElement} wrapped with the current
+     * {@link ElementController}.
      *
      * @return string HTML
      */
-    public function RenderElement()
+    public function forTemplate()
     {
-        return $this->renderWith($this->element->getRenderTemplates());
+        $template = $this->element->config()->get('controller_template');
+
+        return $this->renderWith($template);
     }
 
     /**
-     * @return string HTML
+     * @param string $action
+     *
+     * @return string
      */
-    public function ElementHolder()
+    public function Link($action = null)
     {
-        return $this->renderWith('ElementHolder');
+        $page = Director::get_current_page();
+
+        if ($page && !($page instanceof ElementController)) {
+            return Controller::join_links(
+                $page->Link($action),
+                '#'. $this->element->getAnchor()
+            );
+        }
+
+        $curr = Controller::curr();
+
+        if ($curr && !($curr instanceof ElementController)) {
+            return Controller::join_links(
+                $curr->Link($action),
+                '#'. $this->element->getAnchor()
+            );
+        }
     }
 }

@@ -1,6 +1,6 @@
 DNADesign\Elemental\Models\ElementalArea:
   area1:
-    Title: Bogus
+    Title: Area 1
 
 DNADesign\Elemental\Tests\Src\TestPage:
   page1:
