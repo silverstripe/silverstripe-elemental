@@ -1,0 +1,26 @@
+en:
+  DNADesign\Elemental\Models\BaseElement:
+    ALL: 'All types'
+    ELEMENTTYPE: 'Element Type'
+    ExtraCssClassesLabel: 'Custom CSS classes'
+    ExtraCssClassesPlaceholder: 'my_class another_class'
+    PLURALNAME: 'Content Elements'
+    PLURALS:
+      one: 'A Content Element'
+      other: '{count} Content Elements'
+    SINGULARNAME: 'Content Element'
+  DNADesign\Elemental\Models\ElementContent:
+    CONTENT: Content
+    CUSTOM_STYLES: 'Select a custom style..'
+    PLURALNAME: 'Content Elements'
+    PLURALS:
+      one: 'A Content Element'
+      other: '{count} Content Elements'
+    SINGULARNAME: 'Content Element'
+    STYLE: Style
+  DNADesign\Elemental\Models\ElementalArea:
+    PLURALNAME: 'Elemental Areas'
+    PLURALS:
+      one: 'An Elemental Area'
+      other: '{count} Elemental Areas'
+    SINGULARNAME: 'Elemental Area'
