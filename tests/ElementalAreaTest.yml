@@ -1,6 +1,6 @@
 DNADesign\Elemental\Models\ElementalArea:
   area1:
-    Title: Bogus
+    Title: Area 1
 
 DNADesign\Elemental\Tests\Src\TestPage:
   page1:
@@ -12,4 +12,8 @@ DNADesign\Elemental\Tests\Src\TestElement:
   element1:
     Title: Element 1
     TestValue: 'Hello Test'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area1
+  element2:
+    Title: Element 2
+    TestValue: 'Hello Test 2'
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.area1

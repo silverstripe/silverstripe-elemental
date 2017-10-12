@@ -83,7 +83,7 @@ class ElementalAreasExtension extends DataExtension
             $inst = singleton($availableClass);
 
             if (!in_array($availableClass, $disallowedElements) && $inst->canCreate()) {
-                if ($inst->hasMethod('canCreateBlock') && !$inst->canCreateBlock()) {
+                if ($inst->hasMethod('canCreateElement') && !$inst->canCreateElement()) {
                     continue;
                 }
 

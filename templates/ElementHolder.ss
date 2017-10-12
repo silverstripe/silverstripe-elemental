@@ -7,5 +7,5 @@
 		<% end_if %>
 	<% end_uncached %>
 
-	$RenderElement
+	$Element
 </div>

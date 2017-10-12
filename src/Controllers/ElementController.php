@@ -35,31 +35,12 @@ class ElementController extends Controller
     /**
      * @param BaseElement $element
      */
-    public function __construct($element = null)
+    public function __construct(BaseElement $element)
     {
-        if ($element) {
-            $this->element = $element;
-            $this->failover = $element;
-        }
+        $this->element = $element;
+        $this->failover = $element;
 
         parent::__construct();
-    }
-
-    /**
-     * Cycles up the controller stack until it finds an Element controller
-     * This is needed becauseController::curr returns the element controller,
-     * which means anyLinkfunction turns into endless loop.
-     *
-     * @return Controller
-     */
-    public function getParentController()
-    {
-        foreach (Controller::$controller_stack as $controller) {
-            if (!($controller instanceof ElementController)) {
-                return $controller;
-            }
-        }
-        return false;
     }
 
     /**
@@ -71,11 +52,16 @@ class ElementController extends Controller
     }
 
     /**
+     * Renders the managed {@link BaseElement} wrapped with the current
+     * {@link ElementController}.
+     *
      * @return string HTML
      */
-    public function ElementHolder()
+    public function forTemplate()
     {
-        return $this->element->renderWith('ElementHolder');
+        $template = $this->element->config()->get('controller_template');
+
+        return $this->renderWith($template);
     }
 
     /**
@@ -85,18 +71,21 @@ class ElementController extends Controller
      */
     public function Link($action = null)
     {
-        $id = ($this->element) ? $this->element->ID : null;
-        $segment = Controller::join_links('element', $id, $action);
         $page = Director::get_current_page();
 
         if ($page && !($page instanceof ElementController)) {
-            return $page->Link($segment);
+            return Controller::join_links(
+                $page->Link($action), '#'. $this->element->getAnchor()
+            );
         }
 
-        if ($controller = $this->getParentController()) {
-            return $controller->Link($segment);
-        }
+        $curr = Controller::curr();
 
-        return $segment;
+        if ($curr && !($curr instanceof ElementController)) {
+            return Controller::join_links(
+                $curr->Link($action),
+                '#'. $this->element->getAnchor()
+            );
+        }
     }
 }

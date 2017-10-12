@@ -1,3 +1,5 @@
-<% loop $ElementControllers %>
-	$ElementHolder
-<% end_loop %>
+<% if $ElementControllers %>
+    <% loop $ElementControllers %>
+	   $Me
+    <% end_loop %>
+<% end_if %>

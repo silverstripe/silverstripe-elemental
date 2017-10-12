@@ -70,6 +70,11 @@ class BaseElement extends DataObject implements CMSPreviewable
     private static $controller_class = ElementController::class;
 
     /**
+     * @var string
+     */
+    private static $controller_template = 'ElementHolder';
+
+    /**
      * @var ElementController
      */
     protected $controller;
@@ -404,45 +409,13 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * Element holder used to wrap each element in a consistent way
-     *
-     * @return string HTML
-     */
-    public function ElementHolder()
-    {
-        return $this->renderWith('ElementHolder');
-    }
-
-    /**
-     * Default way to render element in templates.
+     * Default way to render element in templates. Note that all blocks should
+     * be rendered through their {@link ElementController} class as this
+     * contains the holder styles.
      *
      * @return string HTML
      */
     public function forTemplate($holder = true)
-    {
-        $config = SiteConfig::current_site_config();
-
-        if ($config->Theme) {
-            Config::modify()->merge(SSViewer::class, 'themes', [$config->Theme]);
-        }
-
-        if ($holder) {
-            return $this->ElementHolder();
-        }
-
-        return $this->RenderElement();
-    }
-
-    /**
-     * Renders the element in a custom template with the same name as the
-     * current class. This should be the main point of output customization.
-     *
-     * Invoked from within ElementHolder.ss, which contains the "framing" around
-     * the custom content, like a title.
-     *
-     * @return HTMLText
-     */
-    public function RenderElement()
     {
         $templates = $this->getRenderTemplates();
 
@@ -481,9 +454,9 @@ class BaseElement extends DataObject implements CMSPreviewable
     /**
      * @return string
      */
-    public function SimpleClassName()
+    public function getSimpleClassName()
     {
-        return $this->sanitiseClassName($this->ClassName, '');
+        return strtolower($this->sanitiseClassName($this->ClassName, '__'));
     }
 
     /**

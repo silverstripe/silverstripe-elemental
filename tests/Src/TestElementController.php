@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\Tests\ElementControllerTest;
+namespace DNADesign\Elemental\Tests\Src;
 
 use DNADesign\Elemental\Controllers\ElementController;
 use SilverStripe\Dev\TestOnly;
@@ -11,6 +11,7 @@ use SilverStripe\Forms\TextField;
 
 class TestElementController extends ElementController implements TestOnly
 {
+    private static $url_segment = 'test-page';
 
     private static $allowed_actions = array(
         'Form'

@@ -73,7 +73,7 @@ DNADesign\Elemental\Models\BaseElement:
   default_global_elements: false
 ```
 
-### Defining your own elements.
+### Defining your own Elements.
 
 An element is as simple as a class which extends `BaseElement`. After you add the class, ensure you have rebuilt your
 database and reload the CMS.
@@ -99,6 +99,8 @@ class MyElement extends BaseElement
     }
 }
 ```
+
+### Defining your own HTML
 
 `MyElement` will be rendered into a `MyElement.ss` template with the `ElementHolder.ss` wrapper.
 

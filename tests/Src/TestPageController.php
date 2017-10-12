@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\Tests\ElementControllerTest;
+namespace DNADesign\Elemental\Tests\Src;
 
 use PageController;
 use ReflectionClass;

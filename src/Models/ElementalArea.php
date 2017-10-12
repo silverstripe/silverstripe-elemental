@@ -85,13 +85,14 @@ class ElementalArea extends DataObject
     {
         parent::onBeforeWrite();
 
-        $this->SearchContent = $this->renderSearchContent();
+        // @todo
+        // $this->SearchContent = $this->renderSearchContent();
     }
 
     /**
      * Render the elements out and push into ElementContent so that Solr can
      * index.
-     */
+     *
     public function renderSearchContent()
     {
         // Copy elements content to ElementContent to enable search
@@ -106,8 +107,9 @@ class ElementalArea extends DataObject
 
             $controller = $element->getController();
 
-            // concert to raw so that html parts of template aren't matched in search results, e.g link hrefs
-            array_push($searchableContent, Convert::html2raw($controller->ElementHolder()));
+            // concert to raw so that html parts of template aren't matched in
+            // search results, e.g link hrefs
+            array_push($searchableContent, Convert::html2raw($controller->forTemplate()));
         }
 
         Requirements::restore();
@@ -115,7 +117,7 @@ class ElementalArea extends DataObject
         $renderedSearchContent = trim(implode(' ', $searchableContent));
 
         return $renderedSearchContent;
-    }
+    }*/
 
     /**
      * @return HTMLText
