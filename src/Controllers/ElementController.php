@@ -75,7 +75,8 @@ class ElementController extends Controller
 
         if ($page && !($page instanceof ElementController)) {
             return Controller::join_links(
-                $page->Link($action), '#'. $this->element->getAnchor()
+                $page->Link($action),
+                '#'. $this->element->getAnchor()
             );
         }
 
