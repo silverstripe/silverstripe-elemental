@@ -98,9 +98,7 @@ class BaseElement extends DataObject implements CMSPreviewable
      * @var array
      */
     private static $summary_fields = [
-        'Icon' => 'Icon',
-        'Title' => 'Title',
-        'Summary' => 'Summary'
+        'EditorPreview' => 'Summary'
     ];
 
     /**
@@ -425,9 +423,11 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
+     * @param string $suffix
+     *
      * @return array
      */
-    public function getRenderTemplates()
+    public function getRenderTemplates($suffix = '')
     {
         $classes = ClassInfo::ancestry($this->ClassName);
         $classes[static::class] = static::class;
@@ -443,9 +443,9 @@ class BaseElement extends DataObject implements CMSPreviewable
                 break;
             }
 
-            $templates[] = $value;
-            $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value);
-            $templates[] = DataObjectPreviewController::stripNamespacing($value);
+            $templates[] = $value . $suffix;
+            $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value) . $suffix;
+            $templates[] = DataObjectPreviewController::stripNamespacing($value) . $suffix;
         }
 
         return $templates;
@@ -704,5 +704,16 @@ class BaseElement extends DataObject implements CMSPreviewable
         $description = $this->config()->get('description');
 
         return DBField::create_field('HTMLVarchar', $this->ElementType .' <span class="el-description"> &mdash; ' . $description . '</span>');
+    }
+
+    /**
+     * @return HTMLText
+     */
+    public function getEditorPreview()
+    {
+        $templates = $this->getRenderTemplates('_EditorPreview');
+        $templates[] = BaseElement::class . '_EditorPreview';
+
+        return $this->renderWith($templates);
     }
 }

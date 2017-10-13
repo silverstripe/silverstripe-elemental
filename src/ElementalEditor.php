@@ -11,6 +11,7 @@ use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
+use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\GridField\GridFieldPageCount;
 use SilverStripe\Core\Injector\Injector;

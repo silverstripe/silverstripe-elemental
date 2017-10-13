@@ -104,6 +104,13 @@ class ElementalAreasExtension extends DataExtension
         return $list;
     }
 
+    /**
+     * Returns an array of the relation names to ElementAreas. Ignores any
+     * has_one fields named `Parent` as that would indicate that this is child
+     * of an existing area
+     *
+     * @return array
+     */
     public function getElementalRelations()
     {
         $hasOnes = $this->owner->hasOne();
@@ -112,10 +119,13 @@ class ElementalAreasExtension extends DataExtension
             return false;
         }
 
-        // find ElementalArea relations
         $elementalAreaRelations = [];
 
         foreach ($hasOnes as $hasOneName => $hasOneClass) {
+            if ($hasOneName === 'Parent' || $hasOneName === 'ParentID') {
+                continue;
+            }
+
             if ($hasOneClass == ElementalArea::class || is_subclass_of($hasOneClass, ElementalArea::class)) {
                 $elementalAreaRelations[] = $hasOneName;
             }
@@ -138,17 +148,24 @@ class ElementalAreasExtension extends DataExtension
         // add an empty holder for content as some module explicitly use insert
         // after content.
         $fields->replaceField('Content', new LiteralField('Content', ''));
-
         $elementalAreaRelations = $this->owner->getElementalRelations();
 
         foreach ($elementalAreaRelations as $eaRelationship) {
+            $key = $eaRelationship . 'ID';
+
+            // remove the scaffold dropdown
+            $fields->removeByName($key);
+
+            // remove the field, but don't add anything.
+            if (!$this->owner->isInDb()) {
+                continue;
+            }
+
             $area = $this->owner->$eaRelationship();
 
             // if area isn't in the database then force a write so the blocks have a parent ID.
             if (!$area->isInDb()) {
                 $area->write();
-
-                $key = $eaRelationship . 'ID';
 
                 $this->owner->{$key} = $area->ID;
                 $this->owner->write();
