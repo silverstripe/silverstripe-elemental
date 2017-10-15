@@ -70,6 +70,18 @@ class ElementalEditor
     }
 
     /**
+     * @return array
+     */
+    public function getTypes()
+    {
+        $types = $this->types;
+
+        $this->extend('updateGetTypes', $types);
+
+        return $types;
+    }
+
+    /**
      * @return ElementalArea
      */
     public function getArea()
@@ -113,7 +125,7 @@ class ElementalEditor
 
         if ($this->types) {
             $adder = Injector::inst()->create(ElementalGridFieldAddNewMultiClass::class, 'toolbar-header-left');
-            $adder->setClasses($this->types);
+            $adder->setClasses($this->getTypes());
 
             $config->addComponent($adder);
         }
