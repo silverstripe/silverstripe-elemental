@@ -8,6 +8,7 @@ use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
+use SilverStripe\Forms\GridField\GridFieldVersionedState;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
@@ -117,6 +118,7 @@ class ElementalEditor
                     GridFieldDeleteAction::class,
                     GridFieldPaginator::class,
                     GridFieldPageCount::class,
+                    GridFieldVersionedState::class,
                     GridFieldAddExistingAutocompleter::class
                 ))
                 ->addComponent(new GridFieldOrderableRows('Sort'))
