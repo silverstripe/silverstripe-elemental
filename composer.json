@@ -35,7 +35,7 @@
     "extra": {
         "installer-name": "elemental",
         "branch-alias": {
-            "dev-ss4": "2.x-dev"
+            "dev-master": "2.x-dev"
         },
         "expose": [
             "css",
