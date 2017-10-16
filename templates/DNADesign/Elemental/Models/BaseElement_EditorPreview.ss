@@ -2,11 +2,7 @@
     <div class="elementalpreview__icon">$Icon</div>
 
     <div class="elementalpreview__detail">
-        <small>$Type</small>
-
-        <% if Title %>
-            <h2>$Title</h2>
-        <% end_if %>
+        <h2><% if Title %>$Title <% end_if %><small>$Type</small></h2>
 
         <% if Summary %>
             <p>$Summary</p>

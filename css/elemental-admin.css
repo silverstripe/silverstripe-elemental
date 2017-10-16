@@ -82,21 +82,26 @@ td.col-ElementSummary {
 .elementalpreview {
     position: relative;
     padding: 0 0 0 50px;
-    min-height: 45px;
+    min-height: 35px;
 }
     .elementalpreview h2 {
         margin: 0;
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
     }
 
     .elementalpreview small {
         font-size: 13px;
         opacity: 0.8;
     }
+
+    .elementalpreview__detail {
+        padding-top: 5px;
+    }
+
     .elementalpreview__icon {
         position: absolute;
-        top: 5px;
         left: 0px;
-        background: #f7f7f7;
         border-radius: 2px;
         height: 35px;
         width: 35px;
