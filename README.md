@@ -31,7 +31,7 @@ Extend any page type with the ElementPageExtension and define allowed elements. 
 ```yaml
 ElementPage:
   extensions:
-    - DNADesign\Elemental\Extensions\ElementPageExtension
+    - DNADesign\Elemental\Extensions\ElementalPageExtension
 ```
 
 In your page type template use `$ElementArea` to render the elements to the page.
