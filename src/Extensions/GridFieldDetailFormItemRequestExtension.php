@@ -30,8 +30,7 @@ class GridFieldDetailFormItemRequestExtension extends Extension
     public function updateItemEditForm($form)
     {
         $fields = $form->Fields();
-        if (
-            $this->owner->record instanceof CMSPreviewable &&
+        if ($this->owner->record instanceof CMSPreviewable &&
             !$fields->fieldByName('SilverStripeNavigator')
         ) {
             $template = Controller::curr()
@@ -45,7 +44,7 @@ class GridFieldDetailFormItemRequestExtension extends Extension
             $form->addExtraClass('cms-previewable')
                 ->removeExtraClass('cms-panel-padded center');
             Requirements::javascript(
-              'DNADesign/Elemental:javascript/Elemental.Preview.js'
+                'DNADesign/Elemental:javascript/Elemental.Preview.js'
             );
         }
         return $form;

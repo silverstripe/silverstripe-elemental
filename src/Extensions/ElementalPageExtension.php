@@ -26,13 +26,13 @@ class ElementalPageExtension extends ElementalAreasExtension
     {
         $controller = Controller::curr();
         $request = $controller->getRequest();
-        if($request->getVar('ElementalPreview') !== null) {
+        if ($request->getVar('ElementalPreview') !== null) {
             $html = HTML4Value::create($tags);
             $xpath = "//meta[@name='x-page-id' or @name='x-cms-edit-link']";
             $removeTags = $html->query($xpath);
             $body = $html->getBody();
-            foreach($removeTags as $tag) {
-              $body->removeChild($tag);
+            foreach ($removeTags as $tag) {
+                $body->removeChild($tag);
             }
             $tags = $html->getContent();
         }
