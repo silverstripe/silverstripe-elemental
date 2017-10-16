@@ -445,7 +445,6 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
 
             $templates[] = $value . $suffix;
-            $templates[] = DataObjectPreviewController::stripNamespacing($value) . $suffix;
         }
 
         return $templates;

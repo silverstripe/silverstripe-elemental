@@ -1,7 +1,7 @@
 <div class="elementalpreview">
-    <div class="elementalpreview--icon">$Icon</div>
+    <div class="elementalpreview__icon">$Icon</div>
 
-    <div class="elementalpreview--detail">
+    <div class="elementalpreview__detail">
         <small>$Type</small>
 
         <% if Title %>

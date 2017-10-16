@@ -92,7 +92,7 @@ td.col-ElementSummary {
         font-size: 13px;
         opacity: 0.8;
     }
-    .elementalpreview--icon {
+    .elementalpreview__icon {
         position: absolute;
         top: 5px;
         left: 0px;
@@ -104,6 +104,6 @@ td.col-ElementSummary {
         align-items: center;
         justify-content: center;
     }
-        .elementalpreview--icon img {
+        .elementalpreview__icon img {
             opacity: 0.4;
         }
