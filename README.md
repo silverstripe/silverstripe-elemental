@@ -178,9 +178,6 @@ After setting up your SolrSearchIndex, run `sake dev/tasks/Solr_Configure`.
 
 ![Overview](docs/images/overview.png)
 
-![Detail](docs/images/detail.png)
-
-
 ## Versioning
 
 This library follows [Semver](http://semver.org). According to Semver, you will be able to upgrade to any minor or patch version of this library without any breaking changes to the public API. Semver also requires that we clearly define the public API for this library.

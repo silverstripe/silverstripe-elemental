@@ -445,7 +445,6 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
 
             $templates[] = $value . $suffix;
-            $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value) . $suffix;
             $templates[] = DataObjectPreviewController::stripNamespacing($value) . $suffix;
         }
 
@@ -486,6 +485,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         }
 
         $anchorTitle = '';
+
         if (!$this->config()->disable_pretty_anchor_name) {
             if ($this->hasMethod('getAnchorTitle')) {
                 $anchorTitle = $this->getAnchorTitle();
@@ -493,6 +493,7 @@ class BaseElement extends DataObject implements CMSPreviewable
                 $anchorTitle = $this->getField('Title');
             }
         }
+
         if (!$anchorTitle) {
             $anchorTitle = 'e'.$this->ID;
         }
