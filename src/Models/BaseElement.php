@@ -9,6 +9,8 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\DataObjectPreview\Controllers\DataObjectPreviewController;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
@@ -25,7 +27,6 @@ use SilverStripe\Security\Permission;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\View\SSViewer;
 
 class BaseElement extends DataObject implements CMSPreviewable
@@ -34,7 +35,7 @@ class BaseElement extends DataObject implements CMSPreviewable
      * Override this on your custom elements to specify a cms icon
      * @var string
      */
-    private static $icon = 'elemental/images/base.svg';
+    private static $icon = 'dnadesign/silverstripe-elemental:images/base.svg';
 
     /**
      * @var array
@@ -87,12 +88,12 @@ class BaseElement extends DataObject implements CMSPreviewable
     /**
      * @var string
      */
-    private static $title = 'Content Element';
+    private static $title = 'Content';
 
     /**
      * @var string
      */
-    private static $singular_name = 'Content Element';
+    private static $singular_name = 'Content';
 
     /**
      * @var array
@@ -683,11 +684,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         $icon = $this->config()->get('icon');
 
         if ($icon) {
-            if (strpos($icon, ':') !== false) {
-                $parts = explode(':', $icon);
-
-                $icon = ModuleLoader::getModule($parts[0])->getRelativeResourcePath($paths[1]);
-            }
+            $icon = ModuleResourceLoader::resourceURL($icon);
 
             return DBField::create_field('HTMLVarchar', '<img width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" />');
         }
