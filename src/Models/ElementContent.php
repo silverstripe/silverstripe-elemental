@@ -11,7 +11,7 @@ class ElementContent extends BaseElement
     /**
      * @var string
      */
-    private static $icon = 'elemental/images/content.svg';
+    private static $icon = 'dnadesign/silverstripe-elemental:images/content.svg';
 
     /**
      * @var array
@@ -34,7 +34,7 @@ class ElementContent extends BaseElement
     /**
      * @var string
      */
-    private static $title = 'Content Element';
+    private static $title = 'Content';
 
     /**
      * @var string
