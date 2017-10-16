@@ -27,7 +27,13 @@ class GridFieldDetailFormItemRequestExtension extends Extension
         }
     }
 
-    public function updateItemEditForm($form)
+    /**
+     * Updates the edit form to inject the preview panel controls if needed
+     * i.e. if the class being edited implements CMSPreviewable
+     *
+     * @param SilverStripe\Forms\Form $form to be modified by reference
+     */
+    public function updateItemEditForm(&$form)
     {
         $fields = $form->Fields();
         if ($this->owner->record instanceof CMSPreviewable &&
@@ -43,10 +49,6 @@ class GridFieldDetailFormItemRequestExtension extends Extension
             $fields->push($field);
             $form->addExtraClass('cms-previewable')
                 ->removeExtraClass('cms-panel-padded center');
-            Requirements::javascript(
-                'DNADesign/Elemental:javascript/Elemental.Preview.js'
-            );
         }
-        return $form;
     }
 }

@@ -442,11 +442,7 @@ class BaseElement extends DataObject implements CMSPreviewable
                 break;
             }
 
-            $namespacelessClassname = $this->stripNamespacing($value);
-
             $templates[] = $value . $suffix;
-            $templates[] = 'elements/' . $namespacelessClassname . $suffix;
-            $templates[] = $namespacelessClassname . $suffix;
         }
 
         return $templates;
@@ -454,11 +450,11 @@ class BaseElement extends DataObject implements CMSPreviewable
 
     /**
      * Strip all namespaces from class namespace
-     * @param string e.g. "\Fully\Namespaced\Class"
+     * @param string $classname e.g. "\Fully\Namespaced\Class"
      *
      * @return string following the param example, "Class"
      */
-    private function stripNamespacing($classname)
+    protected function stripNamespacing($classname)
     {
         $classParts = explode('\\', $classname);
         return array_pop($classParts);

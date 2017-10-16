@@ -36,6 +36,5 @@ class ElementalPageExtension extends ElementalAreasExtension
             }
             $tags = $html->getContent();
         }
-        return $tags;
     }
 }
