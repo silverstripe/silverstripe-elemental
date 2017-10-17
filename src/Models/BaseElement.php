@@ -11,7 +11,6 @@ use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
-use SilverStripe\DataObjectPreview\Controllers\DataObjectPreviewController;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\HiddenField;
@@ -316,7 +315,7 @@ class BaseElement extends DataObject implements CMSPreviewable
                 unset($elements[$key]);
                 continue;
             }
-            $elements[$key] = DataObjectPreviewController::stripNamespacing($value);
+            $elements[$key] = $this->stripNamespacing($value);
         }
 
         $fields->push(
@@ -445,11 +444,21 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
 
             $templates[] = $value . $suffix;
-            $templates[] = 'elements/' . DataObjectPreviewController::stripNamespacing($value) . $suffix;
-            $templates[] = DataObjectPreviewController::stripNamespacing($value) . $suffix;
         }
 
         return $templates;
+    }
+
+    /**
+     * Strip all namespaces from class namespace
+     * @param string $classname e.g. "\Fully\Namespaced\Class"
+     *
+     * @return string following the param example, "Class"
+     */
+    protected function stripNamespacing($classname)
+    {
+        $classParts = explode('\\', $classname);
+        return array_pop($classParts);
     }
 
     /**
@@ -547,16 +556,10 @@ class BaseElement extends DataObject implements CMSPreviewable
      *
      * @return string
      */
-    public function PreviewLink($action = 'show')
+    public function PreviewLink($action = null)
     {
-        $link = Controller::join_links(
-            Director::baseURL(),
-            'cms-preview',
-            $action,
-            urlencode($this->ClassName),
-            $this->ID
-        );
-
+        $action = $action . '?ElementalPreview=' . mt_rand();
+        $link = $this->Link($action);
         $this->extend('updatePreviewLink', $link);
 
         return $link;

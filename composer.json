@@ -18,7 +18,6 @@
     "require": {
         "silverstripe/cms": "^4.0@dev",
         "symbiote/silverstripe-gridfieldextensions": "3.0.x-dev",
-        "arillo/silverstripe-dataobject-preview": "4.0.x-dev",
         "dnadesign/silverstripe-advanceddropdowns": "^2.0",
         "silverstripe/vendor-plugin": "^1.0"
     },
