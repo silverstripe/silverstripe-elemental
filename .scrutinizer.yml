@@ -1,12 +1,12 @@
-inherit: true
-
-tools:
-    external_code_coverage: false
-
 checks:
-    php:
-        code_rating: true
-        duplication: true
+    php: true
+
+build:
+    nodes:
+        analysis:
+            tests:
+                override: [php-scrutinizer-run]
 
 filter:
-    paths: [src/*, tests/*]
+    paths: ["src/*", "tests/*"]
+
