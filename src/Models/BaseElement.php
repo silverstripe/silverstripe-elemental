@@ -14,7 +14,10 @@ use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\DataObjectPreview\Controllers\DataObjectPreviewController;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\FieldGroup;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\ArrayList;
@@ -28,6 +31,7 @@ use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\SSViewer;
+use VersionViewerDataObject;
 
 class BaseElement extends DataObject implements CMSPreviewable
 {
@@ -37,32 +41,21 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     private static $icon = 'dnadesign/silverstripe-elemental:images/base.svg';
 
-    /**
-     * @var array
-     */
     private static $db = [
         'Title' => 'Varchar(255)',
+        'ShowTitle' => 'Boolean',
         'Sort' => 'Int',
         'ExtraClass' => 'Varchar(255)'
     ];
 
-    /**
-     * @var array
-     */
     private static $has_one = [
         'Parent' => ElementalArea::class
     ];
 
-    /**
-     * @var array
-     */
     private static $extensions = [
         Versioned::class
     ];
 
-    /**
-     * @var string
-     */
     private static $table_name = 'Element';
 
     /**
@@ -80,34 +73,19 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     protected $controller;
 
-    /**
-     * @var string
-     */
     private static $default_sort = 'Sort';
 
-    /**
-     * @var string
-     */
-    private static $title = 'Content';
+    private static $singular_name = 'block';
 
-    /**
-     * @var string
-     */
-    private static $singular_name = 'Content';
+    private static $plural_name = 'blocks';
 
-    /**
-     * @var array
-     */
     private static $summary_fields = [
         'EditorPreview' => 'Summary'
     ];
 
-    /**
-     * @var array
-     */
     private static $searchable_fields = [
         'ID' => [
-            'field' => 'SilverStripe\Forms\NumericField'
+            'field' => NumericField::class,
         ],
         'Title',
         'LastEdited'
@@ -262,42 +240,55 @@ class BaseElement extends DataObject implements CMSPreviewable
         }
     }
 
-    /**
-     * @return FieldList
-     */
     public function getCMSFields()
     {
-        $fields = $this->scaffoldFormFields(array(
-            'includeRelations' => ($this->ID > 0),
-            'tabbed' => true,
-            'ajaxSafe' => true
-        ));
+        $this->beforeUpdateCMSFields(function (FieldList $fields) {
+            // Remove relationship fields
+            $fields->removeByName('ParentID');
+            $fields->removeByName('Sort');
 
-        $fields->removeByName('ListID');
-        $fields->removeByName('ParentID');
-        $fields->removeByName('Sort');
-        $fields->removeByName('ExtraClass');
+            $fields->addFieldToTab(
+                'Root.Settings',
+                TextField::create('ExtraClass', _t(__CLASS__ . '.ExtraCssClassesLabel', 'Custom CSS classes'))
+                    ->setAttribute(
+                        'placeholder',
+                        _t(__CLASS__ . '.ExtraCssClassesPlaceholder', 'my_class another_class')
+                    )
+            );
 
-        $title = $fields->fieldByName('Root.Main.Title');
-        $fields->addFieldToTab(
-            'Root.Settings',
-            TextField::create('ExtraClass', _t(__CLASS__ . '.ExtraCssClassesLabel', 'Custom CSS classes'))
-                ->setAttribute('placeholder', _t(__CLASS__ . '.ExtraCssClassesPlaceholder', 'my_class another_class'))
-        );
+            // Add a combined field for "Title" and "Displayed" checkbox in a Bootstrap input group
+            $fields->removeByName('ShowTitle');
+            $fields->replaceField(
+                'Title',
+                FieldGroup::create(
+                    TextField::create('Title', ''),
+                    CheckboxField::create('ShowTitle', _t(__CLASS__ . '.ShowTitleLabel', 'Displayed'))
+                )
+                    ->setTemplate(__CLASS__ . '\\FieldGroup')
+                    ->setTitle(_t(__CLASS__ . '.TitleLabel', 'Title (not displayed unless specified)'))
+            );
 
-        if ($this->IsInDB()) {
-            if ($this->hasExtension('VersionViewerDataObject')) {
-                $fields = $this->addVersionViewer($fields, $this);
+            // Rename the "Main" tab
+            $fields->fieldByName('Root.Main')
+                ->setTitle(_t(__CLASS__ . '.MainTabLabel', 'Content'));
+
+            // Remove divider lines on all block forms
+            $fields->fieldByName('Root')->addExtraClass('form--no-dividers');
+
+            if ($this->isInDB()) {
+                if ($this->hasExtension(VersionViewerDataObject::class)) {
+                    $fields = $this->addVersionViewer($fields, $this);
+                }
             }
-        }
 
-        $fields->push($liveLinkField = new HiddenField('AbsoluteLink', false, Director::absoluteURL($this->PreviewLink())));
-        $fields->push($liveLinkField = new HiddenField('LiveLink', false, Director::absoluteURL($this->Link())));
-        $fields->push($stageLinkField = new HiddenField('StageLink', false, Director::absoluteURL($this->PreviewLink())));
+            $fields->addFieldsToTab('Root.Main', [
+                HiddenField::create('AbsoluteLink', false, Director::absoluteURL($this->PreviewLink())),
+                HiddenField::create('LiveLink', false, Director::absoluteURL($this->Link())),
+                HiddenField::create('StageLink', false, Director::absoluteURL($this->PreviewLink())),
+            ]);
+        });
 
-        $this->extend('updateCMSFields', $fields);
-
-        return $fields;
+        return parent::getCMSFields();
     }
 
     /**
@@ -334,35 +325,14 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * @return string
-     */
-    public function i18n_singular_name()
-    {
-        return _t(__CLASS__, $this->config()->title);
-    }
-
-    /**
+     * Get the type of the current block, for use in GridField summaries, block type dropdowns etc. Examples
+     * are "Content", "File", "Media", etc.
+     *
      * @return string
      */
     public function getType()
     {
-        return $this->i18n_singular_name();
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        if ($title = $this->getField('Title')) {
-            return $title;
-        } else {
-            if (!$this->isInDb()) {
-                return;
-            }
-
-            return $this->config()->title;
-        }
+        return _t(__CLASS__ . '.BlockType', 'Block');
     }
 
     /**
@@ -700,7 +670,10 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         $description = $this->config()->get('description');
 
-        return DBField::create_field('HTMLVarchar', $this->ElementType .' <span class="el-description"> &mdash; ' . $description . '</span>');
+        return DBField::create_field(
+            'HTMLVarchar',
+            $this->getType() . ' <span class="el-description"> &mdash; ' . $description . '</span>'
+        );
     }
 
     /**

@@ -20,6 +20,7 @@ class ElementalGridFieldAddNewMultiClass extends GridFieldAddNewMultiClass
     public function getHTMLFragments($grid)
     {
         $classes = $this->getClasses($grid);
+        $classes = $this->applyBlockTypeTitles($classes);
 
         if (!count($classes)) {
             return array();
@@ -53,5 +54,25 @@ class ElementalGridFieldAddNewMultiClass extends GridFieldAddNewMultiClass
         return array(
             $this->getFragment() => $data->renderWith(parent::class)
         );
+    }
+
+    /**
+     * Return a list of classes for use in the "add new" block dropdown, using the block's type rather
+     * than i18n singular name as the title
+     *
+     * @param  array $classes
+     * @return array
+     */
+    public function applyBlockTypeTitles(array $classes)
+    {
+        $output = [];
+
+        foreach ($classes as $sanitisedClassName => $originalTitle) {
+            $className = $this->unsanitiseClassName($sanitisedClassName);
+
+            $output[$sanitisedClassName] = singleton($className)->getType();
+        }
+
+        return $output;
     }
 }

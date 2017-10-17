@@ -1,22 +1,27 @@
 en:
   DNADesign\Elemental\Models\BaseElement:
     ALL: 'All types'
+    BlockType: Block
     ELEMENTTYPE: 'Element Type'
     ExtraCssClassesLabel: 'Custom CSS classes'
     ExtraCssClassesPlaceholder: 'my_class another_class'
-    PLURALNAME: 'Content Elements'
+    MainTabLabel: Content
+    PLURALNAME: blocks
     PLURALS:
-      one: 'A Content Element'
-      other: '{count} Content Elements'
-    SINGULARNAME: 'Content Element'
+      one: 'A block'
+      other: '{count} blocks'
+    SINGULARNAME: block
+    ShowTitleLabel: Displayed
+    TitleLabel: 'Title (not displayed unless specified)'
   DNADesign\Elemental\Models\ElementContent:
+    BlockType: Content
     CONTENT: Content
     CUSTOM_STYLES: 'Select a custom style..'
-    PLURALNAME: 'Content Elements'
+    PLURALNAME: 'content blocks'
     PLURALS:
-      one: 'A Content Element'
-      other: '{count} Content Elements'
-    SINGULARNAME: 'Content Element'
+      one: 'A content block'
+      other: '{count} content blocks'
+    SINGULARNAME: 'content block'
     STYLE: Style
   DNADesign\Elemental\Models\ElementalArea:
     PLURALNAME: 'Elemental Areas'
