@@ -8,38 +8,23 @@ use SilverStripe\ORM\FieldType\DBField;
 
 class ElementContent extends BaseElement
 {
-    /**
-     * @var string
-     */
     private static $icon = 'dnadesign/silverstripe-elemental:images/content.svg';
 
-    /**
-     * @var array
-     */
     private static $db = [
         'HTML' => 'HTMLText',
         'Style' => 'Varchar(255)'
     ];
 
-    /**
-     * @var string
-     */
     private static $table_name = 'ElementContent';
+
+    private static $singular_name = 'content block';
+
+    private static $plural_name = 'content blocks';
 
     /**
      * @var array
      */
     private static $styles = [];
-
-    /**
-     * @var string
-     */
-    private static $title = 'Content';
-
-    /**
-     * @var string
-     */
-    private static $description = 'HTML block';
 
     /**
      * {@inheritDoc}
@@ -88,5 +73,10 @@ class ElementContent extends BaseElement
     public function ElementSummary()
     {
         return DBField::create_field('HTMLText', $this->HTML)->Summary(20);
+    }
+
+    public function getType()
+    {
+        return _t(__CLASS__ . '.BlockType', 'Content');
     }
 }
