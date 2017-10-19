@@ -26,7 +26,6 @@
         "squizlabs/php_codesniffer": "^3.0"
     },
     "suggest": {
-        "bluehousegroup/silverstripe-data-object-version-viewer": "Allows viewing of version history for data objects inside of the SilverStripe CMS",
         "dnadesign/silverstripe-elemental-subsites": "Adds subsite support to elemental",
         "dnadesign/silverstripe-elemental-userforms": "Adds userform support to elemental",
         "dnadesign/silverstripe-elemental-virtual": "Adds support to share blocks between pages"

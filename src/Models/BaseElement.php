@@ -19,6 +19,10 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
+use SilverStripe\Forms\GridField\GridFieldDataColumns;
+use SilverStripe\Forms\GridField\GridFieldVersionedState;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\ORM\DataObject;
@@ -26,11 +30,11 @@ use SilverStripe\ORM\DB;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\Search\SearchContext;
 use SilverStripe\Security\Permission;
+use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\SSViewer;
-use VersionViewerDataObject;
 
 class BaseElement extends DataObject implements CMSPreviewable
 {
@@ -273,52 +277,46 @@ class BaseElement extends DataObject implements CMSPreviewable
             // Remove divider lines on all block forms
             $fields->fieldByName('Root')->addExtraClass('form--no-dividers');
 
-            if ($this->isInDB()) {
-                if ($this->hasExtension(VersionViewerDataObject::class)) {
-                    $fields = $this->addVersionViewer($fields, $this);
-                }
-            }
-
             $fields->addFieldsToTab('Root.Main', [
                 HiddenField::create('AbsoluteLink', false, Director::absoluteURL($this->PreviewLink())),
                 HiddenField::create('LiveLink', false, Director::absoluteURL($this->Link())),
                 HiddenField::create('StageLink', false, Director::absoluteURL($this->PreviewLink())),
             ]);
+
+
+
+            $fields->addFieldsToTab('Root.History', $this->getHistoryFields());
         });
 
         return parent::getCMSFields();
     }
 
     /**
-     * Used in ElementalAdmin
+     * Returns the history fields for this element.
+     *
+     * @return FieldList
      */
-    public function getDefaultSearchContext()
+    public function getHistoryFields()
     {
-        $fields = $this->scaffoldSearchFields();
-        $elements = BaseElement::all_allowed_elements();
+        $config = GridFieldConfig_RecordViewer::create();
+        $config->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldPageCount');
 
-        if (!$elements) {
-            $elements = ClassInfo::subclassesFor(self::class);
-        }
-        foreach ($elements as $key => $value) {
-            if ($key == self::class) {
-                unset($elements[$key]);
-                continue;
-            }
-            $elements[$key] = $this->stripNamespacing($value);
-        }
+        $config->getComponentByType(GridFieldDataColumns::class)->setDisplayFields([
+            'Version' => '#',
+            'LastEdited' => _t(__CLASS__ . '.LastEdited', 'Last Edited'),
+            'getAuthor.Name' => _t(__CLASS__ . '.Author', 'Author')
+        ]);
 
-        $fields->push(
-            DropdownField::create('ClassName', _t(__CLASS__.'.ELEMENTTYPE', 'Element Type'), $elements)
-                ->setEmptyString(_t(__CLASS__.'.ALL', 'All types'))
-        );
+        $history = Versioned::get_all_versions(__CLASS__, $this->ID);
+        $history = $history->sort('Version', 'DESC');
 
-        $filters = $this->owner->defaultSearchFilters();
-
-        return new SearchContext(
-            self::class,
-            $fields,
-            $filters
+        return new FieldList(
+            GridField::create(
+                'History',
+                '',
+                $history,
+                $config
+            )
         );
     }
 
@@ -689,5 +687,15 @@ class BaseElement extends DataObject implements CMSPreviewable
         $templates[] = BaseElement::class . '_EditorPreview';
 
         return $this->renderWith($templates);
+    }
+
+    /**
+     * @return Member
+     */
+    public function getAuthor()
+    {
+        if ($this->AuthorID) {
+            return Member::get()->byId($this->AuthorID);
+        }
     }
 }

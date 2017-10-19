@@ -47,10 +47,6 @@ class ElementContent extends BaseElement
 
         $fields = parent::getCMSFields();
 
-        if ($this->hasExtension('VersionViewerDataObject')) {
-            $fields = $this->addVersionViewer($fields, $this);
-        }
-
         return $fields;
     }
 

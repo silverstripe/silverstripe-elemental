@@ -5,9 +5,11 @@ namespace DNADesign\Elemental\Tests;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\GridField\GridField;
 use Page;
 use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\Dev\FunctionalTest;
@@ -93,7 +95,13 @@ class BaseElementTest extends FunctionalTest
 
     public function testGetController()
     {
-        $this->markTestIncomplete();
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+        $controller = $element->getController();
+
+        $this->assertInstanceOf(ElementController::class, $controller);
+
+        $this->assertEquals($element, $controller->getElement(), 'Controller has element');
+        $this->assertEquals('Test Content', $controller->Title, 'Controller fallbacks to element');
     }
 
     public function testLink()
@@ -104,5 +112,25 @@ class BaseElementTest extends FunctionalTest
     public function testGetIcon()
     {
         $this->markTestIncomplete();
+    }
+
+    public function testGetHistoryFields()
+    {
+        $this->logInWithPermission();
+
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+        $history = $element->getHistoryFields()->fieldByName('History');
+
+        $this->assertInstanceOf(GridField::class, $history);
+        $this->assertEquals(1, $history->getList()->count());
+
+        $element->HTML = '<p>Changed</p>';
+        $element->write();
+        $element->publishRecursive();
+
+        $history = $element->getHistoryFields()->fieldByName('History');
+
+        $this->assertInstanceOf(GridField::class, $history);
+        $this->assertEquals(2, $history->getList()->count(), 'Publishing a new version creates a new record');
     }
 }
