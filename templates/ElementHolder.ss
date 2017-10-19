@@ -1,4 +1,4 @@
-<div class="element $SimpleClassName.LowerCase<% if $ExtraClass %> $ExtraClass<% end_if %>" id="$Anchor">
+<div class="element $SimpleClassName.LowerCase<% if StyleVariant %> $StyleVariant<% end_if %><% if $ExtraClass %> $ExtraClass<% end_if %>" id="$Anchor">
 	<% uncached %>
 		<% if canEdit && isCMSPreview == 0 %>
 			<div style="position: relative">

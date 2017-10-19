@@ -23,6 +23,7 @@ use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldVersionedState;
+use SilverStripe\Forms\GridField\GridFieldPageCount;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\ORM\DataObject;
@@ -40,6 +41,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 {
     /**
      * Override this on your custom elements to specify a cms icon
+     *
      * @var string
      */
     private static $icon = 'dnadesign/silverstripe-elemental:images/base.svg';
@@ -48,7 +50,8 @@ class BaseElement extends DataObject implements CMSPreviewable
         'Title' => 'Varchar(255)',
         'ShowTitle' => 'Boolean',
         'Sort' => 'Int',
-        'ExtraClass' => 'Varchar(255)'
+        'ExtraClass' => 'Varchar(255)',
+        'Style' => 'Varchar(255)'
     ];
 
     private static $has_one = [
@@ -86,6 +89,11 @@ class BaseElement extends DataObject implements CMSPreviewable
         'EditorPreview' => 'Summary'
     ];
 
+    /**
+     * @var array
+     */
+    private static $styles = [];
+
     private static $searchable_fields = [
         'ID' => [
             'field' => NumericField::class,
@@ -115,42 +123,6 @@ class BaseElement extends DataObject implements CMSPreviewable
      * @var string
      */
     protected $_anchor = null;
-
-    /**
-     * @return array
-     */
-    public function getAllowedElementClasses()
-    {
-        $classes = [];
-
-        foreach (ClassInfo::subclassesFor(DataObject::class) as $className) {
-            if (Injector::inst()->get($className)->hasExtension(ElementPageExtension::class)) {
-                $classes[] = $className;
-            }
-        }
-
-        $allowed = [];
-
-        foreach ($classes as $className) {
-            $elements = Config::inst()->get($className, 'allowed_elements');
-
-            if ($elements) {
-                $allowed = array_merge($allowed, $elements);
-            }
-        }
-
-        $allowed = array_unique($allowed);
-
-        $elements = [];
-
-        foreach ($allowed as $className) {
-            $elements[$className] = _t($className, Config::inst()->get($className, 'title'));
-        }
-
-        $this->invokeWithExtensions('updateAllowedElementClasses', $elements);
-
-        return $elements;
-    }
 
     /**
      * Basic permissions, defaults to page perms where possible.
@@ -283,7 +255,21 @@ class BaseElement extends DataObject implements CMSPreviewable
                 HiddenField::create('StageLink', false, Director::absoluteURL($this->PreviewLink())),
             ]);
 
+            $styles = $this->config()->get('styles');
 
+            if ($styles && count($styles) > 0) {
+                $styleDropdown = new DropdownField(
+                    'Style',
+                    _t(__CLASS__.'.STYLE', 'Style variation'),
+                    $styles
+                );
+
+                $fields->insertBefore($styleDropdown, 'ExtraClass');
+
+                $styleDropdown->setEmptyString(_t(__CLASS__.'.CUSTOM_STYLES', 'Select a style..'));
+            } else {
+                $fields->removeByName('Style');
+            }
 
             $fields->addFieldsToTab('Root.History', $this->getHistoryFields());
         });
@@ -299,7 +285,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     public function getHistoryFields()
     {
         $config = GridFieldConfig_RecordViewer::create();
-        $config->removeComponentsByType('SilverStripe\Forms\GridField\GridFieldPageCount');
+        $config->removeComponentsByType(GridFieldPageCount::class);
 
         $config->getComponentByType(GridFieldDataColumns::class)->setDisplayFields([
             'Version' => '#',
@@ -321,8 +307,8 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * Get the type of the current block, for use in GridField summaries, block type dropdowns etc. Examples
-     * are "Content", "File", "Media", etc.
+     * Get the type of the current block, for use in GridField summaries, block
+     * type dropdowns etc. Examples are "Content", "File", "Media", etc.
      *
      * @return string
      */
@@ -362,6 +348,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
         $this->controller = Injector::inst()->create($controllerClass, $this);
         $this->controller->doInit();
+
         return $this->controller;
     }
 
@@ -417,7 +404,8 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * Strip all namespaces from class namespace
+     * Strip all namespaces from class namespace.
+     *
      * @param string $classname e.g. "\Fully\Namespaced\Class"
      *
      * @return string following the param example, "Class"
@@ -697,5 +685,23 @@ class BaseElement extends DataObject implements CMSPreviewable
         if ($this->AuthorID) {
             return Member::get()->byId($this->AuthorID);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getStyleVariant()
+    {
+        $style = $this->Style;
+
+        if (isset($styles[$style])) {
+            $style = strtolower($styles[$style]);
+        } else {
+            $style = '';
+        }
+
+        $this->extend('updateStyleVariant', $style);
+
+        return $style;
     }
 }

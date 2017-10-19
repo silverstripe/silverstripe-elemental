@@ -83,11 +83,6 @@ class BaseElementTest extends FunctionalTest
         $this->assertEquals('element-1-4', $recordSet[3]->getAnchor());
     }
 
-    public function testGetAllowedElementClasses()
-    {
-        $this->markTestIncomplete();
-    }
-
     public function testGetCmsFields()
     {
         $this->markTestIncomplete();
@@ -132,5 +127,25 @@ class BaseElementTest extends FunctionalTest
 
         $this->assertInstanceOf(GridField::class, $history);
         $this->assertEquals(2, $history->getList()->count(), 'Publishing a new version creates a new record');
+    }
+
+    public function testStyleVariants()
+    {
+        $styles = [
+            'option1' => 'Option 1',
+            'option2' => 'Option 2'
+        ];
+
+        Config::modify()->set(ElementContent::class, 'styles', $styles);
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+
+        $this->assertEquals($styles, $element->getCMSFields()->dataFieldByName('Style')->getSource());
+
+        $element->Style = 'option1';
+        $this->assertEquals('option1', $element->getStyleVariant());
+
+        // set a outdated style, should not add.
+        $element->Style = 'old';
+        $this->assertEquals('', $element->getStyleVariant());
     }
 }

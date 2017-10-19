@@ -102,7 +102,28 @@ class MyElement extends BaseElement
 
 ### Defining your own HTML
 
-`MyElement` will be rendered into a `MyElement.ss` template with the `ElementHolder.ss` wrapper.
+`MyElement` will be rendered into a `MyElement.ss` template with the `ElementHolder.ss` wrapper. Changing the holder
+template can be done via `YAML` or using a `$controller_template` on your subclass.
+
+```php
+private static $controller_template = 'MyElementHolder';
+```
+
+To customise existing block templates such as `Content` and `Form` templates copy the relevant files from
+`vendor/dnadesign/silverstripe-elemental/templates` to your theme.
+
+### Style Variants
+
+Via YAML you can configure a whitelist of style variants for each `BaseElement` subclass. For instance, if you have
+`dark` and `light` variations of your content block you would enter the following in YAML in the format
+(class: 'Description'). The class will be added to the `ElementHolder`.
+
+```yml
+DNADesign\Elemental\Models\ElementContent:
+  styles:
+    light: 'Light Background'
+    dark: 'Dark Background'
+```
 
 ### Implementing search
 
