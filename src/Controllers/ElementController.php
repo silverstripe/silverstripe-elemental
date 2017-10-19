@@ -38,9 +38,10 @@ class ElementController extends Controller
     public function __construct(BaseElement $element)
     {
         $this->element = $element;
-        $this->failover = $element;
 
         parent::__construct();
+
+        $this->setFailover($this->element);
     }
 
     /**
