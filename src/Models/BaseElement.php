@@ -476,7 +476,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     {
         $area = $this->Parent();
 
-        if ($area instanceof ElementalArea) {
+        if ($area instanceof ElementalArea && $area->exists()) {
             return $area->getOwnerPage();
         }
 
