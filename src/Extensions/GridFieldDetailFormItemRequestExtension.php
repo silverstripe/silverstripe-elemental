@@ -9,6 +9,8 @@ use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\CMS\Controllers\SilverStripeNavigator;
 use SilverStripe\Forms\LiteralField;
 use DNADesign\Elemental\Models\BaseElement;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormAction;
 
 class GridFieldDetailFormItemRequestExtension extends Extension
 {
@@ -36,7 +38,7 @@ class GridFieldDetailFormItemRequestExtension extends Extension
     public function updateItemEditForm(&$form)
     {
         $fields = $form->Fields();
-        if ($this->owner->record instanceof CMSPreviewable &&
+        if ($this->owner->getRecord() instanceof CMSPreviewable &&
             !$fields->fieldByName('SilverStripeNavigator')
         ) {
             $template = Controller::curr()

@@ -12,6 +12,6 @@ SilverStripe\CMS\Controllers\ContentController:
     - DNADesign\Elemental\Extensions\ElementalContentControllerExtension
   url_handlers:
     'element/$ID!': 'handleElement'
-SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest:
+SilverStripe\Versioned\VersionedGridFieldItemRequest:
   extensions:
     - 'DNADesign\Elemental\Extensions\GridFieldDetailFormItemRequestExtension'

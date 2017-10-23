@@ -26,7 +26,8 @@ class BaseElementTest extends FunctionalTest
     ];
 
     protected static $extra_dataobjects = [
-        TestPage::class
+        TestPage::class,
+        TestElement::class
     ];
 
     public function testSimpleClassName()
