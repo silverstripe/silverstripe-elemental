@@ -7,6 +7,7 @@ use SilverStripe\Versioned\Versioned;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\ORM\ValidationResult;
 
@@ -61,6 +62,8 @@ class HistoricalVersionedGridFieldItemRequest extends VersionedGridFieldItemRequ
     {
         $form = parent::ItemEditForm();
         $form->Fields()->push(HiddenField::create('VersionID', '', $this->record->Version));
+        $form->Fields()->addFieldToTab('Root.Main', ReadonlyField::create('Sort', _t(__CLASS__ .'.Position', 'Position'), $this->record->Sort));
+
         $form->setFields($form->Fields()->makeReadonly());
 
         return $form;
