@@ -115,3 +115,43 @@ td.col-ElementSummary {
 .elemental-preview__icon img {
     opacity: 0.4;
 }
+
+    .elemental-preview h2 {
+        margin: 0;
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .elemental-preview small {
+        font-size: 13px;
+        opacity: 0.8;
+    }
+
+    .elemental-preview__detail {
+        padding-top: 5px;
+    }
+
+    .elemental-preview__icon {
+        position: absolute;
+        left: 0px;
+        border-radius: 2px;
+        height: 35px;
+        width: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+        .elemental-preview__icon img {
+            opacity: 0.4;
+        }
+
+.elemental-edit {
+    display: block;
+    color: inherit;
+}
+
+.elemental-edit:hover,
+.elemental-edit:focus {
+    text-decoration: none;
+    color: inherit;
+}
