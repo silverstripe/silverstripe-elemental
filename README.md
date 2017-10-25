@@ -3,8 +3,8 @@
 [![Build Status](http://img.shields.io/travis/dnadesign/silverstripe-elemental.svg?style=flat-square)](https://travis-ci.org/dnadesign/silverstripe-elemental)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dnadesign/silverstripe-elemental/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dnadesign/silverstripe-elemental/?branch=master)
 [![codecov](https://codecov.io/gh/dnadesign/silverstripe-elemental/branch/master/graph/badge.svg)](https://codecov.io/gh/dnadesign/silverstripe-elemental)
-[![Version](http://img.shields.io/packagist/v/dnadesign/silverstripe-elemental.svg?style=flat-square)](https://packagist.org/packages/dnadesign/silverstripe-elemental)
-[![License](http://img.shields.io/packagist/l/dnadesign/silverstripe-elemental.svg?style=flat-square)](LICENSE.md)
+[![Version](http://img.shields.io/packagist/v/dnadesign/silverstripe-elemental.svg?style=flat)](https://packagist.org/packages/dnadesign/silverstripe-elemental)
+[![License](http://img.shields.io/packagist/l/dnadesign/silverstripe-elemental.svg?style=flat)](LICENSE.md)
 
 ## Introduction
 
