@@ -24,10 +24,11 @@ use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
-use SilverStripe\Forms\GridField\GridFieldVersionedState;
-use SilverStripe\Forms\GridField\GridFieldPageCount;
-use SilverStripe\Forms\GridField\GridFieldViewButton;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridFieldPageCount;
+use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
+use SilverStripe\Forms\GridField\GridFieldVersionedState;
+use SilverStripe\Forms\GridField\GridFieldViewButton;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\ORM\DataObject;
@@ -298,6 +299,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
         $config = GridFieldConfig_RecordViewer::create();
         $config->removeComponentsByType(GridFieldPageCount::class);
+        $config->removeComponentsByType(GridFieldToolbarHeader::class);
 
         $config
             ->getComponentByType(GridFieldDetailForm::class)
@@ -320,12 +322,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             ->sort('Version', 'DESC');
 
         return FieldList::create(
-            GridField::create(
-                'History',
-                '',
-                $history,
-                $config
-            )
+            GridField::create('History', '', $history, $config)
         );
     }
 
