@@ -26,6 +26,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldPageCount;
+use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
 use SilverStripe\Forms\GridField\GridFieldVersionedState;
 use SilverStripe\Forms\GridField\GridFieldViewButton;
@@ -41,6 +42,7 @@ use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\SSViewer;
+use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 
 class BaseElement extends DataObject implements CMSPreviewable
 {
@@ -300,6 +302,9 @@ class BaseElement extends DataObject implements CMSPreviewable
         $config = GridFieldConfig_RecordViewer::create();
         $config->removeComponentsByType(GridFieldPageCount::class);
         $config->removeComponentsByType(GridFieldToolbarHeader::class);
+        // Replace the sortable ID column with a static header component
+        $config->removeComponentsByType(GridFieldSortableHeader::class);
+        $config->addComponent(new GridFieldTitleHeader);
 
         $config
             ->getComponentByType(GridFieldDetailForm::class)
