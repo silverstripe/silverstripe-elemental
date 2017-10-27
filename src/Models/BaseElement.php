@@ -264,11 +264,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             $styles = $this->config()->get('styles');
 
             if ($styles && count($styles) > 0) {
-                $styleDropdown = new DropdownField(
-                    'Style',
-                    _t(__CLASS__.'.STYLE', 'Style variation'),
-                    $styles
-                );
+                $styleDropdown = DropdownField::create('Style', _t(__CLASS__.'.STYLE', 'Style variation'), $styles);
 
                 $fields->insertBefore($styleDropdown, 'ExtraClass');
 
@@ -725,14 +721,17 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
+     * Get a user defined style variant for this element, if available
+     *
      * @return string
      */
     public function getStyleVariant()
     {
         $style = $this->Style;
+        $styles = $this->config()->get('styles');
 
         if (isset($styles[$style])) {
-            $style = strtolower($styles[$style]);
+            $style = strtolower($style);
         } else {
             $style = '';
         }

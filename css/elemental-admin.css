@@ -159,4 +159,9 @@ td.col-ElementSummary {
 .element-history__date--small {
     color: #aaa;
     font-size: .8rem;
+    margin-left: 2px;
+}
+
+.ss-gridfield-item[data-class="DNADesign\\Elemental\\Models\\ElementContent"] .col-Version:first-child {
+    width: 1px;
 }
