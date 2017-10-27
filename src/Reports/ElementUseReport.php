@@ -1,12 +1,14 @@
 <?php
 
-use SilverStripe\Reports\Report;
+namespace DNADesign\Elemental\Reports\ElementUseReport;
+
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\Reports\Report;
 use SilverStripe\View\ArrayData;
-use SilverStripe\Core\Convert;
 
 class ElementUseReport extends Report
 {
@@ -75,16 +77,16 @@ class ElementUseReport extends Report
                     }
                 ]
             ];
-        } else {
-            return [
-                'EditorPreview' => [
-                    'title' => ''
-                ],
-                'PageTitle' => [
-                    'title' => _t(__CLASS__.'.Page', 'Page'),
-                    'link' => true
-                ]
-            ];
         }
+
+        return [
+            'EditorPreview' => [
+                'title' => ''
+            ],
+            'PageTitle' => [
+                'title' => _t(__CLASS__.'.Page', 'Page'),
+                'link' => true
+            ]
+        ];
     }
 }
