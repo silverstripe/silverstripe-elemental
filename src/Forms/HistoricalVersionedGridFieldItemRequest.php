@@ -127,7 +127,7 @@ class HistoricalVersionedGridFieldItemRequest extends VersionedGridFieldItemRequ
                             __CLASS__.'.BUTTONREVERTDESC',
                             'Publish this record to the draft site'
                         ))
-                        ->addExtraClass('btn-secondary font-icon-back-in-time')
+                        ->addExtraClass('btn-warning font-icon-back-in-time')
                 );
             }
         });
