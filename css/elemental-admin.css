@@ -155,3 +155,8 @@ td.col-ElementSummary {
     text-decoration: none;
     color: inherit;
 }
+
+.element-history__date--small {
+    color: #aaa;
+    font-size: .8rem;
+}

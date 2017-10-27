@@ -307,11 +307,15 @@ class BaseElement extends DataObject implements CMSPreviewable
             ->getComponentByType(GridFieldDetailForm::class)
             ->setItemRequestClass(HistoricalVersionedGridFieldItemRequest::class);
 
-        $config->getComponentByType(GridFieldDataColumns::class)->setDisplayFields([
-            'Version' => '#',
-            'LastEdited' => _t(__CLASS__ . '.LastEdited', 'Last Edited'),
-            'getAuthor.Name' => _t(__CLASS__ . '.Author', 'Author')
-        ]);
+        $config->getComponentByType(GridFieldDataColumns::class)
+            ->setDisplayFields([
+                'Version' => '#',
+                'RecordStatus' => _t(__CLASS__ . '.Record', 'Record'),
+                'getAuthor.Name' => _t(__CLASS__ . '.Author', 'Author')
+            ])
+            ->setFieldFormatting([
+                'RecordStatus' => '$VersionedStateNice <span class=\"element-history__date--small\">on $LastEditedNice</span>',
+            ]);
 
         $config->removeComponentsByType(GridFieldViewButton::class);
         $config->addComponent(new ElementalGridFieldHistoryButton());
@@ -750,5 +754,29 @@ class BaseElement extends DataObject implements CMSPreviewable
         }
 
         return null;
+    }
+
+    /**
+     * Get a "nice" label for use in the block history GridField
+     *
+     * @return string
+     */
+    public function getVersionedStateNice()
+    {
+        if ($this->WasPublished) {
+            return _t(__CLASS__ . '.Published', 'Published');
+        }
+
+        return _t(__CLASS__ . '.Modified', 'Modified');
+    }
+
+    /**
+     * Return a formatted date for use in the block history GridField
+     *
+     * @return string
+     */
+    public function getLastEditedNice()
+    {
+        return $this->dbObject('LastEdited')->Nice();
     }
 }
