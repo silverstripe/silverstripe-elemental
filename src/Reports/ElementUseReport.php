@@ -41,13 +41,12 @@ class ElementUseReport extends Report
             }
 
             return $output;
-        } else if (isset($params['ClassName'])) {
+        } elseif (isset($params['ClassName'])) {
             $convertClass = Injector::inst()->create(BaseElement::class)->unsanitiseClassName($params['ClassName']);
 
             if (ClassInfo::exists($convertClass)) {
                 return $convertClass::get()->sort('Title', 'ASC');
             } else {
-
             }
         }
     }
@@ -66,7 +65,7 @@ class ElementUseReport extends Report
                 ],
                 'Total' => [
                     'title' => _t(__CLASS__.'.Total', 'Total'),
-                    'link' => function($value, $item) {
+                    'link' => function ($value, $item) {
                         return sprintf(
                             '<a class="grid-field__link" href="%s" title="%s">%s</a>',
                             Convert::raw2att($this->getLink('?filters[ClassName]='. $item->ClassName)),
