@@ -55,6 +55,13 @@ class BaseElement extends DataObject implements CMSPreviewable
         Versioned::class
     ];
 
+    /**
+     * Adds Publish button from Versioned
+     *
+     * @var bool
+     */
+    private static $versioned_gridfield_extensions = true;
+
     private static $table_name = 'Element';
 
     /**
