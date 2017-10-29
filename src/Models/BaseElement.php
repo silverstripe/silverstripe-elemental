@@ -290,11 +290,13 @@ class BaseElement extends DataObject implements CMSPreviewable
     /**
      * Returns the history fields for this element.
      *
+     * @param  bool $checkLatestVersion Whether to check if this is the latest version. Prevents recursion, but can be
+     *                                  overridden to get the history GridField if required.
      * @return FieldList
      */
-    public function getHistoryFields()
+    public function getHistoryFields($checkLatestVersion = true)
     {
-        if (!$this->isLatestVersion()) {
+        if ($checkLatestVersion && !$this->isLatestVersion()) {
             // if viewing the history of the of page then don't show the history
             // fields as then we have recursion.
             return null;

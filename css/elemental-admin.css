@@ -156,8 +156,30 @@ td.col-ElementSummary {
     color: inherit;
 }
 
+// Block history styles
 .element-history__date--small {
     color: #aaa;
+    font-size: .8rem;
+    margin-left: 2px;
+}
+
+.elemental-block__history--detail {
+    margin-bottom: 40px;
+}
+
+.elemental-block__history--detail .ss-gridfield-item {
+    background-color: #0271c3;
+    color: white;
+}
+
+.elemental-block__history--detail .ss-gridfield-item:hover {
+    background-color: #0271c3;
+    color: white;
+    cursor: default;
+}
+
+.elemental-block__history--detail .element-history__date--small {
+    color: #fff;
     font-size: .8rem;
     margin-left: 2px;
 }

@@ -2,14 +2,17 @@
 
 namespace DNADesign\Elemental\Forms;
 
-use SilverStripe\Versioned\VersionedGridFieldItemRequest;
-use SilverStripe\Versioned\Versioned;
-use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig;
+use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\ReadonlyField;
-use SilverStripe\View\ArrayData;
 use SilverStripe\ORM\ValidationResult;
+use SilverStripe\Versioned\VersionedGridFieldItemRequest;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\ArrayData;
 
 /**
  * Overrides core Versioned GridField support to provide revert to version
@@ -22,10 +25,17 @@ class HistoricalVersionedGridFieldItemRequest extends VersionedGridFieldItemRequ
         'ItemEditForm'
     ];
 
+    /**
+     * The requested version ID
+     *
+     * @var int
+     */
+    protected $versionId;
+
     public function __construct($gridField, $component, $record, $requestHandler, $popupFormName)
     {
-        if ($version = $requestHandler->getRequest()->requestVar('VersionID')) {
-            $record = Versioned::get_version(get_class($record), $record->ID, $version);
+        if ($this->versionId = $requestHandler->getRequest()->requestVar('VersionID')) {
+            $record = Versioned::get_version(get_class($record), $record->ID, $this->versionId);
 
             if (!$record) {
                 return $requestHandler->httpError(404, _t(__CLASS__.'.InvalidVersion', 'Invalid version'));
@@ -45,26 +55,33 @@ class HistoricalVersionedGridFieldItemRequest extends VersionedGridFieldItemRequ
 
         $form = $this->ItemEditForm();
 
-        $data = new ArrayData(array(
+        $data = ArrayData::create([
             'Backlink'     => $controller->Link(),
             'ItemEditForm' => $form
-        ));
+        ]);
         $return = $data->renderWith($this->getTemplates());
 
         if ($request->isAjax()) {
             return $return;
-        } else {
-            return $controller->customise(array('Content' => $return));
         }
+
+        return $controller->customise(['Content' => $return]);
     }
 
     public function ItemEditForm()
     {
         $form = parent::ItemEditForm();
-        $form->Fields()->push(HiddenField::create('VersionID', '', $this->record->Version));
-        $form->Fields()->addFieldToTab('Root.Main', ReadonlyField::create('Sort', _t(__CLASS__ .'.Position', 'Position'), $this->record->Sort));
 
-        $form->setFields($form->Fields()->makeReadonly());
+        $form->Fields()->push(HiddenField::create('VersionID', '', $this->record->Version));
+        $form->Fields()->addFieldToTab(
+            'Root.Main',
+            ReadonlyField::create('Sort', _t(__CLASS__ .'.Position', 'Position'), $this->record->Sort)
+        );
+
+        $fields = $form->Fields()->makeReadonly();
+        $fields->unshift($this->getVersionGridField()->setForm($form));
+
+        $form->setFields($fields);
 
         return $form;
     }
@@ -135,5 +152,34 @@ class HistoricalVersionedGridFieldItemRequest extends VersionedGridFieldItemRequ
         $actions = parent::getFormActions();
 
         return $actions;
+    }
+
+    /**
+     * Get the specific version in a GridField, as the only record
+     *
+     * @return GridField
+     */
+    public function getVersionGridField()
+    {
+        /** @var GridField $versionGridField */
+        $versionGridField = $this->getRecord()->getHistoryFields(false)->fieldByName('History');
+
+        /** @var GridFieldConfig */
+        $config = $versionGridField->getConfig();
+
+        $config->removeComponentsByType([
+            GridFieldPaginator::class,
+            ElementalGridFieldHistoryButton::class,
+        ]);
+
+        // Filter this version ID
+        $versionGridField->setList(
+            $versionGridField->getList()->filter(['Version' => $this->versionId])
+        );
+
+        // Add a unique class name so we can style
+        $versionGridField->addExtraClass('elemental-block__history--detail');
+
+        return $versionGridField;
     }
 }
