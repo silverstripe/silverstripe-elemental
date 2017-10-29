@@ -41,6 +41,7 @@ use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
+use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
 use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 
@@ -299,6 +300,8 @@ class BaseElement extends DataObject implements CMSPreviewable
             return null;
         }
 
+        Requirements::javascript('dnadesign/silverstripe-elemental:javascript/block-history.js');
+
         $config = GridFieldConfig_RecordViewer::create();
         $config->removeComponentsByType(GridFieldPageCount::class);
         $config->removeComponentsByType(GridFieldToolbarHeader::class);
@@ -328,6 +331,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
         return FieldList::create(
             GridField::create('History', '', $history, $config)
+                ->addExtraClass('elemental-block__history')
         );
     }
 
