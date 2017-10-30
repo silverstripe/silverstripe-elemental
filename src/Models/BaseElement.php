@@ -263,6 +263,7 @@ class BaseElement extends DataObject implements CMSPreviewable
                     TextField::create('Title', ''),
                     CheckboxField::create('ShowTitle', _t(__CLASS__ . '.ShowTitleLabel', 'Displayed'))
                 )
+                    ->setName('TitleAndDisplayed')
                     ->setTemplate(__CLASS__ . '\\FieldGroup')
                     ->setTitle(_t(__CLASS__ . '.TitleLabel', 'Title (not displayed unless specified)'))
             );
