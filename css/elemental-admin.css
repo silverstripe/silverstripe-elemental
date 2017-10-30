@@ -178,6 +178,6 @@ td.col-ElementSummary {
 }
 
 .element__note {
-    color: #bbb;
+    color: #767676; /* note: use $text-muted when using webpack */
     font-style: italic;
 }

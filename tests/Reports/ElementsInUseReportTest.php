@@ -25,7 +25,6 @@ class ElementsInUseReportTest extends FunctionalTest
         $result = (string) $this->get('admin/reports/show/DNADesign-Elemental-Reports-ElementsInUseReport')->getBody();
 
         $this->assertContains('Content blocks in use', $result, 'Title is displayed');
-        $this->assertContains('Show which content blocks are in use', $result, 'Description is displayed');
 
         $this->assertContains(
             'data-class="DNADesign-Elemental-Models-ElementContent"',
@@ -62,7 +61,7 @@ class ElementsInUseReportTest extends FunctionalTest
         $this->assertNotNull($castros, 'Fixtured Castros page exists');
         $this->assertTrue($castros->hasField('EditLink'));
         $this->assertContains(
-            $this->idFromFixture(TestPage::class, 'castros_home'),
+            (string) $this->idFromFixture(TestPage::class, 'castros_home'),
             $castros->EditLink,
             'Correct owner page ID is in edit link'
         );

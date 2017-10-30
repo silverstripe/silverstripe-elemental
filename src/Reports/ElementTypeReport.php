@@ -18,11 +18,6 @@ class ElementTypeReport extends Report
         return _t(__CLASS__ . '.Title', 'Content block types');
     }
 
-    public function description()
-    {
-        return _t(__CLASS__ . '.Description', 'Show which types of content blocks exist');
-    }
-
     public function sourceRecords($params = [])
     {
         $classes = $this->getElementTypes();

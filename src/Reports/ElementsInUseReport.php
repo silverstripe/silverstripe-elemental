@@ -17,11 +17,6 @@ class ElementsInUseReport extends Report
         return _t(__CLASS__ . '.Title', 'Content blocks in use');
     }
 
-    public function description()
-    {
-        return _t(__CLASS__ . '.Description', 'Show which content blocks are in use');
-    }
-
     public function sourceRecords($params = [])
     {
         /** @var BaseElement[] $elements */
@@ -94,7 +89,7 @@ class ElementsInUseReport extends Report
     protected function getEditLink($value, $item)
     {
         return sprintf(
-            '<a href="grid-field__link" href="%s" title="%s">%s</a>',
+            '<a class="grid-field__link" href="%s" title="%s">%s</a>',
             $item->EditLink,
             $value,
             $value
