@@ -2,26 +2,10 @@
     clear: both;
 }
 
-.col-ElementIcon {
-    max-width: 30px;
-    text-align: center;
-}
-
 .col-reorder + .col-ElementIcon {
     width: 1px;
     max-width: 20px;
     padding-left: 0px !important
-}
-
-th.col-ElementIcon {
-    opacity: 0;
-}
-
-.col-ElementTypeNice .el-description {
-    font-size: 12px;
-    color: rgba(102, 114, 125, 0.6);
-    font-style: italic;
-    padding-left: 5px;
 }
 
 td.col-ElementSummary {
@@ -186,4 +170,14 @@ td.col-ElementSummary {
 
 .ss-gridfield-item[data-class="DNADesign\\Elemental\\Models\\ElementContent"] .col-Version:first-child {
     width: 1px;
+}
+
+/* Reports styles */
+.elemental-report__grid-field .ss-gridfield-item td:first-child {
+    width: 1px;
+}
+
+.element__note {
+    color: #bbb;
+    font-style: italic;
 }

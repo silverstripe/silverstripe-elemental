@@ -54,6 +54,14 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     private static $icon = 'dnadesign/silverstripe-elemental:images/base.svg';
 
+    /**
+     * Describe the purpose of this element
+     *
+     * @config
+     * @var string
+     */
+    private static $description = 'Base element class';
+
     private static $db = [
         'Title' => 'Varchar(255)',
         'ShowTitle' => 'Boolean',
@@ -691,6 +699,20 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
+     * Get a description for this content element, if available
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        $description = $this->config()->uninherited('description');
+        if ($description) {
+            return _t(__CLASS__ . '.Description', $description);
+        }
+        return '';
+    }
+
+    /**
      * Generate markup for element type, with description suitable for use in
      * GridFields.
      *
@@ -698,8 +720,8 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function getTypeNice()
     {
-        $description = $this->config()->get('description');
-        $desc = ($description) ? ' <span class="el-description"> &mdash; ' . $description . '</span>' : '';
+        $description = $this->getDescription();
+        $desc = ($description) ? ' <span class="element__note"> &mdash; ' . $description . '</span>' : '';
 
         return DBField::create_field(
             'HTMLVarchar',
