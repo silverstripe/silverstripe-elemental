@@ -3,6 +3,8 @@
 namespace DNADesign\Elemental\Models;
 
 use Exception;
+use DNADesign\Elemental\Forms\ElementalGridFieldHistoryButton;
+use DNADesign\Elemental\Forms\HistoricalVersionedGridFieldItemRequest;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use DNADesign\Elemental\Controllers\ElementController;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
@@ -19,6 +21,15 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
+use SilverStripe\Forms\GridField\GridFieldDataColumns;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridFieldPageCount;
+use SilverStripe\Forms\GridField\GridFieldSortableHeader;
+use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
+use SilverStripe\Forms\GridField\GridFieldVersionedState;
+use SilverStripe\Forms\GridField\GridFieldViewButton;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\ORM\DataObject;
@@ -26,16 +37,19 @@ use SilverStripe\ORM\DB;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\Search\SearchContext;
 use SilverStripe\Security\Permission;
+use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Parsers\URLSegmentFilter;
+use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
-use VersionViewerDataObject;
+use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 
 class BaseElement extends DataObject implements CMSPreviewable
 {
     /**
      * Override this on your custom elements to specify a cms icon
+     *
      * @var string
      */
     private static $icon = 'dnadesign/silverstripe-elemental:images/base.svg';
@@ -44,7 +58,8 @@ class BaseElement extends DataObject implements CMSPreviewable
         'Title' => 'Varchar(255)',
         'ShowTitle' => 'Boolean',
         'Sort' => 'Int',
-        'ExtraClass' => 'Varchar(255)'
+        'ExtraClass' => 'Varchar(255)',
+        'Style' => 'Varchar(255)'
     ];
 
     private static $has_one = [
@@ -54,6 +69,8 @@ class BaseElement extends DataObject implements CMSPreviewable
     private static $extensions = [
         Versioned::class
     ];
+
+    private static $versioned_gridfield_extensions = true;
 
     private static $table_name = 'Element';
 
@@ -81,6 +98,11 @@ class BaseElement extends DataObject implements CMSPreviewable
     private static $summary_fields = [
         'EditorPreview' => 'Summary'
     ];
+
+    /**
+     * @var array
+     */
+    private static $styles = [];
 
     private static $searchable_fields = [
         'ID' => [
@@ -111,42 +133,6 @@ class BaseElement extends DataObject implements CMSPreviewable
      * @var string
      */
     protected $_anchor = null;
-
-    /**
-     * @return array
-     */
-    public function getAllowedElementClasses()
-    {
-        $classes = [];
-
-        foreach (ClassInfo::subclassesFor(DataObject::class) as $className) {
-            if (Injector::inst()->get($className)->hasExtension(ElementPageExtension::class)) {
-                $classes[] = $className;
-            }
-        }
-
-        $allowed = [];
-
-        foreach ($classes as $className) {
-            $elements = Config::inst()->get($className, 'allowed_elements');
-
-            if ($elements) {
-                $allowed = array_merge($allowed, $elements);
-            }
-        }
-
-        $allowed = array_unique($allowed);
-
-        $elements = [];
-
-        foreach ($allowed as $className) {
-            $elements[$className] = _t($className, Config::inst()->get($className, 'title'));
-        }
-
-        $this->invokeWithExtensions('updateAllowedElementClasses', $elements);
-
-        return $elements;
-    }
 
     /**
      * Basic permissions, defaults to page perms where possible.
@@ -273,58 +259,87 @@ class BaseElement extends DataObject implements CMSPreviewable
             // Remove divider lines on all block forms
             $fields->fieldByName('Root')->addExtraClass('form--no-dividers');
 
-            if ($this->isInDB()) {
-                if ($this->hasExtension(VersionViewerDataObject::class)) {
-                    $fields = $this->addVersionViewer($fields, $this);
-                }
-            }
-
             $fields->addFieldsToTab('Root.Main', [
                 HiddenField::create('AbsoluteLink', false, Director::absoluteURL($this->PreviewLink())),
                 HiddenField::create('LiveLink', false, Director::absoluteURL($this->Link())),
                 HiddenField::create('StageLink', false, Director::absoluteURL($this->PreviewLink())),
             ]);
+
+            $styles = $this->config()->get('styles');
+
+            if ($styles && count($styles) > 0) {
+                $styleDropdown = DropdownField::create('Style', _t(__CLASS__.'.STYLE', 'Style variation'), $styles);
+
+                $fields->insertBefore($styleDropdown, 'ExtraClass');
+
+                $styleDropdown->setEmptyString(_t(__CLASS__.'.CUSTOM_STYLES', 'Select a style..'));
+            } else {
+                $fields->removeByName('Style');
+            }
+
+            $history = $this->getHistoryFields();
+
+            if ($history) {
+                $fields->addFieldsToTab('Root.History', $history);
+            }
         });
 
         return parent::getCMSFields();
     }
 
     /**
-     * Used in ElementalAdmin
+     * Returns the history fields for this element.
+     *
+     * @param  bool $checkLatestVersion Whether to check if this is the latest version. Prevents recursion, but can be
+     *                                  overridden to get the history GridField if required.
+     * @return FieldList
      */
-    public function getDefaultSearchContext()
+    public function getHistoryFields($checkLatestVersion = true)
     {
-        $fields = $this->scaffoldSearchFields();
-        $elements = BaseElement::all_allowed_elements();
-
-        if (!$elements) {
-            $elements = ClassInfo::subclassesFor(self::class);
-        }
-        foreach ($elements as $key => $value) {
-            if ($key == self::class) {
-                unset($elements[$key]);
-                continue;
-            }
-            $elements[$key] = $this->stripNamespacing($value);
+        if ($checkLatestVersion && !$this->isLatestVersion()) {
+            // if viewing the history of the of page then don't show the history
+            // fields as then we have recursion.
+            return null;
         }
 
-        $fields->push(
-            DropdownField::create('ClassName', _t(__CLASS__.'.ELEMENTTYPE', 'Element Type'), $elements)
-                ->setEmptyString(_t(__CLASS__.'.ALL', 'All types'))
-        );
+        Requirements::javascript('dnadesign/silverstripe-elemental:javascript/block-history.js');
 
-        $filters = $this->owner->defaultSearchFilters();
+        $config = GridFieldConfig_RecordViewer::create();
+        $config->removeComponentsByType(GridFieldPageCount::class);
+        $config->removeComponentsByType(GridFieldToolbarHeader::class);
+        // Replace the sortable ID column with a static header component
+        $config->removeComponentsByType(GridFieldSortableHeader::class);
+        $config->addComponent(new GridFieldTitleHeader);
 
-        return new SearchContext(
-            self::class,
-            $fields,
-            $filters
+        $config
+            ->getComponentByType(GridFieldDetailForm::class)
+            ->setItemRequestClass(HistoricalVersionedGridFieldItemRequest::class);
+
+        $config->getComponentByType(GridFieldDataColumns::class)
+            ->setDisplayFields([
+                'Version' => '#',
+                'RecordStatus' => _t(__CLASS__ . '.Record', 'Record'),
+                'getAuthor.Name' => _t(__CLASS__ . '.Author', 'Author')
+            ])
+            ->setFieldFormatting([
+                'RecordStatus' => '$VersionedStateNice <span class=\"element-history__date--small\">on $LastEditedNice</span>',
+            ]);
+
+        $config->removeComponentsByType(GridFieldViewButton::class);
+        $config->addComponent(new ElementalGridFieldHistoryButton());
+
+        $history = Versioned::get_all_versions(__CLASS__, $this->ID)
+            ->sort('Version', 'DESC');
+
+        return FieldList::create(
+            GridField::create('History', '', $history, $config)
+                ->addExtraClass('elemental-block__history')
         );
     }
 
     /**
-     * Get the type of the current block, for use in GridField summaries, block type dropdowns etc. Examples
-     * are "Content", "File", "Media", etc.
+     * Get the type of the current block, for use in GridField summaries, block
+     * type dropdowns etc. Examples are "Content", "File", "Media", etc.
      *
      * @return string
      */
@@ -364,6 +379,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
         $this->controller = Injector::inst()->create($controllerClass, $this);
         $this->controller->doInit();
+
         return $this->controller;
     }
 
@@ -419,7 +435,8 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * Strip all namespaces from class namespace
+     * Strip all namespaces from class namespace.
+     *
      * @param string $classname e.g. "\Fully\Namespaced\Class"
      *
      * @return string following the param example, "Class"
@@ -558,17 +575,18 @@ class BaseElement extends DataObject implements CMSPreviewable
     public function CMSEditLink()
     {
         $relationName = $this->getAreaRelationName();
+        $page = $this->getPage(true);
+
+        if (!$page) {
+            return null;
+        }
 
         $link = Controller::join_links(
             singleton(CMSPageEditController::class)->Link('EditForm'),
-            $this->getPage(true)->ID,
+            $page->ID,
             'field/' . $relationName . '/item/',
             $this->ID
         );
-
-        if ($inList) {
-            return $link;
-        }
 
         return Controller::join_links(
             $link,
@@ -584,12 +602,15 @@ class BaseElement extends DataObject implements CMSPreviewable
     public function getAreaRelationName()
     {
         $page = $this->getPage(true);
-        $has_one = $page->config()->get('has_one');
-        $area = $this->Parent();
 
-        foreach ($has_one as $relationName => $relationClass) {
-            if ($relationClass === $area->ClassName) {
-                return $relationName;
+        if ($page) {
+            $has_one = $page->config()->get('has_one');
+            $area = $this->Parent();
+
+            foreach ($has_one as $relationName => $relationClass) {
+                if ($relationClass === $area->ClassName) {
+                    return $relationName;
+                }
             }
         }
 
@@ -601,9 +622,14 @@ class BaseElement extends DataObject implements CMSPreviewable
      *
      * @return string
      */
-    protected function sanitiseClassName($class, $delimiter = '-')
+    public function sanitiseClassName($class, $delimiter = '-')
     {
         return str_replace('\\', $delimiter, $class);
+    }
+
+    public function unsanitiseClassName($class, $delimiter = '-')
+    {
+        return str_replace($delimiter, '\\', $class);
     }
 
     /**
@@ -673,10 +699,11 @@ class BaseElement extends DataObject implements CMSPreviewable
     public function getTypeNice()
     {
         $description = $this->config()->get('description');
+        $desc = ($description) ? ' <span class="el-description"> &mdash; ' . $description . '</span>' : '';
 
         return DBField::create_field(
             'HTMLVarchar',
-            $this->getType() . ' <span class="el-description"> &mdash; ' . $description . '</span>'
+            $this->getType() . $desc
         );
     }
 
@@ -689,5 +716,74 @@ class BaseElement extends DataObject implements CMSPreviewable
         $templates[] = BaseElement::class . '_EditorPreview';
 
         return $this->renderWith($templates);
+    }
+
+    /**
+     * @return Member
+     */
+    public function getAuthor()
+    {
+        if ($this->AuthorID) {
+            return Member::get()->byId($this->AuthorID);
+        }
+    }
+
+    /**
+     * Get a user defined style variant for this element, if available
+     *
+     * @return string
+     */
+    public function getStyleVariant()
+    {
+        $style = $this->Style;
+        $styles = $this->config()->get('styles');
+
+        if (isset($styles[$style])) {
+            $style = strtolower($style);
+        } else {
+            $style = '';
+        }
+
+        $this->extend('updateStyleVariant', $style);
+
+        return $style;
+    }
+
+    /**
+     *
+     */
+    public function getPageTitle()
+    {
+        $page = $this->getPage();
+
+        if ($page) {
+            return $page->Title;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get a "nice" label for use in the block history GridField
+     *
+     * @return string
+     */
+    public function getVersionedStateNice()
+    {
+        if ($this->WasPublished) {
+            return _t(__CLASS__ . '.Published', 'Published');
+        }
+
+        return _t(__CLASS__ . '.Modified', 'Modified');
+    }
+
+    /**
+     * Return a formatted date for use in the block history GridField
+     *
+     * @return string
+     */
+    public function getLastEditedNice()
+    {
+        return $this->dbObject('LastEdited')->Nice();
     }
 }
