@@ -109,7 +109,7 @@ template can be done via `YAML` or using a `$controller_template` on your subcla
 private static $controller_template = 'MyElementHolder';
 ```
 
-To customise existing block templates such as `Content` and `Form` templates copy the relevant files from
+To customise existing block templates such as `Content` and `Form` templates, copy the relevant files from
 `vendor/dnadesign/silverstripe-elemental/templates` to your theme.
 
 ### Style Variants
