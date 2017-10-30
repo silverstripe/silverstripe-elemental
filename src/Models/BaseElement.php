@@ -3,6 +3,7 @@
 namespace DNADesign\Elemental\Models;
 
 use Exception;
+use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use DNADesign\Elemental\Controllers\ElementController;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\Control\Controller;
@@ -13,7 +14,6 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
@@ -259,13 +259,11 @@ class BaseElement extends DataObject implements CMSPreviewable
             $fields->removeByName('ShowTitle');
             $fields->replaceField(
                 'Title',
-                FieldGroup::create(
-                    TextField::create('Title', ''),
+                TextCheckboxGroupField::create(
+                    TextField::create('Title', _t(__CLASS__ . '.TitleLabel', 'Title (not displayed unless specified)')),
                     CheckboxField::create('ShowTitle', _t(__CLASS__ . '.ShowTitleLabel', 'Displayed'))
                 )
                     ->setName('TitleAndDisplayed')
-                    ->setTemplate(__CLASS__ . '\\FieldGroup')
-                    ->setTitle(_t(__CLASS__ . '.TitleLabel', 'Title (not displayed unless specified)'))
             );
 
             // Rename the "Main" tab
