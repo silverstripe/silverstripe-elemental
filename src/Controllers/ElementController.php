@@ -3,13 +3,13 @@
 namespace DNADesign\Elemental\Controllers;
 
 use DNADesign\Elemental\Models\BaseElement;
-
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\i18n\i18n;
 use SilverStripe\Security\Member;
+use SilverStripe\View\Requirements;
 
 /**
  * Optional controller for every element which has its own logic, e.g. in forms.
@@ -31,6 +31,22 @@ class ElementController extends Controller
      * @var BaseElement $element
      */
     protected $element;
+
+    /**
+     * A list of default (example) styles to include
+     *
+     * @config
+     * @var string[]
+     */
+    private static $default_styles = [];
+
+    /**
+     * Whether to include default (example) styles
+     *
+     * @config
+     * @var bool
+     */
+    private static $include_default_styles = true;
 
     /**
      * @param BaseElement $element
@@ -60,6 +76,13 @@ class ElementController extends Controller
      */
     public function forTemplate()
     {
+        $defaultStyles = $this->config()->get('default_styles');
+        if ($this->config()->get('include_default_styles') && !empty($defaultStyles)) {
+            foreach ($defaultStyles as $stylePath) {
+                Requirements::css($stylePath);
+            }
+        }
+
         $template = $this->element->config()->get('controller_template');
 
         return $this->renderWith($template);
