@@ -1,0 +1,29 @@
+DNADesign\Elemental\Models\BaseElement:
+  just_base:
+    Title: Just a base Elemental
+
+DNADesign\Elemental\Tests\Src\TestElement:
+  test_element:
+    Title: Not important
+  stubby:
+    Title: Stubby Stub
+
+DNADesign\Elemental\Models\ElementalArea:
+  area1:
+    Title: Bogus
+
+DNADesign\Elemental\Tests\Src\TestPage:
+  castros_home:
+    Title: Home Page
+    URLSegment: castros
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area1
+
+DNADesign\Elemental\Models\ElementContent:
+  some_content:
+    Title: My special content block
+  more_content:
+    Title: Another special block
+  welcome_castros:
+    Title: Welcome to Castros
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area1
+    HTML: <p>Welcome to Castros. This is some content.</p>

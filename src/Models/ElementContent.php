@@ -20,10 +20,9 @@ class ElementContent extends BaseElement
 
     private static $plural_name = 'content blocks';
 
-    /**
-     * @return HTMLText
-     */
-    public function ElementSummary()
+    private static $description = 'HTML text block';
+
+    public function getSummary()
     {
         return DBField::create_field('HTMLText', $this->HTML)->Summary(20);
     }
