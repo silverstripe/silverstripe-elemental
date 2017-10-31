@@ -103,7 +103,7 @@ class ElementsInUseReport extends Report
      */
     public function getReportField()
     {
-        Requirements::css('dnadesign/silverstripe-elemental:css/elemental-admin.css');
+        Requirements::css('dnadesign/silverstripe-elemental:client/dist/styles/bundle.css');
 
         /** @var GridField $field */
         $field = parent::getReportField();

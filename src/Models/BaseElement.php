@@ -52,7 +52,7 @@ class BaseElement extends DataObject implements CMSPreviewable
      *
      * @var string
      */
-    private static $icon = 'dnadesign/silverstripe-elemental:images/base.svg';
+    private static $icon = 'dnadesign/silverstripe-elemental:client/images/base.svg';
 
     /**
      * Describe the purpose of this element
@@ -108,6 +108,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     ];
 
     /**
+     * @config
      * @var array
      */
     private static $styles = [];
@@ -310,7 +311,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             return null;
         }
 
-        Requirements::javascript('dnadesign/silverstripe-elemental:javascript/block-history.js');
+        Requirements::javascript('dnadesign/silverstripe-elemental:client/dist/js/bundle.js');
 
         $config = GridFieldConfig_RecordViewer::create();
         $config->removeComponentsByType(GridFieldPageCount::class);

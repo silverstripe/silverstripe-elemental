@@ -85,9 +85,11 @@ use DNADesign\Elemental\Models\BaseElement;
 
 class MyElement extends BaseElement
 {
-    private static $title = "My Element";
+    private static $singular_name = 'my element';
 
-    private static $description = "My Custom Element";
+    private static $plural_name = 'my elements';
+
+    private static $description = 'What my custom element does';
 
 	public function getCMSFields()
     {
@@ -96,6 +98,11 @@ class MyElement extends BaseElement
         // ...
 
         return $fields;
+    }
+
+    public function getType()
+    {
+        return 'My Element';
     }
 }
 ```
@@ -194,6 +201,31 @@ class CustomSolrSearchIndex extends SolrSearchIndex
 ```
 
 After setting up your SolrSearchIndex, run `sake dev/tasks/Solr_Configure`.
+
+## Building the elemental frontend assets
+
+This module uses the [SilverStripe Webpack module](https://github.com/silverstripe/webpack-config), and inherits
+things from the core SilverStripe 4 modules, such as a core variable sheet and Javascript components.
+
+When making changes to either the SASS or Javascript files, ensure you change the source files in `client/src/`.
+
+You can have [yarn](https://yarnpkg.com/en/) watch and rebuild delta changes as you make them (for development only):
+
+```
+yarn watch
+```
+
+When you're ready to make a pull request you can rebuild them, which will also minify everything. Note that `watch`
+will generate source map files which you shouldn't commit in for your final pull request. To minify and package:
+
+```
+yarn build
+```
+
+You'll need to have [yarn installed](https://yarnpkg.com/en/docs/install) globally in your command line.
+
+**Note:** If adding or modifying colours, spacing, font sizes etc. please try and use an appropriate variable from the
+silverstripe/admin module if available.
 
 ## Screenshots
 
