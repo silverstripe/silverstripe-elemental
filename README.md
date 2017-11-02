@@ -17,7 +17,7 @@ the `$Content` variable with `$ElementArea` and rely on the markup of the indivi
 
 ## Installation
 
-	composer require "dnadesign/silverstripe-elemental" "dev-master"
+	composer require dnadesign/silverstripe-elemental ^1.0
 
 Extend any page type with the ElementPageExtension and define allowed elements. This can be done via the SilverStripe
 `YAML` config API.
