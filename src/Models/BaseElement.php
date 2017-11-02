@@ -214,9 +214,6 @@ class BaseElement extends DataObject implements CMSPreviewable
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
 
-    /**
-     *
-     */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
@@ -358,7 +355,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * @param ElementController
+     * @param ElementController $controller
      *
      * @return $this
      */
@@ -370,7 +367,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * @throws Exception
+     * @throws Exception If the specified controller class doesn't exist
      *
      * @return ElementController
      */
@@ -405,7 +402,7 @@ class BaseElement extends DataObject implements CMSPreviewable
      * be rendered through their {@link ElementController} class as this
      * contains the holder styles.
      *
-     * @return string HTML
+     * @return string|null HTML
      */
     public function forTemplate($holder = true)
     {
@@ -568,9 +565,9 @@ class BaseElement extends DataObject implements CMSPreviewable
     public function isCMSPreview()
     {
         if (Controller::has_curr()) {
-            $c = Controller::curr();
+            $controller = Controller::curr();
 
-            if ($c->getRequest()->requestVar('CMSPreview')) {
+            if ($controller->getRequest()->requestVar('CMSPreview')) {
                 return true;
             }
         }
@@ -579,7 +576,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function CMSEditLink()
     {
@@ -606,7 +603,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     /**
      * Retrieve a elemental area relation for creating cms links
      *
-     * @return string - the name of a valid elemental area relation
+     * @return string The name of a valid elemental area relation
      */
     public function getAreaRelationName()
     {
@@ -642,7 +639,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getEditLink()
     {

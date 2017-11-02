@@ -12,21 +12,28 @@ This module extends a page type to swap the content area for a GridField and man
 of rather than a single text field. Features supported:
 
 * Versioning of elements
-* Ability to add, remove supported elements per page.
+* Ability to add, remove supported elements per page
 
 The module provides basic markup for each of the elements but you will likely need to provide your own styles. Replace
-the `$Content` variable with `$ElementArea` and rely on the markup of the individual elements.
+the `$Content` variable with `$ElementalArea` in your page templates, and rely on the markup of the individual elements.
+
+## Requirements
+
+* SilverStripe CMS ^4.0
+* GridFieldExtensions ^3.0
+
+For a SilverStripe 3.x compatible version of this module, please see the [1 branch, or 1.x release line](https://github.com/dnadesign/silverstripe-elemental/tree/1#readme).
 
 ## Installation
 
 ```
-composer require "dnadesign/silverstripe-elemental" "dev-master"
+composer require dnadesign/silverstripe-elemental 2.x-dev
 ```
 
-Extend any page type with the ElementPageExtension and define allowed elements. This can be done via the SilverStripe
-`YAML` config API.
+Extend any page type with the ElementalPageExtension and define allowed elements. This can be done with SilverStripe
+YAML config:
 
-**mysite/\_config/app.yml**
+**mysite/\_config/elements.yml**
 
 ```yaml
 ElementPage:
@@ -34,19 +41,30 @@ ElementPage:
     - DNADesign\Elemental\Extensions\ElementalPageExtension
 ```
 
-In your page type template use `$ElementArea` to render the elements to the page.
+In your page type layout template use `$ElementalArea` to render the elements to the page.
+
+## Getting more elements
+
+Note that this module only comes by default with the base element and a Content element. If you need more, take
+a look at some other modules:
+
+* [silverstripe/silverstripe-elemental-blocks](https://github.com/silverstripe/silverstripe-elemental-blocks)
+* [dnadesign/silverstripe-elemental-userforms](https://github.com/dnadesign/silverstripe-elemental-userforms)
+* [dnadesign/silverstripe-elemental-list](https://github.com/dnadesign/silverstripe-elemental-list)
+* [dnadesign/silverstripe-elemental-virtual](https://github.com/dnadesign/silverstripe-elemental-virtual)
 
 ## Configuration
 
-### Customize HTML and Markup
+### Customize HTML and markup
 
-The basic element area is rendered into the standard `ElementArea` template. This loops over each of the element
-controller instances. Each controller instance will render `$ElementHolder` which represented the element contained within
-a holder `div`. The wrapper div is the `ElementHolder.ss` template.
+The basic element area is rendered into the `DNADesign/Elemental/Models/ElementalArea.ss` template. This loops over
+each of the element controller instances. Each controller instance will render `$ElementHolder` which represents
+the element contained within a holder `div`. The wrapper div is the `ElementHolder.ss` template.
 
-### Limit Allowed Elements
+### Limit allowed elements
 
-You may wish to only enable certain elements for the CMS authors to choose from rather than the full set.
+You may wish to only enable certain elements for the CMS authors to choose from rather than the full set. This can be
+done according to various page types:
 
 ```yaml
 ElementPage:
@@ -62,20 +80,16 @@ ElementPage:
     - YourCompany\YourModule\Elements\ElementContact
 ```
 
-### Limiting Global Elements
+### Sharing elements between pages
 
-By default any element is available to be linked to multiple pages. This can be
-changed with the "Available globally" checkbox in the settings tab of each element.
-The default can be changed so that global elements are opt-in:
+By default the page to element relationship is a "has one", meaning you cannot share elements between pages. If this
+functionality is desired, you could take a look at the [silverstripe-elemental-virtual](https://github.com/dnadesign/silverstripe-elemental-virtual)
+module which helps to achieve this.
 
-```yaml
-DNADesign\Elemental\Models\BaseElement:
-  default_global_elements: false
-```
+### Defining your own elements
 
-### Defining your own Elements.
-
-An element is as simple as a class which extends `BaseElement`. After you add the class, ensure you have rebuilt your
+An element is as simple as a PHP class which extends `DNADesign\Elemental\Models\BaseElement`, and a template to go
+with it (unless you want it to use the default template). After you add the class, ensure you have rebuilt your
 database and reload the CMS.
 
 ```php
@@ -110,16 +124,21 @@ class MyElement extends BaseElement
 ### Defining your own HTML
 
 `MyElement` will be rendered into a `MyElement.ss` template with the `ElementHolder.ss` wrapper. Changing the holder
-template can be done via `YAML` or using a `$controller_template` on your subclass.
+template can be done via YAML, or by using a `$controller_template` on your subclass.
 
 ```php
 private static $controller_template = 'MyElementHolder';
 ```
 
 To customise existing block templates such as `Content` and `Form` templates, copy the relevant files from
-`vendor/dnadesign/silverstripe-elemental/templates` to your theme.
+`vendor/dnadesign/silverstripe-elemental/templates` to your theme. When doing this, ensure you match the folder
+structure (PHP class namespace) to ensure that your new template version takes priority.
 
-### Style Variants
+**Note:** The default set of elements follow the [BEM (Block Element Modifier])(http://getbem.com/) class naming
+convention, which allows developers to style individual parts of the DOM without unnecessarily nested CSS. Where
+possible, we encourage you to follow this naming system.
+
+### Style variants
 
 Via YAML you can configure a whitelist of style variants for each `BaseElement` subclass. For instance, if you have
 `dark` and `light` variations of your content block you would enter the following in YAML in the format
@@ -132,75 +151,22 @@ DNADesign\Elemental\Models\ElementContent:
     dark: 'Dark Background'
 ```
 
-### Implementing search
+### Disabling the default stylesheets
 
-Composing your page of elements means that searching the page for content will require you to add some additional logic
-as SilverStripe would normally expect content to live in a single `Content` field. By default, elemental will copy all
-elements into the `$Content` field on save so search works as designed however this has one limitation, if you share
-elements between pages, publishing on page A will not update the searched content on page B.
+When installing this module, there may be a default set of CSS stylesheets that come to provide some examples for the
+various default element types for the frontend website.
 
-To get around this, we can use the `ElementalSolrIndexer` class (given you're using the
-[FulltextSearchable module](https://github.com/silverstripe-labs/silverstripe-fulltextsearch)). This class can help add
-some smarts to the Solr indexing so that it understands our content.
+You can disable this with YAML configuration:
 
-First step is to define a custom Solr index
-
-```php
-<?php
-
-class CustomSolrSearchIndex extends SolrSearchIndex
-{
-    public function getFieldDefinitions()
-    {
-        $xml = parent::getFieldDefinitions();
-
-        // adds any required XML configuration
-        $indexer = new ElementalSolrIndexer();
-        $xml = $indexer->updateFieldDefinition($xml);
-
-        return $xml;
-    }
-
-    protected function _addAs($object, $base, $options)
-    {
-        // boiler plate from parent::_addAd since we can't
-        // call the parent function to modify this document.
-
-        $includeSubs = $options['include_children'];
-
-        $doc = new Apache_Solr_Document();
-        $doc->setField('_documentid', $this->getDocumentID($object, $base, $includeSubs));
-        $doc->setField('ID', $object->ID);
-        $doc->setField('ClassName', $object->ClassName);
-
-        foreach (SearchIntrospection::hierarchy(get_class($object), false) as $class) {
-            $doc->addField('ClassHierarchy', $class);
-        }
-
-        foreach ($this->getFieldsIterator() as $name => $field) {
-            if ($field['base'] == $base) {
-                $this->_addField($doc, $object, $field);
-            }
-        }
-
-        // custom code for adding in the Elemental smarts
-        $indexer = new ElementalSolrIndexer();
-        $indexer->elementPageChanged($object, $doc);
-
-
-        try {
-            $this->getService()->addDocument($doc);
-        } catch (Exception $e) {
-            SS_Log::log($e, SS_Log::WARN);
-            return false;
-        }
-
-        return $doc;
-    }
-}
+```yaml
+# File: mysite/_config/elements.yml
+DNADesign\Elemental\Controllers\ElementController:
+  include_default_styles: false
 ```
 
-After setting up your SolrSearchIndex, run `sake dev/tasks/Solr_Configure`.
+### Implementing search
+
+TBC.
 
 ## Building the elemental frontend assets
 
@@ -239,8 +205,8 @@ All methods, with `public` visibility, are part of the public API. All other met
 
 ## Reporting Issues
 
-Please [create an issue](http://github.com/dnadesign/silverstripe-elemental/issues) for any bugs you've found, or features you're missing.
+Please [create an issue](https://github.com/dnadesign/silverstripe-elemental/issues) for any bugs you've found, or features you're missing.
 
 ## Credits
 
-CMS Icon blocks by Creative Stall from the Noun Project
+CMS Icon blocks by Creative Stall from the Noun Project.
