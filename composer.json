@@ -36,8 +36,8 @@
             "dev-master": "2.x-dev"
         },
         "expose": [
-            "css",
-            "images"
+            "client/dist",
+            "client/images"
         ]
     },
     "autoload": {

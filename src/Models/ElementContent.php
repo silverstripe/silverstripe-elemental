@@ -8,7 +8,7 @@ use SilverStripe\ORM\FieldType\DBField;
 
 class ElementContent extends BaseElement
 {
-    private static $icon = 'dnadesign/silverstripe-elemental:images/content.svg';
+    private static $icon = 'dnadesign/silverstripe-elemental:client/images/content.svg';
 
     private static $db = [
         'HTML' => 'HTMLText'

@@ -4,7 +4,7 @@ Name: elemental
 
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_css:
-    - 'dnadesign/silverstripe-elemental:css/elemental-admin.css'
+    - 'dnadesign/silverstripe-elemental:client/dist/styles/bundle.css'
   extensions:
     - DNADesign\Elemental\Extensions\LeftAndMainElementIconsExtension
 SilverStripe\CMS\Controllers\ContentController:
