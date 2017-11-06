@@ -107,7 +107,11 @@ class BaseElementTest extends FunctionalTest
 
     public function testGetIcon()
     {
-        $this->markTestIncomplete();
+        $element = new ElementContent;
+        $this->assertContains('class="font-icon-block-content"', $element->getIcon());
+
+        Config::modify()->set(ElementContent::class, 'icon', '');
+        $this->assertEmpty($element->getIcon());
     }
 
     public function testGetHistoryFields()

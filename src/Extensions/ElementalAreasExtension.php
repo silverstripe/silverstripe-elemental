@@ -87,7 +87,7 @@ class ElementalAreasExtension extends DataExtension
                     continue;
                 }
 
-                $list[$availableClass] = $inst->i18n_singular_name();
+                $list[$availableClass] = $inst->getType();
             }
         }
 
