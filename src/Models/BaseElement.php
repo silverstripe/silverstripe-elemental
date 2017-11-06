@@ -254,7 +254,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             $fields->replaceField(
                 'Title',
                 TextCheckboxGroupField::create(
-                    TextField::create('Title', _t(__CLASS__ . '.TitleLabel', 'Title (not displayed unless specified)')),
+                    TextField::create('Title', _t(__CLASS__ . '.TitleLabel', 'Title (displayed if checked)')),
                     CheckboxField::create('ShowTitle', _t(__CLASS__ . '.ShowTitleLabel', 'Displayed'))
                 )
                     ->setName('TitleAndDisplayed')
@@ -263,9 +263,6 @@ class BaseElement extends DataObject implements CMSPreviewable
             // Rename the "Main" tab
             $fields->fieldByName('Root.Main')
                 ->setTitle(_t(__CLASS__ . '.MainTabLabel', 'Content'));
-
-            // Remove divider lines on all block forms
-            $fields->fieldByName('Root')->addExtraClass('form--no-dividers');
 
             $fields->addFieldsToTab('Root.Main', [
                 HiddenField::create('AbsoluteLink', false, Director::absoluteURL($this->PreviewLink())),

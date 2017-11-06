@@ -3,7 +3,7 @@
         <div class="elemental-preview__icon">$Icon</div>
 
         <div class="elemental-preview__detail">
-            <h2><% if Title %>$Title <% end_if %><small>$Type</small></h2>
+            <h3><% if Title %>$Title <% end_if %><small>$Type</small></h3>
 
             <% if $Summary %>
                 <p>$Summary.RAW</p>

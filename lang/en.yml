@@ -12,7 +12,7 @@ en:
       other: '{count} blocks'
     SINGULARNAME: block
     ShowTitleLabel: Displayed
-    TitleLabel: 'Title (not displayed unless specified)'
+    TitleLabel: 'Title (displayed if checked)'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Content
     CONTENT: Content

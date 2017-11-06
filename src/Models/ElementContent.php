@@ -22,6 +22,21 @@ class ElementContent extends BaseElement
 
     private static $description = 'HTML text block';
 
+    /**
+     * Re-title the HTML field to Content
+     *
+     * {@inheritDoc}
+     */
+    public function getCMSFields()
+    {
+        $this->beforeUpdateCMSFields(function ($fields) {
+            $fields
+                ->fieldByName('Root.Main.HTML')
+                ->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'));
+        });
+        return parent::getCMSFields();
+    }
+
     public function getSummary()
     {
         return DBField::create_field('HTMLText', $this->HTML)->Summary(20);
