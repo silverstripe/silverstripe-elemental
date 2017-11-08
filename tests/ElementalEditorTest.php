@@ -6,11 +6,11 @@ use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\ElementalEditor;
-use DNADesign\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
 use Page;
 use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Forms\GridField\GridField;
+use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 
 class ElementalEditorTest extends SapphireTest
 {
@@ -38,7 +38,7 @@ class ElementalEditorTest extends SapphireTest
         ]);
 
         $field = $editor->getField();
-        $classes = $field->getConfig()->getComponentByType(ElementalGridFieldAddNewMultiClass::class)->getClasses($field);
+        $classes = $field->getConfig()->getComponentByType(GridFieldAddNewMultiClass::class)->getClasses($field);
 
         $this->assertEquals(1, count($classes), 'Only one type available');
         $this->assertArrayHasKey('DNADesign-Elemental-Models-ElementContent', $classes);

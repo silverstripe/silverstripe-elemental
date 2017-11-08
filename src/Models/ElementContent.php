@@ -8,7 +8,7 @@ use SilverStripe\ORM\FieldType\DBField;
 
 class ElementContent extends BaseElement
 {
-    private static $icon = 'dnadesign/silverstripe-elemental:client/images/content.svg';
+    private static $icon = 'font-icon-block-content';
 
     private static $db = [
         'HTML' => 'HTMLText'
@@ -21,6 +21,21 @@ class ElementContent extends BaseElement
     private static $plural_name = 'content blocks';
 
     private static $description = 'HTML text block';
+
+    /**
+     * Re-title the HTML field to Content
+     *
+     * {@inheritDoc}
+     */
+    public function getCMSFields()
+    {
+        $this->beforeUpdateCMSFields(function ($fields) {
+            $fields
+                ->fieldByName('Root.Main.HTML')
+                ->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'));
+        });
+        return parent::getCMSFields();
+    }
 
     public function getSummary()
     {

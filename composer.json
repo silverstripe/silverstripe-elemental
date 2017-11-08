@@ -18,7 +18,6 @@
     "require": {
         "silverstripe/cms": "^4.0@dev",
         "symbiote/silverstripe-gridfieldextensions": "3.0.x-dev",
-        "dnadesign/silverstripe-advanceddropdowns": "^2.0",
         "silverstripe/vendor-plugin": "^1.0"
     },
     "require-dev": {
@@ -36,8 +35,7 @@
             "dev-master": "2.x-dev"
         },
         "expose": [
-            "client/dist",
-            "client/images"
+            "client/dist"
         ]
     },
     "autoload": {

@@ -1,106 +1,5 @@
-.ss-gridfield-add-new-multi-class {
-  clear: both;
-}
-
-.col-reorder + .col-ElementIcon {
-  width: 1px;
-  max-width: 20px;
-  padding-left: 0px !important;
-}
-
-td.col-ElementSummary {
-    max-width: 200px;
-}
-
-// Style the chosen dropdown for element icons
-.el-chosen .chosen-container .chosen-results {
-  padding: 0;
-  margin: 0;
-}
-
-.el-chosen .chosen-container-single .chosen-single abbr {
-  top: 11px;
-}
-
-.chosen-container .chosen-results {
-  li.el-icon {
-    font-size: $font-size-sm;
-    line-height: 18px;
-    padding: 7px 16px 7px 6px;
-    color: $link-color;
-    border-bottom: 1px solid #ddd;
-    background-color: $white;
-  }
-
-  li.el-icon.highlighted  {
-    background: #F6F7F8;
-  }
-
-  li.el-icon.result-selected {
-    background: #e6eaed;
-    color: #66727d;
-  }
-
-  li.el-icon:before {
-    content: '';
-    display:inline-block;
-    height: 14px;
-    width: 30px;
-  }
-}
-
-.el-meta {
-  font-size: $font-size-sm;
-  color: rgba(102, 114, 125, 0.6);
-  font-style: italic;
-  font-weight: normal;
-}
-
-.el-icongroup {
-  position: relative;
-}
-
-.el-icon--virtual {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-}
-
-.elemental-preview {
-  position: relative;
-  padding: 0 0 0 50px;
-  min-height: 35px;
-
-  h2 {
-    margin: 0;
-    font-weight: 400;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  small {
-    font-size: $font-size-sm;
-    opacity: .8;
-  }
-}
-
-.elemental-preview__detail {
-  padding-top: 5px;
-}
-
-.elemental-preview__icon {
-  position: absolute;
-  left: 0px;
-  border-radius: 2px;
-  height: 35px;
-  width: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    opacity: 0.4;
-  }
-}
+// @todo make this usable from silverstripe-admin's variable sheet
+$border-radius-sm:       .2rem !default;
 
 .elemental-edit {
   display: block;
@@ -111,4 +10,75 @@ td.col-ElementSummary {
     text-decoration: none;
     color: inherit;
   }
+}
+
+.elemental-editor .col-EditorPreview {
+  padding-left: 0;
+}
+
+.elemental-preview__detail {
+  display: inline-block;
+  margin-left: $spacer-xs;
+
+  h3 {
+    font-weight: 400;
+    line-height: 26px;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  p {
+    align-items: center;
+    display: flex;
+    margin-bottom: 0;
+    margin-top: 6px;
+  }
+
+  small {
+    color: $text-muted;
+    font-size: $font-size-root;
+  }
+}
+
+.elemental-preview__thumbnail-image {
+  margin-right: $spacer-xs;
+
+  img {
+    border-radius: $border-radius-sm;
+  }
+}
+
+.elemental-preview__thumbnail-image--placeholder {
+  border-radius: 0;
+  height: 36px;
+  margin-left: -4px;
+}
+
+.elemental-preview__icon {
+  color: $text-muted;
+  display: inline-block;
+  font-size: 2.3rem;
+  width: 28px;
+  vertical-align: top;
+}
+
+.ss-gridfield-add-new-multi-class {
+  clear: both;
+}
+
+.ss-gridfield-orderable.elemental-editor .col-reorder .handle {
+  opacity: .5;
+  padding: 22px 0 0 0;
+
+  .icon {
+    font-size: 1.3em;
+  }
+}
+
+.elemental-editor .ss-gridfield-item:hover .handle {
+  opacity: 1;
+}
+
+.elemental-editor .grid-field__table {
+    margin-bottom: 12px;
 }

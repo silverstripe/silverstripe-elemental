@@ -13,7 +13,6 @@ use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
@@ -48,11 +47,11 @@ use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 class BaseElement extends DataObject implements CMSPreviewable
 {
     /**
-     * Override this on your custom elements to specify a cms icon
+     * Override this on your custom elements to specify a CSS icon class
      *
      * @var string
      */
-    private static $icon = 'dnadesign/silverstripe-elemental:client/images/base.svg';
+    private static $icon = 'font-icon-block-layout';
 
     /**
      * Describe the purpose of this element
@@ -252,7 +251,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             $fields->replaceField(
                 'Title',
                 TextCheckboxGroupField::create(
-                    TextField::create('Title', _t(__CLASS__ . '.TitleLabel', 'Title (not displayed unless specified)')),
+                    TextField::create('Title', _t(__CLASS__ . '.TitleLabel', 'Title (displayed if checked)')),
                     CheckboxField::create('ShowTitle', _t(__CLASS__ . '.ShowTitleLabel', 'Displayed'))
                 )
                     ->setName('TitleAndDisplayed')
@@ -261,9 +260,6 @@ class BaseElement extends DataObject implements CMSPreviewable
             // Rename the "Main" tab
             $fields->fieldByName('Root.Main')
                 ->setTitle(_t(__CLASS__ . '.MainTabLabel', 'Content'));
-
-            // Remove divider lines on all block forms
-            $fields->fieldByName('Root')->addExtraClass('form--no-dividers');
 
             $fields->addFieldsToTab('Root.Main', [
                 HiddenField::create('AbsoluteLink', false, Director::absoluteURL($this->PreviewLink())),
@@ -683,16 +679,14 @@ class BaseElement extends DataObject implements CMSPreviewable
     /**
      * Generate markup for element type icons suitable for use in GridFields.
      *
-     * @return DBField
+     * @return HTMLVarchar
      */
     public function getIcon()
     {
-        $icon = $this->config()->get('icon');
+        $iconClass = $this->config()->get('icon');
 
-        if ($icon) {
-            $icon = ModuleResourceLoader::resourceURL($icon);
-
-            return DBField::create_field('HTMLVarchar', '<img width="16px" src="' . Director::absoluteBaseURL() . $icon . '" alt="" />');
+        if ($iconClass) {
+            return DBField::create_field('HTMLVarchar', '<i class="' . $iconClass . '"></i>');
         }
     }
 

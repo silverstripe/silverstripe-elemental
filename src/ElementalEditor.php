@@ -2,6 +2,7 @@
 
 namespace DNADesign\Elemental;
 
+use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injectable;
@@ -16,8 +17,7 @@ use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\GridField\GridFieldPageCount;
 use SilverStripe\Core\Injector\Injector;
-use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
+use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
 class ElementalEditor
@@ -125,8 +125,10 @@ class ElementalEditor
                 ->addComponent(new GridFieldDeleteAction(true))
         );
 
+        $gridField->addExtraClass('elemental-editor');
+
         if ($this->types) {
-            $adder = Injector::inst()->create(ElementalGridFieldAddNewMultiClass::class, 'toolbar-header-left');
+            $adder = Injector::inst()->create(GridFieldAddNewMultiClass::class, 'toolbar-header-left');
             $adder->setClasses($this->getTypes());
 
             $config->addComponent($adder);
