@@ -15,3 +15,7 @@ SilverStripe\CMS\Controllers\ContentController:
 SilverStripe\Versioned\VersionedGridFieldItemRequest:
   extensions:
     - 'DNADesign\Elemental\Extensions\GridFieldDetailFormItemRequestExtension'
+
+Symbiote\GridFieldExtensions\GridFieldAddNewMultiClassHandler:
+  extensions:
+    - DNADesign\Elemental\Extensions\GridFieldAddNewMultiClassHandlerExtension
