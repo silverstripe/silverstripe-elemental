@@ -1,31 +1,48 @@
 en:
+  DNADesign\Elemental\Forms\HistoricalVersionedGridFieldItemRequest:
+    BUTTONREVERTDESC: 'Publish this record to the draft site'
+    InvalidVersion: 'Invalid version'
+    Position: Position
+    REVERT: 'Revert to this version'
   DNADesign\Elemental\Models\BaseElement:
-    ALL: 'All types'
+    Author: Author
     BlockType: Block
-    ELEMENTTYPE: 'Element Type'
+    CUSTOM_STYLES: 'Select a style..'
     ExtraCssClassesLabel: 'Custom CSS classes'
     ExtraCssClassesPlaceholder: 'my_class another_class'
     MainTabLabel: Content
+    Modified: Modified
     PLURALNAME: blocks
     PLURALS:
       one: 'A block'
       other: '{count} blocks'
+    Published: Published
+    Record: Record
     SINGULARNAME: block
+    STYLE: 'Style variation'
     ShowTitleLabel: Displayed
     TitleLabel: 'Title (displayed if checked)'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Content
-    CONTENT: Content
-    CUSTOM_STYLES: 'Select a custom style..'
+    ContentLabel: Content
     PLURALNAME: 'content blocks'
     PLURALS:
       one: 'A content block'
       other: '{count} content blocks'
     SINGULARNAME: 'content block'
-    STYLE: Style
   DNADesign\Elemental\Models\ElementalArea:
     PLURALNAME: 'Elemental Areas'
     PLURALS:
       one: 'An Elemental Area'
       other: '{count} Elemental Areas'
     SINGULARNAME: 'Elemental Area'
+  DNADesign\Elemental\Reports\ElementTypeReport:
+    Title: 'Content block types'
+    Total: Total
+    Type: 'Content Type'
+  DNADesign\Elemental\Reports\ElementsInUseReport:
+    None: None
+    Page: Page
+    Summary: Summary
+    Title: Title
+    Type: Type
