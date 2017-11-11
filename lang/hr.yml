@@ -1,0 +1,31 @@
+hr:
+  DNADesign\Elemental\Models\BaseElement:
+    ALL: 'Svi tipovi'
+    BlockType: Blok
+    ELEMENTTYPE: 'Tip elementa'
+    ExtraCssClassesLabel: 'Dodatne CSS klase'
+    ExtraCssClassesPlaceholder: 'my_class another_class'
+    MainTabLabel: Sadržaj
+    PLURALNAME: blokovi
+    PLURALS:
+      one: 'blok'
+      other: '{count} blokova'
+    SINGULARNAME: blok
+    ShowTitleLabel: Prikaži naslov
+    TitleLabel: 'Naslov (vidljiv ako je odabran)'
+  DNADesign\Elemental\Models\ElementContent:
+    BlockType: Sadržaj
+    CONTENT: Sadržaj
+    CUSTOM_STYLES: 'Odaberi stil..'
+    PLURALNAME: 'sadržajni blokovi'
+    PLURALS:
+      one: 'sadržajni blok'
+      other: '{count} sadržajnih blokova'
+    SINGULARNAME: 'sadržajni blok'
+    STYLE: Stil
+  DNADesign\Elemental\Models\ElementalArea:
+    PLURALNAME: 'Elemental zone'
+    PLURALS:
+      one: 'Elemental zona'
+      other: '{count} Elemental zone'
+    SINGULARNAME: 'Elemental zona'
