@@ -12,11 +12,14 @@ use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldVersionedState;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridFieldEditButton;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\GridField\GridFieldPageCount;
 use SilverStripe\Core\Injector\Injector;
+use Symbiote\GridFieldExtensions\GridFieldActionsMenu;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
@@ -116,13 +119,22 @@ class ElementalEditor
                     GridFieldAddNewButton::class,
                     GridFieldSortableHeader::class,
                     GridFieldDeleteAction::class,
+                    GridFieldEditButton::class,
                     GridFieldPaginator::class,
                     GridFieldPageCount::class,
                     GridFieldVersionedState::class,
-                    GridFieldAddExistingAutocompleter::class
+                    GridFieldAddExistingAutocompleter::class,
+                    // Detail form will be added back, but a lower priority order for route processing
+                    // We need MeatballMenu to handle the same routes. Detail form is required by
+                    // \Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass so can't just be removed,
+                    // since it AddNewMultiClass is also utilised by Elemental.
+                    GridFieldDetailForm::class
                 ))
                 ->addComponent(new GridFieldOrderableRows('Sort'))
-                ->addComponent(new GridFieldDeleteAction(true))
+                ->addComponents(
+                    new GridFieldActionsMenu(false),
+                    new GridFieldDetailForm
+                )
         );
 
         $gridField->addExtraClass('elemental-editor');

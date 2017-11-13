@@ -5,7 +5,6 @@ namespace DNADesign\Elemental\Extensions;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\View\Parsers\HTML4Value;
 use SilverStripe\Control\Controller;
-use SilverStripe\Forms\FieldList;
 
 class ElementalPageExtension extends ElementalAreasExtension
 {
@@ -37,26 +36,5 @@ class ElementalPageExtension extends ElementalAreasExtension
             }
             $tags = $html->getContent();
         }
-    }
-
-    public function updateCMSFields(FieldList $fields)
-    {
-        $fields = parent::updateCMSFields($fields);
-        $gf = $fields->dataFieldByName('ElementalArea');
-        $cfg = $gf->getConfig();
-        $cfg->removeComponentsByType([
-            '\SilverStripe\Forms\GridField\GridFieldEditButton',
-            '\SilverStripe\Forms\GridField\GridFieldDeleteAction',
-            // Detail form will be added back, but a lower priority order for route processing
-            // We need MeatballMenu to handle the same routes. Detail form is required by
-            // \Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass so can't just be removed,
-            // since it AddNewMultiClass is also utilised by Elemental.
-            '\SilverStripe\Forms\GridField\GridFieldDetailForm'
-        ]);
-        $cfg->addComponents(
-            new \Symbiote\GridFieldExtensions\GridFieldMeatballMenuComponent,
-            new \SilverStripe\Forms\GridField\GridFieldDetailForm
-        );
-        return $fields;
     }
 }
