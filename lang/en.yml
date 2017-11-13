@@ -43,6 +43,7 @@ en:
   DNADesign\Elemental\Reports\ElementsInUseReport:
     None: None
     Page: Page
+    ReportTitle: 'Content blocks in use'
     Summary: Summary
     Title: Title
     Type: Type

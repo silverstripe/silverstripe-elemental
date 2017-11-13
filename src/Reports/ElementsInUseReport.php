@@ -14,7 +14,7 @@ class ElementsInUseReport extends Report
 {
     public function title()
     {
-        return _t(__CLASS__ . '.Title', 'Content blocks in use');
+        return _t(__CLASS__ . '.ReportTitle', 'Content blocks in use');
     }
 
     public function sourceRecords($params = [])
@@ -64,6 +64,7 @@ class ElementsInUseReport extends Report
             ],
             'Summary' => [
                 'title' => _t(__CLASS__ . '.Summary', 'Summary'),
+                'casting' => 'HTMLText->RAW',
             ],
             'Type' => [
                 'title' => _t(__CLASS__ . '.Type', 'Type'),
