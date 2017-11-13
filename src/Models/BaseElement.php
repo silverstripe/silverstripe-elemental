@@ -430,6 +430,7 @@ class BaseElement extends DataObject implements CMSPreviewable
                 break;
             }
 
+            $templates[] = $value . $suffix . '_'. $this->getAreaRelationName();
             $templates[] = $value . $suffix;
         }
 
