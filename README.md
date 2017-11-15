@@ -178,10 +178,9 @@ class CustomSolrSearchIndex extends SolrSearchIndex {
         return $doc;
     }
 }
+```
 
 After setting up your SolrSearchIndex, run `sake dev/tasks/Solr_Configure`.
-
-```
 
 ## Screenshots
 
