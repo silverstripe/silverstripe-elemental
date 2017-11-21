@@ -25,6 +25,8 @@
         "squizlabs/php_codesniffer": "^3.0"
     },
     "suggest": {
+        "silverstripe/elemental-blocks": "Adds a set of common SilverStripe content block types",
+        "silverstripe/fulltextsearch": "Adds fulltext search capability for elements usin Solr",
         "dnadesign/silverstripe-elemental-subsites": "Adds subsite support to elemental",
         "dnadesign/silverstripe-elemental-userforms": "Adds userform support to elemental",
         "dnadesign/silverstripe-elemental-virtual": "Adds support to share blocks between pages"

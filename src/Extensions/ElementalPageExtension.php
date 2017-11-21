@@ -3,8 +3,9 @@
 namespace DNADesign\Elemental\Extensions;
 
 use DNADesign\Elemental\Models\ElementalArea;
-use SilverStripe\View\Parsers\HTML4Value;
 use SilverStripe\Control\Controller;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\View\Parsers\HTML4Value;
 
 class ElementalPageExtension extends ElementalAreasExtension
 {
@@ -21,6 +22,28 @@ class ElementalPageExtension extends ElementalAreasExtension
     private static $owns = [
         'ElementalArea'
     ];
+
+    /**
+     * Returns the contents of each ElementalArea has_one's markup for use in Solr search indexing
+     *
+     * @return string
+     */
+    public function getElementsForSearch()
+    {
+        $output = [];
+        foreach ($this->owner->hasOne() as $key => $class) {
+            if ($class !== ElementalArea::class) {
+                continue;
+            }
+
+            /** @var ElementalArea $area */
+            $area = $this->owner->$key();
+            if ($area) {
+                $output[] = strip_tags($area->forTemplate());
+            }
+        }
+        return implode($output);
+    }
 
     public function MetaTags(&$tags)
     {
