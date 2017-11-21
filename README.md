@@ -168,7 +168,16 @@ DNADesign\Elemental\Controllers\ElementController:
 
 ### Implementing search
 
-TBC.
+The Elemental module comes with an indexer for Solr (via the
+[silverstripe-fulltextsearch module](https://github.com/silverstripe/silverstripe-fulltextsearch)). You can enable
+this index in your search engine to ensure that a page's elemental area content is indexed under the page's data.
+
+For information on configuring Solr please see [the fulltextsearch documentation](https://github.com/silverstripe/silverstripe-fulltextsearch).
+
+**Note:** If using this indexer, be aware that HTML tags will be stripped from the content before it is indexed.
+The Solr search results may add in emphasis tags or other formatting around matched key words, so you may need
+to allow unescaped HTML in your search results template. You should use the `$Excerpt` property (see
+`SolrIndex::search` for more) to display the relevant search matches.
 
 ## Building the elemental frontend assets
 
