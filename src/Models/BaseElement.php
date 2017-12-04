@@ -610,7 +610,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             $area = $this->Parent();
 
             foreach ($has_one as $relationName => $relationClass) {
-                if ($relationClass === $area->ClassName) {
+                if ($relationClass === $area->ClassName && $page->{$relationName}()->ID === $area->ID) {
                     return $relationName;
                 }
             }
