@@ -141,7 +141,7 @@ class ElementalArea extends DataObject
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
 
-                $page = $class::get()->filter($areaID, $this->ID);
+                $page = Versioned::get_by_stage($class, Versioned::get_stage())->filter($areaID, $this->ID);
 
                 if ($page && $page->exists()) {
                     return $page->first();
@@ -149,23 +149,14 @@ class ElementalArea extends DataObject
             }
         }
 
-        $originalMode = Versioned::get_stage();
-
-        if (!$originalMode) {
-            $originalMode = Versioned::DRAFT;
-        }
-
-        Versioned::set_stage(Versioned::DRAFT);
-
         foreach ($this->supportedPageTypes() as $class) {
             $elementalAreaRelations = Injector::inst()->get($class)->getElementalRelations();
 
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
-                $page = $class::get()->filter($areaID, $this->ID);
+                $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filter($areaID, $this->ID);
 
                 if ($page && $page->exists()) {
-                    Versioned::set_stage($originalMode);
                     $this->OwnerClassName = $class;
                     $this->write();
 
@@ -173,8 +164,6 @@ class ElementalArea extends DataObject
                 }
             }
         }
-
-        Versioned::set_stage($originalMode);
 
         return false;
     }
