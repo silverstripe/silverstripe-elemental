@@ -105,6 +105,9 @@ class ElementList extends BaseElement
                 $sorted = array();
 
                 foreach ($list as $class) {
+                    if (!class_exists($class)) {
+                        throw new Exception($class.' is defined in '.get_class($this).'::allowed_elements config but doesn\'t exist.');
+                    }
                     $inst = singleton($class);
 
                     if ($inst->canCreate()) {
