@@ -8,6 +8,7 @@ use DNADesign\Elemental\Forms\HistoricalVersionedGridFieldItemRequest;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use DNADesign\Elemental\Controllers\ElementController;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
@@ -583,9 +584,15 @@ class BaseElement extends DataObject implements CMSPreviewable
             return null;
         }
 
+        $editLinkPrefix = '';
+        if (!$page instanceof SiteTree && method_exists($page, 'CMSEditLink')) {
+            $editLinkPrefix = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
+        } else {
+            $editLinkPrefix = Controller::join_links(singleton(CMSPageEditController::class)->Link('EditForm'), $page->ID);
+        }
+
         $link = Controller::join_links(
-            singleton(CMSPageEditController::class)->Link('EditForm'),
-            $page->ID,
+            $editLinkPrefix,
             'field/' . $relationName . '/item/',
             $this->ID
         );
@@ -610,6 +617,9 @@ class BaseElement extends DataObject implements CMSPreviewable
             $area = $this->Parent();
 
             foreach ($has_one as $relationName => $relationClass) {
+                if ($page instanceof BaseElement && $relationName === 'Parent') {
+                    continue;
+                }
                 if ($relationClass === $area->ClassName) {
                     return $relationName;
                 }
