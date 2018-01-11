@@ -590,10 +590,14 @@ class BaseElement extends DataObject implements CMSPreviewable
             $this->ID
         );
 
-        return Controller::join_links(
+        $link = Controller::join_links(
             $link,
             'edit'
         );
+
+        $this->extend('updateCMSEditLink', $link);
+
+        return $link;
     }
 
     /**
