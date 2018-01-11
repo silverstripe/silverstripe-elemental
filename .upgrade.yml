@@ -1,0 +1,8 @@
+mappings:
+  BaseElement: DNADesign\Elemental\Models\BaseElement
+  ElementalContentControllerExtension: DNADesign\Elemental\Extensions\ElementalContentControllerExtension
+  ElementalDuplicationExtension: DNADesign\Elemental\Extensions\ElementalDuplicationExtension
+  ElementalPageExtension: DNADesign\Elemental\Extensions\ElementalPageExtension
+  ElementContent: DNADesign\Elemental\Models\ElementContent
+  ElementalArea: DNADesign\Elemental\Models\ElementalArea
+  ElementalPageExtensionTests: DNADesign\Elemental\Tests\ElementalPageExtensionTests
