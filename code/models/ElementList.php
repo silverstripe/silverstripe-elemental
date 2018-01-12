@@ -106,7 +106,7 @@ class ElementList extends BaseElement
 
                 foreach ($list as $class) {
                     if (!class_exists($class)) {
-                        throw new Exception($class.' is defined in '.get_class($this).'::allowed_elements config but doesn\'t exist.');
+                        user_error($class.' is defined in '.get_class($this).'::allowed_elements config but doesn\'t exist.', E_USER_WARNING);
                     }
                     $inst = singleton($class);
 
