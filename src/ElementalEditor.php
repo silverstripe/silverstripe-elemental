@@ -4,19 +4,17 @@ namespace DNADesign\Elemental;
 
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\Core\Extensible;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
-use SilverStripe\Forms\GridField\GridFieldVersionedState;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripe\Forms\GridField\GridFieldPaginator;
-use SilverStripe\Forms\GridField\GridFieldDataColumns;
-use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\GridField\GridFieldPageCount;
-use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Forms\GridField\GridFieldPaginator;
+use SilverStripe\Forms\GridField\GridFieldSortableHeader;
+use SilverStripe\Forms\GridField\GridFieldVersionedState;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
@@ -119,10 +117,11 @@ class ElementalEditor
                     GridFieldPaginator::class,
                     GridFieldPageCount::class,
                     GridFieldVersionedState::class,
-                    GridFieldAddExistingAutocompleter::class
+                    GridFieldAddExistingAutocompleter::class,
                 ))
                 ->addComponent(new GridFieldOrderableRows('Sort'))
-                ->addComponent(new GridFieldDeleteAction(true))
+                // delete elements rather than unlinking them
+                ->addComponent(new GridFieldDeleteAction(false))
         );
 
         $gridField->addExtraClass('elemental-editor');
