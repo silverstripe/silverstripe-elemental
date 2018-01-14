@@ -33,6 +33,7 @@ const config = [
     resolve: resolveJS(ENV, PATHS),
     externals: externalJS(ENV, PATHS),
     module: moduleJS(ENV, PATHS),
+    plugins: pluginJS(ENV, PATHS),
   },
   {
     name: 'css',
@@ -49,4 +50,7 @@ const config = [
   },
 ];
 
-module.exports = config;
+// Use WEBPACK_CHILD=js or WEBPACK_CHILD=css env var to run a single config
+module.exports = (process.env.WEBPACK_CHILD)
+  ? config.find((entry) => entry.name === process.env.WEBPACK_CHILD)
+  : module.exports = config;
