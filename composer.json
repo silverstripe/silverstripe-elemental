@@ -17,7 +17,7 @@
     "prefer-stable": true,
     "require": {
         "silverstripe/cms": "^4.0@dev",
-        "symbiote/silverstripe-gridfieldextensions": "3.0.x-dev",
+        "symbiote/silverstripe-gridfieldextensions": "^3.1",
         "silverstripe/vendor-plugin": "^1.0"
     },
     "require-dev": {
