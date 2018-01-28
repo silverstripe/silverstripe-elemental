@@ -85,7 +85,10 @@ class ElementController extends Controller
 
         $template = $this->element->config()->get('controller_template');
 
-        return $this->renderWith($template);
+        return $this->renderWith([
+            'type' => 'Layout',
+            'DNADesign\\Elemental\\'.$template
+        ]);
     }
 
     /**
