@@ -184,6 +184,7 @@ class ElementPageExtension extends DataExtension
     public function onBeforeWrite()
     {
         if(!$this->supportsElemental()) {
+            parent::onBeforeWrite();
             return;
         }
 
@@ -191,8 +192,7 @@ class ElementPageExtension extends DataExtension
         $originalThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
         Config::inst()->update('SSViewer', 'theme_enabled', true);
 
-
-        if ($this->owner->hasMethod('ElementArea') && Config::inst()->get(__CLASS__, 'copy_element_content_to_contentfield')) {
+        if ($this->owner->hasMethod('ElementArea') && !$this->owner->isChanged('ClassName') && Config::inst()->get(__CLASS__, 'copy_element_content_to_contentfield')) {
             $elements = $this->owner->ElementArea();
 
             if (!$elements->isInDB()) {
