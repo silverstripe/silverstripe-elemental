@@ -2,6 +2,15 @@
   width: 1px;
 }
 
+// Reduce the size of the icons slightly in reports
 .elemental-report__grid-field .col-Icon {
   font-size: 1.5rem;
+}
+
+.elemental-report__grid-field .element-item--draft,
+.elemental-report__grid-field .element-item--modified {
+  bottom: 8px;
+  left: 14px;
+  height: 6px;
+  width: 6px;
 }
