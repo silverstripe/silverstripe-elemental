@@ -4,13 +4,10 @@ namespace DNADesign\Elemental\Tests;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Models\ElementContent;
-use DNADesign\Elemental\Forms\ElementalGridFieldAddNewMultiClass;
 use DNADesign\Elemental\Tests\Src\TestElement;
+use DNADesign\Elemental\Tests\Src\TestPage;
 use Page;
-use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Forms\GridField\GridField;
 
 class ElementalAreaTest extends SapphireTest
 {
@@ -23,7 +20,8 @@ class ElementalAreaTest extends SapphireTest
     ];
 
     protected static $extra_dataobjects = [
-        TestElement::class
+        TestElement::class,
+        TestPage::class,
     ];
 
     public function testElementControllers()
@@ -45,5 +43,19 @@ class ElementalAreaTest extends SapphireTest
 
         $this->assertContains('Hello Test', $area->forTemplate());
         $this->assertContains('Hello Test 2', $area->forTemplate());
+    }
+
+    public function testCanBePublished()
+    {
+        $member = $this->logInWithPermission('SITETREE_EDIT_ALL');
+
+        $page = $this->objFromFixture(TestPage::class, 'page1');
+        $this->assertTrue($page->canPublish($member));
+
+        $area = $this->objFromFixture(ElementalArea::class, 'area1');
+        $this->assertTrue($area->canPublish($member));
+
+        $element = $this->objFromFixture(TestElement::class, 'element1');
+        $this->assertTrue($element->canPublish($member));
     }
 }

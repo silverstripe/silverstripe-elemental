@@ -13,6 +13,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\HasManyList;
 use SilverStripe\ORM\UnsavedRelationList;
+use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
@@ -174,5 +175,21 @@ class ElementalArea extends DataObject
         }
 
         return false;
+    }
+
+    public function canEdit($member = null)
+    {
+        if (Permission::check('ADMIN')) {
+            return true;
+        }
+        return $this->getOwnerPage()->canEdit($member);
+    }
+
+    public function canView($member = null)
+    {
+        if (Permission::check('ADMIN')) {
+            return true;
+        }
+        return $this->getOwnerPage()->canView($member);
     }
 }
