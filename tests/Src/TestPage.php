@@ -2,17 +2,15 @@
 
 namespace DNADesign\Elemental\Tests\Src;
 
-use Page;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
-use DNADesign\Elemental\Models\ElementalArea;
+use Page;
 use SilverStripe\Dev\TestOnly;
-use SilverStripe\View\SSViewer;
 
 class TestPage extends Page implements TestOnly
 {
     private static $table_name = 'TestElementalPage';
 
-    private static $extensions = array(
+    private static $extensions = [
         ElementalPageExtension::class
-    );
+    ];
 }
