@@ -1,0 +1,19 @@
+DNADesign\Elemental\Models\ElementalArea:
+  blocks_page_area:
+    Title: Area 1
+
+DNADesign\Elemental\Tests\Src\TestPage:
+  blocks_page:
+    Title: Content blocks page
+    URLSegment: blocks-page
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.blocks_page_area
+  regular_page:
+    Title: Regular page
+    URLSegment: regular-page
+    Content: Some normal page content
+
+DNADesign\Elemental\Models\ElementContent:
+  blocks_page_content:
+    Title: Content
+    HTML: Specifically blocks page content
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.blocks_page_area

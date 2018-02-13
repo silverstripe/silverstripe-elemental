@@ -19,3 +19,7 @@ SilverStripe\Versioned\VersionedGridFieldItemRequest:
 Symbiote\GridFieldExtensions\GridFieldAddNewMultiClassHandler:
   extensions:
     - DNADesign\Elemental\Extensions\GridFieldAddNewMultiClassHandlerExtension
+
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search:
+    class: DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch
