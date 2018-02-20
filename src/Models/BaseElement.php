@@ -156,6 +156,11 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function canView($member = null)
     {
+        $extended = $this->extendedCan(__FUNCTION__, $member);
+        if ($extended !== null) {
+            return $extended;
+        }
+
         if ($this->hasMethod('getPage')) {
             if ($page = $this->getPage()) {
                 return $page->canView($member);
@@ -174,6 +179,11 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function canEdit($member = null)
     {
+        $extended = $this->extendedCan(__FUNCTION__, $member);
+        if ($extended !== null) {
+            return $extended;
+        }
+
         if ($this->hasMethod('getPage')) {
             if ($page = $this->getPage()) {
                 return $page->canEdit($member);
@@ -196,6 +206,11 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function canDelete($member = null)
     {
+        $extended = $this->extendedCan(__FUNCTION__, $member);
+        if ($extended !== null) {
+            return $extended;
+        }
+
         if ($this->hasMethod('getPage')) {
             if ($page = $this->getPage()) {
                 return $page->canArchive($member);
@@ -215,6 +230,11 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function canCreate($member = null, $context = array())
     {
+        $extended = $this->extendedCan(__FUNCTION__, $member);
+        if ($extended !== null) {
+            return $extended;
+        }
+
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
 
