@@ -15,7 +15,6 @@ use SilverStripe\Forms\GridField\GridFieldPageCount;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\GridField\GridFieldVersionedState;
-use SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
@@ -118,7 +117,6 @@ class ElementalEditor
                     GridFieldPaginator::class,
                     GridFieldPageCount::class,
                     GridFieldVersionedState::class,
-                    VersionedGridFieldState::class,
                     GridFieldAddExistingAutocompleter::class,
                 ))
                 ->addComponent(new GridFieldOrderableRows('Sort'))
