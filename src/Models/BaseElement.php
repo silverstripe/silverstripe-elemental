@@ -748,13 +748,13 @@ class BaseElement extends DataObject implements CMSPreviewable
                 if ($this->isOnDraftOnly()) {
                     $data->VersionState = 'draft';
                     $data->VersionStateTitle = _t(
-                        'SilverStripe\\Versioned\\VersionedGridFieldState\\VersionedGridFieldState.ADDEDTODRAFTHELP',
+                        'SilverStripe\\Forms\\GridField\\GridFieldVersionedState.ADDEDTODRAFTHELP',
                         'Item has not been published yet'
                     );
                 } elseif ($this->isModifiedOnDraft()) {
                     $data->VersionState = 'modified';
                     $data->VersionStateTitle = $data->VersionStateTitle = _t(
-                        'SilverStripe\\Versioned\\VersionedGridFieldState\\VersionedGridFieldState.MODIFIEDONDRAFTHELP',
+                        'SilverStripe\\Forms\\GridField\\GridFieldVersionedState.MODIFIEDONDRAFTHELP',
                         'Item has unpublished changes'
                     );
                 }
