@@ -32,13 +32,13 @@ For a SilverStripe 3.x compatible version of this module, please see the [1 bran
 composer require dnadesign/silverstripe-elemental 2.x-dev
 ```
 
-Extend any page type with the ElementalPageExtension and define allowed elements. This can be done with SilverStripe
-YAML config:
+The following YAML config will enable elements on every `Page` object,
+replacing the standard `Content` rich text field. 
 
 **mysite/\_config/elements.yml**
 
 ```yaml
-ElementPage:
+Page:
   extensions:
     - DNADesign\Elemental\Extensions\ElementalPageExtension
 ```
@@ -57,6 +57,28 @@ a look at some other modules:
 
 ## Configuration
 
+### Limit to specific page type
+
+If you want to use elements alongside traditional page types,
+you can define an "empty" page type and assign the extension only to this type.
+
+**mysite/src/MyElementPage.php**
+
+```php
+<?php
+class MyElementPage extends Page
+{    
+}
+```
+
+**mysite/\_config/elements.yml**
+
+```yaml
+MyElementPage:
+  extensions:
+    - DNADesign\Elemental\Extensions\ElementalPageExtension
+```
+
 ### Customize HTML and markup
 
 The basic element area is rendered into the `DNADesign/Elemental/Models/ElementalArea.ss` template. This loops over
@@ -69,7 +91,7 @@ You may wish to only enable certain elements for the CMS authors to choose from 
 done according to various page types:
 
 ```yaml
-ElementPage:
+Page:
   allowed_elements:
     - DNADesign\Elemental\Models\ElementContent
 ```
@@ -77,7 +99,7 @@ ElementPage:
 Likewise, you can exclude certain elements from being used.
 
 ```yaml
-ElementPage:
+Page:
   disallowed_elements:
     - YourCompany\YourModule\Elements\ElementContact
 ```

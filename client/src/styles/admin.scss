@@ -1,6 +1,3 @@
-// @todo make this usable from silverstripe-admin's variable sheet
-$border-radius-sm:       .2rem !default;
-
 .elemental-edit {
   display: block;
   color: inherit;
@@ -71,10 +68,42 @@ $border-radius-sm:       .2rem !default;
   }
 }
 
-.elemental-editor .ss-gridfield-item:hover .handle {
-  opacity: 1;
+.elemental-editor {
+  .ss-gridfield-item:hover .handle {
+    opacity: 1;
+  }
+
+  .grid-field__table {
+    margin-bottom: 12px;
+
+    @include media-breakpoint-down(md) {
+      // If viewing on a smaller screen, ensure the element content summary is shown
+      .col-EditorPreview {
+        display: table-cell;
+      }
+    }
+  }
 }
 
-.elemental-editor .grid-field__table {
-    margin-bottom: 12px;
+// Draft/modified state icons copied from asset-admin - see GalleryItem.scss
+.element-item--draft,
+.element-item--modified {
+  border: 1px solid $state-draft;
+  border-radius: 100%;
+  bottom: 6px;
+  box-shadow: 0 0 1px .5px $white;
+  display: block;
+  height: 8px;
+  left: 22px;
+  position: relative;
+  width: 8px;
+  z-index: 1;
+}
+
+.element-item--draft {
+  background-color: $state-draft-bg;
+}
+
+.element-item--modified {
+  background-color: $state-modified-bg;
 }

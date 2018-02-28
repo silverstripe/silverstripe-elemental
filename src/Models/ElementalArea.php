@@ -3,22 +3,25 @@
 namespace DNADesign\Elemental\Models;
 
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
-use DNADesign\Elemental\Models\BaseElement;
-
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
-use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extensible;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\FieldType\DBField;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\HasManyList;
-use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\Requirements;
-use SilverStripe\View\SSViewer;
 use SilverStripe\Core\Injector\Injector;
-use Page;
 
+/**
+ * Class ElementalArea
+ * @package DNADesign\Elemental\Models
+ *
+ * @property string $OwnerClassName
+ *
+ * @method HasManyList|BaseElement[] Elements()
+ */
 class ElementalArea extends DataObject
 {
     /**
@@ -85,7 +88,7 @@ class ElementalArea extends DataObject
     }
 
     /**
-     * @return HTMLText
+     * @return DBHTMLText
      */
     public function forTemplate()
     {
@@ -95,7 +98,7 @@ class ElementalArea extends DataObject
     /**
      * Necessary to display results in CMS site search.
      *
-     * @return HTMLText
+     * @return DBField
      */
     public function Breadcrumbs()
     {
@@ -108,6 +111,8 @@ class ElementalArea extends DataObject
                 $owner->Title
             ));
         }
+
+        return null;
     }
 
     /**
@@ -116,6 +121,7 @@ class ElementalArea extends DataObject
      * actions stored in {@link ElementController}.
      *
      * @return ArrayList
+     * @throws \Exception
      */
     public function ElementControllers()
     {
@@ -132,11 +138,20 @@ class ElementalArea extends DataObject
         return $controllers;
     }
 
+    /**
+     * @return null|DataObject
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \SilverStripe\ORM\ValidationException
+     */
     public function getOwnerPage()
     {
         if ($this->OwnerClassName) {
             $class = $this->OwnerClassName;
-            $elementalAreaRelations = Injector::inst()->get($class)->getElementalRelations();
+            $instance = Injector::inst()->get($class);
+            if (!ClassInfo::hasMethod($instance, 'getElementalRelations')) {
+                return null;
+            }
+            $elementalAreaRelations = $instance->getElementalRelations();
 
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
@@ -150,7 +165,11 @@ class ElementalArea extends DataObject
         }
 
         foreach ($this->supportedPageTypes() as $class) {
-            $elementalAreaRelations = Injector::inst()->get($class)->getElementalRelations();
+            $instance = Injector::inst()->get($class);
+            if (!ClassInfo::hasMethod($instance, 'getElementalRelations')) {
+                return null;
+            }
+            $elementalAreaRelations = $instance->getElementalRelations();
 
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
@@ -163,6 +182,46 @@ class ElementalArea extends DataObject
                     return $page->first();
                 }
             }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param null $member
+     * @return bool
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \SilverStripe\ORM\ValidationException
+     */
+    public function canEdit($member = null)
+    {
+        if (parent::canEdit($member)) {
+            return true;
+        }
+
+        $ownerPage = $this->getOwnerPage();
+        if ($ownerPage !== null) {
+            return $this->getOwnerPage()->canEdit($member);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param null $member
+     * @return bool
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \SilverStripe\ORM\ValidationException
+     */
+    public function canView($member = null)
+    {
+        if (parent::canEdit($member)) {
+            return true;
+        }
+
+        $ownerPage = $this->getOwnerPage();
+        if ($ownerPage !== null) {
+            return $this->getOwnerPage()->canView($member);
         }
 
         return false;

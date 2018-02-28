@@ -1,0 +1,49 @@
+fr:
+  DNADesign\Elemental\Forms\HistoricalVersionedGridFieldItemRequest:
+    BUTTONREVERTDESC: 'Publier cette entrée dans le site brouillon'
+    InvalidVersion: 'Version invalide'
+    Position: Position
+    REVERT: 'Revenir à cette version'
+  DNADesign\Elemental\Models\BaseElement:
+    Author: Auteur
+    BlockType: Bloc
+    CUSTOM_STYLES: 'Sélectionner un style..'
+    ExtraCssClassesLabel: 'Classes CSS personnalisées'
+    ExtraCssClassesPlaceholder: 'ma_classe autre_classe'
+    MainTabLabel: Contenu
+    Modified: Modifié
+    PLURALNAME: blocs
+    PLURALS:
+      one: 'Un bloc'
+      other: '{count} blocs'
+    Published: Publié
+    Record: Record
+    SINGULARNAME: bloc
+    STYLE: 'Variation de style'
+    ShowTitleLabel: Affiché
+    TitleLabel: 'Titre (affiché si coché)'
+  DNADesign\Elemental\Models\ElementContent:
+    BlockType: Contenu
+    ContentLabel: Contenu
+    PLURALNAME: 'blocs contenu'
+    PLURALS:
+      one: 'Un bloc contenu'
+      other: '{count} blocs contenu'
+    SINGULARNAME: 'bloc contenu'
+  DNADesign\Elemental\Models\ElementalArea:
+    PLURALNAME: 'Elemental Areas'
+    PLURALS:
+      one: 'An Elemental Area'
+      other: '{count} Elemental Areas'
+    SINGULARNAME: 'Elemental Area'
+  DNADesign\Elemental\Reports\ElementTypeReport:
+    Title: 'Types de blocs'
+    Total: Total
+    Type: 'Type de bloc'
+  DNADesign\Elemental\Reports\ElementsInUseReport:
+    None: Aucun
+    Page: Page
+    ReportTitle: 'Blocs utilisés'
+    Summary: Résumé
+    Title: Titre
+    Type: Type
