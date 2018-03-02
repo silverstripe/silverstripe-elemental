@@ -461,6 +461,11 @@ class BaseElement extends DataObject implements CMSPreviewable
                 break;
             }
 
+            $this->extend('updateRenderTemplates', $templates, $value, $suffix);
+            if ($style = $this->Style) {
+                $templates[] = $value . $suffix . '_'. $this->getAreaRelationName() . '_' . $style;
+                $templates[] = $value . $suffix . '_' . $style;
+            }
             $templates[] = $value . $suffix . '_'. $this->getAreaRelationName();
             $templates[] = $value . $suffix;
         }
