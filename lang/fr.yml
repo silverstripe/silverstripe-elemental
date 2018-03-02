@@ -6,7 +6,6 @@ fr:
     REVERT: 'Revenir à cette version'
   DNADesign\Elemental\Models\BaseElement:
     Author: Auteur
-    BlockType: Bloc
     CUSTOM_STYLES: 'Sélectionner un style..'
     ExtraCssClassesLabel: 'Classes CSS personnalisées'
     ExtraCssClassesPlaceholder: 'ma_classe autre_classe'
