@@ -450,27 +450,33 @@ class BaseElement extends DataObject implements CMSPreviewable
         $classes = ClassInfo::ancestry($this->ClassName);
         $classes[static::class] = static::class;
         $classes = array_reverse($classes);
-        $templates = array();
+        $templates = [];
 
-        foreach ($classes as $key => $value) {
-            if ($value == BaseElement::class) {
+        foreach ($classes as $key => $class) {
+            if ($class == BaseElement::class) {
                 continue;
             }
 
-            if ($value == DataObject::class) {
+            if ($class == DataObject::class) {
                 break;
             }
 
-            $this->extend('updateRenderTemplates', $templates, $value, $suffix);
             if ($style = $this->Style) {
-                $templates[] = $value . $suffix . '_'. $this->getAreaRelationName() . '_' . $style;
-                $templates[] = $value . $suffix . '_' . $style;
+                $templates[$class][] = $class . $suffix . '_'. $this->getAreaRelationName() . '_' . $style;
+                $templates[$class][] = $class . $suffix . '_' . $style;
             }
-            $templates[] = $value . $suffix . '_'. $this->getAreaRelationName();
-            $templates[] = $value . $suffix;
+            $templates[$class][] = $class . $suffix . '_'. $this->getAreaRelationName();
+            $templates[$class][] = $class . $suffix;
         }
 
-        return $templates;
+        $this->extend('updateRenderTemplates', $templates, $suffix);
+
+        $templateFlat = [];
+        foreach ($templates as $class => $variations) {
+            $templateFlat = array_merge($templateFlat, $variations);
+        }
+
+        return $templateFlat;
     }
 
     /**
