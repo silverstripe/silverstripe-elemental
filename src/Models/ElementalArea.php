@@ -176,8 +176,10 @@ class ElementalArea extends DataObject
                 $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filter($areaID, $this->ID);
 
                 if ($page && $page->exists()) {
-                    $this->OwnerClassName = $class;
-                    $this->write();
+                    if ($this->OwnerClassName !== $class) {
+                        $this->OwnerClassName = $class;
+                        $this->write();
+                    }
 
                     return $page->first();
                 }
