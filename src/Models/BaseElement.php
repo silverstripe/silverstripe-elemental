@@ -668,7 +668,7 @@ class BaseElement extends DataObject implements CMSPreviewable
                 if ($page instanceof BaseElement && $relationName === 'Parent') {
                     continue;
                 }
-                if ($relationClass === $area->ClassName) {
+                if ($relationClass === $area->ClassName && $page->{$relationName}()->ID === $area->ID) {
                     return $relationName;
                 }
             }
