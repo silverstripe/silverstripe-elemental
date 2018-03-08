@@ -280,9 +280,9 @@ class ElementPageExtension extends DataExtension
     public function supportsElemental() {
         // check extension applied to base class (avoid error on page class change)
         $base = singleton($this->owner->ClassName);
-        if (!$base->hasExtension($this->class)) {
+        if (!$base->hasExtension(__CLASS__)) {
             return false;
-        };
+        }
 
         if ($this->owner->hasMethod('includeElemental')) {
             $res = $this->owner->includeElemental();
