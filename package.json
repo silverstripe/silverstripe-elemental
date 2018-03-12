@@ -24,7 +24,12 @@
   },
   "homepage": "https://github.com/dnadesign/silverstripe-elemental#readme",
   "dependencies": {
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
+    "react": "15.3.1",
+    "react-apollo": "^0.7.1",
+    "graphql-tag": "^0.1.17",
+    "redux": "^3.3.1",
+    "react-redux": "^4.4.1"
   },
   "devDependencies": {
     "@silverstripe/webpack-config": "^0.4.1",
