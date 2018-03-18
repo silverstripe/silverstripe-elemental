@@ -33,7 +33,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.1.x-dev"
+            "2.x-dev": "2.1.x-dev"
         },
         "expose": [
             "client/dist"
