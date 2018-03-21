@@ -1,5 +1,5 @@
 <% if $ElementControllers %>
     <% loop $ElementControllers %>
-	   $Me
+	   $ListingHelper($Pos, $First, $Last, $EvenOdd)
     <% end_loop %>
 <% end_if %>

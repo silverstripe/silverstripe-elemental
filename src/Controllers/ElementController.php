@@ -61,6 +61,19 @@ class ElementController extends Controller
     }
 
     /**
+     * Get iterator information and pass on to element
+     * @return ElementController
+     */
+    public function ListingHelper($Pos = null, $First = null, $Last = null, $EvenOdd = null)
+    {
+        $this->element->Pos = $Pos;
+        $this->element->First = $First;
+        $this->element->Last = $Last;
+        $this->element->EvenOdd = $EvenOdd;
+        return $this;
+    }
+
+    /**
      * @return Element
      */
     public function getElement()
