@@ -17,7 +17,7 @@ class MigrateContentToElement extends BuildTask
     public function run($request)
     {
         // TODO: needs rewriting for multiple elemental areas
-        $pageTypes = ElementalArea::elemental_page_types();
+        $pageTypes = singleton(ElementalArea::class)->supportedPageTypes();
         $count = 0;
         foreach ($pageTypes as $pageType) {
             $pages = $pageType::get()->filter('ElementalAreaID', 0);
