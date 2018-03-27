@@ -6,7 +6,7 @@ SilverStripe\GraphQL\Controller:
     scaffolding:
       types:
         DNADesign\Elemental\Models\BaseElement:
-          fields: '*'
+          fields: [ID, LastEdited]
           operations:
             readOne: true
         SilverStripe\Security\Member:
