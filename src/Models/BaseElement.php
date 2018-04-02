@@ -34,6 +34,7 @@ use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
+use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
@@ -308,10 +309,21 @@ class BaseElement extends DataObject implements CMSPreviewable
                 $fields->removeByName('Style');
             }
 
-            $history = $this->getHistoryFields();
+            // Support for new history viewer in SS 4.2+
+            if (class_exists(HistoryViewerField::class)) {
+                Requirements::javascript('dnadesign/silverstripe-elemental:client/dist/js/bundle.js');
 
-            if ($history) {
-                $fields->addFieldsToTab('Root.History', $history);
+                $historyViewer = HistoryViewerField::create('ElementHistory');
+                $fields->addFieldToTab('Root.History', $historyViewer);
+
+                $fields->fieldByName('Root.History')->addExtraClass('elemental-block__history-tab');
+            } else {
+                // PHP based GridField history viewer for SS < 4.2
+                $history = $this->getHistoryFields();
+
+                if ($history) {
+                    $fields->addFieldsToTab('Root.History', $history);
+                }
             }
         });
 

@@ -8,8 +8,11 @@ jQuery.entwine('ss', ($) => {
     toggleActionsBar() {
       const cmsActions = $('.cms-content-actions');
 
-      if ($(this).parent('li').attr('aria-controls') === 'Root_History'
-        && $('.elemental-block__history').length > 0
+      if (this.parent('li').attr('aria-controls') === 'Root_History'
+        && (
+          $('.elemental-block__history').length > 0
+          || $('.history-viewer__container').length > 0
+        )
       ) {
         cmsActions.hide();
       } else {
@@ -20,7 +23,7 @@ jQuery.entwine('ss', ($) => {
     onmatch() {
       this._super();
 
-      if ($(this).parent('li').hasClass('ui-state-active')) {
+      if (this.parent('li').hasClass('ui-state-active')) {
         this.toggleActionsBar();
       }
     },

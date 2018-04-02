@@ -1,0 +1,15 @@
+---
+Name: elementalgraphqlconfig
+---
+SilverStripe\GraphQL\Controller:
+  schema:
+    scaffolding:
+      types:
+        DNADesign\Elemental\Models\BaseElement:
+          fields: [ID, LastEdited]
+          operations:
+            readOne: true
+        SilverStripe\Security\Member:
+          fields: [ID, FirstName, Surname]
+          operations:
+            readOne: true
