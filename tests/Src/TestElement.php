@@ -15,7 +15,7 @@ class TestElement extends BaseElement implements TestOnly
 
     private static $controller_class = TestElementController::class;
 
-    public function i18n_singular_name()
+    public function getType()
     {
         return 'A test element';
     }

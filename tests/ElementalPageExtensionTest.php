@@ -3,23 +3,39 @@
 namespace DNADesign\Elemental\Tests;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
-use Page;
+use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\ElementContent;
+use DNADesign\Elemental\Tests\Src\TestElement;
+use DNADesign\Elemental\Tests\Src\TestPage;
 use SilverStripe\CMS\Model\RedirectorPage;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 
-class ElementalPageExtensionTests extends FunctionalTest
+class ElementalPageExtensionTest extends FunctionalTest
 {
     protected static $fixture_file = 'ElementalPageExtensionTests.yml';
 
     protected static $required_extensions = [
-        Page::class => [
+        TestPage::class => [
             ElementalPageExtension::class,
         ],
     ];
 
+    protected static $extra_dataobjects = [
+        TestElement::class,
+        TestPage::class,
+    ];
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->logInWithPermission('ADMIN');
+    }
+
     public function testUpdateCmsFields()
     {
-        $page = $this->objFromFixture(Page::class, 'elementaldemo');
+        $page = $this->objFromFixture(TestPage::class, 'elementaldemo');
 
         $elementalArea = $page->getCMSFields()->dataFieldByName('ElementalArea');
         $this->assertNotNull($elementalArea);
@@ -35,32 +51,32 @@ class ElementalPageExtensionTests extends FunctionalTest
 
     public function testGetElementalTypes()
     {
-        $page = $this->objFromFixture(Page::class, 'elementaldemo');
+        $page = $this->objFromFixture(TestPage::class, 'elementaldemo');
         $types = $page->getElementalTypes();
 
         $this->assertArrayHasKey(ElementContent::class, $types);
-        $this->assertArrayNotHasKey(BaseElement::class, $type, 'Base class should not appear');
+        $this->assertArrayNotHasKey(BaseElement::class, $types, 'Base class should not appear');
 
         // if we disallow a type then it should remove it
-        Config::modify()->set(Page::class, 'disallowed_elements', [
+        Config::modify()->set(TestPage::class, 'disallowed_elements', [
             ElementContent::class
         ]);
 
         $types = $page->getElementalTypes();
-        $this->assertArrayNotHasKey(ElementContent::class, $type, 'Disallowed items should not appear');
+        $this->assertArrayNotHasKey(ElementContent::class, $types, 'Disallowed items should not appear');
 
         // conversely, if we set allowed items to a number of classes then they
         // should be the only ones to appear.
-        Config::modify()->set(Page::class, 'allowed_elements', [
+        Config::modify()->set(TestPage::class, 'allowed_elements', [
             TestElement::class
         ]);
 
-        Config::modify()->remove(Page::class, 'disallowed_elements');
+        Config::modify()->remove(TestPage::class, 'disallowed_elements');
         $types = $page->getElementalTypes();
 
-        $this->assertArrayNotHasKey(ElementContent::class, $type, 'Disallowed items should not appear');
+        $this->assertArrayNotHasKey(ElementContent::class, $types, 'Disallowed items should not appear');
         $this->assertArrayHasKey(TestElement::class, $types);
 
-        $this->assertEquals('A test element', $types[TestElement::class], 'Types should use their i18n name');
+        $this->assertEquals('A test element', $types[TestElement::class], 'Types should use their "type"');
     }
 }
