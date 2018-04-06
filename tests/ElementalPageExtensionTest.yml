@@ -1,11 +1,23 @@
-DNADesign\Elemental\Tests\Src\TestPage:
-  elementaldemo:
-    Title: Test Elemental
-
-SilverStripe\CMS\Model\RedirectorPage:
-  elementredirectpage:
-    Title: Redirector Page
+DNADesign\Elemental\Models\ElementalArea:
+  area51:
+    Title: Area 51
 
 DNADesign\Elemental\Models\ElementContent:
   content1:
     Title: Test Content
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area51
+  content2:
+    Title: More content
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area51
+
+DNADesign\Elemental\Tests\Src\TestPage:
+  elementaldemo:
+    Title: Test Elemental
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area51
+  page_with_elements:
+    Title: Page with elements
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area51
+
+SilverStripe\CMS\Model\RedirectorPage:
+  elementredirectpage:
+    Title: Redirector Page
