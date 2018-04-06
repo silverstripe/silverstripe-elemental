@@ -69,8 +69,6 @@ class ElementalAreaTest extends SapphireTest
         $duplicatedArea = $area->duplicate(true);
         $duplicatedAreaIds = $duplicatedArea->Elements()->column('ID');
         $this->assertCount(2, $duplicatedAreaIds);
-        print_r($areaIds);
-        print_r($duplicatedAreaIds);
         $this->assertNotEquals($areaIds, $duplicatedAreaIds);
     }
 }
