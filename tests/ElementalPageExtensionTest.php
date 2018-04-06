@@ -13,7 +13,7 @@ use SilverStripe\Dev\FunctionalTest;
 
 class ElementalPageExtensionTest extends FunctionalTest
 {
-    protected static $fixture_file = 'ElementalPageExtensionTests.yml';
+    protected static $fixture_file = 'ElementalPageExtensionTest.yml';
 
     protected static $required_extensions = [
         TestPage::class => [
