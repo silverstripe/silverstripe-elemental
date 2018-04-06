@@ -2,12 +2,16 @@
 
 namespace DNADesign\Elemental\Extensions;
 
+use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataExtension;
-use SilverStripe\Core\Config;
 
+/**
+ * @deprecated 2.1..3.0 This extension is not implemented by default, and will be removed
+ *                      in 3.0.0. Please use the `$owns` API with `$cascade_duplicates` instead.
+ *                      See {@link ElementalPageExtension} for an example of this.
+ */
 class ElementalDuplicationExtension extends DataExtension
 {
-
     /**
      * Duplicate items
      *
