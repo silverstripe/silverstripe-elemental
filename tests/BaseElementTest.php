@@ -17,7 +17,7 @@ use DNADesign\Elemental\Models\ElementContent;
 
 class BaseElementTest extends FunctionalTest
 {
-    protected static $fixture_file = 'ElementalPageExtensionTests.yml';
+    protected static $fixture_file = 'ElementalPageExtensionTest.yml';
 
     protected static $required_extensions = [
         Page::class => [
