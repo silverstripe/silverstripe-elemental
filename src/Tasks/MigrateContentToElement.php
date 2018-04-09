@@ -12,7 +12,8 @@ class MigrateContentToElement extends BuildTask
 
     protected $title = 'MigrateContentToElement';
 
-    protected $description = 'When installing Elemental this task converts content in the $Content field to an ElementContent';
+    protected $description = 'When installing Elemental this task converts content in the $Content '
+        . 'field to an ElementContent';
 
     public function run($request)
     {
