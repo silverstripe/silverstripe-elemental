@@ -2,18 +2,17 @@
 
 namespace DNADesign\Elemental\Tests;
 
-use DNADesign\Elemental\Extensions\ElementalPageExtension;
-use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Controllers\ElementController;
+use DNADesign\Elemental\Extensions\ElementalPageExtension;
+use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\ElementalArea;
+use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Forms\GridField\GridField;
 use Page;
-use SilverStripe\CMS\Model\RedirectorPage;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
-use DNADesign\Elemental\Models\ElementContent;
+use SilverStripe\Forms\GridField\GridField;
 
 class BaseElementTest extends FunctionalTest
 {
@@ -118,6 +117,7 @@ class BaseElementTest extends FunctionalTest
     {
         $this->logInWithPermission();
 
+        /** @var ElementContent $element */
         $element = $this->objFromFixture(ElementContent::class, 'content1');
         $history = $element->getHistoryFields()->fieldByName('History');
 
@@ -128,10 +128,17 @@ class BaseElementTest extends FunctionalTest
         $element->write();
         $element->publishRecursive();
 
-        $history = $element->getHistoryFields()->fieldByName('History');
+        // Load latest version from the DB
+        $element = ElementContent::get()->byId($element->ID);
 
+        $history = $element->getHistoryFields()->dataFieldByName('History');
         $this->assertInstanceOf(GridField::class, $history);
-        $this->assertEquals(2, $history->getList()->count(), 'Publishing a new version creates a new record');
+        // Note: assertion handles SS 4.0/4.1 which doesn't create a new version, and SS 4.2 which does
+        $this->assertGreaterThanOrEqual(
+            2,
+            $history->getList()->count(),
+            'Publishing a new version creates a new record'
+        );
     }
 
     public function testStyleVariants()
