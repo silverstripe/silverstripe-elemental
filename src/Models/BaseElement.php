@@ -27,7 +27,6 @@ use SilverStripe\Forms\GridField\GridFieldViewButton;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
-use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
@@ -52,7 +51,7 @@ use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
  *
  * @method ElementalArea Parent()
  */
-class BaseElement extends DataObject implements CMSPreviewable
+class BaseElement extends DataObject
 {
     /**
      * Override this on your custom elements to specify a CSS icon class
