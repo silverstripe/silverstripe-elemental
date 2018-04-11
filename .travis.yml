@@ -2,7 +2,7 @@ language: php
 
 env:
   global:
-    - COMPOSER_ROOT_VERSION=2.x-dev
+    - COMPOSER_ROOT_VERSION=3.0.x-dev
 
 matrix:
   include:

@@ -14,7 +14,6 @@ use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use SilverStripe\Forms\GridField\GridFieldPageCount;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldSortableHeader;
-use SilverStripe\Forms\GridField\GridFieldVersionedState;
 use SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
@@ -117,7 +116,6 @@ class ElementalEditor
                     GridFieldDeleteAction::class,
                     GridFieldPaginator::class,
                     GridFieldPageCount::class,
-                    GridFieldVersionedState::class,
                     VersionedGridFieldState::class,
                     GridFieldAddExistingAutocompleter::class,
                 ))

@@ -1,34 +1,4 @@
-// todo: replace with core variable
-$history-blue: #0271c3;
-
-.element-history__date--small {
-  color: $text-muted;
-  font-size: $font-size-xs;
-  margin-left: 2px;
-}
-
-.elemental-block__history--detail {
-  margin-bottom: 40px;
-
-  .ss-gridfield-item {
-    background-color: $history-blue;
-    color: $white;
-  }
-
-  .ss-gridfield-item:hover {
-    background-color: $history-blue;
-    color: $white;
-    cursor: default;
-  }
-
-  .element-history__date--small {
-    color: $white;
-    font-size: $font-size-xs;
-    margin-left: 2px;
-  }
-}
-
-// Reset of icon column
-.ss-gridfield-item[data-class="DNADesign\\Elemental\\Models\\ElementContent"] .col-Version:first-child {
-    width: 1px;
+// Pull history viewer up a little!
+.elemental-block__history-tab {
+  margin-top: -$panel-padding-x;
 }
