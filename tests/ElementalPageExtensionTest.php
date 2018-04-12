@@ -79,4 +79,22 @@ class ElementalPageExtensionTest extends FunctionalTest
 
         $this->assertEquals('A test element', $types[TestElement::class], 'Types should use their "type"');
     }
+
+    public function testDuplicatingPageDuplicatesElements()
+    {
+        /** @var TestPage $page */
+        $page = $this->objFromFixture(TestPage::class, 'page_with_elements');
+        $this->assertCount(2, $page->ElementalArea()->Elements());
+
+        /** @var TestPage $newPage */
+        $newPage = $page->duplicate();
+        $this->assertNotEquals($page->ElementalArea->ID, $newPage->ElementalArea->ID, 'Area is duplicated');
+        $this->assertCount(2, $newPage->ElementalArea()->Elements());
+
+        $this->assertNotEquals(
+            $page->ElementalArea()->Elements()->column('ID'),
+            $newPage->ElementalArea()->Elements()->column('ID'),
+            'Duplicated page has duplicated area and duplicated elements, i.e. not shared'
+        );
+    }
 }

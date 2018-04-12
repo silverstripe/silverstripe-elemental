@@ -58,4 +58,17 @@ class ElementalAreaTest extends SapphireTest
         $element = $this->objFromFixture(TestElement::class, 'element1');
         $this->assertTrue($element->canPublish($member));
     }
+
+    public function testDuplicate()
+    {
+        /** @var ElementalArea $area */
+        $area = $this->objFromFixture(ElementalArea::class, 'area1');
+        $areaIds = $area->Elements()->column('ID');
+        $this->assertCount(2, $areaIds);
+
+        $duplicatedArea = $area->duplicate(true);
+        $duplicatedAreaIds = $duplicatedArea->Elements()->column('ID');
+        $this->assertCount(2, $duplicatedAreaIds);
+        $this->assertNotEquals($areaIds, $duplicatedAreaIds);
+    }
 }

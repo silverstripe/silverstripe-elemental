@@ -24,51 +24,34 @@ use SilverStripe\Core\Injector\Injector;
  */
 class ElementalArea extends DataObject
 {
-    /**
-     * @var array $db
-     */
     private static $db = [
         'OwnerClassName' => 'Varchar(255)',
     ];
 
-    /**
-     * @var array $has_many
-     */
     private static $has_many = [
-        'Elements' => BaseElement::class
+        'Elements' => BaseElement::class,
     ];
 
-    /**
-     * @var array
-     */
     private static $extensions = [
-        Versioned::class
+        Versioned::class,
     ];
 
-    /**
-     * @var array
-     */
     private static $owns = [
-        'Elements'
+        'Elements',
     ];
 
-    /**
-     * @var array
-     */
     private static $cascade_deletes = [
-        'Elements'
+        'Elements',
     ];
 
-    /**
-     * @var array
-     */
+    private static $cascade_duplicates = [
+        'Elements',
+    ];
+
     private static $summary_fields = [
-        'Title' => 'Title'
+        'Title' => 'Title',
     ];
 
-    /**
-     * @var string
-     */
     private static $table_name = 'ElementalArea';
 
     /**
