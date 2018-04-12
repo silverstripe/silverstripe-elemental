@@ -8,18 +8,16 @@ use SilverStripe\View\Parsers\HTML4Value;
 
 class ElementalPageExtension extends ElementalAreasExtension
 {
-    /**
-     * @var array
-     */
     private static $has_one = [
-        'ElementalArea' => ElementalArea::class
+        'ElementalArea' => ElementalArea::class,
     ];
 
-    /**
-     * @var array
-     */
     private static $owns = [
-        'ElementalArea'
+        'ElementalArea',
+    ];
+
+    private static $cascade_duplicates = [
+        'ElementalArea',
     ];
 
     /**
