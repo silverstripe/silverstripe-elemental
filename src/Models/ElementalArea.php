@@ -156,7 +156,9 @@ class ElementalArea extends DataObject
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
 
-                $page = Versioned::get_by_stage($class, Versioned::get_stage())->filter($areaID, $this->ID);
+                $currentStage = Versioned::get_stage() ?: Versioned::DRAFT;
+                $page = Versioned::get_by_stage($class, $currentStage)->filter($areaID, $this->ID);
+
 
                 if ($page && $page->exists()) {
                     return $page->first();
