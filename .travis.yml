@@ -1,7 +1,5 @@
 language: php
 
-dist: trusty
-
 env:
   global:
     - COMPOSER_ROOT_VERSION=2.x-dev
@@ -9,13 +7,15 @@ env:
 matrix:
   include:
     - php: 5.6
-      env: DB=MYSQL PHPCS_TEST=1 PHPUNIT_TEST=1
+      env: DB=MYSQL RECIPE_VERSION=1.0.x-dev PHPCS_TEST=1 PHPUNIT_TEST=1
     #- php: 7.0
     #  env: DB=PGSQL PHPUNIT_TEST=1
     - php: 7.0
-      env: DB=MYSQL PHPUNIT_TEST=1
+      env: DB=MYSQL RECIPE_VERSION=1.1.x-dev PHPUNIT_TEST=1
     - php: 7.1
-      env: DB=MYSQL PHPUNIT_COVERAGE_TEST=1
+      env: DB=MYSQL RECIPE_VERSION=1.2.x-dev PHPUNIT_COVERAGE_TEST=1
+    - php: 7.2
+      env: DB=MYSQL RECIPE_VERSION=1.x-dev PHPUNIT_TEST=1
 
 before_script:
   # Init PHP
@@ -24,14 +24,14 @@ before_script:
 
   # Install composer dependencies
   - composer validate
-  - composer require silverstripe/recipe-cms 1.0.x-dev  --no-update
+  - composer require silverstripe/recipe-cms $RECIPE_VERSION --no-update
   - if [[ $DB == PGSQL ]]; then composer require silverstripe/postgresql:2.0.x-dev --no-update; fi
   - composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
 script:
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests/; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml; fi
-  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs --standard=vendor/silverstripe/framework/phpcs.xml.dist src/ tests/ ; fi
+  - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs src/ tests/ ; fi
 
 after_success:
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml; fi

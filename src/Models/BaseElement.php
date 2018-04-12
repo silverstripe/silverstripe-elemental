@@ -140,14 +140,14 @@ class BaseElement extends DataObject implements CMSPreviewable
      *
      * @var array
      */
-    protected static $_used_anchors = [];
+    protected static $used_anchors = [];
 
     /**
      * For caching 'getAnchor'
      *
      * @var string
      */
-    protected $_anchor = null;
+    protected $anchor = null;
 
     /**
      * Basic permissions, defaults to page perms where possible.
@@ -353,7 +353,8 @@ class BaseElement extends DataObject implements CMSPreviewable
                 'getAuthor.Name' => _t(__CLASS__ . '.Author', 'Author')
             ])
             ->setFieldFormatting([
-                'RecordStatus' => '$VersionedStateNice <span class=\"element-history__date--small\">on $LastEditedNice</span>',
+                'RecordStatus' => '$VersionedStateNice <span class=\"element-history__date--small\">on '
+                    . '$LastEditedNice</span>',
             ]);
 
         $config->removeComponentsByType(GridFieldViewButton::class);
@@ -405,7 +406,9 @@ class BaseElement extends DataObject implements CMSPreviewable
         $controllerClass = self::config()->controller_class;
 
         if (!class_exists($controllerClass)) {
-            throw new Exception('Could not find controller class ' . $controllerClass . ' as defined in ' . static::class);
+            throw new Exception(
+                'Could not find controller class ' . $controllerClass . ' as defined in ' . static::class
+            );
         }
 
         $this->controller = Injector::inst()->create($controllerClass, $this);
@@ -512,8 +515,8 @@ class BaseElement extends DataObject implements CMSPreviewable
      */
     public function getAnchor()
     {
-        if ($this->_anchor !== null) {
-            return $this->_anchor;
+        if ($this->anchor !== null) {
+            return $this->anchor;
         }
 
         $anchorTitle = '';
@@ -537,12 +540,12 @@ class BaseElement extends DataObject implements CMSPreviewable
         // ie. If two elemental blocks have the same title, it'll append '-2', '-3'
         $result = $titleAsURL;
         $count = 1;
-        while (isset(self::$_used_anchors[$result]) && self::$_used_anchors[$result] !== $this->ID) {
+        while (isset(self::$used_anchors[$result]) && self::$used_anchors[$result] !== $this->ID) {
             ++$count;
-            $result = $titleAsURL.'-'.$count;
+            $result = $titleAsURL . '-' . $count;
         }
-        self::$_used_anchors[$result] = $this->ID;
-        return $this->_anchor = $result;
+        self::$used_anchors[$result] = $this->ID;
+        return $this->anchor = $result;
     }
 
     /**
@@ -630,7 +633,10 @@ class BaseElement extends DataObject implements CMSPreviewable
         if (!$page instanceof SiteTree && method_exists($page, 'CMSEditLink')) {
             $editLinkPrefix = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
         } else {
-            $editLinkPrefix = Controller::join_links(singleton(CMSPageEditController::class)->Link('EditForm'), $page->ID);
+            $editLinkPrefix = Controller::join_links(
+                singleton(CMSPageEditController::class)->Link('EditForm'),
+                $page->ID
+            );
         }
 
         $link = Controller::join_links(
