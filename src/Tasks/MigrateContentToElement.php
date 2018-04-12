@@ -12,12 +12,13 @@ class MigrateContentToElement extends BuildTask
 
     protected $title = 'MigrateContentToElement';
 
-    protected $description = 'When installing Elemental this task converts content in the $Content field to an ElementContent';
+    protected $description = 'When installing Elemental this task converts content in the $Content '
+        . 'field to an ElementContent';
 
     public function run($request)
     {
         // TODO: needs rewriting for multiple elemental areas
-        $pageTypes = ElementalArea::elemental_page_types();
+        $pageTypes = singleton(ElementalArea::class)->supportedPageTypes();
         $count = 0;
         foreach ($pageTypes as $pageType) {
             $pages = $pageType::get()->filter('ElementalAreaID', 0);

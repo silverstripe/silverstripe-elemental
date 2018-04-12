@@ -80,6 +80,7 @@ class ElementalAreasExtension extends DataExtension
         $list = array();
 
         foreach ($availableClasses as $availableClass) {
+            /** @var BaseElement $inst */
             $inst = singleton($availableClass);
 
             if (!in_array($availableClass, $disallowedElements) && $inst->canCreate()) {
