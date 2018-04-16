@@ -3,8 +3,6 @@
 namespace DNADesign\Elemental\Models;
 
 use DNADesign\Elemental\Controllers\ElementController;
-use DNADesign\Elemental\Forms\ElementalGridFieldHistoryButton;
-use DNADesign\Elemental\Forms\HistoricalVersionedGridFieldItemRequest;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use Exception;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
@@ -16,18 +14,9 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
-use SilverStripe\Forms\GridField\GridFieldDataColumns;
-use SilverStripe\Forms\GridField\GridFieldDetailForm;
-use SilverStripe\Forms\GridField\GridFieldPageCount;
-use SilverStripe\Forms\GridField\GridFieldSortableHeader;
-use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
-use SilverStripe\Forms\GridField\GridFieldViewButton;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
-use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
@@ -38,7 +27,6 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
-use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 
 /**
  * Class BaseElement
@@ -52,7 +40,7 @@ use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
  *
  * @method ElementalArea Parent()
  */
-class BaseElement extends DataObject implements CMSPreviewable
+class BaseElement extends DataObject
 {
     /**
      * Override this on your custom elements to specify a CSS icon class
@@ -317,68 +305,10 @@ class BaseElement extends DataObject implements CMSPreviewable
                 $fields->addFieldToTab('Root.History', $historyViewer);
 
                 $fields->fieldByName('Root.History')->addExtraClass('elemental-block__history-tab');
-            } else {
-                // PHP based GridField history viewer for SS < 4.2
-                $history = $this->getHistoryFields();
-
-                if ($history) {
-                    $fields->addFieldsToTab('Root.History', $history);
-                }
             }
         });
 
         return parent::getCMSFields();
-    }
-
-    /**
-     * Returns the history fields for this element.
-     *
-     * @param  bool $checkLatestVersion Whether to check if this is the latest version. Prevents recursion, but can be
-     *                                  overridden to get the history GridField if required.
-     * @return FieldList
-     */
-    public function getHistoryFields($checkLatestVersion = true)
-    {
-        if ($checkLatestVersion && !$this->isLatestVersion()) {
-            // if viewing the history of the of page then don't show the history
-            // fields as then we have recursion.
-            return null;
-        }
-
-        Requirements::javascript('dnadesign/silverstripe-elemental:client/dist/js/bundle.js');
-
-        $config = GridFieldConfig_RecordViewer::create();
-        $config->removeComponentsByType(GridFieldPageCount::class);
-        $config->removeComponentsByType(GridFieldToolbarHeader::class);
-        // Replace the sortable ID column with a static header component
-        $config->removeComponentsByType(GridFieldSortableHeader::class);
-        $config->addComponent(new GridFieldTitleHeader);
-
-        $config
-            ->getComponentByType(GridFieldDetailForm::class)
-            ->setItemRequestClass(HistoricalVersionedGridFieldItemRequest::class);
-
-        $config->getComponentByType(GridFieldDataColumns::class)
-            ->setDisplayFields([
-                'Version' => '#',
-                'RecordStatus' => _t(__CLASS__ . '.Record', 'Record'),
-                'getAuthor.Name' => _t(__CLASS__ . '.Author', 'Author')
-            ])
-            ->setFieldFormatting([
-                'RecordStatus' => '$VersionedStateNice <span class=\"element-history__date--small\">on '
-                    . '$LastEditedNice</span>',
-            ]);
-
-        $config->removeComponentsByType(GridFieldViewButton::class);
-        $config->addComponent(new ElementalGridFieldHistoryButton());
-
-        $history = Versioned::get_all_versions(__CLASS__, $this->ID)
-            ->sort('Version', 'DESC');
-
-        return FieldList::create(
-            GridField::create('History', '', $history, $config)
-                ->addExtraClass('elemental-block__history')
-        );
     }
 
     /**
@@ -884,29 +814,5 @@ class BaseElement extends DataObject implements CMSPreviewable
         }
 
         return null;
-    }
-
-    /**
-     * Get a "nice" label for use in the block history GridField
-     *
-     * @return string
-     */
-    public function getVersionedStateNice()
-    {
-        if ($this->WasPublished) {
-            return _t(__CLASS__ . '.Published', 'Published');
-        }
-
-        return _t(__CLASS__ . '.Modified', 'Modified');
-    }
-
-    /**
-     * Return a formatted date for use in the block history GridField
-     *
-     * @return string
-     */
-    public function getLastEditedNice()
-    {
-        return $this->dbObject('LastEdited')->Nice();
     }
 }
