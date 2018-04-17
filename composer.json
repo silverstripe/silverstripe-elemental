@@ -32,9 +32,6 @@
         "dnadesign/silverstripe-elemental-virtual": "Adds support to share blocks between pages"
     },
     "extra": {
-        "branch-alias": {
-            "2.x-dev": "2.1.x-dev"
-        },
         "expose": [
             "client/dist"
         ]
