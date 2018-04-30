@@ -47,13 +47,33 @@ In your page type layout template use `$ElementalArea` to render the elements to
 
 ## Getting more elements
 
-Note that this module only comes by default with the base element and a Content element. If you need more, take
+Note that this module only comes by default with the base element and a "Content" element. If you need more, take
 a look at some other modules:
 
-* [silverstripe/silverstripe-elemental-blocks](https://github.com/silverstripe/silverstripe-elemental-blocks)
-* [dnadesign/silverstripe-elemental-userforms](https://github.com/dnadesign/silverstripe-elemental-userforms)
-* [dnadesign/silverstripe-elemental-list](https://github.com/dnadesign/silverstripe-elemental-list)
-* [dnadesign/silverstripe-elemental-virtual](https://github.com/dnadesign/silverstripe-elemental-virtual)
+* [dnadesign/silverstripe-elemental](https://github.com/dnadesign/silverstripe-elemental): Text content (built-in)
+* [silverstripe/silverstripe-elemental-blocks](https://github.com/silverstripe/silverstripe-elemental-blocks): File and image block
+* [silverstripe/silverstripe-elemental-blocks](https://github.com/silverstripe/silverstripe-elemental-blocks): Banner with call-to-action and content
+* [dnadesign/silverstripe-elemental-userforms](https://github.com/dnadesign/silverstripe-elemental-userforms): Embed a [user defined form](https://github.com/silverstripe/silverstripe-userforms)
+* [dnadesign/silverstripe-elemental-list](https://github.com/dnadesign/silverstripe-elemental-list): Container for elements (allows layouts)
+* [dnadesign/silverstripe-elemental-virtual](https://github.com/dnadesign/silverstripe-elemental-virtual): Reuse elements across pages
+* [dynamic/silverstripe-elemental-customer-service](https://github.com/dynamic/silverstripe-elemental-customer-service): Contact information
+* [dynamic/silverstripe-elemental-accordion](https://github.com/dynamic/silverstripe-elemental-accordion): Expand/collapse content areas
+* [dynamic/silverstripe-elemental-flexslider](https://github.com/dynamic/silverstripe-elemental-flexslider): Slideshows with flexible elements
+* [dynamic/silverstripe-elemental-blog](https://github.com/dynamic/silverstripe-elemental-blog): Recent blog posts
+* [dynamic/silverstripe-elemental-sponsors](https://github.com/dynamic/silverstripe-elemental-sponsors): Sponsor logos
+* [dynamic/silverstripe-elemental-testimonials](https://github.com/dynamic/silverstripe-elemental-testimonials): Customer testimonials and quotes
+* [nyeholt/silverstripe-ozzymental](https://github.com/nyeholt/silverstripe-ozzymental): oEmbed items (video, etc)
+* [dynamic/silverstripe-elemental-countdown](https://github.com/dynamic/silverstripe-elemental-countdown): Countdown to a specific date/time
+
+## Helpful modules
+
+These modules can extend functionality, and make elemental
+more compatible with other approaches in SilverStripe:
+
+* [dnadesign/silverstripe-elemental-subsites](https://github.com/dnadesign/silverstripe-elemental-subsites): Compatibility with the [silverstripe/subsites](https://github.com/silverstripe/silverstripe-subsites) module
+* [dnadesign/silverstripe-elemental-skeletons](https://github.com/dnadesign/silverstripe-elemental-skeletons): Creates a template of elements which can be created for a page in the CMS
+
+
 
 ## Configuration
 
