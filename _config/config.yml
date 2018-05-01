@@ -3,6 +3,8 @@ Name: elemental
 ---
 
 SilverStripe\Admin\LeftAndMain:
+  extra_requirements_javascript:
+    - 'dnadesign/silverstripe-elemental:client/dist/js/bundle.js'
   extra_requirements_css:
     - 'dnadesign/silverstripe-elemental:client/dist/styles/bundle.css'
 

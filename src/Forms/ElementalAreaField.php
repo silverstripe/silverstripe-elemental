@@ -35,7 +35,19 @@ class ElementalAreaField extends GridField
             // Combine into an appropriately named group
             $elementGroup = FieldGroup::create($elementFields);
             $elementGroup->setName($parentName);
-			$elementGroup->addExtraClass('elementalarea-element');
+            $elementGroup->addExtraClass('elementalarea-element');
+            // Also set the important data for the rendering Component
+            // $elementGroup->setSchemaComponent('HistoricElementView');
+            $elementGroup->setSchemaData([
+                'data' => [
+                    'ElementID' => $element->ID,
+                    'ElementType' => $element->getType(),
+					'ElementIcon' => $element->config()->icon,
+                    'ElementTitle' => $element->Title,
+					'ElementEditLink' => 'admin/',
+					'extraContext' => 'HistoricElementView'
+                ]
+            ]);
             
             return $elementGroup;
         };
@@ -48,7 +60,7 @@ class ElementalAreaField extends GridField
         $readOnlyField = $readOnlyField->transform(new ReadonlyTransformation());
         $readOnlyField->setReadOnly(true);
         $readOnlyField->setName($this->getName());
-		$readOnlyField->addExtraClass('elementalarea--read-only');
+        $readOnlyField->addExtraClass('elementalarea--read-only');
         return $readOnlyField;
     }
 }
