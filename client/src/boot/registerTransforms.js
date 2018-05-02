@@ -6,7 +6,11 @@ export default () => {
   Injector.transform(
   'elemental-fieldgroup',
   (updater) => {
-    updater.component('FieldGroup.HistoryViewer.VersionDetail.HistoricElementView', HistoricElementViewFactory, 'HistoricElement');
+    updater.component(
+      'FieldGroup.HistoryViewer.VersionDetail.HistoricElementView',
+      HistoricElementViewFactory,
+      'HistoricElement'
+    );
   },
   {
     after: 'field-holders'

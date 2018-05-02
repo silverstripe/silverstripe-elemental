@@ -9,15 +9,16 @@ const ElementalAreaHistoryFactory = (FieldGroup) =>
       const { data } = this.props;
 
       return (
-        <Tag className={className}>
+        <Tag className={`${className} elementalarea__element--historic-inner`}>
           {legend}
-          <div className={'elemental-preview'}>
+          <div className={'elemental-preview elemental-preview--historic'}>
+            <a className={'elemental-preview__link'} href={data.ElementEditLink}>
+              View block
+              <i className={'font-icon-angle-right'} />
+            </a>
             <div className={'elemental-preview__icon'}><i className={data.ElementIcon} /></div>
             <div className={'elemental-preview__detail'}>
               <h3>{data.ElementTitle} <small>{data.ElementType}</small></h3>
-              <a className={'HistoricElementView-fullHistory'} href={data.ElementEditLink}>
-                Block history
-              </a>
             </div>
           </div>
           {this.props.children}

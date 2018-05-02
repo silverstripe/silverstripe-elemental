@@ -2,3 +2,58 @@
 .elemental-block__history-tab {
   margin-top: -$panel-padding-x;
 }
+
+// ElementalArea history view
+/*
+ * NOTE: Needs _serious_ refactor once silverstripe/admin drops legacy styles
+ * (currently causing specificity issues causing ugly selectors here)
+ */
+.cms-edit-form .fieldgroup.elementalarea__element--historic {
+  margin-left: 0;
+  margin-right: 0;
+
+  &.form-group {
+    border-top: 1px solid $border-color-light;
+  }
+
+  .form__field-holder {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+.elemental-preview {
+	line-height: 20px;
+}
+
+.elemental-preview--historic {
+  margin-bottom: 1rem;
+}
+
+.elemental-preview__link {
+  float: right;
+  margin-top: 4px;
+}
+
+div.elementalarea__element--historic.elementalarea__element--historic-inner {
+  background:transparent;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: $panel-padding-y;
+}
+
+.elementalarea--read-only {
+  border-bottom: 1px solid $border-color-light;
+  margin-bottom: ($panel-padding-y * 1.5);
+  margin-top: ($panel-padding-y * 1.5);
+
+  @include media-breakpoint-up(lg) {
+    margin-left: -$panel-padding-x;
+    margin-right: -$panel-padding-x;
+  }
+}
+
+.history-viewer__version-detail fieldset {
+  overflow: visible;
+}
