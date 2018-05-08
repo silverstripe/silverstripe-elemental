@@ -395,22 +395,33 @@ class BaseElement extends DataObject
         $classes = ClassInfo::ancestry($this->ClassName);
         $classes[static::class] = static::class;
         $classes = array_reverse($classes);
-        $templates = array();
+        $templates = [];
 
-        foreach ($classes as $key => $value) {
-            if ($value == BaseElement::class) {
+        foreach ($classes as $key => $class) {
+            if ($class == BaseElement::class) {
                 continue;
             }
 
-            if ($value == DataObject::class) {
+            if ($class == DataObject::class) {
                 break;
             }
 
-            $templates[] = $value . $suffix . '_'. $this->getAreaRelationName();
-            $templates[] = $value . $suffix;
+            if ($style = $this->Style) {
+                $templates[$class][] = $class . $suffix . '_'. $this->getAreaRelationName() . '_' . $style;
+                $templates[$class][] = $class . $suffix . '_' . $style;
+            }
+            $templates[$class][] = $class . $suffix . '_'. $this->getAreaRelationName();
+            $templates[$class][] = $class . $suffix;
         }
 
-        return $templates;
+        $this->extend('updateRenderTemplates', $templates, $suffix);
+
+        $templateFlat = [];
+        foreach ($templates as $class => $variations) {
+            $templateFlat = array_merge($templateFlat, $variations);
+        }
+
+        return $templateFlat;
     }
 
     /**
