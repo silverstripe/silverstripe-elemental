@@ -4,17 +4,17 @@ import HistoricElementViewFactory from '../components/HistoricElementView/Histor
 
 export default () => {
   Injector.transform(
-  'elemental-fieldgroup',
-  (updater) => {
-    updater.component(
-      'FieldGroup.HistoryViewer.VersionDetail.HistoricElementView',
-      HistoricElementViewFactory,
-      'HistoricElement'
-    );
-  },
-  {
-    after: 'field-holders'
-  }
+    'elemental-fieldgroup',
+    (updater) => {
+      updater.component(
+        'FieldGroup.HistoryViewer.VersionDetail.HistoricElementView',
+        HistoricElementViewFactory,
+        'HistoricElement'
+      );
+    },
+    {
+      after: 'field-holders'
+    }
   );
   Injector.transform(
     'elements-history',

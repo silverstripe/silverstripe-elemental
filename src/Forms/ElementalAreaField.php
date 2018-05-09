@@ -11,11 +11,16 @@ use SilverStripe\Forms\ReadonlyTransformation;
 
 class ElementalAreaField extends GridField
 {
-    public function performReadonlyTransformation()
+    /**
+     * A getter method that seems redundant in that it is a function that returns a function,
+     * however the returned closure is used in an array map function to return a complete FieldList
+     * representing a read only view of the element passed in (to the closure).
+     *
+     * @return callable
+     */
+    protected function getReadOnlyBlockReducer()
     {
-        $readOnlyField = $this->castedCopy(CompositeField::class);
-        
-        $blockReducer = function ($element) {
+        return function ($element) {
             $parentName = 'Element' . $element->ID;
             $elementFields = $element->getCMSFields();
             // Obtain highest impact fields for a summary (e.g. Title & Content)
@@ -35,23 +40,35 @@ class ElementalAreaField extends GridField
             // Combine into an appropriately named group
             $elementGroup = FieldGroup::create($elementFields);
             $elementGroup->setName($parentName);
-            $elementGroup->addExtraClass('elementalarea__element--historic');
+            $elementGroup->addExtraClass('elemental-area__element--historic');
             // Also set the important data for the rendering Component
-            // $elementGroup->setSchemaComponent('HistoricElementView');
             $elementGroup->setSchemaData([
                 'data' => [
                     'ElementID' => $element->ID,
                     'ElementType' => $element->getType(),
                     'ElementIcon' => $element->config()->icon,
                     'ElementTitle' => $element->Title,
+                    // @todo: Change this to block history permalink when that functionality becomes available.
                     'ElementEditLink' => $element->CMSEditLink(),
                     'extraContext' => 'HistoricElementView'
                 ]
             ]);
-            
+
             return $elementGroup;
         };
-        
+    }
+
+    /**
+     * Provides a readonly representation of the GridField (superclass) Uses a reducer
+     * {@see ElementalAreaField::getReadOnlyBlockReducer()} to fetch a read only representation of the listed class
+     * {@see GridField::getModelClass()}
+     *
+     * @return CompositeField
+     */
+    public function performReadonlyTransformation()
+    {
+        $readOnlyField = $this->castedCopy(CompositeField::class);
+        $blockReducer = $this->getReadOnlyBlockReducer();
         $readOnlyField->setChildren(
             FieldList::create(
                 array_map($blockReducer, $this->getList()->toArray())
@@ -60,7 +77,7 @@ class ElementalAreaField extends GridField
         $readOnlyField = $readOnlyField->transform(new ReadonlyTransformation());
         $readOnlyField->setReadOnly(true);
         $readOnlyField->setName($this->getName());
-        $readOnlyField->addExtraClass('elementalarea--read-only');
+        $readOnlyField->addExtraClass('elemental-area--read-only');
         return $readOnlyField;
     }
 }

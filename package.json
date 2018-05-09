@@ -6,7 +6,8 @@
     "build": "yarn && NODE_ENV=production webpack -p --bail --progress",
     "watch": "yarn && NODE_ENV=development webpack --watch --progress",
     "css": "WEBPACK_CHILD=css npm run build",
-    "lint": "eslint client/src; sass-lint -v"
+    "lint": "eslint client/src; sass-lint -v",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -24,16 +25,19 @@
   },
   "homepage": "https://github.com/dnadesign/silverstripe-elemental#readme",
   "dependencies": {
+    "classnames": "^2.2.5",
+    "graphql-tag": "^0.1.17",
     "jquery": "^3.2.1",
     "react": "15.3.1",
+    "react-addons-test-utils": "15.3.1",
     "react-apollo": "^0.7.1",
-    "graphql-tag": "^0.1.17",
-    "redux": "^3.3.1",
-    "react-redux": "^4.4.1"
+    "react-redux": "^4.4.1",
+    "redux": "^3.3.1"
   },
   "devDependencies": {
     "@silverstripe/webpack-config": "^0.4.1",
     "babel-core": "^6.24.1",
+    "babel-jest": "^20.0.3",
     "babel-loader": "^7.0.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
@@ -46,7 +50,37 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.3.0",
+    "jest-cli": "^19.0.2",
     "webpack": "^2.6.1"
+  },
+  "jest": {
+    "roots": [
+      "client/src"
+    ],
+    "moduleDirectories": [
+      "client/src",
+      "node_modules",
+      "node_modules/@silverstripe/webpack-config/node_modules",
+      "../../admin/client/src",
+      "../../admin/node_modules",
+      "vendor/silverstripe/admin/client/src",
+      "vendor/silverstripe/admin/node_modules"
+    ],
+    "testMatch": [
+      "**/tests/**/*-test.js?(x)"
+    ],
+    "transform": {
+      ".*": "babel-jest"
+    }
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "react"
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
+    ]
   },
   "engines": {
     "node": "^6.x"

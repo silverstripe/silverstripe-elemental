@@ -8,7 +8,7 @@
  * NOTE: Needs _serious_ refactor once silverstripe/admin drops legacy styles
  * (currently causing specificity issues causing ugly selectors here)
  */
-.cms-edit-form .fieldgroup.elementalarea__element--historic {
+.cms-edit-form .fieldgroup.elemental-area__element--historic {
   margin-left: 0;
   margin-right: 0;
 
@@ -23,7 +23,7 @@
 }
 
 .elemental-preview {
-	line-height: 20px;
+  line-height: 20px;
 }
 
 .elemental-preview--historic {
@@ -35,7 +35,7 @@
   margin-top: 4px;
 }
 
-div.elementalarea__element--historic.elementalarea__element--historic-inner {
+div.elemental-area__element--historic.elemental-area__element--historic-inner {
   background:transparent;
   border: 0;
   padding-left: 0;
@@ -43,7 +43,7 @@ div.elementalarea__element--historic.elementalarea__element--historic-inner {
   padding-top: $panel-padding-y;
 }
 
-.elementalarea--read-only {
+.elemental-area--read-only {
   border-bottom: 1px solid $border-color-light;
   margin-bottom: ($panel-padding-y * 1.5);
   margin-top: ($panel-padding-y * 1.5);
