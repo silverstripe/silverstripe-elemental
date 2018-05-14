@@ -3,20 +3,13 @@
 namespace DNADesign\Elemental;
 
 use DNADesign\Elemental\Models\ElementalArea;
+use DNADesign\Elemental\Forms\ElementalAreaConfig;
+use DNADesign\Elemental\Forms\ElementalAreaField;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
-use SilverStripe\Forms\GridField\GridFieldAddNewButton;
-use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
-use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripe\Forms\GridField\GridFieldPageCount;
-use SilverStripe\Forms\GridField\GridFieldPaginator;
-use SilverStripe\Forms\GridField\GridFieldSortableHeader;
-use SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
-use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
 class ElementalEditor
 {
@@ -105,23 +98,11 @@ class ElementalEditor
      */
     public function getField()
     {
-        $gridField = GridField::create(
+        $gridField = ElementalAreaField::create(
             $this->name,
             $this->title,
             $this->getArea()->Elements(),
-            $config = GridFieldConfig_RelationEditor::create()
-                ->removeComponentsByType(array(
-                    GridFieldAddNewButton::class,
-                    GridFieldSortableHeader::class,
-                    GridFieldDeleteAction::class,
-                    GridFieldPaginator::class,
-                    GridFieldPageCount::class,
-                    VersionedGridFieldState::class,
-                    GridFieldAddExistingAutocompleter::class,
-                ))
-                ->addComponent(new GridFieldOrderableRows('Sort'))
-                // delete elements rather than unlinking them
-                ->addComponent(new GridFieldDeleteAction(false))
+            $config = ElementalAreaConfig::create()
         );
 
         $gridField->addExtraClass('elemental-editor');
