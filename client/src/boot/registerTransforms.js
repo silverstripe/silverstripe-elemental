@@ -1,6 +1,7 @@
 import Injector from 'lib/Injector';
 import readOneBlockQuery from '../state/history/readOneBlockQuery';
 import HistoricElementViewFactory from '../components/HistoricElementView/HistoricElementView';
+import revertToBlockVersionMutation from '../state/history/revertToBlockVersionMutation';
 
 export default () => {
   Injector.transform(
@@ -16,6 +17,7 @@ export default () => {
       after: 'field-holders'
     }
   );
+
   Injector.transform(
     'elements-history',
     (updater) => {
@@ -24,6 +26,18 @@ export default () => {
         'HistoryViewer.Form_ItemEditForm',
         readOneBlockQuery,
         'ElementHistoryViewer'
+      );
+    }
+  );
+
+  Injector.transform(
+    'blocks-history-revert',
+    (updater) => {
+      // Add block element revert GraphQL mutation to the HistoryViewerToolbar
+      updater.component(
+        'HistoryViewerToolbar.VersionedAdmin.HistoryViewer.Element.HistoryViewerVersionDetail',
+        revertToBlockVersionMutation,
+        'BlockRevertMutation'
       );
     }
   );

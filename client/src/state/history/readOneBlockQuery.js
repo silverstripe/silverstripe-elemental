@@ -20,6 +20,7 @@ query ReadHistoryViewerBlock ($block_id: ID!, $limit: Int!, $offset: Int!) {
       edges {
         node {
           Version
+          AbsoluteLink
           Author {
             FirstName
             Surname
