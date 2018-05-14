@@ -7,7 +7,7 @@ export default () => {
     'elemental-fieldgroup',
     (updater) => {
       updater.component(
-        'FieldGroup.HistoryViewer.VersionDetail.HistoricElementView',
+        'FieldGroup.HistoryViewer.VersionDetail',
         HistoricElementViewFactory,
         'HistoricElement'
       );

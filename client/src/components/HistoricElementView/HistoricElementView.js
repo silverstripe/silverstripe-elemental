@@ -5,7 +5,11 @@ import classnames from 'classnames';
 const ElementalAreaHistoryFactory = (FieldGroup) =>
   class HistoricElementView extends FieldGroup {
     getClassName() {
-      return classnames('elemental-area__element--historic-inner', super.getClassName());
+      const classlist = [super.getClassName()];
+      if (this.props.data.ElementID) {
+        classlist.unshift('elemental-area__element--historic-inner');
+      }
+      return classnames(classlist);
     }
 
     render() {
@@ -13,6 +17,10 @@ const ElementalAreaHistoryFactory = (FieldGroup) =>
       const Tag = this.props.data.tag || 'div';
       const classNames = this.getClassName();
       const { data } = this.props;
+
+      if (!data.ElementID) {
+        return super.render();
+      }
 
       return (
         <Tag className={classNames}>

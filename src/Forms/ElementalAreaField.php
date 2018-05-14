@@ -49,8 +49,7 @@ class ElementalAreaField extends GridField
                     'ElementIcon' => $element->config()->icon,
                     'ElementTitle' => $element->Title,
                     // @todo: Change this to block history permalink when that functionality becomes available.
-                    'ElementEditLink' => $element->CMSEditLink(),
-                    'extraContext' => 'HistoricElementView'
+                    'ElementEditLink' => $element->CMSEditLink()
                 ]
             ]);
 
