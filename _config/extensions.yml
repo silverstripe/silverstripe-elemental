@@ -1,0 +1,8 @@
+---
+Name: elementalextensions
+Only:
+  moduleexists: silverstripe/versioned-admin
+---
+SilverStripe\VersionedAdmin\Controllers\CMSPageHistoryViewerController:
+  extensions:
+    - DNADesign\Elemental\Extensions\CMSPageHistoryViewerControllerExtension
