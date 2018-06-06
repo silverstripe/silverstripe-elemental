@@ -3,6 +3,6 @@ Name: elementalextensions
 Only:
   moduleexists: silverstripe/versioned-admin
 ---
-SilverStripe\VersionedAdmin\Controllers\CMSPageHistoryViewerController:
+SilverStripe\VersionedAdmin\Controllers\HistoryControllerFactory:
   extensions:
-    - DNADesign\Elemental\Extensions\CMSPageHistoryViewerControllerExtension
+    - DNADesign\Elemental\Extensions\HistoryControllerFactoryExtension
