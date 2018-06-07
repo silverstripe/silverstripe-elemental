@@ -8,7 +8,7 @@ use SilverStripe\Core\Extension;
 /**
  * Instructs the history viewer controller to be enabled for pages that have elemental
  */
-class CMSPageHistoryViewerControllerExtension extends Extension
+class HistoryControllerFactoryExtension extends Extension
 {
     public function updateIsEnabled(SiteTree $page = null)
     {
