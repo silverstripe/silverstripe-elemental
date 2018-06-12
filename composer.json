@@ -16,8 +16,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "silverstripe/cms": "^4.2@dev",
-        "silverstripe/versioned-admin": "^1@dev",
+        "silverstripe/cms": "^4.2",
+        "silverstripe/versioned-admin": "^1.0",
         "symbiote/silverstripe-gridfieldextensions": "^3.1",
         "silverstripe/vendor-plugin": "^1"
     },
@@ -33,9 +33,6 @@
         "dnadesign/silverstripe-elemental-virtual": "Adds support to share blocks between pages"
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "3.0.x-dev"
-        },
         "expose": [
             "client/dist"
         ]
