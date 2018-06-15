@@ -1,3 +1,6 @@
+title: Content blocks
+summary: Creating content blocks in the CMS.
+
 # Using content blocks in the CMS
 
 The [Elemental module](https://addons.silverstripe.org/add-ons/dnadesign/silverstripe-elemental) provides the ability
@@ -9,12 +12,12 @@ developers over how certain pieces of content are presented.
 
 Make sure that your SilverStripe CMS installation has the [Elemental module](https://addons.silverstripe.org/add-ons/dnadesign/silverstripe-elemental)
 installed, and optionally the [SilverStripe Blocks addon module](https://addons.silverstripe.org/add-ons/silverstripe/elemental-blocks).
+https://github.com/dnadesign/silverstripe-elemental/#getting-more-elements
 
-We also assume that you have had a developer enable the functionality with configuration before you start.
+<div class="note" markdown="1">Developer knowledge is required to enable the functionality within the configuration before you begin.</div>
 
 ## Features
 
-* [Create and editing content blocks](edit_content.md)
-* [Reordering content blocks](reordering_content.md)
-* [Use history and rollback to certain versions](history.md)
-* [Use the reports](reports.md)
+* [Create and editing Content blocks](edit_content.md)
+* [History and rollback to certain versions](history.md)
+* [Reports](reports.md)

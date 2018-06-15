@@ -17,7 +17,7 @@ of rather than a single text field. Features supported:
 The module provides basic markup for each of the elements but you will likely need to provide your own styles. Replace
 the `$Content` variable with `$ElementalArea` in your page templates, and rely on the markup of the individual elements.
 
-For a more detailed overview of using this module, please see [the user help documentation](docs/en/index.md).
+For a more detailed overview of using this module, please see [the User help guides](docs/en/index.md).
 
 ## Requirements
 
@@ -33,7 +33,7 @@ composer require dnadesign/silverstripe-elemental 2.x-dev
 ```
 
 The following YAML config will enable elements on every `Page` object,
-replacing the standard `Content` rich text field. 
+replacing the standard `Content` rich text field.
 
 **mysite/\_config/elements.yml**
 
@@ -47,13 +47,20 @@ In your page type layout template use `$ElementalArea` to render the elements to
 
 ## Getting more elements
 
-Note that this module only comes by default with the base element and a "Content" element. If you need more, take
+Note that this module comes by default with the base element and a "Content" element. If you need more, take
 a look at some other modules:
 
+## SilverStripe supported content block modules
+
+To learn more about [SilverStripe supported](https://www.silverstripe.org/software/addons/supported-modules-definition/) content block types see, [Creating new blocks](/docs/en/edit_content.md).
+
 * [dnadesign/silverstripe-elemental](https://github.com/dnadesign/silverstripe-elemental): Text content (built-in)
-* [silverstripe/silverstripe-elemental-blocks](https://github.com/silverstripe/silverstripe-elemental-blocks): File and image block
-* [silverstripe/silverstripe-elemental-blocks](https://github.com/silverstripe/silverstripe-elemental-blocks): Banner with call-to-action and content
+* [silverstripe/silverstripe-elemental-fileblock](https://github.com/silverstripe/silverstripe-elemental-fileblock): File and image block
+* [silverstripe/silverstripe-elemental-bannerblock](https://github.com/silverstripe/silverstripe-elemental-bannerblock): Banner with call-to-action and content
 * [dnadesign/silverstripe-elemental-userforms](https://github.com/dnadesign/silverstripe-elemental-userforms): Embed a [user defined form](https://github.com/silverstripe/silverstripe-userforms)
+
+## Examples of community built content block modules (not a comprehensive list)
+
 * [dnadesign/silverstripe-elemental-list](https://github.com/dnadesign/silverstripe-elemental-list): Container for elements (allows layouts)
 * [dnadesign/silverstripe-elemental-virtual](https://github.com/dnadesign/silverstripe-elemental-virtual): Reuse elements across pages
 * [dynamic/silverstripe-elemental-customer-service](https://github.com/dynamic/silverstripe-elemental-customer-service): Contact information
@@ -72,8 +79,6 @@ more compatible with other approaches in SilverStripe:
 
 * [dnadesign/silverstripe-elemental-subsites](https://github.com/dnadesign/silverstripe-elemental-subsites): Compatibility with the [silverstripe/subsites](https://github.com/silverstripe/silverstripe-subsites) module
 * [dnadesign/silverstripe-elemental-skeletons](https://github.com/dnadesign/silverstripe-elemental-skeletons): Creates a template of elements which can be created for a page in the CMS
-
-
 
 ## Configuration
 
@@ -198,7 +203,7 @@ DNADesign\Elemental\Models\ElementContent:
 ### Disabling the default stylesheets
 
 When installing this module, there may be a default set of CSS stylesheets that come to provide some examples for the
-various default element types for the frontend website.
+various default element types for the front-end website.
 
 You can disable this with YAML configuration:
 
@@ -243,12 +248,11 @@ yarn build
 
 You'll need to have [yarn installed](https://yarnpkg.com/en/docs/install) globally in your command line.
 
-**Note:** If adding or modifying colours, spacing, font sizes etc. please try and use an appropriate variable from the
-silverstripe/admin module if available.
+**Note:** If adding or modifying colours, spacing, font sizes etc. please try and use an appropriate variable from the silverstripe/admin module if available.
 
 ## Screenshots
 
-![Overview](docs/images/overview.png)
+![Elemental content block overview](docs/images/content-block-overview.png)
 
 ## Versioning
 
