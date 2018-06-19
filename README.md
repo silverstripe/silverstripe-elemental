@@ -21,15 +21,16 @@ For a more detailed overview of using this module, please see [the User help gui
 
 ## Requirements
 
-* SilverStripe CMS ^4.0
-* GridFieldExtensions ^3.0
+* SilverStripe CMS ^4.2
+* Versioned Admin ^1.0
+* GridFieldExtensions ^3.1
 
 For a SilverStripe 3.x compatible version of this module, please see the [1 branch, or 1.x release line](https://github.com/dnadesign/silverstripe-elemental/tree/1#readme).
 
 ## Installation
 
 ```
-composer require dnadesign/silverstripe-elemental 2.x-dev
+composer require dnadesign/silverstripe-elemental 3.0.x-dev
 ```
 
 The following YAML config will enable elements on every `Page` object,
@@ -252,7 +253,7 @@ You'll need to have [yarn installed](https://yarnpkg.com/en/docs/install) global
 
 ## Screenshots
 
-![Elemental content block overview](docs/images/content-block-overview.png)
+![Elemental content block overview](docs/en/images/content-block-overview.png)
 
 ## Versioning
 
