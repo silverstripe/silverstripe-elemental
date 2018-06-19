@@ -229,21 +229,16 @@ class BaseElement extends DataObject
     }
 
     /**
-     * @throws \SilverStripe\ORM\ValidationException
+     * Increment the sort order if one hasn't been already defined. This ensures that new elements are created
+     * at the end of the list by default.
+     *
+     * {@inheritDoc}
      */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
 
-        if ($areaID = $this->ParentID) {
-            if ($elementalArea = ElementalArea::get()->byID($areaID)) {
-                $elementalArea->write();
-            }
-        }
-
         if (!$this->Sort) {
-            $parentID = ($this->ParentID) ? $this->ParentID : 0;
-
             $this->Sort = static::get()->max('Sort') + 1;
         }
     }
