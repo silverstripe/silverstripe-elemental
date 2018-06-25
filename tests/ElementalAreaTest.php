@@ -8,6 +8,7 @@ use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use Page;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Versioned\Versioned;
 
 class ElementalAreaTest extends SapphireTest
 {
@@ -49,12 +50,15 @@ class ElementalAreaTest extends SapphireTest
     {
         $member = $this->logInWithPermission('SITETREE_EDIT_ALL');
 
+        /** @var Page $page */
         $page = $this->objFromFixture(TestPage::class, 'page1');
         $this->assertTrue($page->canPublish($member));
 
+        /** @var ElementalArea|Versioned $area */
         $area = $this->objFromFixture(ElementalArea::class, 'area1');
         $this->assertTrue($area->canPublish($member));
 
+        /** @var TestElement|Versioned $element */
         $element = $this->objFromFixture(TestElement::class, 'element1');
         $this->assertTrue($element->canPublish($member));
     }

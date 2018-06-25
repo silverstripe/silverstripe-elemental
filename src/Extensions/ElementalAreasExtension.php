@@ -187,7 +187,6 @@ class ElementalAreasExtension extends DataExtension
 
     /**
      * Make sure there is always an ElementalArea for adding Elements
-     *
      */
     public function onBeforeWrite()
     {
@@ -207,8 +206,6 @@ class ElementalAreasExtension extends DataExtension
                 $area->OwnerClassName = $this->owner->ClassName;
                 $area->write();
                 $this->owner->$areaID = $area->ID;
-            } elseif ($area = ElementalArea::get()->filter('ID', $this->owner->$areaID)->first()) {
-                $area->write();
             }
         }
 
