@@ -299,7 +299,8 @@ class BaseElement extends DataObject
                 $historyViewer = HistoryViewerField::create('ElementHistory');
                 $fields->addFieldToTab('Root.History', $historyViewer);
 
-                $fields->fieldByName('Root.History')->addExtraClass('elemental-block__history-tab');
+                $fields->fieldByName('Root.History')
+                    ->addExtraClass('elemental-block__history-tab tab--history-viewer');
             }
         });
 
