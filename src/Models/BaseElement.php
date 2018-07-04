@@ -17,6 +17,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
@@ -40,7 +41,7 @@ use SilverStripe\View\Requirements;
  *
  * @method ElementalArea Parent()
  */
-class BaseElement extends DataObject
+class BaseElement extends DataObject implements CMSPreviewable
 {
     /**
      * Override this on your custom elements to specify a CSS icon class
