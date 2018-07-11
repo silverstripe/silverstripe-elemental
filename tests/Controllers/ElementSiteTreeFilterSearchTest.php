@@ -4,13 +4,18 @@ namespace DNADesign\Elemental\Tests\Controllers;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Tests\Src\TestPage;
-use Page;
 use SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search;
 use SilverStripe\Dev\SapphireTest;
 
 class ElementSiteTreeFilterSearchTest extends SapphireTest
 {
     protected static $fixture_file = 'ElementSiteTreeFilterSearchTest.yml';
+
+    protected static $required_extensions = [
+        TestPage::class => [
+            ElementalPageExtension::class,
+        ],
+    ];
 
     protected static $extra_dataobjects = [
         TestPage::class,

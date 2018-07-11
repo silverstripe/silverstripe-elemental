@@ -2,7 +2,6 @@
 
 namespace DNADesign\Elemental\Tests;
 
-use function class_exists;
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\BaseElement;
@@ -13,7 +12,6 @@ use DNADesign\Elemental\Tests\Src\TestPage;
 use Page;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
-use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 
 class BaseElementTest extends FunctionalTest
@@ -23,12 +21,12 @@ class BaseElementTest extends FunctionalTest
     protected static $required_extensions = [
         Page::class => [
             ElementalPageExtension::class,
-        ]
+        ],
     ];
 
     protected static $extra_dataobjects = [
         TestPage::class,
-        TestElement::class
+        TestElement::class,
     ];
 
     public function testSimpleClassName()
@@ -124,7 +122,7 @@ class BaseElementTest extends FunctionalTest
 
         /** @var ElementContent $element */
         $element = $this->objFromFixture(ElementContent::class, 'content1');
-        
+
         $history = $element->getCMSFields()->dataFieldByName('ElementHistory');
         $this->assertInstanceOf(HistoryViewerField::class, $history);
     }

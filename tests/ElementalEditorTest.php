@@ -2,12 +2,11 @@
 
 namespace DNADesign\Elemental\Tests;
 
+use DNADesign\Elemental\ElementalEditor;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
-use DNADesign\Elemental\ElementalEditor;
 use Page;
-use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Forms\GridField\GridField;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
