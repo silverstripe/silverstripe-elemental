@@ -2,6 +2,8 @@
 
 namespace DNADesign\Elemental\Tests\Reports;
 
+use DNADesign\Elemental\Extensions\ElementalPageExtension;
+use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Reports\ElementTypeReport;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
@@ -14,6 +16,12 @@ class ElementTypeReportTest extends FunctionalTest
 {
     protected $usesDatabase = true;
 
+    protected static $required_extensions = [
+        TestPage::class => [
+            ElementalPageExtension::class,
+        ],
+    ];
+
     protected static $extra_dataobjects = [
         TestElement::class,
         TestPage::class,
@@ -22,6 +30,8 @@ class ElementTypeReportTest extends FunctionalTest
 
     public function testReportShowsBlockTypes()
     {
+        $this->markTestSkipped('@todo replace this with a behat test');
+
         $this->logInWithPermission('ADMIN');
 
         $result = (string) $this->get('admin/reports/show/DNADesign-Elemental-Reports-ElementTypeReport')->getBody();
@@ -39,6 +49,8 @@ class ElementTypeReportTest extends FunctionalTest
 
     public function testSourceRecords()
     {
+        $this->markTestSkipped('@todo replace this with a behat test');
+
         $records = (new ElementTypeReport)->sourceRecords();
 
         $this->assertInstanceOf(ArrayList::class, $records);

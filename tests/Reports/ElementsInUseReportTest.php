@@ -2,6 +2,7 @@
 
 namespace DNADesign\Elemental\Tests\Reports;
 
+use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Reports\ElementsInUseReport;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
@@ -12,6 +13,12 @@ use SilverStripe\View\ArrayData;
 class ElementsInUseReportTest extends FunctionalTest
 {
     protected static $fixture_file = 'ElementsInUseReportTest.yml';
+
+    protected static $required_extensions = [
+        TestPage::class => [
+            ElementalPageExtension::class,
+        ],
+    ];
 
     protected static $extra_dataobjects = [
         TestElement::class,
