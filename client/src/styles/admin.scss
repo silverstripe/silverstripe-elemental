@@ -1,5 +1,5 @@
 .elemental-edit {
-  display: block;
+  display: flex;
   color: inherit;
 
   &:hover,
@@ -55,6 +55,7 @@
 .elemental-preview__icon {
   color: $text-muted;
   display: inline-block;
+  flex-direction: row;
   font-size: 2.3rem;
   width: 28px;
   vertical-align: top;
