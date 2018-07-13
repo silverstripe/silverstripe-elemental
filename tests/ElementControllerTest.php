@@ -36,6 +36,8 @@ class ElementControllerTest extends FunctionalTest
     public function testForTemplate()
     {
         $element = $this->objFromFixture(TestElement::class, 'element1');
+        // Although we read from Versioned::DRAFT, Versioned will still block draft content view permissions
+        $this->logInWithPermission('ADMIN');
         $controller = new TestElementController($element);
 
         $this->assertContains('Hello Test', $controller->forTemplate());

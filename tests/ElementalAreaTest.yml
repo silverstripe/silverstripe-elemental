@@ -20,7 +20,19 @@ DNADesign\Elemental\Tests\Src\TestElement:
     Title: Element 1
     TestValue: 'Hello Test'
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.area1
+    Viewable: true
   element2:
     Title: Element 2
     TestValue: 'Hello Test 2'
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.area1
+    Viewable: true
+  element3:
+    Title: Element 3
+    TestValue: 'Hello Test 3'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area2
+    Viewable: true
+  element4:
+    Title: Element 4
+    TestValue: 'Hello Test 4'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area2
+    Viewable: false

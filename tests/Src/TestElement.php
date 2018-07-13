@@ -10,7 +10,8 @@ class TestElement extends BaseElement implements TestOnly
     private static $table_name = 'TestElement';
 
     private static $db = [
-        'TestValue' => 'Text'
+        'TestValue' => 'Text',
+        'Viewable' => 'Boolean'
     ];
 
     private static $controller_class = TestElementController::class;
@@ -18,5 +19,10 @@ class TestElement extends BaseElement implements TestOnly
     public function getType()
     {
         return 'A test element';
+    }
+
+    public function canView($member = null)
+    {
+        return parent::canView($member) && $this->Viewable;
     }
 }

@@ -33,6 +33,18 @@ class ElementalAreaTest extends SapphireTest
         $this->assertEquals(2, $controllers->count(), 'Should be a controller per element');
     }
 
+
+    public function testViewPermissionsAreChecked()
+    {
+        $area = $this->objFromFixture(ElementalArea::class, 'area2');
+        $controllers = $area->ElementControllers();
+        $elements = $area->Elements();
+
+        $this->assertEquals(1, $controllers->count(),
+            'Should be one controller only, since one of the elements is not viewable');
+        $this->assertEquals(2, $elements->count());
+    }
+
     public function testGetOwnerPage()
     {
         $area1 = $this->objFromFixture(ElementalArea::class, 'area1');
