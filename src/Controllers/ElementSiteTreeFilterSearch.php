@@ -5,9 +5,11 @@ namespace DNADesign\Elemental\Controllers;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\DateField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
+use SilverStripe\View\SSViewer;
 
 class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
 {
@@ -30,6 +32,10 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
             return parent::applyDefaultFilters($query);
         }
 
+        // Enable frontend themes in order to correctly render the elements as they would be for the frontend
+        Config::nest();
+        SSViewer::set_themes(SSViewer::config()->get('themes'));
+
         // Get an array of SiteTree record IDs that match the search term in nested element data
         /** @var ArrayList $siteTrees */
         $siteTrees = $query->filterByCallback(function (SiteTree $siteTree) {
@@ -42,6 +48,9 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
             $pageContent = $siteTree->getElementsForSearch();
             return (bool) stripos($pageContent, $this->params['Term']) !== false;
         });
+
+        // Return themes back for the CMS
+        Config::unnest();
 
         if ($siteTrees->count()) {
             // Apply the list of IDs as an extra filter
