@@ -1,12 +1,19 @@
 DNADesign\Elemental\Models\ElementalArea:
   area1:
     Title: Area 1
+  area2:
+    Title: Area 2
+    OwnerClassName: DNADesign\Elemental\Tests\Src\TestPage
 
 DNADesign\Elemental\Tests\Src\TestPage:
   page1:
     Title: Page 1
     URLSegment: test-page
     ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area1
+  page2:
+    Title: Page 2
+    URLSegment: test-page-2
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area2
 
 DNADesign\Elemental\Tests\Src\TestElement:
   element1:

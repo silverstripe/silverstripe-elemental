@@ -35,7 +35,16 @@ class ElementalAreaTest extends SapphireTest
 
     public function testGetOwnerPage()
     {
-        $this->markTestIncomplete();
+        $area1 = $this->objFromFixture(ElementalArea::class, 'area1');
+        $area2 = $this->objFromFixture(ElementalArea::class, 'area2');
+
+        // OwnerClassName not set
+        $ownerpage1 = $area1->getOwnerPage();
+        // OwnerClassName set
+        $ownerpage2 = $area2->getOwnerPage();
+
+        $this->assertEquals("DNADesign\Elemental\Tests\Src\TestPage", $ownerpage1);
+        $this->assertEquals("DNADesign\Elemental\Tests\Src\TestPage", $ownerpage2);
     }
 
     public function testForTemplate()
