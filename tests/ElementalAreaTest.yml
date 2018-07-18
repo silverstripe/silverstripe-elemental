@@ -24,3 +24,12 @@ DNADesign\Elemental\Tests\Src\TestElement:
     Title: Element 2
     TestValue: 'Hello Test 2'
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.area1
+  element3:
+    Title: Element 3
+    TestValue: 'Hello Test 3'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area2
+
+DNADesign\Elemental\Models\ElementContent:
+  content1:
+    HTML: Some content
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area2
