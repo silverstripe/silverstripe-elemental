@@ -12,6 +12,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\HasManyList;
+use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
 
 /**
@@ -108,6 +109,11 @@ class ElementalArea extends DataObject
      */
     public function ElementControllers()
     {
+        // Don't try and process unsaved lists
+        if ($this->Elements() instanceof UnsavedRelationList) {
+            return ArrayList::create();
+        }
+
         $controllers = ArrayList::create();
         $items = $this->Elements()->filterByCallback(function (BaseElement $item) {
             return $item->canView();

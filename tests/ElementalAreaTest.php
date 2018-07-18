@@ -4,10 +4,12 @@ namespace DNADesign\Elemental\Tests;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\ElementalArea;
+use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use Page;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\Versioned\Versioned;
 
 class ElementalAreaTest extends SapphireTest
@@ -115,5 +117,19 @@ class ElementalAreaTest extends SapphireTest
         $duplicatedAreaIds = $duplicatedArea->Elements()->column('ID');
         $this->assertCount(2, $duplicatedAreaIds);
         $this->assertNotEquals($areaIds, $duplicatedAreaIds);
+    }
+
+    public function testUnsavedRelationListOfElementsReturnsEmptyArrayList()
+    {
+        $area = new ElementalArea();
+
+        $element = new ElementContent();
+        $element->HTML = 'Test';
+
+        $area->Elements()->add($element);
+
+        $result = $area->ElementControllers();
+        $this->assertInstanceOf(ArrayList::class, $result);
+        $this->assertEmpty($result);
     }
 }
