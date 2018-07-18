@@ -3,11 +3,9 @@
 namespace DNADesign\Elemental\Reports;
 
 use DNADesign\Elemental\Models\BaseElement;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataList;
 use SilverStripe\Reports\Report;
-use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 
 class ElementsInUseReport extends Report
@@ -19,29 +17,15 @@ class ElementsInUseReport extends Report
 
     public function sourceRecords($params = [])
     {
-        /** @var BaseElement[] $elements */
-        $elements = BaseElement::get();
+        /** @var DataList $elements */
+        $elements = BaseElement::get()->exclude(['ClassName' => BaseElement::class]);
 
-        $output = ArrayList::create();
-
-        foreach ($elements as $element) {
-            // Skip if filtering and looking at a different record
-            if (isset($params['ClassName']) && $params['ClassName'] !== $element->sanitiseClassName($element)) {
-                continue;
-            }
-
-            $output->push(ArrayData::create([
-                'Icon' => $element->getIcon(),
-                'Title' => $element->Title,
-                'EditLink' => $element->CMSEditLink(),
-                'Summary' => $element->getSummary(),
-                'Type' => $element->getTypeNice(),
-                'ClassName' => $element->sanitiseClassName(get_class($element)),
-                'Page' => $element->getPageTitle(),
-            ]));
+        if (isset($params['ClassName'])) {
+            $className = $this->unsanitiseClassName($params['ClassName']);
+            $elements = $elements->filter(['ClassName' => $className]);
         }
 
-        return $output;
+        return $elements;
     }
 
     public function columns()
@@ -49,12 +33,17 @@ class ElementsInUseReport extends Report
         return [
             'Icon' => [
                 'title' => '',
+                'formatting' => function ($value, BaseElement $item) {
+                    return $item->getIcon();
+                },
             ],
             'Title' => [
                 'title' => _t(__CLASS__ . '.Title', 'Title'),
-                'formatting' => function ($value, $item) {
+                'formatting' => function ($value, BaseElement $item) {
+                    $value = $item->Title;
+
                     if (!empty($value)) {
-                        if ($item->EditLink) {
+                        if ($item->CMSEditLink()) {
                             return $this->getEditLink($value, $item);
                         }
                         return $value;
@@ -65,16 +54,23 @@ class ElementsInUseReport extends Report
             'Summary' => [
                 'title' => _t(__CLASS__ . '.Summary', 'Summary'),
                 'casting' => 'HTMLText->RAW',
+                'formatting' => function ($value, BaseElement $item) {
+                    return $item->getSummary();
+                },
             ],
             'Type' => [
                 'title' => _t(__CLASS__ . '.Type', 'Type'),
+                'formatting' => function ($value, BaseElement $item) {
+                    return $item->getTypeNice();
+                },
             ],
-            'Page' => [
+            'Page.Title' => [
                 'title' => _t(__CLASS__ . '.Page', 'Page'),
-                'formatting' => function ($value, $item) {
+                'formatting' => function ($value, BaseElement $item) {
                     if ($value) {
                         return $this->getEditLink($value, $item);
                     }
+                    return $item->getPageTitle();
                 },
             ],
         ];
@@ -84,14 +80,14 @@ class ElementsInUseReport extends Report
      * Helper method to return the link to edit an element
      *
      * @param string $value
-     * @param ArrayData $item
+     * @param BaseElement $item
      * @return string
      */
     protected function getEditLink($value, $item)
     {
         return sprintf(
             '<a class="grid-field__link" href="%s" title="%s">%s</a>',
-            $item->EditLink,
+            $item->CMSEditLink(),
             $value,
             $value
         );
@@ -111,5 +107,18 @@ class ElementsInUseReport extends Report
         $field->addExtraClass('elemental-report__grid-field');
 
         return $field;
+    }
+
+    /**
+     * Unsanitise a model class' name from a URL param
+     *
+     * See {@link \SilverStripe\Admin\ModelAdmin::unsanitiseClassName}
+     *
+     * @param string $class
+     * @return string
+     */
+    protected function unsanitiseClassName($class)
+    {
+        return str_replace('-', '\\', $class);
     }
 }
