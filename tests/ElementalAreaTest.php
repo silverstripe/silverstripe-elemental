@@ -33,16 +33,36 @@ class ElementalAreaTest extends SapphireTest
         $this->assertEquals(2, $controllers->count(), 'Should be a controller per element');
     }
 
-
-    public function testViewPermissionsAreChecked()
+    public function testCanViewTestElementIsFalseWhenLoggedInAsCmsEditor()
     {
+        /** @var ElementalArea $area */
         $area = $this->objFromFixture(ElementalArea::class, 'area2');
-        $controllers = $area->ElementControllers();
-        $elements = $area->Elements();
+        // Content editors do not have permission to view the TestElement
+        $this->logInWithPermission('VIEW_DRAFT_CONTENT');
 
-        $this->assertEquals(1, $controllers->count(),
-            'Should be one controller only, since one of the elements is not viewable');
-        $this->assertEquals(2, $elements->count());
+        $controllers = $area->ElementControllers();
+        $this->assertCount(2, $area->Elements(), 'There are two elements in total');
+        $this->assertCount(
+            1,
+            $controllers,
+            'Should be one controller only, since TestElement is not viewable by non-admins'
+        );
+    }
+
+    public function testCanViewTestElementIsTrueForAdmins()
+    {
+        /** @var ElementalArea $area */
+        $area = $this->objFromFixture(ElementalArea::class, 'area2');
+        // Admin users have permission to view the TestElement
+        $this->logInWithPermission('ADMIN');
+
+        $controllers = $area->ElementControllers();
+        $this->assertCount(2, $area->Elements(), 'There are two elements in total');
+        $this->assertCount(
+            2,
+            $controllers,
+            'Should be two controllers when logged in as admin'
+        );
     }
 
     public function testGetOwnerPage()

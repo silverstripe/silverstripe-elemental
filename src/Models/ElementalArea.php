@@ -108,7 +108,7 @@ class ElementalArea extends DataObject
      */
     public function ElementControllers()
     {
-        $controllers = new ArrayList();
+        $controllers = ArrayList::create();
         $items = $this->Elements()->filterByCallback(function (BaseElement $item) {
             return $item->canView();
         });

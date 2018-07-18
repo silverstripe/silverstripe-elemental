@@ -2,8 +2,9 @@
 
 namespace DNADesign\Elemental\Tests\Src;
 
-use SilverStripe\Dev\TestOnly;
 use DNADesign\Elemental\Models\BaseElement;
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\Security\Permission;
 
 class TestElement extends BaseElement implements TestOnly
 {
@@ -11,7 +12,6 @@ class TestElement extends BaseElement implements TestOnly
 
     private static $db = [
         'TestValue' => 'Text',
-        'Viewable' => 'Boolean'
     ];
 
     private static $controller_class = TestElementController::class;
@@ -23,6 +23,10 @@ class TestElement extends BaseElement implements TestOnly
 
     public function canView($member = null)
     {
-        return parent::canView($member) && $this->Viewable;
+        $check = Permission::checkMember($member, 'ADMIN');
+        if ($check !== null) {
+            return $check;
+        }
+        return parent::canView($member);
     }
 }
