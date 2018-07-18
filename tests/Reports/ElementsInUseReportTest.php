@@ -2,12 +2,13 @@
 
 namespace DNADesign\Elemental\Tests\Reports;
 
+use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Reports\ElementsInUseReport;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use SilverStripe\Dev\FunctionalTest;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\View\ArrayData;
+use SilverStripe\ORM\DataList;
 
 class ElementsInUseReportTest extends FunctionalTest
 {
@@ -27,7 +28,7 @@ class ElementsInUseReportTest extends FunctionalTest
         $this->assertContains('Content blocks in use', $result, 'Title is displayed');
 
         $this->assertContains(
-            'data-class="DNADesign-Elemental-Models-ElementContent"',
+            'data-class="DNADesign\\Elemental\\Models\\ElementContent"',
             $result,
             'Report contains content elements (bundled with elemental)'
         );
@@ -42,14 +43,12 @@ class ElementsInUseReportTest extends FunctionalTest
     {
         $records = (new ElementsInUseReport)->sourceRecords();
 
-        $this->assertInstanceOf(ArrayList::class, $records);
-        $this->assertNotContains(BaseElement::class, $records->toArray(), 'BaseElement is excluded');
-
-        $this->assertContainsOnlyInstancesOf(ArrayData::class, $records);
+        $this->assertInstanceOf(DataList::class, $records);
+        $this->assertNotEmpty($records);
+        $this->assertContainsOnlyInstancesOf(BaseElement::class, $records, 'Report contains elements');
 
         foreach ($records as $record) {
-            $this->assertNotNull($record->Icon, 'Fields have an icon');
-            $this->assertNotNull($record->Type, 'Fields have a type');
+            $this->assertNotEquals(BaseElement::class, get_class($record), 'BaseElement does not exist in the report');
         }
     }
 
@@ -73,13 +72,11 @@ class ElementsInUseReportTest extends FunctionalTest
             'ClassName' => 'DNADesign-Elemental-Models-ElementContent',
         ]);
 
-        $this->assertInstanceOf(ArrayList::class, $records);
+        $this->assertInstanceOf(DataList::class, $records);
         $this->assertNotEmpty($records->toArray(), 'Results are returned when filtered');
-        $this->assertEquals(
-            [
-                'DNADesign-Elemental-Models-ElementContent'
-            ],
-            array_unique($records->column('ClassName')),
+        $this->assertContainsOnlyInstancesOf(
+            ElementContent::class,
+            $records->toArray(),
             'Only contains filtered element type'
         );
     }
