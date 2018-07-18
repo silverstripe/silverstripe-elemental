@@ -47,11 +47,8 @@ div.elemental-area__element--historic.elemental-area__element--historic-inner {
   border-bottom: 1px solid $border-color-light;
   margin-bottom: ($panel-padding-y * 1.5);
   margin-top: ($panel-padding-y * 1.5);
-
-  @include media-breakpoint-up(lg) {
-    margin-left: -$panel-padding-x;
-    margin-right: -$panel-padding-x;
-  }
+  margin-left: -$panel-padding-x;
+  margin-right: -$panel-padding-x;
 }
 
 .history-viewer__version-detail fieldset {

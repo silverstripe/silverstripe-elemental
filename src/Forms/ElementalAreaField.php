@@ -2,12 +2,12 @@
 
 namespace DNADesign\Elemental\Forms;
 
-use SilverStripe\Forms\GridField\GridField;
+use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\TabSet;
-use SilverStripe\Forms\ReadonlyTransformation;
 
 class ElementalAreaField extends GridField
 {
@@ -20,9 +20,10 @@ class ElementalAreaField extends GridField
      */
     protected function getReadOnlyBlockReducer()
     {
-        return function ($element) {
+        return function (BaseElement $element) {
             $parentName = 'Element' . $element->ID;
             $elementFields = $element->getCMSFields();
+
             // Obtain highest impact fields for a summary (e.g. Title & Content)
             foreach ($elementFields as $field) {
                 if (is_object($field) && $field instanceof TabSet) {
@@ -31,16 +32,21 @@ class ElementalAreaField extends GridField
                     break;
                 }
             }
+
             // Set values (before names don't match anymore)
             $elementFields->setValues($element->getQueriedDatabaseFields());
+
             // Ensure field names are unique between elements on parent form
             $elementFields->recursiveWalk(function ($field) use ($parentName) {
                 $field->setName($parentName . '_' . $field->getName());
             });
+
             // Combine into an appropriately named group
             $elementGroup = FieldGroup::create($elementFields);
+            $elementGroup->setForm($this->getForm());
             $elementGroup->setName($parentName);
             $elementGroup->addExtraClass('elemental-area__element--historic');
+
             // Also set the important data for the rendering Component
             $elementGroup->setSchemaData([
                 'data' => [
@@ -66,17 +72,17 @@ class ElementalAreaField extends GridField
      */
     public function performReadonlyTransformation()
     {
+        /** @var CompositeField $readOnlyField */
         $readOnlyField = $this->castedCopy(CompositeField::class);
         $blockReducer = $this->getReadOnlyBlockReducer();
         $readOnlyField->setChildren(
-            FieldList::create(
-                array_map($blockReducer, $this->getList()->toArray())
-            )
+            FieldList::create(array_map($blockReducer, $this->getList()->toArray()))
         );
-        $readOnlyField = $readOnlyField->transform(new ReadonlyTransformation());
-        $readOnlyField->setReadOnly(true);
-        $readOnlyField->setName($this->getName());
-        $readOnlyField->addExtraClass('elemental-area--read-only');
-        return $readOnlyField;
+
+        $readOnlyField = $readOnlyField->performReadonlyTransformation();
+        return $readOnlyField
+            ->setReadOnly(true)
+            ->setName($this->getName())
+            ->addExtraClass('elemental-area--read-only');
     }
 }

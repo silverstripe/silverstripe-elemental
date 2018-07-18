@@ -33,9 +33,50 @@ class ElementalAreaTest extends SapphireTest
         $this->assertEquals(2, $controllers->count(), 'Should be a controller per element');
     }
 
+    public function testCanViewTestElementIsFalseWhenLoggedInAsCmsEditor()
+    {
+        /** @var ElementalArea $area */
+        $area = $this->objFromFixture(ElementalArea::class, 'area2');
+        // Content editors do not have permission to view the TestElement
+        $this->logInWithPermission('VIEW_DRAFT_CONTENT');
+
+        $controllers = $area->ElementControllers();
+        $this->assertCount(2, $area->Elements(), 'There are two elements in total');
+        $this->assertCount(
+            1,
+            $controllers,
+            'Should be one controller only, since TestElement is not viewable by non-admins'
+        );
+    }
+
+    public function testCanViewTestElementIsTrueForAdmins()
+    {
+        /** @var ElementalArea $area */
+        $area = $this->objFromFixture(ElementalArea::class, 'area2');
+        // Admin users have permission to view the TestElement
+        $this->logInWithPermission('ADMIN');
+
+        $controllers = $area->ElementControllers();
+        $this->assertCount(2, $area->Elements(), 'There are two elements in total');
+        $this->assertCount(
+            2,
+            $controllers,
+            'Should be two controllers when logged in as admin'
+        );
+    }
+
     public function testGetOwnerPage()
     {
-        $this->markTestIncomplete();
+        $area1 = $this->objFromFixture(ElementalArea::class, 'area1');
+        $area2 = $this->objFromFixture(ElementalArea::class, 'area2');
+
+        // OwnerClassName not set
+        $ownerpage1 = $area1->getOwnerPage();
+        // OwnerClassName set
+        $ownerpage2 = $area2->getOwnerPage();
+
+        $this->assertEquals("DNADesign\Elemental\Tests\Src\TestPage", $ownerpage1);
+        $this->assertEquals("DNADesign\Elemental\Tests\Src\TestPage", $ownerpage2);
     }
 
     public function testForTemplate()

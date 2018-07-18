@@ -1,0 +1,32 @@
+# Run silverstripe-elemental behat tests with this command
+# Note that silverstripe-elemental behat tests require CMS module
+# ========================================================================= #
+# chromedriver
+# vendor/bin/behat @silverstripe-elemental
+# ========================================================================= #
+default:
+  suites:
+    silverstripe-elemental:
+      paths:
+        - %paths.modules.silverstripe-elemental%/tests/Behat/features
+      contexts:
+        - SilverStripe\Framework\Tests\Behaviour\FeatureContext
+        - SilverStripe\Framework\Tests\Behaviour\CmsFormsContext
+        - SilverStripe\Framework\Tests\Behaviour\CmsUiContext
+        - SilverStripe\BehatExtension\Context\BasicContext
+        - SilverStripe\BehatExtension\Context\LoginContext
+        -
+          SilverStripe\BehatExtension\Context\FixtureContext:
+            - %paths.modules.silverstripe-elemental%/tests/Behat/files/
+  extensions:
+    SilverStripe\BehatExtension\MinkExtension:
+      default_session: facebook_web_driver
+      javascript_session: facebook_web_driver
+      facebook_web_driver:
+        browser: chrome
+        wd_host: "http://127.0.0.1:9515" #chromedriver port
+      browser_name: chrome
+    SilverStripe\BehatExtension\Extension:
+      bootstrap_file: vendor/silverstripe/cms/tests/behat/serve-bootstrap.php
+      screenshot_path: %paths.base%/artifacts/screenshots
+      retry_seconds: 4 # default is 2

@@ -10,7 +10,7 @@ used to create content.
 
 Navigating to the **Reports** section in the CMS menu and select the report ***Content block types***.
 
-![Content block types report](../images/report_types.png)
+![Content block types report](_images/report_types.png)
 
 You can select a content block type to view the ***Content blocks in use*** report, filtered by this type of block.
 
@@ -21,7 +21,7 @@ which page they were created on.
 
 Select any block title, or page name to enter Edit mode.
 
-![Content blocks in use report](../images/report_in_use.png)
+![Content blocks in use report](_images/report_in_use.png)
 
 ## Printing and exporting
 
