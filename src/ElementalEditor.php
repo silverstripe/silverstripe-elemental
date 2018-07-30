@@ -3,13 +3,10 @@
 namespace DNADesign\Elemental;
 
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Forms\ElementalAreaConfig;
-use DNADesign\Elemental\Forms\ElementalAreaField;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Forms\GridField\GridField;
-use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
+use SilverStripe\Forms\FormField;
+use SilverStripe\Forms\LiteralField;
 
 class ElementalEditor
 {
@@ -94,28 +91,10 @@ class ElementalEditor
     }
 
     /**
-     * @return GridField
+     * @return FormField
      */
     public function getField()
     {
-        $gridField = ElementalAreaField::create(
-            $this->name,
-            $this->title,
-            $this->getArea()->Elements(),
-            $config = ElementalAreaConfig::create()
-        );
-
-        $gridField->addExtraClass('elemental-editor');
-
-        if ($this->types) {
-            $adder = Injector::inst()->create(GridFieldAddNewMultiClass::class, 'toolbar-header-left');
-            $adder->setClasses($this->getTypes());
-
-            $config->addComponent($adder);
-        }
-
-        $this->extend('updateField', $gridField);
-
-        return $gridField;
+        return LiteralField::create($this->name, '<div class="element-editor__container"></div>');
     }
 }
