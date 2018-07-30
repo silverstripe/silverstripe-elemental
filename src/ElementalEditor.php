@@ -3,36 +3,14 @@
 namespace DNADesign\Elemental;
 
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Forms\ElementalAreaConfig;
-use DNADesign\Elemental\Forms\ElementalAreaField;
-use SilverStripe\Core\Extensible;
-use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Forms\GridField\GridField;
-use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
+use SilverStripe\Forms\FormField;
 
-class ElementalEditor
+class ElementalEditor extends FormField
 {
-    use Extensible;
-    use Injectable;
-
     /**
      * @var ElementalArea $area
      */
     protected $area;
-
-    /**
-     * @var string $name
-     */
-    protected $name;
-
-    /**
-     * By default, no need for a title on the editor. If there is more than one
-     * area then use `setTitle` to describe.
-     *
-     * @var string $title
-     */
-    protected $title = '';
 
     /**
      * @var array $type
@@ -45,8 +23,11 @@ class ElementalEditor
      */
     public function __construct($name, ElementalArea $area)
     {
-        $this->name = $name;
+        // By default, no need for a title on the editor. If there is more than one area then use `setTitle` to describe
+        parent::__construct($name, '');
         $this->area = $area;
+
+        $this->addExtraClass('element-editor__container');
     }
 
     /**
@@ -79,43 +60,5 @@ class ElementalEditor
     public function getArea()
     {
         return $this->area;
-    }
-
-    /**
-     * @param string $title
-     *
-     * @return $this
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * @return GridField
-     */
-    public function getField()
-    {
-        $gridField = ElementalAreaField::create(
-            $this->name,
-            $this->title,
-            $this->getArea()->Elements(),
-            $config = ElementalAreaConfig::create()
-        );
-
-        $gridField->addExtraClass('elemental-editor');
-
-        if ($this->types) {
-            $adder = Injector::inst()->create(GridFieldAddNewMultiClass::class, 'toolbar-header-left');
-            $adder->setClasses($this->getTypes());
-
-            $config->addComponent($adder);
-        }
-
-        $this->extend('updateField', $gridField);
-
-        return $gridField;
     }
 }

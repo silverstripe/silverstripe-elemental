@@ -176,9 +176,9 @@ class ElementalAreasExtension extends DataExtension
             $editor->setTypes($this->getElementalTypes());
 
             if ($this->owner instanceof SiteTree && $fields->findOrMakeTab('Root.Main')->fieldByName('Metadata')) {
-                $fields->addFieldToTab('Root.Main', $editor->getField(), 'Metadata');
+                $fields->addFieldToTab('Root.Main', $editor, 'Metadata');
             } else {
-                $fields->addFieldToTab('Root.Main', $editor->getField());
+                $fields->addFieldToTab('Root.Main', $editor);
             }
         }
 
