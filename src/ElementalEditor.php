@@ -65,7 +65,8 @@ class ElementalEditor extends FormField
     public function getSchemaDataDefaults()
     {
         $schemaData = parent::getSchemaDataDefaults();
-        $schemaData['page-id'] = $this->getArea()->getOwnerPage()->ID;
+        $pageId = ($this->getArea() && ($page = $this->getArea()->getOwnerPage())) ? $page->ID : null;
+        $schemaData['page-id'] = $pageId;
         return $schemaData;
     }
 }
