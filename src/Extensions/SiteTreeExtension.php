@@ -12,14 +12,15 @@ use SilverStripe\ORM\DataExtension;
 class SiteTreeExtension extends DataExtension
 {
     /**
-     * Returns the owner's `ElementalArea()` contents if it has the extension
+     * Returns the owner's `ElementalArea()` contents if it has the extension, or an empty one
      *
-     * @return ElementalArea|null
+     * @return ElementalArea
      */
     public function ElementalAreaIfExists()
     {
         if ($this->owner->hasExtension(ElementalPageExtension::class)) {
             return $this->owner->ElementalArea();
         }
+        return ElementalArea::create();
     }
 }
