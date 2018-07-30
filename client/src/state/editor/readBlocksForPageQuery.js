@@ -2,7 +2,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 // GraphQL query for retrieving the current state of elements for a page, via the
-// ElementalArea. The results of the query must be set to the "blocks" prop on
+// ElementalAreaIfExists. The results of the query must be set to the "blocks" prop on
 // the component that this HOC is applied to for binding implementation.
 const query = gql`
 query ReadBlocksForPage($id:ID!) {
@@ -10,7 +10,7 @@ query ReadBlocksForPage($id:ID!) {
     Mode: LATEST
   }){
     ID
-    ElementalArea {
+    ElementalAreaIfExists {
       Elements {
         pageInfo {
           totalCount
@@ -48,7 +48,7 @@ const config = {
     let blocks = null;
     if (readOnePage) {
       // Remove the GraphQL pagination keys
-      blocks = readOnePage.ElementalArea.Elements.edges.map((element) => element.node);
+      blocks = readOnePage.ElementalAreaIfExists.Elements.edges.map((element) => element.node);
     }
 
     const errors = error && error.graphQLErrors &&
