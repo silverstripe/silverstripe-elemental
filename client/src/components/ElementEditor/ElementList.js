@@ -1,14 +1,50 @@
 import React, { Component, PropTypes } from 'react';
+import { elementType } from 'types/elementType';
+import { inject } from 'lib/Injector';
 
 class ElementList extends Component {
+  /**
+   * Renders a list of Element components, each with an elementType object
+   * of data mapped into it. The data is provided by a GraphQL HOC registered
+   * in registerTransforms.js.
+   */
+  renderBlocks() {
+    const { ElementComponent, blocks } = this.props;
+
+    if (!blocks) {
+      return null;
+    }
+
+    return blocks.map((element) => (
+      <ElementComponent
+        key={element.ID}
+        element={element}
+      />
+    ));
+  }
+
   render() {
     return (
-      <div />
+      <div className="elemental-editor__list">
+        {this.renderBlocks()}
+      </div>
     );
   }
 }
 
-ElementList.defaultProps = {};
-ElementList.propTypes = {};
+ElementList.propTypes = {
+  // @todo support either ElementList or Element children in an array (or both)
+  blocks: PropTypes.arrayOf(elementType),
+};
 
-export default ElementList;
+ElementList.defaultProps = {
+  blocks: [],
+};
+
+export default inject(
+  ['Element'],
+  (ElementComponent) => ({
+    ElementComponent,
+  }),
+  () => 'ElementEditor.ElementList'
+)(ElementList);

@@ -12,9 +12,14 @@ jQuery.entwine('ss', ($) => {
     onmatch() {
       const context = {};
       const ElementEditorComponent = loadComponent('ElementEditor', context);
+      const schemaData = this.data('schema');
+
+      const props = {
+        pageId: schemaData['page-id'],
+      };
 
       ReactDOM.render(
-        <ElementEditorComponent />,
+        <ElementEditorComponent {...props} />,
         this[0]
       );
     },

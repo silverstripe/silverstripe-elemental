@@ -1,14 +1,34 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
+import { inject } from 'lib/Injector';
 
-class ElementEditor extends Component {
+/**
+ * The ElementEditor is used in the CMS to manage a list or nested lists of
+ * elements for a page or other DataObject.
+ */
+class ElementEditor extends PureComponent {
   render() {
+    const { ToolbarComponent, ListComponent, pageId } = this.props;
+
     return (
-      <div />
+      <div className="element-editor">
+        <ToolbarComponent />
+        <ListComponent pageId={pageId} />
+      </div>
     );
   }
 }
 
-ElementEditor.defaultProps = {};
-ElementEditor.propTypes = {};
+ElementEditor.propTypes = {
+  pageId: PropTypes.number.isRequired,
+};
 
-export default ElementEditor;
+ElementEditor.defaultProps = {};
+
+export default inject(
+  ['ElementToolbar', 'ElementList'],
+  (ToolbarComponent, ListComponent) => ({
+    ToolbarComponent,
+    ListComponent,
+  }),
+  () => 'ElementEditor'
+)(ElementEditor);

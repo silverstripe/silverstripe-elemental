@@ -1,7 +1,8 @@
 import Injector from 'lib/Injector';
-import readOneBlockQuery from '../state/history/readOneBlockQuery';
-import HistoricElementViewFactory from '../components/HistoricElementView/HistoricElementView';
-import revertToBlockVersionMutation from '../state/history/revertToBlockVersionMutation';
+import readOneBlockQuery from 'state/history/readOneBlockQuery';
+import HistoricElementViewFactory from 'components/HistoricElementView/HistoricElementView';
+import revertToBlockVersionMutation from 'state/history/revertToBlockVersionMutation';
+import readBlocksForPageQuery from 'state/editor/readBlocksForPageQuery';
 
 export default () => {
   Injector.transform(
@@ -38,6 +39,18 @@ export default () => {
         'HistoryViewerToolbar.VersionedAdmin.HistoryViewer.Element.HistoryViewerVersionDetail',
         revertToBlockVersionMutation,
         'BlockRevertMutation'
+      );
+    }
+  );
+
+  Injector.transform(
+    'cms-element-editor',
+    (updater) => {
+      // Add GraphQL query for reading elements on a page for the ElementEditor
+      updater.component(
+        'ElementList',
+        readBlocksForPageQuery,
+        'PageElements'
       );
     }
   );

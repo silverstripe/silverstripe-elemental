@@ -1,14 +1,33 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import { elementType } from 'types/elementType';
 
-class Element extends Component {
+/**
+ * The Element component used in the context of an ElementEditor shows the summary
+ * of an element's details when used in the CMS, including ID, Title and Summary.
+ */
+class Element extends PureComponent {
   render() {
+    const { element: { ID, Title, Summary } } = this.props;
+
+    if (!ID) {
+      return null;
+    }
+
     return (
-      <div />
+      <div className="element-editor__element">
+        <p>#{ID}: {Title}</p>
+        <p>{Summary}</p>
+      </div>
     );
   }
 }
 
-Element.defaultProps = {};
-Element.propTypes = {};
+Element.propTypes = {
+  element: elementType,
+};
+
+Element.defaultProps = {
+  element: null,
+};
 
 export default Element;

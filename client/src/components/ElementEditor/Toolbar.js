@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
 
-class Toolbar extends Component {
+// eslint-disable-next-line react/prefer-stateless-function
+class Toolbar extends PureComponent {
   render() {
     return (
       <div />
