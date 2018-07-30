@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 // ElementalArea. The results of the query must be set to the "blocks" prop on
 // the component that this HOC is applied to for binding implementation.
 const query = gql`
-query readBlocksForPage($id:ID!) {
+query ReadBlocksForPage($id:ID!) {
   readOnePage(ID: $id, Versioning: {
     Mode: LATEST
   }){
@@ -40,12 +40,16 @@ const config = {
     {
       data: {
         error,
-        readBlocksForPage,
+        readOnePage,
         loading: networkLoading,
       },
     }
   ) {
-    const blocks = readBlocksForPage || null;
+    let blocks = null;
+    if (readOnePage) {
+      // Remove the GraphQL pagination keys
+      blocks = readOnePage.ElementalArea.Elements.edges.map((element) => element.node);
+    }
 
     const errors = error && error.graphQLErrors &&
       error.graphQLErrors.map((graphQLError) => graphQLError.message);

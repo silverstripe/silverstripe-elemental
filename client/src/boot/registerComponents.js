@@ -1,8 +1,14 @@
 import Injector from 'lib/Injector';
-import ElementEditor from 'components/ElementEditor/containers/ElementEditor';
+import Element from 'components/ElementEditor/Element';
+import ElementEditor from 'components/ElementEditor/ElementEditor';
+import ElementList from 'components/ElementEditor/ElementList';
+import Toolbar from 'components/ElementEditor/Toolbar';
 
 export default () => {
   Injector.component.registerMany({
-    ElementEditor
+    ElementEditor,
+    ElementToolbar: Toolbar,
+    ElementList,
+    Element,
   });
 };
