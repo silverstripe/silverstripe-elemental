@@ -31,7 +31,7 @@ For a SilverStripe 3.x compatible version of this module, please see the [1 bran
 ## Installation
 
 ```
-composer require dnadesign/silverstripe-elemental 3.0.x-dev
+composer require dnadesign/silverstripe-elemental 4.x-dev
 ```
 
 The following YAML config will enable elements on every `Page` object,
@@ -111,6 +111,10 @@ MyElementPage:
 The basic element area is rendered into the `DNADesign/Elemental/Models/ElementalArea.ss` template. This loops over
 each of the element controller instances. Each controller instance will render `$ElementHolder` which represents
 the element contained within a holder `div`. The wrapper div is the `ElementHolder.ss` template.
+
+To customise the ElementEditor in the CMS you will need to use the SilverStripe JS Injector to apply transformations
+to the necessary React components. [See here](https://docs.silverstripe.org/en/4/developer_guides/customising_the_admin_interface/how_tos/customise_react_components/)
+for more information.
 
 ### Limit allowed elements
 
@@ -252,9 +256,13 @@ You'll need to have [yarn installed](https://yarnpkg.com/en/docs/install) global
 
 **Note:** If adding or modifying colours, spacing, font sizes etc. please try and use an appropriate variable from the silverstripe/admin module if available.
 
+## Upgrading
+
+For developers upgrading from Elemental 3 to 4, [see the upgrade guide](docs/en/upgrading_to_4.md).
+
 ## Screenshots
 
-![Elemental content block overview](docs/en/images/content-block-overview.png)
+![Elemental content block overview](docs/en/userguide/_images/content-block-overview.png)
 
 ## Versioning
 
