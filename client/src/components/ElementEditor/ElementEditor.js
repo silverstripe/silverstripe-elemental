@@ -7,11 +7,11 @@ import { inject } from 'lib/Injector';
  */
 class ElementEditor extends PureComponent {
   render() {
-    const { ToolbarComponent, ListComponent, pageId } = this.props;
+    const { ToolbarComponent, ListComponent, pageId, elementTypes } = this.props;
 
     return (
       <div className="element-editor">
-        <ToolbarComponent />
+        <ToolbarComponent elementTypes={elementTypes} />
         <ListComponent pageId={pageId} />
       </div>
     );
@@ -19,6 +19,7 @@ class ElementEditor extends PureComponent {
 }
 
 ElementEditor.propTypes = {
+  elementTypes: PropTypes.array.isRequired,
   pageId: PropTypes.number.isRequired,
 };
 

@@ -16,6 +16,7 @@ jQuery.entwine('ss', ($) => {
 
       const props = {
         pageId: schemaData['page-id'],
+        elementTypes: schemaData['element-types'],
       };
 
       ReactDOM.render(

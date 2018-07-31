@@ -3,14 +3,94 @@
 namespace DNADesign\Elemental\Forms;
 
 use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\TabSet;
 
-class ElementalAreaField extends GridField
+class ElementalAreaField extends FormField
 {
+    /**
+     * @var ElementalArea $area
+     */
+    protected $area;
+
+    /**
+     * @var array $type
+     */
+    protected $types = [];
+
+    /**
+     * @var null
+     */
+    protected $inputType = null;
+
+    /**
+     * @param string $name
+     * @param ElementalArea $area
+     */
+    public function __construct($name, ElementalArea $area)
+    {
+        // By default, no need for a title on the editor. If there is more than one area then use `setTitle` to describe
+        parent::__construct($name, '');
+        $this->area = $area;
+
+        $this->addExtraClass('element-editor__container');
+    }
+
+    /**
+     * @param array $types
+     *
+     * @return $this
+     */
+    public function setTypes($types)
+    {
+        $this->types = $types;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypes()
+    {
+        $types = $this->types;
+
+        $this->extend('updateGetTypes', $types);
+
+        return $types;
+    }
+
+    /**
+     * @return ElementalArea
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    public function getSchemaDataDefaults()
+    {
+        $schemaData = parent::getSchemaDataDefaults();
+        $pageId = ($this->getArea() && ($page = $this->getArea()->getOwnerPage())) ? $page->ID : null;
+        $schemaData['page-id'] = $pageId;
+
+        $blockTypes = [];
+
+        foreach ($this->getTypes() as $className => $blockTitle) {
+            $blockTypes[] = [
+                'value' => $className,
+                'title' => $blockTitle,
+            ];
+        }
+
+        $schemaData['element-types'] = $blockTypes;
+        return $schemaData;
+    }
+
     /**
      * A getter method that seems redundant in that it is a function that returns a function,
      * however the returned closure is used in an array map function to return a complete FieldList
@@ -76,7 +156,7 @@ class ElementalAreaField extends GridField
         $readOnlyField = $this->castedCopy(CompositeField::class);
         $blockReducer = $this->getReadOnlyBlockReducer();
         $readOnlyField->setChildren(
-            FieldList::create(array_map($blockReducer, $this->getList()->toArray()))
+            FieldList::create(array_map($blockReducer, $this->getArea()->Elements()->toArray()))
         );
 
         $readOnlyField = $readOnlyField->performReadonlyTransformation();
