@@ -23,8 +23,3 @@ apply `ElementalPageExtension`), in order to provide a consistent API surface fo
 `ElementalArea` (required for GraphQL queries). Developers using more ElementalArea relations than the default will
 need to add similar extensions, as well as augment the GraphQL query at
 `client/src/state/editor/readBlocksForPageQuery.js`.
-
-### BaseElement changes
-
-* `BaseElement::getIcon` is removed. Use either `BaseElement::getIconClass` and/or render HTML snippets containing this
-  data in user code.
