@@ -229,8 +229,8 @@ class BaseElement extends DataObject
     }
 
     /**
-     * Increment the sort order if one hasn't been already defined. This ensures that new elements are created
-     * at the end of the list by default.
+     * Increment the sort order if one hasn't been already defined. This
+     * ensures that new elements are created at the end of the list by default.
      *
      * {@inheritDoc}
      */
@@ -239,7 +239,15 @@ class BaseElement extends DataObject
         parent::onBeforeWrite();
 
         if (!$this->Sort) {
-            $this->Sort = static::get()->max('Sort') + 1;
+            if ($this->hasExtension(Versioned::class)) {
+                $records = Versioned::get_by_stage(BaseElement::class, Versioned::DRAFT);
+            } else {
+                $records = BaseElement::get()->max('Sort');
+            }
+
+            $records = $records->filter('ParentID', $this->ParentID);
+
+            $this->Sort = $records->max('Sort') + 1;
         }
     }
 
