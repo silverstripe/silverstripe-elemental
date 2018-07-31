@@ -1,15 +1,21 @@
 DNADesign\Elemental\Models\ElementalArea:
   area51:
     Title: Area 51
-
+  area52:
+    Title: Area 52
 DNADesign\Elemental\Models\ElementContent:
   content1:
     Title: Test Content
+    Sort: 1
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.area51
   content2:
     Title: More content
+    Sort: 2
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.area51
-
+  content3:
+    Title: More third content
+    Sort: 1
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area52
 DNADesign\Elemental\Tests\Src\TestPage:
   elementaldemo:
     Title: Test Elemental
@@ -17,7 +23,9 @@ DNADesign\Elemental\Tests\Src\TestPage:
   page_with_elements:
     Title: Page with elements
     ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area51
-
+  page_with_one_element:
+    Title: Page with one elements
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area52
 SilverStripe\CMS\Model\RedirectorPage:
   elementredirectpage:
     Title: Redirector Page

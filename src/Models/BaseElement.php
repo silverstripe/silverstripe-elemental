@@ -830,4 +830,48 @@ class BaseElement extends DataObject
 
         return null;
     }
+
+    /**
+     * @return boolean
+     */
+    public function First()
+    {
+        return ($this->Parent()->Elements()->first()->ID === $this->ID);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function Last()
+    {
+        return ($this->Parent()->Elements()->last()->ID === $this->ID);
+    }
+
+    /**
+     * @return int
+     */
+    public function TotalItems()
+    {
+        return $this->Parent()->Elements()->count();
+    }
+
+    /**
+     * Returns the position of the current element.
+     *
+     * @return int
+     */
+    public function Pos()
+    {
+        return ($this->Parent()->Elements()->filter('Sort:LessThan', $this->Sort)->count() + 1);
+    }
+
+    /**
+     * @return string
+     */
+    public function EvenOdd()
+    {
+        $odd = (bool) ($this->Pos() % 2);
+
+        return  ($odd) ? 'odd' : 'even';
+    }
 }
