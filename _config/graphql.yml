@@ -7,7 +7,7 @@ SilverStripe\GraphQL\Controller:
       types:
         # Expose common static fields for the ElementEditor component to use for preview summaries
         DNADesign\Elemental\Models\BaseElement:
-          fields: [ID, LastEdited, AbsoluteLink, Title, ShowTitle, Sort, Summary]
+          fields: [ID, LastEdited, AbsoluteLink, Title, ShowTitle, Sort, Summary, Type, IconClass]
           operations:
             copyToStage: true
             readOne: true

@@ -2,10 +2,16 @@
 @import "variables";
 
 // Thirdparty
+@import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/variables";
 
 // Elemental components
 @import "admin";
 @import "history";
 @import "reports";
 @import "textcheckboxgroup";
+@import "../components/ElementEditor/Content";
+@import "../components/ElementEditor/ElementEditor";
+@import "../components/ElementEditor/Header";
+

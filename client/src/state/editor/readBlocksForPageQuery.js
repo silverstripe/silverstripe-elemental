@@ -20,6 +20,8 @@ query ReadBlocksForPage($id:ID!) {
             ID
             Title
             Summary
+            Type
+            IconClass
           }
         }
       }

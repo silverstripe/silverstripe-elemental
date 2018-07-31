@@ -694,6 +694,15 @@ class BaseElement extends DataObject
         return '';
     }
 
+    /**
+     * Return the icon class name
+     *
+     * @return string
+     */
+    public function getIconClass()
+    {
+        return $this->config()->get(‘icon’);
+    }
 
     /**
      * Generate markup for element type icons suitable for use in GridFields.

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { elementType } from 'types/elementType';
+import { inject } from 'lib/Injector';
 
 /**
  * The Element component used in the context of an ElementEditor shows the summary
@@ -7,7 +8,11 @@ import { elementType } from 'types/elementType';
  */
 class Element extends PureComponent {
   render() {
-    const { element: { ID, Title, Summary } } = this.props;
+    const {
+      element: { ID, Title, Summary, Type, IconClass },
+      HeaderComponent,
+      ContentComponent
+    } = this.props;
 
     if (!ID) {
       return null;
@@ -15,8 +20,15 @@ class Element extends PureComponent {
 
     return (
       <div className="element-editor__element">
-        <p>#{ID}: {Title}</p>
-        <p>{Summary}</p>
+        <HeaderComponent
+          id={ID}
+          title={Title}
+          elementType={Type}
+          fontIcon={IconClass}
+        />
+        <ContentComponent
+          summary={Summary}
+        />
       </div>
     );
   }
@@ -24,10 +36,19 @@ class Element extends PureComponent {
 
 Element.propTypes = {
   element: elementType,
+
 };
 
 Element.defaultProps = {
   element: null,
 };
 
-export default Element;
+export { Element as Component };
+
+export default inject(
+  ['ElementHeader', 'ElementContent'],
+  (HeaderComponent, ContentComponent) => ({
+    HeaderComponent, ContentComponent,
+  }),
+  () => 'ElementEditor.ElementList.Element'
+)(Element);
