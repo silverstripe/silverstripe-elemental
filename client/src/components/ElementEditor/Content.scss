@@ -1,0 +1,13 @@
+.element-editor-content {
+  display: flex;
+}
+
+.elemental-editor-content__thumbnail-image {
+  border-radius: 0;
+  height: 36px;
+  margin-right: 5px;
+}
+
+.element-editor-content__content {
+  color: $gray-600;
+}

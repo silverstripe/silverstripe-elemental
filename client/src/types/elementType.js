@@ -7,6 +7,8 @@ const elementType = {
   Summary: PropTypes.string,
   Type: PropTypes.string,
   IconClass: PropTypes.string,
+  FileURL: PropTypes.string,
+  Content: PropTypes.string,
 };
 
 export { elementType };

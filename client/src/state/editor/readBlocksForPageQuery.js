@@ -22,6 +22,8 @@ query ReadBlocksForPage($id:ID!) {
             Summary
             Type
             IconClass
+            FileURL
+            Content
           }
         }
       }

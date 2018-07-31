@@ -9,7 +9,7 @@ import { inject } from 'lib/Injector';
 class Element extends PureComponent {
   render() {
     const {
-      element: { ID, Title, Summary, Type, IconClass },
+      element: { ID, Title, Summary, Type, IconClass, FileURL, Content },
       HeaderComponent,
       ContentComponent
     } = this.props;
@@ -28,6 +28,8 @@ class Element extends PureComponent {
         />
         <ContentComponent
           summary={Summary}
+          fileUrl={FileURL}
+          content={Content}
         />
       </div>
     );

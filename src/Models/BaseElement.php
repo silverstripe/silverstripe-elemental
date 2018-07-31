@@ -695,6 +695,27 @@ class BaseElement extends DataObject
     }
 
     /**
+     * This can be overridden on child elements.
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return '';
+    }
+
+    /**
+     * This can be overridden on child elements.
+     *
+     * @return string
+     */
+    public function getFileURL()
+    {
+        return '';
+    }
+
+
+    /**
      * Return the icon class name
      *
      * @return string
