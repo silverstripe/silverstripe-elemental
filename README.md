@@ -57,14 +57,22 @@ a look at some other modules:
 * [dnadesign/silverstripe-elemental-userforms](https://github.com/dnadesign/silverstripe-elemental-userforms): Embed a [user defined form](https://github.com/silverstripe/silverstripe-userforms)
 * [dnadesign/silverstripe-elemental-list](https://github.com/dnadesign/silverstripe-elemental-list): Container for elements (allows layouts)
 * [dnadesign/silverstripe-elemental-virtual](https://github.com/dnadesign/silverstripe-elemental-virtual): Reuse elements across pages
-* [dynamic/silverstripe-elemental-customer-service](https://github.com/dynamic/silverstripe-elemental-customer-service): Contact information
+* [dynamic/silverstripe-elemental-blocks](https://github.com/dynamic/silverstripe-elemental-blocks): A recipe to require additonal elements
 * [dynamic/silverstripe-elemental-accordion](https://github.com/dynamic/silverstripe-elemental-accordion): Expand/collapse content areas
+* [dynamic/silverstripe-elemental-countdown](https://github.com/dynamic/silverstripe-elemental-countdown): Countdown to a specific date/time
+* [dynamic/silverstripe-elemental-customer-service](https://github.com/dynamic/silverstripe-elemental-customer-service): Contact information
+* [dynamic/silverstripe-elemental-embedded-code](https://github.com/dynamic/silverstripe-elemental-embedded-code): Embed code like iframes, javascript, etc.
+* [dynamic/silverstripe-elemental-features](https://github.com/dynamic/silverstripe-elemental-features): Large image, headline, description, link. one per row
 * [dynamic/silverstripe-elemental-flexslider](https://github.com/dynamic/silverstripe-elemental-flexslider): Slideshows with flexible elements
+* [dynamic/silverstripe-elemental-gallery](https://github.com/dynamic/silverstripe-elemental-gallery): Display a collection of images
+* [dynamic/silverstripe-elemental-image](https://github.com/dynamic/silverstripe-elemental-image): Single image
+* [dynamic/silverstripe-elemental-oembed](https://github.com/dynamic/silverstripe-elemental-oembed): Embed content from YouTube, SoundCloud, etc
+* [dynamic/silverstripe-elemental-promos](https://github.com/dynamic/silverstripe-elemental-promos): Small image, headline, description, link. 3 to 4 per row
 * [dynamic/silverstripe-elemental-blog](https://github.com/dynamic/silverstripe-elemental-blog): Recent blog posts
+* [dynamic/silverstripe-elemental-section-navigation](https://github.com/dynamic/silverstripe-elemental-section-navigation): List of child pages or pages in current level
 * [dynamic/silverstripe-elemental-sponsors](https://github.com/dynamic/silverstripe-elemental-sponsors): Sponsor logos
 * [dynamic/silverstripe-elemental-testimonials](https://github.com/dynamic/silverstripe-elemental-testimonials): Customer testimonials and quotes
 * [nyeholt/silverstripe-ozzymental](https://github.com/nyeholt/silverstripe-ozzymental): oEmbed items (video, etc)
-* [dynamic/silverstripe-elemental-countdown](https://github.com/dynamic/silverstripe-elemental-countdown): Countdown to a specific date/time
 
 ## Helpful modules
 
@@ -73,6 +81,7 @@ more compatible with other approaches in SilverStripe:
 
 * [dnadesign/silverstripe-elemental-subsites](https://github.com/dnadesign/silverstripe-elemental-subsites): Compatibility with the [silverstripe/subsites](https://github.com/silverstripe/silverstripe-subsites) module
 * [dnadesign/silverstripe-elemental-skeletons](https://github.com/dnadesign/silverstripe-elemental-skeletons): Creates a template of elements which can be created for a page in the CMS
+* [fractas/elemental-stylings](https://github.com/fractaslabs/silverstripe-elemental-stylings): This module extends SilverStripe Elemental Blocks to enhance its functionalities with predefined sets of Classes of Styling elements. 
 
 
 
