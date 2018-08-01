@@ -41,9 +41,11 @@ class ElementContent extends BaseElement
         return DBField::create_field('HTMLText', $this->HTML)->Summary(20);
     }
 
-    public function getContent()
+    public function getSummaryData()
     {
-        return DBField::create_field('HTMLText', $this->HTML)->Summary(20);
+        $summaryData = parent::getSummaryData();
+        $summaryData['content'] = $this->getSummary();
+        return $summaryData;
     }
 
     public function getType()

@@ -3,11 +3,13 @@ Name: elementalgraphqlconfig
 ---
 SilverStripe\GraphQL\Controller:
   schema:
+    types:
+      ObjectType: DNADesign\Elemental\GraphQL\Types\ObjectType
     scaffolding:
       types:
         # Expose common static fields for the ElementEditor component to use for preview summaries
         DNADesign\Elemental\Models\BaseElement:
-          fields: [ID, LastEdited, AbsoluteLink, Title, ShowTitle, Sort, Summary, Type, IconClass, FileURL, Content]
+          fields: [ID, LastEdited, AbsoluteLink, Title, ShowTitle, Sort, Summary, Type, IconClass, SummaryData]
           operations:
             copyToStage: true
             readOne: true

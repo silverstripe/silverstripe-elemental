@@ -2,6 +2,7 @@
 
 namespace DNADesign\Elemental\Models;
 
+use DNADesign\Elemental\ORM\FieldType\DBObjectType;
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use Exception;
@@ -71,6 +72,10 @@ class BaseElement extends DataObject
 
     private static $extensions = [
         Versioned::class
+    ];
+
+    private static $casting = [
+        'SummaryData' => DBObjectType::class,
     ];
 
     private static $versioned_gridfield_extensions = true;
@@ -692,6 +697,14 @@ class BaseElement extends DataObject
     public function getSummary()
     {
         return '';
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getSummaryData() {
+        return [];
     }
 
     /**
