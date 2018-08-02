@@ -94,7 +94,7 @@ you can define an "empty" page type and assign the extension only to this type.
 ```php
 <?php
 class MyElementPage extends Page
-{    
+{
 }
 ```
 
@@ -189,10 +189,31 @@ structure (PHP class namespace) to ensure that your new template version takes p
 convention, which allows developers to style individual parts of the DOM without unnecessarily nested CSS. Where
 possible, we encourage you to follow this naming system.
 
+
+#### Position Helpers
+
+In your `BaseElement` template you can use the following variables for additional
+logic or styling helpers. They behave in the same way traditional `SS_Viewer`
+methods work either returning a `Boolean`, `String` or a `Int`
+
+  1. `$First` (boolean)
+  1. `$Last` (boolean)
+  1. `$Pos` (int)
+  1. `$TotalItems` (int)
+  1. `$EvenOdd` (string - 'even' or 'odd')
+
+
+```
+<div class="element element--{$EvenOdd} <% if First %>element--first<% end_if %> <% if Last %>element--last<% end_if %>">
+    // ...
+</div>
+```
+
 ### Style variants
 
-Via YAML you can configure a whitelist of style variants for each `BaseElement` subclass. For instance, if you have
-`dark` and `light` variations of your content block you would enter the following in YAML in the format
+Via YAML you can configure a whitelist of style variants for each `BaseElement`
+subclass. For instance, if you have `dark` and `light` variations of your
+content block you would enter the following in YAML in the format
 (class: 'Description'). The class will be added to the `ElementHolder`.
 
 ```yml
@@ -201,6 +222,7 @@ DNADesign\Elemental\Models\ElementContent:
     light: 'Light Background'
     dark: 'Dark Background'
 ```
+
 
 ### Disabling the default stylesheets
 
@@ -241,26 +263,35 @@ You can have [yarn](https://yarnpkg.com/en/) watch and rebuild delta changes as 
 yarn watch
 ```
 
-When you're ready to make a pull request you can rebuild them, which will also minify everything. Note that `watch`
-will generate source map files which you shouldn't commit in for your final pull request. To minify and package:
+When you're ready to make a pull request you can rebuild them, which will also
+minify everything. Note that `watch`will generate source map files which you
+shouldn't commit in for your final pull request. To minify and package:
 
 ```
 yarn build
 ```
 
-You'll need to have [yarn installed](https://yarnpkg.com/en/docs/install) globally in your command line.
+You'll need to have [yarn installed](https://yarnpkg.com/en/docs/install)
+globally in your command line.
 
-**Note:** If adding or modifying colours, spacing, font sizes etc. please try and use an appropriate variable from the silverstripe/admin module if available.
+**Note:** If adding or modifying colours, spacing, font sizes etc. please try
+and use an appropriate variable from the silverstripe/admin module if available.
 
 ## Screenshots
 
-![Elemental content block overview](docs/en/images/content-block-overview.png)
+![Elemental content block overview](docs/en/_images/content-block-overview.png)
 
 ## Versioning
 
-This library follows [Semver](http://semver.org). According to Semver, you will be able to upgrade to any minor or patch version of this library without any breaking changes to the public API. Semver also requires that we clearly define the public API for this library.
+This library follows [Semver](http://semver.org). According to Semver, you will
+be able to upgrade to any minor or patch version of this library without any
+breaking changes to the public API. Semver also requires that we clearly define
+the public API for this library.
 
-All methods, with `public` visibility, are part of the public API. All other methods are not part of the public API. Where possible, we'll try to keep `protected` methods backwards-compatible in minor/patch versions, but if you're overriding methods then please test your work before upgrading.
+All methods, with `public` visibility, are part of the public API. All other
+methods are not part of the public API. Where possible, we'll try to keep
+`protected` methods backwards-compatible in minor/patch versions, but if you're
+overriding methods then please test your work before upgrading.
 
 ## Reporting Issues
 
