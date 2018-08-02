@@ -701,7 +701,7 @@ class BaseElement extends DataObject
      */
     public function getIconClass()
     {
-        return $this->config()->get(‘icon’);
+        return $this->config()->get('icon');
     }
 
     /**
