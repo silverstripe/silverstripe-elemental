@@ -31,7 +31,8 @@ class ElementalAreaFieldTest extends SapphireTest
             'ElementalAreaField',
             new ElementalArea([
                 TestElement::create(),
-            ])
+            ]),
+            [TestElement::class => TestElement::create()->getType()]
         );
     }
 

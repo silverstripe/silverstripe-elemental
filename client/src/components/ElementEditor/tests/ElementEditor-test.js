@@ -9,8 +9,8 @@ import Adapter from 'enzyme-adapter-react-15.4/build/index';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('ElementEditor', () => {
-  const ToolbarComponent = () => <div/>;
-  const ListComponent = () => <div className="elemental-editor__list"/>;
+  const ToolbarComponent = () => <div />;
+  const ListComponent = () => <div className="elemental-editor__list" />;
 
   describe('render()', () => {
     it('should render ElementList and Toolbar', () => {

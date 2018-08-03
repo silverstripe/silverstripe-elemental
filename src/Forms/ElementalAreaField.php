@@ -4,13 +4,16 @@ namespace DNADesign\Elemental\Forms;
 
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
+use SilverStripe\Control\Controller;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\FormField;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\TabSet;
+use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 
-class ElementalAreaField extends FormField
+class ElementalAreaField extends GridField
 {
     /**
      * @var ElementalArea $area
@@ -27,14 +30,28 @@ class ElementalAreaField extends FormField
      */
     protected $inputType = null;
 
+    protected $modelClassName = BaseElement::class;
+
     /**
      * @param string $name
      * @param ElementalArea $area
+     * @param string[] $blockTypes
      */
-    public function __construct($name, ElementalArea $area)
+    public function __construct($name, ElementalArea $area, array $blockTypes)
     {
+        $this->setTypes($blockTypes);
+
+        $config = new ElementalAreaConfig();
+
+        if (!empty($blockTypes)) {
+            /** @var GridFieldAddNewMultiClass $adder */
+            $adder = Injector::inst()->create(GridFieldAddNewMultiClass::class);
+            $adder->setClasses($blockTypes);
+            $config->addComponent($adder);
+        }
+
         // By default, no need for a title on the editor. If there is more than one area then use `setTitle` to describe
-        parent::__construct($name, '');
+        parent::__construct($name, '', $area->Elements(), $config);
         $this->area = $area;
 
         $this->addExtraClass('element-editor__container');
@@ -72,6 +89,23 @@ class ElementalAreaField extends FormField
         return $this->area;
     }
 
+    /**
+     * Overloaded to skip GridField implementation - this is copied from FormField.
+     *
+     * @param array $properties
+     * @return \SilverStripe\ORM\FieldType\DBHTMLText|string
+     */
+    public function FieldHolder($properties = array())
+    {
+        $context = $this;
+
+        if (count($properties)) {
+            $context = $this->customise($properties);
+        }
+
+        return $context->renderWith($this->getFieldHolderTemplates());
+    }
+
     public function getSchemaDataDefaults()
     {
         $schemaData = parent::getSchemaDataDefaults();
@@ -82,12 +116,13 @@ class ElementalAreaField extends FormField
 
         foreach ($this->getTypes() as $className => $blockTitle) {
             $blockTypes[] = [
-                'value' => $className,
+                'value' => str_replace('\\', '-', $className),
                 'title' => $blockTitle,
             ];
         }
 
         $schemaData['element-types'] = $blockTypes;
+        $schemaData['base-add-href'] = Controller::join_links($this->Link(), 'add-multi-class');
         return $schemaData;
     }
 

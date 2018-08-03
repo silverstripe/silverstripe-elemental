@@ -172,8 +172,7 @@ class ElementalAreasExtension extends DataExtension
                 $this->owner->write();
             }
 
-            $editor = ElementalAreaField::create($eaRelationship, $area);
-            $editor->setTypes($this->getElementalTypes());
+            $editor = ElementalAreaField::create($eaRelationship, $area, $this->getElementalTypes());
 
             if ($this->owner instanceof SiteTree && $fields->findOrMakeTab('Root.Main')->fieldByName('Metadata')) {
                 $fields->addFieldToTab('Root.Main', $editor, 'Metadata');

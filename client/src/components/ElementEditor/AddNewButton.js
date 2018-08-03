@@ -7,7 +7,6 @@ class AddNewButton extends Component {
     super(props);
 
     this.handleTypeChange = this.handleTypeChange.bind(this);
-    this.getButtonHref = this.getButtonHref.bind(this);
 
     this.state = {
       selectedType: null,
@@ -19,7 +18,11 @@ class AddNewButton extends Component {
    * @param event
    */
   handleTypeChange(event) {
-    const type = event.target ? event.target.value : null;
+    const type = event.target
+      ? this.props.elementTypes.find(
+          candidateType => candidateType.value === event.target.value
+        ) || null
+      : null;
 
     this.setState(() => ({
       selectedType: type,
@@ -27,17 +30,29 @@ class AddNewButton extends Component {
   }
 
   /**
-   * Return the href for the "add" link - based on the currently selected block type
-   * @returns {string}
+   * Render the add button next to the dropdown for block types
+   * @returns {DOMElement}
    */
-  getButtonHref() {
+  renderAddButton() {
     const { selectedType } = this.state;
+    const buttonHref = selectedType ? `${this.props.baseAddHref}/${selectedType.value}` : '#';
+    const title = selectedType
+      ? i18n.inject(i18n._t('AddNewButton.TITLE', 'Add a "{type}" block'), { type: selectedType.title })
+      : '';
+    const buttonAttributes = {
+      href: buttonHref,
+      title,
+      disabled: !selectedType,
+      tag: 'a',
+      color: 'primary',
+      className: 'font-icon-plus',
+    };
 
-    if (!selectedType) {
-      return '#';
-    }
-
-    return this.props.baseEditHref + selectedType;
+    return (
+      <Button {...buttonAttributes}>
+        {i18n._t('AddNewButton.ADD', 'Add')}
+      </Button>
+    );
   }
 
   /**
@@ -64,12 +79,10 @@ class AddNewButton extends Component {
       <InputGroup className="elemental-editor__add-new-block-control">
         <Input type="select" className="no-change-track" onChange={this.handleTypeChange}>
           <option>{i18n._t('AddNewButton.SELECT', '(Select type to create)')}</option>
-          { this.renderOptions() }
+          {this.renderOptions()}
         </Input>
         <InputGroupAddon addonType="append">
-          <Button href={this.getButtonHref()} tag="a" color="primary" className="font-icon-plus">
-            {i18n._t('AddNewButton.ADD', 'Add')}
-          </Button>
+          {this.renderAddButton()}
         </InputGroupAddon>
       </InputGroup>
     );
@@ -78,7 +91,7 @@ class AddNewButton extends Component {
 
 AddNewButton.defaultProps = {};
 AddNewButton.propTypes = {
-  baseEditHref: PropTypes.string.isRequired,
+  baseAddHref: PropTypes.string.isRequired,
   elementTypes: PropTypes.array.isRequired,
 };
 

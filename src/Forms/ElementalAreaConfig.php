@@ -19,18 +19,8 @@ class ElementalAreaConfig extends GridFieldConfig
     {
         parent::__construct();
 
-        $this->addComponent(new GridFieldButtonRow('before'));
-        $this->addComponent(new GridFieldToolbarHeader());
-        $this->addComponent($filter = new GridFieldFilterHeader());
-        $this->addComponent(new GridFieldDataColumns());
-        $this->addComponent(new GridFieldEditButton());
         $this->addComponent(new GridFieldDeleteAction(false));
         $this->addComponent(new GridFieldDetailForm());
-
-        $filter->setThrowExceptionOnBadDataType(false);
-
-        $this->removeComponentsByType(VersionedGridFieldState::class);
-        $this->addComponent(new GridFieldOrderableRows('Sort'));
 
         $this->extend('updateConfig');
     }
