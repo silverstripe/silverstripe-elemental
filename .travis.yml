@@ -6,7 +6,8 @@ before_install:
 
 env:
   global:
-    - COMPOSER_ROOT_VERSION=3.0.x-dev
+    - COMPOSER_ROOT_VERSION=4.x-dev
+    - TRAVIS_NODE_VERSION="6"
     - DISPLAY=":99"
     - XVFBARGS=":99 -ac -screen 0 1024x768x16"
     - SS_BASE_URL="http://localhost:8080/"
@@ -26,6 +27,8 @@ matrix:
       env: DB=MYSQL RECIPE_VERSION=4.2.x-dev BEHAT_TEST=1
     - php: 7.2
       env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1
+    - php: 7.2
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev NPM_TEST=1
 
 before_script:
   # Extra $PATH
@@ -37,9 +40,9 @@ before_script:
 
   # Install composer dependencies
   - composer validate
-  - composer require silverstripe/recipe-cms:$RECIPE_VERSION silverstripe/recipe-testing:^1 --no-update
-  - if [[ $DB == PGSQL ]]; then composer require silverstripe/postgresql:2.0.x-dev --no-update; fi
-  - composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
+  - composer require silverstripe/recipe-cms:"$RECIPE_VERSION" silverstripe/recipe-testing:^1 --no-update
+  - if [[ $DB == PGSQL ]]; then composer require silverstripe/postgresql:2.1.x-dev --no-update; fi
+  - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
   # Behat bootstrapping
   - if [[ $BEHAT_TEST ]]; then mkdir artifacts; fi
@@ -48,10 +51,17 @@ before_script:
   - if [[ $BEHAT_TEST ]]; then (chromedriver > artifacts/chromedriver.log 2>&1 &); fi
   - if [[ $BEHAT_TEST ]]; then (vendor/bin/serve --bootstrap-file vendor/silverstripe/cms/tests/behat/serve-bootstrap.php &> artifacts/serve.log &); fi
 
+  # Install NPM dependencies
+  - if [[ $NPM_TEST ]]; then nvm install $TRAVIS_NODE_VERSION && nvm use $TRAVIS_NODE_VERSION && npm install -g yarn && yarn install --network-concurrency 1 && (cd vendor/silverstripe/admin && yarn install --network-concurrency 1) && yarn run build; fi
+
 script:
   - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests/; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml; fi
   - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs src/ tests/ ; fi
+  - if [[ $NPM_TEST ]]; then git diff-files --quiet -w --relative=client; fi
+  - if [[ $NPM_TEST ]]; then git diff --name-status --relative=client; fi
+  - if [[ $NPM_TEST ]]; then yarn run test; fi
+  - if [[ $NPM_TEST ]]; then yarn run lint; fi
   - if [[ $BEHAT_TEST ]]; then vendor/bin/behat @silverstripe-elemental; fi
 
 after_success:
