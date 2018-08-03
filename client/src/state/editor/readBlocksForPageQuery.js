@@ -19,11 +19,7 @@ query ReadBlocksForPage($id:ID!) {
           node {
             ID
             Title
-            Summary
-            Type
-            IconClass
-            FileURL
-            Content
+            BlockSchema
           }
         }
       }

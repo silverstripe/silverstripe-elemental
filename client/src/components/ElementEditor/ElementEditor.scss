@@ -1,3 +1,10 @@
 .element-editor {
   background-color:  $white;
+
+  // .form-group adds a margin-bottom of 15px
+  // move the border up one pixel to hide the bottom border from the last form element which doesn't spread full width
+  margin-top: -14px;
+  margin-left: -$panel-padding-x;
+  margin-right: -$panel-padding-x;
+  border-top: 1px solid $border-color-light;
 }

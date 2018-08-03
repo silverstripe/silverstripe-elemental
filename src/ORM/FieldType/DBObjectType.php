@@ -11,7 +11,7 @@ class DBObjectType extends DBField
      */
     public function requireField()
     {
-        // I am mad that I have to add this.
+        // noop - This class exists only to bind to a custom GraphQL type
     }
 
     public function getGraphQLType(Manager $manager)

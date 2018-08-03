@@ -75,7 +75,7 @@ class BaseElement extends DataObject
     ];
 
     private static $casting = [
-        'SummaryData' => DBObjectType::class,
+        'BlockSchema' => DBObjectType::class,
     ];
 
     private static $versioned_gridfield_extensions = true;
@@ -703,39 +703,14 @@ class BaseElement extends DataObject
     /**
      * @return array
      */
-    public function getSummaryData() {
-        return [];
-    }
-
-    /**
-     * This can be overridden on child elements.
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getBlockSchema()
     {
-        return '';
-    }
+        $blockSchema = [
+            'iconClass' => $this->config()->get('icon'),
+            'type' => $this->getType(),
+        ];
 
-    /**
-     * This can be overridden on child elements.
-     *
-     * @return string
-     */
-    public function getFileURL()
-    {
-        return '';
-    }
-
-
-    /**
-     * Return the icon class name
-     *
-     * @return string
-     */
-    public function getIconClass()
-    {
-        return $this->config()->get('icon');
+        return $blockSchema;
     }
 
     /**
