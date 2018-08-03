@@ -1,25 +1,26 @@
 .element-editor-header {
   display: flex;
   justify-content: space-between;
-}
 
-.element-editor-header__title {
-  font-weight: 400;
-  line-height: 26px;
-  margin-left: 5px;
-  -webkit-font-smoothing: antialiased
-}
+  &__title {
+    font-weight: 400;
+    line-height: 26px;
+    margin-left: 5px;
+    -webkit-font-smoothing: antialiased
+  }
 
-.element-editor-header__info {
-  display: flex;
-}
+  &__info {
+    display: flex;
+    align-items: center;
+  }
 
-.element-editor-header__icon-container {
-  color: #566b8d;
-  display: inline-block;
-  font-size: 2.3rem;
-  width: 28px;
-  vertical-align: top;
+  &__icon-container {
+    color: $gray-600;
+    display: inline-block;
+    font-size: 2.3rem;
+    width: 28px;
+    vertical-align: top;
+  }
 }
 
 

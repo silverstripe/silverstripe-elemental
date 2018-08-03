@@ -1,13 +1,23 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 
-class Content extends Component {
-
-  const { summary } = this.props;
-
+class Content extends PureComponent {
   render() {
-    return (
-      <div>
+    const { fileUrl, fileTitle, content } = this.props;
 
+    return (
+      <div className="element-editor-content">
+        {fileUrl &&
+          <img
+            className="element-editor-content__thumbnail-image"
+            src={fileUrl}
+            alt={fileTitle}
+          />
+        }
+        {content &&
+          <p className="element-editor-content__content">
+            {content}
+          </p>
+        }
       </div>
     );
   }
@@ -15,8 +25,9 @@ class Content extends Component {
 
 Content.defaultProps = {};
 Content.propTypes = {
-  summary: PropTypes.string,
+  content: PropTypes.string,
+  fileUrl: PropTypes.string,
+  fileTitle: PropTypes.string
 };
 
-export { Content as Component };
 export default Content;

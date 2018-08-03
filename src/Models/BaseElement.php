@@ -2,6 +2,7 @@
 
 namespace DNADesign\Elemental\Models;
 
+use DNADesign\Elemental\ORM\FieldType\DBObjectType;
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use Exception;
@@ -71,6 +72,10 @@ class BaseElement extends DataObject
 
     private static $extensions = [
         Versioned::class
+    ];
+
+    private static $casting = [
+        'BlockSchema' => DBObjectType::class,
     ];
 
     private static $versioned_gridfield_extensions = true;
@@ -694,14 +699,18 @@ class BaseElement extends DataObject
         return '';
     }
 
+
     /**
-     * Return the icon class name
-     *
-     * @return string
+     * @return array
      */
-    public function getIconClass()
+    public function getBlockSchema()
     {
-        return $this->config()->get('icon');
+        $blockSchema = [
+            'iconClass' => $this->config()->get('icon'),
+            'type' => $this->getType(),
+        ];
+
+        return $blockSchema;
     }
 
     /**

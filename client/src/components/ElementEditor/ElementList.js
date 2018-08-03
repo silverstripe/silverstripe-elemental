@@ -41,6 +41,8 @@ ElementList.defaultProps = {
   blocks: [],
 };
 
+export { ElementList as Component };
+
 export default inject(
   ['Element'],
   (ElementComponent) => ({

@@ -41,6 +41,13 @@ class ElementContent extends BaseElement
         return DBField::create_field('HTMLText', $this->HTML)->Summary(20);
     }
 
+    public function getBlockSchema()
+    {
+        $blockSchema = parent::getBlockSchema();
+        $blockSchema['content'] = $this->getSummary();
+        return $blockSchema;
+    }
+
     public function getType()
     {
         return _t(__CLASS__ . '.BlockType', 'Content');

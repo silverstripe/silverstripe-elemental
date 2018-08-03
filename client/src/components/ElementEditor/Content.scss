@@ -1,0 +1,15 @@
+.element-editor-content {
+  display: flex;
+  margin-left: 33px; // header icon + 5px margin of title
+  align-items: center;
+
+  &__thumbnail-image {
+    border-radius: .192rem;
+    height: 48px;
+    margin-right: 5px;
+  }
+
+  &__content {
+    color: $gray-600;
+  }
+}

@@ -24,6 +24,7 @@ ElementEditor.propTypes = {
 
 ElementEditor.defaultProps = {};
 
+export { ElementEditor as Component };
 export default inject(
   ['ElementToolbar', 'ElementList'],
   (ToolbarComponent, ListComponent) => ({
