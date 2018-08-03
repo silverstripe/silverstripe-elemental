@@ -242,7 +242,7 @@ class BaseElement extends DataObject
             if ($this->hasExtension(Versioned::class)) {
                 $records = Versioned::get_by_stage(BaseElement::class, Versioned::DRAFT);
             } else {
-                $records = BaseElement::get()->max('Sort');
+                $records = BaseElement::get();
             }
 
             $records = $records->filter('ParentID', $this->ParentID);
