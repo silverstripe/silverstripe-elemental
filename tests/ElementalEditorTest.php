@@ -27,8 +27,13 @@ class ElementalEditorTest extends SapphireTest
     {
         $area = $this->objFromFixture(ElementalArea::class, 'area1');
 
-        $field = ElementalAreaField::create('ElementalArea', $area);
+        $field = ElementalAreaField::create('ElementalArea', $area, [ElementContent::class]);
         $this->assertInstanceOf(FormField::class, $field);
         $this->assertEquals('ElementalArea', $field->getName());
+
+        $classes = $field->getConfig()->getComponentByType(GridFieldAddNewMultiClass::class)->getClasses($field);
+
+        $this->assertEquals(1, count($classes), 'Only one type available');
+        $this->assertArrayHasKey('DNADesign-Elemental-Models-ElementContent', $classes);
     }
 }

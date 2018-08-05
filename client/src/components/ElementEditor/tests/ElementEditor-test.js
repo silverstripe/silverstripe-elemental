@@ -19,6 +19,8 @@ describe('ElementEditor', () => {
           ToolbarComponent={ToolbarComponent}
           ListComponent={ListComponent}
           pageId={8}
+          baseAddHref="#"
+          elementTypes={['TestElement']}
         />
       );
 
