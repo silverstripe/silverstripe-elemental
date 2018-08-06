@@ -708,6 +708,9 @@ class BaseElement extends DataObject
         $blockSchema = [
             'iconClass' => $this->config()->get('icon'),
             'type' => $this->getType(),
+            'actions' => [
+                'edit' => $this->getEditLink(),
+            ]
         ];
 
         return $blockSchema;
