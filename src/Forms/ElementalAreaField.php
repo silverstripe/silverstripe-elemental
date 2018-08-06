@@ -3,14 +3,129 @@
 namespace DNADesign\Elemental\Forms;
 
 use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\ElementalArea;
+use SilverStripe\Control\Controller;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\TabSet;
+use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 
 class ElementalAreaField extends GridField
 {
+    /**
+     * @var ElementalArea $area
+     */
+    protected $area;
+
+    /**
+     * @var array $type
+     */
+    protected $types = [];
+
+    /**
+     * @var null
+     */
+    protected $inputType = null;
+
+    protected $modelClassName = BaseElement::class;
+
+    /**
+     * @param string $name
+     * @param ElementalArea $area
+     * @param string[] $blockTypes
+     */
+    public function __construct($name, ElementalArea $area, array $blockTypes)
+    {
+        $this->setTypes($blockTypes);
+
+        $config = new ElementalAreaConfig();
+
+        if (!empty($blockTypes)) {
+            /** @var GridFieldAddNewMultiClass $adder */
+            $adder = Injector::inst()->create(GridFieldAddNewMultiClass::class);
+            $adder->setClasses($blockTypes);
+            $config->addComponent($adder);
+        }
+
+        // By default, no need for a title on the editor. If there is more than one area then use `setTitle` to describe
+        parent::__construct($name, '', $area->Elements(), $config);
+        $this->area = $area;
+
+        $this->addExtraClass('element-editor__container');
+    }
+
+    /**
+     * @param array $types
+     *
+     * @return $this
+     */
+    public function setTypes($types)
+    {
+        $this->types = $types;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypes()
+    {
+        $types = $this->types;
+
+        $this->extend('updateGetTypes', $types);
+
+        return $types;
+    }
+
+    /**
+     * @return ElementalArea
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
+     * Overloaded to skip GridField implementation - this is copied from FormField.
+     *
+     * @param array $properties
+     * @return \SilverStripe\ORM\FieldType\DBHTMLText|string
+     */
+    public function FieldHolder($properties = array())
+    {
+        $context = $this;
+
+        if (count($properties)) {
+            $context = $this->customise($properties);
+        }
+
+        return $context->renderWith($this->getFieldHolderTemplates());
+    }
+
+    public function getSchemaDataDefaults()
+    {
+        $schemaData = parent::getSchemaDataDefaults();
+        $pageId = ($this->getArea() && ($page = $this->getArea()->getOwnerPage())) ? $page->ID : null;
+        $schemaData['page-id'] = $pageId;
+
+        $blockTypes = [];
+
+        foreach ($this->getTypes() as $className => $blockTitle) {
+            $blockTypes[] = [
+                'value' => str_replace('\\', '-', $className),
+                'title' => $blockTitle,
+            ];
+        }
+
+        $schemaData['element-types'] = $blockTypes;
+        $schemaData['base-add-href'] = Controller::join_links($this->Link(), 'add-multi-class');
+        return $schemaData;
+    }
+
     /**
      * A getter method that seems redundant in that it is a function that returns a function,
      * however the returned closure is used in an array map function to return a complete FieldList
@@ -76,7 +191,7 @@ class ElementalAreaField extends GridField
         $readOnlyField = $this->castedCopy(CompositeField::class);
         $blockReducer = $this->getReadOnlyBlockReducer();
         $readOnlyField->setChildren(
-            FieldList::create(array_map($blockReducer, $this->getList()->toArray()))
+            FieldList::create(array_map($blockReducer, $this->getArea()->Elements()->toArray()))
         );
 
         $readOnlyField = $readOnlyField->performReadonlyTransformation();

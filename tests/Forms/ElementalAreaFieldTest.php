@@ -3,7 +3,7 @@
 namespace DNADesign\Elemental\Tests\Forms;
 
 use DNADesign\Elemental\Forms\ElementalAreaField;
-use DNADesign\Elemental\Forms\ElementalAreaConfig;
+use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use SilverStripe\Dev\SapphireTest;
@@ -29,9 +29,10 @@ class ElementalAreaFieldTest extends SapphireTest
 
         $this->field = new ElementalAreaField(
             'ElementalAreaField',
-            'Elemental Area Field',
-            TestElement::get(),
-            new ElementalAreaConfig
+            new ElementalArea([
+                TestElement::create(),
+            ]),
+            [TestElement::class => TestElement::create()->getType()]
         );
     }
 

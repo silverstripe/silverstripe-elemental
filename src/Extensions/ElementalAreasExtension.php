@@ -2,16 +2,16 @@
 
 namespace DNADesign\Elemental\Extensions;
 
+use DNADesign\Elemental\Forms\ElementalAreaField;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\ElementalEditor;
+use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\CMS\Model\RedirectorPage;
-use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\ORM\DataExtension;
 
 /**
@@ -172,8 +172,7 @@ class ElementalAreasExtension extends DataExtension
                 $this->owner->write();
             }
 
-            $editor = ElementalEditor::create($eaRelationship, $area);
-            $editor->setTypes($this->getElementalTypes());
+            $editor = ElementalAreaField::create($eaRelationship, $area, $this->getElementalTypes());
 
             if ($this->owner instanceof SiteTree && $fields->findOrMakeTab('Root.Main')->fieldByName('Metadata')) {
                 $fields->addFieldToTab('Root.Main', $editor, 'Metadata');

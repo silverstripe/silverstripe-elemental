@@ -1,4 +1,10 @@
 .elemental-editor__list {
+  background-color:  $white;
+
+  margin-left: -$panel-padding-x;
+  margin-right: -$panel-padding-x;
+  border-top: 1px solid $border-color-light;
+
   > .element-editor__element {
     border-bottom: 1px solid $border-color-light;
   }

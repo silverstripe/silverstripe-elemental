@@ -9,7 +9,7 @@
 
 ## Introduction
 
-This module extends a page type to swap the content area for a GridField and manageable elements to compose a page out
+This module extends a page type to swap the content area for a list of manageable elements to compose a page out
 of rather than a single text field. Features supported:
 
 * Versioning of elements
@@ -231,6 +231,11 @@ For information on configuring Solr please see [the fulltextsearch documentation
 The Solr search results may add in emphasis tags or other formatting around matched key words, so you may need
 to allow unescaped HTML in your search results template. You should use the `$Excerpt` property (see
 `SolrIndex::search` for more) to display the relevant search matches.
+
+### Usage of GridField
+
+Note that this module uses GridField for creating, editing and deleting elements. Usage of GridField is temporary and 
+will be removed from Elemental when a React alternative is developed.
 
 ## Building the elemental frontend assets
 

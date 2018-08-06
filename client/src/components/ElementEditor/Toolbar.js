@@ -1,15 +1,29 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
+import { inject } from 'lib/Injector';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class Toolbar extends PureComponent {
   render() {
+    const { AddNewButtonComponent, elementTypes, baseAddHref } = this.props;
     return (
-      <div />
+      <div className="element-editor__toolbar">
+        <AddNewButtonComponent elementTypes={elementTypes} baseAddHref={baseAddHref} />
+      </div>
     );
   }
 }
 
 Toolbar.defaultProps = {};
-Toolbar.propTypes = {};
+Toolbar.propTypes = {
+  elementTypes: PropTypes.array.isRequired,
+  baseAddHref: PropTypes.string.isRequired,
+  AddNewButtonComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+};
 
-export default Toolbar;
+export default inject(
+  ['ElementAddNewButton'],
+  (AddNewButtonComponent) => ({
+    AddNewButtonComponent,
+  }),
+  () => 'ElementEditor.ElementToolbar'
+)(Toolbar);

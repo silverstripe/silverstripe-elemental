@@ -4,6 +4,7 @@ namespace DNADesign\Elemental\Tests;
 
 use DNADesign\Elemental\ElementalEditor;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
+use DNADesign\Elemental\Forms\ElementalAreaField;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
 use Page;
@@ -26,8 +27,13 @@ class ElementalEditorTest extends SapphireTest
     {
         $area = $this->objFromFixture(ElementalArea::class, 'area1');
 
-        $field = ElementalEditor::create('ElementalArea', $area);
+        $field = ElementalAreaField::create('ElementalArea', $area, [ElementContent::class]);
         $this->assertInstanceOf(FormField::class, $field);
         $this->assertEquals('ElementalArea', $field->getName());
+
+        $classes = $field->getConfig()->getComponentByType(GridFieldAddNewMultiClass::class)->getClasses($field);
+
+        $this->assertEquals(1, count($classes), 'Only one type available');
+        $this->assertArrayHasKey('DNADesign-Elemental-Models-ElementContent', $classes);
     }
 }

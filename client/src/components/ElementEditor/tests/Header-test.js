@@ -9,8 +9,6 @@ import Adapter from 'enzyme-adapter-react-15.4/build/index';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Header', () => {
-  const Tooltip = () => <div />;
-
   describe('render()', () => {
     it('should render the icon', () => {
       const wrapper = shallow(
