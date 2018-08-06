@@ -6,7 +6,7 @@ class Toolbar extends PureComponent {
   render() {
     const { AddNewButtonComponent, elementTypes, baseAddHref } = this.props;
     return (
-      <div>
+      <div className="element-editor__toolbar">
         <AddNewButtonComponent elementTypes={elementTypes} baseAddHref={baseAddHref} />
       </div>
     );
