@@ -37,7 +37,7 @@ class AddNewButton extends Component {
     const { selectedType } = this.state;
     const buttonHref = selectedType ? `${this.props.baseAddHref}/${selectedType.value}` : '#';
     const title = selectedType
-      ? i18n.inject(i18n._t('AddNewButton.TITLE', 'Add a "{type}" block'), { type: selectedType.title })
+      ? i18n.inject(i18n._t('ElementalAddNewButton.TITLE', 'Add a "{type}" block'), { type: selectedType.title })
       : '';
     const buttonAttributes = {
       href: buttonHref,
