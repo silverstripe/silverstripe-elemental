@@ -10,9 +10,21 @@ as the backend. The data model and relationships remain largely the same.
 
 ### ElementalEditor and GridField
 
-`ElementalEditor` no longer extends from `GridField`. In order to customise components of the elemental editor in
-the CMS, developers must now use the JavaScript Injector and apply React higher order components to transform the
-behaviour of individual components.
+`ElementalEditor` no longer exists. Types of blocks that can be edited are now defined on the field 
+(`ElementalAreaField`) itself. You can get an `ElementalAreaField` by creating one directly:
+
+```php
+use DNADesign\Elemental\Forms\ElementalAreaField;
+use DNADesign\Elemental\Models\ElementContent;
+
+$area = $page->ElementalArea();
+$allowedElements = [ElementContent::class];
+$field = ElementalAreaField::create('editor', $area, $allowedElements);
+```
+ 
+`ElementalAreaField` still extends `GridField` but this is only used to provide a `GridFieldDetailForm`. In order to 
+customise components of the elemental editor in the CMS, developers must now use the JavaScript Injector and apply React
+higher order components to transform the behaviour of individual components.
 
 For more information, [see here](https://docs.silverstripe.org/en/4/developer_guides/customising_the_admin_interface/how_tos/customise_react_components/).
 
