@@ -24,7 +24,8 @@ describe('HistoricElementView', () => {
   const HistoricElementView = ElementalAreaHistoryFactory(FieldGroupStub);
   let history = null;
 
-  describe('render', () => {
+  // Temporarily disable (with xdescribe):
+  xdescribe('render', () => {
     beforeEach(() => {
       history = ReactTestUtils.renderIntoDocument(
         <HistoricElementView data={datumSet} />

@@ -19,6 +19,7 @@ class ElementList extends Component {
       <ElementComponent
         key={element.ID}
         element={element}
+        link={element.BlockSchema.actions.edit}
       />
     ));
   }
