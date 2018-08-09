@@ -12,6 +12,7 @@ use DNADesign\Elemental\Tests\Src\TestPage;
 use Page;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 
 class BaseElementTest extends FunctionalTest
@@ -85,7 +86,9 @@ class BaseElementTest extends FunctionalTest
 
     public function testGetCmsFields()
     {
-        $this->markTestIncomplete();
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+
+        $this->assertInstanceOf(FieldList::class, $element->getCMSFields());
     }
 
     public function testGetController()
@@ -101,7 +104,9 @@ class BaseElementTest extends FunctionalTest
 
     public function testLink()
     {
-        $this->markTestIncomplete();
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+
+        $this->assertContains($element->getPage()->Link(), $element->Link());
     }
 
     public function testGetIcon()
@@ -145,5 +150,43 @@ class BaseElementTest extends FunctionalTest
         // set a outdated style, should not add.
         $element->Style = 'old';
         $this->assertEquals('', $element->getStyleVariant());
+    }
+
+    public function testFirst()
+    {
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+        $element2 = $this->objFromFixture(ElementContent::class, 'content2');
+
+        $this->assertTrue($element->First());
+        $this->assertFalse($element2->First());
+    }
+
+    public function testLast()
+    {
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+        $element2 = $this->objFromFixture(ElementContent::class, 'content2');
+
+        $this->assertFalse($element->Last());
+        $this->assertTrue($element2->Last());
+    }
+
+    public function testTotalItems()
+    {
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+        $element3 = $this->objFromFixture(ElementContent::class, 'content3');
+
+        $this->assertEquals(2, $element->TotalItems());
+        $this->assertEquals(1, $element3->TotalItems());
+    }
+
+    public function testEvenOdd()
+    {
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+        $element2 = $this->objFromFixture(ElementContent::class, 'content2');
+        $element3 = $this->objFromFixture(ElementContent::class, 'content3');
+
+        $this->assertEquals('odd', $element->EvenOdd());
+        $this->assertEquals('even', $element2->EvenOdd());
+        $this->assertEquals('odd', $element3->EvenOdd());
     }
 }

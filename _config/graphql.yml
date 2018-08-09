@@ -1,37 +1,38 @@
 ---
 Name: elementalgraphqlconfig
 ---
-SilverStripe\GraphQL\Controller:
-  schema:
-    types:
-      ObjectType: DNADesign\Elemental\GraphQL\Types\ObjectType
-    scaffolding:
+SilverStripe\GraphQL\Manager:
+  schemas:
+    admin:
       types:
-        # Expose common static fields for the ElementEditor component to use for preview summaries
-        DNADesign\Elemental\Models\BaseElement:
-          fields: [ID, LastEdited, AbsoluteLink, Title, ShowTitle, Sort, BlockSchema]
-          operations:
-            copyToStage: true
-            readOne: true
-        # Expose access to Elements via Page -> ElementalArea -> Elements (see resolver)
-        DNADesign\Elemental\Models\ElementalArea:
-          fields: [ID]
-          nestedQueries:
-            Elements:
-              resolver: DNADesign\Elemental\GraphQL\ElementsResolver
-          operations:
-            readOne: true
-        # Expose ElementalAreaIfExists (a consistently available API proxy for ElementalArea)
-        SilverStripe\CMS\Model\SiteTree:
-          fields: [ID, ElementalAreaIfExists]
-          operations:
-            readOne: true
-        # Basic member information is required for history views
-        SilverStripe\Security\Member:
-          fields: [ID, FirstName, Surname]
-          operations:
-            readOne: true
-    # Define specific names for the models we expose
-    typeNames:
-      DNADesign\Elemental\Models\BaseElement: Block
-      DNADesign\Elemental\Models\ElementalArea: ElementalArea
+        ObjectType: DNADesign\Elemental\GraphQL\Types\ObjectType
+      scaffolding:
+        types:
+          # Expose common static fields for the ElementEditor component to use for preview summaries
+          DNADesign\Elemental\Models\BaseElement:
+            fields: [ID, LastEdited, AbsoluteLink, Title, ShowTitle, Sort, BlockSchema]
+            operations:
+              copyToStage: true
+              readOne: true
+          # Expose access to Elements via Page -> ElementalArea -> Elements (see resolver)
+          DNADesign\Elemental\Models\ElementalArea:
+            fields: [ID]
+            nestedQueries:
+              Elements:
+                resolver: DNADesign\Elemental\GraphQL\ElementsResolver
+            operations:
+              readOne: true
+          # Expose ElementalAreaIfExists (a consistently available API proxy for ElementalArea)
+          SilverStripe\CMS\Model\SiteTree:
+            fields: [ID, ElementalAreaIfExists]
+            operations:
+              readOne: true
+          # Basic member information is required for history views
+          SilverStripe\Security\Member:
+            fields: [ID, FirstName, Surname]
+            operations:
+              readOne: true
+      # Define specific names for the models we expose
+      typeNames:
+        DNADesign\Elemental\Models\BaseElement: Block
+        DNADesign\Elemental\Models\ElementalArea: ElementalArea
