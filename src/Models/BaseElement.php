@@ -709,19 +709,41 @@ class BaseElement extends DataObject
 
 
     /**
+     * The block schema defines a set of data that will be serialised and sent via GraphQL
+     * to the React editor client.
+     *
+     * To modify the schema, either use the extension point or overload the `provideBlockSchema`
+     * method.
+     *
+     * @internal This API may change in future. Treat this as a `final` method.
      * @return array
      */
     public function getBlockSchema()
     {
-        $blockSchema = [
+        $blockSchema = $this->provideBlockSchema();
+
+        $this->extend('updateBlockSchema', $blockSchema);
+
+        return $blockSchema;
+    }
+
+    /**
+     * Provide block schema data, which will be serialised and sent via GraphQL to the editor client.
+     *
+     * Overload this method in child element classes to augment, or use the extension point on `getBlockSchema`
+     * to update it from an `Extension`.
+     *
+     * @return array
+     */
+    protected function provideBlockSchema()
+    {
+        return [
             'iconClass' => $this->config()->get('icon'),
             'type' => $this->getType(),
             'actions' => [
                 'edit' => $this->getEditLink(),
-            ]
+            ],
         ];
-
-        return $blockSchema;
     }
 
     /**
