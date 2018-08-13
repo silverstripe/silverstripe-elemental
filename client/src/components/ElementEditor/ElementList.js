@@ -24,9 +24,24 @@ class ElementList extends Component {
     ));
   }
 
+  /**
+   * Renders a loading component
+   *
+   * @returns {LoadingComponent|null}
+   */
+  renderLoading() {
+    const { loading, LoadingComponent } = this.props;
+
+    if (loading) {
+      return <LoadingComponent />;
+    }
+    return null;
+  }
+
   render() {
     return (
       <div className="elemental-editor__list">
+        {this.renderLoading()}
         {this.renderBlocks()}
       </div>
     );
@@ -36,18 +51,21 @@ class ElementList extends Component {
 ElementList.propTypes = {
   // @todo support either ElementList or Element children in an array (or both)
   blocks: PropTypes.arrayOf(elementType),
+  loading: PropTypes.bool,
 };
 
 ElementList.defaultProps = {
   blocks: [],
+  loading: false,
 };
 
 export { ElementList as Component };
 
 export default inject(
-  ['Element'],
-  (ElementComponent) => ({
+  ['Element', 'Loading'],
+  (ElementComponent, LoadingComponent) => ({
     ElementComponent,
+    LoadingComponent,
   }),
   () => 'ElementEditor.ElementList'
 )(ElementList);
