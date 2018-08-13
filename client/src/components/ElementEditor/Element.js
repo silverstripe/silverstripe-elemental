@@ -1,4 +1,6 @@
-import React, { PureComponent, PropTypes } from 'react';
+/* global window */
+
+import React, { Component, PropTypes } from 'react';
 import { elementType } from 'types/elementType';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
@@ -7,14 +9,41 @@ import i18n from 'i18n';
  * The Element component used in the context of an ElementEditor shows the summary
  * of an element's details when used in the CMS, including ID, Title and Summary.
  */
-class Element extends PureComponent {
+class Element extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+  }
+
+  /**
+   * Take the user to the GridFieldDetailForm to edit the record
+   */
+  handleClick() {
+    const { link } = this.props;
+
+    window.location = link;
+  }
+
+  /**
+   * If pressing enter key, treat it like a mouse click
+   *
+   * @param {Object} event
+   */
+  handleKeyUp(event) {
+    if (event.keyCode === 13) {
+      this.handleClick();
+    }
+  }
+
   render() {
     const {
       element: { ID, Title, BlockSchema },
       HeaderComponent,
       ContentComponent,
-      link,
     } = this.props;
+
     const linkTitle = i18n.inject(
       i18n._t('ElementalElement.TITLE', 'Edit this {type} block'), { type: BlockSchema.type }
     );
@@ -24,7 +53,14 @@ class Element extends PureComponent {
     }
 
     return (
-      <a className="element-editor__element" href={link} title={linkTitle}>
+      <span
+        className="element-editor__element"
+        onClick={this.handleClick}
+        onKeyUp={this.handleKeyUp}
+        role="button"
+        tabIndex={0}
+        title={linkTitle}
+      >
         <HeaderComponent
           id={ID}
           title={Title}
@@ -36,7 +72,7 @@ class Element extends PureComponent {
           fileTitle={BlockSchema.fileTitle}
           content={BlockSchema.content}
         />
-      </a>
+      </span>
     );
   }
 }

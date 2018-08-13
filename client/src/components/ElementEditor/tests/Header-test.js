@@ -2,11 +2,13 @@
 /* global jest, describe, it, expect */
 
 import React from 'react';
-import Header from '../Header';
+import { Component as Header } from '../Header';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15.4/build/index';
 
 Enzyme.configure({ adapter: new Adapter() });
+
+const mockFormAction = jest.fn();
 
 describe('Header', () => {
   describe('render()', () => {
@@ -17,6 +19,7 @@ describe('Header', () => {
           title="Sample File Block"
           elementType="File"
           fontIcon="font-icon-block-file"
+          FormActionComponent={mockFormAction}
         />
       );
 
@@ -32,6 +35,7 @@ describe('Header', () => {
           title="Sample File Block"
           elementType="File"
           fontIcon="font-icon-block-file"
+          FormActionComponent={mockFormAction}
         />
       );
 
@@ -46,6 +50,7 @@ describe('Header', () => {
           title="Sample File Block"
           elementType="File"
           fontIcon="font-icon-block-file"
+          FormActionComponent={mockFormAction}
         />
       );
 

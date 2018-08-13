@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
 const query = gql`
 query ReadBlocksForPage($id:ID!) {
   readOnePage(ID: $id, Versioning: {
-    Mode: LATEST
+    Mode: DRAFT
   }){
     ID
     ElementalAreaIfExists {

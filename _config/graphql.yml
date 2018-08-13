@@ -14,6 +14,7 @@ SilverStripe\GraphQL\Manager:
             operations:
               copyToStage: true
               readOne: true
+              delete: true
           # Expose access to Elements via Page -> ElementalArea -> Elements (see resolver)
           DNADesign\Elemental\Models\ElementalArea:
             fields: [ID]
