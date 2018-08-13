@@ -31,6 +31,7 @@ query ReadHistoryViewerBlock ($block_id: ID!, $limit: Int!, $offset: Int!) {
           }
           Published
           LiveVersion
+          LatestDraftVersion
           LastEdited
         }
       }
