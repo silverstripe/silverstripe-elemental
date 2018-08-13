@@ -77,7 +77,12 @@ class AddNewButton extends Component {
   render() {
     return (
       <InputGroup className="elemental-editor__add-new-block-control">
-        <Input type="select" className="no-change-track" onChange={this.handleTypeChange}>
+        <Input
+          type="select"
+          id="elemental-editor_add-new-block-control_select-dropdown"
+          className="no-change-track"
+          onChange={this.handleTypeChange}
+        >
           <option>{i18n._t('AddNewButton.SELECT', '(Select type to create)')}</option>
           {this.renderOptions()}
         </Input>

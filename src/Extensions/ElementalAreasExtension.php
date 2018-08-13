@@ -162,6 +162,7 @@ class ElementalAreasExtension extends DataExtension
                 continue;
             }
 
+            // Example: $eaRelationship = 'ElementalArea';
             $area = $this->owner->$eaRelationship();
 
             // if area isn't in the database then force a write so the blocks have a parent ID.
