@@ -1,6 +1,7 @@
 .element-editor__element {
   display: block;
   color: inherit;
+  cursor: pointer;
   padding: $panel-padding-x;
 
   &:hover {
