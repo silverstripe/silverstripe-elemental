@@ -1,25 +1,23 @@
 .element-editor-header {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
 
   &__title {
     font-weight: 400;
-    line-height: 26px;
-    margin-left: $spacer-sm;
+    margin: 0 0 0 $spacer-sm;
     -webkit-font-smoothing: antialiased
   }
 
   &__info {
-    display: flex;
     align-items: center;
+    display: flex;
+    flex-grow: 1;
   }
 
   &__icon-container {
     color: $gray-600;
-    display: inline-block;
     font-size: 2.3rem;
-    width: 28px;
-    vertical-align: top;
+    height: 40px;
   }
 }
 

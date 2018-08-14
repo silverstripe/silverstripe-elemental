@@ -1,12 +1,14 @@
 .element-editor-content {
   display: flex;
-  margin-left: 33px; // header icon + 5px margin of title
+  margin-top: $spacer;
+  margin-left: 42px; // header icon + margin of title
   align-items: center;
 
   &__thumbnail-image {
-    border-radius: .192rem;
+    border-radius: $thumbnail-border-radius;
     height: 48px;
-    margin-right: 5px;
+    margin-top: -$spacer-sm;
+    margin-right: $spacer-sm;
   }
 
   &__content {
