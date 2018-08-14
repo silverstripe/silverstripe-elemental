@@ -1,17 +1,16 @@
 .element-editor-content {
   display: flex;
-  margin-top: $spacer;
+  margin-top: $spacer-xs;
   margin-left: 42px; // header icon + margin of title
   align-items: center;
 
   &__thumbnail-image {
     border-radius: $thumbnail-border-radius;
-    height: 48px;
-    margin-top: -$spacer-sm;
-    margin-right: $spacer-sm;
+    height: 36px;
+    margin: (-$spacer-sm) $spacer-sm (-$spacer-sm) 0;
   }
-
   &__content {
     color: $gray-600;
+    margin-bottom: 0;
   }
 }
