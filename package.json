@@ -3,11 +3,18 @@
   "version": "1.0.0",
   "description": "Compose your SilverStripe content of Elements",
   "scripts": {
-    "build": "yarn && NODE_ENV=production webpack -p --bail --progress",
-    "watch": "yarn && NODE_ENV=development webpack --watch --progress",
+    "build": "yarn && yarn lint && yarn test && NODE_ENV=production webpack -p --bail --progress",
+    "dev": "NODE_ENV=development webpack --progress",
+    "watch": "NODE_ENV=development webpack --watch --progress",
     "css": "WEBPACK_CHILD=css npm run build",
-    "lint": "eslint client/src; sass-lint client/src",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "lock": "npm-shrinkwrap --dev",
+    "lint": "eslint client/src && sass-lint --verbose",
+    "lint-js": "eslint client/src",
+    "lint-js-fix": "eslint client/src --fix",
+    "lint-sass": "sass-lint --verbose"
+
   },
   "repository": {
     "type": "git",
@@ -25,6 +32,7 @@
   },
   "homepage": "https://github.com/dnadesign/silverstripe-elemental#readme",
   "dependencies": {
+    "bootstrap": "4.0.0",
     "classnames": "^2.2.5",
     "graphql-tag": "^0.1.17",
     "jquery": "^3.2.1",
@@ -37,25 +45,15 @@
     "redux": "^3.3.1"
   },
   "devDependencies": {
+    "@silverstripe/eslint-config": "^0.0.2",
     "@silverstripe/webpack-config": "^0.4.1",
-    "babel-core": "^6.24.1",
     "babel-jest": "^20.0.3",
     "babel-loader": "^7.0.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-react": "^6.24.1",
-    "bootstrap": "4.0.0-beta",
-    "css-loader": "^0.28.1",
-    "eslint": "^4.6.1",
-    "eslint-config-airbnb": "^15.1.0",
-    "eslint-config-airbnb-base": "^12.0.0",
-    "eslint-loader": "^1.7.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.3.0",
-    "graphql-tag": "^0.1.17",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-15.4": "^1.0.5",
+    "expose-loader": "^0.7.4",
     "jest-cli": "^19.0.2",
-    "react-apollo": "^0.7.1",
-    "webpack": "^2.6.1"
+    "sass-loader": "^6.0.7"
   },
   "jest": {
     "roots": [
