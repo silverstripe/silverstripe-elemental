@@ -121,6 +121,12 @@ class ElementalArea extends DataObject
         return $controllers;
     }
 
+    public function onBeforeWrite()
+    {
+        $this->getOwnerPage();
+        parent::onBeforeWrite();
+    }
+
     /**
      * @return null|DataObject
      * @throws \Psr\Container\NotFoundExceptionInterface
@@ -161,11 +167,7 @@ class ElementalArea extends DataObject
                 $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filter($areaID, $this->ID);
 
                 if ($page && $page->exists()) {
-                    if ($this->OwnerClassName !== $class) {
-                        $this->OwnerClassName = $class;
-                        $this->write();
-                    }
-
+                    $this->OwnerClassName = $class;
                     return $page->first();
                 }
             }
