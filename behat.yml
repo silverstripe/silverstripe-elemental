@@ -10,14 +10,17 @@ default:
       paths:
         - %paths.modules.silverstripe-elemental%/tests/Behat/features
       contexts:
-        - SilverStripe\Framework\Tests\Behaviour\FeatureContext
+        - DNADesign\Elemental\Tests\Behat\Context\FeatureContext
         - SilverStripe\Framework\Tests\Behaviour\CmsFormsContext
         - SilverStripe\Framework\Tests\Behaviour\CmsUiContext
         - SilverStripe\BehatExtension\Context\BasicContext
         - SilverStripe\BehatExtension\Context\LoginContext
         -
-          SilverStripe\BehatExtension\Context\FixtureContext:
-            - %paths.modules.silverstripe-elemental%/tests/Behat/files/
+          DNADesign\Elemental\Tests\Behat\Context\FixtureContext:
+            - %paths.modules.silverstripe-elemental%/tests/Behat
+        -
+          SilverStripe\Framework\Tests\Behaviour\ConfigContext:
+            - %paths.modules.silverstripe-elemental%/tests/Behat/config
   extensions:
     SilverStripe\BehatExtension\MinkExtension:
       default_session: facebook_web_driver
