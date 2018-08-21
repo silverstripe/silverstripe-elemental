@@ -1,6 +1,0 @@
----
-Name: testonly-enable-elemental
----
-Page:
-  extensions:
-    - DNADesign\Elemental\Extensions\ElementalPageExtension

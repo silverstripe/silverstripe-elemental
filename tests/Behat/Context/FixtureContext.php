@@ -23,11 +23,35 @@ if (!class_exists(BaseFixtureContext::class)) {
 class FixtureContext extends BaseFixtureContext
 {
     /**
-     * @Given I add an extension :extension to the :class class
+     * @Given /(?:the|a) "([^"]+)" "([^"]+)" (?:with|has) a "([^"]+)" content element with "([^"]+)" content/
+     *
+     * @param string $pageTitle
+     * @param string $type
+     * @param string $elementTitle
+     * @param string $elementContent
      */
-    public function iAddAnExtensionToTheClass($extension, $class)
+    public function theHasAContentElementWithContent($type, $pageTitle, $elementTitle, $elementContent)
     {
-        $targetClass = $this->convertTypeToClass($class);
-        $targetClass::add_extension(ElementalPageExtension::class);
+        // Create the page (ElementalArea is created on write and attached to it)
+        $targetClass = $this->convertTypeToClass($type);
+
+        $page = $this->getFixtureFactory()->get($targetClass, $pageTitle);
+        if (!$page) {
+            $page = $this->getFixtureFactory()->createObject($targetClass, $pageTitle);
+        }
+
+        $elementalArea = $page->ElementalArea();
+        $elementalArea->Elements()->add($this->getFixtureFactory()->createObject(ElementContent::class, $elementTitle));
+
+        // Create element
+        $element = $this->getFixtureFactory()->get(ElementContent::class, $elementTitle);
+
+        if ($element) {
+            $element->HTML = $elementContent;
+            $element->write();
+        } else {
+            $element = $this->getFixtureFactory()->createObject(ElementContent::class, $elementTitle, $fields);
+            $element->write();
+        }
     }
 }
