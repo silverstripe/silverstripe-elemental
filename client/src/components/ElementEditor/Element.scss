@@ -4,6 +4,7 @@
   cursor: pointer;
   display: block;
   padding: $panel-padding-x;
+  padding-top: $spacer;
 
   &:hover {
     text-decoration: inherit;

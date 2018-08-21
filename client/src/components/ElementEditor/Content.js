@@ -4,6 +4,10 @@ class Content extends PureComponent {
   render() {
     const { fileUrl, fileTitle, content } = this.props;
 
+    if (!content && !fileUrl) {
+      return null;
+    }
+
     return (
       <div className="element-editor-content">
         {fileUrl &&

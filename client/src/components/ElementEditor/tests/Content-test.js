@@ -50,12 +50,24 @@ describe('Content', () => {
   it('should not render a content summary if the content prop is not provided', () => {
     const wrapper = shallow(
       <Content
-        fileUrl=""
+        fileUrl="/ss4/assets/Uploads/c70617f2e4/sample__FillWzEwMCwxMDBd.jpeg"
         fileTitle=""
         content=""
       />
     );
 
     expect(wrapper.find('p').length).toBe(0);
+  });
+
+  it('returns null when no content or image is provided', () => {
+    const wrapper = shallow(
+      <Content
+        fileUrl=""
+        fileTitle=""
+        content=""
+      />
+    );
+
+    expect(wrapper.type()).toBeNull();
   });
 });

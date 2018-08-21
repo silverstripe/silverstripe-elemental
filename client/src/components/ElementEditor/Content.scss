@@ -1,15 +1,20 @@
 .element-editor-content {
   display: flex;
-  margin-left: 33px; // header icon + 5px margin of title
+  margin-top: $spacer-xs;
+  margin-left: 42px; // header icon + margin of title
   align-items: center;
 
   &__thumbnail-image {
-    border-radius: .192rem;
-    height: 48px;
-    margin-right: 5px;
+    border-radius: $thumbnail-border-radius;
+    height: 36px;
+    margin: (-$spacer-sm) $spacer-sm (-$spacer-sm) 0;
   }
-
   &__content {
     color: $gray-600;
+    line-height: 1.3; // Help ensure the container element height is around 102px
+    margin-bottom: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

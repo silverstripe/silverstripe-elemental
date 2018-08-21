@@ -1,1 +1,1 @@
-module.exports = require('@silverstripe/webpack-config/.eslintrc');
+module.exports = require('@silverstripe/eslint-config/.eslintrc');
