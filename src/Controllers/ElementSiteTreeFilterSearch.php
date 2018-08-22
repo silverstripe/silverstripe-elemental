@@ -32,10 +32,6 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
             return parent::applyDefaultFilters($query);
         }
 
-        // Enable frontend themes in order to correctly render the elements as they would be for the frontend
-        Config::nest();
-        SSViewer::set_themes(SSViewer::config()->get('themes'));
-
         // Get an array of SiteTree record IDs that match the search term in nested element data
         /** @var ArrayList $siteTrees */
         $siteTrees = $query->filterByCallback(function (SiteTree $siteTree) {
@@ -48,9 +44,6 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
             $pageContent = $siteTree->getElementsForSearch();
             return (bool) stripos($pageContent, $this->params['Term']) !== false;
         });
-
-        // Return themes back for the CMS
-        Config::unnest();
 
         if ($siteTrees->count()) {
             // Apply the list of IDs as an extra filter
