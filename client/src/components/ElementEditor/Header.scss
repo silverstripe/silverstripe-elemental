@@ -8,10 +8,15 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  &__info {
+  &__info,
+  &__actions {
     align-items: center;
     display: flex;
     flex-grow: 1;
+  }
+
+  &__actions {
+    justify-content: flex-end;
   }
 
   &__icon-container {
