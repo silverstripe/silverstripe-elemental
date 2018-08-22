@@ -2,9 +2,12 @@
 
 namespace DNADesign\Elemental\Extensions;
 
+use Exception;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\Control\Controller;
 use SilverStripe\View\Parsers\HTML4Value;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\View\SSViewer;
 
 class ElementalPageExtension extends ElementalAreasExtension
 {
@@ -21,23 +24,31 @@ class ElementalPageExtension extends ElementalAreasExtension
     ];
 
     /**
-     * Returns the contents of each ElementalArea has_one's markup for use in Solr search indexing
+     * Returns the contents of each ElementalArea has_one's markup for use in Solr or Elastic search indexing
      *
      * @return string
      */
     public function getElementsForSearch()
     {
-        $output = [];
-        foreach ($this->owner->hasOne() as $key => $class) {
-            if ($class !== ElementalArea::class) {
-                continue;
+        $oldThemes = SSViewer::get_themes();
+        SSViewer::set_themes(SSViewer::config()->get('themes'));
+        try {
+            $output = [];
+            foreach ($this->owner->hasOne() as $key => $class) {
+                if ($class !== ElementalArea::class) {
+                    continue;
+                }
+                /** @var ElementalArea $area */
+                $area = $this->owner->$key();
+                if ($area) {
+                    $output[] = strip_tags($area->forTemplate());
+                }
             }
-
-            /** @var ElementalArea $area */
-            $area = $this->owner->$key();
-            if ($area) {
-                $output[] = strip_tags($area->forTemplate());
-            }
+        } finally {
+            // Reset theme if an exception occurs, if you don't have a
+            // try / finally around code that might throw an Exception,
+            // CMS layout can break on the response. (SilverStripe 4.1.1)
+            SSViewer::set_themes($oldThemes);
         }
         return implode($output);
     }
