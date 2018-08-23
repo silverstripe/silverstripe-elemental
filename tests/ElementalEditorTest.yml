@@ -1,15 +1,3 @@
 DNADesign\Elemental\Models\ElementalArea:
   area1:
     Title: Area 1
-
-DNADesign\Elemental\Tests\Src\TestPage:
-  page1:
-    Title: Page 1
-    URLSegment: test-page
-    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area1
-
-DNADesign\Elemental\Tests\Src\TestElement:
-  element1:
-    Title: Element 1
-    TestValue: 'Hello Test'
-    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area1

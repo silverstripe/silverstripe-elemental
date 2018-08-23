@@ -15,7 +15,7 @@ use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 
 class ElementalEditorTest extends SapphireTest
 {
-    protected static $fixture_file = 'ElementControllerTest.yml';
+    protected static $fixture_file = 'ElementalEditorTest.yml';
 
     protected static $required_extensions = [
         Page::class => [
@@ -33,7 +33,7 @@ class ElementalEditorTest extends SapphireTest
 
         $classes = $field->getConfig()->getComponentByType(GridFieldAddNewMultiClass::class)->getClasses($field);
 
-        $this->assertEquals(1, count($classes), 'Only one type available');
+        $this->assertCount(1, $classes, 'Only one type available');
         $this->assertArrayHasKey('DNADesign-Elemental-Models-ElementContent', $classes);
     }
 }
