@@ -77,8 +77,9 @@ Feature: View types of elements in a report
       And I wait 1 second
       And I should see "Second Sample Block"
       And I should see block 1
-      And I should see the delete button for block 1
-      And I click on the delete button for block 1
+      And I press the "View actions" button
+    Then I should see the delete button for block 1
+    When I press the "Delete" button
       And I see the text "Are you sure you want to delete this block?" in the alert
       And I confirm the dialog
       And I wait until I see the ".element-editor__element" element

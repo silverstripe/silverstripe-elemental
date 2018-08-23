@@ -6,6 +6,7 @@ import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import deleteBlockMutation from 'state/editor/deleteBlockMutation';
 import i18n from 'i18n';
+import classNames from 'classnames';
 
 class Header extends Component {
   constructor(props) {
@@ -45,7 +46,17 @@ class Header extends Component {
   }
 
   render() {
-    const { id, title, elementType, fontIcon, FormActionComponent } = this.props;
+    const {
+      id,
+      title,
+      elementType,
+      fontIcon,
+      ActionMenuComponent,
+    } = this.props;
+
+    const deleteTitle = i18n._t('ElementHeader.DELETE', 'Delete');
+
+    const deleteButtonClassNames = classNames('dropdown-item', 'element-editor__actions-delete');
 
     return (
       <div className="element-editor-header">
@@ -63,14 +74,23 @@ class Header extends Component {
           </div>
           <h3 className="element-editor-header__title">{title}</h3>
         </div>
-        <FormActionComponent
-          onClick={this.handleDelete}
-          title={null}
-          icon="trash-bin"
-          attributes={{
-            title: i18n._t('ElementHeader.DELETE', 'Delete'),
-          }}
-        />
+        <div className="element-editor-header__actions">
+          <ActionMenuComponent
+            id={`element-editor-actions-${id}`}
+            className="element-editor-header__actions-dropdown"
+            dropdownMenuProps={{ right: true }}
+            toggleCallback={(event) => event.stopPropagation()}
+          >
+            <button
+              onClick={this.handleDelete}
+              title={deleteTitle}
+              type="button"
+              className={deleteButtonClassNames}
+            >
+              {deleteTitle}
+            </button>
+          </ActionMenuComponent>
+        </div>
       </div>
     );
   }
@@ -84,16 +104,17 @@ Header.propTypes = {
   actions: PropTypes.shape({
     handleDeleteBlock: PropTypes.func.isRequired,
   }),
-  FormActionComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+  ActionMenuComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
+
 };
 
 export { Header as Component };
 
 export default compose(
   inject(
-    ['FormAction'],
-    (FormActionComponent) => ({
-      FormActionComponent,
+    ['ActionMenu'],
+    (ActionMenuComponent) => ({
+      ActionMenuComponent,
     }),
     () => 'ElementEditor.ElementList.Element'
   ),

@@ -36,14 +36,6 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
-     * @When I click on the delete button for block :position
-     */
-    public function iClickOnTheDeleteButtonForBlock($position)
-    {
-        $this->getDeleteButton($position)->click();
-    }
-
-    /**
      * @Then I should see :text as the title for block :position
      */
     public function iShouldSeeAsTheTitleForBlock($text, $position)
@@ -142,7 +134,7 @@ class FeatureContext extends SilverStripeContext
         $block = $this->getSpecificBlock($position);
         assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
 
-        $button = $block->find('css', '.font-icon-trash-bin');
+        $button = $block->find('css', '.element-editor__actions-delete');
         assertNotNull($button, 'Delete button not found');
 
         return $button;
