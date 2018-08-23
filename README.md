@@ -176,6 +176,12 @@ class MyElement extends BaseElement
 }
 ```
 
+#### In-line Editing
+
+By default elements can be edited in the CMS using an inline form where all your elements appear together. For elements 
+that are more complex you can disable the in-line edit form by setting `private static $inline_editable = false` in your
+element class. A `GridFieldDetailForm` will be used to edit blocks that are not in-line editable.
+
 ### Defining your own HTML
 
 `MyElement` will be rendered into a `MyElement.ss` template with the `ElementHolder.ss` wrapper. Changing the holder
