@@ -19,6 +19,7 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Security\Member;
@@ -76,6 +77,7 @@ class BaseElement extends DataObject
 
     private static $casting = [
         'BlockSchema' => DBObjectType::class,
+        'InlineEditable' => DBBoolean::class,
     ];
 
     private static $versioned_gridfield_extensions = true;
@@ -127,6 +129,15 @@ class BaseElement extends DataObject
      * @var boolean
      */
     private static $disable_pretty_anchor_name = false;
+
+    /**
+     * Set to false to prevent an in-line edit form from showing in an elemental area. Instead the element will be
+     * clickable and a GridFieldDetailForm will be used.
+     *
+     * @config
+     * @var bool
+     */
+    private static $inline_editable = true;
 
     /**
      * Store used anchor names, this is to avoid title clashes
@@ -329,6 +340,16 @@ class BaseElement extends DataObject
     public function getType()
     {
         return _t(__CLASS__ . '.BlockType', 'Block');
+    }
+
+    /**
+     * Proxy through to configuration setting 'inline_editable'
+     *
+     * @return bool
+     */
+    public function inlineEditable()
+    {
+        return static::config()->get('inline_editable');
     }
 
     /**
