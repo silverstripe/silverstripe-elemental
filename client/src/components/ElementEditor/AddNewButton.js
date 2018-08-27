@@ -80,7 +80,7 @@ class AddNewButton extends Component {
         <Input
           type="select"
           id="elemental-editor_add-new-block-control_select-dropdown"
-          className="no-change-track"
+          className="no-change-track custom-select"
           onChange={this.handleTypeChange}
         >
           <option>{i18n._t('AddNewButton.SELECT', '(Select type to create)')}</option>
