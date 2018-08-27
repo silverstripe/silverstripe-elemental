@@ -14,9 +14,10 @@ class Header extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleCaretClick = this.handleCaretClick.bind(this);
 
     this.state = {
-      tooltipOpen: false
+      tooltipOpen: false,
     };
   }
 
@@ -39,6 +40,20 @@ class Header extends Component {
     }
   }
 
+  /**
+   * Handle the opening/closing of the block preview
+   */
+  handleCaretClick(event) {
+    event.stopPropagation();
+
+    // Tell Element
+    const { caretClickCallback } = this.props;
+
+    if (caretClickCallback) {
+     caretClickCallback(event);
+    }
+  }
+
   toggle() {
     this.setState({
       tooltipOpen: !this.state.tooltipOpen
@@ -52,11 +67,24 @@ class Header extends Component {
       elementType,
       fontIcon,
       ActionMenuComponent,
+      expandable,
+      previewExpanded
     } = this.props;
 
     const deleteTitle = i18n._t('ElementHeader.DELETE', 'Delete');
 
     const deleteButtonClassNames = classNames('dropdown-item', 'element-editor__actions-delete');
+
+    const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
+    const expandButtonClassNames = classNames(
+      'dropdown-item',
+      'element-editor__expand',
+      'btn',
+      {
+        'font-icon-right-open-big': !expandable,
+        'font-icon-up-open-big': expandable && previewExpanded,
+        'font-icon-down-open-big': expandable && !previewExpanded
+      });
 
     return (
       <div className="element-editor-header">
@@ -90,6 +118,12 @@ class Header extends Component {
               {deleteTitle}
             </button>
           </ActionMenuComponent>
+          <button
+            onClick={this.handleCaretClick}
+            title={expandTitle}
+            type="button"
+            className={expandButtonClassNames}
+          />
         </div>
       </div>
     );
@@ -105,8 +139,16 @@ Header.propTypes = {
     handleDeleteBlock: PropTypes.func.isRequired,
   }),
   ActionMenuComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
+  expandable: PropTypes.bool,
+  caretClickCallback: PropTypes.func,
+  previewExpanded: PropTypes.bool,
 
 };
+
+Header.defaultProps = {
+
+};
+
 
 export { Header as Component };
 

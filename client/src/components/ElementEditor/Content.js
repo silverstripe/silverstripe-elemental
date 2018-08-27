@@ -1,8 +1,16 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { inject } from 'lib/Injector';
 
 class Content extends PureComponent {
   render() {
-    const { fileUrl, fileTitle, content } = this.props;
+    const {
+      fileUrl,
+      fileTitle,
+      content,
+      previewExpanded,
+      FormBuilderComponent,
+      SummaryComponent
+    } = this.props;
 
     if (!content && !fileUrl) {
       return null;
@@ -10,17 +18,17 @@ class Content extends PureComponent {
 
     return (
       <div className="element-editor-content">
-        {fileUrl &&
-          <img
-            className="element-editor-content__thumbnail-image"
-            src={fileUrl}
-            alt={fileTitle}
+        {!previewExpanded &&
+          // Show summary
+          <SummaryComponent
+            content={content}
+            fileUrl={fileUrl}
+            fileTitle={fileTitle}
           />
         }
-        {content &&
-          <p className="element-editor-content__content">
-            {content}
-          </p>
+        {previewExpanded &&
+          // Show inline editable fields
+          <FormBuilderComponent />
         }
       </div>
     );
@@ -28,10 +36,20 @@ class Content extends PureComponent {
 }
 
 Content.defaultProps = {};
+
 Content.propTypes = {
   content: PropTypes.string,
   fileUrl: PropTypes.string,
-  fileTitle: PropTypes.string
+  fileTitle: PropTypes.string,
+  previewExpanded: PropTypes.bool,
 };
 
-export default Content;
+export { Content as Component };
+
+export default inject(
+  ['ElementSummary', 'ElementFormBuilder'],
+  (SummaryComponent, FormBuilderComponent) => ({
+    SummaryComponent, FormBuilderComponent,
+  }),
+  () => 'ElementEditor.ElementList.Element'
+)(Content);

@@ -48,20 +48,14 @@ Feature: View types of elements in a report
       And I wait 1 second
     Then I should see "Additional Sample Block"
 
-  Scenario: I can edit a block
+  Scenario: I can preview a block
     Given I wait until I see the ".element-editor__element" element
     Then I should see block 1
 
     Given I click on block 1
-    Then I should see "My Sample Block"
-      And the "HTML" HTML field should contain "My sample content"
-
-    Given I fill in "New Block Title" for "Title"
-      And I fill in "<p>New sample content</p>" for the "HTML" HTML field
-      And I press the "Publish" button
-      And I go to "/admin/pages/edit/show/6"
-    Then I should see "New Block Title"
-      But I should not see "My Sample Block"
+    # Needs rewrite once the FormBuilder component is fully functional.
+    # Test checks only if placeholder text is rendered.
+    Then I should see "Imagine some fancy form builder here!"
 
   @modal
   Scenario: I can delete a block
