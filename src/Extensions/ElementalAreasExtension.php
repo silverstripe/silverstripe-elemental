@@ -33,6 +33,11 @@ use SilverStripe\ORM\DataExtension;
  *     'ElementalArea2'
  * );
  *
+ * private static $cascade_duplicates = array(
+ *     'ElementalArea1',
+ *     'ElementalArea2'
+ * );
+ *
  * @package elemental
  */
 class ElementalAreasExtension extends DataExtension
