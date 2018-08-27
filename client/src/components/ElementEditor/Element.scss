@@ -15,4 +15,9 @@
   &:last-child {
     border-bottom: 0;
   }
+
+  // Styles for non-inline editable elements
+  &--expandable {
+    cursor: default;
+  }
 }
