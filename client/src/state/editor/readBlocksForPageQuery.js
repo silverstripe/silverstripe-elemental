@@ -20,6 +20,7 @@ query ReadBlocksForPage($id:ID!) {
             ID
             Title
             BlockSchema
+            InlineEditable
           }
         }
       }

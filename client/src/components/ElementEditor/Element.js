@@ -13,17 +13,32 @@ class Element extends Component {
   constructor(props) {
     super(props);
 
-    this.handleClick = this.handleClick.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.handleExpand = this.handleExpand.bind(this);
+
+    this.state = {
+      previewExpanded: false,
+    };
   }
 
   /**
-   * Take the user to the GridFieldDetailForm to edit the record
+   * Expand the element to show the  preview
+   * If the element is not inline-editable, take user to the GridFieldDetailForm to edit the record
    */
-  handleClick() {
-    const { link } = this.props;
+  handleExpand() {
+    const {
+      element,
+      link
+    } = this.props;
 
-    window.location = link;
+    if (element.InlineEditable) {
+      this.setState({
+        previewExpanded: !this.state.previewExpanded
+      });
+    } else {
+      // link to edit form
+      window.location = link;
+    }
   }
 
   /**
@@ -39,38 +54,49 @@ class Element extends Component {
 
   render() {
     const {
-      element: { ID, Title, BlockSchema },
+      element,
       HeaderComponent,
       ContentComponent,
+      link,
     } = this.props;
 
+    const {
+      previewExpanded,
+    } = this.state;
+
     const linkTitle = i18n.inject(
-      i18n._t('ElementalElement.TITLE', 'Edit this {type} block'), { type: BlockSchema.type }
+      i18n._t('ElementalElement.TITLE', 'Edit this {type} block'),
+      { type: element.BlockSchema.type }
     );
 
-    if (!ID) {
+    if (!element.ID) {
       return null;
     }
 
     return (
       <span
         className="element-editor__element"
-        onClick={this.handleClick}
+        onClick={this.handleExpand}
         onKeyUp={this.handleKeyUp}
         role="button"
         tabIndex={0}
         title={linkTitle}
       >
         <HeaderComponent
-          id={ID}
-          title={Title}
-          elementType={BlockSchema.type}
-          fontIcon={BlockSchema.iconClass}
+          id={element.ID}
+          title={element.Title}
+          elementType={element.BlockSchema.type}
+          fontIcon={element.BlockSchema.iconClass}
+          link={link}
+          caretClickCallback={this.handleExpand}
+          previewExpanded={previewExpanded}
+          expandable={element.InlineEditable}
         />
         <ContentComponent
-          fileUrl={BlockSchema.fileURL}
-          fileTitle={BlockSchema.fileTitle}
-          content={BlockSchema.content}
+          fileUrl={element.BlockSchema.fileURL}
+          fileTitle={element.BlockSchema.fileTitle}
+          content={element.BlockSchema.content}
+          previewExpanded={previewExpanded}
         />
       </span>
     );

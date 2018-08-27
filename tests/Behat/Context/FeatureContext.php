@@ -51,7 +51,7 @@ class FeatureContext extends SilverStripeContext
     public function iShouldSeeAsTheSummaryForBlock($text, $position)
     {
         $block = $this->getSpecificBlock($position);
-        $summary = $block->find('css', '.element-editor-content__content');
+        $summary = $block->find('css', '.element-editor-summary__content');
         assertEquals($summary->getText(), $text);
     }
 
