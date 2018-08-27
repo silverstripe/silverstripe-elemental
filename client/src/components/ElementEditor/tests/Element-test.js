@@ -13,7 +13,7 @@ describe('Element', () => {
   const ContentComponent = () => <div />;
 
   const element = {
-      ID: 2,
+      ID: '2',
       Title: 'Block Title',
       BlockSchema: {
         actions: {
@@ -47,7 +47,7 @@ describe('Element', () => {
           element={
             {
               ...element,
-              ID: 0
+              ID: ''
             }
           }
           link={'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'}

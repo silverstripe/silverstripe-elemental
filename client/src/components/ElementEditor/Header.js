@@ -149,7 +149,7 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   title: PropTypes.string,
   elementType: PropTypes.string,
   fontIcon: PropTypes.string,

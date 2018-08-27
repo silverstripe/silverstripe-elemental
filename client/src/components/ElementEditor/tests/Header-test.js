@@ -15,7 +15,7 @@ describe('Header', () => {
     it('should render the icon', () => {
       const wrapper = shallow(
         <Header
-          id={11}
+          id={'11'}
           title="Sample File Block"
           elementType="File"
           fontIcon="font-icon-block-file"
@@ -23,7 +23,7 @@ describe('Header', () => {
         />
       );
 
-      expect(wrapper.instance().props.id).toBe(11);
+      expect(wrapper.instance().props.id).toBe('11');
       expect(wrapper.find('i.font-icon-block-file')).toHaveLength(1);
       expect(wrapper.find('#element-editor-header__icon11')).toHaveLength(1);
     });
@@ -31,7 +31,7 @@ describe('Header', () => {
     it('should render the title', () => {
       const wrapper = shallow(
         <Header
-          id={12}
+          id={'12'}
           title="Sample File Block"
           elementType="File"
           fontIcon="font-icon-block-file"
@@ -39,14 +39,14 @@ describe('Header', () => {
         />
       );
 
-      expect(wrapper.instance().props.id).toBe(12);
+      expect(wrapper.instance().props.id).toBe('12');
       expect(wrapper.text()).toContain('Sample File Block');
     });
 
     it('should contain a Tooltip', () => {
       const wrapper = shallow(
         <Header
-          id={13}
+          id={'13'}
           title="Sample File Block"
           elementType="File"
           fontIcon="font-icon-block-file"
@@ -54,7 +54,7 @@ describe('Header', () => {
         />
       );
 
-      expect(wrapper.instance().props.id).toBe(13);
+      expect(wrapper.instance().props.id).toBe('13');
       expect(wrapper.find('Tooltip').length).toBe(1);
       expect(wrapper.instance().props.elementType).toBe('File');
     });
