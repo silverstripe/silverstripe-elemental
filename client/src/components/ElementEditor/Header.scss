@@ -26,10 +26,10 @@
     height: 40px;
   }
 
-  .element-editor__expand {
+  &__expand {
     width: unset;
 
-    &::before {
+    &.dropdown-item::before {
       margin-right: 0;
     }
   }

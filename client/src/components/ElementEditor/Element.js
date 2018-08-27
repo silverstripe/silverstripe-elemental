@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { elementType } from 'types/elementType';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
+import classNames from 'classnames';
 
 /**
  * The Element component used in the context of an ElementEditor shows the summary
@@ -26,19 +27,18 @@ class Element extends Component {
    * If the element is not inline-editable, take user to the GridFieldDetailForm to edit the record
    */
   handleExpand() {
-    const {
-      element,
-      link
-    } = this.props;
+    const { element, link } = this.props;
 
     if (element.InlineEditable) {
       this.setState({
         previewExpanded: !this.state.previewExpanded
       });
-    } else {
-      // link to edit form
-      window.location = link;
+      return;
     }
+
+    // If inline editing is disabled for this element, send them to the standalone
+    // edit form
+    window.location = link;
   }
 
   /**
@@ -60,9 +60,7 @@ class Element extends Component {
       link,
     } = this.props;
 
-    const {
-      previewExpanded,
-    } = this.state;
+    const { previewExpanded } = this.state;
 
     const linkTitle = i18n.inject(
       i18n._t('ElementalElement.TITLE', 'Edit this {type} block'),
@@ -73,9 +71,13 @@ class Element extends Component {
       return null;
     }
 
+    const elementClassNames = classNames('element-editor__element', {
+      'element-editor__element--expandable': element.InlineEditable
+    });
+
     return (
       <span
-        className="element-editor__element"
+        className={elementClassNames}
         onClick={this.handleExpand}
         onKeyUp={this.handleKeyUp}
         role="button"

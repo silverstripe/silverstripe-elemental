@@ -60,31 +60,62 @@ class Header extends Component {
     });
   }
 
+  /**
+   * If inline editing is enabled, render the "more actions" menu
+   *
+   * @returns {ActionMenuComponent|null}
+   */
+  renderActionsMenu() {
+    const { id, expandable, ActionMenuComponent } = this.props;
+
+    // Don't show the menu when inline editing is not enabled
+    if (!expandable) {
+      return null;
+    }
+
+    const deleteTitle = i18n._t('ElementHeader.DELETE', 'Delete');
+    const deleteButtonClassNames = classNames('dropdown-item', 'element-editor__actions-delete');
+
+    return (
+      <ActionMenuComponent
+        id={`element-editor-actions-${id}`}
+        className="element-editor-header__actions-dropdown"
+        dropdownMenuProps={{ right: true }}
+        toggleCallback={(event) => event.stopPropagation()}
+      >
+        <button
+          onClick={this.handleDelete}
+          title={deleteTitle}
+          type="button"
+          className={deleteButtonClassNames}
+        >
+          {deleteTitle}
+        </button>
+      </ActionMenuComponent>
+    );
+  }
+
   render() {
     const {
       id,
       title,
       elementType,
       fontIcon,
-      ActionMenuComponent,
       expandable,
-      previewExpanded
+      previewExpanded,
     } = this.props;
-
-    const deleteTitle = i18n._t('ElementHeader.DELETE', 'Delete');
-
-    const deleteButtonClassNames = classNames('dropdown-item', 'element-editor__actions-delete');
 
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
     const expandButtonClassNames = classNames(
       'dropdown-item',
-      'element-editor__expand',
+      'element-editor-header__expand',
       'btn',
       {
         'font-icon-right-open-big': !expandable,
         'font-icon-up-open-big': expandable && previewExpanded,
-        'font-icon-down-open-big': expandable && !previewExpanded
-      });
+        'font-icon-down-open-big': expandable && !previewExpanded,
+      }
+    );
 
     return (
       <div className="element-editor-header">
@@ -103,21 +134,8 @@ class Header extends Component {
           <h3 className="element-editor-header__title">{title}</h3>
         </div>
         <div className="element-editor-header__actions">
-          <ActionMenuComponent
-            id={`element-editor-actions-${id}`}
-            className="element-editor-header__actions-dropdown"
-            dropdownMenuProps={{ right: true }}
-            toggleCallback={(event) => event.stopPropagation()}
-          >
-            <button
-              onClick={this.handleDelete}
-              title={deleteTitle}
-              type="button"
-              className={deleteButtonClassNames}
-            >
-              {deleteTitle}
-            </button>
-          </ActionMenuComponent>
+          {this.renderActionsMenu()}
+
           <button
             onClick={this.handleCaretClick}
             title={expandTitle}
@@ -142,13 +160,11 @@ Header.propTypes = {
   expandable: PropTypes.bool,
   caretClickCallback: PropTypes.func,
   previewExpanded: PropTypes.bool,
-
 };
 
 Header.defaultProps = {
-
+  expandable: true,
 };
-
 
 export { Header as Component };
 
