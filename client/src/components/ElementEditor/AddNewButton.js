@@ -67,7 +67,7 @@ class AddNewButton extends Component {
     }
 
     return elementTypes.map(type => (
-      <option value={type.value}>{type.title}</option>
+      <option key={type.value} value={type.value}>{type.title}</option>
     ));
   }
 
