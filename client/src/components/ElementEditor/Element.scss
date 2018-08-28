@@ -6,10 +6,10 @@
   padding: $panel-padding-x;
   padding-top: $spacer;
 
+  &:focus,
   &:hover {
-    text-decoration: inherit;
-    color: inherit;
-    background-color: $table-hover-bg;
+    box-shadow: $z-depth-1;
+    outline-width: 0;
   }
 
   &:last-child {
