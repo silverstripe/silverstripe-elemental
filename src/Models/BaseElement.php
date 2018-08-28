@@ -78,6 +78,7 @@ class BaseElement extends DataObject
     private static $casting = [
         'BlockSchema' => DBObjectType::class,
         'InlineEditable' => DBBoolean::class,
+        'IsPublished' => DBBoolean::class
     ];
 
     private static $versioned_gridfield_extensions = true;

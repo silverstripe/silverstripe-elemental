@@ -6,6 +6,8 @@ const elementType = PropTypes.shape({
   Title: PropTypes.string,
   BlockSchema: PropTypes.object,
   InlineEditable: PropTypes.bool,
+  IsPublished: PropTypes.bool,
+  Version: PropTypes.number
 });
 
 export { elementType };

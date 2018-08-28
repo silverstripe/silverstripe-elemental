@@ -87,6 +87,8 @@ class Element extends Component {
         <HeaderComponent
           id={element.ID}
           title={element.Title}
+          version={element.Version}
+          isPublished={element.IsPublished}
           elementType={element.BlockSchema.type}
           fontIcon={element.BlockSchema.iconClass}
           link={link}
