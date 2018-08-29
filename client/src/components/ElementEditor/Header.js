@@ -5,6 +5,7 @@ import { Tooltip } from 'reactstrap';
 import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import deleteBlockMutation from 'state/editor/deleteBlockMutation';
+import publishBlockMutation from 'state/editor/publishBlockMutation';
 import i18n from 'i18n';
 import classNames from 'classnames';
 
@@ -14,7 +15,9 @@ class Header extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handlePublish = this.handlePublish.bind(this);
     this.handleCaretClick = this.handleCaretClick.bind(this);
+    this.renderActionsMenu = this.renderActionsMenu.bind(this);
 
     this.state = {
       tooltipOpen: false,
@@ -41,6 +44,21 @@ class Header extends Component {
   }
 
   /**
+   * Handle the publication of a block, passing the block ID and version number in
+   */
+  handlePublish(event) {
+    event.stopPropagation();
+
+    const { id, version, actions: { handlePublishBlock } } = this.props;
+
+    // eslint-disable-next-line no-alert
+    if (handlePublishBlock) {
+      // blockId, fromStage, toStage, fromVersion
+      handlePublishBlock(id, 'DRAFT', 'LIVE', version);
+    }
+  }
+
+  /**
    * Handle the opening/closing of the block preview
    */
   handleCaretClick(event) {
@@ -61,6 +79,32 @@ class Header extends Component {
   }
 
   /**
+   * Render the publish button, if the current state of the button is not yet published
+   *
+   * @returns {DOMElement|null}
+   */
+  renderPublishButton() {
+    const { isPublished } = this.props;
+
+    const publishTitle = i18n._t('ElementHeader.PUBLISH', 'Publish');
+
+    if (isPublished) {
+      return null;
+    }
+
+    return (
+      <button
+        onClick={this.handlePublish}
+        title={publishTitle}
+        type="button"
+        className={classNames('element-editor__actions-publish', 'dropdown-item')}
+      >
+        {publishTitle}
+      </button>
+    );
+  }
+
+  /**
    * If inline editing is enabled, render the "more actions" menu
    *
    * @returns {ActionMenuComponent|null}
@@ -74,12 +118,11 @@ class Header extends Component {
     }
 
     const deleteTitle = i18n._t('ElementHeader.DELETE', 'Delete');
-    const deleteButtonClassNames = classNames('dropdown-item', 'element-editor__actions-delete');
 
     return (
       <ActionMenuComponent
         id={`element-editor-actions-${id}`}
-        className="element-editor-header__actions-dropdown"
+        className={'element-editor-header__actions-dropdown'}
         dropdownMenuProps={{ right: true }}
         toggleCallback={(event) => event.stopPropagation()}
       >
@@ -87,10 +130,13 @@ class Header extends Component {
           onClick={this.handleDelete}
           title={deleteTitle}
           type="button"
-          className={deleteButtonClassNames}
+          className={classNames('element-editor__actions-delete', 'dropdown-item')}
         >
           {deleteTitle}
         </button>
+
+        {this.renderPublishButton()}
+
       </ActionMenuComponent>
     );
   }
@@ -151,10 +197,13 @@ class Header extends Component {
 Header.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
+  version: PropTypes.number,
+  isPublished: PropTypes.bool,
   elementType: PropTypes.string,
   fontIcon: PropTypes.string,
   actions: PropTypes.shape({
     handleDeleteBlock: PropTypes.func.isRequired,
+    handlePublishBlock: PropTypes.func
   }),
   ActionMenuComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
   expandable: PropTypes.bool,
@@ -176,5 +225,6 @@ export default compose(
     }),
     () => 'ElementEditor.ElementList.Element'
   ),
-  deleteBlockMutation
+  deleteBlockMutation,
+  publishBlockMutation
 )(Header);
