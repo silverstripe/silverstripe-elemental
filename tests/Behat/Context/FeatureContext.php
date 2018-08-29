@@ -56,13 +56,13 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
-     * @Then I should see the delete button for block :position
+     * @Then I should see the archive button for block :position
      *
      * @param int $position
      */
-    public function iShouldSeeDeleteButtonForBlock($position)
+    public function iShouldSeeArchiveButtonForBlock($position)
     {
-        $this->getDeleteButton($position);
+        $this->getArchiveButton($position);
     }
 
     /**
@@ -124,18 +124,18 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
-     * Returns the delete button for a specific block
+     * Returns the archive button for a specific block
      *
      * @param $position
      * @return NodeElement
      */
-    protected function getDeleteButton($position)
+    protected function getArchiveButton($position)
     {
         $block = $this->getSpecificBlock($position);
         assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
 
-        $button = $block->find('css', '.element-editor__actions-delete');
-        assertNotNull($button, 'Delete button not found');
+        $button = $block->find('css', '.element-editor__actions-archive');
+        assertNotNull($button, 'Archive button not found');
 
         return $button;
     }

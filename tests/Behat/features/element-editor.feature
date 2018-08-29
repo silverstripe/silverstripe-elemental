@@ -58,7 +58,7 @@ Feature: View types of elements in a report
     Then I should see "Imagine some fancy form builder here!"
 
   @modal
-  Scenario: I can delete a block
+  Scenario: I can archive a block
     Given I wait until I see the ".element-editor__element" element
     When I select "Content" from "elemental-editor_add-new-block-control_select-dropdown"
       And I click "Add" in the ".elemental-editor__add-new-block-control" element
@@ -72,9 +72,9 @@ Feature: View types of elements in a report
       And I should see "Second Sample Block"
       And I should see block 1
       And I press the "View actions" button
-    Then I should see the delete button for block 1
-    When I press the "Delete" button
-      And I see the text "Are you sure you want to delete this block?" in the alert
+    Then I should see the archive button for block 1
+    When I press the "Archive" button
+      And I see the text "Are you sure you want to send this block to the archive?" in the alert
       And I confirm the dialog
       And I wait until I see the ".element-editor__element" element
     Then I should see "Second Sample Block"
