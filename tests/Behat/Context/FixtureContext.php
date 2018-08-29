@@ -1,18 +1,8 @@
 <?php
 namespace DNADesign\Elemental\Tests\Behat\Context;
 
-use DNADesign\Elemental\Extensions\ElementalAreasExtension;
-use DNADesign\Elemental\Extensions\ElementalPageExtension;
-use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementContent;
 use SilverStripe\BehatExtension\Context\FixtureContext as BaseFixtureContext;
-use SilverStripe\BehatExtension\Utility\StepHelper;
-use SilverStripe\Core\ClassInfo;
-use SilverStripe\Core\Extensible;
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\FixtureBlueprint;
-use SilverStripe\ORM\DB;
-use SilverStripe\ORM\HasManyList;
 
 if (!class_exists(BaseFixtureContext::class)) {
     return;
@@ -50,8 +40,36 @@ class FixtureContext extends BaseFixtureContext
             $element->HTML = $elementContent;
             $element->write();
         } else {
-            $element = $this->getFixtureFactory()->createObject(ElementContent::class, $elementTitle, $fields);
+            $element = $this->getFixtureFactory()->createObject(ElementContent::class, $elementTitle, [
+                'Title' => $elementTitle,
+                'HTML' => $elementContent
+            ]);
             $element->write();
         }
+    }
+
+    /**
+     * @Given content blocks are not in-line editable
+     *
+     * @param $elementTitle
+     */
+    public function contentBlocksAreNotInLineEditable()
+    {
+        $contentBlockClass = ElementContent::class;
+        $config = <<<YAML
+---
+Name: testonly-content-blocks-not-inline-editable
+---
+$contentBlockClass:
+  inline_editable: false
+YAML;
+
+        $file = 'content-blocks-not-inline-editable.yml';
+        $path = $this->getDestinationConfigFolder($file);
+        file_put_contents($path, $config);
+
+        $this->activatedConfigFiles[] = $path;
+
+        $this->getMainContext()->visit('/?flush');
     }
 }

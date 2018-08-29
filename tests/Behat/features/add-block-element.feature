@@ -5,11 +5,11 @@ Feature: Add elements in the CMS
   So that I can use multiple elements on a page
 
   Background:
-    Given I am logged in with "ADMIN" permissions
-      And I add an extension "DNADesign\Elemental\Extensions\ElementalPageExtension" to the "Page" class
+    Given I add an extension "DNADesign\Elemental\Extensions\ElementalPageExtension" to the "Page" class
       And a "page" "Blocks Page" with a "Alice's Block" content element with "Some content" content
       And the "page" "Blocks Page" has a "Bob's Block" content element with "Some content II" content
 
+    Given I am logged in with "ADMIN" permissions
       # Remove with 'And I click "Blocks Page" in the ".breadcrumbs-wrapper" element' once the ElementalArea refreshes,
       # See https://github.com/dnadesign/silverstripe-elemental/issues/320
       And I go to "/admin/pages/edit/show/6"
