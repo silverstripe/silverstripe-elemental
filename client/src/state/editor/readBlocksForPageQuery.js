@@ -21,6 +21,7 @@ query ReadBlocksForPage($id:ID!) {
             Title
             BlockSchema
             InlineEditable
+            IsLiveVersion
             IsPublished
             Version
           }

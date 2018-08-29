@@ -88,6 +88,7 @@ class Element extends Component {
           id={element.ID}
           title={element.Title}
           version={element.Version}
+          isLiveVersion={element.IsLiveVersion}
           isPublished={element.IsPublished}
           elementType={element.BlockSchema.type}
           fontIcon={element.BlockSchema.iconClass}
