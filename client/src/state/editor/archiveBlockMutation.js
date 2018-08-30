@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 
 // GraphQL query for deleting a specific block
 const mutation = gql`
-mutation DeleteBlock($blockId: ID!) {
+mutation ArchiveBlock($blockId: ID!) {
   deleteBlock(IDs: [$blockId]) {
     ID
   }
@@ -12,14 +12,14 @@ mutation DeleteBlock($blockId: ID!) {
 
 const config = {
   props: ({ mutate, ownProps: { actions } }) => {
-    const handleDeleteBlock = (blockId) => mutate({
+    const handleArchiveBlock = (blockId) => mutate({
       variables: { blockId },
     });
 
     return {
       actions: {
         ...actions,
-        handleDeleteBlock,
+        handleArchiveBlock,
       },
     };
   },

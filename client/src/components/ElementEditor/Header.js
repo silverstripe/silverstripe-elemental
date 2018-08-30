@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { Tooltip } from 'reactstrap';
 import { compose } from 'redux';
 import { inject } from 'lib/Injector';
-import deleteBlockMutation from 'state/editor/deleteBlockMutation';
+import archiveBlockMutation from 'state/editor/archiveBlockMutation';
 import publishBlockMutation from 'state/editor/publishBlockMutation';
 import i18n from 'i18n';
 import classNames from 'classnames';
@@ -13,11 +13,11 @@ class Header extends Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.handlePublish = this.handlePublish.bind(this);
+    this.handleArchive = this.handleArchive.bind(this);
     this.handleCaretClick = this.handleCaretClick.bind(this);
+    this.handlePublish = this.handlePublish.bind(this);
     this.renderActionsMenu = this.renderActionsMenu.bind(this);
+    this.toggle = this.toggle.bind(this);
 
     this.state = {
       tooltipOpen: false,
@@ -27,19 +27,26 @@ class Header extends Component {
   /**
    * Handle the deletion of a block, passing the block ID in
    */
-  handleDelete(event) {
+  handleArchive(event) {
     event.stopPropagation();
 
-    const { id, actions: { handleDeleteBlock } } = this.props;
+    const { id, isPublished, actions: { handleArchiveBlock } } = this.props;
 
-    const deleteMessage = i18n._t(
+    let archiveMessage = i18n._t(
       'ElementHeader.CONFIRM_DELETE',
-      'Are you sure you want to delete this block?'
+      'Are you sure you want to send this block to the archive?'
     );
 
+    if (isPublished) {
+      archiveMessage = i18n._t(
+        'ElementHeader.CONFIRM_DELETE_AND_UNPUBLISH',
+        'Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?'
+      );
+    }
+
     // eslint-disable-next-line no-alert
-    if (handleDeleteBlock && confirm(deleteMessage)) {
-      handleDeleteBlock(id);
+    if (handleArchiveBlock && confirm(archiveMessage)) {
+      handleArchiveBlock(id);
     }
   }
 
@@ -117,7 +124,7 @@ class Header extends Component {
       return null;
     }
 
-    const deleteTitle = i18n._t('ElementHeader.DELETE', 'Delete');
+    const archiveTitle = i18n._t('ElementHeader.ARCHIVE', 'Archive');
 
     return (
       <ActionMenuComponent
@@ -127,12 +134,12 @@ class Header extends Component {
         toggleCallback={(event) => event.stopPropagation()}
       >
         <button
-          onClick={this.handleDelete}
-          title={deleteTitle}
+          onClick={this.handleArchive}
+          title={archiveTitle}
           type="button"
-          className={classNames('element-editor__actions-delete', 'dropdown-item')}
+          className={classNames('element-editor__actions-archive', 'dropdown-item')}
         >
-          {deleteTitle}
+          {archiveTitle}
         </button>
 
         {this.renderPublishButton()}
@@ -202,8 +209,8 @@ Header.propTypes = {
   elementType: PropTypes.string,
   fontIcon: PropTypes.string,
   actions: PropTypes.shape({
-    handleDeleteBlock: PropTypes.func.isRequired,
-    handlePublishBlock: PropTypes.func
+    handlePublishBlock: PropTypes.func,
+    handleArchiveBlock: PropTypes.func.isRequired,
   }),
   ActionMenuComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
   expandable: PropTypes.bool,
@@ -225,6 +232,6 @@ export default compose(
     }),
     () => 'ElementEditor.ElementList.Element'
   ),
-  deleteBlockMutation,
-  publishBlockMutation
+  publishBlockMutation,
+  archiveBlockMutation
 )(Header);
