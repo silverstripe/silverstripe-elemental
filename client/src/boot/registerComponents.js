@@ -8,6 +8,7 @@ import Header from 'components/ElementEditor/Header';
 import Content from 'components/ElementEditor/Content';
 import Summary from 'components/ElementEditor/Summary';
 import FormBuilder from 'components/ElementEditor/FormBuilder';
+import AddElementPopoverContent from 'components/ElementEditor/AddElementPopoverContent';
 
 export default () => {
   Injector.component.registerMany({
@@ -20,5 +21,6 @@ export default () => {
     ElementContent: Content,
     ElementSummary: Summary,
     ElementFormBuilder: FormBuilder,
+    AddElementPopoverContent,
   });
 };

@@ -5,6 +5,7 @@ namespace DNADesign\Elemental\Forms;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\Control\Controller;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FieldGroup;
@@ -118,6 +119,7 @@ class ElementalAreaField extends GridField
             $blockTypes[] = [
                 'value' => str_replace('\\', '-', $className),
                 'title' => $blockTitle,
+                'icon' => Config::inst()->get($className, 'icon'),
             ];
         }
 
