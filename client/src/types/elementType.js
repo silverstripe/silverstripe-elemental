@@ -7,6 +7,7 @@ const elementType = PropTypes.shape({
   BlockSchema: PropTypes.object,
   InlineEditable: PropTypes.bool,
   IsPublished: PropTypes.bool,
+  IsLiveVersion: PropTypes.bool,
   Version: PropTypes.number
 });
 

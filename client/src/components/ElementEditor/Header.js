@@ -6,6 +6,7 @@ import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import archiveBlockMutation from 'state/editor/archiveBlockMutation';
 import publishBlockMutation from 'state/editor/publishBlockMutation';
+import unpublishBlockMutation from 'state/editor/unpublishBlockMutation';
 import i18n from 'i18n';
 import classNames from 'classnames';
 
@@ -16,6 +17,7 @@ class Header extends Component {
     this.handleArchive = this.handleArchive.bind(this);
     this.handleCaretClick = this.handleCaretClick.bind(this);
     this.handlePublish = this.handlePublish.bind(this);
+    this.handleUnpublish = this.handleUnpublish.bind(this);
     this.renderActionsMenu = this.renderActionsMenu.bind(this);
     this.toggle = this.toggle.bind(this);
 
@@ -58,10 +60,21 @@ class Header extends Component {
 
     const { id, version, actions: { handlePublishBlock } } = this.props;
 
-    // eslint-disable-next-line no-alert
     if (handlePublishBlock) {
-      // blockId, fromStage, toStage, fromVersion
       handlePublishBlock(id, 'DRAFT', 'LIVE', version);
+    }
+  }
+
+  /**
+   * Handle unpublishing of a block, passing the block ID in
+   */
+  handleUnpublish(event) {
+    event.stopPropagation();
+
+    const { id, actions: { handleUnpublishBlock } } = this.props;
+
+    if (handleUnpublishBlock) {
+      handleUnpublishBlock(id);
     }
   }
 
@@ -91,11 +104,11 @@ class Header extends Component {
    * @returns {DOMElement|null}
    */
   renderPublishButton() {
-    const { isPublished } = this.props;
+    const { isLiveVersion } = this.props;
 
     const publishTitle = i18n._t('ElementHeader.PUBLISH', 'Publish');
 
-    if (isPublished) {
+    if (isLiveVersion) {
       return null;
     }
 
@@ -107,6 +120,31 @@ class Header extends Component {
         className={classNames('element-editor__actions-publish', 'dropdown-item')}
       >
         {publishTitle}
+      </button>
+    );
+  }
+
+  /**
+   * Render the unpublish button if the current state of the button is published
+   *
+   * @returns {DOMElement|null}
+   */
+  renderUnpublishButton() {
+    const { isPublished } = this.props;
+    const unpublishTitle = i18n._t('ElementHeader.UNPUBLISH', 'Unpublish');
+
+    if (!isPublished) {
+      return null;
+    }
+
+    return (
+      <button
+        onClick={this.handleUnpublish}
+        title={unpublishTitle}
+        type="button"
+        className={classNames('element-editor__actions-unpublish', 'dropdown-item')}
+      >
+        {unpublishTitle}
       </button>
     );
   }
@@ -141,9 +179,8 @@ class Header extends Component {
         >
           {archiveTitle}
         </button>
-
         {this.renderPublishButton()}
-
+        {this.renderUnpublishButton()}
       </ActionMenuComponent>
     );
   }
@@ -205,12 +242,14 @@ Header.propTypes = {
   id: PropTypes.string,
   title: PropTypes.string,
   version: PropTypes.number,
+  isLiveVersion: PropTypes.bool,
   isPublished: PropTypes.bool,
   elementType: PropTypes.string,
   fontIcon: PropTypes.string,
   actions: PropTypes.shape({
-    handlePublishBlock: PropTypes.func,
     handleArchiveBlock: PropTypes.func.isRequired,
+    handlePublishBlock: PropTypes.func,
+    handleUnpublishBlock: PropTypes.func
   }),
   ActionMenuComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
   expandable: PropTypes.bool,
@@ -232,6 +271,7 @@ export default compose(
     }),
     () => 'ElementEditor.ElementList.Element'
   ),
+  archiveBlockMutation,
   publishBlockMutation,
-  archiveBlockMutation
+  unpublishBlockMutation,
 )(Header);
