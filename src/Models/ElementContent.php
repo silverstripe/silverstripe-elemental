@@ -31,7 +31,8 @@ class ElementContent extends BaseElement
         $this->beforeUpdateCMSFields(function (FieldList $fields) {
             $fields
                 ->fieldByName('Root.Main.HTML')
-                ->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'));
+                ->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'))
+                ->setSchemaComponent('HtmlEditorField');
         });
         return parent::getCMSFields();
     }

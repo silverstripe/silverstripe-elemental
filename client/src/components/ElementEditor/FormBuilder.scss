@@ -1,3 +1,7 @@
 .element-editor-formbuilder {
   margin-top: $spacer-xs;
+  cursor: auto;
+}
+.element-editor-formbuilder--collapsed {
+  display: none;
 }

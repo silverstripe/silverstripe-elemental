@@ -13,7 +13,7 @@ use SilverStripe\Forms\Form;
  */
 class ElementalAreaController extends LeftAndMain
 {
-    private static $url_segment = 'element-area';
+    private static $url_segment = 'elemental-area';
 
     private static $ignore_menuitem = true;
 

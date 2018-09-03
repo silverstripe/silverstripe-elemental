@@ -2,8 +2,29 @@ import React, { PureComponent, PropTypes } from 'react';
 import { inject } from 'lib/Injector';
 
 class Content extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      elementFormLoaded: props.previewExpanded,
+    };
+  }
+
+  componentWillReceiveProps(newProps) {
+    const showForm = this.state.elementFormLoaded || newProps.previewExpanded;
+
+    this.setState(
+      (prevState) => ({
+        ...prevState,
+        elementFormLoaded: showForm,
+      })
+    );
+
+    return showForm;
+  }
+
   render() {
     const {
+      id,
       fileUrl,
       fileTitle,
       content,
@@ -26,9 +47,13 @@ class Content extends PureComponent {
             fileTitle={fileTitle}
           />
         }
-        {previewExpanded &&
+        {(this.state.elementFormLoaded || previewExpanded) &&
           // Show inline editable fields
-          <FormBuilderComponent />
+          <FormBuilderComponent
+            extraClasses={{ 'element-editor-formbuilder--collapsed': !previewExpanded }}
+            onClick={(event) => event.stopPropagation()}
+            elementId={id}
+          />
         }
       </div>
     );
@@ -38,6 +63,7 @@ class Content extends PureComponent {
 Content.defaultProps = {};
 
 Content.propTypes = {
+  id: PropTypes.number,
   content: PropTypes.string,
   fileUrl: PropTypes.string,
   fileTitle: PropTypes.string,
