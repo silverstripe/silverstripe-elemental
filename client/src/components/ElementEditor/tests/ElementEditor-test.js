@@ -11,6 +11,12 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('ElementEditor', () => {
   const ToolbarComponent = () => <div />;
   const ListComponent = () => <div className="elemental-editor__list" />;
+  const testElementType = {
+    name: 'TestElement',
+    title: 'Test Block',
+    icon: 'nothing',
+    tabs: ['Content', 'History'],
+  };
 
   describe('render()', () => {
     it('should render ElementList and Toolbar', () => {
@@ -20,7 +26,7 @@ describe('ElementEditor', () => {
           ListComponent={ListComponent}
           pageId={8}
           baseAddHref="#"
-          elementTypes={['TestElement']}
+          elementTypes={[testElementType]}
         />
       );
 

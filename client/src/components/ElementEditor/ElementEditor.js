@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { inject } from 'lib/Injector';
+import { elementTypeType } from 'types/elementTypeType';
 
 /**
  * The ElementEditor is used in the CMS to manage a list or nested lists of
@@ -19,7 +20,7 @@ class ElementEditor extends PureComponent {
 }
 
 ElementEditor.propTypes = {
-  elementTypes: PropTypes.array.isRequired,
+  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   pageId: PropTypes.number.isRequired,
   baseAddHref: PropTypes.string.isRequired,
 };

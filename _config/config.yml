@@ -25,3 +25,10 @@ Symbiote\GridFieldExtensions\GridFieldAddNewMultiClassHandler:
 SilverStripe\Core\Injector\Injector:
   SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search:
     class: DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch
+  Psr\SimpleCache\CacheInterface.ElementTabCache:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: "ElementTabCache"
+  DNADesign\Elemental\Services\ElementTabProvider:
+    properties:
+      cache: %$Psr\SimpleCache\CacheInterface.ElementTabCache
