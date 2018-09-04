@@ -12,7 +12,7 @@ class ElementEditor extends PureComponent {
     return (
       <div className="element-editor">
         <ToolbarComponent elementTypes={elementTypes} baseAddHref={baseAddHref} />
-        <ListComponent pageId={pageId} />
+        <ListComponent elementTypes={elementTypes} pageId={pageId} />
       </div>
     );
   }
