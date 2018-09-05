@@ -52,18 +52,12 @@
   position: relative;
   width: 8px;
   z-index: 1;
-}
 
-.element-editor__element {
   &--draft {
-    .element-editor-header__version-state {
-      background-color: $state-draft-bg;
-    }
+    background-color: $state-draft-bg;
   }
 
   &--modified {
-    .element-editor-header__version-state {
-      background-color: $state-modified-bg;
-    }
+    background-color: $state-modified-bg;
   }
 }

@@ -89,7 +89,8 @@
 }
 
 // Legacy - tweaks to put the version indicator in the right place for PHP
-// GridField rendering
+// GridField rendering. Specificity is deliberate so it doesn't affect the React
+// elemental area editor
 .elemental-report__grid-field {
   .element-editor-header__version-state {
     bottom: 9px;

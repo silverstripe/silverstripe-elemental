@@ -199,18 +199,21 @@ class Header extends Component {
     }
 
     let versionStateButtonTitle = '';
+    const stateClassNames = ['element-editor-header__version-state'];
 
     if (!isPublished) {
       versionStateButtonTitle = i18n._t('ElementHeader.STATE_DRAFT', 'Item has not been published yet');
+      stateClassNames.push('element-editor-header__version-state--draft');
     }
 
     if (isPublished && !isLiveVersion) {
       versionStateButtonTitle = i18n._t('ElementHeader.STATE_MODIFIED', 'Item has unpublished changes');
+      stateClassNames.push('element-editor-header__version-state--modified');
     }
 
     return (
       <span
-        className="element-editor-header__version-state"
+        className={classNames(stateClassNames)}
         title={versionStateButtonTitle}
       />
     );

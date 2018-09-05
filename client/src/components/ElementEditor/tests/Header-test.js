@@ -135,8 +135,9 @@ describe('Header', () => {
         />
       );
 
-      expect(wrapper.find('.element-editor-header__version-state').prop('title'))
-        .toContain('not been published');
+      const versionedState = wrapper.find('.element-editor-header__version-state');
+      expect(versionedState.prop('title')).toContain('not been published');
+      expect(versionedState.hasClass('element-editor-header__version-state--draft')).toBe(true);
     });
 
     it('identifies modified versions', () => {
@@ -148,8 +149,9 @@ describe('Header', () => {
         />
       );
 
-      expect(wrapper.find('.element-editor-header__version-state').prop('title'))
-        .toContain('has unpublished changes');
+      const versionedState = wrapper.find('.element-editor-header__version-state');
+      expect(versionedState.prop('title')).toContain('has unpublished changes');
+      expect(versionedState.hasClass('element-editor-header__version-state--modified')).toBe(true);
     });
 
     it('ignores live versions', () => {
