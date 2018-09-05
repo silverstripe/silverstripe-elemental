@@ -124,4 +124,46 @@ describe('Header', () => {
       expect(wrapper.text()).not.toContain('ActionMenuComponent');
     });
   });
+
+  describe('renderVersionedStateMessage()', () => {
+    it('identifies draft versions', () => {
+      const wrapper = shallow(
+        <Header
+          ActionMenuComponent={ActionMenuComponent}
+          isPublished={false}
+          isLiveVersion={false}
+        />
+      );
+
+      const versionedState = wrapper.find('.element-editor-header__version-state');
+      expect(versionedState.prop('title')).toContain('not been published');
+      expect(versionedState.hasClass('element-editor-header__version-state--draft')).toBe(true);
+    });
+
+    it('identifies modified versions', () => {
+      const wrapper = shallow(
+        <Header
+          ActionMenuComponent={ActionMenuComponent}
+          isPublished
+          isLiveVersion={false}
+        />
+      );
+
+      const versionedState = wrapper.find('.element-editor-header__version-state');
+      expect(versionedState.prop('title')).toContain('has unpublished changes');
+      expect(versionedState.hasClass('element-editor-header__version-state--modified')).toBe(true);
+    });
+
+    it('ignores live versions', () => {
+      const wrapper = shallow(
+        <Header
+          ActionMenuComponent={ActionMenuComponent}
+          isPublished
+          isLiveVersion
+        />
+      );
+
+      expect(wrapper.find('.element-editor-header__version-state').length).toBe(0);
+    });
+  });
 });

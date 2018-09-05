@@ -276,6 +276,9 @@ class BaseElement extends DataObject
             $fields->removeByName('ParentID');
             $fields->removeByName('Sort');
 
+            // Remove link and file tracking tabs
+            $fields->removeByName(['LinkTracking', 'FileTracking']);
+
             $fields->addFieldToTab(
                 'Root.Settings',
                 TextField::create('ExtraClass', _t(__CLASS__ . '.ExtraCssClassesLabel', 'Custom CSS classes'))

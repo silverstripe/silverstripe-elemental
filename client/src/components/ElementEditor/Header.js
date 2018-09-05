@@ -185,6 +185,40 @@ class Header extends Component {
     );
   }
 
+  /**
+   * Renders a message indicating the current versioned state of the element
+   *
+   * @returns {DOMElement|null}
+   */
+  renderVersionedStateMessage() {
+    const { isLiveVersion, isPublished } = this.props;
+
+    // No indication required for published elements
+    if (isPublished && isLiveVersion) {
+      return null;
+    }
+
+    let versionStateButtonTitle = '';
+    const stateClassNames = ['element-editor-header__version-state'];
+
+    if (!isPublished) {
+      versionStateButtonTitle = i18n._t('ElementHeader.STATE_DRAFT', 'Item has not been published yet');
+      stateClassNames.push('element-editor-header__version-state--draft');
+    }
+
+    if (isPublished && !isLiveVersion) {
+      versionStateButtonTitle = i18n._t('ElementHeader.STATE_MODIFIED', 'Item has unpublished changes');
+      stateClassNames.push('element-editor-header__version-state--modified');
+    }
+
+    return (
+      <span
+        className={classNames(stateClassNames)}
+        title={versionStateButtonTitle}
+      />
+    );
+  }
+
   render() {
     const {
       id,
@@ -212,6 +246,7 @@ class Header extends Component {
         <div className="element-editor-header__info">
           <div className="element-editor-header__icon-container">
             <i className={fontIcon} id={`element-editor-header__icon${id}`} />
+            {this.renderVersionedStateMessage()}
             <Tooltip
               placement="top"
               isOpen={this.state.tooltipOpen}

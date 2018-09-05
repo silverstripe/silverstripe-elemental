@@ -10,7 +10,7 @@ if (!class_exists(SilverStripeContext::class)) {
 class FeatureContext extends SilverStripeContext
 {
     /**
-     * @Then I should see a list of blocks
+     * @Then /^I (?:should\s)?see a list of blocks$/i
      */
     public function iShouldSeeAListOfBlocks()
     {
@@ -103,10 +103,13 @@ class FeatureContext extends SilverStripeContext
     {
         // Wait for the list to be visible
         $this->getSession()->wait(3000, 'window.jQuery(".element-editor .elemental-editor__list").length > 0');
-        $blocks = $this->getSession()
+
+        // Wait for blocks to be rendered
+        $this->getSession()->wait(3000, 'window.jQuery(".element-editor__element").length > 0');
+
+        return $this->getSession()
             ->getPage()
-            ->findAll('css', '.elemental-editor__list .element-editor__element' . $modifier);
-        return $blocks;
+            ->findAll('css', '.element-editor__element' . $modifier);
     }
     /**
      * Returns the selected element

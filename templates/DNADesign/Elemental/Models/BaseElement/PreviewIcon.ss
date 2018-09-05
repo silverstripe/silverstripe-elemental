@@ -3,5 +3,8 @@
 <% end_if %>
 
 <% if $IsVersioned && $VersionState %>
-    <span class="element-item--{$VersionState}" title="$VersionStateTitle"></span>
+    <span
+        class="element-editor-header__version-state element-editor-header__version-state--{$VersionState}"
+        title="$VersionStateTitle"
+    />
 <% end_if %>

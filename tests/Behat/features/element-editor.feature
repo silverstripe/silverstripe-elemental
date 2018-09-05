@@ -11,20 +11,19 @@ Feature: View types of elements in an area on a page
 
     Given I am logged in with "ADMIN" permissions
       And I go to "/admin/pages/edit/show/6"
-      And I wait until I see the ".elemental-editor__list" element
-    Then I should see "Alice's Block"
+    When I see a list of blocks
+      Then I should see "Alice's Block"
       And I should see "Bob's Block"
 
   Scenario: I can see the title and summary of each element
-    Given I wait until I see the ".element-editor__element" element
-    Then I should see a list of blocks
-      And I should see "Alice's Block" as the title for block 1
+    Given I see a list of blocks
+    Then I should see "Alice's Block" as the title for block 1
       And I should see "Some content" as the summary for block 1
       And I should see "Bob's Block" as the title for block 2
       And I should see "Some content II" as the summary for block 2
 
   Scenario: I can preview a block
-    Given I wait until I see the ".element-editor__element" element
+    Given I see a list of blocks
       Then I should see block 1
     Given I click on block 1
       # Needs rewrite once the FormBuilder component is fully functional.
@@ -36,6 +35,6 @@ Feature: View types of elements in an area on a page
     Then I should not see "Imagine some fancy form builder here!"
 
   Scenario: I can see the block type when I hover over an element's icon
-    Given I wait until I see the ".element-editor__element" element
+    Given I see a list of blocks
     When I hover over the icon of block 1
     Then I should see text matching "Content"

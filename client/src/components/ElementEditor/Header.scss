@@ -21,9 +21,10 @@
   }
 
   &__icon-container {
-    color: $gray-600;
+    color: $text-muted;
     font-size: 2.3rem;
-    height: 40px;
+    height: 30px;
+    line-height: 1.5rem;
   }
 
   &__expand {
@@ -33,6 +34,30 @@
       margin-right: 0;
     }
   }
+
+  &__version-state {
+    box-shadow: $gallery-item-shadow;
+  }
 }
 
+// Draft/modified state icons copied from asset-admin - see GalleryItem.scss
+.element-editor-header__version-state {
+  border: 1px solid $state-draft;
+  border-radius: 100%;
+  bottom: 6px;
+  box-shadow: 0 0 1px .5px $white;
+  display: block;
+  height: 8px;
+  left: 22px;
+  position: relative;
+  width: 8px;
+  z-index: 1;
 
+  &--draft {
+    background-color: $state-draft-bg;
+  }
+
+  &--modified {
+    background-color: $state-modified-bg;
+  }
+}
