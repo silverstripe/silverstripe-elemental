@@ -21,9 +21,10 @@
   }
 
   &__icon-container {
-    color: $gray-600;
+    color: $text-muted;
     font-size: 2.3rem;
-    height: 40px;
+    height: 30px;
+    line-height: 1.5rem;
   }
 
   &__expand {
@@ -32,6 +33,10 @@
     &.dropdown-item::before {
       margin-right: 0;
     }
+  }
+
+  &__version-state {
+    box-shadow: $gallery-item-shadow;
   }
 }
 

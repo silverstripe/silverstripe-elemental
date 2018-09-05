@@ -32,5 +32,7 @@ Feature: Edit elements in the CMS
       And I press the "Publish" button
     Then I should see a "Published content block" message
     When I go to "/admin/pages/edit/show/6"
-      Then I should see "Eve's Block"
+      And I wait until I see the ".element-editor__element" element
+      And I wait 1 second
+    Then I should see "Eve's Block"
       But I should not see "Alice's Block"

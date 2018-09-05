@@ -193,6 +193,8 @@ class Header extends Component {
       fontIcon,
       expandable,
       previewExpanded,
+      isLiveVersion,
+      isPublished,
     } = this.props;
 
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
@@ -207,11 +209,30 @@ class Header extends Component {
       }
     );
 
+    const versionStateButtonClassNames = classNames(
+      'element-editor-header__version-state',
+      {
+        'element-item--draft': !isPublished,
+        'element-item--modified': isPublished && !isLiveVersion,
+      }
+    );
+
+    let versionStateButtonTitle = '';
+
+    if (!isPublished) {
+      versionStateButtonTitle = 'Item has not been published yet';
+    }
+
+    if (isPublished && !isLiveVersion) {
+      versionStateButtonTitle = 'Item has unpublished changes';
+    }
+
     return (
       <div className="element-editor-header">
         <div className="element-editor-header__info">
           <div className="element-editor-header__icon-container">
             <i className={fontIcon} id={`element-editor-header__icon${id}`} />
+            <span className={versionStateButtonClassNames} title={versionStateButtonTitle} />
             <Tooltip
               placement="top"
               isOpen={this.state.tooltipOpen}
