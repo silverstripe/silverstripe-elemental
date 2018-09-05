@@ -185,6 +185,37 @@ class Header extends Component {
     );
   }
 
+  /**
+   * Renders a message indicating the current versioned state of the element
+   *
+   * @returns {DOMElement|null}
+   */
+  renderVersionedStateMessage() {
+    const { isLiveVersion, isPublished } = this.props;
+
+    // No indication required for published elements
+    if (isPublished && isLiveVersion) {
+      return null;
+    }
+
+    let versionStateButtonTitle = '';
+
+    if (!isPublished) {
+      versionStateButtonTitle = i18n._t('ElementHeader.STATE_DRAFT', 'Item has not been published yet');
+    }
+
+    if (isPublished && !isLiveVersion) {
+      versionStateButtonTitle = i18n._t('ElementHeader.STATE_MODIFIED', 'Item has unpublished changes');
+    }
+
+    return (
+      <span
+        className="element-editor-header__version-state"
+        title={versionStateButtonTitle}
+      />
+    );
+  }
+
   render() {
     const {
       id,
@@ -193,8 +224,6 @@ class Header extends Component {
       fontIcon,
       expandable,
       previewExpanded,
-      isLiveVersion,
-      isPublished,
     } = this.props;
 
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
@@ -209,30 +238,12 @@ class Header extends Component {
       }
     );
 
-    const versionStateButtonClassNames = classNames(
-      'element-editor-header__version-state',
-      {
-        'element-item--draft': !isPublished,
-        'element-item--modified': isPublished && !isLiveVersion,
-      }
-    );
-
-    let versionStateButtonTitle = '';
-
-    if (!isPublished) {
-      versionStateButtonTitle = 'Item has not been published yet';
-    }
-
-    if (isPublished && !isLiveVersion) {
-      versionStateButtonTitle = 'Item has unpublished changes';
-    }
-
     return (
       <div className="element-editor-header">
         <div className="element-editor-header__info">
           <div className="element-editor-header__icon-container">
             <i className={fontIcon} id={`element-editor-header__icon${id}`} />
-            <span className={versionStateButtonClassNames} title={versionStateButtonTitle} />
+            {this.renderVersionedStateMessage()}
             <Tooltip
               placement="top"
               isOpen={this.state.tooltipOpen}

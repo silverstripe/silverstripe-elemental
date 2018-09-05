@@ -11,16 +11,16 @@ Feature: Edit elements in the CMS
 
     Given I am logged in with "ADMIN" permissions
       # Remove with 'And I click "Blocks Page" in the ".breadcrumbs-wrapper" element' once the ElementalArea refreshes,
-      # See https://github.com/dnadesign/silverstripe-elemental/issues/320
+      # See https://github.com/dnadesign/silverstripe-elemental/issues/312
       And I go to "/admin/pages/edit/show/6"
-      And I wait until I see the ".element-editor__element" element
-    Then I should see "Alice's Block"
+    Then I should see a list of blocks
+      And I should see "Alice's Block"
       And I should see "Bob's Block"
 
   Scenario: I can edit a non in-line editable block
     Given content blocks are not in-line editable
       And I go to "/admin/pages/edit/show/6"
-      And I wait until I see the ".element-editor__element" element
+      And I see a list of blocks
     Then I should see block 1
 
     Given I click on block 1
@@ -32,7 +32,6 @@ Feature: Edit elements in the CMS
       And I press the "Publish" button
     Then I should see a "Published content block" message
     When I go to "/admin/pages/edit/show/6"
-      And I wait until I see the ".element-editor__element" element
-      And I wait 1 second
+      And I see a list of blocks
     Then I should see "Eve's Block"
       But I should not see "Alice's Block"

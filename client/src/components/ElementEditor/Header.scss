@@ -40,4 +40,30 @@
   }
 }
 
+// Draft/modified state icons copied from asset-admin - see GalleryItem.scss
+.element-editor-header__version-state {
+  border: 1px solid $state-draft;
+  border-radius: 100%;
+  bottom: 6px;
+  box-shadow: 0 0 1px .5px $white;
+  display: block;
+  height: 8px;
+  left: 22px;
+  position: relative;
+  width: 8px;
+  z-index: 1;
+}
 
+.element-editor__element {
+  &--draft {
+    .element-editor-header__version-state {
+      background-color: $state-draft-bg;
+    }
+  }
+
+  &--modified {
+    .element-editor-header__version-state {
+      background-color: $state-modified-bg;
+    }
+  }
+}

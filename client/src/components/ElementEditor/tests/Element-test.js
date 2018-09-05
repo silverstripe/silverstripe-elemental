@@ -13,17 +13,19 @@ describe('Element', () => {
   const ContentComponent = () => <div />;
 
   const element = {
-      ID: '2',
-      Title: 'Block Title',
-      BlockSchema: {
-        actions: {
-          edit: 'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'
-        },
-        content: 'Block Content',
-        iconClass: 'font-icon-block-content',
-        type: 'Content'
+    ID: '2',
+    Title: 'Block Title',
+    BlockSchema: {
+      actions: {
+        edit: 'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'
       },
-      InlineEditable: true
+      content: 'Block Content',
+      iconClass: 'font-icon-block-content',
+      type: 'Content'
+    },
+    InlineEditable: true,
+    IsLiveVersion: true,
+    IsPublished: true,
   };
 
   describe('render()', () => {
@@ -59,6 +61,58 @@ describe('Element', () => {
       expect(wrapper.find(HeaderComponent)).toHaveLength(0);
       expect(wrapper.find(ContentComponent)).toHaveLength(0);
       expect(wrapper.type()).toBeNull();
+    });
+  });
+
+  describe('getVersionedStateClassName()', () => {
+    it('identifies draft elements', () => {
+      const wrapper = shallow(
+        <Element
+          element={{
+            ...element,
+            IsPublished: false,
+          }}
+          link="/"
+          HeaderComponent={HeaderComponent}
+          ContentComponent={ContentComponent}
+        />
+      );
+
+      expect(wrapper.hasClass('element-editor__element--draft')).toBe(true);
+    });
+
+    it('identifies modified elements', () => {
+      const wrapper = shallow(
+        <Element
+          element={{
+            ...element,
+            IsPublished: true,
+            IsLiveVersion: false,
+          }}
+          link="/"
+          HeaderComponent={HeaderComponent}
+          ContentComponent={ContentComponent}
+        />
+      );
+
+      expect(wrapper.hasClass('element-editor__element--modified')).toBe(true);
+    });
+
+    it('identifies published elements', () => {
+      const wrapper = shallow(
+        <Element
+          element={{
+            ...element,
+            IsPublished: true,
+            IsLiveVersion: true,
+          }}
+          link="/"
+          HeaderComponent={HeaderComponent}
+          ContentComponent={ContentComponent}
+        />
+      );
+
+      expect(wrapper.hasClass('element-editor__element--published')).toBe(true);
     });
   });
 });

@@ -23,6 +23,27 @@ class Element extends Component {
   }
 
   /**
+   * Returns the applicable versioned state class names for the element
+   *
+   * @returns {string}
+   */
+  getVersionedStateClassName() {
+    const { element } = this.props;
+
+    const baseClassName = 'element-editor__element';
+
+    if (!element.IsPublished) {
+      return `${baseClassName}--draft`;
+    }
+
+    if (element.IsPublished && !element.IsLiveVersion) {
+      return `${baseClassName}--modified`;
+    }
+
+    return `${baseClassName}--published`;
+  }
+
+  /**
    * Expand the element to show the  preview
    * If the element is not inline-editable, take user to the GridFieldDetailForm to edit the record
    */
@@ -71,9 +92,13 @@ class Element extends Component {
       return null;
     }
 
-    const elementClassNames = classNames('element-editor__element', {
-      'element-editor__element--expandable': element.InlineEditable
-    });
+    const elementClassNames = classNames(
+      'element-editor__element',
+      {
+        'element-editor__element--expandable': element.InlineEditable,
+      },
+      this.getVersionedStateClassName()
+    );
 
     return (
       <span

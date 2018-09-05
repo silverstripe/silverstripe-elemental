@@ -88,25 +88,11 @@
   }
 }
 
-// Draft/modified state icons copied from asset-admin - see GalleryItem.scss
-.element-item--draft,
-.element-item--modified {
-  border: 1px solid $state-draft;
-  border-radius: 100%;
-  bottom: 6px;
-  box-shadow: 0 0 1px .5px $white;
-  display: block;
-  height: 8px;
-  left: 22px;
-  position: relative;
-  width: 8px;
-  z-index: 1;
-}
-
-.element-item--draft {
-  background-color: $state-draft-bg;
-}
-
-.element-item--modified {
-  background-color: $state-modified-bg;
+// Legacy - tweaks to put the version indicator in the right place for PHP
+// GridField rendering
+.elemental-report__grid-field {
+  .element-editor-header__version-state {
+    bottom: 9px;
+    left: 14px;
+  }
 }

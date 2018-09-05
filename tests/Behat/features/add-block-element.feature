@@ -13,13 +13,13 @@ Feature: Add elements in the CMS
       # Remove with 'And I click "Blocks Page" in the ".breadcrumbs-wrapper" element' once the ElementalArea refreshes,
       # See https://github.com/dnadesign/silverstripe-elemental/issues/320
       And I go to "/admin/pages/edit/show/6"
-      And I wait until I see the ".element-editor__element" element
-    Then I should see "Alice's Block"
+    Then I should see a list of blocks
+      And I should see "Alice's Block"
       And I should see "Bob's Block"
 
   Scenario: I can add elements to the page
-    Given I wait until I see the ".element-editor__element" element
-    When I select "Content" from "elemental-editor_add-new-block-control_select-dropdown"
+    When I see a list of blocks
+    Then I select "Content" from "elemental-editor_add-new-block-control_select-dropdown"
       And I click "Add" in the ".elemental-editor__add-new-block-control" element
       And I fill in "Eve's Block" for "Title"
       And I fill in "<p>Some content III</p>" for the "HTML" HTML field
@@ -27,6 +27,6 @@ Feature: Add elements in the CMS
     Then I should see a "Saved content block" message
 
     When I go to "/admin/pages/edit/show/6"
-      And I wait until I see the ".element-editor__element" element
-      And I wait 1 second
-    Then I should see "Eve's Block"
+      And I see a list of blocks
+    Then I wait 1 second
+      And I should see "Eve's Block"

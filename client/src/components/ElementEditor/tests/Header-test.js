@@ -124,4 +124,44 @@ describe('Header', () => {
       expect(wrapper.text()).not.toContain('ActionMenuComponent');
     });
   });
+
+  describe('renderVersionedStateMessage()', () => {
+    it('identifies draft versions', () => {
+      const wrapper = shallow(
+        <Header
+          ActionMenuComponent={ActionMenuComponent}
+          isPublished={false}
+          isLiveVersion={false}
+        />
+      );
+
+      expect(wrapper.find('.element-editor-header__version-state').prop('title'))
+        .toContain('not been published');
+    });
+
+    it('identifies modified versions', () => {
+      const wrapper = shallow(
+        <Header
+          ActionMenuComponent={ActionMenuComponent}
+          isPublished
+          isLiveVersion={false}
+        />
+      );
+
+      expect(wrapper.find('.element-editor-header__version-state').prop('title'))
+        .toContain('has unpublished changes');
+    });
+
+    it('ignores live versions', () => {
+      const wrapper = shallow(
+        <Header
+          ActionMenuComponent={ActionMenuComponent}
+          isPublished
+          isLiveVersion
+        />
+      );
+
+      expect(wrapper.find('.element-editor-header__version-state').length).toBe(0);
+    });
+  });
 });
