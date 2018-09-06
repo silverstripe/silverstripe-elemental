@@ -65,10 +65,15 @@ class ElementalAreaController extends LeftAndMain
             return null;
         }
 
-        return $scaffolder->getForm(
+        /** @var Form $form */
+        $form = $scaffolder->getForm(
             $this,
             'ElementForm_'.$elementID,
             ['Record' => $element]
         );
+
+        $form->addExtraClass('form--no-dividers');
+
+        return $form;
     }
 }
