@@ -1,14 +1,14 @@
 <?php
+
 namespace DNADesign\Elemental\Controllers;
 
+use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Forms\DefaultFormFactory;
 use SilverStripe\Forms\Form;
-use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 
 /**
  * Controller for "ElementalArea" - handles loading and saving of in-line edit forms in an elemental area in admin
@@ -59,7 +59,7 @@ class ElementalAreaController extends LeftAndMain
      */
     public function getElementForm($elementID)
     {
-        $scaffolder = Injector::inst()->get(DefaultFormFactory::class);
+        $scaffolder = Injector::inst()->get(EditFormFactory::class);
         $element = BaseElement::get()->byID($elementID);
 
         if (!$element) {
@@ -72,14 +72,6 @@ class ElementalAreaController extends LeftAndMain
             'ElementForm_'.$elementID,
             ['Record' => $element]
         );
-
-        $form->addExtraClass('form--no-dividers');
-
-        /** @var HTMLEditorField $contentField */
-        $contentField = $form->Fields()->fieldByName('Root.Main.HTML');
-        if ($contentField) {
-            $contentField->setRows(5);
-        }
 
         return $form;
     }
