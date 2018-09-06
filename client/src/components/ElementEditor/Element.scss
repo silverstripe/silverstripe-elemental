@@ -2,9 +2,7 @@
   border-bottom: 1px solid $border-color-light;
   color: inherit;
   cursor: pointer;
-  display: block;
-  padding: $panel-padding-x;
-  padding-top: $spacer;
+  padding: $spacer-sm $panel-padding-x $spacer * 1.5;
 
   &:focus,
   &:hover {
@@ -14,9 +12,5 @@
 
   &:last-child {
     border-bottom: 0;
-  }
-
-  &--expandable {
-    cursor: default;
   }
 }

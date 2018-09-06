@@ -15,10 +15,8 @@ class Header extends Component {
     super(props);
 
     this.handleArchive = this.handleArchive.bind(this);
-    this.handleCaretClick = this.handleCaretClick.bind(this);
     this.handlePublish = this.handlePublish.bind(this);
     this.handleUnpublish = this.handleUnpublish.bind(this);
-    this.renderActionsMenu = this.renderActionsMenu.bind(this);
     this.toggle = this.toggle.bind(this);
 
     this.state = {
@@ -75,20 +73,6 @@ class Header extends Component {
 
     if (handleUnpublishBlock) {
       handleUnpublishBlock(id);
-    }
-  }
-
-  /**
-   * Handle the opening/closing of the block preview
-   */
-  handleCaretClick(event) {
-    event.stopPropagation();
-
-    // Tell Element
-    const { caretClickCallback } = this.props;
-
-    if (caretClickCallback) {
-     caretClickCallback(event);
     }
   }
 
@@ -163,12 +147,21 @@ class Header extends Component {
     }
 
     const archiveTitle = i18n._t('ElementHeader.ARCHIVE', 'Archive');
+    const dropdownToggleClassNames = [
+      'element-editor-header__actions-toggle',
+      'btn',
+      'btn-sm',
+      'btn--no-text',
+      'font-icon-dot-3',
+    ];
 
+    // Remove btn-icon-xl make btn-sm
     return (
       <ActionMenuComponent
         id={`element-editor-actions-${id}`}
         className={'element-editor-header__actions-dropdown'}
         dropdownMenuProps={{ right: true }}
+        dropdownToggleClassNames={dropdownToggleClassNames}
         toggleCallback={(event) => event.stopPropagation()}
       >
         { this.renderEditTabs() }
@@ -247,10 +240,8 @@ class Header extends Component {
     } = this.props;
 
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
-    const expandButtonClassNames = classNames(
-      'dropdown-item',
+    const expandCaretClasses = classNames(
       'element-editor-header__expand',
-      'btn',
       {
         'font-icon-right-open-big': !expandable,
         'font-icon-up-open-big': expandable && previewExpanded,
@@ -278,12 +269,7 @@ class Header extends Component {
         <div className="element-editor-header__actions">
           {this.renderActionsMenu()}
 
-          <button
-            onClick={this.handleCaretClick}
-            title={expandTitle}
-            type="button"
-            className={expandButtonClassNames}
-          />
+          <i className={expandCaretClasses} title={expandTitle} />
         </div>
       </div>
     );
@@ -306,7 +292,6 @@ Header.propTypes = {
   }),
   ActionMenuComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
   expandable: PropTypes.bool,
-  caretClickCallback: PropTypes.func,
   previewExpanded: PropTypes.bool,
 };
 

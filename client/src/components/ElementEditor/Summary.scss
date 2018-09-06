@@ -1,13 +1,13 @@
 .element-editor-summary {
   display: flex;
-  margin-top: $spacer-xs;
-  margin-left: 42px; // header icon + margin of title
+  margin-top: $spacer-sm;
+  margin-left: 36px; // header icon + margin of title
   align-items: center;
 
   &__thumbnail-image {
-    border-radius: $thumbnail-border-radius;
+    border-radius: $border-radius-sm * 0.8;
     height: 36px;
-    margin: (-$spacer-sm) $spacer-sm (-$spacer-sm) 0;
+    margin: (-$spacer-xs * 0.8) $spacer-sm (-$spacer-xs * 0.8) 0;
   }
   &__content {
     color: $gray-600;
