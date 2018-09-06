@@ -42,12 +42,9 @@
   }
 
   &__expand {
-    width: unset;
     font-size: 1.1rem;
-
-    &.dropdown-item::before {
-      margin-right: 0;
-    }
+    margin-left: 3px;
+    width: unset;
   }
 
   &__version-state {
