@@ -1,19 +1,14 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import classnames from 'classnames';
 import FormBuilderLoader from 'containers/FormBuilderLoader/FormBuilderLoader';
-import Config from 'lib/Config';
+import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 
-class InlineEditForm extends Component {
-  getConfig() {
-    const sectionKey = 'DNADesign\\Elemental\\Controllers\\ElementalAreaController';
-    return Config.getSection(sectionKey);
-  }
-
+class InlineEditForm extends PureComponent {
   render() {
-    const { extraClass, elementId, onClick } = this.props;
+    const { elementId, extraClass, onClick } = this.props;
 
     const classNames = classnames('element-editor-editform', extraClass);
-    const schemaUrl = `${this.getConfig().form.elementForm.schemaUrl}/${elementId}`;
+    const schemaUrl = loadElementSchemaValue('schemaUrl', elementId);
 
     const formProps = {
       formTag: 'div',

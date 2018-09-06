@@ -5,6 +5,7 @@ import revertToBlockVersionMutation from 'state/history/revertToBlockVersionMuta
 import readBlocksForPageQuery from 'state/editor/readBlocksForPageQuery';
 import ArchiveAction from 'components/ElementActions/ArchiveAction';
 import PublishAction from 'components/ElementActions/PublishAction';
+import SaveAction from 'components/ElementActions/SaveAction';
 import UnpublishAction from 'components/ElementActions/UnpublishAction';
 
 export default () => {
@@ -60,6 +61,7 @@ export default () => {
 
   // Add elemental editor actions
   Injector.transform('element-actions', (updater) => {
+    updater.component('ElementActions', SaveAction, 'ElementActionsWithSave');
     updater.component('ElementActions', ArchiveAction, 'ElementActionsWithArchive');
     updater.component('ElementActions', PublishAction, 'ElementActionsWithPublish');
     updater.component('ElementActions', UnpublishAction, 'ElementActionsWithUnpublish');
