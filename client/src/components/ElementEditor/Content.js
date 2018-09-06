@@ -27,7 +27,7 @@ class Content extends PureComponent {
       fileTitle,
       content,
       previewExpanded,
-      FormBuilderComponent,
+      InlineEditFormComponent,
       SummaryComponent
     } = this.props;
 
@@ -47,8 +47,8 @@ class Content extends PureComponent {
         }
         {(this.state.elementFormLoaded || previewExpanded) &&
           // Show inline editable fields
-          <FormBuilderComponent
-            extraClasses={{ 'element-editor-formbuilder--collapsed': !previewExpanded }}
+          <InlineEditFormComponent
+            extraClass={{ 'element-editor-editform--collapsed': !previewExpanded }}
             onClick={(event) => event.stopPropagation()}
             elementId={id}
           />
@@ -58,22 +58,24 @@ class Content extends PureComponent {
   }
 }
 
-Content.defaultProps = {};
-
 Content.propTypes = {
   id: PropTypes.number,
   content: PropTypes.string,
   fileUrl: PropTypes.string,
   fileTitle: PropTypes.string,
   previewExpanded: PropTypes.bool,
+  SummaryComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  InlineEditFormComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 };
+
+Content.defaultProps = {};
 
 export { Content as Component };
 
 export default inject(
-  ['ElementSummary', 'ElementFormBuilder'],
-  (SummaryComponent, FormBuilderComponent) => ({
-    SummaryComponent, FormBuilderComponent,
+  ['ElementSummary', 'ElementInlineEditForm'],
+  (SummaryComponent, InlineEditFormComponent) => ({
+    SummaryComponent, InlineEditFormComponent,
   }),
   () => 'ElementEditor.ElementList.Element'
 )(Content);

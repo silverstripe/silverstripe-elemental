@@ -4,6 +4,7 @@ namespace DNADesign\Elemental\Controllers;
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\DefaultFormFactory;
 use SilverStripe\Forms\Form;
@@ -22,10 +23,19 @@ class ElementalAreaController extends LeftAndMain
         'schema',
     );
 
+    public function getClientConfig()
+    {
+        $clientConfig = parent::getClientConfig();
+        $clientConfig['form']['elementForm'] = [
+            'schemaUrl' => $this->Link('schema/elementForm'),
+        ];
+        return $clientConfig;
+    }
+
     /**
      * @param HTTPRequest|null $request
      * @return Form
-     * @throws \SilverStripe\Control\HTTPResponse_Exception
+     * @throws HTTPResponse_Exception
      */
     public function elementForm(HTTPRequest $request = null)
     {
