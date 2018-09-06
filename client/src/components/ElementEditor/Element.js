@@ -79,6 +79,7 @@ class Element extends Component {
       HeaderComponent,
       ContentComponent,
       link,
+      editTabs,
     } = this.props;
 
     const { previewExpanded } = this.state;
@@ -118,6 +119,7 @@ class Element extends Component {
           elementType={element.BlockSchema.type}
           fontIcon={element.BlockSchema.iconClass}
           link={link}
+          editTabs={editTabs}
           caretClickCallback={this.handleExpand}
           previewExpanded={previewExpanded}
           expandable={element.InlineEditable}
@@ -136,6 +138,7 @@ class Element extends Component {
 Element.propTypes = {
   element: elementType,
   link: PropTypes.string.isRequired,
+  editTabs: PropTypes.arrayOf(PropTypes.string),
 };
 
 Element.defaultProps = {

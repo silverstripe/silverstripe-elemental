@@ -1,0 +1,11 @@
+---
+Name: elementalcache
+---
+SilverStripe\Core\Injector\Injector:
+  Psr\SimpleCache\CacheInterface.ElementTabCache:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: 'ElementTabCache'
+  DNADesign\Elemental\Services\ElementTabProvider:
+    properties:
+      cache: '%$Psr\SimpleCache\CacheInterface.ElementTabCache'

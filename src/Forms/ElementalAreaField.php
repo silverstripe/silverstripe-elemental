@@ -4,6 +4,7 @@ namespace DNADesign\Elemental\Forms;
 
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
+use DNADesign\Elemental\Services\ElementTabProvider;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
@@ -115,11 +116,16 @@ class ElementalAreaField extends GridField
 
         $blockTypes = [];
 
+        // Use the internal (temporary) provider to get cached tab names.
+        /** @var ElementTabProvider $tabProvider */
+        $tabProvider = Injector::inst()->get(ElementTabProvider::class);
+
         foreach ($this->getTypes() as $className => $blockTitle) {
             $blockTypes[] = [
-                'value' => str_replace('\\', '-', $className),
+                'name' => str_replace('\\', '-', $className),
                 'title' => $blockTitle,
                 'icon' => Config::inst()->get($className, 'icon'),
+                'tabs' => array_values($tabProvider->getTabsForElement($className)),
             ];
         }
 

@@ -10,6 +10,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('Header', () => {
   const ActionMenuComponent = () => <div />;
+  const testTabs = ['Content', 'Settings', 'History'];
 
   describe('render()', () => {
     it('should render the icon', () => {
@@ -35,6 +36,7 @@ describe('Header', () => {
           title="Sample File Block"
           elementType="File"
           fontIcon="font-icon-block-file"
+          editTabs={testTabs}
           ActionMenuComponent={ActionMenuComponent}
         />
       );
@@ -50,6 +52,7 @@ describe('Header', () => {
           title="Sample File Block"
           elementType="File"
           fontIcon="font-icon-block-file"
+          editTabs={testTabs}
           ActionMenuComponent={ActionMenuComponent}
         />
       );
@@ -122,6 +125,23 @@ describe('Header', () => {
       );
 
       expect(wrapper.text()).not.toContain('ActionMenuComponent');
+    });
+
+    it('should render the given "edit tabs" in the action menu', () => {
+      const wrapper = shallow(
+        <Header
+          expandable
+          editTabs={testTabs}
+          ActionMenuComponent={ActionMenuComponent}
+        />
+      );
+
+      // See the dropdown separator
+      expect(wrapper.find(ActionMenuComponent).children().find('DropdownItem').length).toBe(1);
+      // See all the relevant action menu options
+      expect(wrapper.find(ActionMenuComponent).children().map(node => node.text())).toEqual(
+        expect.arrayContaining(testTabs)
+      );
     });
   });
 

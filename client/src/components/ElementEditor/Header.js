@@ -1,7 +1,7 @@
 /* global confirm */
 
 import React, { Component, PropTypes } from 'react';
-import { Tooltip } from 'reactstrap';
+import { Tooltip, DropdownItem } from 'reactstrap';
 import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import archiveBlockMutation from 'state/editor/archiveBlockMutation';
@@ -155,7 +155,7 @@ class Header extends Component {
    * @returns {ActionMenuComponent|null}
    */
   renderActionsMenu() {
-    const { id, expandable, ActionMenuComponent } = this.props;
+    const { id, expandable, editTabs, ActionMenuComponent } = this.props;
 
     // Don't show the menu when inline editing is not enabled
     if (!expandable) {
@@ -171,6 +171,8 @@ class Header extends Component {
         dropdownMenuProps={{ right: true }}
         toggleCallback={(event) => event.stopPropagation()}
       >
+        { this.renderEditTabs() }
+        { !editTabs || !editTabs.length || <DropdownItem divider /> }
         <button
           onClick={this.handleArchive}
           title={archiveTitle}
@@ -183,6 +185,21 @@ class Header extends Component {
         {this.renderUnpublishButton()}
       </ActionMenuComponent>
     );
+  }
+
+  /**
+   * Render buttons for the edit form tabs that will be a part of the edit form (if they exist)
+   *
+   * @returns {DOMElement[]|null}
+   */
+  renderEditTabs() {
+    const { editTabs } = this.props;
+
+    if (!editTabs || !editTabs.length) {
+      return null;
+    }
+
+    return editTabs.map((tab) => <button key={tab} className="dropdown-item">{tab}</button>);
   }
 
   /**
@@ -281,6 +298,7 @@ Header.propTypes = {
   isPublished: PropTypes.bool,
   elementType: PropTypes.string,
   fontIcon: PropTypes.string,
+  editTabs: PropTypes.arrayOf(PropTypes.string),
   actions: PropTypes.shape({
     handleArchiveBlock: PropTypes.func.isRequired,
     handlePublishBlock: PropTypes.func,

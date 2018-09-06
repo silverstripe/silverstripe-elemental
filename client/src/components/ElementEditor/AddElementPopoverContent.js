@@ -1,8 +1,7 @@
-/* global window */
-
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'reactstrap';
 import classNames from 'classnames';
+import { elementTypeType } from 'types/elementTypeType';
 
 /**
  * The AddElementPopoverContent component used in the context of an ElementEditor shows the
@@ -28,7 +27,7 @@ class AddElementPopoverContent extends Component {
               'element-editor-add-element-content__button'
             )
           }
-          key={elementType.ID}
+          key={elementType.name}
         >
           {elementType.title}
         </Button>
@@ -47,14 +46,7 @@ class AddElementPopoverContent extends Component {
   }
 }
 AddElementPopoverContent.propTypes = {
-  elementTypes: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string,
-    icon: PropTypes.string,
-  })),
-};
-
-AddElementPopoverContent.defaultProps = {
-
+  elementTypes: PropTypes.arrayOf(elementTypeType),
 };
 
 export default AddElementPopoverContent;

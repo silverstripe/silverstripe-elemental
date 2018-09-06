@@ -2,8 +2,27 @@ import React, { Component, PropTypes } from 'react';
 import { elementType } from 'types/elementType';
 import { inject } from 'lib/Injector';
 import AddElementPopoverContent from 'components/ElementEditor/AddElementPopoverContent';
+import { elementTypeType } from 'types/elementTypeType';
 
 class ElementList extends Component {
+  /**
+   * Given an elementType, return a list of tabs that should be available in the edit form for an
+   * element.
+   *
+   * @param {elementTypeType} element
+   * @returns {string[]}
+   */
+  getEditTabs(element) {
+    const { elementTypes } = this.props;
+    const matchingType = elementTypes.find(type => element.BlockSchema.type === type.title);
+
+    if (!matchingType || !matchingType.tabs) {
+      return [];
+    }
+
+    return matchingType.tabs;
+  }
+
   /**
    * Renders a list of Element components, each with an elementType object
    * of data mapped into it. The data is provided by a GraphQL HOC registered
@@ -16,10 +35,12 @@ class ElementList extends Component {
       return null;
     }
 
+
     return blocks.map((element) => (
       <ElementComponent
         key={element.ID}
         element={element}
+        editTabs={this.getEditTabs(element)}
         link={element.BlockSchema.actions.edit}
       />
     ));
@@ -54,7 +75,7 @@ class ElementList extends Component {
 ElementList.propTypes = {
   // @todo support either ElementList or Element children in an array (or both)
   blocks: PropTypes.arrayOf(elementType),
-  elementTypes: PropTypes.array.isRequired,
+  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   loading: PropTypes.bool,
 };
 

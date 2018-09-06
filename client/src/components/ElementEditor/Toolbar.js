@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { inject } from 'lib/Injector';
+import { elementTypeType } from 'types/elementTypeType';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class Toolbar extends PureComponent {
@@ -15,7 +16,7 @@ class Toolbar extends PureComponent {
 
 Toolbar.defaultProps = {};
 Toolbar.propTypes = {
-  elementTypes: PropTypes.array.isRequired,
+  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   baseAddHref: PropTypes.string.isRequired,
   AddNewButtonComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };

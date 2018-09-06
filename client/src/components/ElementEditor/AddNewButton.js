@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { InputGroup, Input, InputGroupAddon, Button } from 'reactstrap';
 import i18n from 'i18n';
+import { elementTypeType } from 'types/elementTypeType';
 
 class AddNewButton extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class AddNewButton extends Component {
   handleTypeChange(event) {
     const type = event.target
       ? this.props.elementTypes.find(
-          candidateType => candidateType.value === event.target.value
+          candidateType => candidateType.name === event.target.value
         ) || null
       : null;
 
@@ -35,7 +36,7 @@ class AddNewButton extends Component {
    */
   renderAddButton() {
     const { selectedType } = this.state;
-    const buttonHref = selectedType ? `${this.props.baseAddHref}/${selectedType.value}` : '#';
+    const buttonHref = selectedType ? `${this.props.baseAddHref}/${selectedType.name}` : '#';
     const title = selectedType
       ? i18n.inject(i18n._t('ElementalAddNewButton.TITLE', 'Add a "{type}" block'), { type: selectedType.title })
       : '';
@@ -67,7 +68,7 @@ class AddNewButton extends Component {
     }
 
     return elementTypes.map(type => (
-      <option key={type.value} value={type.value}>{type.title}</option>
+      <option key={type.name} value={type.name}>{type.title}</option>
     ));
   }
 
@@ -97,7 +98,7 @@ class AddNewButton extends Component {
 AddNewButton.defaultProps = {};
 AddNewButton.propTypes = {
   baseAddHref: PropTypes.string.isRequired,
-  elementTypes: PropTypes.array.isRequired,
+  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
 };
 
 export default AddNewButton;
