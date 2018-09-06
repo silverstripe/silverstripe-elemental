@@ -8,6 +8,7 @@ use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\DefaultFormFactory;
 use SilverStripe\Forms\Form;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 
 /**
  * Controller for "ElementalArea" - handles loading and saving of in-line edit forms in an elemental area in admin
@@ -73,6 +74,12 @@ class ElementalAreaController extends LeftAndMain
         );
 
         $form->addExtraClass('form--no-dividers');
+
+        /** @var HTMLEditorField $contentField */
+        $contentField = $form->Fields()->fieldByName('Root.Main.HTML');
+        if ($contentField) {
+            $contentField->setRows(5);
+        }
 
         return $form;
     }
