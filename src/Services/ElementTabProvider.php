@@ -62,7 +62,7 @@ class ElementTabProvider implements Flushable
         /** @var static $self */
         $self = singleton(static::class);
 
-        $self->cache->clear();
+        $self->getCache()->clear();
 
         if ($self->config()->get('regenerate_on_flush')) {
             $self->generateAllTabs();
