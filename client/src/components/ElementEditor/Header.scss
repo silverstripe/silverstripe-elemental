@@ -4,9 +4,13 @@
   justify-content: space-between;
 
   &__title {
+    font-size: 15px;
     font-weight: 400;
-    margin: 0 0 0 $spacer-sm;
+    margin: 0 0 0 $spacer-xs;
     -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__info,
@@ -16,19 +20,30 @@
     flex-grow: 1;
   }
 
+  &__info {
+    max-width: calc(100% - 60px);
+  }
+
   &__actions {
     justify-content: flex-end;
   }
 
+  &__actions-toggle {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+
   &__icon-container {
+    margin-left: -2px;
     color: $text-muted;
-    font-size: 2.3rem;
-    height: 30px;
+    font-size: 2.154rem;
+    height: 28px;
     line-height: 1.5rem;
   }
 
   &__expand {
     width: unset;
+    font-size: 1.1rem;
 
     &.dropdown-item::before {
       margin-right: 0;

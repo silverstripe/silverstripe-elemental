@@ -69,7 +69,7 @@ class Element extends Component {
    */
   handleKeyUp(event) {
     if (event.keyCode === 13) {
-      this.handleClick();
+      this.handleExpand();
     }
   }
 
@@ -102,7 +102,7 @@ class Element extends Component {
     );
 
     return (
-      <span
+      <div
         className={elementClassNames}
         onClick={this.handleExpand}
         onKeyUp={this.handleKeyUp}
@@ -120,7 +120,6 @@ class Element extends Component {
           fontIcon={element.BlockSchema.iconClass}
           link={link}
           editTabs={editTabs}
-          caretClickCallback={this.handleExpand}
           previewExpanded={previewExpanded}
           expandable={element.InlineEditable}
         />
@@ -130,7 +129,7 @@ class Element extends Component {
           content={element.BlockSchema.content}
           previewExpanded={previewExpanded}
         />
-      </span>
+      </div>
     );
   }
 }
