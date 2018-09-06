@@ -12,12 +12,9 @@ class Content extends PureComponent {
   componentWillReceiveProps(newProps) {
     const showForm = this.state.elementFormLoaded || newProps.previewExpanded;
 
-    this.setState(
-      (prevState) => ({
-        ...prevState,
-        elementFormLoaded: showForm,
-      })
-    );
+    this.setState({
+      elementFormLoaded: showForm,
+    });
 
     return showForm;
   }
