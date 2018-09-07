@@ -154,11 +154,11 @@ class ElementalArea extends DataObject
                 $areaID = $eaRelationship . 'ID';
 
                 $currentStage = Versioned::get_stage() ?: Versioned::DRAFT;
-                $page = Versioned::get_by_stage($class, $currentStage)->filter($areaID, $this->ID);
+                $page = Versioned::get_one_by_stage($class, $currentStage, "\"$areaID\" = {$this->ID}");
 
 
-                if ($page && $page->exists()) {
-                    return $page->first();
+                if ($page) {
+                    return $page;
                 }
             }
         }
@@ -172,11 +172,15 @@ class ElementalArea extends DataObject
 
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
-                $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filter($areaID, $this->ID);
+                $page = Versioned::get_one_by_stage($class, Versioned::DRAFT, "\"$areaID\" = {$this->ID}");
 
-                if ($page && $page->exists()) {
-                    $this->OwnerClassName = $class;
-                    return $page->first();
+                if ($page) {
+                    if ($this->OwnerClassName !== $class) {
+                        $this->OwnerClassName = $class;
+                        $this->write();
+                    }
+
+                    return $page;
                 }
             }
         }
