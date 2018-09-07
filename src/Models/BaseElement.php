@@ -92,6 +92,14 @@ class BaseElement extends DataObject
      */
     protected $controller;
 
+    /**
+     * Cache various data to improve CMS load time
+     *
+     * @internal
+     * @var array
+     */
+    protected $cacheData;
+
     private static $default_sort = 'Sort';
 
     private static $singular_name = 'block';
@@ -448,10 +456,16 @@ class BaseElement extends DataObject
      */
     public function getPage()
     {
+        // Allow for repeated calls to be cached
+        if (isset($this->cacheData['page'])) {
+            return $this->cacheData['page'];
+        }
+
         $area = $this->Parent();
 
         if ($area instanceof ElementalArea && $area->exists()) {
-            return $area->getOwnerPage();
+            $this->cacheData['page'] = $area->getOwnerPage();
+            return $this->cacheData['page'];
         }
 
         return null;
@@ -571,8 +585,13 @@ class BaseElement extends DataObject
      */
     public function CMSEditLink()
     {
+        // Allow for repeated calls to be returned from cache
+        if (isset($this->cacheData['cms_edit_link'])) {
+            return $this->cacheData['cms_edit_link'];
+        }
+
         $relationName = $this->getAreaRelationName();
-        $page = $this->getPage(true);
+        $page = $this->getPage();
 
         if (!$page) {
             return null;
@@ -601,6 +620,7 @@ class BaseElement extends DataObject
 
         $this->extend('updateCMSEditLink', $link);
 
+        $this->cacheData['cms_edit_link'] = $link;
         return $link;
     }
 
@@ -613,7 +633,14 @@ class BaseElement extends DataObject
      */
     public function getAreaRelationName()
     {
+        // Allow repeated calls to return from internal cache
+        if (isset($this->cacheData['area_relation_name'])) {
+            return $this->cacheData['area_relation_name'];
+        }
+
         $page = $this->getPage();
+
+        $result = 'ElementalArea';
 
         if ($page) {
             $has_one = $page->config()->get('has_one');
@@ -624,12 +651,14 @@ class BaseElement extends DataObject
                     continue;
                 }
                 if ($relationClass === $area->ClassName && $page->{$relationName}()->ID === $area->ID) {
-                    return $relationName;
+                    $result = $relationName;
+                    break;
                 }
             }
         }
 
-        return 'ElementalArea';
+        $this->cacheData['area_relation_name'] = $result;
+        return $result;
     }
 
     /**
