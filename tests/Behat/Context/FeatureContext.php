@@ -105,6 +105,45 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
+     * @Then /^I should( not |\s+)see the publish button for block (\d+)$/i
+     *
+     * @param string $negative
+     * @param int $position
+     *
+     */
+    public function iShouldSeeThePublishButtonForBlock($negative, $position)
+    {
+        $iShouldNotSee = $negative === ' not ';
+
+        $publishButton = $this->findPublishButton($position);
+
+        if ($iShouldNotSee) {
+            assertNull($publishButton, 'Publish button displayed (but shouldn\'t)');
+        } else {
+            assertNotNull($publishButton, 'Publish button not displayed (but should be)');
+        }
+    }
+
+    /**
+     * @Then /^I should( not |\s+)see the unpublish button for block (\d+)$/i
+     *
+     * @param string $negative
+     * @param int $position
+     */
+    public function iShouldSeeTheUnpublishButtonForBlock($negative, $position)
+    {
+        $iShouldNotSee = $negative === ' not ';
+
+        $unpublishButton = $this->findUnpublishButton($position);
+
+        if ($iShouldNotSee) {
+            assertNull($unpublishButton, 'Unpublish button displayed (but shouldn\'t)');
+        } else {
+            assertNotNull($unpublishButton, 'Unpublish button not displayed (but should be)');
+        }
+    }
+
+    /**
      * @When I hover over block :position
      *
      * @param int $position
@@ -178,6 +217,38 @@ class FeatureContext extends SilverStripeContext
 
         $button = $block->find('css', '.element-editor__actions-archive');
         assertNotNull($button, 'Archive button not found');
+
+        return $button;
+    }
+
+    /**
+     * Returns the publish button for a specific block if it exists
+     *
+     * @param $position
+     * @return NodeElement|null
+     */
+    protected function findPublishButton($position)
+    {
+        $block = $this->getSpecificBlock($position);
+        assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
+
+        $button = $block->find('css', '.element-editor__actions-publish');
+
+        return $button;
+    }
+
+    /**
+     * Returns the unpublish button for a specific block if it exists
+     *
+     * @param $position
+     * @return NodeElement|null
+     */
+    protected function findUnpublishButton($position)
+    {
+        $block = $this->getSpecificBlock($position);
+        assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
+
+        $button = $block->find('css', '.element-editor__actions-unpublish');
 
         return $button;
     }

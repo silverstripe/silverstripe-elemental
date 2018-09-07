@@ -1,3 +1,4 @@
+/* global window */
 import React from 'react';
 import { compose } from 'redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
@@ -11,10 +12,21 @@ const PublishAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { id, version, actions: { handlePublishBlock } } = props;
+    const { id, title, version, actions: { handlePublishBlock } } = props;
+    const { jQuery: $ } = window;
 
     if (handlePublishBlock) {
       handlePublishBlock(id, 'DRAFT', 'LIVE', version);
+      $.noticeAdd({
+        text: i18n.inject(
+          i18n._t(
+            'UnpublishAction.SUCCESS_NOTIFICATION',
+            'Published \'{title}\' successfully'),
+          { title }
+        ),
+        stay: false,
+        type: 'success'
+      });
     }
   };
 
