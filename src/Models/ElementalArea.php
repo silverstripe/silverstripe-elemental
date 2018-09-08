@@ -56,6 +56,14 @@ class ElementalArea extends DataObject
     private static $table_name = 'ElementalArea';
 
     /**
+     * Cache various data to improve CMS load time
+     *
+     * @internal
+     * @var array
+     */
+    protected $cacheData = [];
+
+    /**
      * @return array
      */
     public function supportedPageTypes()
@@ -136,6 +144,11 @@ class ElementalArea extends DataObject
      */
     public function getOwnerPage()
     {
+        // Allow for repeated calls to read from cache
+        if (isset($this->cacheData['owner_page'])) {
+            return $this->cacheData['owner_page'];
+        }
+
         if ($this->OwnerClassName) {
             $class = $this->OwnerClassName;
             $instance = Injector::inst()->get($class);
@@ -148,11 +161,11 @@ class ElementalArea extends DataObject
                 $areaID = $eaRelationship . 'ID';
 
                 $currentStage = Versioned::get_stage() ?: Versioned::DRAFT;
-                $page = Versioned::get_by_stage($class, $currentStage)->filter($areaID, $this->ID);
+                $page = Versioned::get_one_by_stage($class, $currentStage, "\"$areaID\" = {$this->ID}");
 
-
-                if ($page && $page->exists()) {
-                    return $page->first();
+                if ($page) {
+                    $this->cacheData['owner_page'] = $page;
+                    return $page;
                 }
             }
         }
@@ -166,9 +179,9 @@ class ElementalArea extends DataObject
 
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
-                $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filter($areaID, $this->ID);
+                $page = Versioned::get_one_by_stage($class, Versioned::DRAFT, "\"$areaID\" = {$this->ID}");
 
-                if ($page && $page->exists()) {
+                if ($page) {
                     if ($this->OwnerClassName !== $class) {
                         $this->OwnerClassName = $class;
 
@@ -177,7 +190,9 @@ class ElementalArea extends DataObject
                             $this->write();
                         }
                     }
-                    return $page->first();
+
+                    $this->cacheData['area_relation_name'] = $page;
+                    return $page;
                 }
             }
         }
