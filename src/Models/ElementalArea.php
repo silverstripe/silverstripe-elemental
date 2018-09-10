@@ -157,6 +157,7 @@ class ElementalArea extends DataObject
 
         if ($this->OwnerClassName) {
             $class = $this->OwnerClassName;
+            $tableName = DataObject::getSchema()->tableName($class);
             $instance = Injector::inst()->get($class);
             if (!ClassInfo::hasMethod($instance, 'getElementalRelations')) {
                 return null;
@@ -167,7 +168,7 @@ class ElementalArea extends DataObject
                 $areaID = $eaRelationship . 'ID';
 
                 $currentStage = Versioned::get_stage() ?: Versioned::DRAFT;
-                $page = Versioned::get_one_by_stage($class, $currentStage, "\"$areaID\" = {$this->ID}");
+                $page = Versioned::get_one_by_stage($class, $currentStage, "\"$tableName\".\"$areaID\" = {$this->ID}");
 
                 if ($page) {
                     $this->cacheData['owner_page'] = $page;
@@ -177,6 +178,7 @@ class ElementalArea extends DataObject
         }
 
         foreach ($this->supportedPageTypes() as $class) {
+            $tableName = DataObject::getSchema()->tableName($class);
             $instance = Injector::inst()->get($class);
             if (!ClassInfo::hasMethod($instance, 'getElementalRelations')) {
                 return null;
@@ -185,7 +187,7 @@ class ElementalArea extends DataObject
 
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
-                $page = Versioned::get_one_by_stage($class, Versioned::DRAFT, "\"$areaID\" = {$this->ID}");
+                $page = Versioned::get_one_by_stage($class, Versioned::DRAFT, "\"$tableName\".\"$areaID\" = {$this->ID}");
 
                 if ($page) {
                     if ($this->OwnerClassName !== $class) {
