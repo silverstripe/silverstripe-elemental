@@ -10,6 +10,25 @@ if (!class_exists(SilverStripeContext::class)) {
 class FeatureContext extends SilverStripeContext
 {
     /**
+     * @Then /^I should( not |\s*)see the edit form for block (\d+)$/i
+     */
+    public function iShouldSeeTheEditFormForBlock($negative, $position)
+    {
+        $iShouldNotSee = $negative === ' not ';
+
+        $block = $this->getSpecificBlock($position);
+
+        $form = $block->find('css', '.element-editor-editform');
+
+        if ($iShouldNotSee) {
+            assert(!$form || !$form->isVisible(), 'I see the form! Try again later.');
+        } else {
+            assertNotNull($form, 'Edit form not found');
+            assert($form->isVisible());
+        }
+    }
+
+    /**
      * @Then /^I (?:should\s)?see a list of blocks$/i
      */
     public function iShouldSeeAListOfBlocks()
@@ -34,6 +53,19 @@ class FeatureContext extends SilverStripeContext
         assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
         $block->click();
     }
+
+    /**
+     * @When /^I click on the caret button for block (\d+)(?:\sagain)?$/i
+     */
+    public function iClickOnTheCaretButtonForBlock($position)
+    {
+        $block = $this->getSpecificBlock($position);
+        $button = $this->getCaretButton($block);
+        assertNotNull($button, 'Caret button for block ' . $position . ' was not found in the page.');
+        $button->click();
+    }
+
+
 
     /**
      * @Then I should see :text as the title for block :position
@@ -139,6 +171,20 @@ class FeatureContext extends SilverStripeContext
 
         $button = $block->find('css', '.element-editor__actions-archive');
         assertNotNull($button, 'Archive button not found');
+
+        return $button;
+    }
+
+    /**
+     * Returns the caret button for a specific block
+     *
+     * @param $block
+     * @return NodeElement
+     */
+    protected function getCaretButton($block)
+    {
+        $button = $block->find('css', '.element-editor-header__expand');
+        assertNotNull($button, 'Caret button not found');
 
         return $button;
     }
