@@ -124,6 +124,7 @@ class Element extends Component {
           expandable={element.InlineEditable}
         />
         <ContentComponent
+          id={element.ID}
           fileUrl={element.BlockSchema.fileURL}
           fileTitle={element.BlockSchema.fileTitle}
           content={element.BlockSchema.content}

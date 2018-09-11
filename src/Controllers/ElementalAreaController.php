@@ -1,11 +1,13 @@
 <?php
+
 namespace DNADesign\Elemental\Controllers;
 
+use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Forms\DefaultFormFactory;
 use SilverStripe\Forms\Form;
 
 /**
@@ -13,7 +15,7 @@ use SilverStripe\Forms\Form;
  */
 class ElementalAreaController extends LeftAndMain
 {
-    private static $url_segment = 'element-area';
+    private static $url_segment = 'elemental-area';
 
     private static $ignore_menuitem = true;
 
@@ -22,10 +24,19 @@ class ElementalAreaController extends LeftAndMain
         'schema',
     );
 
+    public function getClientConfig()
+    {
+        $clientConfig = parent::getClientConfig();
+        $clientConfig['form']['elementForm'] = [
+            'schemaUrl' => $this->Link('schema/elementForm'),
+        ];
+        return $clientConfig;
+    }
+
     /**
      * @param HTTPRequest|null $request
      * @return Form
-     * @throws \SilverStripe\Control\HTTPResponse_Exception
+     * @throws HTTPResponse_Exception
      */
     public function elementForm(HTTPRequest $request = null)
     {
@@ -48,17 +59,20 @@ class ElementalAreaController extends LeftAndMain
      */
     public function getElementForm($elementID)
     {
-        $scaffolder = Injector::inst()->get(DefaultFormFactory::class);
+        $scaffolder = Injector::inst()->get(EditFormFactory::class);
         $element = BaseElement::get()->byID($elementID);
 
         if (!$element) {
             return null;
         }
 
-        return $scaffolder->getForm(
+        /** @var Form $form */
+        $form = $scaffolder->getForm(
             $this,
             'ElementForm_'.$elementID,
             ['Record' => $element]
         );
+
+        return $form;
     }
 }

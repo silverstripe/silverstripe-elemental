@@ -26,6 +26,7 @@ Feature: Archive elements in the CMS
     When I press the "Archive" button
       And I see the text "Are you sure you want to send this block to the archive?" in the alert
       And I confirm the dialog
+      And I wait for 2 seconds
     Then I see a list of blocks
       And I should see "Bob's Block"
       But I should not see "Alice's Block"

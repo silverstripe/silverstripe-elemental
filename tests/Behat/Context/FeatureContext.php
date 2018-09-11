@@ -26,7 +26,7 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
-     * @When I click on block :position
+     * @When /^I click on block (\d+)(?:\sagain)?$/i
      */
     public function iClickOnBlock($position)
     {

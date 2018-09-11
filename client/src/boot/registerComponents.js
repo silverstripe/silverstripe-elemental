@@ -7,7 +7,7 @@ import AddNewButton from 'components/ElementEditor/AddNewButton';
 import Header from 'components/ElementEditor/Header';
 import Content from 'components/ElementEditor/Content';
 import Summary from 'components/ElementEditor/Summary';
-import FormBuilder from 'components/ElementEditor/FormBuilder';
+import InlineEditForm from 'components/ElementEditor/InlineEditForm';
 import AddElementPopoverContent from 'components/ElementEditor/AddElementPopoverContent';
 
 export default () => {
@@ -20,7 +20,7 @@ export default () => {
     ElementHeader: Header,
     ElementContent: Content,
     ElementSummary: Summary,
-    ElementFormBuilder: FormBuilder,
+    ElementInlineEditForm: InlineEditForm,
     AddElementPopoverContent,
   });
 };

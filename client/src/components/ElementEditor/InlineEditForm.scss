@@ -1,0 +1,8 @@
+.element-editor-editform {
+  margin-top: $spacer-xs;
+  cursor: auto;
+
+  &--collapsed {
+    display: none;
+  }
+}

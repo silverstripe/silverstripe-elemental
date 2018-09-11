@@ -2,13 +2,32 @@ import React, { PureComponent, PropTypes } from 'react';
 import { inject } from 'lib/Injector';
 
 class Content extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      elementFormLoaded: props.previewExpanded,
+    };
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { elementFormLoaded } = this.state;
+    const { previewExpanded } = newProps;
+
+    const showForm = elementFormLoaded || previewExpanded;
+
+    this.setState({
+      elementFormLoaded: showForm,
+    });
+  }
+
   render() {
     const {
+      id,
       fileUrl,
       fileTitle,
       content,
       previewExpanded,
-      FormBuilderComponent,
+      InlineEditFormComponent,
       SummaryComponent
     } = this.props;
 
@@ -26,30 +45,37 @@ class Content extends PureComponent {
             fileTitle={fileTitle}
           />
         }
-        {previewExpanded &&
+        {(this.state.elementFormLoaded || previewExpanded) &&
           // Show inline editable fields
-          <FormBuilderComponent />
+          <InlineEditFormComponent
+            extraClass={{ 'element-editor-editform--collapsed': !previewExpanded }}
+            onClick={(event) => event.stopPropagation()}
+            elementId={id}
+          />
         }
       </div>
     );
   }
 }
 
-Content.defaultProps = {};
-
 Content.propTypes = {
+  id: PropTypes.number,
   content: PropTypes.string,
   fileUrl: PropTypes.string,
   fileTitle: PropTypes.string,
   previewExpanded: PropTypes.bool,
+  SummaryComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  InlineEditFormComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 };
+
+Content.defaultProps = {};
 
 export { Content as Component };
 
 export default inject(
-  ['ElementSummary', 'ElementFormBuilder'],
-  (SummaryComponent, FormBuilderComponent) => ({
-    SummaryComponent, FormBuilderComponent,
+  ['ElementSummary', 'ElementInlineEditForm'],
+  (SummaryComponent, InlineEditFormComponent) => ({
+    SummaryComponent, InlineEditFormComponent,
   }),
   () => 'ElementEditor.ElementList.Element'
 )(Content);

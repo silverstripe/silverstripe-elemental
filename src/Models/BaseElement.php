@@ -334,8 +334,10 @@ class BaseElement extends DataObject
                 Requirements::javascript('dnadesign/silverstripe-elemental:client/dist/js/bundle.js');
 
                 $historyViewer = HistoryViewerField::create('ElementHistory');
+
                 $fields->addFieldToTab('Root.History', $historyViewer);
 
+                // Add class to containing tab
                 $fields->fieldByName('Root.History')
                     ->addExtraClass('elemental-block__history-tab tab--history-viewer');
             }

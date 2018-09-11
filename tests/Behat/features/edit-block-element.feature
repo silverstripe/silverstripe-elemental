@@ -35,3 +35,12 @@ Feature: Edit elements in the CMS
       And I see a list of blocks
     Then I should see "Eve's Block"
       But I should not see "Alice's Block"
+
+  Scenario: I can get to the edit form of an inline-editable block
+    Given I go to "/admin/pages/edit/show/6"
+    When I see a list of blocks
+    Then I should see block 2
+
+    Given I click on block 2
+    Then I should see "Bob's Block"
+      And the "HTML" HTML field should contain "Some content II"

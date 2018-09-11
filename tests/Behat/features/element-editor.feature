@@ -22,17 +22,23 @@ Feature: View types of elements in an area on a page
       And I should see "Bob's Block" as the title for block 2
       And I should see "Some content II" as the summary for block 2
 
-  Scenario: I can preview a block
-    Given I see a list of blocks
-      Then I should see block 1
-    Given I click on block 1
-      # Needs rewrite once the FormBuilder component is fully functional.
-      # Test checks only if placeholder text is rendered.
-      Then I should see "Imagine some fancy form builder here!"
+  # @todo Reimplement this in a way that works
+  #  Scenario: I can preview a block and hide the form again
+  #    Given I see a list of blocks
+  #    Then I should see block 1
+  #    Given I click on block 1
+  #    Then I should see "Title (displayed if checked)"
+  #      And the "HTML" HTML field should contain "Some content"
+  #    Given I click on block 1 again
+  #    Then I should not see "Title (displayed if checked)"
+  #      # The form should still exist, just be hidden from the user
+  #      And the "HTML" HTML field should contain "Some content"
+  #      # The content shows in the preview when the form is not shown
+  #      And I should see "Some content"
 
   Scenario: Opening the "more actions" menu will not expand a block
     When I press the "View actions" button
-    Then I should not see "Imagine some fancy form builder here!"
+    Then I should not see "Title (displayed if checked)"
 
   Scenario: I can see the block type when I hover over an element's icon
     Given I see a list of blocks

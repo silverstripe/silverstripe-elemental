@@ -9,7 +9,7 @@ import Adapter from 'enzyme-adapter-react-15.4/build/index';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Content', () => {
-  const FormBuilderComponent = () => <div />;
+  const InlineEditFormComponent = () => <div />;
   const SummaryComponent = () => <div />;
 
   describe('render()', () => {
@@ -20,7 +20,7 @@ describe('Content', () => {
           fileTitle=""
           content=""
           previewExpanded={false}
-          FormBuilderComponent={FormBuilderComponent}
+          InlineEditFormComponent={InlineEditFormComponent}
           SummaryComponent={SummaryComponent}
         />
       );
@@ -29,20 +29,20 @@ describe('Content', () => {
       expect(wrapper.find(SummaryComponent)).toHaveLength(1);
     });
 
-    it('should render the FormBuilder component if the preview is expanded', () => {
+    it('should render the InlineEditForm component if the preview is expanded', () => {
       const wrapper = shallow(
         <Content
           fileUrl="/ss4/assets/Uploads/c70617f2e4/sample__FillWzEwMCwxMDBd.jpeg"
           fileTitle=""
           content=""
           previewExpanded
-          FormBuilderComponent={FormBuilderComponent}
+          InlineEditFormComponent={InlineEditFormComponent}
           SummaryComponent={SummaryComponent}
         />
       );
 
       expect(wrapper.name()).toEqual('div');
-      expect(wrapper.find(FormBuilderComponent)).toHaveLength(1);
+      expect(wrapper.find(InlineEditFormComponent)).toHaveLength(1);
     });
 
     it('returns null when no content or image is provided', () => {
@@ -52,7 +52,7 @@ describe('Content', () => {
           fileTitle=""
           content=""
           previewExpanded
-          FormBuilderComponent={FormBuilderComponent}
+          InlineEditFormComponent={InlineEditFormComponent}
           SummaryComponent={SummaryComponent}
         />
       );
