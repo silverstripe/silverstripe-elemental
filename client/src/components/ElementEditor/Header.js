@@ -64,6 +64,7 @@ class Header extends Component {
       fontIcon,
       expandable,
       previewExpanded,
+      simple,
       ElementActionsComponent,
     } = this.props;
 
@@ -73,6 +74,11 @@ class Header extends Component {
       'element-editor-header__title--none': !title,
     });
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
+    const containerClasses = classNames(
+      'element-editor-header', {
+        'element-editor-header--simple': simple
+      }
+    );
     const expandCaretClasses = classNames(
       'element-editor-header__expand',
       {
@@ -83,26 +89,26 @@ class Header extends Component {
     );
 
     return (
-      <div className="element-editor-header">
+      <div className={containerClasses}>
+        <div className="element-editor-header__drag-handle">
+          <i className="font-icon-drag-handle" />
+        </div>
         <div className="element-editor-header__info">
           <div className="element-editor-header__icon-container">
             <i className={fontIcon} id={`element-editor-header__icon${id}`} />
             {this.renderVersionedStateMessage()}
-            <Tooltip
+            {!simple && <Tooltip
               placement="top"
               isOpen={this.state.tooltipOpen}
               target={`element-editor-header__icon${id}`}
               toggle={this.toggle}
             >
               {elementType}
-            </Tooltip>
+            </Tooltip>}
           </div>
           <h3 className={titleClasses}>{title || noTitle}</h3>
         </div>
-        <div
-          className="element-editor-header__actions"
-
-        >
+        {!simple && <div className="element-editor-header__actions">
           {expandable &&
             <div
               role="none"
@@ -112,7 +118,7 @@ class Header extends Component {
             </div>
           }
           <i className={expandCaretClasses} title={expandTitle} />
-        </div>
+        </div>}
       </div>
     );
   }
@@ -126,6 +132,7 @@ Header.propTypes = {
   isPublished: PropTypes.bool,
   elementType: PropTypes.string,
   fontIcon: PropTypes.string,
+  simple: PropTypes.bool,
   ElementActionsComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
   expandable: PropTypes.bool,
   previewExpanded: PropTypes.bool,

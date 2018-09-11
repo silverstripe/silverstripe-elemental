@@ -74,6 +74,22 @@
     }
   }
 
+  &__drag-handle {
+    display: none;
+    position: absolute;
+    left: 5px;
+    cursor: grab;
+    cursor: -webkit-grab;
+  }
+
+  &--simple &__drag-handle {
+    display: block;
+  }
+
+  &--simple &__info {
+    width: 460px;
+  }
+
   .dropdown-item.active {
     cursor: default;
   }

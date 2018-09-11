@@ -1,0 +1,11 @@
+.element-editor-drag-preview {
+  top: 0;
+  left: 0;
+  position: fixed;
+  pointer-events: none;
+  z-index: 100; // Higher than CMS tree view
+  background-color: $white;
+  border: 1px solid $border-color;
+  padding: $spacer-sm $panel-padding-x;
+  box-shadow: $z-depth-1;
+}

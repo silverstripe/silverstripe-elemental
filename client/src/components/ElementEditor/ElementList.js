@@ -32,9 +32,15 @@ class ElementList extends Component {
     const {
       ElementComponent,
       HoverBarComponent,
+      DragIndicatorComponent,
       blocks,
       elementTypes,
       elementalAreaId,
+      isDragging,
+      dragTargetElementId,
+      onDragDrop,
+      onDragOver,
+      onDragStart,
     } = this.props;
 
     // Blocks can be either null or an empty array
@@ -46,12 +52,15 @@ class ElementList extends Component {
       return <div>{i18n._t('ElementList.ADD_BLOCKS', 'Add blocks to place your content')}</div>;
     }
 
-    return blocks.map((element) => (
+    const output = blocks.map((element) => (
       <div key={element.ID}>
         <ElementComponent
           element={element}
           editTabs={this.getEditTabs(element)}
           link={element.BlockSchema.actions.edit}
+          onDragOver={onDragOver}
+          onDragDrop={onDragDrop}
+          onDragStart={onDragStart}
         />
         <HoverBarComponent
           elementalAreaId={elementalAreaId}
@@ -60,6 +69,15 @@ class ElementList extends Component {
         />
       </div>
     ));
+
+    if (isDragging) {
+      const indicatorIndex = dragTargetElementId ?
+        blocks.findIndex(element => element.ID === dragTargetElementId) + 1 : 0;
+
+      output.splice(indicatorIndex, 0, <DragIndicatorComponent key="DropIndicator" />);
+    }
+
+    return output;
   }
 
   /**
@@ -79,8 +97,8 @@ class ElementList extends Component {
   render() {
     const { blocks } = this.props;
     const listClassNames = classNames(
-      'elemental-editor__list',
-      { 'elemental-editor__list--empty': !blocks || !blocks.length }
+      'elemental-editor-list',
+      { 'elemental-editor-list--empty': !blocks || !blocks.length }
     );
 
     return (
@@ -97,6 +115,11 @@ ElementList.propTypes = {
   blocks: PropTypes.arrayOf(elementType),
   loading: PropTypes.bool,
   elementalAreaId: PropTypes.number.isRequired,
+  isDragging: PropTypes.bool,
+  dragTargetElementId: PropTypes.string,
+  onDragOver: PropTypes.func,
+  onDragDrop: PropTypes.func,
+  onDragStart: PropTypes.func,
 };
 
 ElementList.defaultProps = {
@@ -107,11 +130,12 @@ ElementList.defaultProps = {
 export { ElementList as Component };
 
 export default inject(
-  ['Element', 'Loading', 'HoverBar'],
-  (ElementComponent, LoadingComponent, HoverBarComponent) => ({
+  ['Element', 'Loading', 'HoverBar', 'DragPositionIndicator'],
+  (ElementComponent, LoadingComponent, HoverBarComponent, DragIndicatorComponent) => ({
     ElementComponent,
     LoadingComponent,
     HoverBarComponent,
+    DragIndicatorComponent,
   }),
   () => 'ElementEditor.ElementList'
 )(ElementList);

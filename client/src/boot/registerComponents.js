@@ -11,6 +11,7 @@ import Summary from 'components/ElementEditor/Summary';
 import InlineEditForm from 'components/ElementEditor/InlineEditForm';
 import AddElementPopover from 'components/ElementEditor/AddElementPopover';
 import HoverBar from 'components/ElementEditor/HoverBar';
+import DragPositionIndicator from 'components/ElementEditor/DragPositionIndicator';
 
 export default () => {
   Injector.component.registerMany({
@@ -26,5 +27,6 @@ export default () => {
     ElementInlineEditForm: InlineEditForm,
     AddElementPopover,
     HoverBar,
+    DragPositionIndicator,
   });
 };
