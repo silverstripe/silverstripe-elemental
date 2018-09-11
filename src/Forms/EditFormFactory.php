@@ -31,4 +31,3 @@ class EditFormFactory extends DefaultFormFactory
         return $fields;
     }
 }
-
