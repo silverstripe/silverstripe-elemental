@@ -7,10 +7,11 @@ use SilverStripe\BehatExtension\Context\SilverStripeContext;
 if (!class_exists(SilverStripeContext::class)) {
     return;
 }
+
 class FeatureContext extends SilverStripeContext
 {
     /**
-     * @Then /^I should( not |\s*)see the edit form for block (\d+)$/i
+     * @Then /^I should( not |\s+)see the edit form for block (\d+)$/i
      */
     public function iShouldSeeTheEditFormForBlock($negative, $position)
     {
@@ -21,10 +22,10 @@ class FeatureContext extends SilverStripeContext
         $form = $block->find('css', '.element-editor-editform');
 
         if ($iShouldNotSee) {
-            assert(!$form || !$form->isVisible(), 'I see the form! Try again later.');
+            assertTrue(!$form || !$form->isVisible(), 'I see the form! Try again later.');
         } else {
             assertNotNull($form, 'Edit form not found');
-            assert($form->isVisible());
+            assertTrue($form->isVisible());
         }
     }
 
@@ -64,8 +65,6 @@ class FeatureContext extends SilverStripeContext
         assertNotNull($button, 'Caret button for block ' . $position . ' was not found in the page.');
         $button->click();
     }
-
-
 
     /**
      * @Then I should see :text as the title for block :position
@@ -178,7 +177,7 @@ class FeatureContext extends SilverStripeContext
     /**
      * Returns the caret button for a specific block
      *
-     * @param $block
+     * @param NodeElement $block
      * @return NodeElement
      */
     protected function getCaretButton($block)

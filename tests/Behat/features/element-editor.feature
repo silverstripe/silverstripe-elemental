@@ -26,11 +26,11 @@ Feature: View types of elements in an area on a page
       Given I see a list of blocks
       Then I should see block 1
       # The entire block should be clickable to reveal the form
-      Given I click on block 1
+      When I click on block 1
       Then I should see the edit form for block 1
         And I should see "Title (displayed if checked)"
         And the "HTML" HTML field should contain "Some content"
-      Given I click on the caret button for block 1
+      When I click on the caret button for block 1
       # The form should still exist, just be hidden from the user
       Then I should not see the edit form for block 1
         And the "HTML" HTML field should contain "Some content"
