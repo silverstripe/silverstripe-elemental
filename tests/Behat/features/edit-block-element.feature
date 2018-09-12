@@ -25,9 +25,10 @@ Feature: Edit elements in the CMS
 
     Given I click on block 1
     Then I should see "Alice's Block"
-      And the "HTML" HTML field should contain "Some content"
+      And the "Content" field should contain "Some content"
 
     Given I fill in "Eve's Block" for "Title"
+      # Note: using un-namespaced fields in PHP GridField
       And I fill in "<p>New sample content</p>" for the "HTML" HTML field
       And I press the "Publish" button
     Then I should see a "Published content block" message
@@ -43,4 +44,4 @@ Feature: Edit elements in the CMS
 
     Given I click on block 2
     Then I should see "Bob's Block"
-      And the "HTML" HTML field should contain "Some content II"
+      And the "Content" field should contain "Some content II"

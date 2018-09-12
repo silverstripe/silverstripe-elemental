@@ -29,11 +29,11 @@ Feature: View types of elements in an area on a page
       When I click on block 1
       Then I should see the edit form for block 1
         And I should see "Title (displayed if checked)"
-        And the "HTML" HTML field should contain "Some content"
+        And the "Content" field should contain "Some content"
       When I click on the caret button for block 1
       # The form should still exist, just be hidden from the user
       Then I should not see the edit form for block 1
-        And the "HTML" HTML field should contain "Some content"
+        And the "Content" field should contain "Some content"
         # The content shows in the preview when the form is not shown
         And I should see "Some content"
 

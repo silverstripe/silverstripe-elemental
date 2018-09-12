@@ -22,6 +22,7 @@ Feature: Add elements in the CMS
     Then I select "Content" from "elemental-editor_add-new-block-control_select-dropdown"
       And I click "Add" in the ".elemental-editor__add-new-block-control" element
       And I fill in "Eve's Block" for "Title"
+      # Note: using un-namespaced fields in PHP GridField
       And I fill in "<p>Some content III</p>" for the "HTML" HTML field
       And I press the "Create" button
     Then I should see a "Saved content block" message
