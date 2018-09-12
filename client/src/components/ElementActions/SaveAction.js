@@ -1,4 +1,3 @@
-/* global document */
 import React from 'react';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import backend from 'lib/Backend';

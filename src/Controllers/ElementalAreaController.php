@@ -119,6 +119,9 @@ class ElementalAreaController extends LeftAndMain
             return null;
         }
 
+        // Remove the pseudo namespaces that were added by the form factory
+        $data = $this->removeNamespacesFromFields($data, $element->ID);
+
         try {
             $updated = false;
             $element->update($data);
@@ -140,5 +143,28 @@ class ElementalAreaController extends LeftAndMain
             'updated' => $updated,
         ]);
         return HTTPResponse::create($body)->addHeader('Content-Type', 'application/json');
+    }
+
+    /**
+     * Remove the pseudo namespaces that were added to form fields by the form factory
+     *
+     * @param array $data
+     * @param int $elementID
+     * @return array
+     */
+    protected function removeNamespacesFromFields(array $data, $elementID)
+    {
+        $output = [];
+        $template = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementID, '');
+        foreach ($data as $key => $value) {
+            // Only look at fields that match the namespace template
+            if (substr($key, 0, strlen($template)) !== $template) {
+                continue;
+            }
+
+            $fieldName = substr($key, strlen($template));
+            $output[$fieldName] = $value;
+        }
+        return $output;
     }
 }
