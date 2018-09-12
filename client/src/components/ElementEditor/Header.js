@@ -1,12 +1,7 @@
-/* global confirm */
-
 import React, { Component, PropTypes } from 'react';
-import { Tooltip, DropdownItem } from 'reactstrap';
+import { Tooltip } from 'reactstrap';
 import { compose } from 'redux';
 import { inject } from 'lib/Injector';
-import archiveBlockMutation from 'state/editor/archiveBlockMutation';
-import publishBlockMutation from 'state/editor/publishBlockMutation';
-import unpublishBlockMutation from 'state/editor/unpublishBlockMutation';
 import i18n from 'i18n';
 import classNames from 'classnames';
 
@@ -14,66 +9,11 @@ class Header extends Component {
   constructor(props) {
     super(props);
 
-    this.handleArchive = this.handleArchive.bind(this);
-    this.handlePublish = this.handlePublish.bind(this);
-    this.handleUnpublish = this.handleUnpublish.bind(this);
     this.toggle = this.toggle.bind(this);
 
     this.state = {
       tooltipOpen: false,
     };
-  }
-
-  /**
-   * Handle the deletion of a block, passing the block ID in
-   */
-  handleArchive(event) {
-    event.stopPropagation();
-
-    const { id, isPublished, actions: { handleArchiveBlock } } = this.props;
-
-    let archiveMessage = i18n._t(
-      'ElementHeader.CONFIRM_DELETE',
-      'Are you sure you want to send this block to the archive?'
-    );
-
-    if (isPublished) {
-      archiveMessage = i18n._t(
-        'ElementHeader.CONFIRM_DELETE_AND_UNPUBLISH',
-        'Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?'
-      );
-    }
-
-    // eslint-disable-next-line no-alert
-    if (handleArchiveBlock && confirm(archiveMessage)) {
-      handleArchiveBlock(id);
-    }
-  }
-
-  /**
-   * Handle the publication of a block, passing the block ID and version number in
-   */
-  handlePublish(event) {
-    event.stopPropagation();
-
-    const { id, version, actions: { handlePublishBlock } } = this.props;
-
-    if (handlePublishBlock) {
-      handlePublishBlock(id, 'DRAFT', 'LIVE', version);
-    }
-  }
-
-  /**
-   * Handle unpublishing of a block, passing the block ID in
-   */
-  handleUnpublish(event) {
-    event.stopPropagation();
-
-    const { id, actions: { handleUnpublishBlock } } = this.props;
-
-    if (handleUnpublishBlock) {
-      handleUnpublishBlock(id);
-    }
   }
 
   toggle() {
@@ -82,118 +22,6 @@ class Header extends Component {
     });
   }
 
-  /**
-   * Render the publish button, if the current state of the button is not yet published
-   *
-   * @returns {DOMElement|null}
-   */
-  renderPublishButton() {
-    const { isLiveVersion } = this.props;
-
-    const publishTitle = i18n._t('ElementHeader.PUBLISH', 'Publish');
-
-    if (isLiveVersion) {
-      return null;
-    }
-
-    return (
-      <button
-        onClick={this.handlePublish}
-        title={publishTitle}
-        type="button"
-        className={classNames('element-editor__actions-publish', 'dropdown-item')}
-      >
-        {publishTitle}
-      </button>
-    );
-  }
-
-  /**
-   * Render the unpublish button if the current state of the button is published
-   *
-   * @returns {DOMElement|null}
-   */
-  renderUnpublishButton() {
-    const { isPublished } = this.props;
-    const unpublishTitle = i18n._t('ElementHeader.UNPUBLISH', 'Unpublish');
-
-    if (!isPublished) {
-      return null;
-    }
-
-    return (
-      <button
-        onClick={this.handleUnpublish}
-        title={unpublishTitle}
-        type="button"
-        className={classNames('element-editor__actions-unpublish', 'dropdown-item')}
-      >
-        {unpublishTitle}
-      </button>
-    );
-  }
-
-  /**
-   * If inline editing is enabled, render the "more actions" menu
-   *
-   * @returns {ActionMenuComponent|null}
-   */
-  renderActionsMenu() {
-    const { id, expandable, editTabs, ActionMenuComponent } = this.props;
-
-    // Don't show the menu when inline editing is not enabled
-    if (!expandable) {
-      return null;
-    }
-
-    const archiveTitle = i18n._t('ElementHeader.ARCHIVE', 'Archive');
-    const dropdownToggleClassNames = [
-      'element-editor-header__actions-toggle',
-      'btn',
-      'btn-sm',
-      'btn--no-text',
-      'font-icon-dot-3',
-    ];
-
-    // Remove btn-icon-xl make btn-sm
-    return (
-      <ActionMenuComponent
-        id={`element-editor-actions-${id}`}
-        className={'element-editor-header__actions-dropdown'}
-        dropdownMenuProps={{ right: true }}
-        dropdownToggleClassNames={dropdownToggleClassNames}
-        toggleCallback={(event) => event.stopPropagation()}
-      >
-        { this.renderEditTabs() }
-        { !editTabs || !editTabs.length || <DropdownItem divider /> }
-        <button
-          onClick={this.handleArchive}
-          title={archiveTitle}
-          type="button"
-          className={classNames('element-editor__actions-archive', 'dropdown-item')}
-        >
-          {archiveTitle}
-        </button>
-        {this.renderPublishButton()}
-        {this.renderUnpublishButton()}
-      </ActionMenuComponent>
-    );
-  }
-
-  /**
-   * Render buttons for the edit form tabs that will be a part of the edit form (if they exist)
-   *
-   * @returns {DOMElement[]|null}
-   */
-  renderEditTabs() {
-    const { editTabs } = this.props;
-
-    if (!editTabs || !editTabs.length) {
-      return null;
-    }
-
-    return editTabs.map((tab) => <button key={tab} className="dropdown-item">{tab}</button>);
-  }
 
   /**
    * Renders a message indicating the current versioned state of the element
@@ -237,6 +65,7 @@ class Header extends Component {
       fontIcon,
       expandable,
       previewExpanded,
+      ElementActionsComponent,
     } = this.props;
 
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
@@ -267,7 +96,7 @@ class Header extends Component {
           <h3 className="element-editor-header__title">{title}</h3>
         </div>
         <div className="element-editor-header__actions">
-          {this.renderActionsMenu()}
+          {expandable && <ElementActionsComponent {...this.props} />}
 
           <i className={expandCaretClasses} title={expandTitle} />
         </div>
@@ -284,13 +113,7 @@ Header.propTypes = {
   isPublished: PropTypes.bool,
   elementType: PropTypes.string,
   fontIcon: PropTypes.string,
-  editTabs: PropTypes.arrayOf(PropTypes.string),
-  actions: PropTypes.shape({
-    handleArchiveBlock: PropTypes.func.isRequired,
-    handlePublishBlock: PropTypes.func,
-    handleUnpublishBlock: PropTypes.func
-  }),
-  ActionMenuComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
+  ElementActionsComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
   expandable: PropTypes.bool,
   previewExpanded: PropTypes.bool,
 };
@@ -303,13 +126,10 @@ export { Header as Component };
 
 export default compose(
   inject(
-    ['ActionMenu'],
-    (ActionMenuComponent) => ({
-      ActionMenuComponent,
+    ['ElementActions'],
+    (ElementActionsComponent) => ({
+      ElementActionsComponent,
     }),
     () => 'ElementEditor.ElementList.Element'
-  ),
-  archiveBlockMutation,
-  publishBlockMutation,
-  unpublishBlockMutation,
+  )
 )(Header);

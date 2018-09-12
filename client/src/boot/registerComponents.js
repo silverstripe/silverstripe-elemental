@@ -1,5 +1,6 @@
 import Injector from 'lib/Injector';
 import Element from 'components/ElementEditor/Element';
+import ElementActions from 'components/ElementEditor/ElementActions';
 import ElementEditor from 'components/ElementEditor/ElementEditor';
 import ElementList from 'components/ElementEditor/ElementList';
 import Toolbar from 'components/ElementEditor/Toolbar';
@@ -17,6 +18,7 @@ export default () => {
     ElementAddNewButton: AddNewButton,
     ElementList,
     Element,
+    ElementActions,
     ElementHeader: Header,
     ElementContent: Content,
     ElementSummary: Summary,

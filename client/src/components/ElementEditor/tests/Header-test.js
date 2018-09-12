@@ -9,7 +9,7 @@ import Adapter from 'enzyme-adapter-react-15.4/build/index';
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('Header', () => {
-  const ActionMenuComponent = () => <div />;
+  const ElementActionsComponent = () => <div />;
   const testTabs = ['Content', 'Settings', 'History'];
 
   describe('render()', () => {
@@ -20,7 +20,7 @@ describe('Header', () => {
           title="Sample File Block"
           elementType="File"
           fontIcon="font-icon-block-file"
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
         />
       );
 
@@ -37,7 +37,7 @@ describe('Header', () => {
           elementType="File"
           fontIcon="font-icon-block-file"
           editTabs={testTabs}
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
         />
       );
 
@@ -53,7 +53,7 @@ describe('Header', () => {
           elementType="File"
           fontIcon="font-icon-block-file"
           editTabs={testTabs}
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
         />
       );
 
@@ -66,7 +66,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           expandable={false}
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
         />
       );
 
@@ -80,7 +80,7 @@ describe('Header', () => {
         <Header
           expandable
           previewExpanded={false}
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
         />
       );
 
@@ -94,7 +94,7 @@ describe('Header', () => {
         <Header
           expandable
           previewExpanded
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
         />
       );
 
@@ -102,46 +102,27 @@ describe('Header', () => {
       expect(expandButton.length).toBe(1);
       expect(expandButton.hasClass('font-icon-up-open-big')).toBe(true);
     });
-  });
 
-  describe('renderActionsMenu()', () => {
-    it('should render an ActionMenu when the element is expandable', () => {
+    it('should render an ElementActions component when the element is expandable', () => {
       const wrapper = shallow(
         <Header
           expandable
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
         />
       );
 
-      expect(wrapper.text()).toContain('ActionMenuComponent');
+      expect(wrapper.text()).toContain('ElementActionsComponent');
     });
 
-    it('should not render an ActionMenu when the element is not expandable', () => {
+    it('should not render an ElementActions when the element is not expandable', () => {
       const wrapper = shallow(
         <Header
           expandable={false}
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
         />
       );
 
-      expect(wrapper.text()).not.toContain('ActionMenuComponent');
-    });
-
-    it('should render the given "edit tabs" in the action menu', () => {
-      const wrapper = shallow(
-        <Header
-          expandable
-          editTabs={testTabs}
-          ActionMenuComponent={ActionMenuComponent}
-        />
-      );
-
-      // See the dropdown separator
-      expect(wrapper.find(ActionMenuComponent).children().find('DropdownItem').length).toBe(1);
-      // See all the relevant action menu options
-      expect(wrapper.find(ActionMenuComponent).children().map(node => node.text())).toEqual(
-        expect.arrayContaining(testTabs)
-      );
+      expect(wrapper.text()).not.toContain('ElementActionsComponent');
     });
   });
 
@@ -149,7 +130,7 @@ describe('Header', () => {
     it('identifies draft versions', () => {
       const wrapper = shallow(
         <Header
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
           isPublished={false}
           isLiveVersion={false}
         />
@@ -163,7 +144,7 @@ describe('Header', () => {
     it('identifies modified versions', () => {
       const wrapper = shallow(
         <Header
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
           isPublished
           isLiveVersion={false}
         />
@@ -177,7 +158,7 @@ describe('Header', () => {
     it('ignores live versions', () => {
       const wrapper = shallow(
         <Header
-          ActionMenuComponent={ActionMenuComponent}
+          ElementActionsComponent={ElementActionsComponent}
           isPublished
           isLiveVersion
         />
