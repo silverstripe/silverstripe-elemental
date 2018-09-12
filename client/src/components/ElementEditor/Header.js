@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Tooltip } from 'reactstrap';
+import { elementType } from 'types/elementType';
 import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
@@ -16,6 +17,19 @@ class Header extends Component {
     };
   }
 
+  componentDidUpdate() {
+    if (this.state.tooltipOpen && this.props.disableTooltip) {
+      // This addresses an issue where the tooltip will stick around after dragging. The
+      // ability to have a tooltip is back (props.disableTooltip) but the old state remains.
+      // Using `setState` in `componentDidUpdate` is dangerous but is okay within a reasonable
+      // condition that avoids the (potential) infinite loop.
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        tooltipOpen: false
+      });
+    }
+  }
+
   toggle() {
     this.setState({
       tooltipOpen: !this.state.tooltipOpen
@@ -28,7 +42,7 @@ class Header extends Component {
    * @returns {DOMElement|null}
    */
   renderVersionedStateMessage() {
-    const { isLiveVersion, isPublished } = this.props;
+    const { element: { IsLiveVersion: isLiveVersion, IsPublished: isPublished } } = this.props;
 
     // No indication required for published elements
     if (isPublished && isLiveVersion) {
@@ -58,20 +72,18 @@ class Header extends Component {
 
   render() {
     const {
-      id,
-      title,
-      elementType,
-      fontIcon,
-      expandable,
+      element,
       previewExpanded,
       simple,
+      disableTooltip,
+      expandable,
       ElementActionsComponent,
     } = this.props;
 
     const noTitle = i18n.inject(i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'), { type: elementType });
     const titleClasses = classNames({
       'element-editor-header__title': true,
-      'element-editor-header__title--none': !title,
+      'element-editor-header__title--none': !element.Title,
     });
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
     const containerClasses = classNames(
@@ -87,6 +99,7 @@ class Header extends Component {
         'font-icon-down-open-big': expandable && !previewExpanded,
       }
     );
+    const blockIconId = `element-icon-${element.ID}`;
 
     return (
       <div className={containerClasses}>
@@ -95,18 +108,18 @@ class Header extends Component {
         </div>
         <div className="element-editor-header__info">
           <div className="element-editor-header__icon-container">
-            <i className={fontIcon} id={`element-editor-header__icon${id}`} />
+            <i className={element.BlockSchema.iconClass} id={blockIconId} />
             {this.renderVersionedStateMessage()}
             {!simple && <Tooltip
               placement="top"
-              isOpen={this.state.tooltipOpen}
-              target={`element-editor-header__icon${id}`}
+              isOpen={this.state.tooltipOpen && !disableTooltip}
+              target={blockIconId}
               toggle={this.toggle}
             >
-              {elementType}
+              {element.BlockSchema.type}
             </Tooltip>}
           </div>
-          <h3 className={titleClasses}>{title || noTitle}</h3>
+          <h3 className={titleClasses}>{element.Title || noTitle}</h3>
         </div>
         {!simple && <div className="element-editor-header__actions">
           {expandable &&
@@ -125,17 +138,12 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  id: PropTypes.string,
-  title: PropTypes.string,
-  version: PropTypes.number,
-  isLiveVersion: PropTypes.bool,
-  isPublished: PropTypes.bool,
+  element: elementType.isRequired,
   elementType: PropTypes.string,
-  fontIcon: PropTypes.string,
   simple: PropTypes.bool,
   ElementActionsComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
-  expandable: PropTypes.bool,
   previewExpanded: PropTypes.bool,
+  disableTooltip: PropTypes.bool,
 };
 
 Header.defaultProps = {

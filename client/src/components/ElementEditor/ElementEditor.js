@@ -1,13 +1,13 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { inject } from 'lib/Injector';
+import { compose } from 'redux';
 import { elementTypeType } from 'types/elementTypeType';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import classnames from 'classnames';
-
+import sortBlockMutation from 'state/editor/sortBlockMutation';
 import ElementDragPreview from 'components/ElementEditor/ElementDragPreview';
 
 /**
@@ -19,7 +19,7 @@ class ElementEditor extends PureComponent {
     super(props);
 
     this.state = {
-      dragTargetElementId: false,
+      dragTargetElementId: undefined,
       isDragging: false,
       draggedElement: null,
     };
@@ -47,10 +47,19 @@ class ElementEditor extends PureComponent {
   }
 
   handleDragDrop() {
+    const { dragTargetElementId: targetId, draggedElement: element } = this.state;
+    const { actions: { handleSortBlock }, pageId } = this.props;
+
     this.setState({
-      dragTargetElementId: false,
+      dragTargetElementId: undefined,
       isDragging: false,
     });
+
+    if (!handleSortBlock || (targetId && targetId === element.ID)) {
+      return;
+    }
+
+    handleSortBlock(element.ID, targetId || 0, pageId);
   }
 
   render() {
@@ -99,6 +108,9 @@ ElementEditor.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   pageId: PropTypes.number.isRequired,
   elementalAreaId: PropTypes.number.isRequired,
+  actions: PropTypes.shape({
+    handleSortBlock: PropTypes.func,
+  }),
 };
 
 ElementEditor.defaultProps = {};
@@ -132,5 +144,6 @@ export default compose(
       ListComponent,
     }),
     () => 'ElementEditor'
-  )
+  ),
+  sortBlockMutation
 )(ElementEditor);

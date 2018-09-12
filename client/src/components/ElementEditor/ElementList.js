@@ -58,6 +58,7 @@ class ElementList extends Component {
           element={element}
           editTabs={this.getEditTabs(element)}
           link={element.BlockSchema.actions.edit}
+          isDragging={isDragging}
           onDragOver={onDragOver}
           onDragDrop={onDragDrop}
           onDragStart={onDragStart}

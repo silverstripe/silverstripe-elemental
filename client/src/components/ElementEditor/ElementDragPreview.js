@@ -13,16 +13,6 @@ class ElementDragPreview extends Component {
     }
 
     const { x, y } = currentOffset;
-
-    const thing = element || {
-      ID: 2,
-      Title: 'Something blah',
-      Version: 5,
-      IsLiveVersion: true,
-      IsPublished: true,
-      BlockSchema: { iconClass: 'font-icon-block-form' },
-    };
-
     const transform = `translate(${x}px, ${y}px)`;
     const style = {
       transform,
@@ -32,12 +22,7 @@ class ElementDragPreview extends Component {
     return (
       <div className="element-editor-drag-preview" style={style}>
         <Header
-          id={thing.ID}
-          title={thing.Title}
-          version={thing.Version}
-          isLiveVersion={thing.IsLiveVersion}
-          isPublished={thing.IsPublished}
-          fontIcon={thing.BlockSchema.iconClass}
+          element={element}
           simple
         />
       </div>

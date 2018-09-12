@@ -239,19 +239,15 @@ class Element extends Component {
         key={element.ID}
       >
         <HeaderComponent
-          id={element.ID}
-          title={element.Title}
-          version={element.Version}
-          isLiveVersion={element.IsLiveVersion}
-          isPublished={element.IsPublished}
-          elementType={element.BlockSchema.type}
-          fontIcon={element.BlockSchema.iconClass}
+          element={element}
+          expandable={element.InlineEditable}
           link={link}
           editTabs={editTabs}
           previewExpanded={previewExpanded}
           expandable={element.InlineEditable}
           handleEditTabsClick={this.handleTabClick}
           activeTab={activeTab}
+          disableTooltip={isDragging}
         />
         <ContentComponent
           id={element.ID}

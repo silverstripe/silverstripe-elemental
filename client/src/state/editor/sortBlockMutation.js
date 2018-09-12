@@ -22,8 +22,10 @@ const config = {
         afterBlockId,
       },
       optimisticResponse: {
-        ID: blockId,
-        __typename: 'Block',
+        sortBlock: {
+          ID: blockId,
+          __typename: 'Block',
+        },
       },
       update: store => {
         const variables = readBlocksConfig.options({ pageId }).variables;
