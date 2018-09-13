@@ -1,0 +1,4 @@
+DNADesign\Elemental\Models\ElementContent:
+  content_block:
+    Title: Foo bar
+    HTML: <p>Some content</p>
