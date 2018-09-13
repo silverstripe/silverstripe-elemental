@@ -56,6 +56,6 @@ class EditFormFactory extends DefaultFormFactory
         foreach ($fields->dataFields() as $field) {
             $namespacedName = sprintf(self::FIELD_NAMESPACE_TEMPLATE, $elementID, $field->getName());
             $field->setName($namespacedName);
-        };
+        }
     }
 }
