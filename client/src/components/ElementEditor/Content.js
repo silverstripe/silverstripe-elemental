@@ -59,7 +59,7 @@ class Content extends PureComponent {
 }
 
 Content.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   content: PropTypes.string,
   fileUrl: PropTypes.string,
   fileTitle: PropTypes.string,

@@ -24,12 +24,13 @@ class ElementActions extends Component {
   }
 
   /**
-   * If inline editing is enabled, render the "more actions" menu
+   * If inline editing is enabled, render the "more actions" menu. Injector registrations can
+   * define HOCs that add action components as children of this component.
    *
    * @returns {ActionMenuComponent|null}
    */
   render() {
-    const { actionButtons, id, editTabs, ActionMenuComponent } = this.props;
+    const { children, id, editTabs, ActionMenuComponent } = this.props;
 
     const dropdownToggleClassNames = [
       'element-editor-header__actions-toggle',
@@ -50,7 +51,7 @@ class ElementActions extends Component {
       >
         { this.renderEditTabs() }
         { !editTabs || !editTabs.length || <DropdownItem divider /> }
-        { actionButtons }
+        { children }
       </ActionMenuComponent>
     );
   }
@@ -59,11 +60,9 @@ class ElementActions extends Component {
 ElementActions.propTypes = {
   id: PropTypes.string,
   editTabs: PropTypes.arrayOf(PropTypes.string),
-  actionButtons: PropTypes.array,
 };
 
 ElementActions.defaultProps = {
-  actionButtons: [],
   editTabs: [],
 };
 

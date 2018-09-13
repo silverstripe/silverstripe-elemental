@@ -1,81 +1,46 @@
 /* global confirm */
-import React, { Component } from 'react';
+import React from 'react';
 import { compose } from 'redux';
+import AbstractAction from 'components/ElementActions/AbstractAction';
 import archiveBlockMutation from 'state/editor/archiveBlockMutation';
-import classNames from 'classnames';
 import i18n from 'i18n';
 
-function withArchiveAction(ElementActions) {
-  /**
-   * Adds the elemental menu action to archive a block of any state
-   */
-  class WithArchiveAction extends Component {
-    constructor(props) {
-      super(props);
+/**
+ * Adds the elemental menu action to archive a block of any state
+ */
+const ArchiveAction = (WrappedComponent) => (props) => (
+  <WrappedComponent {...props}>
+    {props.children}
 
-      this.handleArchive = this.handleArchive.bind(this);
-    }
+    <AbstractAction
+      title={i18n._t('ArchiveAction.ARCHIVE', 'Archive')}
+      extraClass="element-editor__actions-archive"
+      onClick={(event) => {
+        event.stopPropagation();
 
-    /**
-     * Handle the deletion of a block, passing the block ID in
-     */
-    handleArchive(event) {
-      event.stopPropagation();
+        const { id, isPublished, actions: { handleArchiveBlock } } = props;
 
-      const { id, isPublished, actions: { handleArchiveBlock } } = this.props;
-
-      let archiveMessage = i18n._t(
-        'ArchiveAction.CONFIRM_DELETE',
-        'Are you sure you want to send this block to the archive?'
-      );
-
-      if (isPublished) {
-        archiveMessage = i18n._t(
-          'ArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH',
-          'Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?'
+        let archiveMessage = i18n._t(
+          'ArchiveAction.CONFIRM_DELETE',
+          'Are you sure you want to send this block to the archive?'
         );
-      }
 
-      // eslint-disable-next-line no-alert
-      if (handleArchiveBlock && confirm(archiveMessage)) {
-        handleArchiveBlock(id);
-      }
-    }
+        if (isPublished) {
+          archiveMessage = i18n._t(
+            'ArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH',
+            'Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?'
+          );
+        }
 
-    /**
-     * Render the archive button
-     *
-     * @returns {DOMElement|null}
-     */
-    renderArchiveAction() {
-      const archiveTitle = i18n._t('ArchiveAction.ARCHIVE', 'Archive');
+        // eslint-disable-next-line no-alert
+        if (handleArchiveBlock && confirm(archiveMessage)) {
+          handleArchiveBlock(id);
+        }
+      }}
+    />
+  </WrappedComponent>
+);
 
-      return (
-        <button
-          onClick={this.handleArchive}
-          title={archiveTitle}
-          type="button"
-          className={classNames('element-editor__actions-archive', 'dropdown-item')}
-        >
-          {archiveTitle}
-        </button>
-      );
-    }
+export { ArchiveAction as Component };
 
-    render() {
-      const newProps = {
-        ...this.props,
-        actionButtons: [
-          ...this.props.actionButtons || [],
-          this.renderArchiveAction(),
-        ],
-      };
-
-      return <ElementActions {...newProps} />;
-    }
-  }
-
-  return compose(archiveBlockMutation)(WithArchiveAction);
-}
-
-export default withArchiveAction;
+export default compose(archiveBlockMutation, ArchiveAction);
