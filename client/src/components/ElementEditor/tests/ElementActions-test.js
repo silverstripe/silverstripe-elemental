@@ -5,11 +5,12 @@ import React from 'react';
 import { Component as ElementActions } from '../ElementActions';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15.4/build/index';
+import AbstractAction from 'components/ElementActions/AbstractAction';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('ElementActions', () => {
-  const ActionMenuComponent = () => <div />;
+  const ActionMenuComponent = (props) => <div>{props.children}</div>;
   const testTabs = ['Content', 'Settings', 'History'];
 
   describe('renderEditTabs()', () => {
@@ -24,9 +25,7 @@ describe('ElementActions', () => {
       const result = wrapper.instance().renderEditTabs();
       expect(result).toBeInstanceOf(Array);
       expect(result.length).toBe(3);
-      expect(result[0]).toEqual(
-        <button key="Content" className="dropdown-item">Content</button>
-      );
+      expect(result[0]).toEqual(<AbstractAction key="Content" title="Content" />);
     });
   });
 
@@ -40,11 +39,11 @@ describe('ElementActions', () => {
       );
 
       // See the dropdown separator
-      expect(wrapper.find(ActionMenuComponent).children().find('DropdownItem').length).toBe(1);
+      expect(wrapper.find('DropdownItem').length).toBe(1);
       // See all the relevant action menu options
-      expect(wrapper.find(ActionMenuComponent).children().map(node => node.text())).toEqual(
-        expect.arrayContaining(testTabs)
-      );
+      expect(wrapper.html()).toContain('Content');
+      expect(wrapper.html()).toContain('Settings');
+      expect(wrapper.html()).toContain('History');
     });
   });
 });

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { DropdownItem } from 'reactstrap';
 import { inject } from 'lib/Injector';
+import AbstractAction from 'components/ElementActions/AbstractAction';
 
 /**
  * Element actions is a dropdown menu containing links to inline editing forms for each
@@ -20,7 +21,9 @@ class ElementActions extends Component {
       return null;
     }
 
-    return editTabs.map((tab) => <button key={tab} className="dropdown-item">{tab}</button>);
+    return editTabs.map(
+      (tab) => <AbstractAction key={tab} title={tab} />
+    );
   }
 
   /**
