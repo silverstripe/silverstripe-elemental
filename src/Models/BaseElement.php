@@ -300,18 +300,15 @@ class BaseElement extends DataObject
                 $fields->removeByName('Style');
             }
 
-            // Check object exists before pushing History Tab
-            if($this->ID) {
-              // Support for new history viewer in SS 4.2+
-              if (class_exists(HistoryViewerField::class)) {
-                  Requirements::javascript('dnadesign/silverstripe-elemental:client/dist/js/bundle.js');
+            // Support for new history viewer in SS 4.2+
+            if ($this->isInDB() && class_exists(HistoryViewerField::class)) {
+                Requirements::javascript('dnadesign/silverstripe-elemental:client/dist/js/bundle.js');
 
-                  $historyViewer = HistoryViewerField::create('ElementHistory');
-                  $fields->addFieldToTab('Root.History', $historyViewer);
+                $historyViewer = HistoryViewerField::create('ElementHistory');
+                $fields->addFieldToTab('Root.History', $historyViewer);
 
-                  $fields->fieldByName('Root.History')
-                      ->addExtraClass('elemental-block__history-tab tab--history-viewer');
-              }
+                $fields->fieldByName('Root.History')
+                    ->addExtraClass('elemental-block__history-tab tab--history-viewer');
             }
         });
 
