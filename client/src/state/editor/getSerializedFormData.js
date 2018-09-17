@@ -7,6 +7,10 @@
  */
 export const getSerializedFormData = (formName) => {
   const form = document.getElementById(formName);
+  if (!form) {
+    return {};
+  }
+
   const fields = form.querySelectorAll('input, select, textarea, checkbox');
 
   const output = {};

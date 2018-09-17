@@ -22,6 +22,7 @@ describe('UnpublishAction', () => {
         id={123}
         isPublished
         actions={{ handleUnpublishBlock: mockMutation }}
+        toggle={false}
       />
     );
 

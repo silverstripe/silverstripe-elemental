@@ -34,8 +34,9 @@ const ArchiveAction = (MenuComponent) => (props) => {
 
   const newProps = {
     title: i18n._t('ArchiveAction.ARCHIVE', 'Archive'),
-    extraClass: 'element-editor__actions-archive',
+    className: 'element-editor__actions-archive',
     onClick: handleClick,
+    toggle: props.toggle,
   };
 
   return (

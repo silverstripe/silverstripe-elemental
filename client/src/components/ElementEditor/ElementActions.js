@@ -57,14 +57,12 @@ class ElementActions extends Component {
       'font-icon-dot-3',
     ];
 
-    // Remove btn-icon-xl make btn-sm
     return (
       <ActionMenuComponent
         id={`element-editor-actions-${id}`}
         className={'element-editor-header__actions-dropdown'}
         dropdownMenuProps={{ right: true }}
         dropdownToggleClassNames={dropdownToggleClassNames}
-        toggleCallback={(event) => event.stopPropagation()}
       >
         { this.renderEditTabs() }
         { this.renderDivider() }

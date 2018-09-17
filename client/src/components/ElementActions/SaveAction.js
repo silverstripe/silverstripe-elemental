@@ -1,4 +1,6 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import backend from 'lib/Backend';
 import i18n from 'i18n';
@@ -13,7 +15,7 @@ const SaveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { id } = this.props;
+    const { id, securityId } = props;
 
     const formData = getSerializedFormData(`Form_ElementForm_${id}`);
 
@@ -21,19 +23,20 @@ const SaveAction = (MenuComponent) => (props) => {
       url: loadElementSchemaValue('saveUrl', id),
       method: loadElementSchemaValue('saveMethod'),
       payloadFormat: loadElementSchemaValue('payloadFormat'),
+      defaultData: {
+        SecurityID: securityId
+      },
     };
 
-    // @todo add CSRF SecurityID token
     const endpoint = backend.createEndpointFetcher(endpointSpec);
-    endpoint(formData).then((result) => {
-      console.log(result);
-      // @todo update apollo cache?
+    endpoint(formData).then(() => {
+      // @todo update apollo cache? `result` argument is available
     });
   };
 
   const newProps = {
     title: i18n._t('SaveAction.SAVE', 'Save'),
-    extraClass: 'element-editor__actions-save',
+    className: 'element-editor__actions-save',
     onClick: handleClick,
   };
 
@@ -46,4 +49,12 @@ const SaveAction = (MenuComponent) => (props) => {
   );
 };
 
-export default SaveAction;
+function mapStateToProps(state) {
+  return {
+    securityId: state.config.SecurityID,
+  };
+}
+
+export { SaveAction as Component };
+
+export default compose(connect(mapStateToProps), SaveAction);

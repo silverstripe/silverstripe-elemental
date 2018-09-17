@@ -20,6 +20,7 @@ describe('ArchiveAction', () => {
         id={123}
         isPublished
         actions={{ handleArchiveBlock: mockMutation }}
+        toggle={false}
       />
     );
   });
@@ -55,6 +56,7 @@ describe('ArchiveAction', () => {
         id={123}
         isPublished={false}
         actions={{ handleArchiveBlock: mockMutation }}
+        toggle={false}
       />
     );
     const mockConfirm = jest.fn();

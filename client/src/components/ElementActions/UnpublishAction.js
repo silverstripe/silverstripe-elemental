@@ -46,8 +46,9 @@ const UnpublishAction = (MenuComponent) => (props) => {
 
   const newProps = {
     title: i18n._t('UnpublishAction.UNPUBLISH', 'Unpublish'),
-    extraClass: 'element-editor__actions-unpublish',
+    className: 'element-editor__actions-unpublish',
     onClick: handleClick,
+    toggle: props.toggle,
   };
 
   return (
