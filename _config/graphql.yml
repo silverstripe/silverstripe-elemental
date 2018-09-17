@@ -6,6 +6,8 @@ SilverStripe\GraphQL\Manager:
     admin:
       types:
         ObjectType: DNADesign\Elemental\GraphQL\Types\ObjectType
+      mutations:
+        sortBlock: DNADesign\Elemental\GraphQL\SortBlockMutationCreator
       scaffolding:
         types:
           # Expose common static fields for the ElementEditor component to use for preview summaries
