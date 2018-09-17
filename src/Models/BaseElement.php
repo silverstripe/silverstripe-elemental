@@ -309,7 +309,7 @@ class BaseElement extends DataObject
             }
 
             // Support for new history viewer in SS 4.2+
-            if (class_exists(HistoryViewerField::class)) {
+            if ($this->isInDB() && class_exists(HistoryViewerField::class)) {
                 Requirements::javascript('dnadesign/silverstripe-elemental:client/dist/js/bundle.js');
 
                 $historyViewer = HistoryViewerField::create('ElementHistory');
