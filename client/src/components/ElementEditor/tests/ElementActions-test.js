@@ -38,12 +38,26 @@ describe('ElementActions', () => {
         />
       );
 
-      // See the dropdown separator
-      expect(wrapper.find('DropdownItem').length).toBe(1);
+      // No dropdown separator should exist when there are no non-CMS actions
+      expect(wrapper.find('DropdownItem').length).toBe(0);
+
       // See all the relevant action menu options
       expect(wrapper.html()).toContain('Content');
       expect(wrapper.html()).toContain('Settings');
       expect(wrapper.html()).toContain('History');
+    });
+
+    it('should render a divider when CMS tab actions and default actions are rendered', () => {
+      const wrapper = shallow(
+        <ElementActions
+          editTabs={testTabs}
+          ActionMenuComponent={ActionMenuComponent}
+        >
+          <AbstractAction title="some button" />
+        </ElementActions>
+      );
+
+      expect(wrapper.find('DropdownItem').length).toBe(1);
     });
   });
 });

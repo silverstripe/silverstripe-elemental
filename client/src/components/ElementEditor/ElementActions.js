@@ -27,13 +27,27 @@ class ElementActions extends Component {
   }
 
   /**
+   * Renders a divider if there are CMS edit tabs and child actions
+   *
+   * @returns {DropdownItem|null}
+   */
+  renderDivider() {
+    const { children, editTabs } = this.props;
+
+    if (editTabs && editTabs.length && React.Children.count(children)) {
+      return <DropdownItem divider />;
+    }
+    return null;
+  }
+
+  /**
    * If inline editing is enabled, render the "more actions" menu. Injector registrations can
    * define HOCs that add action components as children of this component.
    *
    * @returns {ActionMenuComponent|null}
    */
   render() {
-    const { children, id, editTabs, ActionMenuComponent } = this.props;
+    const { children, id, ActionMenuComponent } = this.props;
 
     const dropdownToggleClassNames = [
       'element-editor-header__actions-toggle',
@@ -53,7 +67,7 @@ class ElementActions extends Component {
         toggleCallback={(event) => event.stopPropagation()}
       >
         { this.renderEditTabs() }
-        { !editTabs || !editTabs.length || <DropdownItem divider /> }
+        { this.renderDivider() }
         { children }
       </ActionMenuComponent>
     );

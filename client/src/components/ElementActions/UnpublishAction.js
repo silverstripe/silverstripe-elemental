@@ -7,25 +7,31 @@ import i18n from 'i18n';
 /**
  * Adds the elemental menu action to unpublish a published block
  */
-const UnpublishAction = (WrappedComponent) => (props) => (
-  <WrappedComponent {...props}>
-    {props.children}
+const UnpublishAction = (MenuComponent) => (props) => {
+  const handleClick = (event) => {
+    event.stopPropagation();
 
-    {props.isPublished && <AbstractAction
-      title={i18n._t('UnpublishAction.UNPUBLISH', 'Unpublish')}
-      extraClass="element-editor__actions-unpublish"
-      onClick={(event) => {
-        event.stopPropagation();
+    const { id, actions: { handleUnpublishBlock } } = props;
 
-        const { id, actions: { handleUnpublishBlock } } = props;
+    if (handleUnpublishBlock) {
+      handleUnpublishBlock(id);
+    }
+  };
 
-        if (handleUnpublishBlock) {
-          handleUnpublishBlock(id);
-        }
-      }}
-    />}
-  </WrappedComponent>
-);
+  const newProps = {
+    title: i18n._t('UnpublishAction.UNPUBLISH', 'Unpublish'),
+    extraClass: 'element-editor__actions-unpublish',
+    onClick: handleClick,
+  };
+
+  return (
+    <MenuComponent {...props}>
+      {props.children}
+
+      {props.isPublished && <AbstractAction {...newProps} />}
+    </MenuComponent>
+  );
+};
 
 export { UnpublishAction as Component };
 

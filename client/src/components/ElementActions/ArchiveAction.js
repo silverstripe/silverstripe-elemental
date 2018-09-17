@@ -8,38 +8,44 @@ import i18n from 'i18n';
 /**
  * Adds the elemental menu action to archive a block of any state
  */
-const ArchiveAction = (WrappedComponent) => (props) => (
-  <WrappedComponent {...props}>
-    {props.children}
+const ArchiveAction = (MenuComponent) => (props) => {
+  const handleClick = (event) => {
+    event.stopPropagation();
 
-    <AbstractAction
-      title={i18n._t('ArchiveAction.ARCHIVE', 'Archive')}
-      extraClass="element-editor__actions-archive"
-      onClick={(event) => {
-        event.stopPropagation();
+    const { id, isPublished, actions: { handleArchiveBlock } } = props;
 
-        const { id, isPublished, actions: { handleArchiveBlock } } = props;
+    let archiveMessage = i18n._t(
+      'ArchiveAction.CONFIRM_DELETE',
+      'Are you sure you want to send this block to the archive?'
+    );
 
-        let archiveMessage = i18n._t(
-          'ArchiveAction.CONFIRM_DELETE',
-          'Are you sure you want to send this block to the archive?'
-        );
+    if (isPublished) {
+      archiveMessage = i18n._t(
+        'ArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH',
+        'Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?'
+      );
+    }
 
-        if (isPublished) {
-          archiveMessage = i18n._t(
-            'ArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH',
-            'Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?'
-          );
-        }
+    // eslint-disable-next-line no-alert
+    if (handleArchiveBlock && confirm(archiveMessage)) {
+      handleArchiveBlock(id);
+    }
+  };
 
-        // eslint-disable-next-line no-alert
-        if (handleArchiveBlock && confirm(archiveMessage)) {
-          handleArchiveBlock(id);
-        }
-      }}
-    />
-  </WrappedComponent>
-);
+  const newProps = {
+    title: i18n._t('ArchiveAction.ARCHIVE', 'Archive'),
+    extraClass: 'element-editor__actions-archive',
+    onClick: handleClick,
+  };
+
+  return (
+    <MenuComponent {...props}>
+      {props.children}
+
+      <AbstractAction {...newProps} />
+    </MenuComponent>
+  );
+};
 
 export { ArchiveAction as Component };
 
