@@ -13,6 +13,7 @@ use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\Form;
+use SilverStripe\Security\SecurityToken;
 
 /**
  * Controller for "ElementalArea" - handles loading and saving of in-line edit forms in an elemental area in admin
@@ -107,6 +108,17 @@ class ElementalAreaController extends LeftAndMain
 
         $data = Convert::json2array($request->getBody());
         if (empty($data)) {
+            $this->jsonError(400);
+            return null;
+        }
+
+        // Inject request body as request vars
+        foreach ($data as $key => $value) {
+            $request->offsetSet($key, $value);
+        }
+
+        // Check security token
+        if (!SecurityToken::inst()->checkRequest($request)) {
             $this->jsonError(400);
             return null;
         }

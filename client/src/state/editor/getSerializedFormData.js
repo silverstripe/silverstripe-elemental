@@ -18,8 +18,9 @@ export const getSerializedFormData = (formName) => {
     if (fields[i]) {
       const formField = fields[i];
       const fieldName = formField.name;
-
-      output[fieldName] = formField.value;
+      if (fieldName !== '') {
+        output[fieldName] = formField.value;
+      }
     }
   }
 
