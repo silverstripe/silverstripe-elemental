@@ -3,6 +3,9 @@ import readOneBlockQuery from 'state/history/readOneBlockQuery';
 import HistoricElementViewFactory from 'components/HistoricElementView/HistoricElementView';
 import revertToBlockVersionMutation from 'state/history/revertToBlockVersionMutation';
 import readBlocksForPageQuery from 'state/editor/readBlocksForPageQuery';
+import ArchiveAction from 'components/ElementActions/ArchiveAction';
+import PublishAction from 'components/ElementActions/PublishAction';
+import UnpublishAction from 'components/ElementActions/UnpublishAction';
 
 export default () => {
   Injector.transform(
@@ -54,4 +57,11 @@ export default () => {
       );
     }
   );
+
+  // Add elemental editor actions
+  Injector.transform('element-actions', (updater) => {
+    updater.component('ElementActions', ArchiveAction, 'ElementActionsWithArchive');
+    updater.component('ElementActions', PublishAction, 'ElementActionsWithPublish');
+    updater.component('ElementActions', UnpublishAction, 'ElementActionsWithUnpublish');
+  });
 };
