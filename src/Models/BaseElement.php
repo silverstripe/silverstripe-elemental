@@ -341,6 +341,10 @@ class BaseElement extends DataObject
                 $fields->fieldByName('Root.History')
                     ->addExtraClass('elemental-block__history-tab tab--history-viewer');
             }
+
+            // Hide the navigation section of the tabs in the React component {@see silverstripe/admin Tabs}
+            $rootTabset = $fields->fieldByName('Root');
+            $rootTabset->setSchemaState(['hideNav' => true]);
         });
 
         return parent::getCMSFields();
