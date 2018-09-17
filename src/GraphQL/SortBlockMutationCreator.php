@@ -77,20 +77,20 @@ class SortBlockMutationCreator extends MutationCreator implements OperationResol
 
         if ($sortAfterPosition < $blockPosition) {
             $operator = '+';
-            $filter = "Sort > $sortAfterPosition && Sort < $blockPosition";
+            $filter = "\"Sort\" > $sortAfterPosition AND \"Sort\" < $blockPosition";
             $newBlockPosition = $sortAfterPosition + 1;
         } else {
             $operator = '-';
-            $filter = "Sort <= $sortAfterPosition && Sort > $blockPosition";
+            $filter = "\"Sort\" <= $sortAfterPosition AND \"Sort\" > $blockPosition";
             $newBlockPosition = $sortAfterPosition;
         }
 
         $table = DataObject::getSchema()->tableName(BaseElement::class);
 
         $query = SQLUpdate::create()
-           ->setTable($table)
-           ->assignSQL('"' . $table . '"."Sort"', "\"$table\".\"Sort\" $operator 1")
-           ->addWhere([$filter, '"ParentId"' => $parentId]);
+           ->setTable("\"$table\"")
+           ->assignSQL('"Sort"', "\"Sort\" $operator 1")
+           ->addWhere([$filter, '"ParentID"' => $parentId]);
 
         $query->execute();
 
