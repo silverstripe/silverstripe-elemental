@@ -3,12 +3,34 @@ import { compose } from 'redux';
 import { DropdownItem } from 'reactstrap';
 import { inject } from 'lib/Injector';
 import AbstractAction from 'components/ElementActions/AbstractAction';
+import { setActiveTab } from 'state/tabs/TabsActions';
+import { connect } from 'react-redux';
 
 /**
  * Element actions is a dropdown menu containing links to inline editing forms for each
  * of the element's primary tabs, as well as operations such as save, publish, archive etc
  */
 class ElementActions extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleEditTabsClick = this.handleEditTabsClick.bind(this);
+  }
+
+  /**
+   * Set the active tab
+   *
+   * @param activeTab
+   */
+  handleEditTabsClick(event) {
+    const { onSetActiveTab, editTabs, activeTab } = this.props;
+    const selectedTab = editTabs.find(tab => tab.title === event.target.title);
+
+    if (selectedTab && activeTab !== selectedTab.name) {
+      onSetActiveTab(selectedTab.name);
+    }
+  }
+
   /**
    * Render buttons for the edit form tabs that will be a part of the edit form (if they exist)
    *
@@ -22,8 +44,13 @@ class ElementActions extends Component {
     }
 
     return editTabs.map(
-      (tab) => <AbstractAction key={tab} title={tab} />
-    );
+      (tab) =>
+        (<AbstractAction
+          key={tab.name}
+          title={tab.title}
+          onClick={this.handleEditTabsClick}
+        />)
+  );
   }
 
   /**
@@ -76,16 +103,39 @@ class ElementActions extends Component {
 
 ElementActions.propTypes = {
   id: PropTypes.string,
-  editTabs: PropTypes.arrayOf(PropTypes.string),
+  editTabs: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    name: PropTypes.string,
+  })),
+  onSetActiveTab: PropTypes.func,
 };
 
 ElementActions.defaultProps = {
   editTabs: [],
 };
 
+function mapStateToProps(state) {
+  const {
+    activeTab,
+  } = state.tabs;
+
+  return {
+    activeTab,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onSetActiveTab(activeTab) {
+      dispatch(setActiveTab(activeTab));
+    },
+  };
+}
+
 export { ElementActions as Component };
 
 export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   inject(
     ['ActionMenu'],
     (ActionMenuComponent) => ({

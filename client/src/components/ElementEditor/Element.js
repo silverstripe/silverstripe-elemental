@@ -47,8 +47,14 @@ class Element extends Component {
    * Expand the element to show the  preview
    * If the element is not inline-editable, take user to the GridFieldDetailForm to edit the record
    */
-  handleExpand() {
+  handleExpand(event) {
     const { element, link } = this.props;
+
+    if (event.target.type === 'button') {
+      // Stop bubbling if the click target was a button within this container
+      event.stopPropagation();
+      return;
+    }
 
     if (element.InlineEditable) {
       this.setState({
@@ -69,7 +75,7 @@ class Element extends Component {
    */
   handleKeyUp(event) {
     if (event.keyCode === 13) {
-      this.handleExpand();
+      this.handleExpand(event);
     }
   }
 

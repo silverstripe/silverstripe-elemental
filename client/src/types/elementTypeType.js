@@ -5,7 +5,10 @@ const elementTypeType = PropTypes.shape({
   name: PropTypes.string,
   title: PropTypes.string,
   icon: PropTypes.string,
-  tabs: PropTypes.arrayOf(PropTypes.string),
+  tabs: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    name: PropTypes.string,
+  })),
 });
 
 export { elementTypeType };
