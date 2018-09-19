@@ -29,7 +29,7 @@ class ElementList extends Component {
    * in registerTransforms.js.
    */
   renderBlocks() {
-    const { ElementComponent, blocks } = this.props;
+    const { ElementComponent, blocks, pageId } = this.props;
 
     // Blocks can be either null or an empty array
     if (!blocks) {
@@ -44,6 +44,7 @@ class ElementList extends Component {
       <ElementComponent
         key={element.ID}
         element={element}
+        pageId={pageId}
         editTabs={this.getEditTabs(element)}
         link={element.BlockSchema.actions.edit}
       />

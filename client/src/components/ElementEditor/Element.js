@@ -86,6 +86,7 @@ class Element extends Component {
       ContentComponent,
       link,
       editTabs,
+      pageId,
     } = this.props;
 
     const { previewExpanded } = this.state;
@@ -125,6 +126,7 @@ class Element extends Component {
           elementType={element.BlockSchema.type}
           fontIcon={element.BlockSchema.iconClass}
           link={link}
+          pageId={pageId}
           editTabs={editTabs}
           previewExpanded={previewExpanded}
           expandable={element.InlineEditable}

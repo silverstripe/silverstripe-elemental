@@ -93,7 +93,6 @@ class ElementalAreaController extends LeftAndMain
     /**
      * Save an inline edit form for a block
      *
-     * @todo CSRF protection!
      * @param HTTPRequest $request
      * @return HTTPResponse|null JSON encoded string or null if an exception is thrown
      * @throws HTTPResponse_Exception
