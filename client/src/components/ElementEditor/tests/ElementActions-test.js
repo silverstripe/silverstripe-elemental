@@ -11,7 +11,11 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('ElementActions', () => {
   const ActionMenuComponent = (props) => <div>{props.children}</div>;
-  const testTabs = ['Content', 'Settings', 'History'];
+  const testTabs = [
+    { title: 'Content', name: 'Main' },
+    { title: 'Settings', name: 'Settings' },
+    { title: 'History', name: 'History' }
+  ];
 
   describe('renderEditTabs()', () => {
     it('should map input tabs into an array of buttons', () => {
@@ -22,10 +26,11 @@ describe('ElementActions', () => {
         />
       );
 
-      const result = wrapper.instance().renderEditTabs();
-      expect(result).toBeInstanceOf(Array);
-      expect(result.length).toBe(3);
-      expect(result[0]).toEqual(<AbstractAction key="Content" title="Content" />);
+      const actions = wrapper.find(AbstractAction);
+      expect(actions).toHaveLength(3);
+      expect(actions.at(0).props().title).toEqual('Content');
+      expect(actions.at(1).props().title).toEqual('Settings');
+      expect(actions.at(2).props().title).toEqual('History');
     });
   });
 

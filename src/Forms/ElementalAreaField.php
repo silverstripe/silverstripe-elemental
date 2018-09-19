@@ -125,7 +125,7 @@ class ElementalAreaField extends GridField
                 'name' => str_replace('\\', '-', $className),
                 'title' => $blockTitle,
                 'icon' => Config::inst()->get($className, 'icon'),
-                'tabs' => array_values($tabProvider->getTabsForElement($className)),
+                'tabs' => $tabProvider->getTabsForElement($className),
             ];
         }
 

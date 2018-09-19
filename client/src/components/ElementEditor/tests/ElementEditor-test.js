@@ -15,7 +15,10 @@ describe('ElementEditor', () => {
     name: 'TestElement',
     title: 'Test Block',
     icon: 'nothing',
-    tabs: ['Content', 'History'],
+    tabs: [
+      { title: 'Content', name: 'Main' },
+      { title: 'History', name: 'History' }
+    ],
   };
 
   describe('render()', () => {

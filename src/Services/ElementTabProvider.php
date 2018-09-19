@@ -7,6 +7,7 @@ use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Flushable;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
 
 /**
@@ -115,8 +116,15 @@ class ElementTabProvider implements Flushable
         /** @var TabSet $tabset */
         $tabset = $element->getCMSFields()->fieldByName('Root');
 
-        // Get and map (ID => name) the tab names
-        $tabs = $tabset->Tabs()->map()->toArray();
+        // Get and map the tab names/titles into an associative array
+        $tabs = [];
+        /** @var Tab $tabDefinition */
+        foreach ($tabset->Tabs() as $tabDefinition) {
+            $tabs[] = [
+                'name' => $tabDefinition->getName(),
+                'title' => $tabDefinition->Title(),
+            ];
+        }
 
         // Cache them for next time
         $this->getCache()->set($this->getCacheKey($elementClass), $tabs);
