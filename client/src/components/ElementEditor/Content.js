@@ -2,24 +2,6 @@ import React, { PureComponent, PropTypes } from 'react';
 import { inject } from 'lib/Injector';
 
 class Content extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      elementFormLoaded: props.previewExpanded,
-    };
-  }
-
-  componentWillReceiveProps(newProps) {
-    const { elementFormLoaded } = this.state;
-    const { previewExpanded } = newProps;
-
-    const showForm = elementFormLoaded || previewExpanded;
-
-    this.setState({
-      elementFormLoaded: showForm,
-    });
-  }
-
   render() {
     const {
       id,
@@ -43,7 +25,7 @@ class Content extends PureComponent {
             fileTitle={fileTitle}
           />
         }
-        {(this.state.elementFormLoaded || previewExpanded) &&
+        {previewExpanded &&
           // Show inline editable fields
           <InlineEditFormComponent
             extraClass={{ 'element-editor-editform--collapsed': !previewExpanded }}
