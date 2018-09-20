@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { elementType } from 'types/elementType';
 import { inject } from 'lib/Injector';
-import AddElementPopoverContent from 'components/ElementEditor/AddElementPopoverContent';
-import { elementTypeType } from 'types/elementTypeType';
 
 class ElementList extends Component {
   /**
@@ -61,12 +59,10 @@ class ElementList extends Component {
   }
 
   render() {
-    const { elementTypes } = this.props;
     return (
       <div className="elemental-editor__list">
         {this.renderLoading()}
         {this.renderBlocks()}
-        <AddElementPopoverContent elementTypes={elementTypes} />
       </div>
     );
   }
@@ -75,7 +71,6 @@ class ElementList extends Component {
 ElementList.propTypes = {
   // @todo support either ElementList or Element children in an array (or both)
   blocks: PropTypes.arrayOf(elementType),
-  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   loading: PropTypes.bool,
 };
 
