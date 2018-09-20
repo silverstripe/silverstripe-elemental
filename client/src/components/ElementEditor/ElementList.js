@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { elementType } from 'types/elementType';
 import { inject } from 'lib/Injector';
+import classNames from 'classnames';
+import i18n from 'i18n';
 
 class ElementList extends Component {
   /**
@@ -29,10 +31,14 @@ class ElementList extends Component {
   renderBlocks() {
     const { ElementComponent, blocks } = this.props;
 
+    // Blocks can be either null or an empty array
     if (!blocks) {
       return null;
     }
 
+    if (blocks && !blocks.length) {
+      return <div>{i18n._t('ElementList.ADD_BLOCKS', 'Add blocks to place your content')}</div>;
+    }
 
     return blocks.map((element) => (
       <ElementComponent
@@ -59,8 +65,14 @@ class ElementList extends Component {
   }
 
   render() {
+    const { blocks } = this.props;
+    const listClassNames = classNames(
+      'elemental-editor__list',
+      { 'elemental-editor__list--empty': !blocks || !blocks.length }
+    );
+
     return (
-      <div className="elemental-editor__list">
+      <div className={listClassNames}>
         {this.renderLoading()}
         {this.renderBlocks()}
       </div>

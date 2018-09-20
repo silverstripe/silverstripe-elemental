@@ -38,6 +38,14 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
+     * @Then /^I (?:should\s)?see an empty list of blocks$/i
+     */
+    public function iShouldSeeAnEmptyListOfBlocks()
+    {
+        assertEmpty($this->getBlocks());
+    }
+
+    /**
      * @Then I should see block :position
      */
     public function iShouldSeeBlock($position)
