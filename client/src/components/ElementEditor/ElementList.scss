@@ -6,4 +6,10 @@
   margin-right: -$panel-padding-x;
   min-height: 6rem;
   position: relative;
+
+  &--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
