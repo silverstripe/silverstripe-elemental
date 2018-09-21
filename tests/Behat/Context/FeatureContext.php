@@ -172,6 +172,22 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
+     * @Given /^I press the "([^"]*)" button in the add block popover$/
+     * @param string $text
+     */
+    public function stepIPressTheButtonInTheAddBlockPopover($text)
+    {
+        $popover = $this->getSession()->getPage()->find('css', '.element-editor-add-element-content');
+
+        $blockType = strtolower($text);
+
+        // Selector preferable not font-icon, but other class shared among all buttons
+        $button = $popover->find('css', '.font-icon-block-'. $blockType);
+        assertNotNull($button, "{$text} button not found in Add Block popover");
+        $button->click();
+    }
+
+    /**
      * Returns the blocks from the element editor
      *
      * @param string $modifier Optional CSS selector modifier
