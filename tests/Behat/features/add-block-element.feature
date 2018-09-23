@@ -19,8 +19,9 @@ Feature: Add elements in the CMS
 
   Scenario: I can add elements to the page
     When I see a list of blocks
-    Then I select "Content" from "elemental-editor_add-new-block-control_select-dropdown"
-      And I click "Add" in the ".elemental-editor__add-new-block-control" element
+    Then I press the "Add block" button
+    Then I press the "Content" button in the add block popover
+      And I wait 1 second
       And I fill in "Eve's Block" for "Title"
       # Note: using un-namespaced fields in PHP GridField
       And I fill in "<p>Some content III</p>" for the "HTML" HTML field

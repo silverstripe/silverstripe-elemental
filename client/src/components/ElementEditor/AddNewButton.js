@@ -1,104 +1,72 @@
 import React, { Component, PropTypes } from 'react';
-import { InputGroup, Input, InputGroupAddon, Button } from 'reactstrap';
+import { Button, Popover } from 'reactstrap';
 import i18n from 'i18n';
 import { elementTypeType } from 'types/elementTypeType';
+import { inject } from 'lib/Injector';
 
 class AddNewButton extends Component {
   constructor(props) {
     super(props);
 
-    this.handleTypeChange = this.handleTypeChange.bind(this);
+    this.toggle = this.toggle.bind(this);
 
     this.state = {
-      selectedType: null,
+      popoverOpen: false
     };
   }
 
-  /**
-   * Set the current state to the new selected type
-   * @param event
-   */
-  handleTypeChange(event) {
-    const type = event.target
-      ? this.props.elementTypes.find(
-          candidateType => candidateType.name === event.target.value
-        ) || null
-      : null;
-
-    this.setState(() => ({
-      selectedType: type,
-    }));
+  toggle() {
+    this.setState({
+      popoverOpen: !this.state.popoverOpen
+    });
   }
 
   /**
-   * Render the add button next to the dropdown for block types
-   * @returns {DOMElement}
-   */
-  renderAddButton() {
-    const { selectedType } = this.state;
-    const buttonHref = selectedType ? `${this.props.baseAddHref}/${selectedType.name}` : '#';
-    const title = selectedType
-      ? i18n.inject(i18n._t('ElementalAddNewButton.TITLE', 'Add a "{type}" block'), { type: selectedType.title })
-      : '';
-    const buttonAttributes = {
-      href: buttonHref,
-      title,
-      disabled: !selectedType,
-      tag: 'a',
-      color: 'primary',
-      className: 'font-icon-plus',
-    };
-
-    return (
-      <Button {...buttonAttributes}>
-        {i18n._t('AddNewButton.ADD', 'Add')}
-      </Button>
-    );
-  }
-
-  /**
-   * Render elemental block type options for a select
-   * @returns {DOMElement}
-   */
-  renderOptions() {
-    const { elementTypes } = this.props;
-
-    if (!elementTypes) {
-      return null;
-    }
-
-    return elementTypes.map(type => (
-      <option key={type.name} value={type.name}>{type.title}</option>
-    ));
-  }
-
-  /**
+   * Render the add button for block types
    * @returns {DOMElement}
    */
   render() {
+    const { AddElementPopoverContentComponent, elementTypes, baseAddHref } = this.props;
+    const buttonAttributes = {
+      id: 'AddButton',
+      color: 'primary',
+      onClick: this.toggle
+    };
+
     return (
-      <InputGroup className="elemental-editor__add-new-block-control">
-        <Input
-          type="select"
-          id="elemental-editor_add-new-block-control_select-dropdown"
-          className="no-change-track custom-select"
-          onChange={this.handleTypeChange}
+      <div>
+        <Button {...buttonAttributes}>
+          {i18n._t('AddNewButton.ADD_BLOCK', 'Add block')}
+        </Button>
+        <Popover
+          placement="bottom"
+          isOpen={this.state.popoverOpen}
+          target="AddButton"
+          toggle={this.toggle}
+          hideArrow
         >
-          <option>{i18n._t('AddNewButton.SELECT', '(Select type to create)')}</option>
-          {this.renderOptions()}
-        </Input>
-        <InputGroupAddon addonType="append">
-          {this.renderAddButton()}
-        </InputGroupAddon>
-      </InputGroup>
+          <AddElementPopoverContentComponent
+            elementTypes={elementTypes}
+            baseAddHref={baseAddHref}
+          />
+        </Popover>
+      </div>
     );
   }
 }
 
 AddNewButton.defaultProps = {};
 AddNewButton.propTypes = {
-  baseAddHref: PropTypes.string.isRequired,
+  baseAddHref: PropTypes.string.isRequired, // temp until elements can be added inline
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
 };
 
-export default AddNewButton;
+export { AddNewButton as Component };
+
+export default inject(
+  ['AddElementPopoverContent'],
+  (AddElementPopoverContentComponent) => ({
+    AddElementPopoverContentComponent,
+  }),
+  () => 'ElementEditor.ElementList.AddNewButton'
+)(AddNewButton);

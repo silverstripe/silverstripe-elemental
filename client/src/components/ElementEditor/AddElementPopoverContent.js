@@ -28,6 +28,7 @@ class AddElementPopoverContent extends Component {
             )
           }
           key={elementType.name}
+          href={`${this.props.baseAddHref}/${elementType.name}`}
         >
           {elementType.title}
         </Button>
@@ -45,8 +46,10 @@ class AddElementPopoverContent extends Component {
     );
   }
 }
+
 AddElementPopoverContent.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType),
+  baseAddHref: PropTypes.string.isRequired,
 };
 
 export default AddElementPopoverContent;
