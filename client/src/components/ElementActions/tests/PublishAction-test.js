@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global jest, describe, it, expect, window */
 
 import React from 'react';
 import { Component as PublishAction } from '../PublishAction';
@@ -13,6 +13,8 @@ describe('PublishAction', () => {
   const mockMutation = jest.fn();
   const WrappedComponent = (props) => <div>{props.children}</div>;
   const ActionComponent = PublishAction(WrappedComponent);
+  const jQuery = jest.fn();
+  window.jQuery = jQuery;
 
   beforeEach(() => {
     wrapper = mount(
@@ -23,6 +25,8 @@ describe('PublishAction', () => {
         actions={{ handlePublishBlock: mockMutation }}
       />
     );
+
+    jQuery.noticeAdd = jest.fn();
   });
 
   it('renders the wrapped component', () => {

@@ -1,3 +1,4 @@
+/* global window */
 import React from 'react';
 import { compose } from 'redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
@@ -11,10 +12,21 @@ const UnpublishAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { id, actions: { handleUnpublishBlock } } = props;
+    const { id, title, actions: { handleUnpublishBlock } } = props;
+    const { jQuery: $ } = window;
 
     if (handleUnpublishBlock) {
       handleUnpublishBlock(id);
+      $.noticeAdd({
+        text: i18n.inject(
+          i18n._t(
+            'UnpublishAction.SUCCESS_NOTIFICATION',
+            'Removed \'{title}\' from the published page'),
+          { title }
+        ),
+        stay: false,
+        type: 'success'
+      });
     }
   };
 
