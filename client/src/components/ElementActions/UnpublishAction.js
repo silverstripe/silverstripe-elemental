@@ -16,17 +16,31 @@ const UnpublishAction = (MenuComponent) => (props) => {
     const { jQuery: $ } = window;
 
     if (handleUnpublishBlock) {
-      handleUnpublishBlock(id);
-      $.noticeAdd({
-        text: i18n.inject(
-          i18n._t(
-            'UnpublishAction.SUCCESS_NOTIFICATION',
-            'Removed \'{title}\' from the published page'),
-          { title }
-        ),
-        stay: false,
-        type: 'success'
-      });
+      handleUnpublishBlock(id)
+        .then(() => {
+          $.noticeAdd({
+            text: i18n.inject(
+              i18n._t(
+                'UnpublishAction.SUCCESS_NOTIFICATION',
+                'Removed \'{title}\' from the published page'),
+              { title }
+            ),
+            stay: false,
+            type: 'success'
+          });
+        })
+        .catch(() => {
+          $.noticeAdd({
+            text: i18n.inject(
+              i18n._t(
+                'UnpublishAction.ERROR_NOTIFICATION',
+                'Error removing \'{title}\' from the published page'),
+              { title }
+            ),
+            stay: false,
+            type: 'error'
+          });
+        });
     }
   };
 

@@ -9,7 +9,7 @@ import Header from 'components/ElementEditor/Header';
 import Content from 'components/ElementEditor/Content';
 import Summary from 'components/ElementEditor/Summary';
 import InlineEditForm from 'components/ElementEditor/InlineEditForm';
-import AddElementPopoverContent from 'components/ElementEditor/AddElementPopoverContent';
+import AddElementPopover from 'components/ElementEditor/AddElementPopover';
 
 export default () => {
   Injector.component.registerMany({
@@ -23,6 +23,6 @@ export default () => {
     ElementContent: Content,
     ElementSummary: Summary,
     ElementInlineEditForm: InlineEditForm,
-    AddElementPopoverContent,
+    AddElementPopover,
   });
 };

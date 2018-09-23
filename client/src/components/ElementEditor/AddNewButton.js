@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Button, Popover } from 'reactstrap';
+import { Button } from 'reactstrap';
 import i18n from 'i18n';
 import { elementTypeType } from 'types/elementTypeType';
 import { inject } from 'lib/Injector';
@@ -26,7 +26,7 @@ class AddNewButton extends Component {
    * @returns {DOMElement}
    */
   render() {
-    const { AddElementPopoverContentComponent, elementTypes, baseAddHref } = this.props;
+    const { AddElementPopoverComponent, elementTypes, baseAddHref } = this.props;
     const buttonAttributes = {
       id: 'AddButton',
       color: 'primary',
@@ -38,18 +38,14 @@ class AddNewButton extends Component {
         <Button {...buttonAttributes}>
           {i18n._t('AddNewButton.ADD_BLOCK', 'Add block')}
         </Button>
-        <Popover
-          placement="bottom"
+        <AddElementPopoverComponent
+          placement="bottom-start"
+          target={'AddButton'}
           isOpen={this.state.popoverOpen}
-          target="AddButton"
+          elementTypes={elementTypes}
+          baseAddHref={baseAddHref}
           toggle={this.toggle}
-          hideArrow
-        >
-          <AddElementPopoverContentComponent
-            elementTypes={elementTypes}
-            baseAddHref={baseAddHref}
-          />
-        </Popover>
+        />
       </div>
     );
   }
@@ -64,9 +60,9 @@ AddNewButton.propTypes = {
 export { AddNewButton as Component };
 
 export default inject(
-  ['AddElementPopoverContent'],
-  (AddElementPopoverContentComponent) => ({
-    AddElementPopoverContentComponent,
+  ['AddElementPopover'],
+  (AddElementPopoverComponent) => ({
+    AddElementPopoverComponent,
   }),
   () => 'ElementEditor.ElementList.AddNewButton'
 )(AddNewButton);

@@ -10,7 +10,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('UnpublishAction', () => {
   let wrapper = null;
-  const mockMutation = jest.fn();
+  const mockMutation = jest.fn(() => new Promise((resolve) => { resolve(); }));
   const WrappedComponent = (props) => <div>{props.children}</div>;
   const ActionComponent = UnpublishAction(WrappedComponent);
   const jQuery = jest.fn();
