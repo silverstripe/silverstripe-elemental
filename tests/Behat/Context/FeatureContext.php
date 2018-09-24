@@ -223,7 +223,7 @@ class FeatureContext extends SilverStripeContext
     /**
      * Returns the archive button for a specific block
      *
-     * @param $position
+     * @param int $position
      * @return NodeElement
      */
     protected function getArchiveButton($position)
@@ -240,7 +240,7 @@ class FeatureContext extends SilverStripeContext
     /**
      * Returns the publish button for a specific block if it exists
      *
-     * @param $position
+     * @param int $position
      * @return NodeElement|null
      */
     protected function findPublishButton($position)
