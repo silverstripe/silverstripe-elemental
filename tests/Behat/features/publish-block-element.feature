@@ -24,8 +24,8 @@ Feature: Publish elements in the CMS
     When I press the "View actions" button
     Then I should see the publish button for block 1
     When I press the "Publish" button
+      And I wait 1 second
     Then I should see a "Published 'Block A' successfully" notice
-
         # Behat's assertion is faster than React's rendering
     When I wait 1 second
     Then I should see the unpublish button for block 1

@@ -16,17 +16,31 @@ const PublishAction = (MenuComponent) => (props) => {
     const { jQuery: $ } = window;
 
     if (handlePublishBlock) {
-      handlePublishBlock(id, 'DRAFT', 'LIVE', version);
-      $.noticeAdd({
-        text: i18n.inject(
-          i18n._t(
-            'UnpublishAction.SUCCESS_NOTIFICATION',
-            'Published \'{title}\' successfully'),
-          { title }
-        ),
-        stay: false,
-        type: 'success'
-      });
+      handlePublishBlock(id, 'DRAFT', 'LIVE', version)
+        .then(() => {
+          $.noticeAdd({
+            text: i18n.inject(
+              i18n._t(
+                'UnpublishAction.SUCCESS_NOTIFICATION',
+                'Published \'{title}\' successfully'),
+              { title }
+            ),
+            stay: false,
+            type: 'success'
+          });
+        })
+        .catch(() => {
+          $.noticeAdd({
+            text: i18n.inject(
+              i18n._t(
+                'UnpublishAction.ERROR_NOTIFICATION',
+                'Error publishing \'{title}\''),
+              { title }
+            ),
+            stay: false,
+            type: 'error'
+          });
+        });
     }
   };
 

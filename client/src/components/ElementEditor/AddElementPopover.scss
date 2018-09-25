@@ -1,0 +1,87 @@
+.element-editor-add-element {
+  min-width: 320px;
+  max-height: 356px; // TODO Find variable!
+  display: flex;
+  flex-direction: column;
+  border-radius: $border-radius; // Change to equal 4px
+  overflow-y: scroll;
+  margin-top: 0;
+
+  &:focus,
+  &:hover {
+    box-shadow: $z-depth-1;
+    outline-width: 0;
+  }
+
+  &__button-container {
+    width: 100%;
+    padding: 10px;
+    box-shadow: $z-depth-1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    :nth-child(odd) {
+      margin-right: 10px;
+    }
+    :nth-child(even) {
+      margin-right: 0;
+    }
+    :nth-last-child(-n+2) {
+      margin-bottom: 0;
+    }
+
+    .element-editor-add-element__no-results {
+      text-align: center;
+      vertical-align: middle;
+      width: 100%;
+      margin: 0;
+      padding: 10px;
+    }
+  }
+
+  &__button {
+    width: calc(100% * (1 / 2) - 5px);
+    padding: 10px;
+    text-align: start;
+    margin-bottom: 4px;
+  }
+
+  // Adds necessary specificity to override default font-size and margins
+  & &__button::before {
+    font-size: 2.1rem;
+    margin-right: 10px;
+  }
+
+  &__search {
+    height: $toolbar-height;
+
+    &-input,
+    &-clear {
+      &,
+      &:focus,
+      &:hover,
+      &:active {
+        box-shadow: none;
+        border: none;
+        border-bottom: 1px solid $border-color-light;
+        border-radius: 0;
+        outline: none;
+      }
+    }
+
+    &-input {
+      padding-left: $panel-padding-x;
+    }
+
+    // Nesting needed for specificity, adds padding to clear link
+    .input-group-append {
+
+      .btn-link {
+        padding-right: $panel-padding-x;
+      }
+    }
+  }
+}
+
+
