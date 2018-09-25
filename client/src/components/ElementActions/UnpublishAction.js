@@ -34,7 +34,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
             text: i18n.inject(
               i18n._t(
                 'UnpublishAction.ERROR_NOTIFICATION',
-                'Error removing \'{title}\' from the published page'),
+                'Error unpublishing \'{title}\''),
               { title }
             ),
             stay: false,
