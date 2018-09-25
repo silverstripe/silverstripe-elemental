@@ -23,6 +23,9 @@ class AddElementPopover extends Component {
     };
   }
 
+  /**
+   * Pass toggle to parent and clear the search input
+   */
   handleToggle() {
     const { toggle } = this.props;
 
@@ -30,6 +33,9 @@ class AddElementPopover extends Component {
     this.handleClear();
   }
 
+  /**
+   * Handle click on clear button within search bar
+   */
   handleClear() {
     this.setState(
       { searchValue: '' }
@@ -37,6 +43,7 @@ class AddElementPopover extends Component {
   }
 
   /**
+   * Update the internal state on user input change
    * @param event
    */
   handleSearchValueChange(event) {
@@ -45,6 +52,10 @@ class AddElementPopover extends Component {
     );
   }
 
+  /**
+   * Render a link to clear the search field if user entered input
+   * @returns {DOMElement}
+   */
   renderClearLink() {
     const { searchValue } = this.state;
 
@@ -64,6 +75,11 @@ class AddElementPopover extends Component {
     );
   }
 
+  /**
+   * Render either all blocks available, blocks matching the search term, or a message that there
+   * are not matching block types
+   * @returns {DOMElement}
+   */
   renderElementButtons() {
     let { elementTypes } = this.props;
     const { searchValue } = this.state;
@@ -102,6 +118,10 @@ class AddElementPopover extends Component {
     );
   }
 
+  /**
+   * Render the container for the add element popover content
+   * @returns {DOMElement}
+   */
   renderAddElementPopoverContent() {
     return (
       <div className="element-editor-add-element__button-container">
@@ -110,6 +130,10 @@ class AddElementPopover extends Component {
     );
   }
 
+  /**
+   * Render the add element popover
+   * @returns {DOMElement}
+   */
   render() {
     const { isOpen, placement } = this.props;
 
@@ -146,6 +170,9 @@ AddElementPopover.propTypes = {
 
   elementTypes: PropTypes.arrayOf(elementTypeType),
   baseAddHref: PropTypes.string.isRequired,
+  toggle: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  placement: PropTypes.string,
 };
 
 export default AddElementPopover;
