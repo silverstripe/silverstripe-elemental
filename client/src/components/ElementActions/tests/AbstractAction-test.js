@@ -3,7 +3,7 @@
 
 import React from 'react';
 import AbstractAction from '../AbstractAction';
-import Enzyme, { shallow } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15.4/build/index';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -13,18 +13,19 @@ describe('AbstractAction', () => {
   let wrapper = null;
 
   beforeEach(() => {
-    wrapper = shallow(
+    wrapper = mount(
       <AbstractAction
         onClick={clickHandler}
         title="My abstract action"
         disabled={false}
-        extraClass="foo-bar"
+        className="foo-bar"
+        toggle={false}
       />
     );
   });
 
-  it('renders a button', () => {
-    expect(wrapper.find('button').length).toBe(1);
+  it('renders a DropdownItem', () => {
+    expect(wrapper.find('DropdownItem').length).toBe(1);
   });
 
   it('includes the title text', () => {

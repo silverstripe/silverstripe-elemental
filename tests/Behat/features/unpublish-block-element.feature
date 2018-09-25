@@ -26,10 +26,10 @@ Feature: Unpublish elements in the CMS
     When I press the "Publish" button
       # Behat's assertion is faster than React's rendering
       And I wait 1 second
+      And I press the "View actions" button
     Then I should see the unpublish button for block 1
       But I should not see the publish button for block 1
     When I press the "Unpublish" button
       And I wait 1 second
     Then I should see a "Removed 'Block A' from the published page" notice
-
 

@@ -46,8 +46,9 @@ const PublishAction = (MenuComponent) => (props) => {
 
   const newProps = {
     title: i18n._t('PublishAction.PUBLISH', 'Publish'),
-    extraClass: 'element-editor__actions-publish',
+    className: 'element-editor__actions-publish',
     onClick: handleClick,
+    toggle: props.toggle,
   };
 
   return (

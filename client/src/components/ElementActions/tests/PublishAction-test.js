@@ -23,6 +23,7 @@ describe('PublishAction', () => {
         version={234}
         isLiveVersion={false}
         actions={{ handlePublishBlock: mockMutation }}
+        toggle={false}
       />
     );
 

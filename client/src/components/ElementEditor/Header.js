@@ -22,7 +22,6 @@ class Header extends Component {
     });
   }
 
-
   /**
    * Renders a message indicating the current versioned state of the element
    *
