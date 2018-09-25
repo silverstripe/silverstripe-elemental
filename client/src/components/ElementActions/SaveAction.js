@@ -16,7 +16,9 @@ const SaveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { id, securityId } = props;
+    const { id, title, securityId } = props;
+
+    const { jQuery: $ } = window;
 
     const formData = getSerializedFormData(`Form_ElementForm_${id}`);
 
@@ -30,14 +32,38 @@ const SaveAction = (MenuComponent) => (props) => {
     };
 
     const endpoint = backend.createEndpointFetcher(endpointSpec);
-    endpoint(formData).then(() => {
-      // Update the Apollo query cache with the new form data
-      const { apolloClient } = window.ss;
+    endpoint(formData)
+      .then(() => {
+        // Update the Apollo query cache with the new form data
+        const { apolloClient } = window.ss;
 
-      // @todo optimistically update the data for the current element instead of
-      // rerunning the whole query
-      apolloClient.queryManager.reFetchObservableQueries();
-    });
+        // @todo optimistically update the data for the current element instead of
+        // rerunning the whole query
+        apolloClient.queryManager.reFetchObservableQueries();
+
+        $.noticeAdd({
+          text: i18n.inject(
+            i18n._t(
+              'SaveAction.SUCCESS_NOTIFICATION',
+              'Saved \'{title}\' successfully'),
+            { title }
+          ),
+          stay: false,
+          type: 'success'
+        });
+      })
+      .catch(() => {
+        $.noticeAdd({
+          text: i18n.inject(
+            i18n._t(
+              'SaveAction.ERROR_NOTIFICATION',
+              'Error saving \'{title}\''),
+            { title }
+          ),
+          stay: false,
+          type: 'error'
+        });
+      });
   };
 
   const newProps = {
