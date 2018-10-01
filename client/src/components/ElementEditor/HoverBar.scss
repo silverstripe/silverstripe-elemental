@@ -1,0 +1,61 @@
+.element-editor__add-block-area-container {
+  height: 0;
+  display: flex;
+  width: 100%;
+  position: relative;
+  align-items: center;
+}
+
+.element-editor__add-block-area {
+  background-color: transparent;
+  min-height: $spacer * 1.5;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  transition: 0s;
+  display: flex;
+}
+
+.element-editor__add-block-hover-bar {
+  align-self: center;
+  width: 100%;
+  -webkit-appearance: button;
+  border: none;
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+
+  &:before {
+    font-size: 1.5rem;
+    background-image: radial-gradient(#fff 50%, transparent 50%);
+    -moz-transform:    translateY(50%);
+    -o-transform:      translateY(50%);
+    -webkit-transform: translateY(50%);
+    transform: translateY(-50%);
+    // position plus 'button' to be able to modify it's z-index
+    position: relative;
+    z-index: 2;
+    margin-right: $panel-padding-x/2;
+  }
+
+  &--delay {
+    background-color: $border-color-dark;
+    max-height: 3px;
+
+    &:before {
+      color: $border-color-dark;
+    }
+  }
+
+  &--inst {
+    background-color: $component-active-bg;
+    max-height: 5px;
+
+    &:before {
+      color: $component-active-bg;
+    }
+  }
+}
+

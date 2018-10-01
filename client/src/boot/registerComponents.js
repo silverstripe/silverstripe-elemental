@@ -10,6 +10,7 @@ import Content from 'components/ElementEditor/Content';
 import Summary from 'components/ElementEditor/Summary';
 import InlineEditForm from 'components/ElementEditor/InlineEditForm';
 import AddElementPopover from 'components/ElementEditor/AddElementPopover';
+import HoverBar from 'components/ElementEditor/HoverBar';
 
 export default () => {
   Injector.component.registerMany({
@@ -24,5 +25,6 @@ export default () => {
     ElementSummary: Summary,
     ElementInlineEditForm: InlineEditForm,
     AddElementPopover,
+    HoverBar,
   });
 };

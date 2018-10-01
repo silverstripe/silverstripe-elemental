@@ -45,16 +45,20 @@ describe('ElementList', () => {
 
   const Element = () => <div />;
   const Loading = () => <div />;
+  const HoverBar = 'div';
 
   describe('renderBlocks()', () => {
     it('renders elements when blocks are provided as props', () => {
       const wrapper = shallow(
         <ElementList
+          key={'1'}
           blocks={blocks}
           elementTypes={elementTypes}
           ElementComponent={Element}
           LoadingComponent={Loading}
+          HoverBarComponent={HoverBar}
           loading={false}
+          baseAddHref={''}
         />
       );
 
@@ -66,11 +70,14 @@ describe('ElementList', () => {
     it('renders a loading component', () => {
       const wrapper = shallow(
         <ElementList
+          key={'2'}
           blocks={[]}
           elementTypes={elementTypes}
           ElementComponent={Element}
           LoadingComponent={Loading}
+          HoverBarComponent={HoverBar}
           loading
+          baseAddHref={''}
         />
       );
 
@@ -82,11 +89,14 @@ describe('ElementList', () => {
     it('renders a placeholder message when no elements are provided as props', () => {
       const wrapper = shallow(
         <ElementList
+          key={'3'}
           blocks={[]}
           elementTypes={elementTypes}
           ElementComponent={Element}
           LoadingComponent={Loading}
+          HoverBarComponent={HoverBar}
           loading={false}
+          baseAddHref={''}
         />
       );
 
