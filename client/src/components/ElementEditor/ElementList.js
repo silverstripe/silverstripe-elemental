@@ -29,7 +29,14 @@ class ElementList extends Component {
    * in registerTransforms.js.
    */
   renderBlocks() {
-    const { ElementComponent, blocks, pageId } = this.props;
+    const {
+      ElementComponent,
+      HoverBarComponent,
+      blocks,
+      pageId,
+      elementTypes,
+      baseAddHref
+    } = this.props;
 
     // Blocks can be either null or an empty array
     if (!blocks) {
@@ -41,13 +48,21 @@ class ElementList extends Component {
     }
 
     return blocks.map((element) => (
-      <ElementComponent
-        key={element.ID}
-        element={element}
-        pageId={pageId}
-        editTabs={this.getEditTabs(element)}
-        link={element.BlockSchema.actions.edit}
-      />
+      <div>
+        <ElementComponent
+          key={element.ID}
+          element={element}
+          pageId={pageId}
+          editTabs={this.getEditTabs(element)}
+          link={element.BlockSchema.actions.edit}
+        />
+        <HoverBarComponent
+          baseAddHref={baseAddHref}
+          elementId={element.ID}
+          elementTypes={elementTypes}
+          key={`AddBlockHoverBar_${element.ID}`}
+        />
+      </div>
     ));
   }
 
@@ -85,6 +100,7 @@ ElementList.propTypes = {
   // @todo support either ElementList or Element children in an array (or both)
   blocks: PropTypes.arrayOf(elementType),
   loading: PropTypes.bool,
+  baseAddHref: PropTypes.string.isRequired,
 };
 
 ElementList.defaultProps = {
@@ -95,10 +111,11 @@ ElementList.defaultProps = {
 export { ElementList as Component };
 
 export default inject(
-  ['Element', 'Loading'],
-  (ElementComponent, LoadingComponent) => ({
+  ['Element', 'Loading', 'HoverBar'],
+  (ElementComponent, LoadingComponent, HoverBarComponent) => ({
     ElementComponent,
     LoadingComponent,
+    HoverBarComponent,
   }),
   () => 'ElementEditor.ElementList'
 )(ElementList);

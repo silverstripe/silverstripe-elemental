@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Button, Popover, InputGroup, Input, InputGroupAddon } from 'reactstrap';
+import { Button, Input, InputGroup, InputGroupAddon, Popover } from 'reactstrap';
 import classNames from 'classnames';
 import { elementTypeType } from 'types/elementTypeType';
 import i18n from 'i18n';
@@ -81,6 +81,7 @@ class AddElementPopover extends Component {
    * @returns {DOMElement}
    */
   renderElementButtons() {
+    const { baseAddHref } = this.props;
     let { elementTypes } = this.props;
     const { searchValue } = this.state;
 
@@ -109,7 +110,7 @@ class AddElementPopover extends Component {
             )
           }
           key={elementType.name}
-          href={`${this.props.baseAddHref}/${elementType.name}`}
+          href={`${baseAddHref}/${elementType.name}`}
           onClick={this.handleToggle}
         >
           {elementType.title}
@@ -135,44 +136,50 @@ class AddElementPopover extends Component {
    * @returns {DOMElement}
    */
   render() {
-    const { isOpen, placement } = this.props;
+    const { container, extraClass, isOpen, placement, target } = this.props;
+    const { searchValue } = this.state;
+    const popoverClassNames = classNames(
+      'element-editor-add-element',
+      extraClass
+    );
 
     return (
       <Popover
-        className="element-editor-add-element"
-        placement={placement}
-        isOpen={isOpen}
-        target="AddButton"
-        toggle={this.handleToggle}
+        className={popoverClassNames}
+        container={container}
         hideArrow
-
+        isOpen={isOpen}
+        placement={placement}
+        target={target}
+        toggle={this.handleToggle}
       >
         <InputGroup className="element-editor-add-element__search">
           <Input
-            type="text"
-            id="element-editor-add-element__search-input"
+            autoFocus
             className="element-editor-add-element__search-input"
+            id="element-editor-add-element__search-input"
             onChange={this.handleSearchValueChange}
             placeholder={i18n._t('AddElementPopover.SEARCH_BLOCKS', 'Search blocks')}
-            value={this.state.searchValue}
-            autoFocus
+            type="text"
+            value={searchValue}
           />
           {this.renderClearLink()}
         </InputGroup>
         {this.renderAddElementPopoverContent()}
       </Popover>
-
     );
   }
 }
 
 AddElementPopover.propTypes = {
-
-  elementTypes: PropTypes.arrayOf(elementTypeType),
   baseAddHref: PropTypes.string.isRequired,
-  toggle: PropTypes.func.isRequired,
+  container: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]),
+  elementTypes: PropTypes.arrayOf(elementTypeType),
+  extraClass: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
   isOpen: PropTypes.bool.isRequired,
   placement: PropTypes.string,
+  target: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]).isRequired,
+  toggle: PropTypes.func.isRequired,
 };
 
 export default AddElementPopover;

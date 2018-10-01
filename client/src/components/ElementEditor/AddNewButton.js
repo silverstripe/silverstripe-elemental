@@ -40,7 +40,7 @@ class AddNewButton extends Component {
         </Button>
         <AddElementPopoverComponent
           placement="bottom-start"
-          target={'AddButton'}
+          target={buttonAttributes.id}
           isOpen={this.state.popoverOpen}
           elementTypes={elementTypes}
           baseAddHref={baseAddHref}
