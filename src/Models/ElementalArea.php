@@ -112,7 +112,7 @@ class ElementalArea extends DataObject
 
     /**
      * A cache-aware accessor for the elements
-     * @return ArrayList|DataList
+     * @return ArrayList|DataList|BaseElement[]
      */
     public function Elements()
     {
@@ -206,7 +206,7 @@ class ElementalArea extends DataObject
                 $page = Versioned::get_by_stage($class, $currentStage)->filter($areaID, $this->ID)->first();
 
                 if ($page) {
-                    $this->cacheData['owner_page'] = $page;
+                    $this->setOwnerPageCached($page);
                     return $page;
                 }
             }

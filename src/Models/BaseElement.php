@@ -676,7 +676,8 @@ class BaseElement extends DataObject
             }
         }
 
-        $this->cacheData['area_relation_name'] = $result;
+        $this->setAreaRelationNameCache($result);
+
         return $result;
     }
 
