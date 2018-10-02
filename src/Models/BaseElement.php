@@ -375,7 +375,7 @@ class BaseElement extends DataObject
      * @param string $name
      * @return $this
      */
-    public function setAreaRelationNameCache(string $name)
+    public function setAreaRelationNameCache($name)
     {
         $this->cacheData['area_relation_name'] = $name;
 
