@@ -8,6 +8,7 @@ use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
@@ -85,6 +86,41 @@ class ElementalArea extends DataObject
     public function forTemplate()
     {
         return $this->renderWith(static::class);
+    }
+
+    /**
+     * @param ArrayList $elements
+     * @return $this
+     */
+    public function setElementsCached(ArrayList $elements)
+    {
+        $this->cacheData['elements'] = $elements;
+
+        return $this;
+    }
+
+    /**
+     * @param DataObject $page
+     * @return $this
+     */
+    public function setOwnerPageCached(DataObject $page)
+    {
+        $this->cacheData['owner_page'] = $page;
+
+        return $this;
+    }
+
+    /**
+     * A cache-aware accessor for the elements
+     * @return ArrayList|DataList
+     */
+    public function Elements()
+    {
+        if (isset($this->cacheData['elements'])) {
+            return $this->cacheData['elements'];
+        }
+
+        return parent::Elements();
     }
 
     /**
