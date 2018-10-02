@@ -132,4 +132,18 @@ class ElementalAreaTest extends SapphireTest
         $this->assertInstanceOf(ArrayList::class, $result);
         $this->assertEmpty($result);
     }
+
+    public function testElementsListIsCached()
+    {
+        $area = new ElementalArea();
+
+        $element = new ElementContent();
+        $element->HTML = 'Test';
+
+        $elements = new ArrayList([$element]);
+
+        $area->setElementsCached($elements);
+
+        $this->assertSame($elements, $area->Elements());
+    }
 }
