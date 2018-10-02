@@ -42,7 +42,8 @@
     "react-apollo": "^0.7.1",
     "react-redux": "^4.4.1",
     "reactstrap": "^5.0.0-beta",
-    "redux": "^3.3.1"
+    "redux": "^3.3.1",
+    "redux-form": "^6.0.2"
   },
   "devDependencies": {
     "@silverstripe/eslint-config": "^0.0.2",

@@ -48,7 +48,7 @@ class ElementList extends Component {
     }
 
     return blocks.map((element) => (
-      <div>
+      <div key={element.ID}>
         <ElementComponent
           key={element.ID}
           element={element}

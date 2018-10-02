@@ -25,6 +25,7 @@ AbstractAction.propTypes = {
   className: PropTypes.string,
   onClick: PropTypes.func,
   title: PropTypes.string,
+  name: PropTypes.string,
 };
 
 AbstractAction.defaultProps = {

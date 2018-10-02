@@ -16,9 +16,11 @@ class Element extends Component {
 
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleExpand = this.handleExpand.bind(this);
+    this.handleTabClick = this.handleTabClick.bind(this);
 
     this.state = {
       previewExpanded: false,
+      activeTab: '',
     };
   }
 
@@ -41,6 +43,17 @@ class Element extends Component {
     }
 
     return `${baseClassName}--published`;
+  }
+
+  /**
+   * Update the active tab state on tab click that is passed down to InlineEditForm
+   *
+   * @param {string} toBeActiveTab
+   */
+  handleTabClick(toBeActiveTab) {
+    this.setState({
+      activeTab: toBeActiveTab
+    });
   }
 
   /**
@@ -97,7 +110,7 @@ class Element extends Component {
       pageId,
     } = this.props;
 
-    const { previewExpanded } = this.state;
+    const { previewExpanded, activeTab } = this.state;
 
     const linkTitle = i18n.inject(
       i18n._t('ElementalElement.TITLE', 'Edit this {type} block'),
@@ -124,6 +137,7 @@ class Element extends Component {
         role="button"
         tabIndex={0}
         title={linkTitle}
+        key={element.ID}
       >
         <HeaderComponent
           id={element.ID}
@@ -138,6 +152,7 @@ class Element extends Component {
           editTabs={editTabs}
           previewExpanded={previewExpanded}
           expandable={element.InlineEditable}
+          handleEditTabsClick={this.handleTabClick}
         />
         <ContentComponent
           id={element.ID}
@@ -145,6 +160,7 @@ class Element extends Component {
           fileTitle={element.BlockSchema.fileTitle}
           content={element.BlockSchema.content}
           previewExpanded={previewExpanded}
+          activeTab={activeTab}
         />
       </div>
     );
@@ -154,7 +170,7 @@ class Element extends Component {
 Element.propTypes = {
   element: elementType,
   link: PropTypes.string.isRequired,
-  editTabs: PropTypes.arrayOf(PropTypes.string),
+  editTabs: PropTypes.arrayOf(PropTypes.object),
 };
 
 Element.defaultProps = {

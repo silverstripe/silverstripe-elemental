@@ -20,6 +20,8 @@ use SilverStripe\Security\SecurityToken;
  */
 class ElementalAreaController extends LeftAndMain
 {
+    const FORM_NAME_TEMPLATE = 'ElementForm_%s';
+
     private static $url_segment = 'elemental-area';
 
     private static $ignore_menuitem = true;
@@ -43,6 +45,7 @@ class ElementalAreaController extends LeftAndMain
             'saveUrl' => $this->Link('api/saveForm'),
             'saveMethod' => 'post',
             'payloadFormat' => 'json',
+            'formNameTemplate' => sprintf(static::FORM_NAME_TEMPLATE, '{id}'),
         ];
         return $clientConfig;
     }
@@ -83,7 +86,7 @@ class ElementalAreaController extends LeftAndMain
         /** @var Form $form */
         $form = $scaffolder->getForm(
             $this,
-            'ElementForm_'.$elementID,
+            sprintf(static::FORM_NAME_TEMPLATE, $elementID),
             ['Record' => $element]
         );
 

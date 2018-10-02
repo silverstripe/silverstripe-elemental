@@ -9,6 +9,22 @@ import AbstractAction from 'components/ElementActions/AbstractAction';
  * of the element's primary tabs, as well as operations such as save, publish, archive etc
  */
 class ElementActions extends Component {
+  constructor(props) {
+    super(props);
+    this.handleEditTabsClick = this.handleEditTabsClick.bind(this);
+  }
+
+  /**
+   * Set the active tab
+   *
+   * @param activeTab
+   */
+  handleEditTabsClick(event) {
+    const { handleEditTabsClick } = this.props;
+     handleEditTabsClick(event.target.name);
+  }
+
+
   /**
    * Render buttons for the edit form tabs that will be a part of the edit form (if they exist)
    *
@@ -22,7 +38,8 @@ class ElementActions extends Component {
     }
 
     return editTabs.map(
-      (tab) => <AbstractAction key={tab} title={tab} />
+      ({ name, title }) =>
+        <AbstractAction key={name} name={name} title={title} onClick={this.handleEditTabsClick} />
     );
   }
 
@@ -74,8 +91,10 @@ class ElementActions extends Component {
 
 ElementActions.propTypes = {
   id: PropTypes.string,
-  editTabs: PropTypes.arrayOf(PropTypes.string),
-};
+  editTabs: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    name: PropTypes.string,
+  })), };
 
 ElementActions.defaultProps = {
   editTabs: [],
