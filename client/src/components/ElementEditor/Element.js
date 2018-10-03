@@ -52,7 +52,8 @@ class Element extends Component {
    */
   handleTabClick(toBeActiveTab) {
     this.setState({
-      activeTab: toBeActiveTab
+      activeTab: toBeActiveTab,
+      previewExpanded: true,
     });
   }
 
