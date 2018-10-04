@@ -30,6 +30,7 @@ class Content extends PureComponent {
       InlineEditFormComponent,
       SummaryComponent,
       activeTab,
+      onFormInit
     } = this.props;
 
     if (!content && !fileUrl) {
@@ -53,6 +54,7 @@ class Content extends PureComponent {
             onClick={(event) => event.stopPropagation()}
             elementId={id}
             activeTab={activeTab}
+            onFormInit={onFormInit}
           />
         }
       </div>

@@ -17,7 +17,7 @@ class ElementActions extends Component {
   /**
    * Set the active tab
    *
-   * @param activeTab
+   * @param {string} activeTab
    */
   handleEditTabsClick(event) {
     const { handleEditTabsClick } = this.props;
@@ -31,7 +31,7 @@ class ElementActions extends Component {
    * @returns {DOMElement[]|null}
    */
   renderEditTabs() {
-    const { editTabs } = this.props;
+    const { editTabs, activeTab } = this.props;
 
     if (!editTabs || !editTabs.length) {
       return null;
@@ -39,7 +39,13 @@ class ElementActions extends Component {
 
     return editTabs.map(
       ({ name, title }) =>
-        <AbstractAction key={name} name={name} title={title} onClick={this.handleEditTabsClick} />
+        (<AbstractAction
+          key={name}
+          name={name}
+          title={title}
+          onClick={this.handleEditTabsClick}
+          active={name === activeTab}
+        />)
     );
   }
 
@@ -52,7 +58,7 @@ class ElementActions extends Component {
     const { children, editTabs } = this.props;
 
     if (editTabs && editTabs.length && React.Children.count(children)) {
-      return <DropdownItem divider />;
+      return <DropdownItem divider role="separator" />;
     }
     return null;
   }
@@ -91,6 +97,7 @@ class ElementActions extends Component {
 
 ElementActions.propTypes = {
   id: PropTypes.string,
+  activeTab: PropTypes.string,
   editTabs: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     name: PropTypes.string,
