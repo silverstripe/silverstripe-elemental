@@ -69,12 +69,12 @@ class Element extends Component {
   }
 
   /**
-   * If pressing enter key, treat it like a mouse click
+   * If pressing enter or space key, treat it like a mouse click
    *
    * @param {Object} event
    */
   handleKeyUp(event) {
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13 || event.keyCode === 32) {
       this.handleExpand(event);
     }
   }
