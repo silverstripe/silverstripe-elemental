@@ -4,8 +4,6 @@ import { PropTypes } from 'react';
 const elementType = PropTypes.shape({
   ID: PropTypes.string.isRequired,
   Title: PropTypes.string,
-  BlockSchema: PropTypes.object,
-  InlineEditable: PropTypes.bool,
   IsPublished: PropTypes.bool,
   IsLiveVersion: PropTypes.bool,
   Version: PropTypes.number

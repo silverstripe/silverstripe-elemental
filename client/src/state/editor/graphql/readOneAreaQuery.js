@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
-import configProvider from '../elementalConfigProvider';
+import { elementConfigProvider } from '../getElementConfig';
 
 const queryProvider = () => {
-  const blockFields = Object.values(configProvider().elementTypes).reduce(
+  const blockFields = Object.values(elementConfigProvider().elementTypes).reduce(
     (accumulator, elementType) => {
       const { graphQL: { type, fields } } = elementType;
 
@@ -45,18 +45,18 @@ const config = {
       },
     }
   ) {
-    let blocks = null;
+    let elements = null;
     if (readOneElementalArea) {
       // Remove the GraphQL pagination keys
-      blocks = readOneElementalArea.Elements.edges.map((element) => element.node);
+      elements = readOneElementalArea.Elements.edges.map((element) => element.node);
     }
 
     const errors = error && error.graphQLErrors &&
       error.graphQLErrors.map((graphQLError) => graphQLError.message);
 
     return {
-      loading: networkLoading || !blocks,
-      blocks,
+      loading: networkLoading || !elements,
+      elements,
       graphQLErrors: errors,
     };
   },

@@ -75,13 +75,6 @@ class BaseElement extends DataObject
         Versioned::class
     ];
 
-    private static $casting = [
-        'BlockSchema' => DBObjectType::class,
-        'InlineEditable' => DBBoolean::class,
-        'IsLiveVersion' => DBBoolean::class,
-        'IsPublished' => DBBoolean::class,
-    ];
-
     private static $versioned_gridfield_extensions = true;
 
     private static $table_name = 'Element';
@@ -736,9 +729,9 @@ class BaseElement extends DataObject
         return [
             'ID',
             'Title',
-            'IsLiveVersion',
-            'IsPublished',
-            'InlineEditable',
+            'IsLiveVersion' => 'Boolean',
+            'IsPublished' => 'Boolean',
+            'CMSEditLink',
         ];
     }
 
@@ -777,45 +770,6 @@ class BaseElement extends DataObject
     public function getSummary()
     {
         return '';
-    }
-
-
-    /**
-     * The block schema defines a set of data that will be serialised and sent via GraphQL
-     * to the React editor client.
-     *
-     * To modify the schema, either use the extension point or overload the `provideBlockSchema`
-     * method.
-     *
-     * @internal This API may change in future. Treat this as a `final` method.
-     * @return array
-     */
-    public function getBlockSchema()
-    {
-        $blockSchema = $this->provideBlockSchema();
-
-        $this->extend('updateBlockSchema', $blockSchema);
-
-        return $blockSchema;
-    }
-
-    /**
-     * Provide block schema data, which will be serialised and sent via GraphQL to the editor client.
-     *
-     * Overload this method in child element classes to augment, or use the extension point on `getBlockSchema`
-     * to update it from an `Extension`.
-     *
-     * @return array
-     */
-    protected function provideBlockSchema()
-    {
-        return [
-            'iconClass' => $this->config()->get('icon'),
-            'type' => $this->getType(),
-            'actions' => [
-                'edit' => $this->getEditLink(),
-            ],
-        ];
     }
 
     /**

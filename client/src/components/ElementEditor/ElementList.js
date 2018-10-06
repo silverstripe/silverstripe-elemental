@@ -6,24 +6,6 @@ import i18n from 'i18n';
 
 class ElementList extends Component {
   /**
-   * Given an elementType, return a list of tabs that should be available in the edit form for an
-   * element.
-   *
-   * @param {elementTypeType} element
-   * @returns {string[]}
-   */
-  getEditTabs(element) {
-    const { elementTypes } = this.props;
-    const matchingType = elementTypes.find(type => element.BlockSchema.type === type.title);
-
-    if (!matchingType || !matchingType.tabs) {
-      return [];
-    }
-
-    return matchingType.tabs;
-  }
-
-  /**
    * Renders a list of Element components, each with an elementType object
    * of data mapped into it. The data is provided by a GraphQL HOC registered
    * in registerTransforms.js.
@@ -32,29 +14,27 @@ class ElementList extends Component {
     const {
       ElementComponent,
       HoverBarComponent,
-      blocks,
-      pageId,
+      elements,
+      areaId,
       elementTypes,
       baseAddHref
     } = this.props;
 
     // Blocks can be either null or an empty array
-    if (!blocks) {
+    if (!elements) {
       return null;
     }
 
-    if (blocks && !blocks.length) {
-      return <div>{i18n._t('ElementList.ADD_BLOCKS', 'Add blocks to place your content')}</div>;
+    if (elements && !elements.length) {
+      return <div>{i18n._t('ElementList.ADD_BLOCKS', 'Add elements to place your content')}</div>;
     }
 
-    return blocks.map((element) => (
+    return elements.map((element) => (
       <div>
         <ElementComponent
           key={element.ID}
           element={element}
-          pageId={pageId}
-          editTabs={this.getEditTabs(element)}
-          link={element.BlockSchema.actions.edit}
+          areaId={areaId}
         />
         <HoverBarComponent
           baseAddHref={baseAddHref}
@@ -81,10 +61,10 @@ class ElementList extends Component {
   }
 
   render() {
-    const { blocks } = this.props;
+    const { elements } = this.props;
     const listClassNames = classNames(
       'elemental-editor__list',
-      { 'elemental-editor__list--empty': !blocks || !blocks.length }
+      { 'elemental-editor__list--empty': !elements || !elements.length }
     );
 
     return (
@@ -98,13 +78,14 @@ class ElementList extends Component {
 
 ElementList.propTypes = {
   // @todo support either ElementList or Element children in an array (or both)
-  blocks: PropTypes.arrayOf(elementType),
+  elements: PropTypes.arrayOf(elementType),
   loading: PropTypes.bool,
   baseAddHref: PropTypes.string.isRequired,
+  areaId: PropTypes.string.isRequired,
 };
 
 ElementList.defaultProps = {
-  blocks: [],
+  elements: [],
   loading: false,
 };
 

@@ -2,8 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { Tooltip } from 'reactstrap';
 import { compose } from 'redux';
 import { inject } from 'lib/Injector';
+import { elementType } from 'types/elementType';
 import i18n from 'i18n';
 import classNames from 'classnames';
+import { getElementTypeConfig } from 'state/editor/getElementConfig';
 
 class Header extends Component {
   constructor(props) {
@@ -28,7 +30,7 @@ class Header extends Component {
    * @returns {DOMElement|null}
    */
   renderVersionedStateMessage() {
-    const { isLiveVersion, isPublished } = this.props;
+    const { element: { isLiveVersion, isPublished } } = this.props;
 
     // No indication required for published elements
     if (isPublished && isLiveVersion) {
@@ -58,14 +60,17 @@ class Header extends Component {
 
   render() {
     const {
-      id,
-      title,
-      elementType,
-      fontIcon,
-      expandable,
+      element,
       previewExpanded,
       ElementActionsComponent,
     } = this.props;
+
+    const {
+      inlineEditable: expandable,
+      icon: fontIcon,
+      editTabs,
+      type,
+    } = getElementTypeConfig(element.__typename).properties;
 
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
     const expandCaretClasses = classNames(
@@ -81,21 +86,21 @@ class Header extends Component {
       <div className="element-editor-header">
         <div className="element-editor-header__info">
           <div className="element-editor-header__icon-container">
-            <i className={fontIcon} id={`element-editor-header__icon${id}`} />
+            <i className={fontIcon} id={`element-editor-header__icon${element.ID}`} />
             {this.renderVersionedStateMessage()}
             <Tooltip
               placement="top"
               isOpen={this.state.tooltipOpen}
-              target={`element-editor-header__icon${id}`}
+              target={`element-editor-header__icon${element.ID}`}
               toggle={this.toggle}
             >
-              {elementType}
+              {type}
             </Tooltip>
           </div>
-          <h3 className="element-editor-header__title">{title}</h3>
+          <h3 className="element-editor-header__title">{element.Title}</h3>
         </div>
         <div className="element-editor-header__actions">
-          {expandable && <ElementActionsComponent {...this.props} />}
+          {expandable && <ElementActionsComponent id={element.ID} editTabs={editTabs} />}
 
           <i className={expandCaretClasses} title={expandTitle} />
         </div>
@@ -105,15 +110,8 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  id: PropTypes.string,
-  title: PropTypes.string,
-  version: PropTypes.number,
-  isLiveVersion: PropTypes.bool,
-  isPublished: PropTypes.bool,
-  elementType: PropTypes.string,
-  fontIcon: PropTypes.string,
-  ElementActionsComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
-  expandable: PropTypes.bool,
+  element: elementType,
+  ElementActionsComponent: PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
   previewExpanded: PropTypes.bool,
 };
 

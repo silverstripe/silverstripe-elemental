@@ -4,10 +4,10 @@ import { queryProvider as readAreaQueryProvider, config as readAreaConfig } from
 
 // GraphQL query for changing the sort order of blocks
 const mutation = gql`
-mutation SortBlockMutation($blockId:ID!, $afterBlockId:ID!) {
+mutation SortBlockMutation($elementId:ID!, $afterElementId:ID!) {
   sortBlock(
-    ID: $blockId
-    AfterBlockID: $afterBlockId
+    ID: $elementId
+    AfterBlockID: $afterElementId
   ) {
     ID
   }
@@ -16,13 +16,13 @@ mutation SortBlockMutation($blockId:ID!, $afterBlockId:ID!) {
 
 const config = {
   props: ({ mutate, ownProps: { actions } }) => {
-    const handleSortBlock = (blockId, afterBlockId, areaId) => mutate({
+    const handleSortBlock = (elementId, afterElementId, areaId) => mutate({
       variables: {
-        blockId,
-        afterBlockId,
+        elementId,
+        afterElementId,
       },
       optimisticResponse: {
-        ID: blockId,
+        ID: elementId,
         __typename: 'Block',
       },
       update: store => {
@@ -36,17 +36,17 @@ const config = {
         let { edges } = newData.readOnePage.ElementalAreaIfExists.Elements;
 
         // Find the block we reordered
-        const movedBlockIndex = edges.findIndex(edge => edge.node.ID === blockId);
+        const movedBlockIndex = edges.findIndex(edge => edge.node.ID === elementId);
         // Keep it
         const movedBlock = edges[movedBlockIndex];
         // Remove the moved block
         edges.splice(movedBlockIndex, 1);
         // If the target is 0, it's added to the start
-        if (!afterBlockId) {
+        if (!afterElementId) {
           edges.unshift(movedBlock);
         } else {
           // Else, find the block we inserted after
-          const targetBlockIndex = edges.findIndex(edge => edge.node.ID === afterBlockId);
+          const targetBlockIndex = edges.findIndex(edge => edge.node.ID === afterElementId);
           // Add it back after the target
           const end = edges.slice(targetBlockIndex + 1);
           edges = edges.slice(0, targetBlockIndex + 1);

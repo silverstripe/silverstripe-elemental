@@ -1,11 +1,12 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import { elementType } from 'types/elementType';
+import striptags from 'striptags';
 
 class Summary extends PureComponent {
   render() {
-    const { fileUrl, fileTitle, content } = this.props;
+    const { fileUrl, fileTitle, HTML } = this.props.element;
 
     return (
-
       <div className="element-editor-summary">
         {fileUrl &&
         <img
@@ -14,9 +15,9 @@ class Summary extends PureComponent {
           alt={fileTitle}
         />
         }
-        {content &&
+        {HTML &&
         <p className="element-editor-summary__content">
-          {content}
+          {striptags(HTML)}
         </p>
         }
       </div>
@@ -28,9 +29,7 @@ class Summary extends PureComponent {
 Summary.defaultProps = {};
 
 Summary.propTypes = {
-  content: PropTypes.string,
-  fileUrl: PropTypes.string,
-  fileTitle: PropTypes.string,
+  element: elementType,
 };
 
 export default Summary;

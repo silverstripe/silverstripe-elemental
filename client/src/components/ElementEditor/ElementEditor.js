@@ -16,8 +16,6 @@ class ElementEditor extends PureComponent {
       baseAddHref,
     } = this.props;
 
-    // console.log(blocks);
-
     return (
       <div className="element-editor">
         <ToolbarComponent elementTypes={elementTypes} baseAddHref={baseAddHref} />

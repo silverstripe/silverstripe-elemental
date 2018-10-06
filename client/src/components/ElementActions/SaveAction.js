@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import backend from 'lib/Backend';
 import i18n from 'i18n';
-import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
+import { getElementSchemaValue } from 'state/editor/getElementConfig';
 import { getSerializedFormData } from 'state/editor/getSerializedFormData';
 
 /**
@@ -23,9 +23,9 @@ const SaveAction = (MenuComponent) => (props) => {
     const formData = getSerializedFormData(`Form_ElementForm_${id}`);
 
     const endpointSpec = {
-      url: loadElementSchemaValue('saveUrl', id),
-      method: loadElementSchemaValue('saveMethod'),
-      payloadFormat: loadElementSchemaValue('payloadFormat'),
+      url: getElementSchemaValue('saveUrl', id),
+      method: getElementSchemaValue('saveMethod'),
+      payloadFormat: getElementSchemaValue('payloadFormat'),
       defaultData: {
         SecurityID: securityId
       },

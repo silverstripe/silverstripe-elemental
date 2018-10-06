@@ -46,21 +46,26 @@ class ElementTypeRegistry
             throw new LogicException('Only elements that extend ' . BaseElement::class . ' can be registered');
         }
 
-        // Set the ID to something that can be replaced
-        $singleton->ID = ':ID';
-
         $graphQLType = StaticSchema::inst()->typeNameForDataObject($elementClass);
+
+        $graphQLDefinitons = $singleton->getGraphQLDefinitions();
+
+        $fields = [];
+        foreach ($graphQLDefinitons as $name => $cast) {
+            $fields[] = is_numeric($name) ? $cast : $name;
+        }
 
         static::$elementTypes[$elementClass] = [
             'graphQL' => [
                 'type' => $graphQLType,
-                'fields' => $singleton->getGraphQLDefinitions(),
+                'fields' => $fields,
+                'types' => $graphQLDefinitons,
             ],
             'properties' => [
                 'icon' => $singleton::config()->get('icon'),
                 'type' => $singleton->getType(),
                 'inlineEditable' => $singleton->inlineEditable(),
-                'editTabs' => $this->getTabProvider()->getTabsForElement($elementClass)
+                'editTabs' => array_values($this->getTabProvider()->getTabsForElement($elementClass))
             ],
         ];
     }

@@ -5,6 +5,7 @@ import { elementType } from 'types/elementType';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
 import classNames from 'classnames';
+import { getElementTypeConfig } from 'state/editor/getElementConfig';
 
 /**
  * The Element component used in the context of an ElementEditor shows the summary
@@ -48,7 +49,8 @@ class Element extends Component {
    * If the element is not inline-editable, take user to the GridFieldDetailForm to edit the record
    */
   handleExpand(event) {
-    const { element, link } = this.props;
+    const { element } = this.props;
+    const { inlineEditable } = getElementTypeConfig(element.__typename).properties;
 
     if (event.target.type === 'button') {
       // Stop bubbling if the click target was a button within this container
@@ -56,7 +58,7 @@ class Element extends Component {
       return;
     }
 
-    if (element.InlineEditable) {
+    if (inlineEditable) {
       this.setState({
         previewExpanded: !this.state.previewExpanded
       });
@@ -65,7 +67,7 @@ class Element extends Component {
 
     // If inline editing is disabled for this element, send them to the standalone
     // edit form
-    window.location = link;
+    window.location = element.CMSEditLink;
   }
 
   /**
@@ -84,16 +86,14 @@ class Element extends Component {
       element,
       HeaderComponent,
       ContentComponent,
-      link,
-      editTabs,
-      pageId,
+      areaId,
     } = this.props;
 
     const { previewExpanded } = this.state;
 
     const linkTitle = i18n.inject(
       i18n._t('ElementalElement.TITLE', 'Edit this {type} block'),
-      { type: element.BlockSchema.type }
+      { type: getElementTypeConfig(element.__typename).properties.type }
     );
 
     if (!element.ID) {
@@ -118,24 +118,12 @@ class Element extends Component {
         title={linkTitle}
       >
         <HeaderComponent
-          id={element.ID}
-          title={element.Title}
-          version={element.Version}
-          isLiveVersion={element.IsLiveVersion}
-          isPublished={element.IsPublished}
-          elementType={element.BlockSchema.type}
-          fontIcon={element.BlockSchema.iconClass}
-          link={link}
-          pageId={pageId}
-          editTabs={editTabs}
+          element={element}
+          areaId={areaId}
           previewExpanded={previewExpanded}
-          expandable={element.InlineEditable}
         />
         <ContentComponent
-          id={element.ID}
-          fileUrl={element.BlockSchema.fileURL}
-          fileTitle={element.BlockSchema.fileTitle}
-          content={element.BlockSchema.content}
+          element={element}
           previewExpanded={previewExpanded}
         />
       </div>
@@ -145,8 +133,7 @@ class Element extends Component {
 
 Element.propTypes = {
   element: elementType,
-  link: PropTypes.string.isRequired,
-  editTabs: PropTypes.arrayOf(PropTypes.string),
+  areaId: PropTypes.string,
 };
 
 Element.defaultProps = {

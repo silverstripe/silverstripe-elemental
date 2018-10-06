@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { inject } from 'lib/Injector';
+import { elementType } from 'types/elementType';
 
 class Content extends PureComponent {
   constructor(props) {
@@ -22,27 +23,18 @@ class Content extends PureComponent {
 
   render() {
     const {
-      id,
-      fileUrl,
-      fileTitle,
-      content,
+      element,
       previewExpanded,
       InlineEditFormComponent,
       SummaryComponent
     } = this.props;
-
-    if (!content && !fileUrl) {
-      return null;
-    }
 
     return (
       <div className="element-editor-content">
         {!previewExpanded &&
           // Show summary
           <SummaryComponent
-            content={content}
-            fileUrl={fileUrl}
-            fileTitle={fileTitle}
+            element={element}
           />
         }
         {(this.state.elementFormLoaded || previewExpanded) &&
@@ -50,7 +42,7 @@ class Content extends PureComponent {
           <InlineEditFormComponent
             extraClass={{ 'element-editor-editform--collapsed': !previewExpanded }}
             onClick={(event) => event.stopPropagation()}
-            elementId={id}
+            elementId={element.ID}
           />
         }
       </div>
@@ -59,10 +51,7 @@ class Content extends PureComponent {
 }
 
 Content.propTypes = {
-  id: PropTypes.string,
-  content: PropTypes.string,
-  fileUrl: PropTypes.string,
-  fileTitle: PropTypes.string,
+  element: elementType,
   previewExpanded: PropTypes.bool,
   SummaryComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   InlineEditFormComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
