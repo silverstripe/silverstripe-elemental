@@ -1,6 +1,6 @@
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { query as readBlocksQuery, config as readBlocksConfig } from './readBlocksForPageQuery';
+import { queryProvider as readAreaQueryProvider, config as readAreaConfig } from './readOneAreaQuery';
 
 // GraphQL query for changing the sort order of blocks
 const mutation = gql`
@@ -16,7 +16,7 @@ mutation SortBlockMutation($blockId:ID!, $afterBlockId:ID!) {
 
 const config = {
   props: ({ mutate, ownProps: { actions } }) => {
-    const handleSortBlock = (blockId, afterBlockId, pageId) => mutate({
+    const handleSortBlock = (blockId, afterBlockId, areaId) => mutate({
       variables: {
         blockId,
         afterBlockId,
@@ -26,8 +26,9 @@ const config = {
         __typename: 'Block',
       },
       update: store => {
-        const variables = readBlocksConfig.options({ pageId }).variables;
-        const data = store.readQuery({ query: readBlocksQuery, variables });
+        const variables = readAreaConfig.options({ areaId }).variables;
+        const readAreaQuery = readAreaQueryProvider();
+        const data = store.readQuery({ query: readAreaQuery, variables });
 
         // Query returns a deeply nested object. Explicit reconstruction via spreads is too verbose.
         // This is an alternative, relatively efficient way to deep clone
@@ -54,8 +55,8 @@ const config = {
         }
 
         // Add it back to the full result
-        newData.readOnePage.ElementalAreaIfExists.Elements.edges = edges;
-        store.writeQuery({ query: readBlocksQuery, data: newData, variables });
+        newData.readOneElementalArea.Elements.edges = edges;
+        store.writeQuery({ query: readAreaQuery, data: newData, variables });
       },
     });
     return {

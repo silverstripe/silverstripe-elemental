@@ -2,8 +2,7 @@ import Injector from 'lib/Injector';
 import readOneBlockQuery from 'state/history/readOneBlockQuery';
 import HistoricElementViewFactory from 'components/HistoricElementView/HistoricElementView';
 import revertToBlockVersionMutation from 'state/history/revertToBlockVersionMutation';
-import readBlocksForPageQuery from 'state/editor/readBlocksForPageQuery';
-import provideReadOneAreaQuery from 'state/editor/readOneAreaQuery';
+import provideReadOneAreaQuery from 'state/editor/graphql/readOneAreaQuery';
 import ArchiveAction from 'components/ElementActions/ArchiveAction';
 import PublishAction from 'components/ElementActions/PublishAction';
 import SaveAction from 'components/ElementActions/SaveAction';
@@ -47,18 +46,6 @@ export default () => {
       );
     }
   );
-
-  // Injector.transform(
-  //   'cms-element-editor',
-  //   (updater) => {
-  //     // Add GraphQL query for reading elements on a page for the ElementEditor
-  //     updater.component(
-  //       'ElementList',
-  //       readBlocksForPageQuery,
-  //       'PageElements'
-  //     );
-  //   }
-  // );
 
   Injector.transform(
     'cms-element-editor',

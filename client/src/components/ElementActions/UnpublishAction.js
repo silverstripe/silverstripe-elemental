@@ -2,7 +2,7 @@
 import React from 'react';
 import { compose } from 'redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
-import unpublishBlockMutation from 'state/editor/unpublishBlockMutation';
+import unpublishBlockMutation from 'state/editor/graphql/unpublishBlockMutation';
 import i18n from 'i18n';
 
 /**

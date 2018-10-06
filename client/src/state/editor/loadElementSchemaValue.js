@@ -1,5 +1,4 @@
-import Config from 'lib/Config';
-
+import configProvider from './elementalConfigProvider';
 /**
  * Returns the named component from the elementForm's schema data
  *
@@ -8,9 +7,7 @@ import Config from 'lib/Config';
  * @returns {string}
  */
 export const loadElementSchemaValue = (key, elementId = null) => {
-  const sectionKey = 'DNADesign\\Elemental\\Controllers\\ElementalAreaController';
-  const section = Config.getSection(sectionKey);
-  const schemaValue = section.form.elementForm[key] || '';
+  const schemaValue = configProvider().form.elementForm[key] || '';
 
   if (elementId) {
     return `${schemaValue}/${elementId}`;
