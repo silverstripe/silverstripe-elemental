@@ -7,6 +7,7 @@ use GraphQL\Type\Definition\Type;
 use SilverStripe\Core\Convert;
 use SilverStripe\GraphQL\MutationCreator;
 use SilverStripe\GraphQL\OperationResolver;
+use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
 
@@ -27,7 +28,7 @@ class SortBlockMutationCreator extends MutationCreator implements OperationResol
 
     public function type()
     {
-        return $this->manager->getType('Block');
+        return $this->manager->getType(StaticSchema::inst()->typeNameForDataObject(BaseElement::class));
     }
 
     public function args()

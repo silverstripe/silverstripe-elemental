@@ -48,6 +48,14 @@ class ElementContent extends BaseElement
         return $blockSchema;
     }
 
+    public function getGraphQLDefinitions()
+    {
+        return array_merge(parent::getGraphQLDefinitions(), [
+            'HTML'
+        ]);
+    }
+
+
     public function getType()
     {
         return _t(__CLASS__ . '.BlockType', 'Content');

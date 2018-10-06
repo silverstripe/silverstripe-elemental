@@ -111,8 +111,8 @@ class ElementalAreaField extends GridField
     public function getSchemaDataDefaults()
     {
         $schemaData = parent::getSchemaDataDefaults();
-        $pageId = ($this->getArea() && ($page = $this->getArea()->getOwnerPage())) ? $page->ID : null;
-        $schemaData['page-id'] = $pageId;
+//        $pageId = ($this->getArea() && ($page = $this->getArea()->getOwnerPage())) ? $page->ID : null;
+        $schemaData['area-id'] = $this->getArea()->ID;
 
         $blockTypes = [];
 

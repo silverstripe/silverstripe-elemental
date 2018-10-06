@@ -731,6 +731,17 @@ class BaseElement extends DataObject
         return $this->CMSEditLink();
     }
 
+    public function getGraphQLDefinitions()
+    {
+        return [
+            'ID',
+            'Title',
+            'IsLiveVersion',
+            'IsPublished',
+            'InlineEditable',
+        ];
+    }
+
     /**
      * @return DBField|null
      * @throws \Psr\Container\NotFoundExceptionInterface

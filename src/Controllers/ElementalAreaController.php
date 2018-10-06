@@ -4,6 +4,7 @@ namespace DNADesign\Elemental\Controllers;
 
 use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Services\ElementTypeRegistry;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SilverStripe\Admin\LeftAndMain;
@@ -38,12 +39,18 @@ class ElementalAreaController extends LeftAndMain
     public function getClientConfig()
     {
         $clientConfig = parent::getClientConfig();
+
+        // Form schema endpoint for individual blocks
         $clientConfig['form']['elementForm'] = [
             'schemaUrl' => $this->Link('schema/elementForm'),
             'saveUrl' => $this->Link('api/saveForm'),
             'saveMethod' => 'post',
             'payloadFormat' => 'json',
         ];
+
+        // Configuration for fields that are available per block type
+        $clientConfig['elementTypes'] = ElementTypeRegistry::create()->getDefinitions();
+
         return $clientConfig;
     }
 

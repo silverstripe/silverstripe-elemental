@@ -15,7 +15,7 @@ jQuery.entwine('ss', ($) => {
       const schemaData = this.data('schema');
 
       const props = {
-        pageId: schemaData['page-id'],
+        areaId: schemaData['area-id'],
         elementTypes: schemaData['element-types'],
         baseAddHref: schemaData['base-add-href']
       };

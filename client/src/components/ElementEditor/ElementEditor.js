@@ -8,12 +8,20 @@ import { elementTypeType } from 'types/elementTypeType';
  */
 class ElementEditor extends PureComponent {
   render() {
-    const { ToolbarComponent, ListComponent, pageId, elementTypes, baseAddHref } = this.props;
+    const {
+      ToolbarComponent,
+      ListComponent,
+      areaId,
+      elementTypes,
+      baseAddHref,
+    } = this.props;
+
+    // console.log(blocks);
 
     return (
       <div className="element-editor">
         <ToolbarComponent elementTypes={elementTypes} baseAddHref={baseAddHref} />
-        <ListComponent elementTypes={elementTypes} pageId={pageId} baseAddHref={baseAddHref} />
+        <ListComponent elementTypes={elementTypes} areaId={areaId} baseAddHref={baseAddHref} />
       </div>
     );
   }
@@ -21,7 +29,7 @@ class ElementEditor extends PureComponent {
 
 ElementEditor.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  pageId: PropTypes.number.isRequired,
+  areaId: PropTypes.number.isRequired,
   baseAddHref: PropTypes.string.isRequired,
 };
 
