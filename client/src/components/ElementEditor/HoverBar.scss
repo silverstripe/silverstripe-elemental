@@ -15,7 +15,6 @@
   border: 0;
   outline: 0;
   transition: 0s;
-  display: flex;
 }
 
 .element-editor__add-block-hover-bar {
@@ -26,18 +25,21 @@
   position: absolute;
   display: flex;
   justify-content: flex-end;
+  padding: 0;
+  top: 50%;
+  transform: translateY(-66%);
 
   &:before {
     font-size: 1.5rem;
     background-image: radial-gradient(#fff 50%, transparent 50%);
-    -moz-transform:    translateY(50%);
-    -o-transform:      translateY(50%);
-    -webkit-transform: translateY(50%);
-    transform: translateY(-50%);
+    // Fallback for IE11 & other browsers that don't support the calc() below
+    transform: translateY(-35%);
     // position plus 'button' to be able to modify it's z-index
     position: relative;
     z-index: 2;
     margin-right: $panel-padding-x/2;
+    display: block;
+    height: 1em;
   }
 
   &--delay {
@@ -45,6 +47,7 @@
     max-height: 3px;
 
     &:before {
+      transform: translateY(calc((3px/2) + -50%));
       color: $border-color-dark;
     }
   }
@@ -54,6 +57,7 @@
     max-height: 5px;
 
     &:before {
+      transform: translateY(calc((5px/2) + -50%));
       color: $component-active-bg;
     }
   }
