@@ -2,9 +2,9 @@
 
 namespace DNADesign\Elemental\Models;
 
-use DNADesign\Elemental\ORM\FieldType\DBObjectType;
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
+use DNADesign\Elemental\ORM\FieldType\DBObjectType;
 use Exception;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\CMS\Model\SiteTree;
@@ -25,10 +25,8 @@ use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
-use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
-use SilverStripe\View\Requirements;
 
 /**
  * Class BaseElement
@@ -327,19 +325,6 @@ class BaseElement extends DataObject
                 $styleDropdown->setEmptyString(_t(__CLASS__.'.CUSTOM_STYLES', 'Select a style..'));
             } else {
                 $fields->removeByName('Style');
-            }
-
-            // Support for new history viewer in SS 4.2+
-            if ($this->isInDB() && class_exists(HistoryViewerField::class)) {
-                Requirements::javascript('dnadesign/silverstripe-elemental:client/dist/js/bundle.js');
-
-                $historyViewer = HistoryViewerField::create('ElementHistory');
-
-                $fields->addFieldToTab('Root.History', $historyViewer);
-
-                // Add class to containing tab
-                $fields->fieldByName('Root.History')
-                    ->addExtraClass('elemental-block__history-tab tab--history-viewer');
             }
 
             // Hide the navigation section of the tabs in the React component {@see silverstripe/admin Tabs}

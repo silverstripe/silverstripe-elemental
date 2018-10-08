@@ -118,20 +118,6 @@ class BaseElementTest extends FunctionalTest
         $this->assertEmpty($element->getIcon());
     }
 
-    public function testGetHistoryViewerField()
-    {
-        if (!class_exists(HistoryViewerField::class)) {
-            $this->markTestSkipped('This test requires silverstripe/versioned-admin to be installed.');
-        }
-        $this->logInWithPermission();
-
-        /** @var ElementContent $element */
-        $element = $this->objFromFixture(ElementContent::class, 'content1');
-
-        $history = $element->getCMSFields()->dataFieldByName('ElementHistory');
-        $this->assertInstanceOf(HistoryViewerField::class, $history);
-    }
-
     public function testStyleVariants()
     {
         $styles = [
