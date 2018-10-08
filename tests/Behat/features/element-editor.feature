@@ -22,20 +22,21 @@ Feature: View types of elements in an area on a page
       And I should see "Bob's Block" as the title for block 2
       And I should see "Some content II" as the summary for block 2
 
-    Scenario: I can preview a block and hide the form again
-      Given I see a list of blocks
-      Then I should see block 1
-      # The entire block should be clickable to reveal the form
-      When I click on block 1
-      Then I should see the edit form for block 1
-        And I should see "Title (displayed if checked)"
-        And the "Content" field should contain "Some content"
-      When I click on the caret button for block 1
-      # The form should still exist, just be hidden from the user
-      Then I should not see the edit form for block 1
-        And the "Content" field should contain "Some content"
-        # The content shows in the preview when the form is not shown
-        And I should see "Some content"
+  Scenario: I can preview a block and hide the form again
+    Given I see a list of blocks
+    Then I should see block 1
+    # The entire block should be clickable to reveal the form
+    When I click on block 1
+    Then I should see the edit form for block 1
+      And I should see "Title (displayed if checked)"
+      And the "Content" field should contain "Some content"
+      And I fill in "<p>New sample content</p>" for the "Content" HTML field
+    When I click on the caret button for block 1
+    Then I should not see the edit form for block 1
+    # Re-opening the closed form should contain the updated content
+    When I click on the caret button for block 1
+    Then I should see the edit form for block 1
+      And the "Content" field should contain "<p>New sample content</p>"
 
   Scenario: Opening the "more actions" menu will not expand a block
     When I press the "View actions" button
