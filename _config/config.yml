@@ -25,3 +25,6 @@ Symbiote\GridFieldExtensions\GridFieldAddNewMultiClassHandler:
 SilverStripe\Core\Injector\Injector:
   SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search:
     class: DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch
+  DNADesign\Elemental\GraphQL\ElementScaffoldingProvider:
+    properties:
+      typeRegistry: '%$DNADesign\Elemental\Services\ElementTypeRegistry'

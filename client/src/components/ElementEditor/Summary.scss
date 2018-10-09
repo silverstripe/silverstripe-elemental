@@ -9,13 +9,21 @@
     height: 36px;
     margin: (-$spacer-xs * 0.8) $spacer-sm (-$spacer-xs * 0.8) 0;
   }
+
   &__content {
     color: $gray-600;
     line-height: 1.3; // Help ensure the container element height is around 102px
-    margin-bottom: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
+  &__default {
+    color: #a63a00;
+    font-style: italic;
+  }
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
 }

@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { inject } from 'lib/Injector';
+import { inject, withInjector } from 'lib/Injector';
 import { elementType } from 'types/elementType';
+import { getElementTypeConfig } from 'state/editor/getElementConfig';
 
 class Content extends PureComponent {
   constructor(props) {
@@ -26,8 +27,11 @@ class Content extends PureComponent {
       element,
       previewExpanded,
       InlineEditFormComponent,
-      SummaryComponent
     } = this.props;
+
+    const SummaryComponent = this.context.injector.get(
+      getElementTypeConfig(element.__typename).properties.summaryComponent
+    );
 
     return (
       <div className="element-editor-content">
@@ -53,7 +57,6 @@ class Content extends PureComponent {
 Content.propTypes = {
   element: elementType,
   previewExpanded: PropTypes.bool,
-  SummaryComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   InlineEditFormComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 };
 
@@ -62,9 +65,9 @@ Content.defaultProps = {};
 export { Content as Component };
 
 export default inject(
-  ['ElementSummary', 'ElementInlineEditForm'],
-  (SummaryComponent, InlineEditFormComponent) => ({
-    SummaryComponent, InlineEditFormComponent,
+  ['ElementInlineEditForm'],
+  (InlineEditFormComponent) => ({
+    InlineEditFormComponent,
   }),
   () => 'ElementEditor.ElementList.Element'
-)(Content);
+)(withInjector(Content));

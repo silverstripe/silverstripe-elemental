@@ -126,6 +126,16 @@ class BaseElement extends DataObject
         'LastEdited'
     ];
 
+    private static $graphql_fields = [
+        'ID',
+        'Title',
+        'IsLiveVersion' => 'Boolean',
+        'IsPublished' => 'Boolean',
+        'CMSEditLink',
+    ];
+
+    private static $summary_component = 'ElementSummaryDefault';
+
     /**
      * Enable for backwards compatibility
      *
@@ -722,17 +732,6 @@ class BaseElement extends DataObject
     public function getEditLink()
     {
         return $this->CMSEditLink();
-    }
-
-    public function getGraphQLDefinitions()
-    {
-        return [
-            'ID',
-            'Title',
-            'IsLiveVersion' => 'Boolean',
-            'IsPublished' => 'Boolean',
-            'CMSEditLink',
-        ];
     }
 
     /**

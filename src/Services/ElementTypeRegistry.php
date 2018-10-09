@@ -47,11 +47,11 @@ class ElementTypeRegistry
         }
 
         $graphQLType = StaticSchema::inst()->typeNameForDataObject($elementClass);
-
-        $graphQLDefinitons = $singleton->getGraphQLDefinitions();
+        $graphQLFields = $singleton::config()->get('graphql_fields');
+        $summaryComponent = $singleton::config()->get('summary_component') ?: 'Default';
 
         $fields = [];
-        foreach ($graphQLDefinitons as $name => $cast) {
+        foreach ($graphQLFields as $name => $cast) {
             $fields[] = is_numeric($name) ? $cast : $name;
         }
 
@@ -59,13 +59,14 @@ class ElementTypeRegistry
             'graphQL' => [
                 'type' => $graphQLType,
                 'fields' => $fields,
-                'types' => $graphQLDefinitons,
+                'types' => $graphQLFields,
             ],
             'properties' => [
                 'icon' => $singleton::config()->get('icon'),
                 'type' => $singleton->getType(),
                 'inlineEditable' => $singleton->inlineEditable(),
-                'editTabs' => array_values($this->getTabProvider()->getTabsForElement($elementClass))
+                'editTabs' => array_values($this->getTabProvider()->getTabsForElement($elementClass)),
+                'summaryComponent' => $summaryComponent,
             ],
         ];
     }

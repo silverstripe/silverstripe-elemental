@@ -6,8 +6,6 @@ SilverStripe\GraphQL\Manager:
     admin:
       scaffolding_providers:
         - DNADesign\Elemental\GraphQL\ElementScaffoldingProvider
-      types:
-        ElementType: DNADesign\Elemental\GraphQL\Types\ElementType
       mutations:
         sortBlock: DNADesign\Elemental\GraphQL\SortBlockMutationCreator
       scaffolding:

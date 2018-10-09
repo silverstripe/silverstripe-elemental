@@ -21,6 +21,12 @@ class ElementContent extends BaseElement
 
     private static $description = 'HTML text block';
 
+    private static $graphql_fields = [
+        'HTML',
+    ];
+
+    private static $summary_component = 'ElementSummaryContent';
+
     /**
      * Re-title the HTML field to Content
      *
@@ -46,13 +52,6 @@ class ElementContent extends BaseElement
         $blockSchema = parent::provideBlockSchema();
         $blockSchema['content'] = $this->getSummary();
         return $blockSchema;
-    }
-
-    public function getGraphQLDefinitions()
-    {
-        return array_merge(parent::getGraphQLDefinitions(), [
-            'HTML'
-        ]);
     }
 
 
