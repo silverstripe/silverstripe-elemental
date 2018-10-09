@@ -74,7 +74,15 @@ class Element extends Component {
    * @param {Object} event
    */
   handleKeyUp(event) {
-    if (event.keyCode === 13 || event.keyCode === 32) {
+    const { nodeName } = event.target;
+
+    if (event.code === 'Enter') {
+      this.handleExpand(event);
+    } else if (
+      event.code === 'Space'
+      // Ignore space presses while focusing inputs and textareas
+      && !['input', 'textarea'].includes(nodeName.toLowerCase())
+    ) {
       this.handleExpand(event);
     }
   }
