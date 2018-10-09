@@ -1057,9 +1057,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-bootstrap@4.0.0-beta:
-  version "4.0.0-beta"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.tgz#dc5928175d2e71310bc668cf9e05a907211b72a6"
+bootstrap@4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.2.tgz#aee2a93472e61c471fc79fb475531dcbc87de326"
 
 brace-expansion@^1.1.7:
   version "1.1.8"
