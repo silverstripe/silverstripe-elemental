@@ -5,7 +5,7 @@ import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 
 class InlineEditForm extends PureComponent {
   render() {
-    const { elementId, extraClass, onClick } = this.props;
+    const { elementId, extraClass, onClick, onFormInit } = this.props;
 
     const classNames = classnames('element-editor-editform', extraClass);
     const schemaUrl = loadElementSchemaValue('schemaUrl', elementId);
@@ -15,6 +15,10 @@ class InlineEditForm extends PureComponent {
       schemaUrl,
       identifier: 'element',
     };
+
+    if (typeof onFormInit === 'function') {
+      formProps.onReduxFormInit = onFormInit;
+    }
 
     return (
       <div className={classNames} onClick={onClick} role="presentation">
@@ -27,7 +31,7 @@ class InlineEditForm extends PureComponent {
 InlineEditForm.propTypes = {
   extraClass: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   onClick: PropTypes.func,
-  elementId: PropTypes.number,
+  elementId: PropTypes.string,
 };
 
 export default InlineEditForm;

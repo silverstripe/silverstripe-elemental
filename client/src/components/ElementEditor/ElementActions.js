@@ -9,20 +9,43 @@ import AbstractAction from 'components/ElementActions/AbstractAction';
  * of the element's primary tabs, as well as operations such as save, publish, archive etc
  */
 class ElementActions extends Component {
+  constructor(props) {
+    super(props);
+    this.handleEditTabsClick = this.handleEditTabsClick.bind(this);
+  }
+
+  /**
+   * Set the active tab
+   *
+   * @param {string} activeTab
+   */
+  handleEditTabsClick(event) {
+    const { handleEditTabsClick } = this.props;
+     handleEditTabsClick(event.target.name);
+  }
+
+
   /**
    * Render buttons for the edit form tabs that will be a part of the edit form (if they exist)
    *
    * @returns {DOMElement[]|null}
    */
   renderEditTabs() {
-    const { editTabs } = this.props;
+    const { editTabs, activeTab } = this.props;
 
     if (!editTabs || !editTabs.length) {
       return null;
     }
 
     return editTabs.map(
-      (tab) => <AbstractAction key={tab} title={tab} />
+      ({ name, title }) =>
+        (<AbstractAction
+          key={name}
+          name={name}
+          title={title}
+          onClick={this.handleEditTabsClick}
+          active={name === activeTab}
+        />)
     );
   }
 
@@ -35,7 +58,7 @@ class ElementActions extends Component {
     const { children, editTabs } = this.props;
 
     if (editTabs && editTabs.length && React.Children.count(children)) {
-      return <DropdownItem divider />;
+      return <DropdownItem divider role="separator" />;
     }
     return null;
   }
@@ -74,8 +97,11 @@ class ElementActions extends Component {
 
 ElementActions.propTypes = {
   id: PropTypes.string,
-  editTabs: PropTypes.arrayOf(PropTypes.string),
-};
+  activeTab: PropTypes.string,
+  editTabs: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    name: PropTypes.string,
+  })), };
 
 ElementActions.defaultProps = {
   editTabs: [],

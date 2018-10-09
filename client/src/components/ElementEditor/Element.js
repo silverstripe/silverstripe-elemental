@@ -2,9 +2,15 @@
 
 import React, { Component, PropTypes } from 'react';
 import { elementType } from 'types/elementType';
+import { bindActionCreators, compose } from 'redux';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
+import { change } from 'redux-form';
+import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
+import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
+
 
 /**
  * The Element component used in the context of an ElementEditor shows the summary
@@ -16,9 +22,12 @@ class Element extends Component {
 
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleExpand = this.handleExpand.bind(this);
+    this.handleTabClick = this.handleTabClick.bind(this);
+    this.updateFormTab = this.updateFormTab.bind(this);
 
     this.state = {
       previewExpanded: false,
+      initialTab: '',
     };
   }
 
@@ -41,6 +50,47 @@ class Element extends Component {
     }
 
     return `${baseClassName}--published`;
+  }
+
+  /**
+   * Dispatcher to Redux-Form state for the Tabs container 'value'
+   * @param {string} activeTab Name prop of the active tab
+   */
+  updateFormTab(activeTab) {
+    const { element, actions } = this.props;
+    const { initialTab } = this.state;
+
+    const formStateName = loadElementFormStateName(element.ID);
+
+    if (!initialTab) {
+      this.setState({
+        initialTab: activeTab
+      });
+    }
+
+    if (activeTab || initialTab) {
+      actions.reduxForm.change(formStateName, 'Root', activeTab || initialTab);
+    } else {
+      const defaultFirstTab = 'Main';
+      actions.reduxForm.change(formStateName, 'Root', defaultFirstTab);
+    }
+  }
+
+  /**
+   * Update the active tab on tab actions menu button click event. Is passed down to InlineEditForm.
+   *
+   * @param {string} toBeActiveTab
+   */
+  handleTabClick(toBeActiveTab) {
+    const { activeTab } = this.props;
+
+    if (toBeActiveTab !== activeTab) {
+      this.setState({
+        previewExpanded: true,
+      });
+
+      this.updateFormTab(toBeActiveTab);
+    }
   }
 
   /**
@@ -95,6 +145,7 @@ class Element extends Component {
       link,
       editTabs,
       pageId,
+      activeTab
     } = this.props;
 
     const { previewExpanded } = this.state;
@@ -116,6 +167,7 @@ class Element extends Component {
       this.getVersionedStateClassName()
     );
 
+
     return (
       <div
         className={elementClassNames}
@@ -124,6 +176,7 @@ class Element extends Component {
         role="button"
         tabIndex={0}
         title={linkTitle}
+        key={element.ID}
       >
         <HeaderComponent
           id={element.ID}
@@ -138,6 +191,8 @@ class Element extends Component {
           editTabs={editTabs}
           previewExpanded={previewExpanded}
           expandable={element.InlineEditable}
+          handleEditTabsClick={this.handleTabClick}
+          activeTab={activeTab}
         />
         <ContentComponent
           id={element.ID}
@@ -145,16 +200,57 @@ class Element extends Component {
           fileTitle={element.BlockSchema.fileTitle}
           content={element.BlockSchema.content}
           previewExpanded={previewExpanded}
+          activeTab={activeTab}
+          onFormInit={() => this.updateFormTab(activeTab)}
         />
       </div>
     );
   }
 }
 
+function mapStateToProps(state, ownProps) {
+  const elementName = loadElementFormStateName(ownProps.element.ID).split('.')[1];
+
+  // InlineEditForm will neither have been rendered nor wrapped in redux-form
+  if (!state.form.formState.element || !state.form.formState.element[elementName]) {
+    return {};
+  }
+
+  const elementId = ownProps.element.ID;
+  const elementFormSchema = loadElementSchemaValue('schemaUrl', elementId);
+
+  const stateValue = state.form.formState.element[elementName].values.Root;
+
+  // Search out a default value for the active tab if it is not already in the state.
+  // {@see Tabs.getDefaultActiveKey}
+  const filterFieldsForTabs = (field) => field.component === 'Tabs';
+
+  let defaultValue;
+  if (
+    state.form.formSchemas &&
+    state.form.formSchemas[elementFormSchema] &&
+    state.form.formSchemas[elementFormSchema].schema
+  ) {
+    defaultValue = state.form.formSchemas[elementFormSchema].schema.fields
+      .find(filterFieldsForTabs).children[0].name;
+  }
+  const activeTab = stateValue || defaultValue;
+  return { activeTab };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      reduxForm: bindActionCreators({ change }, dispatch),
+    },
+  };
+}
+
+
 Element.propTypes = {
   element: elementType,
   link: PropTypes.string.isRequired,
-  editTabs: PropTypes.arrayOf(PropTypes.string),
+  editTabs: PropTypes.arrayOf(PropTypes.object),
 };
 
 Element.defaultProps = {
@@ -163,10 +259,13 @@ Element.defaultProps = {
 
 export { Element as Component };
 
-export default inject(
-  ['ElementHeader', 'ElementContent'],
-  (HeaderComponent, ContentComponent) => ({
-    HeaderComponent, ContentComponent,
-  }),
-  () => 'ElementEditor.ElementList.Element'
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  inject(
+    ['ElementHeader', 'ElementContent'],
+    (HeaderComponent, ContentComponent) => ({
+      HeaderComponent, ContentComponent,
+    }),
+    () => 'ElementEditor.ElementList.Element'
+  )
 )(Element);

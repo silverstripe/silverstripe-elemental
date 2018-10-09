@@ -72,4 +72,8 @@
       background-color: $state-modified-bg;
     }
   }
+
+  .dropdown-item.active {
+    cursor: default;
+  }
 }

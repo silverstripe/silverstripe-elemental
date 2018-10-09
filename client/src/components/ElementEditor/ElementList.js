@@ -48,9 +48,8 @@ class ElementList extends Component {
     }
 
     return blocks.map((element) => (
-      <div>
+      <div key={element.ID}>
         <ElementComponent
-          key={element.ID}
           element={element}
           pageId={pageId}
           editTabs={this.getEditTabs(element)}
@@ -60,7 +59,6 @@ class ElementList extends Component {
           baseAddHref={baseAddHref}
           elementId={element.ID}
           elementTypes={elementTypes}
-          key={`AddBlockHoverBar_${element.ID}`}
         />
       </div>
     ));

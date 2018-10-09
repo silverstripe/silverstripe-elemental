@@ -94,9 +94,19 @@ class Header extends Component {
           </div>
           <h3 className="element-editor-header__title">{title}</h3>
         </div>
-        <div className="element-editor-header__actions">
-          {expandable && <ElementActionsComponent {...this.props} />}
+        <div
+          className="element-editor-header__actions"
 
+        >
+          {expandable &&
+          <div
+            role="none"
+            onClick={(event) => event.stopPropagation()
+            }
+          >
+            <ElementActionsComponent {...this.props} />
+          </div>
+          }
           <i className={expandCaretClasses} title={expandTitle} />
         </div>
       </div>

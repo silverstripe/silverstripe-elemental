@@ -28,7 +28,9 @@ class Content extends PureComponent {
       content,
       previewExpanded,
       InlineEditFormComponent,
-      SummaryComponent
+      SummaryComponent,
+      activeTab,
+      onFormInit
     } = this.props;
 
     if (!content && !fileUrl) {
@@ -51,6 +53,8 @@ class Content extends PureComponent {
             extraClass={{ 'element-editor-editform--collapsed': !previewExpanded }}
             onClick={(event) => event.stopPropagation()}
             elementId={id}
+            activeTab={activeTab}
+            onFormInit={onFormInit}
           />
         }
       </div>
