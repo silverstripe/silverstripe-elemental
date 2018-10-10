@@ -6,7 +6,6 @@ import AbstractAction from 'components/ElementActions/AbstractAction';
 import backend from 'lib/Backend';
 import i18n from 'i18n';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
-import { getSerializedFormData } from 'state/editor/getSerializedFormData';
 
 /**
  * Using a REST backend, serialize the current form data and post it to the backend endpoint to save
@@ -16,11 +15,9 @@ const SaveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { id, title, securityId } = props;
+    const { id, title, securityId, formData } = props;
 
     const { jQuery: $ } = window;
-
-    const formData = getSerializedFormData(`Form_ElementForm_${id}`);
 
     const endpointSpec = {
       url: loadElementSchemaValue('saveUrl', id),
@@ -81,8 +78,18 @@ const SaveAction = (MenuComponent) => (props) => {
   );
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  // TODO Use `loadElementFormStateName` when Raissa's PR is merged
+  const formNamePattern = ('ElementForm_%s').replace('%s', ownProps.id);
+
+  let formData = null;
+
+  if (state.form.formState.element && state.form.formState.element[formNamePattern]) {
+    formData = state.form.formState.element[formNamePattern].values;
+  }
+
   return {
+    formData,
     securityId: state.config.SecurityID,
   };
 }
