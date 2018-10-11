@@ -58,7 +58,7 @@ describe('ElementList', () => {
           LoadingComponent={Loading}
           HoverBarComponent={HoverBar}
           loading={false}
-          baseAddHref={''}
+          elementalAreaId={1}
         />
       );
 
@@ -77,7 +77,7 @@ describe('ElementList', () => {
           LoadingComponent={Loading}
           HoverBarComponent={HoverBar}
           loading
-          baseAddHref={''}
+          elementalAreaId={1}
         />
       );
 
@@ -96,7 +96,7 @@ describe('ElementList', () => {
           LoadingComponent={Loading}
           HoverBarComponent={HoverBar}
           loading={false}
-          baseAddHref={''}
+          elementalAreaId={1}
         />
       );
 

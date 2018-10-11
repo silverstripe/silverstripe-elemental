@@ -12,14 +12,26 @@ import { loadElementFormStateName } from 'state/editor/loadElementFormStateName'
 class ElementEditor extends PureComponent {
   render() {
     const {
-      ToolbarComponent, ListComponent,
-      fieldName, pageId, elementTypes, baseAddHref, formState,
+      fieldName,
+      formState,
+      ToolbarComponent,
+      ListComponent,
+      pageId,
+      elementalAreaId,
+      elementTypes,
     } = this.props;
 
     return (
       <div className="element-editor">
-        <ToolbarComponent elementTypes={elementTypes} baseAddHref={baseAddHref} />
-        <ListComponent elementTypes={elementTypes} pageId={pageId} baseAddHref={baseAddHref} />
+        <ToolbarComponent
+          elementTypes={elementTypes}
+          elementalAreaId={elementalAreaId}
+        />
+        <ListComponent
+          elementTypes={elementTypes}
+          pageId={pageId}
+          elementalAreaId={elementalAreaId}
+        />
         <input name={fieldName} type="hidden" value={JSON.stringify(formState)} />
       </div>
     );
@@ -30,7 +42,7 @@ ElementEditor.propTypes = {
   fieldName: PropTypes.string,
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   pageId: PropTypes.number.isRequired,
-  baseAddHref: PropTypes.string.isRequired,
+  elementalAreaId: PropTypes.number.isRequired,
 };
 
 ElementEditor.defaultProps = {};

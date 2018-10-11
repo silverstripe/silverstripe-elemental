@@ -17,10 +17,43 @@ class AddElementPopover extends Component {
     this.handleSearchValueChange = this.handleSearchValueChange.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.getElementButtonClickHandler = this.getElementButtonClickHandler.bind(this);
 
     this.state = {
       searchValue: ''
     };
+  }
+
+  /**
+   * click handler that preserves the details of what was clicked
+   * @param {object} elementType in the shape of types/elmementTypeType
+   * @returns {function}
+   */
+  getElementButtonClickHandler(elementType) {
+    return (event) => {
+      const {
+        actions: { handleAddElementToArea },
+        elementalAreaId,
+        insertAfterElement
+      } = this.props;
+
+      event.preventDefault();
+      handleAddElementToArea(elementType.name.replace(/-/g, '\\'), elementalAreaId, insertAfterElement);
+      this.handleToggle();
+    };
+  }
+
+  /**
+   * Allow closure via `esc` from within popover
+   */
+  handleKeyDown(event) {
+    switch (event.key) {
+      case 'Escape':
+        this.handleToggle();
+        break;
+      default:
+    }
   }
 
   /**
@@ -81,7 +114,7 @@ class AddElementPopover extends Component {
    * @returns {DOMElement}
    */
   renderElementButtons() {
-    const { baseAddHref } = this.props;
+    const { elementalAreaId } = this.props;
     let { elementTypes } = this.props;
     const { searchValue } = this.state;
 
@@ -110,8 +143,9 @@ class AddElementPopover extends Component {
             )
           }
           key={elementType.name}
-          href={`${baseAddHref}/${elementType.name}`}
-          onClick={this.handleToggle}
+          name={elementType.name}
+          onClick={this.getElementButtonClickHandler(elementType)}
+          elementalAreaId={elementalAreaId}
         >
           {elementType.title}
         </Button>
@@ -152,6 +186,7 @@ class AddElementPopover extends Component {
         placement={placement}
         target={target}
         toggle={this.handleToggle}
+        onKeyDown={this.handleKeyDown}
       >
         <InputGroup className="element-editor-add-element__search">
           <Input
@@ -172,7 +207,6 @@ class AddElementPopover extends Component {
 }
 
 AddElementPopover.propTypes = {
-  baseAddHref: PropTypes.string.isRequired,
   container: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]),
   elementTypes: PropTypes.arrayOf(elementTypeType),
   extraClass: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
@@ -180,6 +214,8 @@ AddElementPopover.propTypes = {
   placement: PropTypes.string,
   target: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]).isRequired,
   toggle: PropTypes.func.isRequired,
+  elementalAreaId: PropTypes.number.isRequired,
+  insertAfterElement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default AddElementPopover;

@@ -47,10 +47,6 @@
     width: unset;
   }
 
-  &__version-state {
-    box-shadow: $gallery-item-shadow;
-  }
-
   // Draft/modified state icons copied from asset-admin - see GalleryItem.scss
   &__version-state {
     border: 1px solid $state-draft;

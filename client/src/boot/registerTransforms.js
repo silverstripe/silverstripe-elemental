@@ -3,6 +3,7 @@ import readOneBlockQuery from 'state/history/readOneBlockQuery';
 import HistoricElementViewFactory from 'components/HistoricElementView/HistoricElementView';
 import revertToBlockVersionMutation from 'state/history/revertToBlockVersionMutation';
 import readBlocksForPageQuery from 'state/editor/readBlocksForPageQuery';
+import addElementToArea from 'state/editor/addElementMutation';
 import ArchiveAction from 'components/ElementActions/ArchiveAction';
 import PublishAction from 'components/ElementActions/PublishAction';
 import SaveAction from 'components/ElementActions/SaveAction';
@@ -55,6 +56,18 @@ export default () => {
         'ElementList',
         readBlocksForPageQuery,
         'PageElements'
+      );
+    }
+  );
+
+  Injector.transform(
+    'cms-element-adder',
+    (updater) => {
+      // Add GraphQL query for adding elements to an ElementEditor (ElementalArea)
+      updater.component(
+        'AddElementPopover',
+        addElementToArea,
+        'ElementAddButton'
       );
     }
   );

@@ -9,6 +9,7 @@
     height: 36px;
     margin: (-$spacer-xs * 0.8) $spacer-sm (-$spacer-xs * 0.8) 0;
   }
+
   &__content {
     color: $gray-600;
     line-height: 1.3; // Help ensure the container element height is around 102px
@@ -17,5 +18,4 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-
 }
