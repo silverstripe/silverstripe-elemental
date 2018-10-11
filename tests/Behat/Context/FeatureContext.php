@@ -1,8 +1,11 @@
 <?php
 namespace DNADesign\Elemental\Tests\Behat\Context;
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Element\NodeElement;
+use SilverStripe\BehatExtension\Context\BasicContext;
 use SilverStripe\BehatExtension\Context\SilverStripeContext;
+use SilverStripe\Framework\Tests\Behaviour\CmsFormsContext;
 
 if (!class_exists(SilverStripeContext::class)) {
     return;
@@ -10,6 +13,24 @@ if (!class_exists(SilverStripeContext::class)) {
 
 class FeatureContext extends SilverStripeContext
 {
+    /**
+     * @var CmsFormsContext
+     */
+    protected $cmsContext;
+
+    /**
+     * @var BasicContext
+     */
+    protected $basicContext;
+
+
+    /** @BeforeScenario */
+    public function gatherContexts(BeforeScenarioScope $scope)
+    {
+        $this->cmsContext = $scope->getEnvironment()->getContext(CmsFormsContext::class);
+        $this->basicContext = $scope->getEnvironment()->getContext(BasicContext::class);
+    }
+
     /**
      * @Then /^I should( not |\s+)see the edit form for block (\d+)$/i
      */
@@ -188,6 +209,66 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
+     * @Given /^I press the "([^"]*)" button in the actions? menu for block (\d+)$/
+     */
+    public function stepIPressTheButtonInTheActionMenuForBlock($buttonName, $blockNumber)
+    {
+        $block = $this->getSpecificBlock($blockNumber);
+
+        // Check if the popover is open for the block
+        $popover = $block->find('css', '.action-menu__dropdown');
+        if (!$popover->isVisible()) {
+            $block->find('css', '.element-editor-header__actions-toggle')->click();
+        }
+
+        $button = $popover->find('xpath', sprintf('/button[contains(text(), \'%s\')]', $buttonName));
+
+        assertNotNull($button, sprintf('Could not find button labelled "%s"', $buttonName));
+
+        $button->click();
+    }
+
+    /**
+     * @Given /^I fill in "([^"]*)" for "([^"]*)" for block (\d+)$/
+     */
+    public function stepIFillInForForBlock($value, $name, $blockNumber)
+    {
+        $block = $this->getSpecificBlock($blockNumber);
+        $field = $this->findFieldInBlock($block, $name);
+        $fieldName = $field->getAttribute('name');
+
+        $isTinyMCE = $field->getAttribute('data-editor') === 'tinyMCE';
+
+        if ($isTinyMCE) {
+            $this->cmsContext->stepIFillInTheHtmlFieldWith($fieldName, $value);
+        } else {
+            $this->basicContext->iFillinTheRegion($fieldName, $value, 'html');
+        }
+    }
+
+    /**
+     * @Given /^the "([^"]*)" field for block (\d+) should (not\s*)?contain "([^"]*)"$/
+     */
+    public function theFieldForBlockShouldContain($field, $blockNumber, $negate, $content)
+    {
+        $block = $this->getSpecificBlock($blockNumber);
+        $field = $this->findFieldInBlock($block, $field);
+        $isTinyMCE = $field->getAttribute('data-editor') === 'tinyMCE';
+
+        if ($isTinyMCE) {
+            $this->cmsContext->theHtmlFieldShouldContain(
+                $field->getAttribute('name'),
+                $negate,
+                $content
+            );
+        } elseif ($negate) {
+            $this->assertFieldNotContains($field, $content);
+        } else {
+            $this->assertFieldContains($field, $content);
+        }
+    }
+
+    /**
      * Returns the blocks from the element editor
      *
      * @param string $modifier Optional CSS selector modifier
@@ -281,5 +362,29 @@ class FeatureContext extends SilverStripeContext
         assertNotNull($button, 'Caret button not found');
 
         return $button;
+    }
+
+    /**
+     * @param $block
+     * @param $name
+     * @return mixed
+     */
+    protected function findFieldInBlock($block, $name)
+    {
+        $label = $block->findAll('xpath', sprintf('//label[contains(text(), \'%s\')]', $name));
+
+        assertNotNull($label, sprintf('Could not find a label for a field with the content "%s"', $name));
+        assertCount(
+            1, $label, sprintf(
+            'Found more than one label containing the phrase "%s".',
+            $name
+        )
+        );
+
+        $label = array_shift($label);
+
+        $fieldId = $label->getAttribute('for');
+        $field = $block->find('css', '#' . $fieldId);
+        return $field;
     }
 }
