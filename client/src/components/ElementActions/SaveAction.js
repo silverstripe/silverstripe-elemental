@@ -39,12 +39,14 @@ const SaveAction = (MenuComponent) => (props) => {
         // rerunning the whole query
         apolloClient.queryManager.reFetchObservableQueries();
 
+        const newTitle = formData[`PageElements_${id}_Title`];
+
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
               'SaveAction.SUCCESS_NOTIFICATION',
               'Saved \'{title}\' successfully'),
-            { title }
+            { title: newTitle }
           ),
           stay: false,
           type: 'success'
