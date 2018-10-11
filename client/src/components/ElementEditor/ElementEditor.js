@@ -3,6 +3,7 @@ import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 
 /**
  * The ElementEditor is used in the CMS to manage a list or nested lists of
@@ -35,8 +36,7 @@ ElementEditor.propTypes = {
 ElementEditor.defaultProps = {};
 
 function mapStateToProps(state) {
-  // TODO Use `loadElementFormStateName` when Raissa's PR is merged
-  const formNamePattern = ('ElementForm_%s').replace('%s', '[0-9]+');
+  const formNamePattern = loadElementFormStateName('[0-9]+');
   const elementFormState = state.form.formState.element;
 
   if (!elementFormState) {

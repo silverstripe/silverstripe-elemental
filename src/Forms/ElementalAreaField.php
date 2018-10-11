@@ -242,7 +242,7 @@ class ElementalAreaField extends GridField
             $fieldNamePrefix = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementId, '');
             $prefixLength = strlen($fieldNamePrefix);
 
-            foreach($data as $field => $datum) {
+            foreach ($data as $field => $datum) {
                 // Check that the field starts with a valid name
                 if (strpos($field, $fieldNamePrefix) !== 0) {
                     continue;

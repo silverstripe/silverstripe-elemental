@@ -6,6 +6,7 @@ import AbstractAction from 'components/ElementActions/AbstractAction';
 import backend from 'lib/Backend';
 import i18n from 'i18n';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
+import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 
 /**
  * Using a REST backend, serialize the current form data and post it to the backend endpoint to save
@@ -79,13 +80,12 @@ const SaveAction = (MenuComponent) => (props) => {
 };
 
 function mapStateToProps(state, ownProps) {
-  // TODO Use `loadElementFormStateName` when Raissa's PR is merged
-  const formNamePattern = ('ElementForm_%s').replace('%s', ownProps.id);
+  const formName = loadElementFormStateName(ownProps.id);
 
   let formData = null;
 
-  if (state.form.formState.element && state.form.formState.element[formNamePattern]) {
-    formData = state.form.formState.element[formNamePattern].values;
+  if (state.form.formState.element && state.form.formState.element[formName]) {
+    formData = state.form.formState.element[formName].values;
   }
 
   return {

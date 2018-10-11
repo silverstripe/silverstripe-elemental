@@ -12,7 +12,7 @@ export const loadElementFormStateName = (elementId = null) => {
   const formNameTemplate = section.form.elementForm.formNameTemplate;
 
   if (elementId) {
-    return `element.${formNameTemplate.replace('{id}', elementId)}`;
+    return formNameTemplate.replace('{id}', elementId);
   }
   return formNameTemplate;
 };

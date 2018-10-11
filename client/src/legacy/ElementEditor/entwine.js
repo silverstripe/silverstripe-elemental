@@ -34,7 +34,7 @@ jQuery.entwine('ss', ($) => {
     },
 
     /**
-     * Make sure the editor has flushed all it's buffers before the form is submitted.
+     * Invalidate cache after the form is submitted to force apollo to re-fetch.
      */
     'from .cms-edit-form': {
       onaftersubmitform() {
