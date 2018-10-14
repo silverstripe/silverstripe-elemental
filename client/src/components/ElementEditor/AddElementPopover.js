@@ -86,16 +86,16 @@ class AddElementPopover extends Component {
       extraClass
     );
 
-    const buttons = elementTypes.map(({ name, title, icon }) => ({
-      text: title,
-      key: name,
-      className: classNames(icon, 'btn--icon-xl', 'element-editor-add-element__button'),
+    const buttons = elementTypes.map((elementType) => ({
+      content: elementType.title,
+      key: elementType.name,
+      className: classNames(elementType.icon, 'btn--icon-xl', 'element-editor-add-element__button'),
+      onClick: this.getElementButtonClickHandler(elementType),
     }));
 
     return (
       <PopoverOptionSetComponent
         buttons={buttons}
-        onButtonClick={this.handleButtonClick}
         searchPlaceholder={i18n._t('AddElementPopover.SEARCH_BLOCKS', 'Search blocks')}
         extraClass={popoverClassNames}
         container={container}
