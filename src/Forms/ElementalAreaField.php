@@ -3,12 +3,12 @@
 namespace DNADesign\Elemental\Forms;
 
 use BlocksPage;
+use DNADesign\Elemental\Controllers\ElementalAreaController;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Services\ElementTabProvider;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FieldGroup;
@@ -215,7 +215,7 @@ class ElementalAreaField extends GridField
     public function setSubmittedValue($value, $data = null)
     {
         // Content comes through as a JSON encoded list through a hidden field.
-        $this->setValue(Convert::json2array($value));
+        return $this->setValue(json_decode($value, true));
     }
 
     public function saveInto(DataObjectInterface $dataObject)
@@ -224,10 +224,11 @@ class ElementalAreaField extends GridField
         parent::saveInto($dataObject);
 
         $elementData = $this->Value();
+        $idPrefixLength = strlen(sprintf(ElementalAreaController::FORM_NAME_TEMPLATE, ''));
 
         foreach ($elementData as $form => $data) {
             // Extract the ID
-            $elementId = (int) substr($form, 12);
+            $elementId = (int) substr($form, $idPrefixLength);
 
             /** @var BaseElement $element */
             $element = $this->getArea()->Elements()->byID($elementId);

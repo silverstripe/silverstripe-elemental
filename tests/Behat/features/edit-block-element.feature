@@ -37,6 +37,8 @@ Feature: Edit elements in the CMS
     Then I should see "Eve's Block"
       But I should not see "Alice's Block"
 
+  # The "unsaved changes" dialog causes errors unless this is tagged with "@unsavedChanges"
+  @unsavedChanges
   Scenario: I can preview a block and hide the form again
     Given I see a list of blocks
     Then I should see block 1

@@ -375,10 +375,12 @@ class FeatureContext extends SilverStripeContext
 
         assertNotNull($label, sprintf('Could not find a label for a field with the content "%s"', $name));
         assertCount(
-            1, $label, sprintf(
-            'Found more than one label containing the phrase "%s".',
-            $name
-        )
+            1,
+            $label,
+            sprintf(
+                'Found more than one label containing the phrase "%s".',
+                $name
+            )
         );
 
         $label = array_shift($label);
