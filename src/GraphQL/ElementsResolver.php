@@ -10,7 +10,7 @@ class ElementsResolver implements OperationResolver
 {
     public function resolve($object, array $args, $context, ResolveInfo $info)
     {
-        if (!$object::singleton()->canView($context['currentUser'])) {
+        if (!$object->canView($context['currentUser'])) {
             throw new \Exception('Current user cannot view elements');
         }
 
