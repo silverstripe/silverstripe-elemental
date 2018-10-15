@@ -277,10 +277,10 @@ class FeatureContext extends SilverStripeContext
     protected function getBlocks($modifier = '')
     {
         // Wait for the list to be visible
-        $this->getSession()->wait(3000, 'window.jQuery(".element-editor .elemental-editor__list").length > 0');
+        $this->getSession()->wait(5000, 'window.jQuery(".element-editor .elemental-editor__list").length > 0');
 
         // Wait for blocks to be rendered
-        $this->getSession()->wait(3000, 'window.jQuery(".element-editor__element").length > 0');
+        $this->getSession()->wait(5000, 'window.jQuery(".element-editor__element").length > 0');
 
         return $this->getSession()
             ->getPage()
@@ -373,7 +373,7 @@ class FeatureContext extends SilverStripeContext
     {
         $label = $block->findAll('xpath', sprintf('//label[contains(text(), \'%s\')]', $name));
 
-        assertNotNull($label, sprintf('Could not find a label for a field with the content "%s"', $name));
+        assertNotCount(0, $label, sprintf('Could not find a label for a field with the content "%s"', $name));
         assertCount(
             1,
             $label,

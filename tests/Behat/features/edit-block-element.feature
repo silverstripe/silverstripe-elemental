@@ -35,6 +35,7 @@ Feature: Edit elements in the CMS
     When I go to "/admin/pages/edit/show/6"
       And I see a list of blocks
     Then I should see "Eve's Block"
+      And I should see "New sample content"
       But I should not see "Alice's Block"
 
   # The "unsaved changes" dialog causes errors unless this is tagged with "@unsavedChanges"
@@ -55,6 +56,7 @@ Feature: Edit elements in the CMS
     Then I should see the edit form for block 1
       And the "Content" field should contain "<p>New sample content</p>"
 
+  @unsavedChanges
   Scenario: I can edit an inline-editable block and save the individual block
     Given I see a list of blocks
     Given I click on block 2
