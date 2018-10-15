@@ -33,13 +33,9 @@ class Content extends PureComponent {
       onFormInit
     } = this.props;
 
-    if (!content && !fileUrl) {
-      return null;
-    }
-
     return (
       <div className="element-editor-content">
-        {!previewExpanded &&
+        {!previewExpanded && (content || fileUrl) &&
           // Show summary
           <SummaryComponent
             content={content}

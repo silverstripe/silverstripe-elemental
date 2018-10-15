@@ -45,7 +45,7 @@ describe('Content', () => {
       expect(wrapper.find(InlineEditFormComponent)).toHaveLength(1);
     });
 
-    it('returns null when no content or image is provided', () => {
+    it('returns a div when no content or image is provided', () => {
       const wrapper = shallow(
         <Content
           fileUrl=""
@@ -57,7 +57,8 @@ describe('Content', () => {
         />
       );
 
-      expect(wrapper.type()).toBeNull();
+      expect(wrapper.type()).toEqual('div');
+      expect(wrapper.find(SummaryComponent)).toHaveLength(0);
     });
   });
 });
