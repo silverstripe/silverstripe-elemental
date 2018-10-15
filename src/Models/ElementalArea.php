@@ -7,6 +7,7 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
@@ -221,7 +222,17 @@ class ElementalArea extends DataObject
 
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
-                $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filter($areaID, $this->ID)->first();
+                try {
+                    $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filter($areaID, $this->ID)->first();
+                } catch (\Exception $ex) {
+                    // Usually this is catching cases where test stubs from other modules are trying to be loaded
+                    // and failing in unit tests.
+                    if (in_array(TestOnly::class, class_implements($class))) {
+                        continue;
+                    }
+                    // Continue as normal...
+                    throw $ex;
+                }
 
                 if ($page) {
                     if ($this->OwnerClassName !== $class) {
