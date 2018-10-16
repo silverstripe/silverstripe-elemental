@@ -17,7 +17,7 @@ class Content extends PureComponent {
 
     return (
       <div className="element-editor-content">
-        {!previewExpanded && (content || fileUrl) &&
+        {!previewExpanded &&
           // Show summary
           <SummaryComponent
             content={content}

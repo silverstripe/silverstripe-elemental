@@ -11,6 +11,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &--none {
+      font-style: italic;
+      color: lighten($body-color, 20);
+    }
   }
 
   &__info,

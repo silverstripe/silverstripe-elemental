@@ -3,6 +3,7 @@
   margin-top: $spacer-sm;
   margin-left: 36px; // header icon + margin of title
   align-items: center;
+  min-height: 2em;
 
   &__thumbnail-image {
     border-radius: $border-radius-sm * 0.8;
