@@ -394,6 +394,17 @@ class BaseElement extends DataObject
     }
 
     /**
+     * @param string $name
+     * @return $this
+     */
+    public function setAreaRelationNameCache($name)
+    {
+        $this->cacheData['area_relation_name'] = $name;
+
+        return $this;
+    }
+
+    /**
      * @return Controller
      */
     public function Top()
@@ -687,7 +698,8 @@ class BaseElement extends DataObject
             }
         }
 
-        $this->cacheData['area_relation_name'] = $result;
+        $this->setAreaRelationNameCache($result);
+
         return $result;
     }
 

@@ -170,14 +170,6 @@ class ElementalAreasExtension extends DataExtension
             // Example: $eaRelationship = 'ElementalArea';
             $area = $this->owner->$eaRelationship();
 
-            // if area isn't in the database then force a write so the blocks have a parent ID.
-            if (!$area->isInDb()) {
-                $area->write();
-
-                $this->owner->{$key} = $area->ID;
-                $this->owner->write();
-            }
-
             $editor = ElementalAreaField::create($eaRelationship, $area, $this->getElementalTypes());
 
             if ($this->owner instanceof SiteTree && $fields->findOrMakeTab('Root.Main')->fieldByName('Metadata')) {

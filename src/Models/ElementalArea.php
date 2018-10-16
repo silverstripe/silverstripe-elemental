@@ -7,7 +7,9 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
@@ -88,6 +90,41 @@ class ElementalArea extends DataObject
     }
 
     /**
+     * @param ArrayList $elements
+     * @return $this
+     */
+    public function setElementsCached(ArrayList $elements)
+    {
+        $this->cacheData['elements'] = $elements;
+
+        return $this;
+    }
+
+    /**
+     * @param DataObject $page
+     * @return $this
+     */
+    public function setOwnerPageCached(DataObject $page)
+    {
+        $this->cacheData['owner_page'] = $page;
+
+        return $this;
+    }
+
+    /**
+     * A cache-aware accessor for the elements
+     * @return ArrayList|DataList|BaseElement[]
+     */
+    public function Elements()
+    {
+        if (isset($this->cacheData['elements'])) {
+            return $this->cacheData['elements'];
+        }
+
+        return parent::Elements();
+    }
+
+    /**
      * Necessary to display results in CMS site search.
      *
      * @return DBField
@@ -164,7 +201,7 @@ class ElementalArea extends DataObject
                 $page = Versioned::get_by_stage($class, $currentStage)->filter($areaID, $this->ID)->first();
 
                 if ($page) {
-                    $this->cacheData['owner_page'] = $page;
+                    $this->setOwnerPageCached($page);
                     return $page;
                 }
             }
@@ -179,7 +216,17 @@ class ElementalArea extends DataObject
 
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
-                $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filter($areaID, $this->ID)->first();
+                try {
+                    $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filter($areaID, $this->ID)->first();
+                } catch (\Exception $ex) {
+                    // Usually this is catching cases where test stubs from other modules are trying to be loaded
+                    // and failing in unit tests.
+                    if (in_array(TestOnly::class, class_implements($class))) {
+                        continue;
+                    }
+                    // Continue as normal...
+                    throw $ex;
+                }
 
                 if ($page) {
                     if ($this->OwnerClassName !== $class) {
