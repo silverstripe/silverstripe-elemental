@@ -11,6 +11,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &--none {
+      font-style: italic;
+      color: lighten($body-color, 20);
+    }
   }
 
   &__info,
@@ -45,10 +50,6 @@
     font-size: 1.1rem;
     margin-left: 3px;
     width: unset;
-  }
-
-  &__version-state {
-    box-shadow: $gallery-item-shadow;
   }
 
   // Draft/modified state icons copied from asset-admin - see GalleryItem.scss

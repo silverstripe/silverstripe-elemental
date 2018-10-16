@@ -67,6 +67,11 @@ class Header extends Component {
       ElementActionsComponent,
     } = this.props;
 
+    const noTitle = i18n.inject(i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'), { type: elementType });
+    const titleClasses = classNames({
+      'element-editor-header__title': true,
+      'element-editor-header__title--none': !title,
+    });
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
     const expandCaretClasses = classNames(
       'element-editor-header__expand',
@@ -92,20 +97,19 @@ class Header extends Component {
               {elementType}
             </Tooltip>
           </div>
-          <h3 className="element-editor-header__title">{title}</h3>
+          <h3 className={titleClasses}>{title || noTitle}</h3>
         </div>
         <div
           className="element-editor-header__actions"
 
         >
           {expandable &&
-          <div
-            role="none"
-            onClick={(event) => event.stopPropagation()
-            }
-          >
-            <ElementActionsComponent {...this.props} />
-          </div>
+            <div
+              role="none"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <ElementActionsComponent {...this.props} />
+            </div>
           }
           <i className={expandCaretClasses} title={expandTitle} />
         </div>

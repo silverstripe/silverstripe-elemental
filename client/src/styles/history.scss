@@ -4,10 +4,8 @@
 }
 
 // ElementalArea history view
-/*
- * NOTE: Needs _serious_ refactor once silverstripe/admin drops legacy styles
- * (currently causing specificity issues causing ugly selectors here)
- */
+// NOTE: Needs _serious_ refactor once silverstripe/admin drops legacy styles
+//       (currently causing specificity issues causing ugly selectors here)
 .cms-edit-form .fieldgroup.elemental-area__element--historic {
   margin-left: 0;
   margin-right: 0;

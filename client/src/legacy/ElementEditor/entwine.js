@@ -19,8 +19,8 @@ jQuery.entwine('ss', ($) => {
       const props = {
         fieldName: this.attr('name'),
         pageId: schemaData['page-id'],
+        elementalAreaId: schemaData['elemental-area-id'],
         elementTypes: schemaData['element-types'],
-        baseAddHref: schemaData['base-add-href']
       };
 
       ReactDOM.render(

@@ -55,7 +55,8 @@ class HoverBar extends Component {
       this.setState({
         timeoutRef,
       });
-    } else { // mouse entered within 'instantaneous' hover area
+    } else {
+      // mouse entered within 'instantaneous' hover area
       this.setState({
         instAreaActive: true,
       });
@@ -69,14 +70,13 @@ class HoverBar extends Component {
    *
    */
   handleMouseLeave() {
-     clearTimeout(this.state.timeoutRef);
+    clearTimeout(this.state.timeoutRef);
 
-      if (this.state.popoverOpen) {
-        return;
-      }
-      this.setState({ delayAreaActive: false, instAreaActive: false });
+    if (this.state.popoverOpen) {
+      return;
+    }
+    this.setState({ delayAreaActive: false, instAreaActive: false });
   }
-
 
   toggle() {
     this.setState({
@@ -117,45 +117,49 @@ class HoverBar extends Component {
    * @returns {DOMElement}
    */
   render() {
-    const { AddElementPopoverComponent, elementTypes, baseAddHref, elementId } = this.props;
+    const {
+      AddElementPopoverComponent,
+      elementTypes,
+      elementId,
+      elementalAreaId,
+    } = this.props;
     const { popoverOpen } = this.state;
 
-   return (
-     <div className="element-editor__add-block-area-container" id={`AddBlockArea_${elementId}`}>
-       <div
-         className="element-editor__add-block-area"
-         onMouseEnter={this.handleMouseEnter}
-         onMouseLeave={this.handleMouseLeave}
-       >
-
-         {/* render the hover bar in the corresponding style */}
-         {
+    return (
+      <div className="element-editor__add-block-area-container" id={`AddBlockArea_${elementId}`}>
+        <div
+          className="element-editor__add-block-area"
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        >
+          {/* render the hover bar in the corresponding style */}
+          {
             (this.state.delayAreaActive && this.renderHoverBar(false)) ||
             (this.state.instAreaActive && this.renderHoverBar(true))
           }
-
-         {/* render the popover */}
-         {(this.state.delayAreaActive || this.state.instAreaActive) &&
-         <AddElementPopoverComponent
-           placement="bottom-end"
-           target={`AddBlockHoverBar_${elementId}`}
-           isOpen={popoverOpen}
-           elementTypes={elementTypes}
-           baseAddHref={baseAddHref}
-           toggle={this.toggle}
-           container={`#AddBlockArea_${elementId}`}
-         />
+          {/* render the popover */}
+          {(this.state.delayAreaActive || this.state.instAreaActive) &&
+            <AddElementPopoverComponent
+              placement="bottom-end"
+              target={`AddBlockHoverBar_${elementId}`}
+              isOpen={popoverOpen}
+              elementTypes={elementTypes}
+              toggle={this.toggle}
+              container={`#AddBlockArea_${elementId}`}
+              elementalAreaId={elementalAreaId}
+              insertAfterElement={elementId}
+            />
           }
-       </div>
-     </div>
+        </div>
+      </div>
     );
   }
 }
 
 HoverBar.propTypes = {
-  baseAddHref: PropTypes.string.isRequired,
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  elementId: PropTypes.string.isRequired,
+  elementId: PropTypes.number.isRequired,
+  elementalAreaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 };
 export { HoverBar as Component };
 

@@ -22,13 +22,9 @@ Feature: Add elements in the CMS
     Then I press the "Add block" button
     Then I press the "Content" button in the add block popover
       And I wait 1 second
-      And I fill in "Eve's Block" for "Title"
-      # Note: using un-namespaced fields in PHP GridField
-      And I fill in "<p>Some content III</p>" for the "HTML" HTML field
-      And I press the "Create" button
-    Then I should see a "Saved content block" message
+    Then I should see "Untitled Content block" as the title for block 1
 
     When I go to "/admin/pages/edit/show/6"
       And I see a list of blocks
     Then I wait 1 second
-      And I should see "Eve's Block"
+      And I should see "Untitled Content block"

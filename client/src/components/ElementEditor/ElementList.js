@@ -33,9 +33,8 @@ class ElementList extends Component {
       ElementComponent,
       HoverBarComponent,
       blocks,
-      pageId,
       elementTypes,
-      baseAddHref
+      elementalAreaId,
     } = this.props;
 
     // Blocks can be either null or an empty array
@@ -51,12 +50,11 @@ class ElementList extends Component {
       <div key={element.ID}>
         <ElementComponent
           element={element}
-          pageId={pageId}
           editTabs={this.getEditTabs(element)}
           link={element.BlockSchema.actions.edit}
         />
         <HoverBarComponent
-          baseAddHref={baseAddHref}
+          elementalAreaId={elementalAreaId}
           elementId={element.ID}
           elementTypes={elementTypes}
         />
@@ -98,7 +96,7 @@ ElementList.propTypes = {
   // @todo support either ElementList or Element children in an array (or both)
   blocks: PropTypes.arrayOf(elementType),
   loading: PropTypes.bool,
-  baseAddHref: PropTypes.string.isRequired,
+  elementalAreaId: PropTypes.number.isRequired,
 };
 
 ElementList.defaultProps = {

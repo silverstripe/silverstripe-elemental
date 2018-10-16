@@ -14,7 +14,7 @@ class Summary extends PureComponent {
           alt={fileTitle}
         />
         }
-        {content &&
+        {(content || !fileUrl) &&
         <p className="element-editor-summary__content">
           {content}
         </p>
