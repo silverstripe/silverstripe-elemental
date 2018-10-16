@@ -67,7 +67,7 @@ class Header extends Component {
       ElementActionsComponent,
     } = this.props;
 
-    const noTitle = i18n.inject(i18n._t('ElementHeader.NOTITLE', 'Untitled {type} element'), { type: elementType });
+    const noTitle = i18n.inject(i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'), { type: elementType });
     const titleClasses = classNames({
       'element-editor-header__title': true,
       'element-editor-header__title--none': !title,
