@@ -6,7 +6,7 @@ use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Models\BaseElement;
 use Exception;
 use Psr\Log\LoggerInterface;
-use SilverStripe\Admin\LeftAndMain;
+use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\HTTPResponse_Exception;
@@ -18,7 +18,7 @@ use SilverStripe\Security\SecurityToken;
 /**
  * Controller for "ElementalArea" - handles loading and saving of in-line edit forms in an elemental area in admin
  */
-class ElementalAreaController extends LeftAndMain
+class ElementalAreaController extends CMSMain
 {
     const FORM_NAME_TEMPLATE = 'ElementForm_%s';
 
@@ -89,6 +89,10 @@ class ElementalAreaController extends LeftAndMain
             sprintf(static::FORM_NAME_TEMPLATE, $elementID),
             ['Record' => $element]
         );
+
+        if (!$element->canEdit()) {
+            $form->makeReadonly();
+        }
 
         return $form;
     }

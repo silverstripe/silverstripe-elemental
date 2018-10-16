@@ -28,6 +28,7 @@ class Element extends Component {
     this.state = {
       previewExpanded: false,
       initialTab: '',
+      loadingError: false,
     };
   }
 
@@ -51,6 +52,16 @@ class Element extends Component {
 
     return `${baseClassName}--published`;
   }
+
+  /**
+   * Prevents the Element from being expanded in case a loading error occurred.
+   * This gets triggered from the InlineEditForm component.
+   */
+   handleLoadingError() {
+    this.setState({
+      loadingError: true
+    });
+   }
 
   /**
    * Dispatcher to Redux-Form state for the Tabs container 'value'
@@ -83,8 +94,9 @@ class Element extends Component {
    */
   handleTabClick(toBeActiveTab) {
     const { activeTab } = this.props;
+    const { loadingError } = this.state;
 
-    if (toBeActiveTab !== activeTab) {
+    if (toBeActiveTab !== activeTab && !loadingError) {
       this.setState({
         previewExpanded: true,
       });
@@ -99,6 +111,7 @@ class Element extends Component {
    */
   handleExpand(event) {
     const { element, link } = this.props;
+    const { loadingError } = this.state;
 
     if (event.target.type === 'button') {
       // Stop bubbling if the click target was a button within this container
@@ -106,7 +119,7 @@ class Element extends Component {
       return;
     }
 
-    if (element.InlineEditable) {
+    if (element.InlineEditable && !loadingError) {
       this.setState({
         previewExpanded: !this.state.previewExpanded
       });
@@ -200,6 +213,7 @@ class Element extends Component {
           previewExpanded={previewExpanded}
           activeTab={activeTab}
           onFormInit={() => this.updateFormTab(activeTab)}
+          handleLoadingError={this.handleLoadingError}
         />
       </div>
     );
