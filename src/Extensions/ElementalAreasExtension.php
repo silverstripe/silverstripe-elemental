@@ -81,7 +81,11 @@ class ElementalAreasExtension extends DataExtension
             $availableClasses = ClassInfo::subclassesFor(BaseElement::class);
         }
 
-        $disallowedElements = (array) $config->get('disallowed_elements');
+        if ($config->get('stop_element_inheritance')) {
+            $disallowedElements = (array) $config->get('disallowed_elements', Config::UNINHERITED);
+        } else {
+            $disallowedElements = (array) $config->get('disallowed_elements');
+        }
         $list = array();
 
         foreach ($availableClasses as $availableClass) {
