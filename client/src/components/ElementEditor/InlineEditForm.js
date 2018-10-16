@@ -14,6 +14,7 @@ class InlineEditForm extends PureComponent {
       formTag: 'div',
       schemaUrl,
       identifier: 'element',
+      refetchSchemaOnMount: false,
     };
 
     if (typeof onFormInit === 'function') {
