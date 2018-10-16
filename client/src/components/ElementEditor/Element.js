@@ -60,7 +60,7 @@ class Element extends Component {
     const { element, actions } = this.props;
     const { initialTab } = this.state;
 
-    const formStateName = loadElementFormStateName(element.ID);
+    const formStateName = `element.${loadElementFormStateName(element.ID)}`;
 
     if (!initialTab) {
       this.setState({
@@ -209,7 +209,7 @@ class Element extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const elementName = loadElementFormStateName(ownProps.element.ID).split('.')[1];
+  const elementName = loadElementFormStateName(ownProps.element.ID);
 
   // InlineEditForm will neither have been rendered nor wrapped in redux-form
   if (!state.form.formState.element || !state.form.formState.element[elementName]) {

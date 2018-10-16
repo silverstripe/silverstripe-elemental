@@ -1,3 +1,5 @@
+/* global window */
+
 import jQuery from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -15,6 +17,7 @@ jQuery.entwine('ss', ($) => {
       const schemaData = this.data('schema');
 
       const props = {
+        fieldName: this.attr('name'),
         pageId: schemaData['page-id'],
         elementTypes: schemaData['element-types'],
         baseAddHref: schemaData['base-add-href']
@@ -28,6 +31,15 @@ jQuery.entwine('ss', ($) => {
 
     onunmatch() {
       ReactDOM.unmountComponentAtNode(this[0]);
-    }
+    },
+
+    /**
+     * Invalidate cache after the form is submitted to force apollo to re-fetch.
+     */
+    'from .cms-edit-form': {
+      onaftersubmitform() {
+        window.ss.apolloClient.resetStore();
+      }
+    },
   });
 });

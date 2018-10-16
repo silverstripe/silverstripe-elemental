@@ -31,7 +31,9 @@ class FixtureContext extends BaseFixtureContext
         }
 
         $elementalArea = $page->ElementalArea();
-        $elementalArea->Elements()->add($this->getFixtureFactory()->createObject(ElementContent::class, $elementTitle));
+        $elementalArea->Elements()->add(
+            $this->getFixtureFactory()->createObject(ElementContent::class, $elementTitle)
+        );
 
         // Create element
         $element = $this->getFixtureFactory()->get(ElementContent::class, $elementTitle);

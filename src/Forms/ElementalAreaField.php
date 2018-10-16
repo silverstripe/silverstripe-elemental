@@ -2,6 +2,8 @@
 
 namespace DNADesign\Elemental\Forms;
 
+use BlocksPage;
+use DNADesign\Elemental\Controllers\ElementalAreaController;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Services\ElementTabProvider;
@@ -13,6 +15,7 @@ use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\TabSet;
+use SilverStripe\ORM\DataObjectInterface;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 
 class ElementalAreaField extends GridField
@@ -207,5 +210,50 @@ class ElementalAreaField extends GridField
             ->setReadOnly(true)
             ->setName($this->getName())
             ->addExtraClass('elemental-area--read-only');
+    }
+
+    public function setSubmittedValue($value, $data = null)
+    {
+        // Content comes through as a JSON encoded list through a hidden field.
+        return $this->setValue(json_decode($value, true));
+    }
+
+    public function saveInto(DataObjectInterface $dataObject)
+    {
+        /** @var BlocksPage $dataObject */
+        parent::saveInto($dataObject);
+
+        $elementData = $this->Value();
+        $idPrefixLength = strlen(sprintf(ElementalAreaController::FORM_NAME_TEMPLATE, ''));
+
+        foreach ($elementData as $form => $data) {
+            // Extract the ID
+            $elementId = (int) substr($form, $idPrefixLength);
+
+            /** @var BaseElement $element */
+            $element = $this->getArea()->Elements()->byID($elementId);
+
+            if (!$element) {
+                // Ignore invalid elements
+                continue;
+            }
+
+            $fields = [];
+
+            $fieldNamePrefix = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementId, '');
+            $prefixLength = strlen($fieldNamePrefix);
+
+            foreach ($data as $field => $datum) {
+                // Check that the field starts with a valid name
+                if (strpos($field, $fieldNamePrefix) !== 0) {
+                    continue;
+                }
+
+                $fields[substr($field, $prefixLength)] = $datum;
+            }
+
+            $element->update($fields);
+            $element->write();
+        }
     }
 }
