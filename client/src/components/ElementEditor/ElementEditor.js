@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { elementTypeType } from 'types/elementTypeType';
 import { connect } from 'react-redux';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
-import { DragDropContext } from 'react-dnd';
+import { DragDropContext, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import classnames from 'classnames';
 import sortBlockMutation from 'state/editor/sortBlockMutation';
@@ -19,47 +19,32 @@ class ElementEditor extends PureComponent {
     super(props);
 
     this.state = {
-      dragTargetElementId: undefined,
-      isDragging: false,
-      draggedElement: null,
+      dragTargetElementId: null,
+      dragSpot: null,
     };
 
     this.handleDragOver = this.handleDragOver.bind(this);
-    this.handleDragDrop = this.handleDragDrop.bind(this);
-    this.handleDragStart = this.handleDragStart.bind(this);
+    this.handleDragEnd = this.handleDragEnd.bind(this);
   }
 
-  handleDragStart(element) {
-    this.setState({
-      draggedElement: element,
-    });
-  }
-
-  handleDragOver(element) {
+  handleDragOver(element = null, isOverTop = null) {
     const id = element ? element.ID : false;
 
-    if (this.state.dragTargetElementId !== id) {
-      this.setState({
-        dragTargetElementId: id,
-        isDragging: true,
-      });
-    }
+    this.setState({
+      dragTargetElementId: id,
+      dragSpot: isOverTop === false ? 'bottom' : 'top',
+    });
   }
 
-  handleDragDrop() {
-    const { dragTargetElementId: targetId, draggedElement: element } = this.state;
+  handleDragEnd(sourceId, afterId) {
     const { actions: { handleSortBlock }, pageId } = this.props;
 
+    handleSortBlock(sourceId, afterId, pageId);
+
     this.setState({
-      dragTargetElementId: undefined,
-      isDragging: false,
+      dragTargetElementId: null,
+      dragSpot: null,
     });
-
-    if (!handleSortBlock || (targetId && targetId === element.ID)) {
-      return;
-    }
-
-    handleSortBlock(element.ID, targetId || 0, pageId);
   }
 
   render() {
@@ -71,30 +56,32 @@ class ElementEditor extends PureComponent {
       pageId,
       elementalAreaId,
       elementTypes,
+      isDraggingOver,
+      connectDropTarget,
     } = this.props;
-    const { dragTargetElementId, isDragging } = this.state;
+    const { dragTargetElementId, dragSpot } = this.state;
 
     const classNames = classnames('element-editor', {
-      'element-editor--dragging': isDragging,
+      // 'element-editor--dragging': isDragging,
     });
 
-    return (
+    return connectDropTarget(
       <div className={classNames}>
         <ToolbarComponent
           elementTypes={elementTypes}
           elementalAreaId={elementalAreaId}
           onDragOver={this.handleDragOver}
-          onDragDrop={this.handleDragDrop}
         />
         <ListComponent
           elementTypes={elementTypes}
           pageId={pageId}
           elementalAreaId={elementalAreaId}
           onDragOver={this.handleDragOver}
-          onDragDrop={this.handleDragDrop}
           onDragStart={this.handleDragStart}
+          onDragEnd={this.handleDragEnd}
+          dragSpot={dragSpot}
+          isDraggingOver={isDraggingOver}
           dragTargetElementId={dragTargetElementId}
-          isDragging={isDragging}
         />
         <ElementDragPreview />
         <input name={fieldName} type="hidden" value={JSON.stringify(formState)} />
@@ -136,6 +123,10 @@ function mapStateToProps(state) {
 export { ElementEditor as Component };
 export default compose(
   DragDropContext(HTML5Backend),
+  DropTarget('element', {}, (connector, monitor) => ({
+    connectDropTarget: connector.dropTarget(),
+    isDraggingOver: monitor.isOver(), // isDragging is not available on DropTargetMonitor
+  })),
   connect(mapStateToProps),
   inject(
     ['ElementToolbar', 'ElementList'],

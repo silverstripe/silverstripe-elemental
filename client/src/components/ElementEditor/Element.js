@@ -12,35 +12,7 @@ import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import * as TabsActions from 'state/tabs/TabsActions';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-
-const elementSource = {
-  beginDrag(props) {
-    const { element, onDragStart } = props;
-    if (onDragStart) {
-      onDragStart(element);
-    }
-    return element;
-  }
-};
-
-const elementTarget = {
-  drop(props) {
-    const { element, onDragDrop } = props;
-
-    if (onDragDrop) {
-      onDragDrop(element);
-    }
-  },
-
-  hover(props) {
-    const { element, onDragOver } = props;
-
-    if (onDragOver) {
-      onDragOver(element);
-    }
-  }
-};
-
+import { isOverTop } from 'lib/dragHelpers';
 
 /**
  * The Element component used in the context of an ElementEditor shows the summary
@@ -244,7 +216,6 @@ class Element extends Component {
           link={link}
           editTabs={editTabs}
           previewExpanded={previewExpanded}
-          expandable={element.InlineEditable}
           handleEditTabsClick={this.handleTabClick}
           activeTab={activeTab}
           disableTooltip={isDragging}
@@ -254,7 +225,7 @@ class Element extends Component {
           fileUrl={element.BlockSchema.fileURL}
           fileTitle={element.BlockSchema.fileTitle}
           content={element.BlockSchema.content}
-          previewExpanded={previewExpanded}
+          previewExpanded={previewExpanded && !isDragging}
           activeTab={activeTab}
           onFormInit={() => this.updateFormTab(activeTab)}
           handleLoadingError={this.handleLoadingError}
@@ -321,7 +292,7 @@ Element.propTypes = {
   isDragging: PropTypes.bool.isRequired,
   isOver: PropTypes.bool.isRequired,
   onDragOver: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
-  onDragDrop: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
+  onDragEnd: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
   onDragStart: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
 };
 
@@ -331,14 +302,49 @@ Element.defaultProps = {
 
 export { Element as Component };
 
+const elementSource = {
+  beginDrag(props) {
+    return props.element;
+  },
+
+  endDrag(props, monitor) {
+    const { onDragEnd } = props;
+
+    if (!onDragEnd || !monitor.getDropResult()) {
+      return;
+    }
+
+    onDragEnd(monitor.getItem().ID, monitor.getDropResult().dropAfterID);
+  }
+};
+
+const elementTarget = {
+  drop(props, monitor, component) {
+    const { element } = props;
+
+    return {
+      target: element.ID,
+      dropSpot: isOverTop(monitor, component) ? 'top' : 'bottom',
+    };
+  },
+
+  hover(props, monitor, component) {
+    const { element, onDragOver } = props;
+
+    if (onDragOver) {
+      onDragOver(element, isOverTop(monitor, component));
+    }
+  },
+};
+
 export default compose(
-  DropTarget('element', elementTarget, (connect, monitor) => ({
-    connectDropTarget: connect.dropTarget(),
+  DropTarget('element', elementTarget, (connector, monitor) => ({
+    connectDropTarget: connector.dropTarget(),
     isOver: monitor.isOver(),
   })),
-  DragSource('element', elementSource, (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-    connectDragPreview: connect.dragPreview(),
+  DragSource('element', elementSource, (connector, monitor) => ({
+    connectDragSource: connector.dragSource(),
+    connectDragPreview: connector.dragPreview(),
     isDragging: monitor.isDragging(),
   })),
   connect(mapStateToProps, mapDispatchToProps),

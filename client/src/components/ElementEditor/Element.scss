@@ -16,10 +16,6 @@
     }
   }
 
-  &:last-child {
-    border-bottom: 0;
-  }
-
   &--dragging {
     opacity: 0.3;
     cursor: grabbing;

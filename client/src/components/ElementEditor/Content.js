@@ -13,7 +13,7 @@ class Content extends PureComponent {
       SummaryComponent,
       activeTab,
       onFormInit,
-      handleLoadingError
+      handleLoadingError,
     } = this.props;
 
     return (

@@ -1,8 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { elementType } from 'types/elementType';
+import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import classNames from 'classnames';
 import i18n from 'i18n';
+import { DropTarget } from 'react-dnd';
+import { getDragIndicatorIndex } from 'lib/dragHelpers';
 
 class ElementList extends Component {
   /**
@@ -23,6 +26,17 @@ class ElementList extends Component {
     return matchingType.tabs;
   }
 
+  getDragIndicatorIndex() {
+    const { dragTargetElementId, draggedItem, blocks, dragSpot } = this.props;
+
+    return getDragIndicatorIndex(
+      blocks.map(element => element.ID),
+      dragTargetElementId,
+      draggedItem && draggedItem.ID,
+      dragSpot
+    );
+  }
+
   /**
    * Renders a list of Element components, each with an elementType object
    * of data mapped into it. The data is provided by a GraphQL HOC registered
@@ -36,11 +50,10 @@ class ElementList extends Component {
       blocks,
       elementTypes,
       elementalAreaId,
-      isDragging,
-      dragTargetElementId,
-      onDragDrop,
+      onDragEnd,
       onDragOver,
       onDragStart,
+      isDraggingOver,
     } = this.props;
 
     // Blocks can be either null or an empty array
@@ -58,24 +71,21 @@ class ElementList extends Component {
           element={element}
           editTabs={this.getEditTabs(element)}
           link={element.BlockSchema.actions.edit}
-          isDragging={isDragging}
           onDragOver={onDragOver}
-          onDragDrop={onDragDrop}
+          onDragEnd={onDragEnd}
           onDragStart={onDragStart}
         />
-        <HoverBarComponent
+        {isDraggingOver || <HoverBarComponent
           elementalAreaId={elementalAreaId}
           elementId={element.ID}
           elementTypes={elementTypes}
-        />
+        />}
       </div>
     ));
 
-    if (isDragging) {
-      const indicatorIndex = dragTargetElementId ?
-        blocks.findIndex(element => element.ID === dragTargetElementId) + 1 : 0;
-
-      output.splice(indicatorIndex, 0, <DragIndicatorComponent key="DropIndicator" />);
+    const dragIndicatorIndex = this.getDragIndicatorIndex();
+    if (isDraggingOver && dragIndicatorIndex !== null) {
+      output.splice(dragIndicatorIndex, 0, <DragIndicatorComponent key="DropIndicator" />);
     }
 
     return output;
@@ -102,7 +112,7 @@ class ElementList extends Component {
       { 'elemental-editor-list--empty': !blocks || !blocks.length }
     );
 
-    return (
+    return this.props.connectDropTarget(
       <div className={listClassNames}>
         {this.renderLoading()}
         {this.renderBlocks()}
@@ -116,11 +126,10 @@ ElementList.propTypes = {
   blocks: PropTypes.arrayOf(elementType),
   loading: PropTypes.bool,
   elementalAreaId: PropTypes.number.isRequired,
-  isDragging: PropTypes.bool,
-  dragTargetElementId: PropTypes.string,
+  dragTargetElementId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onDragOver: PropTypes.func,
-  onDragDrop: PropTypes.func,
   onDragStart: PropTypes.func,
+  onDragEnd: PropTypes.func,
 };
 
 ElementList.defaultProps = {
@@ -130,13 +139,43 @@ ElementList.defaultProps = {
 
 export { ElementList as Component };
 
-export default inject(
-  ['Element', 'Loading', 'HoverBar', 'DragPositionIndicator'],
-  (ElementComponent, LoadingComponent, HoverBarComponent, DragIndicatorComponent) => ({
-    ElementComponent,
-    LoadingComponent,
-    HoverBarComponent,
-    DragIndicatorComponent,
-  }),
-  () => 'ElementEditor.ElementList'
+const elementListTarget = {
+  drop(props, monitor) {
+    const { blocks } = props;
+    const elementTargetDropResult = monitor.getDropResult();
+
+    if (!elementTargetDropResult) {
+      return {};
+    }
+
+    const dropIndex = getDragIndicatorIndex(
+      blocks.map(element => element.ID),
+      elementTargetDropResult.target,
+      monitor.getItem(),
+      elementTargetDropResult.dropSpot,
+    );
+    const dropAfterID = blocks[dropIndex - 1] ? blocks[dropIndex - 1].ID : '0';
+
+    return {
+      ...elementTargetDropResult,
+      dropAfterID,
+    };
+  },
+};
+
+export default compose(
+  DropTarget('element', elementListTarget, (connector, monitor) => ({
+    connectDropTarget: connector.dropTarget(),
+    draggedItem: monitor.getItem(),
+  })),
+  inject(
+    ['Element', 'Loading', 'HoverBar', 'DragPositionIndicator'],
+    (ElementComponent, LoadingComponent, HoverBarComponent, DragIndicatorComponent) => ({
+      ElementComponent,
+      LoadingComponent,
+      HoverBarComponent,
+      DragIndicatorComponent,
+    }),
+    () => 'ElementEditor.ElementList'
+  )
 )(ElementList);

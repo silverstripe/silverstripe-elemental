@@ -3,21 +3,6 @@ import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
 import { DropTarget } from 'react-dnd';
 
-const toolbarTarget = {
-  drop(props) {
-    const { onDragDrop } = props;
-    if (onDragDrop) {
-      onDragDrop();
-    }
-  },
-  hover(props) {
-    const { onDragOver } = props;
-    if (onDragOver) {
-      onDragOver();
-    }
-  }
-};
-
 // eslint-disable-next-line react/prefer-stateless-function
 class Toolbar extends PureComponent {
   render() {
@@ -43,7 +28,16 @@ Toolbar.propTypes = {
   onDragDrop: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
 };
 
-export default DropTarget('element', toolbarTarget, (connect) => ({
+const toolbarTarget = {
+  hover(props) {
+    const { onDragOver } = props;
+    if (onDragOver) {
+      onDragOver();
+    }
+  }
+};
+
+export default DropTarget('element', toolbarTarget, connect => ({
   connectDropTarget: connect.dropTarget(),
 }))(inject(
   ['ElementAddNewButton'],
