@@ -6,24 +6,6 @@ import i18n from 'i18n';
 
 class ElementList extends Component {
   /**
-   * Given an elementType, return a list of tabs that should be available in the edit form for an
-   * element.
-   *
-   * @param {elementTypeType} element
-   * @returns {string[]}
-   */
-  getEditTabs(element) {
-    const { elementTypes } = this.props;
-    const matchingType = elementTypes.find(type => element.BlockSchema.type === type.title);
-
-    if (!matchingType || !matchingType.tabs) {
-      return [];
-    }
-
-    return matchingType.tabs;
-  }
-
-  /**
    * Renders a list of Element components, each with an elementType object
    * of data mapped into it. The data is provided by a GraphQL HOC registered
    * in registerTransforms.js.
@@ -33,7 +15,6 @@ class ElementList extends Component {
       ElementComponent,
       HoverBarComponent,
       blocks,
-      elementTypes,
       elementalAreaId,
     } = this.props;
 
@@ -50,13 +31,11 @@ class ElementList extends Component {
       <div key={element.ID}>
         <ElementComponent
           element={element}
-          editTabs={this.getEditTabs(element)}
           link={element.BlockSchema.actions.edit}
         />
         <HoverBarComponent
           elementalAreaId={elementalAreaId}
           elementId={element.ID}
-          elementTypes={elementTypes}
         />
       </div>
     ));

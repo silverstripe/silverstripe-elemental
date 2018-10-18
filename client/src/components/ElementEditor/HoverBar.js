@@ -2,7 +2,6 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { inject } from 'lib/Injector';
-import { elementTypeType } from 'types/elementTypeType';
 
 /**
  * The HoverBar component used in the context of an ElementEditor allows CMS users to add available
@@ -119,7 +118,6 @@ class HoverBar extends Component {
   render() {
     const {
       AddElementPopoverComponent,
-      elementTypes,
       elementId,
       elementalAreaId,
     } = this.props;
@@ -143,7 +141,6 @@ class HoverBar extends Component {
               placement="bottom-end"
               target={`AddBlockHoverBar_${elementId}`}
               isOpen={popoverOpen}
-              elementTypes={elementTypes}
               toggle={this.toggle}
               container={`#AddBlockArea_${elementId}`}
               elementalAreaId={elementalAreaId}
@@ -157,8 +154,7 @@ class HoverBar extends Component {
 }
 
 HoverBar.propTypes = {
-  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  elementId: PropTypes.number.isRequired,
+  elementId: PropTypes.string.isRequired,
   elementalAreaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 };
 export { HoverBar as Component };

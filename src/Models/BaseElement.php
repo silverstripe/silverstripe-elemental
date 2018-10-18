@@ -797,7 +797,7 @@ class BaseElement extends DataObject
     {
         return [
             'iconClass' => $this->config()->get('icon'),
-            'type' => $this->getType(),
+            'type' => get_called_class(),
             'actions' => [
                 'edit' => $this->getEditLink(),
             ],

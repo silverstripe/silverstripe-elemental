@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import backend from 'lib/Backend';
 import i18n from 'i18n';
-import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
-import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
+import { getElementSchemaValue, getElementFormStateName } from 'state/editor/getElementConfig';
 
 /**
  * Using a REST backend, serialize the current form data and post it to the backend endpoint to save
@@ -21,9 +20,9 @@ const SaveAction = (MenuComponent) => (props) => {
     const { jQuery: $ } = window;
 
     const endpointSpec = {
-      url: loadElementSchemaValue('saveUrl', id),
-      method: loadElementSchemaValue('saveMethod'),
-      payloadFormat: loadElementSchemaValue('payloadFormat'),
+      url: getElementSchemaValue('saveUrl', id),
+      method: getElementSchemaValue('saveMethod'),
+      payloadFormat: getElementSchemaValue('payloadFormat'),
       defaultData: {
         SecurityID: securityId
       },
@@ -82,7 +81,7 @@ const SaveAction = (MenuComponent) => (props) => {
 };
 
 function mapStateToProps(state, ownProps) {
-  const formName = loadElementFormStateName(ownProps.id);
+  const formName = getElementFormStateName(ownProps.id);
 
   let formData = null;
 

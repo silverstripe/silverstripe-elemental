@@ -1,9 +1,8 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { inject } from 'lib/Injector';
-import { elementTypeType } from 'types/elementTypeType';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
+import { getElementFormStateName } from 'state/editor/getElementConfig';
 
 /**
  * The ElementEditor is used in the CMS to manage a list or nested lists of
@@ -18,17 +17,14 @@ class ElementEditor extends PureComponent {
       ListComponent,
       pageId,
       elementalAreaId,
-      elementTypes,
     } = this.props;
 
     return (
       <div className="element-editor">
         <ToolbarComponent
-          elementTypes={elementTypes}
           elementalAreaId={elementalAreaId}
         />
         <ListComponent
-          elementTypes={elementTypes}
           pageId={pageId}
           elementalAreaId={elementalAreaId}
         />
@@ -40,7 +36,6 @@ class ElementEditor extends PureComponent {
 
 ElementEditor.propTypes = {
   fieldName: PropTypes.string,
-  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   pageId: PropTypes.number.isRequired,
   elementalAreaId: PropTypes.number.isRequired,
 };
@@ -48,7 +43,7 @@ ElementEditor.propTypes = {
 ElementEditor.defaultProps = {};
 
 function mapStateToProps(state) {
-  const formNamePattern = loadElementFormStateName('[0-9]+');
+  const formNamePattern = getElementFormStateName('[0-9]+');
   const elementFormState = state.form.formState.element;
 
   if (!elementFormState) {

@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global window, jest, describe, it, expect */
 
 import React from 'react';
 import { Component as Element } from '../Element';
@@ -21,12 +21,26 @@ describe('Element', () => {
       },
       content: 'Block Content',
       iconClass: 'font-icon-block-content',
-      type: 'Content'
+      type: 'FakeType'
     },
     InlineEditable: true,
     IsLiveVersion: true,
     IsPublished: true,
   };
+
+  beforeEach(() => {
+    // Set window config
+    window.ss.config = {
+      sections: [
+        {
+          name: 'DNADesign\\Elemental\\Controllers\\ElementalAreaController',
+          elementTypes: {
+            FakeType: { title: 'Content' }
+          },
+        },
+      ],
+    };
+  });
 
   describe('render()', () => {
     it('should render the HeaderComponent and the ContentComponent', () => {

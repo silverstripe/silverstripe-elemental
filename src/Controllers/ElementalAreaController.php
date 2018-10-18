@@ -4,6 +4,7 @@ namespace DNADesign\Elemental\Controllers;
 
 use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Services\ElementTypeRegistry;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SilverStripe\Admin\LeftAndMain;
@@ -47,6 +48,10 @@ class ElementalAreaController extends LeftAndMain
             'payloadFormat' => 'json',
             'formNameTemplate' => sprintf(static::FORM_NAME_TEMPLATE, '{id}'),
         ];
+
+        // Configuration that is available per element type
+        $clientConfig['elementTypes'] = ElementTypeRegistry::create()->getDefinitions();
+
         return $clientConfig;
     }
 

@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, Input, InputGroup, InputGroupAddon, Popover } from 'reactstrap';
 import classNames from 'classnames';
-import { elementTypeType } from 'types/elementTypeType';
 import i18n from 'i18n';
+import { elementConfigProvider } from 'state/editor/getElementConfig';
 
 /**
  * The AddElementPopover component used in the context of an ElementEditor shows the
@@ -115,8 +115,9 @@ class AddElementPopover extends Component {
    */
   renderElementButtons() {
     const { elementalAreaId } = this.props;
-    let { elementTypes } = this.props;
     const { searchValue } = this.state;
+
+    let elementTypes = Object.values(elementConfigProvider().elementTypes);
 
     if (searchValue.length !== 0) {
       elementTypes = elementTypes.filter((elementType) =>
@@ -208,7 +209,6 @@ class AddElementPopover extends Component {
 
 AddElementPopover.propTypes = {
   container: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]),
-  elementTypes: PropTypes.arrayOf(elementTypeType),
   extraClass: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
   isOpen: PropTypes.bool.isRequired,
   placement: PropTypes.string,

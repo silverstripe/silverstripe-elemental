@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'reactstrap';
 import i18n from 'i18n';
-import { elementTypeType } from 'types/elementTypeType';
 import { inject } from 'lib/Injector';
 
 class AddNewButton extends Component {
@@ -26,7 +25,7 @@ class AddNewButton extends Component {
    * @returns {DOMElement}
    */
   render() {
-    const { AddElementPopoverComponent, elementTypes, elementalAreaId } = this.props;
+    const { AddElementPopoverComponent, elementalAreaId } = this.props;
     const buttonAttributes = {
       id: `ElementalArea${elementalAreaId}_AddButton`,
       color: 'primary',
@@ -42,7 +41,6 @@ class AddNewButton extends Component {
           placement="bottom-start"
           target={buttonAttributes.id}
           isOpen={this.state.popoverOpen}
-          elementTypes={elementTypes}
           toggle={this.toggle}
           elementalAreaId={elementalAreaId}
           insertAfterElement={0}
@@ -54,7 +52,6 @@ class AddNewButton extends Component {
 
 AddNewButton.defaultProps = {};
 AddNewButton.propTypes = {
-  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   elementalAreaId: PropTypes.number.isRequired,
 };
 

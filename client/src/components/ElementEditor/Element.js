@@ -8,8 +8,7 @@ import i18n from 'i18n';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { change } from 'redux-form';
-import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
-import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
+import { getElementFormStateName, getElementSchemaValue, getElementTypeConfig } from 'state/editor/getElementConfig';
 
 
 /**
@@ -29,6 +28,10 @@ class Element extends Component {
       previewExpanded: false,
       initialTab: '',
     };
+  }
+
+  getElementType() {
+    return getElementTypeConfig(this.props.element.BlockSchema.type);
   }
 
   /**
@@ -60,7 +63,7 @@ class Element extends Component {
     const { element, actions } = this.props;
     const { initialTab } = this.state;
 
-    const formStateName = `element.${loadElementFormStateName(element.ID)}`;
+    const formStateName = `element.${getElementFormStateName(element.ID)}`;
 
     if (!initialTab) {
       this.setState({
@@ -98,7 +101,7 @@ class Element extends Component {
    * If the element is not inline-editable, take user to the GridFieldDetailForm to edit the record
    */
   handleExpand(event) {
-    const { element, link } = this.props;
+    const { link } = this.props;
 
     if (event.target.type === 'button') {
       // Stop bubbling if the click target was a button within this container
@@ -106,7 +109,7 @@ class Element extends Component {
       return;
     }
 
-    if (element.InlineEditable) {
+    if (this.getElementType().inlineEditable) {
       this.setState({
         previewExpanded: !this.state.previewExpanded
       });
@@ -143,25 +146,26 @@ class Element extends Component {
       HeaderComponent,
       ContentComponent,
       link,
-      editTabs,
       activeTab,
     } = this.props;
 
     const { previewExpanded } = this.state;
 
-    const linkTitle = i18n.inject(
-      i18n._t('ElementalElement.TITLE', 'Edit this {type} block'),
-      { type: element.BlockSchema.type }
-    );
-
     if (!element.ID) {
       return null;
     }
 
+    const type = this.getElementType();
+
+    const linkTitle = i18n.inject(
+      i18n._t('ElementalElement.TITLE', 'Edit this {type} block'),
+      { type: type.title }
+    );
+
     const elementClassNames = classNames(
       'element-editor__element',
       {
-        'element-editor__element--expandable': element.InlineEditable,
+        'element-editor__element--expandable': type.inlineEditable,
       },
       this.getVersionedStateClassName()
     );
@@ -183,12 +187,12 @@ class Element extends Component {
           version={element.Version}
           isLiveVersion={element.IsLiveVersion}
           isPublished={element.IsPublished}
-          elementType={element.BlockSchema.type}
-          fontIcon={element.BlockSchema.iconClass}
+          elementType={type.title}
+          fontIcon={type.icon}
           link={link}
-          editTabs={editTabs}
+          editTabs={type.editTabs}
           previewExpanded={previewExpanded}
-          expandable={element.InlineEditable}
+          expandable={type.inlineEditable}
           handleEditTabsClick={this.handleTabClick}
           activeTab={activeTab}
         />
@@ -207,7 +211,7 @@ class Element extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const elementName = loadElementFormStateName(ownProps.element.ID);
+  const elementName = getElementFormStateName(ownProps.element.ID);
 
   // InlineEditForm will neither have been rendered nor wrapped in redux-form
   if (!state.form.formState.element || !state.form.formState.element[elementName]) {
@@ -215,7 +219,7 @@ function mapStateToProps(state, ownProps) {
   }
 
   const elementId = ownProps.element.ID;
-  const elementFormSchema = loadElementSchemaValue('schemaUrl', elementId);
+  const elementFormSchema = getElementSchemaValue('schemaUrl', elementId);
 
   const stateValue = state.form.formState.element[elementName].values.Root;
 
@@ -248,7 +252,6 @@ function mapDispatchToProps(dispatch) {
 Element.propTypes = {
   element: elementType,
   link: PropTypes.string.isRequired,
-  editTabs: PropTypes.arrayOf(PropTypes.object),
 };
 
 Element.defaultProps = {
