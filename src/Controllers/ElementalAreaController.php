@@ -29,12 +29,14 @@ class ElementalAreaController extends CMSMain
     private static $url_handlers = [
         // API access points with structured data
         'POST api/saveForm/$ID' => 'apiSaveForm',
+        'POST $FormName/field/$FieldName' => 'formAction',
     ];
 
     private static $allowed_actions = [
         'elementForm',
         'schema',
         'apiSaveForm',
+        'formAction',
     ];
 
     public function getClientConfig()
@@ -161,6 +163,19 @@ class ElementalAreaController extends CMSMain
             'updated' => $updated,
         ]);
         return HTTPResponse::create($body)->addHeader('Content-Type', 'application/json');
+    }
+
+    public function formAction(HTTPRequest $request)
+    {
+        $formName = $request->param('FormName');
+
+        // Get the element ID from the form name
+        $id = substr($formName, strlen(sprintf(self::FORM_NAME_TEMPLATE, '')));
+        $form = $this->getElementForm($id);
+
+        $field = $form->getRequestHandler()->handleField($request);
+
+        return $field->handleRequest($request);
     }
 
     /**

@@ -241,10 +241,10 @@ class ElementalAreaField extends GridField
                 continue;
             }
 
-            $fields = [];
-
             $fieldNamePrefix = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementId, '');
             $prefixLength = strlen($fieldNamePrefix);
+
+            $cmsFields = $element->getCMSFields();
 
             foreach ($data as $field => $datum) {
                 // Check that the field starts with a valid name
@@ -252,10 +252,16 @@ class ElementalAreaField extends GridField
                     continue;
                 }
 
-                $fields[substr($field, $prefixLength)] = $datum;
+                $field = $cmsFields->dataFieldByName(substr($field, $prefixLength));
+
+                if (!$field) {
+                    continue;
+                }
+
+                $field->setSubmittedValue($datum);
+                $field->saveInto($element);
             }
 
-            $element->update($fields);
             $element->write();
         }
     }
