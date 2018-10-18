@@ -28,9 +28,9 @@ class InlineEditForm extends PureComponent {
       text: i18n.inject(
         i18n._t(
           'EditForm.ERROR_NOTIFICATION',
-          'Error rendering the edit form for this block'),
+          'Error displaying the edit form for this block'),
         ),
-        stay: false,
+        stay: true,
         type: 'notice'
     });
 
