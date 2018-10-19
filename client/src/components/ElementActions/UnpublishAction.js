@@ -12,8 +12,15 @@ const UnpublishAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { id, title, actions: { handleUnpublishBlock } } = props;
+    const { id, title, elementType, actions: { handleUnpublishBlock } } = props;
     const { jQuery: $ } = window;
+    const noTitle = i18n.inject(
+      i18n._t(
+        'ElementHeader.NOTITLE',
+        'Untitled {type} block'
+      ),
+      { type: elementType }
+    );
 
     if (handleUnpublishBlock) {
       handleUnpublishBlock(id)
@@ -23,7 +30,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
               i18n._t(
                 'UnpublishAction.SUCCESS_NOTIFICATION',
                 'Removed \'{title}\' from the published page'),
-              { title }
+              { title: title || noTitle }
             ),
             stay: false,
             type: 'success'
@@ -35,7 +42,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
               i18n._t(
                 'UnpublishAction.ERROR_NOTIFICATION',
                 'Error unpublishing \'{title}\''),
-              { title }
+              { title: title || noTitle }
             ),
             stay: false,
             type: 'error'
