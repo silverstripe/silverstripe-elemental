@@ -45,8 +45,10 @@ const SaveAction = (MenuComponent) => (props) => {
         // rerunning the whole query
         apolloClient.queryManager.reFetchObservableQueries();
 
-        const newTitle = formData[`PageElements_${id}_Title`];
+        const preview = $('.cms-preview');
+        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
 
+        const newTitle = formData[`PageElements_${id}_Title`];
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
