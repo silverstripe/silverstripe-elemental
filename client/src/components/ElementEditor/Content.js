@@ -12,7 +12,8 @@ class Content extends PureComponent {
       InlineEditFormComponent,
       SummaryComponent,
       activeTab,
-      onFormInit
+      onFormInit,
+      handleLoadingError
     } = this.props;
 
     return (
@@ -33,6 +34,7 @@ class Content extends PureComponent {
             elementId={id}
             activeTab={activeTab}
             onFormInit={onFormInit}
+            handleLoadingError={handleLoadingError}
           />
         }
       </div>
@@ -48,6 +50,7 @@ Content.propTypes = {
   previewExpanded: PropTypes.bool,
   SummaryComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   InlineEditFormComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  handleLoadingError: PropTypes.func,
 };
 
 Content.defaultProps = {};
