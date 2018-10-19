@@ -16,9 +16,15 @@ const SaveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { id, title, securityId, formData } = props;
-
+    const { id, title, securityId, elementType, formData } = props;
     const { jQuery: $ } = window;
+    const noTitle = i18n.inject(
+      i18n._t(
+        'ElementHeader.NOTITLE',
+        'Untitled {type} block'
+      ),
+      { type: elementType }
+    );
 
     const endpointSpec = {
       url: loadElementSchemaValue('saveUrl', id),
@@ -46,7 +52,7 @@ const SaveAction = (MenuComponent) => (props) => {
             i18n._t(
               'SaveAction.SUCCESS_NOTIFICATION',
               'Saved \'{title}\' successfully'),
-            { title: newTitle }
+            { title: newTitle || noTitle }
           ),
           stay: false,
           type: 'success'
@@ -58,7 +64,7 @@ const SaveAction = (MenuComponent) => (props) => {
             i18n._t(
               'SaveAction.ERROR_NOTIFICATION',
               'Error saving \'{title}\''),
-            { title }
+            { title: title || noTitle }
           ),
           stay: false,
           type: 'error'

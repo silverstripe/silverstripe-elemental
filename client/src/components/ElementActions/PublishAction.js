@@ -12,8 +12,15 @@ const PublishAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { id, title, version, actions: { handlePublishBlock } } = props;
+    const { id, title, version, elementType, actions: { handlePublishBlock } } = props;
     const { jQuery: $ } = window;
+    const noTitle = i18n.inject(
+      i18n._t(
+        'ElementHeader.NOTITLE',
+        'Untitled {type} block'
+      ),
+      { type: elementType }
+    );
 
     if (handlePublishBlock) {
       handlePublishBlock(id, 'DRAFT', 'LIVE', version)
@@ -23,7 +30,7 @@ const PublishAction = (MenuComponent) => (props) => {
               i18n._t(
                 'UnpublishAction.SUCCESS_NOTIFICATION',
                 'Published \'{title}\' successfully'),
-              { title }
+                { title: title || noTitle }
             ),
             stay: false,
             type: 'success'
@@ -35,7 +42,7 @@ const PublishAction = (MenuComponent) => (props) => {
               i18n._t(
                 'UnpublishAction.ERROR_NOTIFICATION',
                 'Error publishing \'{title}\''),
-              { title }
+                { title: title || noTitle }
             ),
             stay: false,
             type: 'error'
