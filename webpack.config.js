@@ -31,7 +31,14 @@ const config = [
     },
     devtool: (ENV !== 'production') ? 'source-map' : '',
     resolve: resolveJS(ENV, PATHS),
-    externals: externalJS(ENV, PATHS),
+    externals: Object.assign(
+      {},
+      externalJS(ENV, PATHS),
+      {
+        // @todo remove this once @silverstripe/webpack-config has this updated and published
+        'state/tabs/TabsActions': 'TabsActions',
+      }
+    ),
     module: moduleJS(ENV, PATHS),
     plugins: pluginJS(ENV, PATHS),
   },
