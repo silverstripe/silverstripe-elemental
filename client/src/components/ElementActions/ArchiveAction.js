@@ -1,4 +1,4 @@
-/* global confirm */
+/* global window */
 import React from 'react';
 import { compose } from 'redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
@@ -27,8 +27,11 @@ const ArchiveAction = (MenuComponent) => (props) => {
     }
 
     // eslint-disable-next-line no-alert
-    if (handleArchiveBlock && confirm(archiveMessage)) {
-      handleArchiveBlock(id);
+    if (handleArchiveBlock && window.confirm(archiveMessage)) {
+      handleArchiveBlock(id).then(() => {
+        const preview = window.jQuery('.cms-preview');
+        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+      });
     }
   };
 

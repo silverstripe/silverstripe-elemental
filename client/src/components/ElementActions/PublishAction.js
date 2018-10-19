@@ -25,6 +25,9 @@ const PublishAction = (MenuComponent) => (props) => {
     if (handlePublishBlock) {
       handlePublishBlock(id, 'DRAFT', 'LIVE', version)
         .then(() => {
+          const preview = $('.cms-preview');
+          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+
           $.noticeAdd({
             text: i18n.inject(
               i18n._t(

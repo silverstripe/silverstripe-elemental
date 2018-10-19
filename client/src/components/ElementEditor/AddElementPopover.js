@@ -1,3 +1,4 @@
+/* global window */
 import React, { Component, PropTypes } from 'react';
 import { Button, Input, InputGroup, InputGroupAddon, Popover } from 'reactstrap';
 import classNames from 'classnames';
@@ -39,7 +40,12 @@ class AddElementPopover extends Component {
       } = this.props;
 
       event.preventDefault();
-      handleAddElementToArea(elementType.name.replace(/-/g, '\\'), elementalAreaId, insertAfterElement);
+      handleAddElementToArea(elementType.name.replace(/-/g, '\\'), elementalAreaId, insertAfterElement).then(
+        () => {
+          const preview = window.jQuery('.cms-preview');
+          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        }
+      );
       this.handleToggle();
     };
   }

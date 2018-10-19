@@ -25,6 +25,9 @@ const UnpublishAction = (MenuComponent) => (props) => {
     if (handleUnpublishBlock) {
       handleUnpublishBlock(id)
         .then(() => {
+          const preview = $('.cms-preview');
+          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+
           $.noticeAdd({
             text: i18n.inject(
               i18n._t(
