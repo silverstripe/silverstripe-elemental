@@ -165,6 +165,14 @@ class ElementalAreaController extends CMSMain
         return HTTPResponse::create($body)->addHeader('Content-Type', 'application/json');
     }
 
+    /**
+     * Provides action control for form fields that are request handlers when they're used in an in-line edit form.
+     *
+     * Eg. UploadField
+     *
+     * @param HTTPRequest $request
+     * @return array|HTTPResponse|\SilverStripe\Control\RequestHandler|string
+     */
     public function formAction(HTTPRequest $request)
     {
         $formName = $request->param('FormName');
