@@ -21,6 +21,7 @@ class Element extends Component {
 
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleExpand = this.handleExpand.bind(this);
+    this.handleLoadingError = this.handleLoadingError.bind(this);
     this.handleTabClick = this.handleTabClick.bind(this);
     this.updateFormTab = this.updateFormTab.bind(this);
 
