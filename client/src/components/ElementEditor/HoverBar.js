@@ -158,7 +158,7 @@ class HoverBar extends Component {
 
 HoverBar.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  elementId: PropTypes.number.isRequired,
+  elementId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   elementalAreaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 };
 export { HoverBar as Component };
