@@ -17,7 +17,12 @@ describe('ArchiveAction', () => {
   beforeEach(() => {
     wrapper = mount(
       <ActionComponent
-        id={123}
+        title="My abstract action"
+        element={{
+          ID: 123,
+          IsPublished: true,
+          BlockSchema: { type: 'Test' }
+        }}
         isPublished
         actions={{ handleArchiveBlock: mockMutation }}
         toggle={false}
@@ -53,8 +58,12 @@ describe('ArchiveAction', () => {
   it('indicates that the block will be sent to archive', () => {
     const unpublishedWrapper = mount(
       <ActionComponent
-        id={123}
-        isPublished={false}
+        title="My abstract action"
+        element={{
+          ID: 123,
+          IsPublished: false,
+          BlockSchema: { type: 'Test' }
+        }}
         actions={{ handleArchiveBlock: mockMutation }}
         toggle={false}
       />

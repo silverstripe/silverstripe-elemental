@@ -19,8 +19,12 @@ describe('UnpublishAction', () => {
   beforeEach(() => {
     wrapper = mount(
       <ActionComponent
-        id={123}
-        isPublished
+        title="My abstract action"
+        element={{
+          ID: 123,
+          IsPublished: true,
+          BlockSchema: { type: 'Test' },
+        }}
         actions={{ handleUnpublishBlock: mockMutation }}
         toggle={false}
       />
@@ -44,7 +48,10 @@ describe('UnpublishAction', () => {
 
   it('returns null when is not published', () => {
     const draftWrapper = mount(
-      <ActionComponent isPublished={false} />
+      <ActionComponent
+        element={{ IsPublished: false, BlockSchema: { type: 'Test' } }}
+        actions={{ handleUnpublishBlock: mockMutation }}
+      />
     );
 
     expect(draftWrapper.find('button').length).toBe(0);

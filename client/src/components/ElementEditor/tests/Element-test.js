@@ -28,14 +28,25 @@ describe('Element', () => {
     IsPublished: true,
   };
 
+  const identity = el => el;
+
+  const defaultProps = {
+    HeaderComponent,
+    ContentComponent,
+    connectDragSource: identity,
+    connectDragPreview: identity,
+    connectDropTarget: identity,
+    isDragging: false,
+    isOver: false,
+  };
+
   describe('render()', () => {
     it('should render the HeaderComponent and the ContentComponent', () => {
       const wrapper = shallow(
         <Element
           element={element}
           link={'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'}
-          HeaderComponent={HeaderComponent}
-          ContentComponent={ContentComponent}
+          {...defaultProps}
         />
       );
 
@@ -53,8 +64,7 @@ describe('Element', () => {
             }
           }
           link={'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'}
-          HeaderComponent={HeaderComponent}
-          ContentComponent={ContentComponent}
+          {...defaultProps}
         />
       );
 
@@ -73,8 +83,7 @@ describe('Element', () => {
             IsPublished: false,
           }}
           link="/"
-          HeaderComponent={HeaderComponent}
-          ContentComponent={ContentComponent}
+          {...defaultProps}
         />
       );
 
@@ -90,8 +99,7 @@ describe('Element', () => {
             IsLiveVersion: false,
           }}
           link="/"
-          HeaderComponent={HeaderComponent}
-          ContentComponent={ContentComponent}
+          {...defaultProps}
         />
       );
 
@@ -107,8 +115,7 @@ describe('Element', () => {
             IsLiveVersion: true,
           }}
           link="/"
-          HeaderComponent={HeaderComponent}
-          ContentComponent={ContentComponent}
+          {...defaultProps}
         />
       );
 

@@ -10,6 +10,9 @@ import { connect } from 'react-redux';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import * as TabsActions from 'state/tabs/TabsActions';
+import { DragSource, DropTarget } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
+import { isOverTop } from 'lib/dragHelpers';
 
 /**
  * The Element component used in the context of an ElementEditor shows the summary
@@ -30,6 +33,19 @@ class Element extends Component {
       initialTab: '',
       loadingError: false,
     };
+  }
+
+  componentDidMount() {
+    const { connectDragPreview } = this.props;
+    if (connectDragPreview) {
+      // Use empty image as a drag preview so browsers don't draw it
+      // and we can draw whatever we want on the custom drag layer instead.
+      connectDragPreview(getEmptyImage(), {
+        // IE fallback: specify that we'd rather screenshot the node
+        // when it already knows it's being dragged so we can hide it with CSS.
+        captureDraggingState: true,
+      });
+    }
   }
 
   /**
@@ -157,6 +173,10 @@ class Element extends Component {
       link,
       editTabs,
       activeTab,
+      connectDragSource,
+      connectDropTarget,
+      isDragging,
+      isOver,
     } = this.props;
 
     const { previewExpanded } = this.state;
@@ -174,11 +194,13 @@ class Element extends Component {
       'element-editor__element',
       {
         'element-editor__element--expandable': element.InlineEditable,
+        'element-editor__element--dragging': isDragging,
+        'element-editor__element--dragged-over': isOver,
       },
       this.getVersionedStateClassName()
     );
 
-    return (
+    return connectDropTarget(connectDragSource(
       <div
         className={elementClassNames}
         onClick={this.handleExpand}
@@ -189,32 +211,27 @@ class Element extends Component {
         key={element.ID}
       >
         <HeaderComponent
-          id={element.ID}
-          title={element.Title}
-          version={element.Version}
-          isLiveVersion={element.IsLiveVersion}
-          isPublished={element.IsPublished}
-          elementType={element.BlockSchema.type}
-          fontIcon={element.BlockSchema.iconClass}
+          element={element}
+          expandable={element.InlineEditable}
           link={link}
           editTabs={editTabs}
           previewExpanded={previewExpanded}
-          expandable={element.InlineEditable}
           handleEditTabsClick={this.handleTabClick}
           activeTab={activeTab}
+          disableTooltip={isDragging}
         />
         <ContentComponent
           id={element.ID}
           fileUrl={element.BlockSchema.fileURL}
           fileTitle={element.BlockSchema.fileTitle}
           content={element.BlockSchema.content}
-          previewExpanded={previewExpanded}
+          previewExpanded={previewExpanded && !isDragging}
           activeTab={activeTab}
           onFormInit={() => this.updateFormTab(activeTab)}
           handleLoadingError={this.handleLoadingError}
         />
       </div>
-    );
+    ));
   }
 }
 
@@ -269,6 +286,14 @@ Element.propTypes = {
   activeTab: PropTypes.string,
   tabSetName: PropTypes.string,
   onActivateTab: PropTypes.func,
+  connectDragSource: PropTypes.func.isRequired,
+  connectDragPreview: PropTypes.func.isRequired,
+  connectDropTarget: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  isOver: PropTypes.bool.isRequired,
+  onDragOver: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
+  onDragEnd: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
+  onDragStart: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
 };
 
 Element.defaultProps = {
@@ -277,7 +302,51 @@ Element.defaultProps = {
 
 export { Element as Component };
 
+const elementSource = {
+  beginDrag(props) {
+    return props.element;
+  },
+
+  endDrag(props, monitor) {
+    const { onDragEnd } = props;
+
+    if (!onDragEnd || !monitor.getDropResult()) {
+      return;
+    }
+
+    onDragEnd(monitor.getItem().ID, monitor.getDropResult().dropAfterID);
+  }
+};
+
+const elementTarget = {
+  drop(props, monitor, component) {
+    const { element } = props;
+
+    return {
+      target: element.ID,
+      dropSpot: isOverTop(monitor, component) ? 'top' : 'bottom',
+    };
+  },
+
+  hover(props, monitor, component) {
+    const { element, onDragOver } = props;
+
+    if (onDragOver) {
+      onDragOver(element, isOverTop(monitor, component));
+    }
+  },
+};
+
 export default compose(
+  DropTarget('element', elementTarget, (connector, monitor) => ({
+    connectDropTarget: connector.dropTarget(),
+    isOver: monitor.isOver(),
+  })),
+  DragSource('element', elementSource, (connector, monitor) => ({
+    connectDragSource: connector.dragSource(),
+    connectDragPreview: connector.dragPreview(),
+    isDragging: monitor.isDragging(),
+  })),
   connect(mapStateToProps, mapDispatchToProps),
   inject(
     ['ElementHeader', 'ElementContent'],

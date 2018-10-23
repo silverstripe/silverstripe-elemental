@@ -11,6 +11,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('ElementEditor', () => {
   const ToolbarComponent = () => <div />;
   const ListComponent = () => <div className="elemental-editor__list" />;
+  const connectDropTarget = content => content;
   const testElementType = {
     name: 'TestElement',
     title: 'Test Block',
@@ -30,6 +31,7 @@ describe('ElementEditor', () => {
           pageId={8}
           elementTypes={[testElementType]}
           elementalAreaId={1}
+          connectDropTarget={connectDropTarget}
         />
       );
 

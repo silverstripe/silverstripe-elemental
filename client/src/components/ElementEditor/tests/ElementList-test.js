@@ -45,6 +45,7 @@ describe('ElementList', () => {
 
   const Element = () => <div />;
   const Loading = () => <div />;
+  const connectDropTarget = content => content;
   const HoverBar = 'div';
 
   describe('renderBlocks()', () => {
@@ -59,6 +60,7 @@ describe('ElementList', () => {
           HoverBarComponent={HoverBar}
           loading={false}
           elementalAreaId={1}
+          connectDropTarget={connectDropTarget}
         />
       );
 
@@ -78,6 +80,7 @@ describe('ElementList', () => {
           HoverBarComponent={HoverBar}
           loading
           elementalAreaId={1}
+          connectDropTarget={connectDropTarget}
         />
       );
 
@@ -97,6 +100,7 @@ describe('ElementList', () => {
           HoverBarComponent={HoverBar}
           loading={false}
           elementalAreaId={1}
+          connectDropTarget={connectDropTarget}
         />
       );
 

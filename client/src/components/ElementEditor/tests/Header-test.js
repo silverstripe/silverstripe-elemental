@@ -11,60 +11,62 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('Header', () => {
   const ElementActionsComponent = () => <div />;
   const testTabs = ['Content', 'Settings', 'History'];
+  const element = {
+    ID: '0',
+    InlineEditable: true,
+    Title: 'Sample File Block',
+    BlockSchema: {
+      type: 'File',
+      iconClass: 'font-icon-block-file',
+    },
+  };
 
   describe('render()', () => {
     it('should render the icon', () => {
+      element.ID = '11';
       const wrapper = shallow(
         <Header
-          id={'11'}
-          title="Sample File Block"
-          elementType="File"
-          fontIcon="font-icon-block-file"
+          element={element}
           ElementActionsComponent={ElementActionsComponent}
         />
       );
 
-      expect(wrapper.instance().props.id).toBe('11');
       expect(wrapper.find('i.font-icon-block-file')).toHaveLength(1);
-      expect(wrapper.find('#element-editor-header__icon11')).toHaveLength(1);
+      expect(wrapper.find('#element-icon-11')).toHaveLength(1);
     });
 
     it('should render the title', () => {
+      element.ID = '12';
       const wrapper = shallow(
         <Header
-          id={'12'}
-          title="Sample File Block"
-          elementType="File"
-          fontIcon="font-icon-block-file"
+          element={element}
           editTabs={testTabs}
           ElementActionsComponent={ElementActionsComponent}
         />
       );
 
-      expect(wrapper.instance().props.id).toBe('12');
       expect(wrapper.text()).toContain('Sample File Block');
     });
 
     it('should contain a Tooltip', () => {
+      element.ID = '13';
       const wrapper = shallow(
         <Header
-          id={'13'}
-          title="Sample File Block"
-          elementType="File"
-          fontIcon="font-icon-block-file"
+          element={element}
           editTabs={testTabs}
           ElementActionsComponent={ElementActionsComponent}
         />
       );
 
-      expect(wrapper.instance().props.id).toBe('13');
-      expect(wrapper.find('Tooltip').length).toBe(1);
-      expect(wrapper.instance().props.elementType).toBe('File');
+      const tooltip = wrapper.find('Tooltip');
+      expect(tooltip.length).toBe(1);
+      expect(tooltip.children().text()).toBe('File');
     });
 
     it('should render a "right caret" button when not expandable', () => {
       const wrapper = shallow(
         <Header
+          element={element}
           expandable={false}
           ElementActionsComponent={ElementActionsComponent}
         />
@@ -78,6 +80,7 @@ describe('Header', () => {
     it('should render a "down caret" button when not expanded', () => {
       const wrapper = shallow(
         <Header
+          element={element}
           expandable
           previewExpanded={false}
           ElementActionsComponent={ElementActionsComponent}
@@ -92,6 +95,7 @@ describe('Header', () => {
     it('should render an "up caret" button when expanded', () => {
       const wrapper = shallow(
         <Header
+          element={element}
           expandable
           previewExpanded
           ElementActionsComponent={ElementActionsComponent}
@@ -106,6 +110,7 @@ describe('Header', () => {
     it('should render an ElementActions component when the element is expandable', () => {
       const wrapper = shallow(
         <Header
+          element={element}
           expandable
           ElementActionsComponent={ElementActionsComponent}
         />
@@ -117,6 +122,7 @@ describe('Header', () => {
     it('should not render an ElementActions when the element is not expandable', () => {
       const wrapper = shallow(
         <Header
+          element={element}
           expandable={false}
           ElementActionsComponent={ElementActionsComponent}
         />
@@ -128,11 +134,12 @@ describe('Header', () => {
 
   describe('renderVersionedStateMessage()', () => {
     it('identifies draft versions', () => {
+      element.IsPublished = false;
+      element.IsLiveVersion = false;
       const wrapper = shallow(
         <Header
+          element={element}
           ElementActionsComponent={ElementActionsComponent}
-          isPublished={false}
-          isLiveVersion={false}
         />
       );
 
@@ -142,11 +149,12 @@ describe('Header', () => {
     });
 
     it('identifies modified versions', () => {
+      element.IsPublished = true;
+      element.IsLiveVersion = false;
       const wrapper = shallow(
         <Header
           ElementActionsComponent={ElementActionsComponent}
-          isPublished
-          isLiveVersion={false}
+          element={element}
         />
       );
 
@@ -156,11 +164,12 @@ describe('Header', () => {
     });
 
     it('ignores live versions', () => {
+      element.IsPublished = true;
+      element.IsLiveVersion = true;
       const wrapper = shallow(
         <Header
           ElementActionsComponent={ElementActionsComponent}
-          isPublished
-          isLiveVersion
+          element={element}
         />
       );
 

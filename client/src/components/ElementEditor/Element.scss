@@ -10,7 +10,15 @@
     outline-width: 0;
   }
 
-  &:last-child {
-    border-bottom: 0;
+  &:hover {
+    .element-editor-header__drag-handle {
+      display: block;
+    }
+  }
+
+  &--dragging {
+    opacity: 0.3;
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
   }
 }
