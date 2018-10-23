@@ -18,7 +18,10 @@ class Header extends Component {
   }
 
   componentDidUpdate() {
-    if (this.state.tooltipOpen && this.props.disableTooltip) {
+    const { tooltipOpen } = this.state;
+    const { disableTooltip } = this.props;
+
+    if (tooltipOpen && disableTooltip) {
       // This addresses an issue where the tooltip will stick around after dragging. The
       // ability to have a tooltip is back (props.disableTooltip) but the old state remains.
       // Using `setState` in `componentDidUpdate` is dangerous but is okay within a reasonable
@@ -80,7 +83,10 @@ class Header extends Component {
       ElementActionsComponent,
     } = this.props;
 
-    const noTitle = i18n.inject(i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'), { type: elementType });
+    const noTitle = i18n.inject(
+      i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
+      { type: element.BlockSchema.type }
+    );
     const titleClasses = classNames({
       'element-editor-header__title': true,
       'element-editor-header__title--none': !element.Title,
@@ -139,7 +145,6 @@ class Header extends Component {
 
 Header.propTypes = {
   element: elementType.isRequired,
-  elementType: PropTypes.string,
   simple: PropTypes.bool,
   ElementActionsComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
   previewExpanded: PropTypes.bool,

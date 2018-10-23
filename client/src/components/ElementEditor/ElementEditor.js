@@ -27,6 +27,15 @@ class ElementEditor extends PureComponent {
     this.handleDragEnd = this.handleDragEnd.bind(this);
   }
 
+  /**
+   * Hook for ReactDND triggered by hovering over a drag _target_.
+   *
+   * This tracks the current hover target and whether it's above the top half of the target
+   * or the bottom half.
+   *
+   * @param element
+   * @param isOverTop
+   */
   handleDragOver(element = null, isOverTop = null) {
     const id = element ? element.ID : false;
 
@@ -36,6 +45,14 @@ class ElementEditor extends PureComponent {
     });
   }
 
+  /**
+   * Hook for ReactDND triggered when a drag source is dropped onto a drag target.
+   *
+   * This will fire the GraphQL mutation for sorting and reset any state updates
+   *
+   * @param sourceId
+   * @param afterId
+   */
   handleDragEnd(sourceId, afterId) {
     const { actions: { handleSortBlock }, pageId } = this.props;
 

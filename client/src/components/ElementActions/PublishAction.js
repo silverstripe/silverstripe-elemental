@@ -9,21 +9,20 @@ import i18n from 'i18n';
  * Adds the elemental menu action to publish a draft/modified block
  */
 const PublishAction = (MenuComponent) => (props) => {
+  const { element, actions: { handlePublishBlock } } = props;
   const handleClick = (event) => {
     event.stopPropagation();
-
-    const { id, title, version, elementType, actions: { handlePublishBlock } } = props;
     const { jQuery: $ } = window;
     const noTitle = i18n.inject(
       i18n._t(
         'ElementHeader.NOTITLE',
         'Untitled {type} block'
       ),
-      { type: elementType }
+      { type: element.BlockSchema.type }
     );
 
     if (handlePublishBlock) {
-      handlePublishBlock(id, 'DRAFT', 'LIVE', version)
+      handlePublishBlock(element.ID, 'DRAFT', 'LIVE', element.Version)
         .then(() => {
           const preview = $('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -33,7 +32,7 @@ const PublishAction = (MenuComponent) => (props) => {
               i18n._t(
                 'UnpublishAction.SUCCESS_NOTIFICATION',
                 'Published \'{title}\' successfully'),
-                { title: title || noTitle }
+              { title: element.Title || noTitle }
             ),
             stay: false,
             type: 'success'
@@ -45,7 +44,7 @@ const PublishAction = (MenuComponent) => (props) => {
               i18n._t(
                 'UnpublishAction.ERROR_NOTIFICATION',
                 'Error publishing \'{title}\''),
-                { title: title || noTitle }
+              { title: element.Title || noTitle }
             ),
             stay: false,
             type: 'error'
@@ -65,7 +64,7 @@ const PublishAction = (MenuComponent) => (props) => {
     <MenuComponent {...props}>
       {props.children}
 
-      {!props.isLiveVersion && <AbstractAction {...newProps} />}
+      {!element.IsLiveVersion && <AbstractAction {...newProps} />}
     </MenuComponent>
   );
 };

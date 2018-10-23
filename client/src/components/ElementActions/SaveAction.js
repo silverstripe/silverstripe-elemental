@@ -16,18 +16,19 @@ const SaveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { id, title, securityId, elementType, formData } = props;
+    const { element, securityId, formData } = props;
+
     const { jQuery: $ } = window;
     const noTitle = i18n.inject(
       i18n._t(
         'ElementHeader.NOTITLE',
         'Untitled {type} block'
       ),
-      { type: elementType }
+      { type: element.BlockSchema.type }
     );
 
     const endpointSpec = {
-      url: loadElementSchemaValue('saveUrl', id),
+      url: loadElementSchemaValue('saveUrl', element.ID),
       method: loadElementSchemaValue('saveMethod'),
       payloadFormat: loadElementSchemaValue('payloadFormat'),
       defaultData: {
@@ -48,7 +49,7 @@ const SaveAction = (MenuComponent) => (props) => {
         const preview = $('.cms-preview');
         preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
 
-        const newTitle = formData[`PageElements_${id}_Title`];
+        const newTitle = formData[`PageElements_${element.ID}_Title`];
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
@@ -66,7 +67,7 @@ const SaveAction = (MenuComponent) => (props) => {
             i18n._t(
               'SaveAction.ERROR_NOTIFICATION',
               'Error saving \'{title}\''),
-            { title: title || noTitle }
+            { title: element.Title || noTitle }
           ),
           stay: false,
           type: 'error'
@@ -90,7 +91,7 @@ const SaveAction = (MenuComponent) => (props) => {
 };
 
 function mapStateToProps(state, ownProps) {
-  const formName = loadElementFormStateName(ownProps.id);
+  const formName = loadElementFormStateName(ownProps.element.ID);
 
   let formData = null;
 
