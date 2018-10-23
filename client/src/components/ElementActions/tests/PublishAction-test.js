@@ -10,13 +10,14 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('PublishAction', () => {
   let wrapper = null;
-  const mockMutation = jest.fn(() => new Promise((resolve) => { resolve(); }));
+  let mockMutation = null;
   const WrappedComponent = (props) => <div>{props.children}</div>;
   const ActionComponent = PublishAction(WrappedComponent);
   const jQuery = jest.fn();
   window.jQuery = jQuery;
 
   beforeEach(() => {
+    mockMutation = jest.fn(() => new Promise((resolve) => resolve()));
     wrapper = mount(
       <ActionComponent
         title="My abstract action"
@@ -47,8 +48,13 @@ describe('PublishAction', () => {
     expect(wrapper.find('button').hasClass('element-editor__actions-publish')).toBe(true);
   });
 
-  it('publishes from draft to live', () => {
+  it('publishes from draft to live', async () => {
     wrapper.find('button').simulate('click');
+
+    // The click handler does not return a promise, but it does USE one.
+    // We need to await the promise resolution cycle before asserting.
+    await new Promise((resolve) => resolve());
+
     expect(mockMutation).toHaveBeenCalledWith(123, 'DRAFT', 'LIVE', 234);
   });
 
