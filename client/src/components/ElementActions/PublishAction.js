@@ -74,18 +74,10 @@ const performSaveForElementWithFormData = (id, formData, securityId) => {
 };
 
 /**
- * Detect if there has been an input change to the Element's data
- * which will have to be saved before publishing
- *
- * @param {number} id Element ID to check for form input changes
- */
-const elementDataHasChanged = (id) => id && false;
-
-/**
  * Adds the elemental menu action to publish a draft/modified block
  */
 const PublishAction = (MenuComponent) => (props) => {
-  const { element } = props;
+  const { element, formDirty } = props;
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -99,10 +91,9 @@ const PublishAction = (MenuComponent) => (props) => {
       },
       securityId,
       formData,
-      actions: { handlePublishBlock }
+      actions: { handlePublishBlock },
     } = props;
 
-    const formDirty = elementDataHasChanged(id);
     let actionFlow = new Promise((resolve) => resolve(version));
 
     // Edits have been made to the form. Peform a "Save & Publish"
@@ -128,7 +119,7 @@ const PublishAction = (MenuComponent) => (props) => {
     <MenuComponent {...props}>
       {props.children}
 
-      {!element.IsLiveVersion && <AbstractAction {...newProps} />}
+      {(formDirty || !element.IsLiveVersion) && <AbstractAction {...newProps} />}
     </MenuComponent>
   );
 };
@@ -145,6 +136,7 @@ function mapStateToProps(state, ownProps) {
   return {
     formData,
     securityId: state.config.SecurityID,
+    formDirty: state.unsavedForms.find((unsaved) => unsaved.name === `element.${formName}`),
   };
 }
 
