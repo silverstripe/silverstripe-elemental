@@ -144,7 +144,8 @@ class ElementalAreaController extends CMSMain
 
         try {
             $updated = false;
-            $element->update($data);
+
+            $element->updateFromFormData($data);
             // Check if anything will actually be changed before writing
             if ($element->isChanged()) {
                 $element->write();
@@ -193,7 +194,7 @@ class ElementalAreaController extends CMSMain
      * @param int $elementID
      * @return array
      */
-    protected function removeNamespacesFromFields(array $data, $elementID)
+    public static function removeNamespacesFromFields(array $data, $elementID)
     {
         $output = [];
         $template = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementID, '');

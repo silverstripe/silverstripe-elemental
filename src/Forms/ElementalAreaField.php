@@ -241,27 +241,9 @@ class ElementalAreaField extends GridField
                 continue;
             }
 
-            $fieldNamePrefix = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementId, '');
-            $prefixLength = strlen($fieldNamePrefix);
+            $data = ElementalAreaController::removeNamespacesFromFields($data, $element->ID);
 
-            $cmsFields = $element->getCMSFields();
-
-            foreach ($data as $field => $datum) {
-                // Check that the field starts with a valid name
-                if (strpos($field, $fieldNamePrefix) !== 0) {
-                    continue;
-                }
-
-                $field = $cmsFields->dataFieldByName(substr($field, $prefixLength));
-
-                if (!$field) {
-                    continue;
-                }
-
-                $field->setSubmittedValue($datum);
-                $field->saveInto($element);
-            }
-
+            $element->updateFromFormData($data);
             $element->write();
         }
     }
