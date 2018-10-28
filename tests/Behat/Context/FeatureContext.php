@@ -198,7 +198,7 @@ class FeatureContext extends SilverStripeContext
      */
     public function stepIPressTheButtonInTheAddBlockPopover($text)
     {
-        $popover = $this->getSession()->getPage()->find('css', '.element-editor-add-element');
+        $popover = $this->getSession()->getPage()->find('css', '.popover-option-set');
 
         $blockType = strtolower($text);
 

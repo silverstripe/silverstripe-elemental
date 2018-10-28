@@ -155,3 +155,4 @@ export default compose(
   ),
   sortBlockMutation
 )(ElementEditor);
+
