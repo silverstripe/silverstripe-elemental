@@ -13,7 +13,7 @@ This module extends a page type to swap the content area for a list of manageabl
 of rather than a single text field. Features supported:
 
 * Versioning of elements
-* Ability to add, remove supported elements per page
+* Ability to add, remove supported elements per _elemental area_
 
 The module provides basic markup for each of the elements but you will likely need to provide your own styles. Replace
 the `$Content` variable with `$ElementalArea` in your page templates, and rely on the markup of the individual elements.
@@ -22,16 +22,18 @@ For a more detailed overview of using this module, please see [the User help gui
 
 ## Requirements
 
-* SilverStripe CMS ^4.2
+* SilverStripe CMS ^4.3
 * Versioned Admin ^1.0
 * GridFieldExtensions ^3.1
+
+For a SilverStripe 4.1 or 4.2 compatible version of this module, please see the [2.x or 3.x release line](https://github.com/dnadesign/silverstripe-elemental/tree/3#readme).
 
 For a SilverStripe 3.x compatible version of this module, please see the [1 branch, or 1.x release line](https://github.com/dnadesign/silverstripe-elemental/tree/1#readme).
 
 ## Installation
 
 ```
-composer require dnadesign/silverstripe-elemental 4.x-dev
+composer require dnadesign/silverstripe-elemental ^4
 ```
 
 The following YAML config will enable elements on every `Page` object,
@@ -45,7 +47,7 @@ Page:
     - DNADesign\Elemental\Extensions\ElementalPageExtension
 ```
 
-In your page type layout template use `$ElementalArea` to render the elements to the page.
+In your page type layout template use `$ElementalArea` to render the elements to the page (in place of `$Content`).
 
 ## Getting more elements
 
@@ -61,7 +63,7 @@ To learn more about [SilverStripe supported](https://www.silverstripe.org/softwa
 * [silverstripe/silverstripe-elemental-bannerblock](https://github.com/silverstripe/silverstripe-elemental-bannerblock): Banner with call-to-action and content
 * [dnadesign/silverstripe-elemental-userforms](https://github.com/dnadesign/silverstripe-elemental-userforms): Embed a [user defined form](https://github.com/silverstripe/silverstripe-userforms)
 
-## Examples of community built content block modules (not a comprehensive list)
+## Examples of community built content block modules (not a comprehensive list - may not be updated for Elemental 4 yet)
 
 * [dnadesign/silverstripe-elemental-list](https://github.com/dnadesign/silverstripe-elemental-list): Container for elements (allows layouts)
 * [dnadesign/silverstripe-elemental-virtual](https://github.com/dnadesign/silverstripe-elemental-virtual): Reuse elements across pages
@@ -71,7 +73,6 @@ To learn more about [SilverStripe supported](https://www.silverstripe.org/softwa
 * [dynamic/silverstripe-elemental-blog](https://github.com/dynamic/silverstripe-elemental-blog): Recent blog posts
 * [dynamic/silverstripe-elemental-sponsors](https://github.com/dynamic/silverstripe-elemental-sponsors): Sponsor logos
 * [dynamic/silverstripe-elemental-testimonials](https://github.com/dynamic/silverstripe-elemental-testimonials): Customer testimonials and quotes
-* [nyeholt/silverstripe-ozzymental](https://github.com/nyeholt/silverstripe-ozzymental): oEmbed items (video, etc)
 * [dynamic/silverstripe-elemental-countdown](https://github.com/dynamic/silverstripe-elemental-countdown): Countdown to a specific date/time
 
 ## Helpful modules
@@ -180,7 +181,7 @@ class MyElement extends BaseElement
 
 By default elements can be edited in the CMS using an inline form where all your elements appear together. For elements 
 that are more complex you can disable the in-line edit form by setting `private static $inline_editable = false` in your
-element class. A `GridFieldDetailForm` will be used to edit blocks that are not in-line editable.
+element class. A `GridFieldDetailForm` will be used to edit blocks that are not in-line editable. The default is that all elements are in-line editable.
 
 ### Defining your own HTML
 
