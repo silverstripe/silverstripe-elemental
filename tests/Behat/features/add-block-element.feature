@@ -21,7 +21,6 @@ Feature: Add elements in the CMS
     When I see a list of blocks
     Then I press the "Add block" button
     Then I press the "Content" button in the add block popover
-      And I wait 1 second
     Then I should see "Untitled Content block" as the title for block 1
 
     When I go to "/admin/pages/edit/show/6"
