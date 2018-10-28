@@ -179,9 +179,25 @@ class MyElement extends BaseElement
 
 #### In-line Editing
 
-By default elements can be edited in the CMS using an inline form where all your elements appear together. For elements 
-that are more complex you can disable the in-line edit form by setting `private static $inline_editable = false` in your
-element class. A `GridFieldDetailForm` will be used to edit blocks that are not in-line editable. The default is that all elements are in-line editable.
+Elements can be edited in the CMS using an inline form where all your elements appear together. For elements 
+that are more complex (e.g. use custom `FormField` classes) you can disable the in-line edit form by setting `private static $inline_editable = false` in your
+element class. A `GridFieldDetailForm` will be used to edit blocks that are not in-line editable. Alternatively as the CMS element editor is now React driven, in-line editing functionality can be added to by defining your own React components.
+
+**Note: The default is that all elements are in-line editable.**
+
+If in-line editing is not disabled, whilst not having a custom component defined, custom fields will not be rendered unless the field's `schemaDataType` is set See [Framework's FormField definition](https://github.com/silverstripe/silverstripe-framework/blob/4/src/Forms/FormField.php).
+
+After building your own React components and including them into the CMS, altering the applicable Element's PHP definition to use the new React component can be achieved by setting some `protected` properties of that class.
+
+```php
+    protected $schemaDataType = FormField::SCHEMA_DATA_TYPE_CUSTOM;
+    protected $schemaComponent = 'BlockLinkField';
+```
+
+- The `$schemaDataType` does not need to be CUSTOM, but should not be STRUCTURAL as structural types are not submitted as form data.
+- The `$schemaComponent` is the name of the React component you have created to be used.
+
+The above example was taken from [`silverstripe/elemental-bannerblock`](https://github.com/silverstripe/silverstripe-elemental-bannerblock/blob/master/src/Block/BannerBlock.php)
 
 ### Defining your own HTML
 
@@ -263,8 +279,7 @@ to allow unescaped HTML in your search results template. You should use the `$Ex
 
 ### Usage of GridField
 
-Note that this module uses GridField for creating, editing and deleting elements. Usage of GridField is temporary and 
-will be removed from Elemental when a React alternative is developed.
+This module used to use GridField to create and update Elements in the CMS. This has now been largely succeeded by a JavaScript interface via React. However elements that are marked as being incompatible with in-line editing will still use the GridField method.
 
 ## Building the elemental frontend assets
 
