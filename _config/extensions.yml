@@ -1,10 +1,6 @@
 ---
 Name: elementalextensions
 ---
-SilverStripe\VersionedAdmin\Controllers\HistoryControllerFactory:
-  extensions:
-    - DNADesign\Elemental\Extensions\HistoryControllerFactoryExtension
-
 SilverStripe\CMS\Model\SiteTree:
   extensions:
     - DNADesign\Elemental\Extensions\SiteTreeExtension

@@ -6,3 +6,7 @@ mappings:
   ElementContent: DNADesign\Elemental\Models\ElementContent
   ElementalArea: DNADesign\Elemental\Models\ElementalArea
   ElementalPageExtensionTests: DNADesign\Elemental\Tests\ElementalPageExtensionTests
+warnings:
+  classes:
+    'DNADesign\Elemental\Extensions\HistoryControllerFactoryExtension':
+      message: 'Removed'
