@@ -97,3 +97,22 @@
     left: 14px;
   }
 }
+
+// Stack fields - this is a global default for all Elemental Areas
+// doing it this way means people do not need to add 'stacked' as
+// an extra class to all PHP CMS field definitions, and passing that
+// through to React.
+// This also means the selector needs to be a smidge silly specific.
+.element-editor .form-group:nth-child(1n) {
+  display: block;
+
+  .form__field-label,
+  .form__field-holder {
+
+    @include media-breakpoint-up(lg) {
+      @include make-col(10);
+      // To bring checkboxes and radio buttons into alignment
+      margin-left: 0;
+    }
+  }
+}
