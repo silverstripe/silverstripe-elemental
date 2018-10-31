@@ -1,4 +1,10 @@
 .element-editor-editform {
   margin-top: $spacer-xs;
+  @include make-row();
   cursor: auto;
+
+  .form-group {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
