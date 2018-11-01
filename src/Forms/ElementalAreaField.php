@@ -241,21 +241,9 @@ class ElementalAreaField extends GridField
                 continue;
             }
 
-            $fields = [];
+            $data = ElementalAreaController::removeNamespacesFromFields($data, $element->ID);
 
-            $fieldNamePrefix = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementId, '');
-            $prefixLength = strlen($fieldNamePrefix);
-
-            foreach ($data as $field => $datum) {
-                // Check that the field starts with a valid name
-                if (strpos($field, $fieldNamePrefix) !== 0) {
-                    continue;
-                }
-
-                $fields[substr($field, $prefixLength)] = $datum;
-            }
-
-            $element->update($fields);
+            $element->updateFromFormData($data);
             $element->write();
         }
     }

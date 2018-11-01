@@ -3,6 +3,7 @@
 namespace DNADesign\Elemental\Models;
 
 use DNADesign\Elemental\Controllers\ElementController;
+use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use DNADesign\Elemental\ORM\FieldType\DBObjectType;
 use Exception;
@@ -467,6 +468,27 @@ class BaseElement extends DataObject
         }
 
         return $templateFlat;
+    }
+
+    /**
+     * Given form data (wit
+     *
+     * @param $data
+     */
+    public function updateFromFormData($data)
+    {
+        $cmsFields = $this->getCMSFields();
+
+        foreach ($data as $field => $datum) {
+            $field = $cmsFields->dataFieldByName($field);
+
+            if (!$field) {
+                continue;
+            }
+
+            $field->setSubmittedValue($datum);
+            $field->saveInto($this);
+        }
     }
 
     /**

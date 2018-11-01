@@ -29,12 +29,14 @@ class ElementalAreaController extends CMSMain
     private static $url_handlers = [
         // API access points with structured data
         'POST api/saveForm/$ID' => 'apiSaveForm',
+        'POST $FormName/field/$FieldName' => 'formAction',
     ];
 
     private static $allowed_actions = [
         'elementForm',
         'schema',
         'apiSaveForm',
+        'formAction',
     ];
 
     public function getClientConfig()
@@ -142,7 +144,8 @@ class ElementalAreaController extends CMSMain
 
         try {
             $updated = false;
-            $element->update($data);
+
+            $element->updateFromFormData($data);
             // Check if anything will actually be changed before writing
             if ($element->isChanged()) {
                 $element->write();
@@ -164,13 +167,34 @@ class ElementalAreaController extends CMSMain
     }
 
     /**
+     * Provides action control for form fields that are request handlers when they're used in an in-line edit form.
+     *
+     * Eg. UploadField
+     *
+     * @param HTTPRequest $request
+     * @return array|HTTPResponse|\SilverStripe\Control\RequestHandler|string
+     */
+    public function formAction(HTTPRequest $request)
+    {
+        $formName = $request->param('FormName');
+
+        // Get the element ID from the form name
+        $id = substr($formName, strlen(sprintf(self::FORM_NAME_TEMPLATE, '')));
+        $form = $this->getElementForm($id);
+
+        $field = $form->getRequestHandler()->handleField($request);
+
+        return $field->handleRequest($request);
+    }
+
+    /**
      * Remove the pseudo namespaces that were added to form fields by the form factory
      *
      * @param array $data
      * @param int $elementID
      * @return array
      */
-    protected function removeNamespacesFromFields(array $data, $elementID)
+    public static function removeNamespacesFromFields(array $data, $elementID)
     {
         $output = [];
         $template = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementID, '');
