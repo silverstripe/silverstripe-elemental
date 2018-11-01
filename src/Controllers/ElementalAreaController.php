@@ -96,6 +96,8 @@ class ElementalAreaController extends CMSMain
             $form->makeReadonly();
         }
 
+        $form->addExtraClass('element-editor-editform__form');
+
         return $form;
     }
 
