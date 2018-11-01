@@ -12,6 +12,7 @@ import InlineEditForm from 'components/ElementEditor/InlineEditForm';
 import AddElementPopover from 'components/ElementEditor/AddElementPopover';
 import HoverBar from 'components/ElementEditor/HoverBar';
 import DragPositionIndicator from 'components/ElementEditor/DragPositionIndicator';
+import TextCheckboxGroupField from 'components/TextCheckboxGroupField/TextCheckboxGroupField';
 
 export default () => {
   Injector.component.registerMany({
@@ -28,5 +29,6 @@ export default () => {
     AddElementPopover,
     HoverBar,
     DragPositionIndicator,
+    TextCheckboxGroupField,
   });
 };
