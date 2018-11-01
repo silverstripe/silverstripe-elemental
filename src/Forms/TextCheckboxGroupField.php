@@ -6,6 +6,8 @@ use SilverStripe\Forms\CompositeField;
 
 class TextCheckboxGroupField extends CompositeField
 {
+    protected $schemaComponent = 'TextCheckboxGroupField';
+
     /**
      * Set the composite's title to that of the first child
      *

@@ -1,0 +1,9 @@
+// Temporarily overwriting the styles from the CheckboxField component
+// since it cannot be removed easily
+.text-checkout-group-field {
+  .form-check {
+    display: inline;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+}

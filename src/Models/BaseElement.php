@@ -303,7 +303,7 @@ class BaseElement extends DataObject
                     TextField::create('Title', _t(__CLASS__ . '.TitleLabel', 'Title (displayed if checked)')),
                     CheckboxField::create('ShowTitle', _t(__CLASS__ . '.ShowTitleLabel', 'Displayed'))
                 )
-                    ->setName('TitleAndDisplayed')
+                    ->setName('Title')
             );
 
             // Rename the "Main" tab
