@@ -4,11 +4,11 @@ import { compose } from 'redux';
 import { elementTypeType } from 'types/elementTypeType';
 import { connect } from 'react-redux';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
-import { DragDropContext, DropTarget } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import { DropTarget } from 'react-dnd';
 import classnames from 'classnames';
 import sortBlockMutation from 'state/editor/sortBlockMutation';
 import ElementDragPreview from 'components/ElementEditor/ElementDragPreview';
+import withDragDropContext from 'lib/withDragDropContext';
 
 /**
  * The ElementEditor is used in the CMS to manage a list or nested lists of
@@ -139,7 +139,7 @@ function mapStateToProps(state) {
 
 export { ElementEditor as Component };
 export default compose(
-  DragDropContext(HTML5Backend),
+  withDragDropContext,
   DropTarget('element', {}, (connector, monitor) => ({
     connectDropTarget: connector.dropTarget(),
     isDraggingOver: monitor.isOver(), // isDragging is not available on DropTargetMonitor
