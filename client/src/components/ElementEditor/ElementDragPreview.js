@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 import Header from 'components/ElementEditor/Header';
 import { DragLayer } from 'react-dnd';
 import { elementType } from 'types/elementType';

@@ -4,7 +4,7 @@
 import React from 'react';
 import AbstractAction from '../AbstractAction';
 import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15.4/build/index';
+import Adapter from 'enzyme-adapter-react-16/build/index';
 
 Enzyme.configure({ adapter: new Adapter() });
 

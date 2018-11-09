@@ -4,7 +4,7 @@
 import React from 'react';
 import { Component as ElementEditor } from '../ElementEditor';
 import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15.4/build/index';
+import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
 

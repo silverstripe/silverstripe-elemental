@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 import { Tooltip } from 'reactstrap';
 import { elementType } from 'types/elementType';
 import { compose } from 'redux';
@@ -146,7 +147,7 @@ class Header extends Component {
 Header.propTypes = {
   element: elementType.isRequired,
   simple: PropTypes.bool,
-  ElementActionsComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
+  ElementActionsComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   previewExpanded: PropTypes.bool,
   disableTooltip: PropTypes.bool,
 };
