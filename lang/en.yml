@@ -1,23 +1,16 @@
 en:
-  DNADesign\Elemental\Forms\HistoricalVersionedGridFieldItemRequest:
-    BUTTONREVERTDESC: 'Publish this record to the draft site'
-    InvalidVersion: 'Invalid version'
-    Position: Position
-    REVERT: 'Revert to this version'
+  DNADesign\Elemental\Controllers\ElementalAreaController:
+    MENUTITLE: 'Edit Page'
   DNADesign\Elemental\Models\BaseElement:
-    Author: Author
     BlockType: Block
     CUSTOM_STYLES: 'Select a style..'
     ExtraCssClassesLabel: 'Custom CSS classes'
     ExtraCssClassesPlaceholder: 'my_class another_class'
     MainTabLabel: Content
-    Modified: Modified
     PLURALNAME: blocks
     PLURALS:
       one: 'A block'
       other: '{count} blocks'
-    Published: Published
-    Record: Record
     SINGULARNAME: block
     STYLE: 'Style variation'
     ShowTitleLabel: Displayed
