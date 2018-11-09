@@ -53,8 +53,9 @@ const SaveAction = (MenuComponent) => (props) => {
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
-              'SaveAction.SUCCESS_NOTIFICATION',
-              'Saved \'{title}\' successfully'),
+              'ElementSaveAction.SUCCESS_NOTIFICATION',
+              'Saved \'{title}\' successfully'
+            ),
             { title: newTitle || noTitle }
           ),
           stay: false,
@@ -65,8 +66,9 @@ const SaveAction = (MenuComponent) => (props) => {
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
-              'SaveAction.ERROR_NOTIFICATION',
-              'Error saving \'{title}\''),
+              'ElementSaveAction.ERROR_NOTIFICATION',
+              'Error saving \'{title}\''
+            ),
             { title: element.Title || noTitle }
           ),
           stay: false,
@@ -76,7 +78,7 @@ const SaveAction = (MenuComponent) => (props) => {
   };
 
   const newProps = {
-    title: i18n._t('SaveAction.SAVE', 'Save'),
+    title: i18n._t('ElementSaveAction.SAVE', 'Save'),
     className: 'element-editor__actions-save',
     onClick: handleClick,
   };

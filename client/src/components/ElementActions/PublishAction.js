@@ -18,15 +18,15 @@ import { loadElementFormStateName } from 'state/editor/loadElementFormStateName'
  */
 const reportPublicationStatus = (elementType, title, success) => {
   const noTitle = i18n.inject(
-    i18n._t('ElementHeader.NOTITLE', 'Untitled {elementType} block'),
-    { elementType }
+    i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
+    { type: elementType }
   );
   const successMessage = i18n.inject(
-    i18n._t('UnpublishAction.SUCCESS_NOTIFICATION', 'Published \'{title}\' successfully'),
+    i18n._t('ElementPublishAction.SUCCESS_NOTIFICATION', 'Published \'{title}\' successfully'),
     { title: title || noTitle }
   );
   const errorMessage = i18n.inject(
-    i18n._t('UnpublishAction.ERROR_NOTIFICATION', 'Error publishing \'{title}\''),
+    i18n._t('ElementPublishAction.ERROR_NOTIFICATION', 'Error publishing \'{title}\''),
     { title: title || noTitle }
   );
   window.jQuery.noticeAdd({
@@ -109,7 +109,7 @@ const PublishAction = (MenuComponent) => (props) => {
   };
 
   const newProps = {
-    title: i18n._t('PublishAction.PUBLISH', 'Publish'),
+    title: i18n._t('ElementPublishAction.PUBLISH', 'Publish'),
     className: 'element-editor__actions-publish',
     onClick: handleClick,
     toggle: props.toggle,

@@ -96,7 +96,7 @@ class AddElementPopover extends Component {
     return (
       <PopoverOptionSetComponent
         buttons={buttons}
-        searchPlaceholder={i18n._t('AddElementPopover.SEARCH_BLOCKS', 'Search blocks')}
+        searchPlaceholder={i18n._t('ElementAddElementPopover.SEARCH_BLOCKS', 'Search blocks')}
         extraClass={popoverClassNames}
         container={container}
         isOpen={isOpen}

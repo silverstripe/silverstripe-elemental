@@ -31,8 +31,9 @@ const UnpublishAction = (MenuComponent) => (props) => {
           $.noticeAdd({
             text: i18n.inject(
               i18n._t(
-                'UnpublishAction.SUCCESS_NOTIFICATION',
-                'Removed \'{title}\' from the published page'),
+                'ElementUnpublishAction.SUCCESS_NOTIFICATION',
+                'Removed \'{title}\' from the published page'
+              ),
               { title: element.Title || noTitle }
             ),
             stay: false,
@@ -43,8 +44,9 @@ const UnpublishAction = (MenuComponent) => (props) => {
           $.noticeAdd({
             text: i18n.inject(
               i18n._t(
-                'UnpublishAction.ERROR_NOTIFICATION',
-                'Error unpublishing \'{title}\''),
+                'ElementUnpublishAction.ERROR_NOTIFICATION',
+                'Error unpublishing \'{title}\''
+              ),
               { title: element.Title || noTitle }
             ),
             stay: false,
@@ -55,7 +57,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
   };
 
   const newProps = {
-    title: i18n._t('UnpublishAction.UNPUBLISH', 'Unpublish'),
+    title: i18n._t('ElementUnpublishAction.UNPUBLISH', 'Unpublish'),
     className: 'element-editor__actions-unpublish',
     onClick: handleClick,
     toggle: props.toggle,

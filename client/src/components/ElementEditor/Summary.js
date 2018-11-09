@@ -15,7 +15,7 @@ class Summary extends PureComponent {
    */
   render() {
     const { fileUrl, fileTitle, content } = this.props;
-    const noContent = i18n._t('Summary.NO_PREVIEW', 'No preview available');
+    const noContent = i18n._t('ElementSummary.NO_PREVIEW', 'No preview available');
 
     return (
 

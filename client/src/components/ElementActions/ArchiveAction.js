@@ -15,13 +15,13 @@ const ArchiveAction = (MenuComponent) => (props) => {
     const { element: { ID: id }, isPublished, actions: { handleArchiveBlock } } = props;
 
     let archiveMessage = i18n._t(
-      'ArchiveAction.CONFIRM_DELETE',
+      'ElementArchiveAction.CONFIRM_DELETE',
       'Are you sure you want to send this block to the archive?'
     );
 
     if (isPublished) {
       archiveMessage = i18n._t(
-        'ArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH',
+        'ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH',
         'Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?'
       );
     }
@@ -36,7 +36,7 @@ const ArchiveAction = (MenuComponent) => (props) => {
   };
 
   const newProps = {
-    title: i18n._t('ArchiveAction.ARCHIVE', 'Archive'),
+    title: i18n._t('ElementArchiveAction.ARCHIVE', 'Archive'),
     className: 'element-editor__actions-archive',
     onClick: handleClick,
     toggle: props.toggle,
