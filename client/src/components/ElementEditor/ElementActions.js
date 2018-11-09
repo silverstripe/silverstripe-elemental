@@ -17,7 +17,7 @@ class ElementActions extends Component {
   /**
    * Set the active tab
    *
-   * @param {string} activeTab
+   * @param {Object} event
    */
   handleEditTabsClick(event) {
     const { handleEditTabsClick } = this.props;
