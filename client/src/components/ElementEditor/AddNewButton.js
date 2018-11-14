@@ -30,7 +30,8 @@ class AddNewButton extends Component {
     const buttonAttributes = {
       id: `ElementalArea${elementalAreaId}_AddButton`,
       color: 'primary',
-      onClick: this.toggle
+      onClick: this.toggle,
+      className: 'font-icon-plus',
     };
 
     return (
