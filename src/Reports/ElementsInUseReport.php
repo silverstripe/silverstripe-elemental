@@ -6,6 +6,7 @@ use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\ORM\DataList;
 use SilverStripe\Reports\Report;
+use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 
 class ElementsInUseReport extends Report
@@ -107,6 +108,30 @@ class ElementsInUseReport extends Report
         $field->addExtraClass('elemental-report__grid-field');
 
         return $field;
+    }
+
+    /**
+     * When used with newer versions of silverstripe-reports this method will automatically be added as breadcrumbs
+     * leading up to this report.
+     *
+     * @return ArrayData[]
+     */
+    public function getBreadcrumbs()
+    {
+        $params = $this->getSourceParams();
+
+        // Only apply breadcrumbs if a "ClassName" filter is applied. This implies that we came from the
+        // "element type report".
+        if (!isset($params['ClassName'])) {
+            return [];
+        }
+
+        $report = ElementTypeReport::create();
+
+        return [ArrayData::create([
+            'Title' => $report->title(),
+            'Link' => $report->getLink(),
+        ])];
     }
 
     /**
