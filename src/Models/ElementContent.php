@@ -15,9 +15,9 @@ class ElementContent extends BaseElement
 
     private static $table_name = 'ElementContent';
 
-    private static $singular_name = 'content block';
+    private static $singular_name = 'Content block';
 
-    private static $plural_name = 'content blocks';
+    private static $plural_name = 'Content blocks';
 
     private static $description = 'HTML text block';
 

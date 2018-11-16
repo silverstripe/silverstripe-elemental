@@ -110,9 +110,9 @@ class BaseElement extends DataObject
 
     private static $default_sort = 'Sort';
 
-    private static $singular_name = 'block';
+    private static $singular_name = 'Block';
 
-    private static $plural_name = 'blocks';
+    private static $plural_name = 'Blocks';
 
     private static $summary_fields = [
         'EditorPreview' => 'Summary'
@@ -344,7 +344,7 @@ class BaseElement extends DataObject
      */
     public function getType()
     {
-        return _t(__CLASS__ . '.BlockType', 'Block');
+        return $this->i18n_singular_name();
     }
 
     /**

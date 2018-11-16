@@ -2,7 +2,6 @@ en:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Edit Page'
   DNADesign\Elemental\Models\BaseElement:
-    BlockType: Block
     CUSTOM_STYLES: 'Select a style..'
     ExtraCssClassesLabel: 'Custom CSS classes'
     ExtraCssClassesPlaceholder: 'my_class another_class'
