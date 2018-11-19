@@ -146,4 +146,20 @@ class BaseElementTest extends FunctionalTest
         $element->Style = 'old';
         $this->assertEquals('', $element->getStyleVariant());
     }
+
+    public function testOnBeforeWrite()
+    {
+        $element1 = new ElementContent();
+        $element1->write();
+        $baselineSort = $element1->Sort;
+
+        $element2 = new ElementContent();
+        $element2->write();
+        $this->assertEquals($baselineSort + 1, $element2->Sort, 'Sort order should be higher than the max');
+
+        // Use a different element type, ensuring that sort orders are relative to the BaseElement
+        $element3 = new TestElement();
+        $element3->write();
+        $this->assertEquals($baselineSort + 2, $element3->Sort, 'Sort order should be higher than the max');
+    }
 }
