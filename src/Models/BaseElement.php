@@ -247,7 +247,7 @@ class BaseElement extends DataObject
         parent::onBeforeWrite();
 
         if (!$this->Sort) {
-            $this->Sort = static::get()->max('Sort') + 1;
+            $this->Sort = BaseElement::get()->max('Sort') + 1;
         }
     }
 
