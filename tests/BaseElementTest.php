@@ -189,4 +189,26 @@ class BaseElementTest extends FunctionalTest
         $this->assertEquals('even', $element2->EvenOdd());
         $this->assertEquals('odd', $element3->EvenOdd());
     }
+
+    public function testOnBeforeWrite()
+    {
+        /** @var ElementalArea $area */
+        $area = $this->objFromFixture(ElementalArea::class, 'area51');
+
+        $element1 = new ElementContent();
+        $element1->ParentID = $area->ID;
+        $element1->write();
+        $baselineSort = $element1->Sort;
+
+        $element2 = new ElementContent();
+        $element2->ParentID = $area->ID;
+        $element2->write();
+        $this->assertEquals($baselineSort + 1, $element2->Sort, 'Sort order should be higher than the max');
+
+        // Use a different element type, ensuring that sort orders are relative to the BaseElement
+        $element3 = new TestElement();
+        $element3->ParentID = $area->ID;
+        $element3->write();
+        $this->assertEquals($baselineSort + 2, $element3->Sort, 'Sort order should be higher than the max');
+    }
 }
