@@ -11,6 +11,7 @@ const TextCheckboxGroupField = (props) => {
     )
   );
 
+  // If the checkbox has been removed, just render the TextField on its own
   if (childrenWithProps.length === 1) {
     return childrenWithProps[0];
   }
