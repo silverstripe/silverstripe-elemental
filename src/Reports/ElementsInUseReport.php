@@ -11,6 +11,11 @@ use SilverStripe\View\Requirements;
 
 class ElementsInUseReport extends Report
 {
+    /**
+     * The string used in GET params to filter the records in this report by element type
+     */
+    const CLASS_NAME_FILTER_KEY = 'ClassName';
+
     public function title()
     {
         return _t(__CLASS__ . '.ReportTitle', 'Content blocks in use');
@@ -21,8 +26,8 @@ class ElementsInUseReport extends Report
         /** @var DataList $elements */
         $elements = BaseElement::get()->exclude(['ClassName' => BaseElement::class]);
 
-        if (isset($params['ClassName'])) {
-            $className = $this->unsanitiseClassName($params['ClassName']);
+        if (isset($params[static::CLASS_NAME_FILTER_KEY])) {
+            $className = $this->unsanitiseClassName($params[static::CLASS_NAME_FILTER_KEY]);
             $elements = $elements->filter(['ClassName' => $className]);
         }
 
@@ -122,7 +127,7 @@ class ElementsInUseReport extends Report
 
         // Only apply breadcrumbs if a "ClassName" filter is applied. This implies that we came from the
         // "element type report".
-        if (!isset($params['ClassName'])) {
+        if (!isset($params[static::CLASS_NAME_FILTER_KEY])) {
             return [];
         }
 
