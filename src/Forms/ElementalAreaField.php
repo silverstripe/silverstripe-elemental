@@ -229,6 +229,10 @@ class ElementalAreaField extends GridField
         $elementData = $this->Value();
         $idPrefixLength = strlen(sprintf(ElementalAreaController::FORM_NAME_TEMPLATE, ''));
 
+        if (!$elementData) {
+            return;
+        }
+
         foreach ($elementData as $form => $data) {
             // Extract the ID
             $elementId = (int) substr($form, $idPrefixLength);
