@@ -59,7 +59,7 @@ class ElementalAreaField extends GridField
         parent::__construct($name, '', $area->Elements(), $config);
         $this->area = $area;
 
-        $this->addExtraClass('element-editor__container');
+        $this->addExtraClass('element-editor__container no-change-track');
     }
 
     /**

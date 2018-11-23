@@ -44,4 +44,42 @@ jQuery.entwine('ss', ($) => {
       }
     },
   });
+
+  $('.js-injector-boot .element-editor__container .element-form-dirty-state').entwine({
+    onmatch() {
+      $('.cms-edit-form').trigger('change');
+    },
+    onunmatch() {
+      $('.cms-edit-form').trigger('change');
+    }
+  });
+
+  // Prevent dirty form detection on any field loaded in with FormBuilderLoader.
+  // This looks pretty hacky, and it is. This is mostly copied from some code in subsites that does
+  // a similar thing (with some history):
+  $('.cms-edit-form').entwine({
+    getChangeTrackerOptions() {
+      // Figure out if we're still returning the default value
+      const isDefault = (this.entwineData('ChangeTrackerOptions') === undefined);
+      // Get the current options
+      let opts = this._super();
+
+      if (isDefault) {
+        // If it is the default then...
+        // clone the object (so we don't modify the original),
+        opts = $.extend({}, opts);
+        // modify it,
+        opts.ignoreFieldSelector += ', .elementalarea :input:not(.element-form-dirty-state)';
+        if (opts.fieldSelector === undefined) {
+          opts.fieldSelector = ':input:not(:button,[type="submit"],[type="search"],.gridstate)';
+        }
+        opts.fieldSelector += ', .element-editor-header';
+        // then set the clone as the value on this element
+        // (so next call to this method gets this same clone)
+        this.setChangeTrackerOptions(opts);
+      }
+
+      return opts;
+    }
+  });
 });

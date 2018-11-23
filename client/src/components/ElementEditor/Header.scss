@@ -65,6 +65,11 @@
     width: 8px;
     z-index: 1;
 
+    &--unsaved {
+      background-color: $link-color;
+      border: 1px solid $link-hover-color;
+    }
+
     &--draft {
       background-color: $state-draft-bg;
     }
