@@ -29,7 +29,7 @@ class ElementalAreaController extends CMSMain
     private static $url_handlers = [
         // API access points with structured data
         'POST api/saveForm/$ID' => 'apiSaveForm',
-        'POST $FormName/field/$FieldName' => 'formAction',
+        '$FormName/field/$FieldName' => 'formAction',
     ];
 
     private static $allowed_actions = [
