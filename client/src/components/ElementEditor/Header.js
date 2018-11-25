@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Tooltip } from 'reactstrap';
 import { elementType } from 'types/elementType';
+import { elementTypeType } from 'types/elementTypeType';
 import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
@@ -76,16 +77,18 @@ class Header extends Component {
   render() {
     const {
       element,
+      type,
       previewExpanded,
       simple,
       disableTooltip,
+      activeTab,
       expandable,
       ElementActionsComponent,
     } = this.props;
 
     const noTitle = i18n.inject(
       i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
-      { type: element.BlockSchema.type }
+      { type: type.title }
     );
     const titleClasses = classNames({
       'element-editor-header__title': true,
@@ -114,7 +117,7 @@ class Header extends Component {
         </div>
         <div className="element-editor-header__info">
           <div className="element-editor-header__icon-container">
-            <i className={element.BlockSchema.iconClass} id={blockIconId} />
+            <i className={type.icon} id={blockIconId} />
             {this.renderVersionedStateMessage()}
             {!simple && <Tooltip
               placement="top"
@@ -122,7 +125,7 @@ class Header extends Component {
               target={blockIconId}
               toggle={this.toggle}
             >
-              {element.BlockSchema.type}
+              {type.title}
             </Tooltip>}
           </div>
           <h3 className={titleClasses}>{element.Title || noTitle}</h3>
@@ -133,7 +136,11 @@ class Header extends Component {
               role="none"
               onClick={(event) => event.stopPropagation()}
             >
-              <ElementActionsComponent {...this.props} />
+              <ElementActionsComponent
+                element={element}
+                activeTab={activeTab}
+                editTabs={type.editTabs}
+              />
             </div>
           }
           <i className={expandCaretClasses} title={expandTitle} />
@@ -145,6 +152,8 @@ class Header extends Component {
 
 Header.propTypes = {
   element: elementType.isRequired,
+  type: elementTypeType.isRequired,
+  activeTab: PropTypes.string,
   simple: PropTypes.bool,
   ElementActionsComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
   previewExpanded: PropTypes.bool,

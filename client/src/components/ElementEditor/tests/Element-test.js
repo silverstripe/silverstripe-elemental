@@ -27,6 +27,10 @@ describe('Element', () => {
     IsLiveVersion: true,
     IsPublished: true,
   };
+  const type = {
+    icon: 'font-icon-block-content',
+    title: 'Content'
+  };
 
   const identity = el => el;
 
@@ -45,6 +49,7 @@ describe('Element', () => {
       const wrapper = shallow(
         <Element
           element={element}
+          type={type}
           link={'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'}
           {...defaultProps}
         />
@@ -57,12 +62,11 @@ describe('Element', () => {
     it('should render null if no ID is given', () => {
       const wrapper = shallow(
         <Element
-          element={
-            {
-              ...element,
-              ID: ''
-            }
-          }
+          element={{
+            ...element,
+            ID: ''
+          }}
+          type={type}
           link={'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'}
           {...defaultProps}
         />
@@ -82,6 +86,7 @@ describe('Element', () => {
             ...element,
             IsPublished: false,
           }}
+          type={type}
           link="/"
           {...defaultProps}
         />
@@ -98,6 +103,7 @@ describe('Element', () => {
             IsPublished: true,
             IsLiveVersion: false,
           }}
+          type={type}
           link="/"
           {...defaultProps}
         />
@@ -114,6 +120,7 @@ describe('Element', () => {
             IsPublished: true,
             IsLiveVersion: true,
           }}
+          type={type}
           link="/"
           {...defaultProps}
         />

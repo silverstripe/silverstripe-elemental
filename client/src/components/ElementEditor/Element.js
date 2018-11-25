@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { elementType } from 'types/elementType';
+import { elementTypeType } from 'types/elementTypeType';
 import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
@@ -125,7 +126,7 @@ class Element extends Component {
    * If the element is not inline-editable, take user to the GridFieldDetailForm to edit the record
    */
   handleExpand(event) {
-    const { element, link } = this.props;
+    const { type, link } = this.props;
     const { loadingError } = this.state;
 
     if (event.target.type === 'button') {
@@ -134,7 +135,7 @@ class Element extends Component {
       return;
     }
 
-    if (element.InlineEditable && !loadingError) {
+    if (type.inlineEditable && !loadingError) {
       this.setState({
         previewExpanded: !this.state.previewExpanded
       });
@@ -168,10 +169,10 @@ class Element extends Component {
   render() {
     const {
       element,
+      type,
       HeaderComponent,
       ContentComponent,
       link,
-      editTabs,
       activeTab,
       connectDragSource,
       connectDropTarget,
@@ -183,7 +184,7 @@ class Element extends Component {
 
     const linkTitle = i18n.inject(
       i18n._t('ElementalElement.TITLE', 'Edit this {type} block'),
-      { type: element.BlockSchema.type }
+      { type: type.title }
     );
 
     if (!element.ID) {
@@ -193,7 +194,7 @@ class Element extends Component {
     const elementClassNames = classNames(
       'element-editor__element',
       {
-        'element-editor__element--expandable': element.InlineEditable,
+        'element-editor__element--expandable': type.inlineEditable,
         'element-editor__element--dragging': isDragging,
         'element-editor__element--dragged-over': isOver,
       },
@@ -212,9 +213,9 @@ class Element extends Component {
       >
         <HeaderComponent
           element={element}
-          expandable={element.InlineEditable}
+          type={type}
+          expandable={type.inlineEditable}
           link={link}
-          editTabs={editTabs}
           previewExpanded={previewExpanded}
           handleEditTabsClick={this.handleTabClick}
           activeTab={activeTab}
@@ -280,8 +281,8 @@ function mapDispatchToProps(dispatch, ownProps) {
 
 Element.propTypes = {
   element: elementType,
+  type: elementTypeType.isRequired,
   link: PropTypes.string.isRequired,
-  editTabs: PropTypes.arrayOf(PropTypes.object),
   // Redux mapped props:
   activeTab: PropTypes.string,
   tabSetName: PropTypes.string,

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { compose } from 'redux';
 import { DropdownItem } from 'reactstrap';
 import { inject } from 'lib/Injector';
+import { elementType } from 'types/elementType';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 
 /**
@@ -96,7 +97,8 @@ class ElementActions extends Component {
 }
 
 ElementActions.propTypes = {
-  id: PropTypes.string,
+  // eslint-disable-next-line react/no-unused-prop-types
+  element: elementType,
   activeTab: PropTypes.string,
   editTabs: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,

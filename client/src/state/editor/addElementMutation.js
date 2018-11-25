@@ -10,8 +10,6 @@ mutation AddElementToArea($className: String!, $elementalAreaID: ID!, $afterElem
     AfterElementID: $afterElementID
   ) {
     ID
-    Sort
-    InlineEditable
   }
 }
 `;

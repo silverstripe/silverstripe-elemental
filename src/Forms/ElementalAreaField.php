@@ -120,23 +120,6 @@ class ElementalAreaField extends GridField
         $schemaData['page-id'] = $pageId;
         $schemaData['elemental-area-id'] = $area ? $area->ID : null;
 
-        $blockTypes = [];
-
-        // Use the internal (temporary) provider to get cached tab names.
-        /** @var ElementTabProvider $tabProvider */
-        $tabProvider = Injector::inst()->get(ElementTabProvider::class);
-
-        foreach ($this->getTypes() as $className => $blockTitle) {
-            $blockTypes[] = [
-                'name' => str_replace('\\', '-', $className),
-                'title' => $blockTitle,
-                'icon' => Config::inst()->get($className, 'icon'),
-                'tabs' => $tabProvider->getTabsForElement($className),
-            ];
-        }
-
-        $schemaData['element-types'] = $blockTypes;
-        $schemaData['base-add-href'] = Controller::join_links($this->Link(), 'add-multi-class');
         return $schemaData;
     }
 

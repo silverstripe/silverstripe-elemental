@@ -10,15 +10,19 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('Header', () => {
   const ElementActionsComponent = () => <div />;
-  const testTabs = ['Content', 'Settings', 'History'];
   const element = {
     ID: '0',
-    InlineEditable: true,
     Title: 'Sample File Block',
-    BlockSchema: {
-      type: 'File',
-      iconClass: 'font-icon-block-file',
-    },
+  };
+  const type = {
+    inlineEditable: true,
+      title: 'File',
+      icon: 'font-icon-block-file',
+      editTabs: [
+        { name: 'content', title: 'Content' },
+        { name: 'settings', title: 'Settings' },
+        { name: 'history', title: 'History' },
+      ],
   };
 
   describe('render()', () => {
@@ -27,6 +31,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          type={type}
           ElementActionsComponent={ElementActionsComponent}
         />
       );
@@ -40,7 +45,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
-          editTabs={testTabs}
+          type={type}
           ElementActionsComponent={ElementActionsComponent}
         />
       );
@@ -53,7 +58,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
-          editTabs={testTabs}
+          type={type}
           ElementActionsComponent={ElementActionsComponent}
         />
       );
@@ -67,6 +72,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          type={type}
           expandable={false}
           ElementActionsComponent={ElementActionsComponent}
         />
@@ -81,6 +87,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          type={type}
           expandable
           previewExpanded={false}
           ElementActionsComponent={ElementActionsComponent}
@@ -96,6 +103,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          type={type}
           expandable
           previewExpanded
           ElementActionsComponent={ElementActionsComponent}
@@ -111,6 +119,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          type={type}
           expandable
           ElementActionsComponent={ElementActionsComponent}
         />
@@ -123,6 +132,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          type={type}
           expandable={false}
           ElementActionsComponent={ElementActionsComponent}
         />
@@ -139,6 +149,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          type={type}
           ElementActionsComponent={ElementActionsComponent}
         />
       );
@@ -153,6 +164,7 @@ describe('Header', () => {
       element.IsLiveVersion = false;
       const wrapper = shallow(
         <Header
+          type={type}
           ElementActionsComponent={ElementActionsComponent}
           element={element}
         />
@@ -168,6 +180,7 @@ describe('Header', () => {
       element.IsLiveVersion = true;
       const wrapper = shallow(
         <Header
+          type={type}
           ElementActionsComponent={ElementActionsComponent}
           element={element}
         />
