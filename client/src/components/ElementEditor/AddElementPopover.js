@@ -15,7 +15,6 @@ class AddElementPopover extends Component {
     super(props);
 
     this.handleToggle = this.handleToggle.bind(this);
-    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
   /**
@@ -32,7 +31,8 @@ class AddElementPopover extends Component {
       } = this.props;
 
       event.preventDefault();
-      handleAddElementToArea(elementType.name.replace(/-/g, '\\'), elementalAreaId, insertAfterElement).then(
+      // TODO This should probably use the GraphQL element type name (element.__typeName)
+      handleAddElementToArea(elementType.class, elementalAreaId, insertAfterElement).then(
         () => {
           const preview = window.jQuery('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -61,14 +61,6 @@ class AddElementPopover extends Component {
     const { toggle } = this.props;
 
     toggle();
-  }
-
-  handleButtonClick(button) {
-    const { baseAddHref } = this.props;
-    return (event) => {
-      event.stopPropagation();
-      window.location = `${baseAddHref}/${button.key}`;
-    };
   }
 
   /**
@@ -110,7 +102,7 @@ class AddElementPopover extends Component {
 
 AddElementPopover.propTypes = {
   container: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]),
-  elementTypes: PropTypes.arrayOf(elementTypeType),
+  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   extraClass: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
   isOpen: PropTypes.bool.isRequired,
   placement: PropTypes.string,

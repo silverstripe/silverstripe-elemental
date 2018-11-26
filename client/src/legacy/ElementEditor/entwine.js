@@ -4,6 +4,7 @@ import jQuery from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { loadComponent } from 'lib/Injector';
+import { getConfig } from 'state/editor/elementConfig';
 
 /**
  * Uses entwine to inject the HistoryViewer React component into the DOM, when used
@@ -15,12 +16,13 @@ jQuery.entwine('ss', ($) => {
       const context = {};
       const ElementEditorComponent = loadComponent('ElementEditor', context);
       const schemaData = this.data('schema');
+      const elementTypes = getConfig().elementTypes;
 
       const props = {
         fieldName: this.attr('name'),
         pageId: schemaData['page-id'],
         elementalAreaId: schemaData['elemental-area-id'],
-        elementTypes: schemaData['element-types'],
+        elementTypes,
       };
 
       ReactDOM.render(

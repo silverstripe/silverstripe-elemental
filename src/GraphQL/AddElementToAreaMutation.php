@@ -11,6 +11,7 @@ use InvalidArgumentException;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\GraphQL\MutationCreator;
 use SilverStripe\GraphQL\OperationResolver;
+use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 
 class AddElementToAreaMutation extends MutationCreator implements OperationResolver
 {
@@ -24,7 +25,7 @@ class AddElementToAreaMutation extends MutationCreator implements OperationResol
 
     public function type()
     {
-        return $this->manager->getType('Block');
+        return $this->manager->getType(StaticSchema::inst()->typeNameForDataObject(BaseElement::class));
     }
 
     public function args()
