@@ -1,5 +1,10 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { inject } from 'lib/Injector';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
+import { isDirty } from 'redux-form';
+import getFormState from 'lib/getFormState';
 
 class Content extends PureComponent {
   render() {
@@ -14,6 +19,7 @@ class Content extends PureComponent {
       activeTab,
       onFormInit,
       handleLoadingError,
+      formDirty,
     } = this.props;
 
     return (
@@ -37,6 +43,14 @@ class Content extends PureComponent {
             handleLoadingError={handleLoadingError}
           />
         }
+        {formDirty &&
+          <input
+            type="hidden"
+            name="change-tracker"
+            className="element-form-dirty-state"
+            value="1"
+          />
+        }
       </div>
     );
   }
@@ -55,12 +69,23 @@ Content.propTypes = {
 
 Content.defaultProps = {};
 
+function mapStateToProps(state, ownProps) {
+  const formName = loadElementFormStateName(ownProps.id);
+
+  return {
+    formDirty: isDirty(`element.${formName}`, getFormState)(state),
+  };
+}
+
 export { Content as Component };
 
-export default inject(
-  ['ElementSummary', 'ElementInlineEditForm'],
-  (SummaryComponent, InlineEditFormComponent) => ({
-    SummaryComponent, InlineEditFormComponent,
-  }),
-  () => 'ElementEditor.ElementList.Element'
+export default compose(
+  inject(
+    ['ElementSummary', 'ElementInlineEditForm'],
+    (SummaryComponent, InlineEditFormComponent) => ({
+      SummaryComponent, InlineEditFormComponent,
+    }),
+    () => 'ElementEditor.ElementList.Element'
+  ),
+  connect(mapStateToProps)
 )(Content);

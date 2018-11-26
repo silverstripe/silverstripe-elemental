@@ -101,7 +101,12 @@ class ElementEditor extends PureComponent {
           dragTargetElementId={dragTargetElementId}
         />
         <ElementDragPreview />
-        <input name={fieldName} type="hidden" value={JSON.stringify(formState) || ''} />
+        <input
+          name={fieldName}
+          type="hidden"
+          value={JSON.stringify(formState) || ''}
+          className="no-change-track"
+        />
       </div>
     );
   }
