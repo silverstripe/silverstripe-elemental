@@ -6,10 +6,18 @@ use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\ORM\DataList;
 use SilverStripe\Reports\Report;
+use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 
 class ElementsInUseReport extends Report
 {
+    /**
+     * The string used in GET params to filter the records in this report by element type
+     *
+     * @var string
+     */
+    const CLASS_NAME_FILTER_KEY = 'ClassName';
+
     public function title()
     {
         return _t(__CLASS__ . '.ReportTitle', 'Content blocks in use');
@@ -20,8 +28,8 @@ class ElementsInUseReport extends Report
         /** @var DataList $elements */
         $elements = BaseElement::get()->exclude(['ClassName' => BaseElement::class]);
 
-        if (isset($params['ClassName'])) {
-            $className = $this->unsanitiseClassName($params['ClassName']);
+        if (isset($params[static::CLASS_NAME_FILTER_KEY])) {
+            $className = $this->unsanitiseClassName($params[static::CLASS_NAME_FILTER_KEY]);
             $elements = $elements->filter(['ClassName' => $className]);
         }
 
@@ -107,6 +115,30 @@ class ElementsInUseReport extends Report
         $field->addExtraClass('elemental-report__grid-field');
 
         return $field;
+    }
+
+    /**
+     * When used with silverstripe/reports >= 4.4, this method will automatically be added as breadcrumbs
+     * leading up to this report.
+     *
+     * @return ArrayData[]
+     */
+    public function getBreadcrumbs()
+    {
+        $params = $this->getSourceParams();
+
+        // Only apply breadcrumbs if a "ClassName" filter is applied. This implies that we came from the
+        // "element type report".
+        if (!isset($params[static::CLASS_NAME_FILTER_KEY])) {
+            return [];
+        }
+
+        $report = ElementTypeReport::create();
+
+        return [ArrayData::create([
+            'Title' => $report->title(),
+            'Link' => $report->getLink(),
+        ])];
     }
 
     /**

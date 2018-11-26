@@ -62,7 +62,8 @@ class ElementTypeReport extends Report
 
     public function columns()
     {
-        $inUseReport = new ElementsInUseReport;
+        // Get from Injector so substitutions are used...
+        $inUseReport = ElementsInUseReport::singleton();
 
         return [
             'Icon' => [
@@ -73,7 +74,9 @@ class ElementTypeReport extends Report
                 'formatting' => function ($value, $item) use ($inUseReport) {
                     return sprintf(
                         '<a class="grid-field__link" href="%s" title="%s">%s</a>',
-                        $inUseReport->getLink('?filters[ClassName]='. $item->ClassName),
+                        $inUseReport->getLink(
+                            '?filters[' . $inUseReport::CLASS_NAME_FILTER_KEY . ']=' . $item->ClassName
+                        ),
                         $item->Type,
                         $item->TypeNice
                     );
