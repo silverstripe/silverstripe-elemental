@@ -83,7 +83,7 @@ class ElementsInUseReport extends Report
      * @param BaseElement $item
      * @return string
      */
-    protected function getEditLink($value, $item)
+    protected function getEditLink($value, BaseElement $item)
     {
         return sprintf(
             '<a class="grid-field__link" href="%s" title="%s">%s</a>',
