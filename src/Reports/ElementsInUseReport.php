@@ -13,6 +13,8 @@ class ElementsInUseReport extends Report
 {
     /**
      * The string used in GET params to filter the records in this report by element type
+     *
+     * @var string
      */
     const CLASS_NAME_FILTER_KEY = 'ClassName';
 
@@ -116,7 +118,7 @@ class ElementsInUseReport extends Report
     }
 
     /**
-     * When used with newer versions of silverstripe-reports this method will automatically be added as breadcrumbs
+     * When used with silverstripe/reports >= 4.4, this method will automatically be added as breadcrumbs
      * leading up to this report.
      *
      * @return ArrayData[]
