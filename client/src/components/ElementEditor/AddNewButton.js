@@ -27,9 +27,9 @@ class AddNewButton extends Component {
    * @returns {DOMElement}
    */
   render() {
-    const { AddElementPopoverComponent, elementTypes, elementalAreaId } = this.props;
+    const { AddElementPopoverComponent, elementTypes, areaId } = this.props;
     const buttonAttributes = {
-      id: `ElementalArea${elementalAreaId}_AddButton`,
+      id: `ElementalArea${areaId}_AddButton`,
       color: 'primary',
       onClick: this.toggle,
       className: 'font-icon-plus',
@@ -46,7 +46,7 @@ class AddNewButton extends Component {
           isOpen={this.state.popoverOpen}
           elementTypes={elementTypes}
           toggle={this.toggle}
-          elementalAreaId={elementalAreaId}
+          areaId={areaId}
           insertAfterElement={0}
         />
       </div>
@@ -57,7 +57,7 @@ class AddNewButton extends Component {
 AddNewButton.defaultProps = {};
 AddNewButton.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  elementalAreaId: PropTypes.number.isRequired,
+  areaId: PropTypes.number.isRequired,
 };
 
 export { AddNewButton as Component };

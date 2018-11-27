@@ -5,25 +5,22 @@ import gql from 'graphql-tag';
 // ElementalAreaIfExists. The results of the query must be set to the "blocks" prop on
 // the component that this HOC is applied to for binding implementation.
 const query = gql`
-query ReadBlocksForPage($id:ID!) {
-  readOnePage(ID: $id, Versioning: {
+query ReadBlocksForArea($id:ID!) {
+  readOneElementalArea(ID: $id, Versioning: {
     Mode: DRAFT
   }){
-    ID
-    ElementalAreaIfExists {
-      Elements {
-        pageInfo {
-          totalCount
-        }
-        edges {
-          node {
-            ID
-            Title
-            BlockSchema
-            IsLiveVersion
-            IsPublished
-            Version
-          }
+    Elements {
+      pageInfo {
+        totalCount
+      }
+      edges {
+        node {
+          ID
+          Title
+          BlockSchema
+          IsLiveVersion
+          IsPublished
+          Version
         }
       }
     }
@@ -32,10 +29,10 @@ query ReadBlocksForPage($id:ID!) {
 `;
 
 const config = {
-  options({ pageId }) {
+  options({ areaId }) {
     return {
       variables: {
-        id: pageId,
+        id: areaId,
       }
     };
   },
@@ -43,15 +40,15 @@ const config = {
     {
       data: {
         error,
-        readOnePage,
+        readOneElementalArea,
         loading: networkLoading,
       },
     }
   ) {
     let blocks = null;
-    if (readOnePage) {
+    if (readOneElementalArea) {
       // Remove the GraphQL pagination keys
-      blocks = readOnePage.ElementalAreaIfExists.Elements.edges.map((element) => element.node);
+      blocks = readOneElementalArea.Elements.edges.map((element) => element.node);
     }
 
     const errors = error && error.graphQLErrors &&

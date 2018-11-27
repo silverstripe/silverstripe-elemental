@@ -27,13 +27,12 @@ class AddElementPopover extends Component {
     return (event) => {
       const {
         actions: { handleAddElementToArea },
-        elementalAreaId,
         insertAfterElement
       } = this.props;
 
       event.preventDefault();
       // TODO This should probably use the GraphQL element type name (element.__typeName)
-      handleAddElementToArea(elementType.class, elementalAreaId, insertAfterElement).then(
+      handleAddElementToArea(elementType.class, insertAfterElement).then(
         () => {
           const preview = window.jQuery('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -109,7 +108,8 @@ AddElementPopover.propTypes = {
   placement: PropTypes.string,
   target: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]).isRequired,
   toggle: PropTypes.func.isRequired,
-  elementalAreaId: PropTypes.number.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  areaId: PropTypes.number.isRequired,
   insertAfterElement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 

@@ -5,6 +5,7 @@
   margin-right: -$panel-padding-x;
   min-height: 6rem;
   position: relative;
+  margin-bottom: $form-group-margin-bottom;
 
   &--empty {
     display: flex;

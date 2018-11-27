@@ -34,7 +34,7 @@ class ElementList extends Component {
       DragIndicatorComponent,
       blocks,
       elementTypes,
-      elementalAreaId,
+      areaId,
       onDragEnd,
       onDragOver,
       onDragStart,
@@ -61,7 +61,7 @@ class ElementList extends Component {
           onDragStart={onDragStart}
         />
         {isDraggingOver || <HoverBarComponent
-          elementalAreaId={elementalAreaId}
+          areaId={areaId}
           elementId={element.ID}
           elementTypes={elementTypes}
         />}
@@ -111,7 +111,7 @@ ElementList.propTypes = {
   blocks: PropTypes.arrayOf(elementType),
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   loading: PropTypes.bool,
-  elementalAreaId: PropTypes.number.isRequired,
+  areaId: PropTypes.number.isRequired,
   dragTargetElementId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onDragOver: PropTypes.func,
   onDragStart: PropTypes.func,

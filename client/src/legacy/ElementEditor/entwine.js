@@ -21,8 +21,7 @@ jQuery.entwine('ss', ($) => {
 
       const props = {
         fieldName: this.attr('name'),
-        pageId: schemaData['page-id'],
-        elementalAreaId: schemaData['elemental-area-id'],
+        areaId: schemaData['elemental-area-id'],
         elementTypes,
       };
 

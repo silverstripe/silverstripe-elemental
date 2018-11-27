@@ -2,7 +2,7 @@ import Injector from 'lib/Injector';
 import readOneBlockQuery from 'state/history/readOneBlockQuery';
 import HistoricElementViewFactory from 'components/HistoricElementView/HistoricElementView';
 import revertToBlockVersionMutation from 'state/history/revertToBlockVersionMutation';
-import readBlocksForPageQuery from 'state/editor/readBlocksForPageQuery';
+import readBlocksForAreaQuery from 'state/editor/readBlocksForAreaQuery';
 import addElementToArea from 'state/editor/addElementMutation';
 import ArchiveAction from 'components/ElementActions/ArchiveAction';
 import PublishAction from 'components/ElementActions/PublishAction';
@@ -54,7 +54,7 @@ export default () => {
       // Add GraphQL query for reading elements on a page for the ElementEditor
       updater.component(
         'ElementList',
-        readBlocksForPageQuery,
+        readBlocksForAreaQuery,
         'PageElements'
       );
     }

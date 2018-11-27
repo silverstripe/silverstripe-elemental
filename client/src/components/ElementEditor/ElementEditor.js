@@ -55,9 +55,9 @@ class ElementEditor extends PureComponent {
    * @param afterId
    */
   handleDragEnd(sourceId, afterId) {
-    const { actions: { handleSortBlock }, pageId } = this.props;
+    const { actions: { handleSortBlock }, areaId } = this.props;
 
-    handleSortBlock(sourceId, afterId, pageId);
+    handleSortBlock(sourceId, afterId, areaId);
 
     this.setState({
       dragTargetElementId: null,
@@ -71,8 +71,7 @@ class ElementEditor extends PureComponent {
       formState,
       ToolbarComponent,
       ListComponent,
-      pageId,
-      elementalAreaId,
+      areaId,
       elementTypes,
       isDraggingOver,
       connectDropTarget,
@@ -87,13 +86,12 @@ class ElementEditor extends PureComponent {
       <div className={classNames}>
         <ToolbarComponent
           elementTypes={elementTypes}
-          elementalAreaId={elementalAreaId}
+          areaId={areaId}
           onDragOver={this.handleDragOver}
         />
         <ListComponent
           elementTypes={elementTypes}
-          pageId={pageId}
-          elementalAreaId={elementalAreaId}
+          areaId={areaId}
           onDragOver={this.handleDragOver}
           onDragStart={this.handleDragStart}
           onDragEnd={this.handleDragEnd}
@@ -116,8 +114,7 @@ class ElementEditor extends PureComponent {
 ElementEditor.propTypes = {
   fieldName: PropTypes.string,
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  pageId: PropTypes.number.isRequired,
-  elementalAreaId: PropTypes.number.isRequired,
+  areaId: PropTypes.number.isRequired,
   actions: PropTypes.shape({
     handleSortBlock: PropTypes.func,
   }),
