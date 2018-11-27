@@ -28,11 +28,6 @@ SilverStripe\GraphQL\Manager:
                 resolver: DNADesign\Elemental\GraphQL\ElementsResolver
             operations:
               readOne: true
-          # Expose ElementalAreaIfExists (a consistently available API proxy for ElementalArea)
-          SilverStripe\CMS\Model\SiteTree:
-            fields: [ID, ElementalAreaIfExists]
-            operations:
-              readOne: true
           # Basic member information is required for history views
           SilverStripe\Security\Member:
             fields: [ID, FirstName, Surname]

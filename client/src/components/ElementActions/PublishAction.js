@@ -64,8 +64,7 @@ const performSaveForElementWithFormData = (id, formData, securityId) => {
     .then((newPageData) => {
       const newElementData = newPageData[0] && newPageData[0]
         .data
-        .readOnePage
-        .ElementalAreaIfExists
+        .readOneElementalArea
         .Elements
         .edges
         .find((elementData) => elementData.node.ID === id);

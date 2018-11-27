@@ -1,9 +1,9 @@
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-// GraphQL query for retrieving the current state of elements for a page, via the
-// ElementalAreaIfExists. The results of the query must be set to the "blocks" prop on
-// the component that this HOC is applied to for binding implementation.
+// GraphQL query for retrieving the current state of elements for an area. The results of the query
+// must be set to the "blocks" prop on the component that this HOC is applied to for binding
+// implementation.
 const query = gql`
 query ReadBlocksForArea($id:ID!) {
   readOneElementalArea(ID: $id, Versioning: {
