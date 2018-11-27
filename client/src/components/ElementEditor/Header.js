@@ -87,6 +87,7 @@ class Header extends Component {
     const {
       element,
       type,
+      areaId,
       previewExpanded,
       simple,
       disableTooltip,
@@ -148,6 +149,7 @@ class Header extends Component {
             >
               <ElementActionsComponent
                 element={element}
+                areaId={areaId}
                 activeTab={activeTab}
                 editTabs={type.editTabs}
                 handleEditTabsClick={handleEditTabsClick}
@@ -163,6 +165,7 @@ class Header extends Component {
 
 Header.propTypes = {
   element: elementType.isRequired,
+  areaId: PropTypes.number.isRequired,
   type: elementTypeType.isRequired,
   activeTab: PropTypes.string,
   simple: PropTypes.bool,

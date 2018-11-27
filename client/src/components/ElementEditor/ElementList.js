@@ -54,6 +54,7 @@ class ElementList extends Component {
       <div key={element.ID}>
         <ElementComponent
           element={element}
+          areaId={areaId}
           type={getElementTypeConfig(element.BlockSchema.typeName, elementTypes)}
           link={element.BlockSchema.actions.edit}
           onDragOver={onDragOver}

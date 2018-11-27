@@ -31,6 +31,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          areaId={1}
           type={type}
           ElementActionsComponent={ElementActionsComponent}
         />
@@ -45,6 +46,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          areaId={1}
           type={type}
           ElementActionsComponent={ElementActionsComponent}
         />
@@ -58,6 +60,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          areaId={1}
           type={type}
           ElementActionsComponent={ElementActionsComponent}
         />
@@ -72,6 +75,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          areaId={1}
           type={type}
           expandable={false}
           ElementActionsComponent={ElementActionsComponent}
@@ -87,6 +91,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          areaId={1}
           type={type}
           expandable
           previewExpanded={false}
@@ -103,6 +108,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          areaId={1}
           type={type}
           expandable
           previewExpanded
@@ -119,6 +125,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          areaId={1}
           type={type}
           expandable
           ElementActionsComponent={ElementActionsComponent}
@@ -132,6 +139,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          areaId={1}
           type={type}
           expandable={false}
           ElementActionsComponent={ElementActionsComponent}
@@ -149,6 +157,7 @@ describe('Header', () => {
       const wrapper = shallow(
         <Header
           element={element}
+          areaId={1}
           type={type}
           ElementActionsComponent={ElementActionsComponent}
         />
@@ -164,6 +173,7 @@ describe('Header', () => {
       element.IsLiveVersion = false;
       const wrapper = shallow(
         <Header
+          areaId={1}
           type={type}
           ElementActionsComponent={ElementActionsComponent}
           element={element}
@@ -180,6 +190,7 @@ describe('Header', () => {
       element.IsLiveVersion = true;
       const wrapper = shallow(
         <Header
+          areaId={1}
           type={type}
           ElementActionsComponent={ElementActionsComponent}
           element={element}

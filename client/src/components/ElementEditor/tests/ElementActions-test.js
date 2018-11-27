@@ -21,6 +21,7 @@ describe('ElementActions', () => {
     it('should map input tabs into an array of buttons', () => {
       const wrapper = shallow(
         <ElementActions
+          areaId={1}
           editTabs={testTabs}
           ActionMenuComponent={ActionMenuComponent}
         />
@@ -38,6 +39,7 @@ describe('ElementActions', () => {
     it('should render the given "edit tabs" in the action menu', () => {
       const wrapper = shallow(
         <ElementActions
+          areaId={1}
           editTabs={testTabs}
           ActionMenuComponent={ActionMenuComponent}
         />
@@ -55,6 +57,7 @@ describe('ElementActions', () => {
     it('should render a divider when CMS tab actions and default actions are rendered', () => {
       const wrapper = shallow(
         <ElementActions
+          areaId={1}
           editTabs={testTabs}
           ActionMenuComponent={ActionMenuComponent}
         >

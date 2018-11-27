@@ -49,6 +49,7 @@ describe('Element', () => {
       const wrapper = shallow(
         <Element
           element={element}
+          areaId={1}
           type={type}
           link={'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'}
           {...defaultProps}
@@ -66,6 +67,7 @@ describe('Element', () => {
             ...element,
             ID: ''
           }}
+          areaId={1}
           type={type}
           link={'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'}
           {...defaultProps}
@@ -86,6 +88,7 @@ describe('Element', () => {
             ...element,
             IsPublished: false,
           }}
+          areaId={1}
           type={type}
           link="/"
           {...defaultProps}
@@ -103,6 +106,7 @@ describe('Element', () => {
             IsPublished: true,
             IsLiveVersion: false,
           }}
+          areaId={1}
           type={type}
           link="/"
           {...defaultProps}
@@ -120,6 +124,7 @@ describe('Element', () => {
             IsPublished: true,
             IsLiveVersion: true,
           }}
+          areaId={1}
           type={type}
           link="/"
           {...defaultProps}

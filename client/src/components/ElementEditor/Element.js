@@ -171,6 +171,7 @@ class Element extends Component {
     const {
       element,
       type,
+      areaId,
       HeaderComponent,
       ContentComponent,
       link,
@@ -215,6 +216,7 @@ class Element extends Component {
         <HeaderComponent
           element={element}
           type={type}
+          areaId={areaId}
           expandable={type.inlineEditable}
           link={link}
           previewExpanded={previewExpanded}
@@ -283,6 +285,7 @@ function mapDispatchToProps(dispatch, ownProps) {
 Element.propTypes = {
   element: elementType,
   type: elementTypeType.isRequired,
+  areaId: PropTypes.number.isRequired,
   link: PropTypes.string.isRequired,
   // Redux mapped props:
   activeTab: PropTypes.string,
