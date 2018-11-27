@@ -13,6 +13,7 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\ORM\DataObjectInterface;
@@ -148,11 +149,6 @@ class ElementalAreaField extends GridField
             // Set values (before names don't match anymore)
             $elementFields->setValues($element->getQueriedDatabaseFields());
 
-            // Ensure field names are unique between elements on parent form
-            $elementFields->recursiveWalk(function ($field) use ($parentName) {
-                $field->setName($parentName . '_' . $field->getName());
-            });
-
             // Combine into an appropriately named group
             $elementGroup = FieldGroup::create($elementFields);
             $elementGroup->setForm($this->getForm());
@@ -192,6 +188,17 @@ class ElementalAreaField extends GridField
         );
 
         $readOnlyField = $readOnlyField->performReadonlyTransformation();
+
+        // Ensure field names are unique between elements on parent form but only after transformations have been
+        // performed
+        /** @var FieldGroup $elementForm */
+        foreach ($readOnlyField->getChildren() as $elementForm) {
+            $parentName = $elementForm->getName();
+            $elementForm->getChildren()->recursiveWalk(function (FormField $field) use ($parentName) {
+                $field->setName($parentName . '_' . $field->getName());
+            });
+        }
+
         return $readOnlyField
             ->setReadOnly(true)
             ->setName($this->getName())

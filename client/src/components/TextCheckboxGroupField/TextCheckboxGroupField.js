@@ -5,11 +5,21 @@ import fieldHolder from 'components/FieldHolder/FieldHolder';
 const TextCheckboxGroupField = (props) => {
   const { children } = props;
 
+  // Map out the children and clone to set the "noHolder" prop on them.
   const childrenWithProps = React.Children.toArray(
     React.Children.map(children, child =>
       React.cloneElement(child, { noHolder: true })
     )
   );
+
+  // If readonly we'll just show two literal fields next to each other
+  if (props.readOnly) {
+    return (
+      <div className="text-checkbox-group-field--read-only">
+        {childrenWithProps}
+      </div>
+    );
+  }
 
   // If the checkbox has been removed, just render the TextField on its own
   if (childrenWithProps.length === 1) {
@@ -17,7 +27,7 @@ const TextCheckboxGroupField = (props) => {
   }
 
   return (
-    <InputGroup className="text-checkout-group-field">
+    <InputGroup className="text-checkbox-group-field">
       {childrenWithProps[0]}
       <InputGroupAddon addonType="append">
         <InputGroupText>{childrenWithProps[1]}</InputGroupText>

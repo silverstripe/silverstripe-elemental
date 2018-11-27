@@ -299,10 +299,7 @@ class BaseElement extends DataObject
             $fields->removeByName('ShowTitle');
             $fields->replaceField(
                 'Title',
-                TextCheckboxGroupField::create(
-                    TextField::create('Title', _t(__CLASS__ . '.TitleLabel', 'Title (displayed if checked)')),
-                    CheckboxField::create('ShowTitle', _t(__CLASS__ . '.ShowTitleLabel', 'Displayed'))
-                )
+                TextCheckboxGroupField::create()
                     ->setName('Title')
             );
 

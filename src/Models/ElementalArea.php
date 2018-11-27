@@ -13,7 +13,6 @@ use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\ORM\HasManyList;
 use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
 
@@ -22,8 +21,6 @@ use SilverStripe\Versioned\Versioned;
  * @package DNADesign\Elemental\Models
  *
  * @property string $OwnerClassName
- *
- * @method HasManyList|BaseElement[] Elements()
  */
 class ElementalArea extends DataObject
 {

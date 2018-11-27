@@ -2,7 +2,10 @@
 
 namespace DNADesign\Elemental\Forms;
 
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\CompositeField;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\TextField;
 
 class TextCheckboxGroupField extends CompositeField
 {
@@ -11,13 +14,22 @@ class TextCheckboxGroupField extends CompositeField
     /**
      * Set the composite's title to that of the first child
      *
-     * {@inheritDoc}
+     * @param string|null $title
      */
-    public function __construct(...$children)
+    public function __construct($title = null)
     {
-        parent::__construct($children);
+        if (!$title) {
+            $title = _t(__CLASS__ . '.TitleLabel', 'Title (displayed if checked)');
+        }
 
-        $this->setTitle($this->getChildren()->first()->Title());
+        $fields = [
+            TextField::create('Title', $title),
+            CheckboxField::create('ShowTitle', _t(__CLASS__ . '.ShowTitleLabel', 'Displayed'))
+        ];
+
+        parent::__construct($fields);
+
+        $this->setTitle($title);
     }
 
     /**
@@ -30,7 +42,16 @@ class TextCheckboxGroupField extends CompositeField
         $field = parent::performReadonlyTransformation();
 
         $field->setTemplate(CompositeField::class);
-        $field->setTitle(null);
+        $field->setTitle('Title');
+
+        $field->replaceField('Title', LiteralField::create(
+            'Title',
+            $field->fieldByName('Title')->Value()
+        ));
+        $field->replaceField('ShowTitle', LiteralField::create(
+            'ShowTitle',
+            $field->fieldByName('ShowTitle')->Value() ? 'Displayed' : 'Not displayed'
+        )->addExtraClass('show-title'));
 
         return $field;
     }
