@@ -226,7 +226,7 @@ class ElementalArea extends DataObject
 
             $areaIDFilters = [];
             foreach ($instance->getElementalRelations() as $eaRelationship) {
-	            $areaIDFilters[$eaRelationship . 'ID'] = $this->ID;
+                $areaIDFilters[$eaRelationship . 'ID'] = $this->ID;
             }
 
             try {
