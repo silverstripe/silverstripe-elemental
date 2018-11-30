@@ -187,6 +187,11 @@ class ElementalArea extends DataObject
      */
     public function getOwnerPage()
     {
+        // You can't find the owner page of a area that hasn't been save yet
+        if ($this->ID == 0) {
+            return null;
+        }
+
         // Allow for repeated calls to read from cache
         if (isset($this->cacheData['owner_page'])) {
             return $this->cacheData['owner_page'];
@@ -218,31 +223,32 @@ class ElementalArea extends DataObject
             if (!ClassInfo::hasMethod($instance, 'getElementalRelations')) {
                 return null;
             }
-            $elementalAreaRelations = $instance->getElementalRelations();
 
-            foreach ($elementalAreaRelations as $eaRelationship) {
-                $areaID = $eaRelationship . 'ID';
-                try {
-                    $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filter($areaID, $this->ID)->first();
-                } catch (\Exception $ex) {
-                    // Usually this is catching cases where test stubs from other modules are trying to be loaded
-                    // and failing in unit tests.
-                    if (in_array(TestOnly::class, class_implements($class))) {
-                        continue;
-                    }
-                    // Continue as normal...
-                    throw $ex;
+            $areaIDFilters = [];
+            foreach ($instance->getElementalRelations() as $eaRelationship) {
+	            $areaIDFilters[$eaRelationship . 'ID'] = $this->ID;
+            }
+
+            try {
+                $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filterAny($areaIDFilters)->first();
+            } catch (\Exception $ex) {
+                // Usually this is catching cases where test stubs from other modules are trying to be loaded
+                // and failing in unit tests.
+                if (in_array(TestOnly::class, class_implements($class))) {
+                    continue;
+                }
+                // Continue as normal...
+                throw $ex;
+            }
+
+            if ($page) {
+                if ($this->OwnerClassName !== $class) {
+                    $this->OwnerClassName = $class;
+                    $this->write();
                 }
 
-                if ($page) {
-                    if ($this->OwnerClassName !== $class) {
-                        $this->OwnerClassName = $class;
-                        $this->write();
-                    }
-
-                    $this->cacheData['area_relation_name'] = $page;
-                    return $page;
-                }
+                $this->cacheData['area_relation_name'] = $page;
+                return $page;
             }
         }
 
