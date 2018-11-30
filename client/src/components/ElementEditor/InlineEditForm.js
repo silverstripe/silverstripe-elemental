@@ -1,5 +1,6 @@
 /* global window */
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import FormBuilderLoader from 'containers/FormBuilderLoader/FormBuilderLoader';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';

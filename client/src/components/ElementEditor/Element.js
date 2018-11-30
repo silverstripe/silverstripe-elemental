@@ -1,6 +1,7 @@
 /* global window */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { elementType } from 'types/elementType';
 import { elementTypeType } from 'types/elementTypeType';
 import { compose } from 'redux';

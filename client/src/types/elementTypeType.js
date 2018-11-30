@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 
 // Describes the structure of an element type:
 const elementTypeType = PropTypes.shape({
