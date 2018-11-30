@@ -103,7 +103,9 @@ ElementActions.propTypes = {
   editTabs: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     name: PropTypes.string,
-  })), };
+  })),
+  handleEditTabsClick: PropTypes.func.isRequired,
+};
 
 ElementActions.defaultProps = {
   editTabs: [],

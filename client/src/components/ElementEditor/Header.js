@@ -92,6 +92,7 @@ class Header extends Component {
       activeTab,
       expandable,
       ElementActionsComponent,
+      handleEditTabsClick,
     } = this.props;
 
     const noTitle = i18n.inject(
@@ -148,6 +149,7 @@ class Header extends Component {
                 element={element}
                 activeTab={activeTab}
                 editTabs={type.editTabs}
+                handleEditTabsClick={handleEditTabsClick}
               />
             </div>
           }
