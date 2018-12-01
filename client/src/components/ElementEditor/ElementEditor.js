@@ -99,7 +99,7 @@ class ElementEditor extends PureComponent {
           isDraggingOver={isDraggingOver}
           dragTargetElementId={dragTargetElementId}
         />
-        <ElementDragPreview />
+        <ElementDragPreview elementTypes={elementTypes} />
         <input
           name={fieldName}
           type="hidden"

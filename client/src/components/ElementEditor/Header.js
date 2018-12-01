@@ -165,8 +165,8 @@ class Header extends Component {
 
 Header.propTypes = {
   element: elementType.isRequired,
-  areaId: PropTypes.number.isRequired,
   type: elementTypeType.isRequired,
+  areaId: PropTypes.number,
   activeTab: PropTypes.string,
   simple: PropTypes.bool,
   ElementActionsComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
