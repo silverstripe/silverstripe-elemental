@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { inject } from 'lib/Injector';
 import { compose } from 'redux';
 import { connect } from 'react-redux';

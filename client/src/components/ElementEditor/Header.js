@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
 import { elementType } from 'types/elementType';
 import { elementTypeType } from 'types/elementTypeType';
@@ -165,7 +166,7 @@ Header.propTypes = {
   type: elementTypeType.isRequired,
   activeTab: PropTypes.string,
   simple: PropTypes.bool,
-  ElementActionsComponent: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
+  ElementActionsComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   previewExpanded: PropTypes.bool,
   disableTooltip: PropTypes.bool,
   formDirty: PropTypes.bool,
