@@ -28,7 +28,7 @@ describe('ElementEditor', () => {
         <ElementEditor
           ToolbarComponent={ToolbarComponent}
           ListComponent={ListComponent}
-          pageId={8}
+          areaId={8}
           elementTypes={[testElementType]}
           elementalAreaId={1}
           connectDropTarget={connectDropTarget}

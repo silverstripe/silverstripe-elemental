@@ -97,9 +97,12 @@ class ElementActions extends Component {
   }
 }
 
+// There's some extra prop types in here for registered transformations to consume
 ElementActions.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   element: elementType,
+  // eslint-disable-next-line react/no-unused-prop-types
+  areaId: PropTypes.number.isRequired,
   activeTab: PropTypes.string,
   editTabs: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,

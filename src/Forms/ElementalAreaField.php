@@ -119,7 +119,7 @@ class ElementalAreaField extends GridField
         $area = $this->getArea();
         $pageId = ($area && ($page = $area->getOwnerPage())) ? $page->ID : null;
         $schemaData['page-id'] = $pageId;
-        $schemaData['elemental-area-id'] = $area ? $area->ID : null;
+        $schemaData['elemental-area-id'] = $area ? (int) $area->ID : null;
 
         return $schemaData;
     }

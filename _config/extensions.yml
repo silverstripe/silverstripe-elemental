@@ -1,6 +1,0 @@
----
-Name: elementalextensions
----
-SilverStripe\CMS\Model\SiteTree:
-  extensions:
-    - DNADesign\Elemental\Extensions\SiteTreeExtension
