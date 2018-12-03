@@ -188,7 +188,7 @@ class ElementalArea extends DataObject
     public function getOwnerPage()
     {
         // You can't find the owner page of a area that hasn't been save yet
-        if ($this->ID == 0) {
+        if (!$this->isInDB()) {
             return null;
         }
 
