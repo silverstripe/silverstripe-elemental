@@ -13,6 +13,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataObject;
 
 /**
  * This extension handles most of the relationships between pages and element
@@ -199,16 +200,7 @@ class ElementalAreasExtension extends DataExtension
 
         $elementalAreaRelations = $this->owner->getElementalRelations();
 
-        foreach ($elementalAreaRelations as $eaRelationship) {
-            $areaID = $eaRelationship . 'ID';
-
-            if (!$this->owner->$areaID) {
-                $area = ElementalArea::create();
-                $area->OwnerClassName = $this->owner->ClassName;
-                $area->write();
-                $this->owner->$areaID = $area->ID;
-            }
-        }
+        $this->ensureElementalAreasExist($elementalAreaRelations);
 
         if (Config::inst()->get(self::class, 'clear_contentfield')) {
             $this->owner->Content = '';
@@ -239,5 +231,53 @@ class ElementalAreasExtension extends DataExtension
         }
 
         return true;
+    }
+
+    /**
+     * Set all has_one relationships to an ElementalArea to a valid ID if they're unset
+     *
+     * @param array $elementalAreaRelations indexed array of relationship names that are to ElementalAreas
+     * @return DataObject
+     */
+    public function ensureElementalAreasExist($elementalAreaRelations)
+    {
+        foreach ($elementalAreaRelations as $eaRelationship) {
+            $areaID = $eaRelationship . 'ID';
+
+            if (!$this->owner->$areaID) {
+                $area = ElementalArea::create();
+                $area->OwnerClassName = get_class($this->owner);
+                $area->write();
+                $this->owner->$areaID = $area->ID;
+            }
+        }
+        return $this->owner;
+    }
+
+    /**
+     * Extension hook {@see DataObject::requireDefaultRecords}
+     *
+     * @return void
+     */
+    public function requireDefaultRecords()
+    {
+        if (!$this->supportsElemental()) {
+            return;
+        }
+
+        $ownerClass = get_class($this->owner);
+        $tableName = $this->owner->getSchema()->tableName($ownerClass);
+        $elementalAreas = $this->owner->getElementalRelations();
+        $schema = $this->owner->getSchema();
+
+        // There is no inbuilt filter for null values
+        $where = [];
+        foreach ($elementalAreas as $areaName) {
+            $where[] = $schema->sqlColumnForField($ownerClass, $areaName . 'ID') . ' IS NULL';
+        }
+
+        foreach ($ownerClass::get()->where(implode(' OR ', $where)) as $elementalObject) {
+            $elementalObject->ensureElementalAreasExist($elementalAreas)->write();
+        }
     }
 }
