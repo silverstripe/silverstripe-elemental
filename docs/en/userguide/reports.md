@@ -1,4 +1,4 @@
-# Use the reports
+# Content block reports
 
 The [Elemental module](https://addons.silverstripe.org/add-ons/dnadesign/silverstripe-elemental) will add new
 reports to the **Reports** section of the CMS. These will allow you to identify and find content within blocks quickly.
@@ -16,10 +16,9 @@ You can select a content block type to view the ***Content blocks in use*** repo
 
 ## Content blocks in use
 
-Here you will be shown a more detailed overview of the content blocks in your system, which type they are and
-which page they were created on.
+Here you will be shown a more detailed overview of the content blocks in your system, which type they are and which page they were created on.
 
-Select any block title, or page name to enter Edit mode.
+Select any block title, or page name to enter **Edit mode**.
 
 ![Content blocks in use report](_images/report_in_use.png)
 

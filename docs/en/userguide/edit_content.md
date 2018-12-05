@@ -1,45 +1,72 @@
-# Creating and editing content
+# Before we begin
 
-To get started, create a new page in the CMS. For more information, see [Pages and content](https://userhelp.silverstripe.org) User help guide, to learn more.
+To get started, create a new page in the CMS. See [Pages and content](https://userhelp.silverstripe.org/en/4/creating_pages_and_content/) to learn more.
 
-## Creating new blocks
+## Creating and editing content
 
-Normally in the CMS a page has an HTML editor which allows you to enter content directly.
-You will notice that the HTML editor has been replaced with an empty list and a content block ***Select type to create*** dropdown field.
+Click the button ***Add block*** and select the type of block you want to create from the popover option set. You'll see that content block types are also searchable on open. To remove your search click the link ***Clear***.
 
-The block types shown in the dropdown field will depend on your set up. By default the [Elemental module](https://github.com/dnadesign/silverstripe-elemental) only comes with the content block type, **Content**.
+![Choose a block type to create](_images/creating_a_content_block.png)
 
-We’ve created the most functional and effective elements of content block modules that have been developed by the SilverStripe community and created four generic SilverStripe supported content block types:
+You'll see the content block type you selected appear in your main content area titled ***Untitled Content block***. If you forget the content block type you've added, hover on the block type icon to view a tooltip.
 
-* [Content:](https://github.com/dnadesign/silverstripe-elemental) text content (built-in).
-* [Banner:](https://github.com/silverstripe/silverstripe-elemental-bannerblock) banner with call-to-action and content.
-* [File:](https://github.com/silverstripe/silverstripe-elemental-fileblock) file and image block.
-* [Form:](https://github.com/dnadesign/silverstripe-elemental-userforms) integrates [silverstripe-userforms](silverstripe/silverstripe-userforms) and provides a new content block, which can be used to create user defined forms.
+![Content block tooltip](_images/tooltip.png)
 
-For examples of community content blocks see,
-[Getting more elements](https://github.com/dnadesign/silverstripe-elemental#getting-more-elements).
+Most blocks are directly editable from within the page allowing you to have easy access adding and editing blocks without switching page views.
 
-To get started, choose the type of block you want to create from the ***Select type to create*** dropdown field, and click the button ***Add***.
+To edit, select the content block or click the button ***Expand*** shown as a dropdown arrow icon.
 
-![Choose a block to create](_images/creating_a_content_block.png)
+Enter your content as required, provide a title for the block and choose whether you want the title to be shown on the page or not via the ***Displayed*** checkbox field.
 
-From here you will be navigated away to edit the content for the new block. Enter your content as required, provide a title for the block and choose whether you want the title to be shown on the front-end or not via the ***Displayed*** checkbox field.
+<div class="note" markdown="1"> The content block will remain open until collapsed or the page is reloaded. </div>
 
-When you are finished, click the button ***Save***.
+![Expanded content block](_images/inline_editing.png)
 
-![Editing content for a block](_images/editing_content.png)
+## Reordering content blocks
 
-## Editing existing blocks
+To change the order of content blocks in a page, simply click and hold anywhere on the block, then drag and release to reorder the item.
 
-When viewing a page, you can select the content block list item or select **Content** from the ***More actions*** dropdown shown as an ellipses icon.
+<div class="note" markdown="1"> Expanded blocks will collapse upon pick up.</div>
 
-![Editing a block via More actions](_images/edit_via_more_actions.png)
+![Reordering content blocks](_images/reorder_blocks.png)
 
-# Reordering content blocks
+When you release the block will automatically save their new positions, however you may need to publish the page to see the new order.
 
-To change the order of content blocks in a page, simply click and hold on the drag handle icon on the left hand side of a block list item, then drag and release to reorder the item.
+<div class="note" markdown="1">Similar to the reorganisation of pages, the state of a block is changed after it is relocated and a new version is created.</div>
 
-![Reordering content blocks](_images/reordering_blocks.png)
+## More options
 
-When you release your mouse the blocks will automatically save their new positions, however you may need to publish
-the page to see the new order in the front-end of your website.
+The ***More options*** dropdown shown as an ellipses icon provides further editing functionality of individual blocks including access to editing content, custom settings, saving, publishing and archiving.
+
+![Content block more options](_images/more_options.png)
+
+### Editing existing blocks
+
+When viewing a page, you can select the content block or select **Content** from the ***More options*** dropdown.
+
+### Settings
+
+Your developer may choose to add custom CSS classes allowing you to add theming to the front-end of specific blocks. Custom CSS classes can be added by selecting ***Settings*** from the ***More options*** dropdown.
+
+In ***Settings*** your developer may also choose to add ***Style Variants*** to allow for different stylistic changes to adjust the appearance of content blocks. See [Style variants](https://github.com/dnadesign/silverstripe-elemental#style-variants) for more information.
+
+### Saving and publishing content blocks
+
+Pages with content blocks allow you to perform actions like publish at a page level, but you also have access to perform similar actions on individual blocks. Allowing the ability for blocks to be managed and edited by multiple CMS authors while remaining in draft while other blocks get published. This allows for more flexibility of individual blocks for example if a block has user permissions.
+
+To save or publish an individual content block select the ***More options*** dropdown. To save or publish the whole page select from the Action toolbar of the CMS. See [Saving changes and publishing](https://userhelp.silverstripe.org/en/4/creating_pages_and_content/creating_and_editing_content/saving_changes_and_publishing/) for more information.
+
+#### Block state indicators
+
+States are shown on the block type icon as coloured indicators. Each represents the current workflow status your content block is in.
+
+Blue - The block has unsaved changes.
+Orange full - The block state is **Draft** and not publicly visible.
+Orange outline - The block is **Modified** where it has been published but has some additional draft changes.
+No state - The block is published.
+
+![States of content blocks](_images/content_block_states.png)
+
+### Archiving blocks
+
+To Archive a block select *Archive* in the ***More options*** dropdown. See [Archiving](https://userhelp.silverstripe.org/en/4/creating_pages_and_content/archive/) for more information.
