@@ -18,7 +18,7 @@ of rather than a single text field. Features supported:
 The module provides basic markup for each of the elements but you will likely need to provide your own styles. Replace
 the `$Content` variable with `$ElementalArea` in your page templates, and rely on the markup of the individual elements.
 
-For a more detailed overview of using this module, please see [the User help guides](docs/en/index.md).
+For a more detailed overview of using this module, please see [the User help guides](docs/en/userguide/index.md).
 
 ## Requirements
 
