@@ -2,6 +2,7 @@
   border-bottom: 1px solid $border-color-light;
   color: inherit;
   cursor: pointer;
+  min-height: 8rem;
   padding: $spacer-sm $panel-padding-x $spacer * 1.5;
 
   &:focus,
