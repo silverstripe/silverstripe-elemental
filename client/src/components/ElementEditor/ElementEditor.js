@@ -1,3 +1,5 @@
+/* global window */
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'lib/Injector';
@@ -57,7 +59,10 @@ class ElementEditor extends PureComponent {
   handleDragEnd(sourceId, afterId) {
     const { actions: { handleSortBlock }, areaId } = this.props;
 
-    handleSortBlock(sourceId, afterId, areaId);
+    handleSortBlock(sourceId, afterId, areaId).then(() => {
+      const preview = window.jQuery('.cms-preview');
+      preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+    });
 
     this.setState({
       dragTargetElementId: null,
