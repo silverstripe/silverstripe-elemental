@@ -16,6 +16,7 @@ describe('ElementActions', () => {
     { title: 'Settings', name: 'Settings' },
     { title: 'History', name: 'History' }
   ];
+  const editTabsClick = () => {};
 
   describe('renderEditTabs()', () => {
     it('should map input tabs into an array of buttons', () => {
@@ -24,6 +25,7 @@ describe('ElementActions', () => {
           areaId={1}
           editTabs={testTabs}
           ActionMenuComponent={ActionMenuComponent}
+          handleEditTabsClick={editTabsClick}
         />
       );
 
@@ -42,6 +44,7 @@ describe('ElementActions', () => {
           areaId={1}
           editTabs={testTabs}
           ActionMenuComponent={ActionMenuComponent}
+          handleEditTabsClick={editTabsClick}
         />
       );
 
@@ -60,6 +63,7 @@ describe('ElementActions', () => {
           areaId={1}
           editTabs={testTabs}
           ActionMenuComponent={ActionMenuComponent}
+          handleEditTabsClick={editTabsClick}
         >
           <AbstractAction title="some button" />
         </ElementActions>
