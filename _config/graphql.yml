@@ -17,3 +17,23 @@ SilverStripe\GraphQL\Manager:
               readOne: true
       typeNames:
         DNADesign\Elemental\Models\BaseElement: Block
+
+---
+# This supports older versions of silverstripe-graphql (< 3) but should be benign in other cases
+Name: elementallegacygraphqlconfig
+---
+SilverStripe\GraphQL\Controller:
+  schema:
+    scaffolding:
+      types:
+        DNADesign\Elemental\Models\BaseElement:
+          fields: [ID, LastEdited, AbsoluteLink]
+          operations:
+            copyToStage: true
+            readOne: true
+        SilverStripe\Security\Member:
+          fields: [ID, FirstName, Surname]
+          operations:
+            readOne: true
+    typeNames:
+      DNADesign\Elemental\Models\BaseElement: Block
