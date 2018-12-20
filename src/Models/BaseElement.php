@@ -27,6 +27,7 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
+use SilverStripe\View\SSViewer;
 
 /**
  * Class BaseElement
@@ -817,10 +818,19 @@ class BaseElement extends DataObject
      */
     public function getEditorPreview()
     {
+        // take frontend themes into account
+        $oldThemes = SSViewer::get_themes();
+        SSViewer::set_themes(SSViewer::config()->get('themes'));
+        
         $templates = $this->getRenderTemplates('_EditorPreview');
         $templates[] = BaseElement::class . '_EditorPreview';
+        
+        $output = $this->renderWith($templates);
 
-        return $this->renderWith($templates);
+        // Reset theme
+        SSViewer::set_themes($oldThemes);
+        
+        return $output;
     }
 
     /**
