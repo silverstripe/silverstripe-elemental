@@ -1,32 +1,16 @@
 import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import { elementType } from 'types/elementType';
+import { elementTypeType } from 'types/elementTypeType';
 import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import classNames from 'classnames';
 import i18n from 'i18n';
 import { DropTarget } from 'react-dnd';
 import { getDragIndicatorIndex } from 'lib/dragHelpers';
+import { getElementTypeConfig } from 'state/editor/elementConfig';
 
 class ElementList extends Component {
-  /**
-   * Given an elementType, return a list of tabs that should be available in the edit form for an
-   * element.
-   *
-   * @param {elementTypeType} element
-   * @returns {string[]}
-   */
-  getEditTabs(element) {
-    const { elementTypes } = this.props;
-    const matchingType = elementTypes.find(type => element.BlockSchema.type === type.title);
-
-    if (!matchingType || !matchingType.tabs) {
-      return [];
-    }
-
-    return matchingType.tabs;
-  }
-
   getDragIndicatorIndex() {
     const { dragTargetElementId, draggedItem, blocks, dragSpot } = this.props;
 
@@ -50,7 +34,7 @@ class ElementList extends Component {
       DragIndicatorComponent,
       blocks,
       elementTypes,
-      elementalAreaId,
+      areaId,
       onDragEnd,
       onDragOver,
       onDragStart,
@@ -70,14 +54,15 @@ class ElementList extends Component {
       <div key={element.ID}>
         <ElementComponent
           element={element}
-          editTabs={this.getEditTabs(element)}
+          areaId={areaId}
+          type={getElementTypeConfig(element.BlockSchema.typeName, elementTypes)}
           link={element.BlockSchema.actions.edit}
           onDragOver={onDragOver}
           onDragEnd={onDragEnd}
           onDragStart={onDragStart}
         />
         {isDraggingOver || <HoverBarComponent
-          elementalAreaId={elementalAreaId}
+          areaId={areaId}
           elementId={element.ID}
           elementTypes={elementTypes}
         />}
@@ -125,8 +110,9 @@ class ElementList extends Component {
 ElementList.propTypes = {
   // @todo support either ElementList or Element children in an array (or both)
   blocks: PropTypes.arrayOf(elementType),
+  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   loading: PropTypes.bool,
-  elementalAreaId: PropTypes.number.isRequired,
+  areaId: PropTypes.number.isRequired,
   dragTargetElementId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onDragOver: PropTypes.func,
   onDragStart: PropTypes.func,

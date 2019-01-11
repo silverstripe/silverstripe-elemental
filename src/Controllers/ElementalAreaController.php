@@ -4,6 +4,7 @@ namespace DNADesign\Elemental\Controllers;
 
 use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Services\ElementTypeRegistry;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SilverStripe\CMS\Controllers\CMSMain;
@@ -29,7 +30,7 @@ class ElementalAreaController extends CMSMain
     private static $url_handlers = [
         // API access points with structured data
         'POST api/saveForm/$ID' => 'apiSaveForm',
-        'POST $FormName/field/$FieldName' => 'formAction',
+        '$FormName/field/$FieldName' => 'formAction',
     ];
 
     private static $allowed_actions = [
@@ -49,6 +50,10 @@ class ElementalAreaController extends CMSMain
             'payloadFormat' => 'json',
             'formNameTemplate' => sprintf(static::FORM_NAME_TEMPLATE, '{id}'),
         ];
+
+        // Configuration that is available per element type
+        $clientConfig['elementTypes'] = ElementTypeRegistry::generate()->getDefinitions();
+
         return $clientConfig;
     }
 

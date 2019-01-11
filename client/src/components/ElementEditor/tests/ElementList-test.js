@@ -59,7 +59,7 @@ describe('ElementList', () => {
           LoadingComponent={Loading}
           HoverBarComponent={HoverBar}
           loading={false}
-          elementalAreaId={1}
+          areaId={1}
           connectDropTarget={connectDropTarget}
         />
       );
@@ -79,7 +79,7 @@ describe('ElementList', () => {
           LoadingComponent={Loading}
           HoverBarComponent={HoverBar}
           loading
-          elementalAreaId={1}
+          areaId={1}
           connectDropTarget={connectDropTarget}
         />
       );
@@ -99,7 +99,7 @@ describe('ElementList', () => {
           LoadingComponent={Loading}
           HoverBarComponent={HoverBar}
           loading={false}
-          elementalAreaId={1}
+          areaId={1}
           connectDropTarget={connectDropTarget}
         />
       );

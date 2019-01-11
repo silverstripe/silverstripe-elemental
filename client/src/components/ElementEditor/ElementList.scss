@@ -3,10 +3,12 @@
   border-top: 1px solid $border-color-light;
   margin-left: -$panel-padding-x;
   margin-right: -$panel-padding-x;
-  min-height: 6rem;
+  min-height: calc(8rem + 1px);
   position: relative;
+  margin-bottom: $panel-padding-y;
 
   &--empty {
+    border-bottom: 1px solid $border-color-light;
     display: flex;
     align-items: center;
     justify-content: center;

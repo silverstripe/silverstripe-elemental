@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import Header from 'components/ElementEditor/Header';
 import { DragLayer } from 'react-dnd';
 import { elementType } from 'types/elementType';
+import { elementTypeType } from 'types/elementTypeType';
+import { getElementTypeConfig } from 'state/editor/elementConfig';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class ElementDragPreview extends Component {
   render() {
-    const { isDragging, element, currentOffset } = this.props;
+    const { isDragging, element, elementTypes, currentOffset } = this.props;
 
     if (!isDragging || !currentOffset) {
       return null;
@@ -19,11 +21,13 @@ class ElementDragPreview extends Component {
       transform,
       WebkitTransform: transform,
     };
+    const type = getElementTypeConfig(element.BlockSchema.typeName, elementTypes);
 
     return (
       <div className="element-editor-drag-preview" style={style}>
         <Header
           element={element}
+          type={type}
           simple
         />
       </div>
@@ -33,6 +37,7 @@ class ElementDragPreview extends Component {
 
 ElementDragPreview.propTypes = {
   element: elementType,
+  elementTypes: PropTypes.arrayOf(elementTypeType),
   isDragging: PropTypes.bool,
   currentOffset: PropTypes.shape({
     x: PropTypes.number.isRequired,

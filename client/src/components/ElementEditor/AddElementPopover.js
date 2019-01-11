@@ -1,7 +1,7 @@
 /* global window */
 
 import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
@@ -16,7 +16,6 @@ class AddElementPopover extends Component {
     super(props);
 
     this.handleToggle = this.handleToggle.bind(this);
-    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
   /**
@@ -28,12 +27,12 @@ class AddElementPopover extends Component {
     return (event) => {
       const {
         actions: { handleAddElementToArea },
-        elementalAreaId,
         insertAfterElement
       } = this.props;
 
       event.preventDefault();
-      handleAddElementToArea(elementType.name.replace(/-/g, '\\'), elementalAreaId, insertAfterElement).then(
+      // TODO This should probably use the GraphQL element type name (element.__typeName)
+      handleAddElementToArea(elementType.class, insertAfterElement).then(
         () => {
           const preview = window.jQuery('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -62,14 +61,6 @@ class AddElementPopover extends Component {
     const { toggle } = this.props;
 
     toggle();
-  }
-
-  handleButtonClick(button) {
-    const { baseAddHref } = this.props;
-    return (event) => {
-      event.stopPropagation();
-      window.location = `${baseAddHref}/${button.key}`;
-    };
   }
 
   /**
@@ -111,13 +102,14 @@ class AddElementPopover extends Component {
 
 AddElementPopover.propTypes = {
   container: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]),
-  elementTypes: PropTypes.arrayOf(elementTypeType),
+  elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   extraClass: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
   isOpen: PropTypes.bool.isRequired,
   placement: PropTypes.string,
   target: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]).isRequired,
   toggle: PropTypes.func.isRequired,
-  elementalAreaId: PropTypes.number.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  areaId: PropTypes.number.isRequired,
   insertAfterElement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 

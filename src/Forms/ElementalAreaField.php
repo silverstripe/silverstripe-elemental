@@ -13,6 +13,7 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\ORM\DataObjectInterface;
@@ -59,7 +60,7 @@ class ElementalAreaField extends GridField
         parent::__construct($name, '', $area->Elements(), $config);
         $this->area = $area;
 
-        $this->addExtraClass('element-editor__container');
+        $this->addExtraClass('element-editor__container no-change-track');
     }
 
     /**
@@ -118,25 +119,8 @@ class ElementalAreaField extends GridField
         $area = $this->getArea();
         $pageId = ($area && ($page = $area->getOwnerPage())) ? $page->ID : null;
         $schemaData['page-id'] = $pageId;
-        $schemaData['elemental-area-id'] = $area ? $area->ID : null;
+        $schemaData['elemental-area-id'] = $area ? (int) $area->ID : null;
 
-        $blockTypes = [];
-
-        // Use the internal (temporary) provider to get cached tab names.
-        /** @var ElementTabProvider $tabProvider */
-        $tabProvider = Injector::inst()->get(ElementTabProvider::class);
-
-        foreach ($this->getTypes() as $className => $blockTitle) {
-            $blockTypes[] = [
-                'name' => str_replace('\\', '-', $className),
-                'title' => $blockTitle,
-                'icon' => Config::inst()->get($className, 'icon'),
-                'tabs' => $tabProvider->getTabsForElement($className),
-            ];
-        }
-
-        $schemaData['element-types'] = $blockTypes;
-        $schemaData['base-add-href'] = Controller::join_links($this->Link(), 'add-multi-class');
         return $schemaData;
     }
 
@@ -164,11 +148,6 @@ class ElementalAreaField extends GridField
 
             // Set values (before names don't match anymore)
             $elementFields->setValues($element->getQueriedDatabaseFields());
-
-            // Ensure field names are unique between elements on parent form
-            $elementFields->recursiveWalk(function ($field) use ($parentName) {
-                $field->setName($parentName . '_' . $field->getName());
-            });
 
             // Combine into an appropriately named group
             $elementGroup = FieldGroup::create($elementFields);
@@ -209,6 +188,17 @@ class ElementalAreaField extends GridField
         );
 
         $readOnlyField = $readOnlyField->performReadonlyTransformation();
+
+        // Ensure field names are unique between elements on parent form but only after transformations have been
+        // performed
+        /** @var FieldGroup $elementForm */
+        foreach ($readOnlyField->getChildren() as $elementForm) {
+            $parentName = $elementForm->getName();
+            $elementForm->getChildren()->recursiveWalk(function (FormField $field) use ($parentName) {
+                $field->setName($parentName . '_' . $field->getName());
+            });
+        }
+
         return $readOnlyField
             ->setReadOnly(true)
             ->setName($this->getName())

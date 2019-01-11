@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
 import { DropTarget } from 'react-dnd';
@@ -7,12 +7,12 @@ import { DropTarget } from 'react-dnd';
 // eslint-disable-next-line react/prefer-stateless-function
 class Toolbar extends PureComponent {
   render() {
-    const { AddNewButtonComponent, elementTypes, elementalAreaId, connectDropTarget } = this.props;
+    const { AddNewButtonComponent, elementTypes, areaId, connectDropTarget } = this.props;
     return connectDropTarget(
       <div className="element-editor__toolbar">
         <AddNewButtonComponent
           elementTypes={elementTypes}
-          elementalAreaId={elementalAreaId}
+          areaId={areaId}
         />
       </div>
     );
@@ -22,7 +22,7 @@ class Toolbar extends PureComponent {
 Toolbar.defaultProps = {};
 Toolbar.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  elementalAreaId: PropTypes.number.isRequired,
+  areaId: PropTypes.number.isRequired,
   AddNewButtonComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   onDragOver: PropTypes.func, // eslint-disable-line react/no-unused-prop-types

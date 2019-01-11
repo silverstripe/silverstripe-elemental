@@ -1,0 +1,40 @@
+fi:
+  DNADesign\Elemental\Models\BaseElement:
+    BlockType: Palikka
+    CUSTOM_STYLES: 'Valitse tyyli..'
+    ExtraCssClassesLabel: 'Omat CSS-luokat'
+    ExtraCssClassesPlaceholder: 'oma_luokka toinen_luokka'
+    MainTabLabel: Sisältö
+    PLURALNAME: palikat
+    PLURALS:
+      one: Palikka
+      other: '{count} palikkaa'
+    SINGULARNAME: palikka
+    STYLE: Tyylivariaatio
+    ShowTitleLabel: Näytetään
+    TitleLabel: 'Otsikko (näytetään jos valittu)'
+  DNADesign\Elemental\Models\ElementContent:
+    BlockType: Sisältö
+    ContentLabel: Sisältö
+    PLURALNAME: sisältöpalikat
+    PLURALS:
+      one: Sisältöpalikka
+      other: '{count} sisältöpalikkaa'
+    SINGULARNAME: sisältöpalikka
+  DNADesign\Elemental\Models\ElementalArea:
+    PLURALNAME: Elementtialueet
+    PLURALS:
+      one: Elementtialue
+      other: '{count} elementtialuetta'
+    SINGULARNAME: Elementtialue
+  DNADesign\Elemental\Reports\ElementTypeReport:
+    Title: Sisältöpalikkatyypit
+    Total: Yhteensä
+    Type: Sisältötyyppi
+  DNADesign\Elemental\Reports\ElementsInUseReport:
+    None: 'Ei yhtään'
+    Page: Sivu
+    ReportTitle: 'Sisältöpalikat käytössä'
+    Summary: Yhteenveto
+    Title: Otsikko
+    Type: Tyyppi

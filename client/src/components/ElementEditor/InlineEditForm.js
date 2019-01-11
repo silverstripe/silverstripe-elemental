@@ -1,10 +1,12 @@
 /* global window */
 import React, { PureComponent } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import FormBuilderLoader from 'containers/FormBuilderLoader/FormBuilderLoader';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import i18n from 'i18n';
+import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
+import { connect } from 'react-redux';
 
 class InlineEditForm extends PureComponent {
   constructor(props) {
@@ -40,7 +42,7 @@ class InlineEditForm extends PureComponent {
   }
 
   render() {
-    const { elementId, extraClass, onClick, onFormInit } = this.props;
+    const { elementId, extraClass, onClick, onFormInit, formHasState } = this.props;
     const { loadingError } = this.state;
 
     const classNames = classnames('element-editor-editform', extraClass);
@@ -50,7 +52,7 @@ class InlineEditForm extends PureComponent {
       formTag: 'div',
       schemaUrl,
       identifier: 'element',
-      refetchSchemaOnMount: false,
+      refetchSchemaOnMount: !formHasState,
       onLoadingError: this.handleLoadingError
     };
 
@@ -77,4 +79,13 @@ InlineEditForm.propTypes = {
   handleLoadingError: PropTypes.func,
 };
 
-export default InlineEditForm;
+function mapStateToProps(state, ownProps) {
+  const formName = loadElementFormStateName(ownProps.elementId);
+
+  return {
+    formHasState: state.form.formState && state.form.formState.element &&
+      !!state.form.formState.element[formName],
+  };
+}
+
+export default connect(mapStateToProps)(InlineEditForm);

@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
 import { elementType } from 'types/elementType';
+import { elementTypeType } from 'types/elementTypeType';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
 import classNames from 'classnames';
+import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
+import { isDirty } from 'redux-form';
+import getFormState from 'lib/getFormState';
 
 class Header extends Component {
   constructor(props) {
@@ -46,22 +51,26 @@ class Header extends Component {
    * @returns {DOMElement|null}
    */
   renderVersionedStateMessage() {
-    const { element: { IsLiveVersion: isLiveVersion, IsPublished: isPublished } } = this.props;
+    const {
+      element: { IsLiveVersion: isLiveVersion, IsPublished: isPublished },
+      formDirty,
+    } = this.props;
 
     // No indication required for published elements
-    if (isPublished && isLiveVersion) {
+    if (!formDirty && isPublished && isLiveVersion) {
       return null;
     }
 
     let versionStateButtonTitle = '';
     const stateClassNames = ['element-editor-header__version-state'];
 
-    if (!isPublished) {
+    if (formDirty) {
+      versionStateButtonTitle = i18n._t('ElementHeader.STATE_UNSAVED', 'Item has unsaved changes');
+      stateClassNames.push('element-editor-header__version-state--unsaved');
+    } else if (!isPublished) {
       versionStateButtonTitle = i18n._t('ElementHeader.STATE_DRAFT', 'Item has not been published yet');
       stateClassNames.push('element-editor-header__version-state--draft');
-    }
-
-    if (isPublished && !isLiveVersion) {
+    } else if (!isLiveVersion) {
       versionStateButtonTitle = i18n._t('ElementHeader.STATE_MODIFIED', 'Item has unpublished changes');
       stateClassNames.push('element-editor-header__version-state--modified');
     }
@@ -77,16 +86,20 @@ class Header extends Component {
   render() {
     const {
       element,
+      type,
+      areaId,
       previewExpanded,
       simple,
       disableTooltip,
+      activeTab,
       expandable,
       ElementActionsComponent,
+      handleEditTabsClick,
     } = this.props;
 
     const noTitle = i18n.inject(
       i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
-      { type: element.BlockSchema.type }
+      { type: type.title }
     );
     const titleClasses = classNames({
       'element-editor-header__title': true,
@@ -95,7 +108,7 @@ class Header extends Component {
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
     const containerClasses = classNames(
       'element-editor-header', {
-        'element-editor-header--simple': simple
+        'element-editor-header--simple': simple,
       }
     );
     const expandCaretClasses = classNames(
@@ -115,7 +128,7 @@ class Header extends Component {
         </div>
         <div className="element-editor-header__info">
           <div className="element-editor-header__icon-container">
-            <i className={element.BlockSchema.iconClass} id={blockIconId} />
+            <i className={type.icon} id={blockIconId} />
             {this.renderVersionedStateMessage()}
             {!simple && <Tooltip
               placement="top"
@@ -123,7 +136,7 @@ class Header extends Component {
               target={blockIconId}
               toggle={this.toggle}
             >
-              {element.BlockSchema.type}
+              {type.title}
             </Tooltip>}
           </div>
           <h3 className={titleClasses}>{element.Title || noTitle}</h3>
@@ -134,7 +147,13 @@ class Header extends Component {
               role="none"
               onClick={(event) => event.stopPropagation()}
             >
-              <ElementActionsComponent {...this.props} />
+              <ElementActionsComponent
+                element={element}
+                areaId={areaId}
+                activeTab={activeTab}
+                editTabs={type.editTabs}
+                handleEditTabsClick={handleEditTabsClick}
+              />
             </div>
           }
           <i className={expandCaretClasses} title={expandTitle} />
@@ -146,15 +165,27 @@ class Header extends Component {
 
 Header.propTypes = {
   element: elementType.isRequired,
+  type: elementTypeType.isRequired,
+  areaId: PropTypes.number,
+  activeTab: PropTypes.string,
   simple: PropTypes.bool,
   ElementActionsComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   previewExpanded: PropTypes.bool,
   disableTooltip: PropTypes.bool,
+  formDirty: PropTypes.bool,
 };
 
 Header.defaultProps = {
   expandable: true,
 };
+
+function mapStateToProps(state, ownProps) {
+  const formName = loadElementFormStateName(ownProps.element.ID);
+
+  return {
+    formDirty: isDirty(`element.${formName}`, getFormState)(state),
+  };
+}
 
 export { Header as Component };
 
@@ -165,5 +196,6 @@ export default compose(
       ElementActionsComponent,
     }),
     () => 'ElementEditor.ElementList.Element'
-  )
+  ),
+  connect(mapStateToProps)
 )(Header);

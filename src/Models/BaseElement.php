@@ -19,6 +19,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
+use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
@@ -76,7 +77,6 @@ class BaseElement extends DataObject
 
     private static $casting = [
         'BlockSchema' => DBObjectType::class,
-        'InlineEditable' => DBBoolean::class,
         'IsLiveVersion' => DBBoolean::class,
         'IsPublished' => DBBoolean::class,
     ];
@@ -299,10 +299,7 @@ class BaseElement extends DataObject
             $fields->removeByName('ShowTitle');
             $fields->replaceField(
                 'Title',
-                TextCheckboxGroupField::create(
-                    TextField::create('Title', _t(__CLASS__ . '.TitleLabel', 'Title (displayed if checked)')),
-                    CheckboxField::create('ShowTitle', _t(__CLASS__ . '.ShowTitleLabel', 'Displayed'))
-                )
+                TextCheckboxGroupField::create()
                     ->setName('Title')
             );
 
@@ -513,7 +510,7 @@ class BaseElement extends DataObject
     }
 
     /**
-     * @return null|DataObject
+     * @return null|SiteTree
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \SilverStripe\ORM\ValidationException
      */
@@ -662,24 +659,23 @@ class BaseElement extends DataObject
 
         $editLinkPrefix = '';
         if (!$page instanceof SiteTree && method_exists($page, 'CMSEditLink')) {
-            $editLinkPrefix = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
+            $link = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
         } else {
-            $editLinkPrefix = Controller::join_links(
+            $link = Controller::join_links(
                 singleton(CMSPageEditController::class)->Link('EditForm'),
                 $page->ID
             );
         }
 
-        $link = Controller::join_links(
-            $editLinkPrefix,
-            'field/' . $relationName . '/item/',
-            $this->ID
-        );
-
-        $link = Controller::join_links(
-            $link,
-            'edit'
-        );
+        // In-line editable blocks should just take you to the page. Editable ones should add the suffix for detail form
+        if (!$this->inlineEditable()) {
+            $link = Controller::join_links(
+                $link,
+                'field/' . $relationName . '/item/',
+                $this->ID,
+                'edit'
+            );
+        }
 
         $this->extend('updateCMSEditLink', $link);
 
@@ -787,13 +783,24 @@ class BaseElement extends DataObject
         return '';
     }
 
+    /**
+     * The block config defines a set of data (usually set through config on the element) that will be made available in
+     * client side config. Individual element types may choose to add config variable for use in React code
+     *
+     * @return array
+     */
+    public static function getBlockConfig()
+    {
+        return [];
+    }
 
     /**
-     * The block schema defines a set of data that will be serialised and sent via GraphQL
-     * to the React editor client.
+     * The block actions is an associative array available for providing data to the client side to be used to describe
+     * actions that may be performed. This is available as a plain "ObjectType" in the GraphQL schema.
      *
-     * To modify the schema, either use the extension point or overload the `provideBlockSchema`
-     * method.
+     * By default the only action is "edit" which is simply the URL where the block may be edited.
+     *
+     * To modify the actions, either use the extension point or overload the `provideBlockSchema` method.
      *
      * @internal This API may change in future. Treat this as a `final` method.
      * @return array
@@ -818,8 +825,9 @@ class BaseElement extends DataObject
     protected function provideBlockSchema()
     {
         return [
-            'iconClass' => $this->config()->get('icon'),
-            'type' => $this->getType(),
+            // Currently GraphQL doesn't expose the correct type name and just returns "base element"s. This is a
+            // workaround until we can scaffold a query client side that specifies by type name
+            'typeName' => StaticSchema::inst()->typeNameForDataObject(static::class),
             'actions' => [
                 'edit' => $this->getEditLink(),
             ],

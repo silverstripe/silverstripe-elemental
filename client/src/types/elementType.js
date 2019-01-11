@@ -1,4 +1,4 @@
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 
 // Describes the structure of an element coming in via GraphQL
 const elementType = PropTypes.shape({

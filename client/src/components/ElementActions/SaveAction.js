@@ -7,6 +7,7 @@ import backend from 'lib/Backend';
 import i18n from 'i18n';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
+import { initialize } from 'redux-form';
 
 /**
  * Using a REST backend, serialize the current form data and post it to the backend endpoint to save
@@ -16,7 +17,7 @@ const SaveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { element, securityId, formData } = props;
+    const { element, securityId, formData, reinitialiseForm } = props;
 
     const { jQuery: $ } = window;
     const noTitle = i18n.inject(
@@ -45,6 +46,7 @@ const SaveAction = (MenuComponent) => (props) => {
         // @todo optimistically update the data for the current element instead of
         // rerunning the whole query
         apolloClient.queryManager.reFetchObservableQueries();
+        reinitialiseForm(formData);
 
         const preview = $('.cms-preview');
         preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -107,6 +109,16 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
+function mapDispatchToProps(dispatch, ownProps) {
+  const formName = loadElementFormStateName(ownProps.element.ID);
+
+  return {
+    reinitialiseForm(savedData) {
+      dispatch(initialize(`element.${formName}`, savedData));
+    }
+  };
+}
+
 export { SaveAction as Component };
 
-export default compose(connect(mapStateToProps), SaveAction);
+export default compose(connect(mapStateToProps, mapDispatchToProps), SaveAction);

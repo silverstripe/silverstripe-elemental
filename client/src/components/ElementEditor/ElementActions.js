@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { DropdownItem } from 'reactstrap';
 import { inject } from 'lib/Injector';
+import { elementType } from 'types/elementType';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 
 /**
@@ -96,13 +97,19 @@ class ElementActions extends Component {
   }
 }
 
+// There's some extra prop types in here for registered transformations to consume
 ElementActions.propTypes = {
-  id: PropTypes.string,
+  // eslint-disable-next-line react/no-unused-prop-types
+  element: elementType,
+  // eslint-disable-next-line react/no-unused-prop-types
+  areaId: PropTypes.number.isRequired,
   activeTab: PropTypes.string,
   editTabs: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     name: PropTypes.string,
-  })), };
+  })),
+  handleEditTabsClick: PropTypes.func.isRequired,
+};
 
 ElementActions.defaultProps = {
   editTabs: [],

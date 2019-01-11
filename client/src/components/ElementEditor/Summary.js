@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import i18n from 'i18n';
 
 class Summary extends PureComponent {
@@ -37,7 +37,6 @@ class Summary extends PureComponent {
     );
   }
 }
-
 
 Summary.defaultProps = {};
 

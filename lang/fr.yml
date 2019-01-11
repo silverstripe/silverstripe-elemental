@@ -1,23 +1,14 @@
 fr:
-  DNADesign\Elemental\Forms\HistoricalVersionedGridFieldItemRequest:
-    BUTTONREVERTDESC: 'Publier cette entrée dans le site brouillon'
-    InvalidVersion: 'Version invalide'
-    Position: Position
-    REVERT: 'Revenir à cette version'
   DNADesign\Elemental\Models\BaseElement:
-    Author: Auteur
     BlockType: Bloc
     CUSTOM_STYLES: 'Sélectionner un style..'
     ExtraCssClassesLabel: 'Classes CSS personnalisées'
     ExtraCssClassesPlaceholder: 'ma_classe autre_classe'
     MainTabLabel: Contenu
-    Modified: Modifié
     PLURALNAME: blocs
     PLURALS:
       one: 'Un bloc'
       other: '{count} blocs'
-    Published: Publié
-    Record: Record
     SINGULARNAME: bloc
     STYLE: 'Variation de style'
     ShowTitleLabel: Affiché

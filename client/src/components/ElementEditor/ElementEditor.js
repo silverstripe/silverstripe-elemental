@@ -1,5 +1,6 @@
+/* global window */
 import React, { PureComponent } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import { inject } from 'lib/Injector';
 import { compose } from 'redux';
 import { elementTypeType } from 'types/elementTypeType';
@@ -55,9 +56,12 @@ class ElementEditor extends PureComponent {
    * @param afterId
    */
   handleDragEnd(sourceId, afterId) {
-    const { actions: { handleSortBlock }, pageId } = this.props;
+    const { actions: { handleSortBlock }, areaId } = this.props;
 
-    handleSortBlock(sourceId, afterId, pageId);
+    handleSortBlock(sourceId, afterId, areaId).then(() => {
+      const preview = window.jQuery('.cms-preview');
+      preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+    });
 
     this.setState({
       dragTargetElementId: null,
@@ -71,8 +75,7 @@ class ElementEditor extends PureComponent {
       formState,
       ToolbarComponent,
       ListComponent,
-      pageId,
-      elementalAreaId,
+      areaId,
       elementTypes,
       isDraggingOver,
       connectDropTarget,
@@ -87,13 +90,12 @@ class ElementEditor extends PureComponent {
       <div className={classNames}>
         <ToolbarComponent
           elementTypes={elementTypes}
-          elementalAreaId={elementalAreaId}
+          areaId={areaId}
           onDragOver={this.handleDragOver}
         />
         <ListComponent
           elementTypes={elementTypes}
-          pageId={pageId}
-          elementalAreaId={elementalAreaId}
+          areaId={areaId}
           onDragOver={this.handleDragOver}
           onDragStart={this.handleDragStart}
           onDragEnd={this.handleDragEnd}
@@ -101,8 +103,13 @@ class ElementEditor extends PureComponent {
           isDraggingOver={isDraggingOver}
           dragTargetElementId={dragTargetElementId}
         />
-        <ElementDragPreview />
-        <input name={fieldName} type="hidden" value={JSON.stringify(formState) || ''} />
+        <ElementDragPreview elementTypes={elementTypes} />
+        <input
+          name={fieldName}
+          type="hidden"
+          value={JSON.stringify(formState) || ''}
+          className="no-change-track"
+        />
       </div>
     );
   }
@@ -111,8 +118,7 @@ class ElementEditor extends PureComponent {
 ElementEditor.propTypes = {
   fieldName: PropTypes.string,
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  pageId: PropTypes.number.isRequired,
-  elementalAreaId: PropTypes.number.isRequired,
+  areaId: PropTypes.number.isRequired,
   actions: PropTypes.shape({
     handleSortBlock: PropTypes.func,
   }),

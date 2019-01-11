@@ -1,6 +1,6 @@
 /* global window */
 import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
@@ -122,7 +122,7 @@ class HoverBar extends Component {
       AddElementPopoverComponent,
       elementTypes,
       elementId,
-      elementalAreaId,
+      areaId,
     } = this.props;
     const { popoverOpen } = this.state;
 
@@ -147,7 +147,7 @@ class HoverBar extends Component {
               elementTypes={elementTypes}
               toggle={this.toggle}
               container={`#AddBlockArea_${elementId}`}
-              elementalAreaId={elementalAreaId}
+              areaId={areaId}
               insertAfterElement={elementId}
             />
           }
@@ -160,7 +160,7 @@ class HoverBar extends Component {
 HoverBar.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   elementId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  elementalAreaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  areaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 };
 export { HoverBar as Component };
 

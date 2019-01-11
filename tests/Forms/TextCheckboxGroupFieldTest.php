@@ -19,15 +19,13 @@ class TextCheckboxGroupFieldTest extends SapphireTest
     {
         parent::setUp();
 
-        $this->field = new TextCheckboxGroupField(
-            new TextField('HelloWorld'),
-            new CheckboxField('Display')
-        );
+        $this->field = new TextCheckboxGroupField('Title');
     }
 
     public function testFieldIsAssignedFirstFieldsTitleInConstructor()
     {
-        $this->assertSame('Hello World', $this->field->Title());
+        $this->assertSame('Title', $this->field->Title());
+        $this->assertSame('Title', $this->field->getChildren()->first()->Title());
     }
 
     public function testFieldReturnsCompositeFieldTemplateOnReadonlyTransformation()
