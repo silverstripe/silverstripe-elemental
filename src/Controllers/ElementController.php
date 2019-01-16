@@ -57,7 +57,7 @@ class ElementController extends Controller
     }
 
     /**
-     * @return Element
+     * @return BaseElement
      */
     public function getElement()
     {
