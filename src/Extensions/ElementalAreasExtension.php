@@ -280,7 +280,8 @@ class ElementalAreasExtension extends DataExtension
         // There is no inbuilt filter for null values
         $where = [];
         foreach ($elementalAreas as $areaName) {
-            $where[] = $schema->sqlColumnForField($ownerClass, $areaName . 'ID') . ' IS NULL';
+            $queryDetails = $schema->sqlColumnForField($ownerClass, $areaName . 'ID');
+            $where[] = $queryDetails . ' IS NULL OR ' . $queryDetails . ' = 0' ;
         }
 
         foreach ($ownerClass::get()->where(implode(' OR ', $where)) as $elementalObject) {
