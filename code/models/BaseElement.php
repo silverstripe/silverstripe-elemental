@@ -88,7 +88,7 @@ class BaseElement extends Widget
     protected $_anchor = null;
 
     /**
-     * @var Object
+     * @var SS_Object
      * The virtual owner VirtualLinkedElement
      */
     public $virtualOwner;
@@ -418,7 +418,7 @@ class BaseElement extends Widget
 
         // get all dataobject with the elemental extension
         foreach(ClassInfo::subclassesFor('DataObject') as $className) {
-            if(Object::has_extension($className, 'ElementPageExtension')) {
+            if(SS_Object::has_extension($className, 'ElementPageExtension')) {
                $classes[] = $className;
             }
         }
