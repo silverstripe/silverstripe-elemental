@@ -80,6 +80,7 @@ class ElementEditor extends PureComponent {
       elementTypes,
       isDraggingOver,
       connectDropTarget,
+      allowedElements,
     } = this.props;
     const { dragTargetElementId, dragSpot } = this.state;
 
@@ -90,7 +91,7 @@ class ElementEditor extends PureComponent {
     return connectDropTarget(
       <div className={classNames}>
         <ToolbarComponent
-          elementTypes={elementTypes}
+          elementTypes={allowedElements}
           areaId={areaId}
           onDragOver={this.handleDragOver}
         />
