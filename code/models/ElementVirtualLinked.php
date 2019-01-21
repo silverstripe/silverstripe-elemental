@@ -46,7 +46,7 @@ class ElementVirtualLinked extends BaseElement
     public function getCMSFields()
     {
         $message = sprintf(
-            '<p>%s</p><p><a href="%2$s">%2$s</a></p>',
+            '<p>%s</p><p><a href="%2$s" target="_blank">%2$s</a></p>',
             _t('ElementVirtualLinked.DESCRIBE', 'This is a virtual copy of a block. To edit, visit'),
             $this->LinkedElement()->getEditLink()
         );
