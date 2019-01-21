@@ -125,19 +125,21 @@ class ElementalAreaField extends GridField
         // Use the internal (temporary) provider to get cached tab names.
         /** @var ElementTabProvider $tabProvider */
         $tabProvider = Injector::inst()->get(ElementTabProvider::class);
-        foreach ($this->getTypes() as $className => $blockTitle) {
-            $singleton = singleton($className);
-            $blockTypes[] = [
-                'name' => str_replace('\\', '-', $className),
-                'title' => $singleton->getType(),
-                'icon' => Config::inst()->get($className, 'icon'),
-                'class' => $className,
-                'editTabs' => $tabProvider->getTabsForElement($className),
-                'inlineEditable' => Config::inst()->get($className, 'inline_editable'),
-                'config' => (object) $singleton::getBlockConfig()
-            ];
-        }
-        $schemaData['allowed-elements'] = $blockTypes;
+        $allowedTypes = $this->getTypes();
+//
+//        foreach ($this->getTypes() as $className => $blockTitle) {
+//            $singleton = singleton($className);
+//            $blockTypes[] = [
+//                'name' => str_replace('\\', '-', $className),
+//                'title' => $singleton->getType(),
+//                'icon' => Config::inst()->get($className, 'icon'),
+//                'class' => $className,
+//                'editTabs' => $tabProvider->getTabsForElement($className),
+//                'inlineEditable' => Config::inst()->get($className, 'inline_editable'),
+//                'config' => (object) $singleton::getBlockConfig()
+//            ];
+//        }
+        $schemaData['allowed-elements'] = array_keys($allowedTypes);
 
         return $schemaData;
     }

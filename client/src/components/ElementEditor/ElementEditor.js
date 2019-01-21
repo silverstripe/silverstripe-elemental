@@ -8,7 +8,6 @@ import { elementTypeType } from 'types/elementTypeType';
 import { connect } from 'react-redux';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { DropTarget } from 'react-dnd';
-import classnames from 'classnames';
 import sortBlockMutation from 'state/editor/sortBlockMutation';
 import ElementDragPreview from 'components/ElementEditor/ElementDragPreview';
 import withDragDropContext from 'lib/withDragDropContext';
@@ -84,14 +83,20 @@ class ElementEditor extends PureComponent {
     } = this.props;
     const { dragTargetElementId, dragSpot } = this.state;
 
-    const classNames = classnames('element-editor', {
-      // 'element-editor--dragging': isDragging,
-    });
+    // Map the allowed elements because we want to retain the sort order provided by that array.
+    // We default to allowing all elements if the allowed elements array is not defined for
+    // backwards compatibility.
+    const allowedElementTypes =
+      Array.isArray(allowedElements)
+        ? allowedElements.map(className =>
+          elementTypes.find(type => type.class === className)
+        )
+        : elementTypes;
 
     return connectDropTarget(
-      <div className={classNames}>
+      <div className="element-editor">
         <ToolbarComponent
-          elementTypes={allowedElements}
+          elementTypes={allowedElementTypes}
           areaId={areaId}
           onDragOver={this.handleDragOver}
         />
@@ -120,13 +125,12 @@ class ElementEditor extends PureComponent {
 ElementEditor.propTypes = {
   fieldName: PropTypes.string,
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
+  allowedElements: PropTypes.arrayOf(PropTypes.string),
   areaId: PropTypes.number.isRequired,
   actions: PropTypes.shape({
     handleSortBlock: PropTypes.func,
   }),
 };
-
-ElementEditor.defaultProps = {};
 
 function mapStateToProps(state) {
   const formNamePattern = loadElementFormStateName('[0-9]+');
