@@ -132,7 +132,7 @@ class ElementalAreaField extends GridField
                 'title' => $singleton->getType(),
                 'icon' => Config::inst()->get($className, 'icon'),
                 'class' => $className,
-                'tabs' => $tabProvider->getTabsForElement($className),
+                'editTabs' => $tabProvider->getTabsForElement($className),
                 'inlineEditable' => Config::inst()->get($className, 'inline_editable'),
                 'config' => (object) $singleton::getBlockConfig()
             ];
