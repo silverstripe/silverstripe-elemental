@@ -121,6 +121,9 @@ class ElementalAreaField extends GridField
         $schemaData['page-id'] = $pageId;
         $schemaData['elemental-area-id'] = $area ? (int) $area->ID : null;
 
+        $allowedTypes = $this->getTypes();
+        $schemaData['allowed-elements'] = array_keys($allowedTypes);
+
         return $schemaData;
     }
 
