@@ -53,6 +53,7 @@ describe('ElementEditor', () => {
           ListComponent={ListComponent}
           areaId={8}
           elementTypes={[testElementTypes[0]]}
+          allowedElements={[testElementTypes[0].class]}
           elementalAreaId={1}
           connectDropTarget={connectDropTarget}
         />

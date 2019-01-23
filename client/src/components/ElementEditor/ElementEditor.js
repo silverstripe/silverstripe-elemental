@@ -84,14 +84,9 @@ class ElementEditor extends PureComponent {
     const { dragTargetElementId, dragSpot } = this.state;
 
     // Map the allowed elements because we want to retain the sort order provided by that array.
-    // We default to allowing all elements if the allowed elements array is not defined for
-    // backwards compatibility.
-    const allowedElementTypes =
-      Array.isArray(allowedElements)
-        ? allowedElements.map(className =>
-          elementTypes.find(type => type.class === className)
-        )
-        : elementTypes;
+    const allowedElementTypes = allowedElements.map(className =>
+                                  elementTypes.find(type => type.class === className)
+                                );
 
     return connectDropTarget(
       <div className="element-editor">
@@ -125,7 +120,7 @@ class ElementEditor extends PureComponent {
 ElementEditor.propTypes = {
   fieldName: PropTypes.string,
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  allowedElements: PropTypes.arrayOf(PropTypes.string),
+  allowedElements: PropTypes.arrayOf(PropTypes.string).isRequired,
   areaId: PropTypes.number.isRequired,
   actions: PropTypes.shape({
     handleSortBlock: PropTypes.func,
