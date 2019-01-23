@@ -85,8 +85,8 @@ class ElementEditor extends PureComponent {
 
     // Map the allowed elements because we want to retain the sort order provided by that array.
     const allowedElementTypes = allowedElements.map(className =>
-                                  elementTypes.find(type => type.class === className)
-                                );
+      elementTypes.find(type => type.class === className)
+    );
 
     return connectDropTarget(
       <div className="element-editor">
