@@ -2,7 +2,6 @@
 
 namespace DNADesign\Elemental\Extensions;
 
-
 use SilverStripe\Core\Extension;
 use SilverStripe\View\Requirements;
 
