@@ -14,6 +14,7 @@ en:
     PLURALS:
       one: 'A block'
       other: '{count} blocks'
+    SettingsTabLabel: Settings
     SINGULARNAME: block
     STYLE: 'Style variation'
   DNADesign\Elemental\Models\ElementContent:
