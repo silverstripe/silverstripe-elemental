@@ -3,10 +3,10 @@
 namespace DNADesign\Elemental\Tests\Extensions;
 
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
+use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestUnusedElement;
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
 
 class ElementalAreasExtensionTest extends SapphireTest
@@ -29,7 +29,11 @@ class ElementalAreasExtensionTest extends SapphireTest
         $this->logInWithPermission('ADMIN');
 
         SiteTree::config()
-            ->set('allowed_elements', null)
+            ->set('allowed_elements', [
+                ElementContent::class,
+                TestElement::class,
+                TestUnusedElement::class,
+            ])
             ->set('disallowed_elements', []);
     }
 
