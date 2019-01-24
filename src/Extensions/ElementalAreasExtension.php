@@ -44,21 +44,28 @@ use SilverStripe\ORM\DataObject;
 class ElementalAreasExtension extends DataExtension
 {
     /**
+     * Classes to ignore adding elements to
      * @config
-     *
-     * @var array $ignored_classes Classes to ignore adding elements too.
+     * @var array $ignored_classes
      */
     private static $ignored_classes = [];
 
     /**
-     * @config
-     *
      * On saving the element area, should Elemental reset the main website
      * `$Content` field.
      *
+     * @config
      * @var boolean
      */
     private static $clear_contentfield = false;
+
+    /**
+     * Whether to sort the elements alphabetically by their title
+     *
+     * @config
+     * @var boolean
+     */
+    private static $sort_types_alphabetically = true;
 
     /**
      * Get the available element types for this page type,
@@ -87,7 +94,7 @@ class ElementalAreasExtension extends DataExtension
         } else {
             $disallowedElements = (array) $config->get('disallowed_elements');
         }
-        $list = array();
+        $list = [];
 
         foreach ($availableClasses as $availableClass) {
             /** @var BaseElement $inst */

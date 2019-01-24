@@ -295,6 +295,10 @@ class BaseElement extends DataObject
                     )
             );
 
+            // Rename the "Settings" tab
+            $fields->fieldByName('Root.Settings')
+                ->setTitle(_t(__CLASS__ . '.SettingsTabLabel', 'Settings'));
+
             // Add a combined field for "Title" and "Displayed" checkbox in a Bootstrap input group
             $fields->removeByName('ShowTitle');
             $fields->replaceField(
