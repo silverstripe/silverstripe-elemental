@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
+use SilverStripe\Versioned\Versioned;
 
 class ReorderElements
 {
@@ -92,24 +93,34 @@ class ReorderElements
 
         // We are updating records with SQL queries to avoid the ORM triggering the creation of new versions
         // for each element that is affected by this reordering.
-        $tableName = Convert::raw2sql(DataObject::getSchema()->tableName(BaseElement::class));
+        $baseTableName = Convert::raw2sql(DataObject::getSchema()->tableName(BaseElement::class));
 
-        if ($sortAfterPosition < $currentPosition) {
-            $operator = '+';
-            $filter = "\"$tableName\".\"Sort\" > $sortAfterPosition AND \"$tableName\".\"Sort\" < $currentPosition";
-            $newBlockPosition = $sortAfterPosition + 1;
-        } else {
-            $operator = '-';
-            $filter = "\"$tableName\".\"Sort\" <= $sortAfterPosition AND \"$tableName\".\"Sort\" > $currentPosition";
-            $newBlockPosition = $sortAfterPosition;
+        // Update both the draft and live versions of the records
+        $suffixes = [''];
+        if (BaseElement::has_extension(Versioned::class)) {
+            $suffixes[] = '_Live';
         }
 
-        $query = SQLUpdate::create()
-            ->setTable("\"$tableName\"")
-            ->assignSQL('"Sort"', "\"$tableName\".\"Sort\" $operator 1")
-            ->addWhere([$filter, "\"$tableName\".\"ParentID\"" => $parentId]);
+        foreach ($suffixes as $tableSuffix) {
+            $tableName = sprintf('"%s%s"', $baseTableName, $tableSuffix);
 
-        $query->execute();
+            if ($sortAfterPosition < $currentPosition) {
+                $operator = '+';
+                $filter = "$tableName.\"Sort\" > $sortAfterPosition AND $tableName.\"Sort\" < $currentPosition";
+                $newBlockPosition = $sortAfterPosition + 1;
+            } else {
+                $operator = '-';
+                $filter = "$tableName.\"Sort\" <= $sortAfterPosition AND $tableName.\"Sort\" > $currentPosition";
+                $newBlockPosition = $sortAfterPosition;
+            }
+
+            $query = SQLUpdate::create()
+                ->setTable("$tableName")
+                ->assignSQL('"Sort"', "$tableName.\"Sort\" $operator 1")
+                ->addWhere([$filter, "$tableName.\"ParentID\"" => $parentId]);
+
+            $query->execute();
+        }
 
         // Now use the ORM to write a new version of the record that we are directly reordering
         $element->Sort = $newBlockPosition;
