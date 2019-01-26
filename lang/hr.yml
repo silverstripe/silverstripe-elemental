@@ -8,8 +8,6 @@ hr:
     PLURALNAME: blokovi
     SINGULARNAME: blok
     STYLE: 'Stil varijanta'
-    ShowTitleLabel: Prikazano
-    TitleLabel: 'Naslov (vidljiv ako je odabran)'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Sadržaj
     ContentLabel: Sadržaj

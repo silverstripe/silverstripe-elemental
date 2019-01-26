@@ -11,8 +11,6 @@ fr:
       other: '{count} blocs'
     SINGULARNAME: bloc
     STYLE: 'Variation de style'
-    ShowTitleLabel: Affiché
-    TitleLabel: 'Titre (affiché si coché)'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Contenu
     ContentLabel: Contenu

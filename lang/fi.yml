@@ -7,32 +7,30 @@ fi:
     MainTabLabel: Sisältö
     PLURALNAME: palikat
     PLURALS:
-      one: Palikka
+      one: 'Palikka'
       other: '{count} palikkaa'
     SINGULARNAME: palikka
-    STYLE: Tyylivariaatio
-    ShowTitleLabel: Näytetään
-    TitleLabel: 'Otsikko (näytetään jos valittu)'
+    STYLE: 'Tyylivariaatio'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Sisältö
     ContentLabel: Sisältö
-    PLURALNAME: sisältöpalikat
+    PLURALNAME: 'sisältöpalikat'
     PLURALS:
-      one: Sisältöpalikka
+      one: 'Sisältöpalikka'
       other: '{count} sisältöpalikkaa'
-    SINGULARNAME: sisältöpalikka
+    SINGULARNAME: 'sisältöpalikka'
   DNADesign\Elemental\Models\ElementalArea:
-    PLURALNAME: Elementtialueet
+    PLURALNAME: 'Elementtialueet'
     PLURALS:
-      one: Elementtialue
+      one: 'Elementtialue'
       other: '{count} elementtialuetta'
-    SINGULARNAME: Elementtialue
+    SINGULARNAME: 'Elementtialue'
   DNADesign\Elemental\Reports\ElementTypeReport:
-    Title: Sisältöpalikkatyypit
+    Title: 'Sisältöpalikkatyypit'
     Total: Yhteensä
-    Type: Sisältötyyppi
+    Type: 'Sisältötyyppi'
   DNADesign\Elemental\Reports\ElementsInUseReport:
-    None: 'Ei yhtään'
+    None: Ei yhtään
     Page: Sivu
     ReportTitle: 'Sisältöpalikat käytössä'
     Summary: Yhteenveto
