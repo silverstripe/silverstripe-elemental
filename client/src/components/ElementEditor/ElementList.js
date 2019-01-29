@@ -33,6 +33,7 @@ class ElementList extends Component {
       HoverBarComponent,
       DragIndicatorComponent,
       blocks,
+      allowedElementTypes,
       elementTypes,
       areaId,
       onDragEnd,
@@ -64,7 +65,7 @@ class ElementList extends Component {
         {isDraggingOver || <HoverBarComponent
           areaId={areaId}
           elementId={element.ID}
-          elementTypes={elementTypes}
+          elementTypes={allowedElementTypes}
         />}
       </div>
     ));
@@ -111,6 +112,7 @@ ElementList.propTypes = {
   // @todo support either ElementList or Element children in an array (or both)
   blocks: PropTypes.arrayOf(elementType),
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
+  allowedElementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   loading: PropTypes.bool,
   areaId: PropTypes.number.isRequired,
   dragTargetElementId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
