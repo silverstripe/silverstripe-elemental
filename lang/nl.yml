@@ -13,8 +13,6 @@ nl:
       other: '{count} blokken'
     SINGULARNAME: blok
     STYLE: 'Stijl variatie'
-    ShowTitleLabel: Weergegeven
-    TitleLabel: 'Titel (tonen indien actief)'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Inhoud
     ContentLabel: Inhoud
