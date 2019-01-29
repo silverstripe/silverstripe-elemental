@@ -27,7 +27,8 @@ class TextCheckboxGroupFieldTest extends SapphireTest
 
     public function testFieldIsAssignedFirstFieldsTitleInConstructor()
     {
-        $this->assertSame('Hello World', $this->field->Title());
+        // Note: SilverStripe 4.0-4.3 = "Hello World", 4.4+ "Hello world"
+        $this->assertTrue(strcasecmp('Hello World', $this->field->Title()) === 0);
     }
 
     public function testFieldReturnsCompositeFieldTemplateOnReadonlyTransformation()
