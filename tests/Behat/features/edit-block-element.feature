@@ -68,6 +68,7 @@ Feature: Edit elements in the CMS
     When I click on the caret button for block 2
       Then I should see "New sample content"
 
+  @unsavedChanges
   Scenario: I can edit inline-editable blocks and save the page as a whole
     Given I see a list of blocks
     Given I click on block 1
