@@ -27,7 +27,8 @@ SilverStripe\GraphQL\Manager:
               Elements:
                 resolver: DNADesign\Elemental\GraphQL\ElementsResolver
             operations:
-              readOne: true
+              readOne:
+                resolver: DNADesign\Elemental\GraphQL\ReadOneAreaResolver
           # Basic member information is required for history views
           SilverStripe\Security\Member:
             fields: [ID, FirstName, Surname]
