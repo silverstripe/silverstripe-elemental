@@ -96,13 +96,13 @@ class ReorderElements
         $baseTableName = Convert::raw2sql(DataObject::getSchema()->tableName(BaseElement::class));
 
         // Update both the draft and live versions of the records
-        $suffixes = [''];
+        $tableNames = [$baseTableName];
         if (BaseElement::has_extension(Versioned::class)) {
-            $suffixes[] = '_Live';
+            $tableNames[] = $element->stageTable($baseTableName, Versioned::LIVE);
         }
 
-        foreach ($suffixes as $tableSuffix) {
-            $tableName = sprintf('"%s%s"', $baseTableName, $tableSuffix);
+        foreach ($tableNames as $tableName) {
+            $tableName = sprintf('"%s"', $tableName);
 
             if ($sortAfterPosition < $currentPosition) {
                 $operator = '+';
