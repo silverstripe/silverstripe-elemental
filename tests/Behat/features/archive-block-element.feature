@@ -13,7 +13,8 @@ Feature: Archive elements in the CMS
     Given I am logged in with "ADMIN" permissions
       # Remove with 'And I click "Blocks Page" in the ".breadcrumbs-wrapper" element' once the ElementalArea refreshes,
       # See https://github.com/dnadesign/silverstripe-elemental/issues/320
-      And I go to "/admin/pages/edit/show/6"
+      And I go to "/admin/pages"
+      And I left click on "Blocks Page" in the tree
     When I see a list of blocks
       Then I should see "Alice's Block"
       And I should see "Bob's Block"
