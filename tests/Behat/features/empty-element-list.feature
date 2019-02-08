@@ -9,7 +9,8 @@ Feature: View an elemental area with no blocks on a page
       And a "page" "Blocks Page"
 
   Given I am logged in with "ADMIN" permissions
-      And I go to "/admin/pages/edit/show/6"
+      And I go to "/admin/pages"
+      And I left click on "Blocks Page" in the tree
 
   Scenario: I can see a message that alerts me to add blocks
     Given I should see an empty list of blocks

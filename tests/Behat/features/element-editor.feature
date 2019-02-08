@@ -10,7 +10,8 @@ Feature: View types of elements in an area on a page
       And the "page" "Blocks Page" has a "Bob's Block" content element with "Some content II" content
 
     Given I am logged in with "ADMIN" permissions
-      And I go to "/admin/pages/edit/show/6"
+      When I go to "/admin/pages"
+      And I left click on "Blocks Page" in the tree
     When I see a list of blocks
       Then I should see "Alice's Block"
       And I should see "Bob's Block"
