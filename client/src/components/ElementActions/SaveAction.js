@@ -51,7 +51,7 @@ const SaveAction = (MenuComponent) => (props) => {
         const preview = $('.cms-preview');
         preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
 
-        const newTitle = formData[`PageElements_${element.ID}_Title`];
+        const newTitle = formData ? formData[`PageElements_${element.ID}_Title`] : null;
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
@@ -64,7 +64,8 @@ const SaveAction = (MenuComponent) => (props) => {
           type: 'success'
         });
       })
-      .catch(() => {
+      .catch((something) => {
+        console.log(something);
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
