@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { DropdownItem } from 'reactstrap';
+import { elementTypeType } from 'types/elementTypeType';
 
 /**
  * Renders an action item for the "more actions" dropdown on elements
@@ -27,6 +28,7 @@ AbstractAction.propTypes = {
   onClick: PropTypes.func,
   title: PropTypes.string,
   name: PropTypes.string,
+  type: elementTypeType,
   active: PropTypes.bool,
 };
 

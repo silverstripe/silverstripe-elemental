@@ -9,7 +9,7 @@ import i18n from 'i18n';
  * Adds the elemental menu action to unpublish a published block
  */
 const UnpublishAction = (MenuComponent) => (props) => {
-  const { element, actions: { handleUnpublishBlock } } = props;
+  const { element, type, actions: { handleUnpublishBlock } } = props;
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -19,7 +19,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
         'ElementHeader.NOTITLE',
         'Untitled {type} block'
       ),
-      { type: element.BlockSchema.type }
+      { type: type.title }
     );
 
     if (handleUnpublishBlock) {

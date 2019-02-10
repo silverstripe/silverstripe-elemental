@@ -17,7 +17,7 @@ const SaveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { element, securityId, formData, reinitialiseForm } = props;
+    const { element, type, securityId, formData, reinitialiseForm } = props;
 
     const { jQuery: $ } = window;
     const noTitle = i18n.inject(
@@ -25,7 +25,7 @@ const SaveAction = (MenuComponent) => (props) => {
         'ElementHeader.NOTITLE',
         'Untitled {type} block'
       ),
-      { type: element.BlockSchema.type }
+      { type: type.title }
     );
 
     const endpointSpec = {
@@ -51,7 +51,7 @@ const SaveAction = (MenuComponent) => (props) => {
         const preview = $('.cms-preview');
         preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
 
-        const newTitle = formData[`PageElements_${element.ID}_Title`];
+        const newTitle = formData ? formData[`PageElements_${element.ID}_Title`] : null;
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
@@ -64,7 +64,8 @@ const SaveAction = (MenuComponent) => (props) => {
           type: 'success'
         });
       })
-      .catch(() => {
+      .catch((something) => {
+        console.log(something);
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
