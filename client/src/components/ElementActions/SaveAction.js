@@ -17,7 +17,7 @@ const SaveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { element, securityId, formData, reinitialiseForm } = props;
+    const { element, type, securityId, formData, reinitialiseForm } = props;
 
     const { jQuery: $ } = window;
     const noTitle = i18n.inject(
@@ -25,7 +25,7 @@ const SaveAction = (MenuComponent) => (props) => {
         'ElementHeader.NOTITLE',
         'Untitled {type} block'
       ),
-      { type: element.BlockSchema.type }
+      { type: type.title }
     );
 
     const endpointSpec = {

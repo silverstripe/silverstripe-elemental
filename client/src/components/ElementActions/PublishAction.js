@@ -13,14 +13,14 @@ import { initialize } from 'redux-form';
 /**
  * Show a toast message reporting whether publication of Element was successful
  *
- * @param {string} elementType E.g. "Content" - human friendly element type (not PHP FQCN)
+ * @param {string} type E.g. "Content" - human friendly element type (not PHP FQCN)
  * @param {string} title Title of the element, or a false value if unset (e.g. undefined)
- * @param {bool} success Show a success message (true), or an error message (false)
+ * @param {boolean} success Show a success message (true), or an error message (false)
  */
-const reportPublicationStatus = (elementType, title, success) => {
+const reportPublicationStatus = (type, title, success) => {
   const noTitle = i18n.inject(
     i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
-    { type: elementType }
+    { type }
   );
   const successMessage = i18n.inject(
     i18n._t('ElementPublishAction.SUCCESS_NOTIFICATION', 'Published \'{title}\' successfully'),
@@ -87,8 +87,8 @@ const PublishAction = (MenuComponent) => (props) => {
         ID: id,
         Title: title,
         Version: version,
-        BlockSchema: { type: elementType }
       },
+      type,
       securityId,
       formData,
       actions: { handlePublishBlock },
@@ -109,8 +109,8 @@ const PublishAction = (MenuComponent) => (props) => {
     // Perform publish. Data is assumed to be up to date
     actionFlow
       .then((versionToPublish) => handlePublishBlock(id, 'DRAFT', 'LIVE', versionToPublish))
-      .then(() => reportPublicationStatus(elementType, title, true))
-      .catch(() => reportPublicationStatus(elementType, title, false));
+      .then(() => reportPublicationStatus(type.title, title, true))
+      .catch(() => reportPublicationStatus(type.title, title, false));
   };
 
   const newProps = {

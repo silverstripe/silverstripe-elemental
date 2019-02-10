@@ -149,6 +149,7 @@ class Header extends Component {
             >
               <ElementActionsComponent
                 element={element}
+                type={type}
                 areaId={areaId}
                 activeTab={activeTab}
                 editTabs={type.editTabs}
