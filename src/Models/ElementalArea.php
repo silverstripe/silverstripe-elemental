@@ -55,6 +55,14 @@ class ElementalArea extends DataObject
     private static $table_name = 'ElementalArea';
 
     /**
+     * Don't show this model in campaign admin as part of implicit change sets
+     *
+     * @config
+     * @var bool
+     */
+    private static $hide_in_campaigns = true;
+
+    /**
      * Cache various data to improve CMS load time
      *
      * @internal
