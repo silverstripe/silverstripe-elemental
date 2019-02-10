@@ -8,6 +8,7 @@ import backend from 'lib/Backend';
 import { connect } from 'react-redux';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
+import { initialize } from 'redux-form';
 
 /**
  * Show a toast message reporting whether publication of Element was successful
@@ -91,13 +92,18 @@ const PublishAction = (MenuComponent) => (props) => {
       securityId,
       formData,
       actions: { handlePublishBlock },
+      reinitialiseForm,
     } = props;
 
     let actionFlow = new Promise((resolve) => resolve(version));
 
     // Edits have been made to the form. Peform a "Save & Publish"
     if (formDirty) {
-      actionFlow = performSaveForElementWithFormData(id, formData, securityId);
+      actionFlow = performSaveForElementWithFormData(id, formData, securityId)
+        .then((passthrough) => {
+          reinitialiseForm(formData);
+          return passthrough;
+        });
     }
 
     // Perform publish. Data is assumed to be up to date
@@ -139,6 +145,20 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
+function mapDispatchToProps(dispatch, ownProps) {
+  const formName = loadElementFormStateName(ownProps.element.ID);
+
+  return {
+    reinitialiseForm(savedData) {
+      dispatch(initialize(`element.${formName}`, savedData));
+    }
+  };
+}
+
 export { PublishAction as Component };
 
-export default compose(publishBlockMutation, connect(mapStateToProps), PublishAction);
+export default compose(
+  publishBlockMutation,
+  connect(mapStateToProps, mapDispatchToProps),
+  PublishAction
+);
