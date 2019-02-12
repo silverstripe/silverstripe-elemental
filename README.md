@@ -67,13 +67,23 @@ To learn more about [SilverStripe supported](https://www.silverstripe.org/softwa
 
 * [dnadesign/silverstripe-elemental-list](https://github.com/dnadesign/silverstripe-elemental-list): Container for elements (allows layouts)
 * [dnadesign/silverstripe-elemental-virtual](https://github.com/dnadesign/silverstripe-elemental-virtual): Reuse elements across pages
-* [dynamic/silverstripe-elemental-customer-service](https://github.com/dynamic/silverstripe-elemental-customer-service): Contact information
-* [dynamic/silverstripe-elemental-accordion](https://github.com/dynamic/silverstripe-elemental-accordion): Expand/collapse content areas
-* [dynamic/silverstripe-elemental-flexslider](https://github.com/dynamic/silverstripe-elemental-flexslider): Slideshows with flexible elements
-* [dynamic/silverstripe-elemental-blog](https://github.com/dynamic/silverstripe-elemental-blog): Recent blog posts
-* [dynamic/silverstripe-elemental-sponsors](https://github.com/dynamic/silverstripe-elemental-sponsors): Sponsor logos
-* [dynamic/silverstripe-elemental-testimonials](https://github.com/dynamic/silverstripe-elemental-testimonials): Customer testimonials and quotes
-* [dynamic/silverstripe-elemental-countdown](https://github.com/dynamic/silverstripe-elemental-countdown): Countdown to a specific date/time
+* [dynamic/silverstripe-elemental-blocks](https://github.com/dynamic/silverstripe-elemental-blocks#included-blocks): Elemental Blocks will add the following Elements to your site
+  * Accordion: content in collapsable panels
+  * Countdown: time left until a set date and time
+  * Customer Service: map, directions, and contact info for your location
+  * Embeded Code: embed code like iframes, javascript
+  * Featured Content: large image, headline, description, link. one per row
+  * File List: A list of files for download
+  * Flexslider: Flexslider slideshow
+  * Gallery: display a collection of images
+  * Image: single image
+  * oEmbed: embed content from YouTube, SoundCloud, etc
+  * Promos: small image, headline, description, link. 3 to 4 per row
+  * Recent Blog Posts: list of the most recent posts of a specific blog
+  * Section Navigation: list of child pages or pages in current level
+  * Sponsors: sponsor logos in a row
+  * Tab Set: Create a tabbed interface that uses elements
+  * Testimonials: list of customer testimonials, filter by category
 
 ## Helpful modules
 
