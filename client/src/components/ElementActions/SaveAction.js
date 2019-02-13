@@ -64,8 +64,7 @@ const SaveAction = (MenuComponent) => (props) => {
           type: 'success'
         });
       })
-      .catch((something) => {
-        console.log(something);
+      .catch(() => {
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(

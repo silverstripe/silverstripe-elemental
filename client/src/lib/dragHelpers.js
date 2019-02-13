@@ -32,3 +32,19 @@ export const getDragIndicatorIndex = (items, dragTarget, draggedItem, dragSpot) 
 
   return targetIndex;
 };
+
+export const elementDragSource = {
+  beginDrag(props) {
+    return props.element;
+  },
+
+  endDrag(props, monitor) {
+    const { onDragEnd } = props;
+
+    if (!onDragEnd || !monitor.getDropResult()) {
+      return;
+    }
+
+    onDragEnd(monitor.getItem().ID, monitor.getDropResult().dropAfterID);
+  }
+};
