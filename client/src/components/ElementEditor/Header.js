@@ -10,7 +10,11 @@ import i18n from 'i18n';
 import classNames from 'classnames';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { isDirty } from 'redux-form';
+import { DragSource } from 'react-dnd';
 import getFormState from 'lib/getFormState';
+import { elementDragSource } from 'lib/dragHelpers';
+import { getEmptyImage } from 'react-dnd-html5-backend';
+
 
 class Header extends Component {
   constructor(props) {
@@ -21,6 +25,19 @@ class Header extends Component {
     this.state = {
       tooltipOpen: false,
     };
+  }
+
+  componentDidMount() {
+    const { connectDragPreview } = this.props;
+    if (connectDragPreview) {
+      // Use empty image as a drag preview so browsers don't draw it
+      // and we can draw whatever we want on the custom drag layer instead.
+      connectDragPreview(getEmptyImage(), {
+        // IE fallback: specify that we'd rather screenshot the node
+        // when it already knows it's being dragged so we can hide it with CSS.
+        captureDraggingState: true,
+      });
+    }
   }
 
   componentDidUpdate() {
@@ -85,6 +102,7 @@ class Header extends Component {
 
   render() {
     const {
+      connectDragSource,
       element,
       type,
       areaId,
@@ -121,7 +139,7 @@ class Header extends Component {
     );
     const blockIconId = `element-icon-${element.ID}`;
 
-    return (
+    const content = (
       <div className={containerClasses}>
         <div className="element-editor-header__drag-handle">
           <i className="font-icon-drag-handle" />
@@ -161,6 +179,12 @@ class Header extends Component {
         </div>}
       </div>
     );
+
+    if (previewExpanded) {
+      return connectDragSource(content);
+    }
+
+    return content;
   }
 }
 
@@ -174,6 +198,9 @@ Header.propTypes = {
   previewExpanded: PropTypes.bool,
   disableTooltip: PropTypes.bool,
   formDirty: PropTypes.bool,
+  connectDragSource: PropTypes.func.isRequired,
+  connectDragPreview: PropTypes.func.isRequired,
+  onDragEnd: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
 };
 
 Header.defaultProps = {
@@ -191,12 +218,16 @@ function mapStateToProps(state, ownProps) {
 export { Header as Component };
 
 export default compose(
+  DragSource('element', elementDragSource, connector => ({
+    connectDragSource: connector.dragSource(),
+    connectDragPreview: connector.dragPreview(),
+  })),
+  connect(mapStateToProps),
   inject(
     ['ElementActions'],
     (ElementActionsComponent) => ({
       ElementActionsComponent,
     }),
     () => 'ElementEditor.ElementList.Element'
-  ),
-  connect(mapStateToProps)
+  )
 )(Header);

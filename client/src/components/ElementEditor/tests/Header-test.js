@@ -34,6 +34,9 @@ describe('Header', () => {
           areaId={1}
           type={type}
           ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
@@ -49,6 +52,9 @@ describe('Header', () => {
           areaId={1}
           type={type}
           ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
@@ -63,6 +69,9 @@ describe('Header', () => {
           areaId={1}
           type={type}
           ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
@@ -79,6 +88,9 @@ describe('Header', () => {
           type={type}
           expandable={false}
           ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
@@ -96,6 +108,9 @@ describe('Header', () => {
           expandable
           previewExpanded={false}
           ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
@@ -113,6 +128,9 @@ describe('Header', () => {
           expandable
           previewExpanded
           ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
@@ -129,6 +147,9 @@ describe('Header', () => {
           type={type}
           expandable
           ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
@@ -143,6 +164,9 @@ describe('Header', () => {
           type={type}
           expandable={false}
           ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
@@ -160,6 +184,9 @@ describe('Header', () => {
           areaId={1}
           type={type}
           ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
@@ -177,6 +204,9 @@ describe('Header', () => {
           type={type}
           ElementActionsComponent={ElementActionsComponent}
           element={element}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
@@ -194,6 +224,9 @@ describe('Header', () => {
           type={type}
           ElementActionsComponent={ElementActionsComponent}
           element={element}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
         />
       );
 
