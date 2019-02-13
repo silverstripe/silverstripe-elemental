@@ -40,7 +40,7 @@ An **Add block** button shown as a bar and plus icon can be activated by moving 
 
 ![Adding in-page blocks](_images/adding_blocks_between_blocks.png)
 
-#### Block state indicators {#state-indicators}
+## Block state indicators {#state-indicators}
 
 States are shown on the block type icon as coloured indicators. Each represents the current workflow status your content block is in.
 
