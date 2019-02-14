@@ -14,6 +14,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Subsites\Model\Subsite;
 
 /**
  * This extension handles most of the relationships between pages and element
@@ -275,6 +276,11 @@ class ElementalAreasExtension extends DataExtension
         $ownerClass = get_class($this->owner);
         $elementalAreas = $this->owner->getElementalRelations();
         $schema = $this->owner->getSchema();
+        $hasSubsites = class_exists('\SilverStripe\Subsites\Model\Subsite');
+
+        if ($hasSubsites) {
+            Subsite::$disable_subsite_filter = true;
+        }
 
         // There is no inbuilt filter for null values
         $where = [];
@@ -285,6 +291,10 @@ class ElementalAreasExtension extends DataExtension
 
         foreach ($ownerClass::get()->where(implode(' OR ', $where)) as $elementalObject) {
             $elementalObject->ensureElementalAreasExist($elementalAreas)->write();
+        }
+
+        if ($hasSubsites) {
+            Subsite::$disable_subsite_filter = false;
         }
     }
 }
