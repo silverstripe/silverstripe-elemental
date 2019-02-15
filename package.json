@@ -34,6 +34,7 @@
   "dependencies": {
     "bootstrap": "4.1.2",
     "classnames": "^2.2.5",
+    "deep-freeze-strict":  "^1.1.1",
     "graphql-tag": "^0.1.17",
     "jquery": "^3.2.1",
     "prop-types": "^15.6.2",

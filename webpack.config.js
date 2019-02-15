@@ -39,6 +39,7 @@ const config = [
     name: 'css',
     entry: {
       bundle: `${PATHS.SRC}/styles/bundle.scss`,
+      'preview-overlay': `${PATHS.SRC}/styles/preview-overlay.scss`
     },
     output: {
       path: PATHS.DIST,

@@ -13,6 +13,7 @@ SilverStripe\Admin\LeftAndMain:
 SilverStripe\CMS\Controllers\ContentController:
   extensions:
     - DNADesign\Elemental\Extensions\ElementalContentControllerExtension
+    - DNADesign\Elemental\Extensions\ElementalPreviewOverlayExtension
   url_handlers:
     'element/$ID!': 'handleElement'
 

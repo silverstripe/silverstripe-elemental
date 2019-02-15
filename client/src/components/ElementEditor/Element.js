@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import * as TabsActions from 'state/tabs/TabsActions';
+import * as ElementActions from 'state/element/ElementActions';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { elementDragSource, isOverTop } from 'lib/dragHelpers';
@@ -31,7 +32,6 @@ class Element extends Component {
     this.updateFormTab = this.updateFormTab.bind(this);
 
     this.state = {
-      previewExpanded: false,
       initialTab: '',
       loadingError: false,
     };
@@ -110,13 +110,11 @@ class Element extends Component {
    * @param {string} toBeActiveTab
    */
   handleTabClick(toBeActiveTab) {
-    const { activeTab } = this.props;
+    const { activeTab, toggleElementOpen, element } = this.props;
     const { loadingError } = this.state;
 
     if (toBeActiveTab !== activeTab && !loadingError) {
-      this.setState({
-        previewExpanded: true,
-      });
+      toggleElementOpen(Number(element.ID), true);
 
       this.updateFormTab(toBeActiveTab);
     }
@@ -127,7 +125,7 @@ class Element extends Component {
    * If the element is not inline-editable, take user to the GridFieldDetailForm to edit the record
    */
   handleExpand(event) {
-    const { type, link } = this.props;
+    const { type, link, toggleElementOpen, element } = this.props;
     const { loadingError } = this.state;
 
     if (event.target.type === 'button') {
@@ -137,9 +135,7 @@ class Element extends Component {
     }
 
     if (type.inlineEditable && !loadingError) {
-      this.setState({
-        previewExpanded: !this.state.previewExpanded
-      });
+      toggleElementOpen(Number(element.ID));
       return;
     }
 
@@ -181,9 +177,8 @@ class Element extends Component {
       isDragging,
       isOver,
       onDragEnd,
+      elementOpen,
     } = this.props;
-
-    const { previewExpanded } = this.state;
 
     if (!element.ID) {
       return null;
@@ -219,7 +214,7 @@ class Element extends Component {
         areaId={areaId}
         expandable={type.inlineEditable}
         link={link}
-        previewExpanded={previewExpanded}
+        previewExpanded={elementOpen}
         handleEditTabsClick={this.handleTabClick}
         activeTab={activeTab}
         disableTooltip={isDragging}
@@ -230,14 +225,14 @@ class Element extends Component {
         fileUrl={element.BlockSchema.fileURL}
         fileTitle={element.BlockSchema.fileTitle}
         content={element.BlockSchema.content}
-        previewExpanded={previewExpanded && !isDragging}
+        previewExpanded={elementOpen && !isDragging}
         activeTab={activeTab}
         onFormInit={() => this.updateFormTab(activeTab)}
         handleLoadingError={this.handleLoadingError}
       />
     </div>);
 
-    if (!previewExpanded) {
+    if (!elementOpen) {
       return connectDragSource(content);
     }
 
@@ -249,6 +244,7 @@ function mapStateToProps(state, ownProps) {
   const elementId = ownProps.element.ID;
   const elementName = loadElementFormStateName(elementId);
   const elementFormSchema = loadElementSchemaValue('schemaUrl', elementId);
+  const elementOpen = state.elemental.elements.openElements.includes(Number(elementId));
 
   const filterFieldsForTabs = (field) => field.component === 'Tabs';
 
@@ -275,6 +271,7 @@ function mapStateToProps(state, ownProps) {
   return {
     tabSetName,
     activeTab,
+    elementOpen,
   };
 }
 
@@ -285,6 +282,9 @@ function mapDispatchToProps(dispatch, ownProps) {
     onActivateTab(tabSetName, activeTabName) {
       dispatch(TabsActions.activateTab(`element.${elementName}__${tabSetName}`, activeTabName));
     },
+    toggleElementOpen(id, open = null) {
+      dispatch(ElementActions.toggleElementOpen(id, open));
+    }
   };
 }
 
