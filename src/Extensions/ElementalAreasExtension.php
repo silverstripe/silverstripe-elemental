@@ -273,14 +273,14 @@ class ElementalAreasExtension extends DataExtension
         }
 
         $ownerClass = get_class($this->owner);
-        $tableName = $this->owner->getSchema()->tableName($ownerClass);
         $elementalAreas = $this->owner->getElementalRelations();
         $schema = $this->owner->getSchema();
 
         // There is no inbuilt filter for null values
         $where = [];
         foreach ($elementalAreas as $areaName) {
-            $where[] = $schema->sqlColumnForField($ownerClass, $areaName . 'ID') . ' IS NULL';
+            $queryDetails = $schema->sqlColumnForField($ownerClass, $areaName . 'ID');
+            $where[] = $queryDetails . ' IS NULL OR ' . $queryDetails . ' = 0' ;
         }
 
         foreach ($ownerClass::get()->where(implode(' OR ', $where)) as $elementalObject) {
