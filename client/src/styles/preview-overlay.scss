@@ -1,8 +1,19 @@
+$edit-button-width: 40px;
 $outline-color: #0371c4;
 
 [data-element-id]:hover {
-  box-shadow: inset 0 0 0 1px $outline-color;
   position: relative;
+}
+
+[data-element-id]:hover::after {
+  box-shadow: inset 0 0 0 2px $outline-color;
+  content: " ";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  width: 100%;
 }
 
 [data-element-id] .elemental-edit-button {
@@ -14,10 +25,11 @@ $outline-color: #0371c4;
   display: none;
   font-size: 12px;
   font-weight: bold;
+  left: calc(50% - #{$edit-button-width} / 2);
   text-transform: uppercase;
   position: absolute;
-  right: 5px;
   top: 0;
+  width: $edit-button-width;
 }
 
 [data-element-id]:hover .elemental-edit-button {
