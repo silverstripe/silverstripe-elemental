@@ -27,9 +27,9 @@ const ElementalAreaHistoryFactory = (FieldGroup) =>
           {legend}
           <div className={'elemental-preview elemental-preview--historic'}>
             {data.ElementEditLink &&
-              <a className={'elemental-preview__link'} href={data.ElementEditLink}>
-                {i18n._t('HistoricElementView.BLOCK_HISTORY', 'View block')}
-                <i className={'font-icon-angle-right'} />
+              <a className="elemental-preview__link" href={data.ElementEditLink}>
+                <span className="elemental-preview__link-text">{i18n._t('HistoricElementView.BLOCK_HISTORY', 'View block')}</span>
+                <i className="font-icon-angle-right btn--icon-lg elemental-preview__link-caret" />
               </a>
             }
             <div className={'elemental-preview__icon'}><i className={data.ElementIcon} /></div>

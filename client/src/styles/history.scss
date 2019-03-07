@@ -31,6 +31,21 @@
 .elemental-preview__link {
   float: right;
   margin-top: 4px;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:hover &-text {
+    text-decoration: underline;
+  }
+
+  &-caret {
+    display: block;
+    float: right;
+    margin-top: -2px;
+    margin-left: 2px;
+  }
 }
 
 div.elemental-area__element--historic.elemental-area__element--historic-inner {
