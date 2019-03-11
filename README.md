@@ -305,7 +305,7 @@ yarn watch
 ```
 
 When you're ready to make a pull request you can rebuild them, which will also
-minify everything. Note that `watch`will generate source map files which you
+minify everything. Note that `watch` will generate source map files which you
 shouldn't commit in for your final pull request. To minify and package:
 
 ```
