@@ -250,6 +250,10 @@ The Solr search results may add in emphasis tags or other formatting around matc
 to allow unescaped HTML in your search results template. You should use the `$Excerpt` property (see
 `SolrIndex::search` for more) to display the relevant search matches.
 
+## Advanced setup
+
+* [Advanced setup](docs/en/advanced_setup.md)
+
 ## Building the elemental frontend assets
 
 This module uses the [SilverStripe Webpack module](https://github.com/silverstripe/webpack-config), and inherits
