@@ -54,6 +54,7 @@ describe('ElementList', () => {
         <ElementList
           key={'1'}
           blocks={blocks}
+          allowedElementTypes={elementTypes}
           elementTypes={elementTypes}
           ElementComponent={Element}
           LoadingComponent={Loading}
@@ -74,6 +75,7 @@ describe('ElementList', () => {
         <ElementList
           key={'2'}
           blocks={[]}
+          allowedElementTypes={elementTypes}
           elementTypes={elementTypes}
           ElementComponent={Element}
           LoadingComponent={Loading}
@@ -94,6 +96,7 @@ describe('ElementList', () => {
         <ElementList
           key={'3'}
           blocks={[]}
+          allowedElementTypes={elementTypes}
           elementTypes={elementTypes}
           ElementComponent={Element}
           LoadingComponent={Loading}

@@ -24,6 +24,7 @@ describe('ElementActions', () => {
         <ElementActions
           areaId={1}
           editTabs={testTabs}
+          type={{ title: 'Some block' }}
           ActionMenuComponent={ActionMenuComponent}
           handleEditTabsClick={editTabsClick}
         />
@@ -43,6 +44,7 @@ describe('ElementActions', () => {
         <ElementActions
           areaId={1}
           editTabs={testTabs}
+          type={{ title: 'Some block' }}
           ActionMenuComponent={ActionMenuComponent}
           handleEditTabsClick={editTabsClick}
         />
@@ -62,6 +64,7 @@ describe('ElementActions', () => {
         <ElementActions
           areaId={1}
           editTabs={testTabs}
+          type={{ title: 'Some block' }}
           ActionMenuComponent={ActionMenuComponent}
           handleEditTabsClick={editTabsClick}
         >

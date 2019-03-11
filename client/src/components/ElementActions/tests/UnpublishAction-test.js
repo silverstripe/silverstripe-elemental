@@ -25,6 +25,7 @@ describe('UnpublishAction', () => {
           IsPublished: true,
           BlockSchema: { type: 'Test' },
         }}
+        type={{ title: 'Some block' }}
         actions={{ handleUnpublishBlock: mockMutation }}
         toggle={false}
       />
@@ -51,6 +52,7 @@ describe('UnpublishAction', () => {
       <ActionComponent
         element={{ IsPublished: false, BlockSchema: { type: 'Test' } }}
         actions={{ handleUnpublishBlock: mockMutation }}
+        type={{ title: 'Some block' }}
       />
     );
 

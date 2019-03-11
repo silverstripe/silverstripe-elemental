@@ -95,6 +95,7 @@ class ElementEditor extends PureComponent {
           onDragOver={this.handleDragOver}
         />
         <ListComponent
+          allowedElementTypes={allowedElementTypes}
           elementTypes={elementTypes}
           areaId={areaId}
           onDragOver={this.handleDragOver}

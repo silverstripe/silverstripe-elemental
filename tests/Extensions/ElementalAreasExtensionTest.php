@@ -45,7 +45,7 @@ class ElementalAreasExtensionTest extends SapphireTest
         $page = new SiteTree();
         $types = $page->getElementalTypes();
 
-        $this->assertSame(['A test element', 'Content', 'Unused Element'], array_values($types));
+        $this->assertContainsInOrder(['A test element', 'Content', 'Unused Element'], array_values($types));
     }
 
     public function testGetElementalTypesAreNotSortedAlphabetically()
@@ -56,6 +56,20 @@ class ElementalAreasExtensionTest extends SapphireTest
         $page = new SiteTree();
         $types = $page->getElementalTypes();
 
-        $this->assertSame(['Content', 'A test element', 'Unused Element'], array_values($types));
+        $this->assertContainsInOrder(['Content', 'A test element', 'Unused Element'], array_values($types));
+    }
+
+    /**
+     * We need to check that the order of the elements is correct, but there might be more element types installed than
+     * we're aware of, so we first extract the elements we want from the source list and check the order afterwards.
+     *
+     * @param array $expected
+     * @param array $actual
+     */
+    private function assertContainsInOrder(array $expected, array $actual)
+    {
+        $matches = array_values(array_intersect($actual, $expected));
+
+        $this->assertSame($expected, $matches);
     }
 }

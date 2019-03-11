@@ -14,7 +14,7 @@ import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import * as TabsActions from 'state/tabs/TabsActions';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { isOverTop } from 'lib/dragHelpers';
+import { elementDragSource, isOverTop } from 'lib/dragHelpers';
 
 /**
  * The Element component used in the context of an ElementEditor shows the summary
@@ -180,18 +180,19 @@ class Element extends Component {
       connectDropTarget,
       isDragging,
       isOver,
+      onDragEnd,
     } = this.props;
 
     const { previewExpanded } = this.state;
+
+    if (!element.ID) {
+      return null;
+    }
 
     const linkTitle = i18n.inject(
       i18n._t('ElementalElement.TITLE', 'Edit this {type} block'),
       { type: type.title }
     );
-
-    if (!element.ID) {
-      return null;
-    }
 
     const elementClassNames = classNames(
       'element-editor__element',
@@ -203,39 +204,44 @@ class Element extends Component {
       this.getVersionedStateClassName()
     );
 
-    return connectDropTarget(connectDragSource(
-      <div
-        className={elementClassNames}
-        onClick={this.handleExpand}
-        onKeyUp={this.handleKeyUp}
-        role="button"
-        tabIndex={0}
-        title={linkTitle}
-        key={element.ID}
-      >
-        <HeaderComponent
-          element={element}
-          type={type}
-          areaId={areaId}
-          expandable={type.inlineEditable}
-          link={link}
-          previewExpanded={previewExpanded}
-          handleEditTabsClick={this.handleTabClick}
-          activeTab={activeTab}
-          disableTooltip={isDragging}
-        />
-        <ContentComponent
-          id={element.ID}
-          fileUrl={element.BlockSchema.fileURL}
-          fileTitle={element.BlockSchema.fileTitle}
-          content={element.BlockSchema.content}
-          previewExpanded={previewExpanded && !isDragging}
-          activeTab={activeTab}
-          onFormInit={() => this.updateFormTab(activeTab)}
-          handleLoadingError={this.handleLoadingError}
-        />
-      </div>
-    ));
+    const content = connectDropTarget(<div
+      className={elementClassNames}
+      onClick={this.handleExpand}
+      onKeyUp={this.handleKeyUp}
+      role="button"
+      tabIndex={0}
+      title={linkTitle}
+      key={element.ID}
+    >
+      <HeaderComponent
+        element={element}
+        type={type}
+        areaId={areaId}
+        expandable={type.inlineEditable}
+        link={link}
+        previewExpanded={previewExpanded}
+        handleEditTabsClick={this.handleTabClick}
+        activeTab={activeTab}
+        disableTooltip={isDragging}
+        onDragEnd={onDragEnd}
+      />
+      <ContentComponent
+        id={element.ID}
+        fileUrl={element.BlockSchema.fileURL}
+        fileTitle={element.BlockSchema.fileTitle}
+        content={element.BlockSchema.content}
+        previewExpanded={previewExpanded && !isDragging}
+        activeTab={activeTab}
+        onFormInit={() => this.updateFormTab(activeTab)}
+        handleLoadingError={this.handleLoadingError}
+      />
+    </div>);
+
+    if (!previewExpanded) {
+      return connectDragSource(content);
+    }
+
+    return content;
   }
 }
 
@@ -307,22 +313,6 @@ Element.defaultProps = {
 
 export { Element as Component };
 
-const elementSource = {
-  beginDrag(props) {
-    return props.element;
-  },
-
-  endDrag(props, monitor) {
-    const { onDragEnd } = props;
-
-    if (!onDragEnd || !monitor.getDropResult()) {
-      return;
-    }
-
-    onDragEnd(monitor.getItem().ID, monitor.getDropResult().dropAfterID);
-  }
-};
-
 const elementTarget = {
   drop(props, monitor, component) {
     const { element } = props;
@@ -347,7 +337,7 @@ export default compose(
     connectDropTarget: connector.dropTarget(),
     isOver: monitor.isOver(),
   })),
-  DragSource('element', elementSource, (connector, monitor) => ({
+  DragSource('element', elementDragSource, (connector, monitor) => ({
     connectDragSource: connector.dragSource(),
     connectDragPreview: connector.dragPreview(),
     isDragging: monitor.isDragging(),

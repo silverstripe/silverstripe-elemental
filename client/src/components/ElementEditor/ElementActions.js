@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { DropdownItem } from 'reactstrap';
 import { inject } from 'lib/Injector';
 import { elementType } from 'types/elementType';
+import { elementTypeType } from 'types/elementTypeType';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 
 /**
@@ -30,10 +31,10 @@ class ElementActions extends Component {
   /**
    * Render buttons for the edit form tabs that will be a part of the edit form (if they exist)
    *
-   * @returns {DOMElement[]|null}
+   * @returns {HTMLElement[]|null}
    */
   renderEditTabs() {
-    const { editTabs, activeTab } = this.props;
+    const { editTabs, activeTab, type } = this.props;
 
     if (!editTabs || !editTabs.length) {
       return null;
@@ -45,6 +46,7 @@ class ElementActions extends Component {
           key={name}
           name={name}
           title={title}
+          type={type}
           onClick={this.handleEditTabsClick}
           active={name === activeTab}
         />)
@@ -101,6 +103,7 @@ class ElementActions extends Component {
 ElementActions.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   element: elementType,
+  type: elementTypeType.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
   areaId: PropTypes.number.isRequired,
   activeTab: PropTypes.string,
