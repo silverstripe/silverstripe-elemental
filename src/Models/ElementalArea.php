@@ -3,7 +3,6 @@
 namespace DNADesign\Elemental\Models;
 
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
-use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injector;
@@ -72,7 +71,7 @@ class ElementalArea extends DataObject
     {
         $elementalClasses = [];
 
-        foreach (ClassInfo::getValidSubClasses(SiteTree::class) as $class) {
+        foreach (ClassInfo::getValidSubClasses(DataObject::class) as $class) {
             if (Extensible::has_extension($class, ElementalAreasExtension::class)) {
                 $elementalClasses[] = $class;
             }
