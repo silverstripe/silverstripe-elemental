@@ -308,6 +308,10 @@ globally in your command line.
 **Note:** If adding or modifying colours, spacing, font sizes etc. please try
 and use an appropriate variable from the silverstripe/admin module if available.
 
+## Advanced setup
+
+* [Advanced setup](docs/en/advanced_setup.md)
+
 ## Upgrading
 
 For developers upgrading from Elemental 3 to 4, [see the upgrade guide](docs/en/upgrading_to_4.md).
