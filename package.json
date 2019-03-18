@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/dnadesign/silverstripe-elemental#readme",
   "dependencies": {
-    "bootstrap": "4.1.2",
+    "bootstrap": "^4.3.1",
     "classnames": "^2.2.5",
     "graphql-tag": "^0.1.17",
     "jquery": "^3.2.1",
