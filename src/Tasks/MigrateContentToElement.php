@@ -6,6 +6,7 @@ use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
 
 use SilverStripe\Dev\BuildTask;
+use SilverStripe\Versioned\Versioned;
 
 class MigrateContentToElement extends BuildTask
 {
@@ -21,7 +22,7 @@ class MigrateContentToElement extends BuildTask
         $pageTypes = singleton(ElementalArea::class)->supportedPageTypes();
         $count = 0;
         foreach ($pageTypes as $pageType) {
-            $pages = $pageType::get()->filter('ElementalAreaID', 0);
+            $pages = $pageType::get()->filter('Content:not', ['', null]);
             foreach ($pages as $page) {
                 $content = $page->Content;
                 $page->Content = '';
@@ -33,6 +34,9 @@ class MigrateContentToElement extends BuildTask
                 $element->HTML = $content;
                 $element->ParentID = $area->ID;
                 $element->write();
+                if (class_exists(Versioned::class)) {
+                    $page->copyVersionToStage(Versioned::DRAFT, Versioned::LIVE);
+                }
             }
             $count += $pages->Count();
             echo 'Migrated ' . $pages->Count() . ' ' . $pageType . ' pages\' content<br>';
