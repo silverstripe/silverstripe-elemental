@@ -5,6 +5,7 @@ namespace DNADesign\Elemental\Forms;
 use SilverStripe\Control\RequestHandler;
 use SilverStripe\Forms\DefaultFormFactory;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 
 class EditFormFactory extends DefaultFormFactory
@@ -53,10 +54,7 @@ class EditFormFactory extends DefaultFormFactory
     {
         $elementID = $context['Record']->ID;
 
-        $fieldsToNamespace = $fields->dataFields();
-        $fieldsToNamespace[] = $fields->fieldByName('Root.Main.Title');
-
-        foreach ($fieldsToNamespace as $field) {
+        foreach ($fields->dataFields() as $field) {
             $namespacedName = sprintf(self::FIELD_NAMESPACE_TEMPLATE, $elementID, $field->getName());
             $field->setName($namespacedName);
         }
