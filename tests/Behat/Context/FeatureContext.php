@@ -387,6 +387,13 @@ class FeatureContext extends SilverStripeContext
 
         $fieldId = $label->getAttribute('for');
         $field = $block->find('css', '#' . $fieldId);
+
+        assertNotNull($field, sprintf(
+            'Label found matching "%s" but there was no field that has the ID matching the "for" attribute ("#%s")',
+            $name,
+            $fieldId
+        ));
+
         return $field;
     }
 }
