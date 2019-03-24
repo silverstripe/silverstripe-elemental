@@ -9,7 +9,7 @@ Feature: View types of elements in a report
     And I go to "/admin/reports"
     Then I should see text matching "Content block types"
 
-    When I go to "/admin/reports/show/DNADesign-Elemental-Reports-ElementTypeReport"
+    When I click on the "Content block types" report
     Then I should see text matching "Content block types"
     # See: Content element, bundled by default with elemental
     And I should see text matching "HTML text block"

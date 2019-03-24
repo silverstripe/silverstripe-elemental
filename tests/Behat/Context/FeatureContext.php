@@ -269,6 +269,23 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
+     * @When I click on the :reportName report
+     */
+    public function iClickOnTheReport($reportName)
+    {
+        $reportsTable = $this->getSession()->getPage()->find('css', '.all-reports-gridfield .grid-field__table');
+        assertNotNull($reportsTable, 'Report table could not be found');
+
+        $report = $reportsTable->find('xpath', sprintf('//a[contains(text(), \'%s\')]', $reportName));
+        assertNotNull($report, 'Specified report "' . $reportName . '" could not be found.');
+
+        $report->click();
+
+        // Wait for the report to load
+        $this->getSession()->wait(5000, 'window.jQuery(".all-reports-gridfield").length === 0');
+    }
+
+    /**
      * Returns the blocks from the element editor
      *
      * @param string $modifier Optional CSS selector modifier
