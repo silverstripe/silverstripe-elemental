@@ -1,0 +1,17 @@
+Page:
+  page1:
+    Title: Page 1
+    URLSegment: test-page-1
+    Content: "This is page 1"
+  page2:
+    Title: Page 2
+    URLSegment: test-page-2
+
+DNADesign\Elemental\Tests\Src\TestPage:
+  page3:
+    Title: Page 3
+    URLSegment: test-page-3
+    Content: "This is page 3"
+  page4:
+    Title: Page 4
+    URLSegment: test-page-4
