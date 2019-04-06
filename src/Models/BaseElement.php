@@ -525,8 +525,9 @@ class BaseElement extends DataObject
             return $this->cacheData['page'];
         }
 
-        $area = $this->Parent();
 
+        $class = DataObject::getSchema()->hasOneComponent($this, 'Parent');
+        $area = ($this->ParentID) ? DataObject::get_by_id($class, $this->ParentID) : null;
         if ($area instanceof ElementalArea && $area->exists()) {
             $this->cacheData['page'] = $area->getOwnerPage();
             return $this->cacheData['page'];
