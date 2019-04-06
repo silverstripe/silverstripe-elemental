@@ -27,9 +27,20 @@ class MigrateContentToElementTest extends SapphireTest
         TestPage::class,
     ];
 
+    protected function setUp()
+    {
+        TestPage::create()->flushCache();
+        parent::setUp();
+    }
+
     public function testContentIsMigratedFromPagesToNewElements()
     {
         $task = new MigrateContentToElement();
+
+        // Ensure the page that should be edited is published to begin with
+        /** @var TestPage&Versioned $page */
+        $page = $this->objFromFixture(TestPage::class, 'page3');
+        $page->publishSingle();
 
         ob_start();
         $task->run(new HTTPRequest('GET', ''));
@@ -38,7 +49,6 @@ class MigrateContentToElementTest extends SapphireTest
         $this->assertContains('Finished migrating 1 pages\' content', $output);
 
         // Get the page that should've been updated and the content should be removed
-        /** @var TestPage&Versioned $page */
         $page = $this->objFromFixture(TestPage::class, 'page3');
         $this->assertEmpty($page->Content);
 
@@ -136,5 +146,34 @@ class MigrateContentToElementTest extends SapphireTest
 
         $livePage = Versioned::get_by_stage(TestPage::class, Versioned::LIVE)->byID($page->ID);
         $this->assertSame('This is page 3', $livePage->Content);
+    }
+
+    public function testPagesThatWereNotPublishedAreNotPublishedDuringThisTask()
+    {
+        $task = new MigrateContentToElement();
+
+        ob_start();
+        $task->run(new HTTPRequest('GET', ''));
+        $output = ob_get_clean();
+
+        $this->assertContains('Finished migrating 1 pages\' content', $output);
+
+        // Get the page that should've been updated and the content should be removed
+        /** @var TestPage&Versioned $page */
+        $page = $this->objFromFixture(TestPage::class, 'page3');
+        $this->assertEmpty($page->Content);
+
+        // Check that there's one element and it contains the old content
+        /** @var HasManyList $elements */
+        $elements = $page->ElementalArea->Elements();
+        $this->assertCount(1, $elements);
+
+        /** @var ElementContent&Versioned $contentElement */
+        $contentElement = $elements->first();
+        $this->assertSame('This is page 3', $contentElement->HTML);
+
+        // Assert that the element and page are "live"
+        $this->assertFalse($contentElement->isLiveVersion());
+        $this->assertFalse($page->isLiveVersion());
     }
 }

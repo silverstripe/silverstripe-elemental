@@ -62,7 +62,7 @@ class MigrateContentToElement extends BuildTask
                 continue;
             }
 
-            $pages = $pageType::get()->filter('Content:not', ['', null]);;
+            $pages = $pageType::get()->filter('Content:not', ['', null]);
             $clearContent = $this->config()->get('clear_content');
 
             $this->extend('updatePageFilter', $pages, $pageType);
@@ -75,6 +75,7 @@ class MigrateContentToElement extends BuildTask
                 }
                 // Fetch and clear existing content (if configured)
                 $content = $page->Content;
+                $pageIsLive = $page->isPublished();
                 if ($clearContent) {
                     $page->Content = '';
                 }
@@ -101,13 +102,13 @@ class MigrateContentToElement extends BuildTask
                 $element->setField($this->config()->get('target_element_field'), $content);
 
                 // Provide an extension hook for further updates to the new element
-                $this->extend('updateMigratedElement', $element);
+                $this->extend('updateMigratedElement', $element, $content, $page);
 
                 // Add and write to the area
                 $area->Elements()->add($element);
 
                 // Publish the record if configured
-                if ($this->config()->get('publish_changes')) {
+                if ($this->config()->get('publish_changes') && $pageIsLive) {
                     $page->publishRecursive();
                 }
 
