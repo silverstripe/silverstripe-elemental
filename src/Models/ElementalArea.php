@@ -166,8 +166,8 @@ class ElementalArea extends DataObject
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
 
-                $currentStage = Versioned::get_stage() ?: Versioned::DRAFT;
-                $page = Versioned::get_by_stage($class, $currentStage)->filter($areaID, $this->ID)->first();
+                $table = DataObject::getSchema()->tableForField($class, $areaID);
+                $page = DataObject::get_one($class, ["\"{$table}\".\"$areaID\" = ?" => $this->ID]);
 
                 if ($page) {
                     $this->cacheData['owner_page'] = $page;
