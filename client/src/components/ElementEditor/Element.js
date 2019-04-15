@@ -156,11 +156,9 @@ class Element extends Component {
   handleKeyUp(event) {
     const { nodeName } = event.target;
 
-    if (event.code === 'Enter') {
-      this.handleExpand(event);
-    } else if (
-      event.code === 'Space'
-      // Ignore space presses while focusing inputs and textareas
+    if (
+      (event.key === ' ' || event.key === 'Enter')
+      // Ignore presses while focusing inputs and textareas
       && !['input', 'textarea'].includes(nodeName.toLowerCase())
     ) {
       this.handleExpand(event);

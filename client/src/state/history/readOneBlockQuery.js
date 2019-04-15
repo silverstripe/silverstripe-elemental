@@ -13,7 +13,10 @@ query ReadHistoryViewerBlock ($block_id: ID!, $limit: Int!, $offset: Int!) {
     ID: $block_id
   ) {
     ID
-    Versions (limit: $limit, offset: $offset) {
+    Versions (limit: $limit, offset: $offset, sortBy: {
+      field: Version
+      direction: DESC
+    }) {
       pageInfo {
         totalCount
       }
