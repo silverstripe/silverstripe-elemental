@@ -662,20 +662,17 @@ class BaseElement extends DataObject
             return null;
         }
 
-        $editLinkPrefix = '';
         if (!$page instanceof SiteTree && method_exists($page, 'CMSEditLink')) {
             $link = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
         } else {
-            $link = Controller::join_links(
-                singleton(CMSPageEditController::class)->Link('EditForm'),
-                $page->ID
-            );
+            $link = $page->CMSEditLink();
         }
 
         // In-line editable blocks should just take you to the page. Editable ones should add the suffix for detail form
         if (!$this->inlineEditable()) {
             $link = Controller::join_links(
-                $link,
+                singleton(CMSPageEditController::class)->Link('EditForm'),
+                $page->ID,
                 'field/' . $relationName . '/item/',
                 $this->ID,
                 'edit'

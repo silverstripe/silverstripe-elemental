@@ -39,23 +39,27 @@ class TextCheckboxGroupField extends CompositeField
      */
     public function performReadonlyTransformation()
     {
-        $field = parent::performReadonlyTransformation();
+        $field = $this;
 
-        $field->setTemplate(CompositeField::class);
-        $field->setTitle('Title');
+        if (!$this->readonly) {
+            $field = parent::performReadonlyTransformation();
 
-        $field->replaceField('Title', LiteralField::create(
-            'Title',
-            $field->fieldByName('Title')->Value()
-        ));
+            $field->setTemplate(CompositeField::class);
+            $field->setTitle('Title');
 
-        $displayedText = _t(__CLASS__ . '.DISPLAYED', 'Displayed');
-        $notDisplayedText = _t(__CLASS__ . '.NOT_DISPLAYED', 'Not displayed');
+            $field->replaceField('Title', LiteralField::create(
+                'Title',
+                $field->fieldByName('Title')->Value()
+            ));
 
-        $field->replaceField('ShowTitle', LiteralField::create(
-            'ShowTitle',
-            $field->fieldByName('ShowTitle')->Value() === 'Yes' ? $displayedText : $notDisplayedText
-        )->addExtraClass('show-title'));
+            $displayedText = _t(__CLASS__ . '.DISPLAYED', 'Displayed');
+            $notDisplayedText = _t(__CLASS__ . '.NOT_DISPLAYED', 'Not displayed');
+
+            $field->replaceField('ShowTitle', LiteralField::create(
+                'ShowTitle',
+                $field->fieldByName('ShowTitle')->Value() === 'Yes' ? $displayedText : $notDisplayedText
+            )->addExtraClass('show-title'));
+        }
 
         return $field;
     }

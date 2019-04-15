@@ -51,8 +51,8 @@ class ElementsInUseReport extends Report
                     $value = $item->Title;
 
                     if (!empty($value)) {
-                        if ($item->CMSEditLink()) {
-                            return $this->getEditLink($value, $item);
+                        if ($link = $item->CMSEditLink()) {
+                            return $this->getEditLink($value, $link);
                         }
                         return $value;
                     }
@@ -76,7 +76,9 @@ class ElementsInUseReport extends Report
                 'title' => _t(__CLASS__ . '.Page', 'Page'),
                 'formatting' => function ($value, BaseElement $item) {
                     if ($value) {
-                        return $this->getEditLink($value, $item);
+                        if ($link = $item->getPage()->CMSEditLink()) {
+                            return $this->getEditLink($value, $link);
+                        }
                     }
                     return $item->getPageTitle();
                 },
@@ -88,14 +90,14 @@ class ElementsInUseReport extends Report
      * Helper method to return the link to edit an element
      *
      * @param string $value
-     * @param BaseElement $item
+     * @param string $link
      * @return string
      */
-    protected function getEditLink($value, BaseElement $item)
+    protected function getEditLink($value, $link)
     {
         return sprintf(
             '<a class="grid-field__link" href="%s" title="%s">%s</a>',
-            $item->CMSEditLink(),
+            $link,
             $value,
             $value
         );
