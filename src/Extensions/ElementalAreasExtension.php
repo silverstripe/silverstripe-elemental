@@ -117,6 +117,7 @@ class ElementalAreasExtension extends DataExtension
             unset($list[BaseElement::class]);
         }
 
+        $class = get_class($this->owner);
         $this->owner->invokeWithExtensions('updateAvailableTypesForClass', $class, $list);
 
         return $list;
