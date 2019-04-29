@@ -15,7 +15,7 @@ use SilverStripe\Versioned\Versioned;
 class MigrateContentToElement extends BuildTask
 {
     /**
-     * Configures if the existing content should be left blank.
+     * Configures if the existing content should be cleared once the migration task has completed.
      *
      * @config
      * @var bool
@@ -40,7 +40,7 @@ class MigrateContentToElement extends BuildTask
 
     /**
      * Indicates that the updated page and elements should be immediately published (provided the Versioned extension
-     * is present)
+     * is present, and the page was previously in a published state)
      *
      * @config
      * @var bool

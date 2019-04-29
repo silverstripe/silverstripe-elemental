@@ -10,11 +10,11 @@ content for you. It will:
 - Clear the existing page content
 - Save and publish the page and the block if the latest page version was previously published
 
-There are several configuration options and extension hooks to allow customising the functionality of this class
+There are several configuration options and extension hooks to allow customising the functionality of this class.
 
 ### Configuring the element that is created
 
-You may configure which element content is migrated to by using the following configuration
+You may configure which element content is migrated to by using the following configuration:
 
 ```yml
 DNADesign\Elemental\Tasks\MigrateContentToElement:
@@ -53,4 +53,4 @@ configuration option is enabled.
 
 While this task is built for pages that use the `ElementalPageExtension` it is possible to use elemental using only the 
 `ElementalAreaExtension`. In this case you can extend this task and overload the `isMigratable` and 
-`getAreaRelationFromPage` methods to support your use-case
+`getAreaRelationFromPage` methods to support your use-case.
