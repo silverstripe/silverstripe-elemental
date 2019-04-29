@@ -7,6 +7,7 @@ use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
+use Exception;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\BuildTask;
@@ -86,7 +87,15 @@ class MigrateContentToElement extends BuildTask
                 // Write the page if we're clearing content or if the area doesn't exist - we write to trigger a
                 // relationship update
                 if ($clearContent || !$area->exists()) {
-                    $page->write();
+                    try {
+                        $page->write();
+                    } catch (Exception $e) {
+                        echo sprintf(
+                            'Could not clear content on page %s: %s',
+                            $page->ID,
+                            $e->getMessage()
+                        );
+                    }
 
                     if (!$area->exists()) {
                         $area = $this->getAreaRelationFromPage($page);
