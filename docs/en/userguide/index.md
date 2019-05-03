@@ -35,7 +35,7 @@ We’ve created the most functional and effective elements of content block modu
 * [Content:](https://github.com/dnadesign/silverstripe-elemental) text content (built-in).
 * [Banner:](https://github.com/silverstripe/silverstripe-elemental-bannerblock) banner with call-to-action and content.
 * [File:](https://github.com/silverstripe/silverstripe-elemental-fileblock) file and image block.
-* [Form:](https://github.com/dnadesign/silverstripe-elemental-userforms) integrates [silverstripe-userforms](silverstripe/silverstripe-userforms) and provides a new content block, which can be used to create user defined forms.
+* [Form:](https://github.com/dnadesign/silverstripe-elemental-userforms) integrates [silverstripe-userforms](https://github.com/silverstripe/silverstripe-userforms) and provides a new content block, which can be used to create user defined forms.
 
 ![Supported content block types](_images/content_block_types.png)
 
