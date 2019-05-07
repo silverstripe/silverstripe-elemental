@@ -20,7 +20,7 @@ class ElementalAreaConfig extends GridFieldConfig
         parent::__construct();
 
         $this->addComponent(new GridFieldDeleteAction(false));
-        $this->addComponent(new GridFieldDetailForm());
+        $this->addComponent(new GridFieldDetailForm(null, false, false));
 
         $this->extend('updateConfig');
     }
