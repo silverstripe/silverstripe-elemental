@@ -25,7 +25,7 @@ class ElementalAreaConfig extends GridFieldConfig
         $this->addComponent(new GridFieldDataColumns());
         $this->addComponent(new GridFieldEditButton());
         $this->addComponent(new GridFieldDeleteAction(false));
-        $this->addComponent(new GridFieldDetailForm());
+        $this->addComponent(new GridFieldDetailForm(null, false, false));
 
         $filter->setThrowExceptionOnBadDataType(false);
 
