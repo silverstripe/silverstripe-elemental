@@ -3,6 +3,9 @@
 namespace DNADesign\Elemental\Reports;
 
 use DNADesign\Elemental\Models\BaseElement;
+use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\ORM\DataList;
 use SilverStripe\Reports\Report;
@@ -59,11 +62,21 @@ class ElementsInUseReport extends Report
                     return '<span class="element__note">' . _t(__CLASS__ . '.None', 'None') . '</span>';
                 },
             ],
-            'Summary' => [
+            'ElementSummary' => [
                 'title' => _t(__CLASS__ . '.Summary', 'Summary'),
                 'casting' => 'HTMLText->RAW',
                 'formatting' => function ($value, BaseElement $item) {
-                    return $item->getSummary();
+                    try {
+                        return $item->getSummary();
+                    } catch (InvalidArgumentException $exception) {
+                         // Don't break the report, just continue. Image manipulation is an example which may
+                         // throw exceptions here.
+                        Injector::inst()->get(LoggerInterface::class)->debug(
+                            'Element #' . $item->ID . ' threw exception in ElementInUseReport via getSummary(): '
+                            . $exception->getMessage()
+                        );
+                        return '';
+                    }
                 },
             ],
             'Type' => [
