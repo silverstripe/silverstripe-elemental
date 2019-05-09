@@ -2,6 +2,8 @@ en:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Edit Page'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
+    DISPLAYED: Displayed
+    NOT_DISPLAYED: 'Not displayed'
     ShowTitleLabel: Displayed
     TitleLabel: 'Title (displayed if checked)'
   DNADesign\Elemental\Models\BaseElement:
@@ -14,9 +16,9 @@ en:
     PLURALS:
       one: 'A block'
       other: '{count} blocks'
-    SettingsTabLabel: Settings
     SINGULARNAME: block
     STYLE: 'Style variation'
+    SettingsTabLabel: Settings
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Content
     ContentLabel: Content
