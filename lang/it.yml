@@ -1,0 +1,44 @@
+it:
+  DNADesign\Elemental\Controllers\ElementalAreaController:
+    MENUTITLE: 'Modifica Pagina'
+  DNADesign\Elemental\Forms\TextCheckboxGroupField:
+    ShowTitleLabel: Visualizza
+    TitleLabel: 'Titolo (visualizzato se si seleziona la checkbox)'
+  DNADesign\Elemental\Models\BaseElement:
+    BlockType: Blocco
+    CUSTOM_STYLES: 'Seleziona uno stile..'
+    ExtraCssClassesLabel: 'Classi CSS personalizzate'
+    ExtraCssClassesPlaceholder: 'mia_classe altra_classe'
+    MainTabLabel: Contenuto
+    PLURALNAME: blocchi
+    PLURALS:
+      one: 'Un blocco'
+      other: '{count} blocchi'
+    SettingsTabLabel: Impostazioni
+    SINGULARNAME: blocco
+    STYLE: 'Variazione di stile'
+  DNADesign\Elemental\Models\ElementContent:
+    BlockType: Contenuto
+    ContentLabel: Contenuto
+    PLURALNAME: 'blocchi dei contenuti'
+    PLURALS:
+      one: 'Un blocco di contenuto'
+      other: '{count} blocchi dei contenuti'
+    SINGULARNAME: 'blocchi dei contenuti'
+  DNADesign\Elemental\Models\ElementalArea:
+    PLURALNAME: 'Aree Elementi'
+    PLURALS:
+      one: 'Un''Area Elementi'
+      other: '{count} Aree Elementali'
+    SINGULARNAME: 'Area Elementi'
+  DNADesign\Elemental\Reports\ElementTypeReport:
+    Title: 'Tipi di blocchi dei contenuti'
+    Total: Totale
+    Type: 'Tipo di contenuto'
+  DNADesign\Elemental\Reports\ElementsInUseReport:
+    None: Nessuna
+    Page: Pagina
+    ReportTitle: 'Blocchi dei contenuti in uso'
+    Summary: Sommario
+    Title: Titolo
+    Type: Tipo

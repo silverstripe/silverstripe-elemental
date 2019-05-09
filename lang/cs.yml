@@ -12,7 +12,7 @@ cs:
     MainTabLabel: Obsah
     PLURALNAME: bloky
     PLURALS:
-      one: 'Blok'
+      one: Blok
       few: '{count} bloky'
       many: '{count} bloků'
       other: '{count} bloků'
