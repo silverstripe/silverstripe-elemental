@@ -9,6 +9,10 @@ use SilverStripe\View\Parsers\HTML4Value;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\View\SSViewer;
 
+/**
+ * @method ElementalArea ElementalArea
+ * @property ElementalArea ElementalArea
+ */
 class ElementalPageExtension extends ElementalAreasExtension
 {
     private static $has_one = [

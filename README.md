@@ -107,6 +107,11 @@ MyElementPage:
     - DNADesign\Elemental\Extensions\ElementalPageExtension
 ```
 
+### Migrating existing page content
+
+You can use the `MigrateContentToElement` BuildTask that is provided to assist with migrating content from pages to elements. 
+For more information on using this task refer to the [content migration documentation](docs/en/content_migration.md).
+
 ### Customize HTML and markup
 
 The basic element area is rendered into the `DNADesign/Elemental/Models/ElementalArea.ss` template. This loops over
