@@ -12,6 +12,7 @@ use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\ORM\HasManyList;
 use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
 
@@ -117,7 +118,7 @@ class ElementalArea extends DataObject
 
     /**
      * A cache-aware accessor for the elements
-     * @return ArrayList|DataList|BaseElement[]
+     * @return ArrayList|HasManyList|BaseElement[]
      */
     public function Elements()
     {
