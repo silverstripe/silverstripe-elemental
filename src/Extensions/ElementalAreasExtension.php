@@ -257,6 +257,13 @@ class ElementalAreasExtension extends DataExtension
                 $area->OwnerClassName = get_class($this->owner);
                 $area->write();
                 $this->owner->$areaID = $area->ID;
+            }else{
+                // ensure correct OwnerClassName
+                $area = ElementalArea::get_by_id($this->owner->$areaID);
+                if( $area->OwnerClassName !== get_class($this->owner) ){
+                    $area->OwnerClassName = get_class($this->owner);
+                    $area->write();
+                }
             }
         }
         return $this->owner;
