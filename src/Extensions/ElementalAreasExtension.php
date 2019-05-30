@@ -276,7 +276,7 @@ class ElementalAreasExtension extends DataExtension
             return;
         }
 
-        $this->owner->extend('onBeforeElementalRecords');
+        $this->owner->extend('onBeforeRequireDefaultElementalRecords');
 
         $ownerClass = get_class($this->owner);
         $elementalAreas = $this->owner->getElementalRelations();
@@ -301,6 +301,6 @@ class ElementalAreasExtension extends DataExtension
             }
         }
 
-        $this->owner->extend('onAfterElementalRecords');
+        $this->owner->extend('onAfterRequireDefaultElementalRecords');
     }
 }
