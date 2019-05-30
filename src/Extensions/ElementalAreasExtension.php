@@ -45,6 +45,8 @@ use SilverStripe\Versioned\Versioned;
  */
 class ElementalAreasExtension extends DataExtension
 {
+    use Extensible;
+
     /**
      * Classes to ignore adding elements to
      * @config
@@ -274,6 +276,8 @@ class ElementalAreasExtension extends DataExtension
             return;
         }
 
+        $this->owner->extend('onBeforeRequireDefaultElementalRecords');
+
         $ownerClass = get_class($this->owner);
         $elementalAreas = $this->owner->getElementalRelations();
         $schema = $this->owner->getSchema();
@@ -296,5 +300,7 @@ class ElementalAreasExtension extends DataExtension
                 $elementalObject->publishRecursive();
             }
         }
+
+        $this->owner->extend('onAfterRequireDefaultElementalRecords');
     }
 }
