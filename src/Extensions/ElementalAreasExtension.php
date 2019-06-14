@@ -10,10 +10,12 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Extensible;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Versioned\Versioned;
 
 /**
  * This extension handles most of the relationships between pages and element
@@ -43,6 +45,8 @@ use SilverStripe\ORM\DataObject;
  */
 class ElementalAreasExtension extends DataExtension
 {
+    use Extensible;
+
     /**
      * Classes to ignore adding elements to
      * @config
@@ -272,6 +276,8 @@ class ElementalAreasExtension extends DataExtension
             return;
         }
 
+        $this->owner->extend('onBeforeRequireDefaultElementalRecords');
+
         $ownerClass = get_class($this->owner);
         $elementalAreas = $this->owner->getElementalRelations();
         $schema = $this->owner->getSchema();
@@ -284,7 +290,17 @@ class ElementalAreasExtension extends DataExtension
         }
 
         foreach ($ownerClass::get()->where(implode(' OR ', $where)) as $elementalObject) {
-            $elementalObject->ensureElementalAreasExist($elementalAreas)->write();
+            $needsPublishing = Extensible::has_extension($elementalObject, Versioned::class)
+                && $elementalObject->isPublished();
+
+            /** @var ElementalAreasExtension $elementalObject */
+            $elementalObject->ensureElementalAreasExist($elementalAreas);
+            $elementalObject->write();
+            if ($needsPublishing) {
+                $elementalObject->publishRecursive();
+            }
         }
+
+        $this->owner->extend('onAfterRequireDefaultElementalRecords');
     }
 }
