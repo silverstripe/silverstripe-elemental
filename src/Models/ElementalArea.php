@@ -21,8 +21,6 @@ use SilverStripe\Versioned\Versioned;
  * @package DNADesign\Elemental\Models
  *
  * @property string $OwnerClassName
- *
- * @method HasManyList|BaseElement[] Elements()
  */
 class ElementalArea extends DataObject
 {
@@ -201,9 +199,10 @@ class ElementalArea extends DataObject
 
             foreach ($elementalAreaRelations as $eaRelationship) {
                 $areaID = $eaRelationship . 'ID';
-
+                
                 $table = DataObject::getSchema()->tableForField($class, $areaID);
-                $page = DataObject::get_one($class, ["\"{$table}\".\"$areaID\" = ?" => $this->ID]);
+                // Opt out of caching as we implement our own caching here
+                $page = DataObject::get_one($class, ["\"{$table}\".\"$areaID\" = ?" => $this->ID], false);
 
                 if ($page) {
                     $this->setOwnerPageCached($page);

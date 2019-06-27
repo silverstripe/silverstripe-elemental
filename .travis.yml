@@ -34,6 +34,7 @@ before_script:
   # Init PHP
   - phpenv rehash
   - phpenv config-rm xdebug.ini
+  - echo 'memory_limit = 2G' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
   # Install composer dependencies
   - composer validate
