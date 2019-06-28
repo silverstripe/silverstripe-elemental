@@ -491,6 +491,16 @@ class BaseElement extends DataObject
     }
 
     /**
+     * Set the page in this elements internal cache. This should be used with caution.
+     *
+     * @param DataObject $page
+     */
+    public function setCachePage(DataObject $page)
+    {
+        $this->cacheData['page'] = $page;
+    }
+
+    /**
      * Get a unique anchor name
      *
      * @return string
