@@ -171,12 +171,6 @@ class ElementalArea extends DataObject
         return $controllers;
     }
 
-    public function onBeforeWrite()
-    {
-        $this->getOwnerPage();
-        parent::onBeforeWrite();
-    }
-
     /**
      * @return null|DataObject
      * @throws \Psr\Container\NotFoundExceptionInterface
@@ -232,10 +226,14 @@ class ElementalArea extends DataObject
                     throw $ex;
                 }
 
-                if ($page) {
+                if ($page && $page->exists()) {
                     if ($this->OwnerClassName !== $class) {
                         $this->OwnerClassName = $class;
-                        $this->write();
+
+                        // Avoid recursion: only write if it's already in the database
+                        if ($this->isInDB()) {
+                            $this->write();
+                        }
                     }
 
                     $this->cacheData['area_relation_name'] = $page;
