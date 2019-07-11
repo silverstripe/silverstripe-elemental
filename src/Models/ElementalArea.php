@@ -201,7 +201,8 @@ class ElementalArea extends DataObject
                         }
                     }
 
-                    return $this->cacheData['area_relation_name'] = $page->first();
+                    $this->cacheData['area_relation_name'] = $page;
+                    return $page;
                 }
             }
         }
