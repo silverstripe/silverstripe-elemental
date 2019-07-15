@@ -66,11 +66,14 @@ class AddElementToAreaMutation extends MutationCreator implements OperationResol
             );
         }
 
-        // See BaseElement::$has_one. This circumvents multiple write() operations in conjunction with reordering
-        // below.
+        // Assign the parent ID directly rather than via HasManyList to prevent multiple writes.
+        // See BaseElement::$has_one for the "Parent" naming.
         $newElement->ParentID = $elementalArea->ID;
+        // Ensure that a sort order is assigned - see BaseElement::onBeforeWrite()
+        $newElement->onBeforeWrite();
 
         if ($afterElementID !== null) {
+            /** @var ReorderElements $reorderer */
             $reorderer = Injector::inst()->create(ReorderElements::class, $newElement);
             $reorderer->reorder($afterElementID); // also writes the element
         } else {
