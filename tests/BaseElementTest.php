@@ -10,10 +10,10 @@ use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use Page;
+use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 
 class BaseElementTest extends FunctionalTest
 {
@@ -107,6 +107,18 @@ class BaseElementTest extends FunctionalTest
         $element = $this->objFromFixture(ElementContent::class, 'content1');
 
         $this->assertContains($element->getPage()->Link(), $element->Link());
+    }
+
+    public function testGetEditLink()
+    {
+        Director::config()->set('alternate_base_url', 'http://example.com');
+
+        /** @var ElementContent $element */
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+        $editLink = $element->getEditLink();
+
+        $this->assertContains('http://example.com', $editLink, 'Link should be absolute');
+        $this->assertContains('pages/edit', $editLink, 'Link should contain reference to the page');
     }
 
     public function testGetIcon()
