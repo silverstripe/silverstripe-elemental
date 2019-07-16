@@ -98,6 +98,7 @@ class ReorderElements
         // Update both the draft and live versions of the records
         $tableNames = [$baseTableName];
         if (BaseElement::has_extension(Versioned::class)) {
+            /** @var BaseElement&Versioned $element */
             $tableNames[] = $element->stageTable($baseTableName, Versioned::LIVE);
         }
 

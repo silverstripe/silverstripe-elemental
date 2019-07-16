@@ -57,6 +57,7 @@ class AddElementToAreaMutation extends MutationCreator implements OperationResol
             throw new InvalidArgumentException("The current user has insufficient permission to edit ElementalAreas");
         }
 
+        /** @var BaseElement $newElement */
         $newElement = Injector::inst()->create($elementClass);
 
         if (!$newElement->canEdit($context['currentUser'])) {
@@ -65,11 +66,18 @@ class AddElementToAreaMutation extends MutationCreator implements OperationResol
             );
         }
 
-        $elementalArea->Elements()->add($newElement);
+        // Assign the parent ID directly rather than via HasManyList to prevent multiple writes.
+        // See BaseElement::$has_one for the "Parent" naming.
+        $newElement->ParentID = $elementalArea->ID;
+        // Ensure that a sort order is assigned - see BaseElement::onBeforeWrite()
+        $newElement->onBeforeWrite();
 
-        if (!is_null($afterElementID)) {
+        if ($afterElementID !== null) {
+            /** @var ReorderElements $reorderer */
             $reorderer = Injector::inst()->create(ReorderElements::class, $newElement);
-            $reorderer->reorder($afterElementID);
+            $reorderer->reorder($afterElementID); // also writes the element
+        } else {
+            $newElement->write();
         }
 
         return $newElement;
