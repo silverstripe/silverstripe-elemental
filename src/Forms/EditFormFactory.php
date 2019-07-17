@@ -30,19 +30,6 @@ class EditFormFactory extends DefaultFormFactory
         return $form;
     }
 
-    protected function getFormFields(RequestHandler $controller = null, $name, $context = [])
-    {
-        $fields = parent::getFormFields($controller, $name, $context);
-
-        /** @var HTMLEditorField $contentField */
-        $contentField = $fields->fieldByName('Root.Main.HTML');
-        if ($contentField) {
-            $contentField->setRows(5);
-        }
-
-        return $fields;
-    }
-
     /**
      * Given a {@link FieldList}, give all fields a unique name so they can be used in the same context as
      * other elemental edit forms and the page (or other DataObject) that owns them.

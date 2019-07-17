@@ -3,6 +3,8 @@
 namespace DNADesign\Elemental\Models;
 
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
 use SilverStripe\ORM\FieldType\DBField;
 
 class ElementContent extends BaseElement
@@ -29,9 +31,20 @@ class ElementContent extends BaseElement
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(function (FieldList $fields) {
-            $fields
-                ->fieldByName('Root.Main.HTML')
-                ->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'));
+            // Configure a slimmed down HTML editor for use with blocks
+            /** @var HTMLEditorField $editorField */
+            $editorField = $fields->fieldByName('Root.Main.HTML');
+            $editorField->setRows(7);
+
+            $editorConfig = $editorField->getEditorConfig();
+
+            // Only configure if the editor is TinyMCE
+            if ($editorConfig instanceof TinyMCEConfig) {
+                $editorConfig->setOption('statusbar', false);
+                $editorField->setEditorConfig($editorConfig);
+            }
+
+            $editorField->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'));
         });
         return parent::getCMSFields();
     }
