@@ -3,7 +3,6 @@
 namespace DNADesign\Elemental\Models;
 
 use DNADesign\Elemental\Controllers\ElementController;
-use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use DNADesign\Elemental\ORM\FieldType\DBObjectType;
 use Exception;
@@ -13,7 +12,6 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
@@ -745,7 +743,7 @@ class BaseElement extends DataObject
      */
     public function getEditLink()
     {
-        return $this->CMSEditLink();
+        return Director::absoluteURL($this->CMSEditLink());
     }
 
     /**
