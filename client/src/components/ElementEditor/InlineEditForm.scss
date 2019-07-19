@@ -2,12 +2,6 @@
   margin-top: $spacer-xs;
   cursor: auto;
 
-  // For some reason the form is not considered a "row" when above a certain media breakpoint
-  // We need this for the "stacked" form style
-  @include media-breakpoint-up(lg) {
-    @include make-row()
-  }
-
   // Counteract the margin that is added to the bottom of each form group
   margin-bottom: -1rem;
 
@@ -20,11 +14,6 @@
   // field holder styling as below
   &__form {
     width: 100%;
-  }
-
-  .form-group {
-    margin-left: 0;
-    margin-right: 0;
   }
 
   // Specificity overrides for styles provided by admin.
