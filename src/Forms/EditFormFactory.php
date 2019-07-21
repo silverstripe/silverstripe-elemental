@@ -7,6 +7,7 @@ use SilverStripe\Forms\DefaultFormFactory;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
 
 class EditFormFactory extends DefaultFormFactory
 {
@@ -28,6 +29,26 @@ class EditFormFactory extends DefaultFormFactory
         $form->setFields($formFields);
 
         return $form;
+    }
+
+    protected function getFormFields(RequestHandler $controller = null, $name, $context = [])
+    {
+        $fields = parent::getFormFields($controller, $name, $context);
+
+        // Configure a slimmed down HTML editor for use with blocks
+        /** @var HTMLEditorField $editorField */
+        $editorField = $fields->fieldByName('Root.Main.HTML');
+        $editorField->setRows(7);
+
+        $editorConfig = $editorField->getEditorConfig();
+
+        // Only configure if the editor is TinyMCE
+        if ($editorConfig instanceof TinyMCEConfig) {
+            $editorConfig->setOption('statusbar', false);
+            $editorField->setEditorConfig($editorConfig);
+        }
+
+        return $fields;
     }
 
     /**
