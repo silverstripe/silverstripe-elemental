@@ -36,16 +36,18 @@ class EditFormFactory extends DefaultFormFactory
         $fields = parent::getFormFields($controller, $name, $context);
 
         // Configure a slimmed down HTML editor for use with blocks
-        /** @var HTMLEditorField $editorField */
+        /** @var HTMLEditorField|null $editorField */
         $editorField = $fields->fieldByName('Root.Main.HTML');
-        $editorField->setRows(7);
+        if ($editorField) {
+            $editorField->setRows(7);
 
-        $editorConfig = $editorField->getEditorConfig();
+            $editorConfig = $editorField->getEditorConfig();
 
-        // Only configure if the editor is TinyMCE
-        if ($editorConfig instanceof TinyMCEConfig) {
-            $editorConfig->setOption('statusbar', false);
-            $editorField->setEditorConfig($editorConfig);
+            // Only configure if the editor is TinyMCE
+            if ($editorConfig instanceof TinyMCEConfig) {
+                $editorConfig->setOption('statusbar', false);
+                $editorField->setEditorConfig($editorConfig);
+            }
         }
 
         return $fields;
