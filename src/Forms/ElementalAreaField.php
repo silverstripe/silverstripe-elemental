@@ -137,6 +137,8 @@ class ElementalAreaField extends GridField
     protected function getReadOnlyBlockReducer()
     {
         return function (BaseElement $element) {
+            $element->setDisableInlineEditing(true);
+
             $parentName = 'Element' . $element->ID;
             $elementFields = $element->getCMSFields();
 
@@ -163,11 +165,15 @@ class ElementalAreaField extends GridField
                 'data' => [
                     'ElementID' => $element->ID,
                     'ElementType' => $element->getType(),
-                    'ElementIcon' => $element->config()->icon,
+                    'ElementIcon' => $element->config()->get('icon'),
                     'ElementTitle' => $element->Title,
                     // @todo: Change this to block history permalink when that functionality becomes available.
-                    'ElementEditLink' => $element->CMSEditLink()
-                ]
+                    'ElementEditLink' => Controller::join_links(
+                        $element->CMSEditLink(),
+                        // @todo make this auto-permalinking work somehow
+                        '#Root_History'
+                    ),
+                ],
             ]);
 
             return $elementGroup;

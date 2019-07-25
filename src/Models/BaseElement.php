@@ -25,8 +25,10 @@ use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
+use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
+use SilverStripe\View\Requirements;
 
 /**
  * Class BaseElement
@@ -145,6 +147,14 @@ class BaseElement extends DataObject
      * @var bool
      */
     private static $inline_editable = true;
+
+    /**
+     * Can be set during execution to temporarily disable inline editing, e.g. for generating different types of
+     * edit links for the element.
+     *
+     * @var bool
+     */
+    protected $disableInlineEditing = false;
 
     /**
      * Store used anchor names, this is to avoid title clashes
@@ -330,6 +340,28 @@ class BaseElement extends DataObject
             // Hide the navigation section of the tabs in the React component {@see silverstripe/admin Tabs}
             $rootTabset = $fields->fieldByName('Root');
             $rootTabset->setSchemaState(['hideNav' => true]);
+
+            if ($this->isInDB()) {
+                $fields->addFieldsToTab('Root.History', [
+                    HistoryViewerField::create('ElementHistory'),
+                ]);
+                // Add class to containing tab
+                $fields->fieldByName('Root.History')
+                    ->addExtraClass('elemental-block__history-tab tab--history-viewer');
+
+                // Hack: automatically navigate to the History tab with `#Root_History` is in the URL
+                // To unhack, fix this: https://github.com/silverstripe/silverstripe-admin/issues/911
+                Requirements::customScript(<<<JS
+    document.addEventListener('DOMContentLoaded', () => {
+        var hash = window.location.hash.substr(1);
+        if (hash !== 'Root_History') {
+            return null;
+        }
+        jQuery('.cms-tabset-nav-primary li[aria-controls="Root_History"] a').trigger('click')
+    });
+JS
+                );
+            }
         });
 
         return parent::getCMSFields();
@@ -353,6 +385,9 @@ class BaseElement extends DataObject
      */
     public function inlineEditable()
     {
+        if ($this->getDisableInlineEditing()) {
+            return false;
+        }
         return static::config()->get('inline_editable');
     }
 
@@ -1004,5 +1039,23 @@ class BaseElement extends DataObject
         $odd = (bool) ($this->Pos() % 2);
 
         return  ($odd) ? 'odd' : 'even';
+    }
+
+    /**
+     * @param bool $disable
+     * @return $this
+     */
+    public function setDisableInlineEditing($disable = true)
+    {
+        $this->disableInlineEditing = (bool) $disable;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDisableInlineEditing()
+    {
+        return (bool) $this->disableInlineEditing;
     }
 }
