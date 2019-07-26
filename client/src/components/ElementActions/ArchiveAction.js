@@ -12,7 +12,7 @@ const ArchiveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { element: { ID: id }, isPublished, actions: { handleArchiveBlock } } = props;
+    const { areaId, element: { ID: id }, isPublished, actions: { handleArchiveBlock } } = props;
 
     let archiveMessage = i18n._t(
       'ElementArchiveAction.CONFIRM_DELETE',
@@ -28,7 +28,7 @@ const ArchiveAction = (MenuComponent) => (props) => {
 
     // eslint-disable-next-line no-alert
     if (handleArchiveBlock && window.confirm(archiveMessage)) {
-      handleArchiveBlock(id).then(() => {
+      handleArchiveBlock(id, areaId).then(() => {
         const preview = window.jQuery('.cms-preview');
         preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
       });
