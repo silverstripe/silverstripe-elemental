@@ -1,11 +1,10 @@
-/* global window */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
 import i18n from 'i18n';
+import Preview from 'lib/previewHelper';
 
 /**
  * The AddElementPopover component used in the context of an ElementEditor shows the
@@ -34,8 +33,7 @@ class AddElementPopover extends Component {
       // TODO This should probably use the GraphQL element type name (element.__typeName)
       handleAddElementToArea(elementType.class, insertAfterElement).then(
         () => {
-          const preview = window.jQuery('.cms-preview');
-          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+          (new Preview()).reload();
         }
       );
       this.handleToggle();

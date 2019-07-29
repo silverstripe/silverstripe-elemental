@@ -1,18 +1,36 @@
-/* global window */
 import React from 'react';
 import { compose } from 'redux';
+import confirm from '@silverstripe/reactstrap-confirm';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import archiveBlockMutation from 'state/editor/archiveBlockMutation';
 import i18n from 'i18n';
+import Preview from 'lib/previewHelper';
 
 /**
  * Adds the elemental menu action to archive a block of any state
  */
 const ArchiveAction = (MenuComponent) => (props) => {
-  const handleClick = (event) => {
+  const handleClick = async (event) => {
     event.stopPropagation();
 
-    const { element: { ID: id }, isPublished, actions: { handleArchiveBlock } } = props;
+    const {
+      element: { ID: id, Title: elementTitle, IsPublished: isPublished },
+      type,
+      actions: { handleArchiveBlock }
+    } = props;
+
+    const noTitle = i18n.inject(
+      i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
+      { type: type.title }
+    );
+
+    const archiveTitle = i18n.inject(
+      i18n._t(
+        'ElementArchiveAction.CONFIRM_DELETE_TITLE',
+        'Archive {block}'
+      ),
+      { block: elementTitle || noTitle }
+    );
 
     let archiveMessage = i18n._t(
       'ElementArchiveAction.CONFIRM_DELETE',
@@ -26,11 +44,18 @@ const ArchiveAction = (MenuComponent) => (props) => {
       );
     }
 
+    const deleteButton = i18n._t(
+      'ElementArchiveAction.CONFIRM_DELETE_BUTTON',
+      'Archive'
+    );
+
     // eslint-disable-next-line no-alert
-    if (handleArchiveBlock && window.confirm(archiveMessage)) {
+    if (handleArchiveBlock && await confirm(archiveMessage, {
+      title: archiveTitle,
+      confirmLabel: deleteButton,
+    })) {
       handleArchiveBlock(id).then(() => {
-        const preview = window.jQuery('.cms-preview');
-        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        (new Preview()).reload();
       });
     }
   };

@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import unpublishBlockMutation from 'state/editor/unpublishBlockMutation';
 import i18n from 'i18n';
+import Preview from 'lib/previewHelper';
 
 /**
  * Adds the elemental menu action to unpublish a published block
@@ -25,8 +26,8 @@ const UnpublishAction = (MenuComponent) => (props) => {
     if (handleUnpublishBlock) {
       handleUnpublishBlock(element.ID)
         .then(() => {
-          const preview = $('.cms-preview');
-          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+          // Reload the CMS preview
+          (new Preview()).reload();
 
           $.noticeAdd({
             text: i18n.inject(

@@ -1,4 +1,3 @@
-/* global window */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'lib/Injector';
@@ -10,6 +9,7 @@ import { DropTarget } from 'react-dnd';
 import sortBlockMutation from 'state/editor/sortBlockMutation';
 import ElementDragPreview from 'components/ElementEditor/ElementDragPreview';
 import withDragDropContext from 'lib/withDragDropContext';
+import Preview from 'lib/previewHelper';
 
 /**
  * The ElementEditor is used in the CMS to manage a list or nested lists of
@@ -58,8 +58,7 @@ class ElementEditor extends PureComponent {
     const { actions: { handleSortBlock }, areaId } = this.props;
 
     handleSortBlock(sourceId, afterId, areaId).then(() => {
-      const preview = window.jQuery('.cms-preview');
-      preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+      (new Preview()).reload();
     });
 
     this.setState({

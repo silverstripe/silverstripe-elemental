@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { initialize } from 'redux-form';
+import Preview from 'lib/previewHelper';
 
 /**
  * Show a toast message reporting whether publication of Element was successful
@@ -58,8 +59,7 @@ const performSaveForElementWithFormData = (id, formData, securityId) => {
   return saveEndpoint(formData)
     .then(() => window.ss.apolloClient.queryManager.reFetchObservableQueries())
     .then((input) => {
-      const preview = window.jQuery('.cms-preview');
-      preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+      (new Preview()).reload();
       return input;
     })
     .then((newPageData) => {

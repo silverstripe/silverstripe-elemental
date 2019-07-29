@@ -8,6 +8,7 @@ import i18n from 'i18n';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { initialize } from 'redux-form';
+import Preview from 'lib/previewHelper';
 
 /**
  * Using a REST backend, serialize the current form data and post it to the backend endpoint to save
@@ -48,8 +49,8 @@ const SaveAction = (MenuComponent) => (props) => {
         apolloClient.queryManager.reFetchObservableQueries();
         reinitialiseForm(formData);
 
-        const preview = $('.cms-preview');
-        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        // Reload the CMS preview
+        (new Preview()).reload();
 
         const newTitle = formData ? formData[`PageElements_${element.ID}_Title`] : null;
         $.noticeAdd({

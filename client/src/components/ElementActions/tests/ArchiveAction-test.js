@@ -8,6 +8,16 @@ import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+jest.mock('@silverstripe/reactstrap-confirm', () => jest.fn().mockImplementation(
+  () => Promise.resolve(true)
+));
+import confirm from '@silverstripe/reactstrap-confirm';
+
+const mockReload = jest.fn();
+jest.mock('lib/previewHelper', () => () => ({
+  reload: mockReload
+}));
+
 describe('ArchiveAction', () => {
   let wrapper = null;
   const mockMutation = jest.fn(() => new Promise((resolve) => { resolve(); }));
@@ -26,8 +36,12 @@ describe('ArchiveAction', () => {
         isPublished
         actions={{ handleArchiveBlock: mockMutation }}
         toggle={false}
+        type={{ title: 'Test' }}
       />
     );
+
+    confirm.mockClear();
+    mockReload.mockClear();
   });
 
   it('renders the wrapped component', () => {
@@ -44,18 +58,28 @@ describe('ArchiveAction', () => {
   });
 
   it('does not archive when declining the confirmation', () => {
-    global.confirm = () => false;
+    confirm.mockImplementationOnce(() => Promise.resolve(false));
     wrapper.find('button').simulate('click');
     expect(mockMutation).not.toHaveBeenCalled();
   });
 
-  it('archives when accepting the confirmation', () => {
-    global.confirm = () => true;
+  it('archives when accepting the confirmation', done => {
     wrapper.find('button').simulate('click');
-    expect(mockMutation).toHaveBeenCalled();
+    setTimeout(() => {
+      expect(mockMutation).toHaveBeenCalled();
+      done();
+    }, 0);
   });
 
-  it('indicates that the block will be sent to archive', () => {
+  it('reloads the preview on archive', done => {
+    wrapper.find('button').simulate('click');
+    setTimeout(() => {
+      expect(mockReload).toHaveBeenCalled();
+      done();
+    }, 0);
+  });
+
+  it('indicates that the block will be sent to archive', done => {
     const unpublishedWrapper = mount(
       <ActionComponent
         title="My abstract action"
@@ -66,24 +90,24 @@ describe('ArchiveAction', () => {
         }}
         actions={{ handleArchiveBlock: mockMutation }}
         toggle={false}
+        type={{ title: 'Test' }}
       />
     );
-    const mockConfirm = jest.fn();
-    global.confirm = mockConfirm;
 
     unpublishedWrapper.find('button').simulate('click');
-    expect(mockConfirm).toHaveBeenCalledWith(
-      'Are you sure you want to send this block to the archive?'
-    );
+    setTimeout(() => {
+      expect(confirm).toHaveBeenCalledWith(
+        'Are you sure you want to send this block to the archive?',
+        expect.anything()
+      );
+      done();
+    });
   });
 
   it('indicates that the block will be unpublished before archiving', () => {
-    const mockConfirm = jest.fn();
-    global.confirm = mockConfirm;
-
     wrapper.find('button').simulate('click');
-    expect(mockConfirm).toHaveBeenCalledWith(expect.stringContaining(
+    expect(confirm).toHaveBeenCalledWith(expect.stringContaining(
       'Warning: This block will be unpublished'
-    ));
+    ), expect.anything());
   });
 });
