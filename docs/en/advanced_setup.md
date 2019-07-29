@@ -13,7 +13,7 @@ It's a good idea to create a `BlockPage` class to represent a page with blocks (
 This allows more flexibility as other page types can subclass `Page` without inheriting any blocks related functionality.
 This is useful for covering edge cases that may appear during projects (i.e. not all pages may need blocks).
 
-```
+```php
 class BlockPage extends Page
 {
     /**
@@ -22,6 +22,9 @@ class BlockPage extends Page
     private static $extensions = [
         ElementalPageExtension::class,
     ];
+
+    // ...
+}
 ```
 
 
@@ -40,7 +43,7 @@ It's possible to add functionality which allows content authors to copy specific
 
 Elemental editor `GridField` needs to be adjusted accordingly:
 
-```
+```php
 /**
  * Apply strong inheritance relation config
  * no existing auto complete as reusing items is not allowed
@@ -80,31 +83,26 @@ Make sure to properly configure your objects with the `owns` and `cascade_delete
 `Fluent` module provides multiple options how to localise your content, but there is one option which is the best on average: `indirect localisation`.
 The only thing that will be localised directly is the `ElementalArea`relation.
 
-```
+```php
 class BlockPage extends Page
 {
-    .
-    .
-    .
-
     /**
      * @var array
      */
     private static $field_include = [
         'ElementalAreaID',
     ];
+    
+    // ...
+}
 ```
 
 This configuration allows us to have different `ElementalArea` for different locales of the page.
 We also need to create a copy of the `ElementalArea` when content is being localised. 
 
-```
+```php
 class BlockPage extends Page
 {
-    .
-    .
-    .
-
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
@@ -118,15 +116,18 @@ class BlockPage extends Page
     
         return;
     }
+    
+    // ...
+}
 ```
 
-Note that it's important to have the `cascade_duplicates` setting present on all the relevant objects so they would copy as well.
+Note that it's important to have the [cascade_duplicates setting](https://docs.silverstripe.org/en/4/developer_guides/model/relations/#cascading-duplications) present on all the relevant objects so they would copy as well.
 
 Furthermore, we also need to disable the inheritance for blocks.
 The Fluent module provides multiple extension points, one of them being the `updateLocaliseSelect`.
 We need to create an `Extension` with the following code and apply it to the `BlockPage`:
 
-```
+```php
 class BlockPageFluentExtension extends Extension
 {
     /**
@@ -148,13 +149,9 @@ class BlockPageFluentExtension extends Extension
 ```
 
 
-```
+```php
 class BlockPage extends Page
 {
-    .
-    .
-    .
-
     /**
      * @var array
      */
@@ -162,6 +159,9 @@ class BlockPage extends Page
         ElementalPageExtension::class,
         BlockPageFluentExtension::class,
     ];
+    
+    // ...
+}
 ```
 
 #### Benefits of indirect localisation
@@ -194,7 +194,7 @@ Here are some guidelines to make that easier.
 It's important to include some locales because otherwise your test might be testing a very different situation.
 Example `Locale` setup in a fixture:
 
-```
+```yml
 TractorCow\Fluent\Model\Locale:
   nz:
     Locale: en_NZ
@@ -212,7 +212,7 @@ TractorCow\Fluent\Model\Locale:
 
 In the case your fixture needs to contain data for only a single locale you can specify your desired locale in your unit test like this:
 
-```
+```php
 protected function setUp()
 {
     // Set locale for fixture creation
@@ -226,7 +226,7 @@ protected function setUp()
 
 This will localise all your data so you don't need to worry about that in your fixtures. The following fixture will produce a page localised in `en_NZ`:
 
-```
+```yml
 App\Pages\OperatorArticlePage:
   article-page1:
     Title: ArticlePage1 NZ
@@ -244,7 +244,7 @@ Note that each localised field has to be specified for the table that actually h
 In this case, it's `SiteTree`.
 If you are unsure where your field sits it may be a good idea to check your database structure first and find the relevant table.
 
-```
+```yml
 App\Pages\OperatorArticlePage:
   article-page1:
     Title: ArticlePage1
@@ -265,7 +265,7 @@ SiteTree_Localised:
 
 Make sure you always use the `FluentState` callback to change the global state like this:
 
-```
+```php
 FluentState::singleton()->withState(function (FluentState $state) {
     $state->setLocale('en_NZ');
 
