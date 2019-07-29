@@ -20,7 +20,13 @@ class ElementDuplicationExtension extends Extension
                 $items = $original->$relation();
                 foreach ($items as $item) {
                     $duplicateItem = $item->duplicate(false);
-                    $duplicateItem->{$thisClass.'ID'} = $this->owner->ID;
+
+                    if ($this->owner instanceof ElementList) {
+                        $duplicateItem->ListID = $this->owner->ID;
+                    } else {
+                        $duplicateItem->{$thisClass.'ID'} = $this->owner->ID;
+                    }
+
                     $duplicateItem->write();
                 }
             }
