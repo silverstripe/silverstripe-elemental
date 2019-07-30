@@ -149,14 +149,6 @@ class BaseElement extends DataObject
     private static $inline_editable = true;
 
     /**
-     * Can be set during execution to temporarily disable inline editing, e.g. for generating different types of
-     * edit links for the element.
-     *
-     * @var bool
-     */
-    protected $disableInlineEditing = false;
-
-    /**
      * Store used anchor names, this is to avoid title clashes
      * when calling 'getAnchor'
      *
@@ -385,9 +377,6 @@ JS
      */
     public function inlineEditable()
     {
-        if ($this->getDisableInlineEditing()) {
-            return false;
-        }
         return static::config()->get('inline_editable');
     }
 
@@ -677,11 +666,12 @@ JS
     }
 
     /**
+     * @param bool $directLink Indicates that the GridFieldDetailEdit form link should be given even if the block can be
+     *                         edited in-line.
      * @return null|string
-     * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \SilverStripe\ORM\ValidationException
      */
-    public function CMSEditLink()
+    public function CMSEditLink($directLink = false)
     {
         // Allow for repeated calls to be returned from cache
         if (isset($this->cacheData['cms_edit_link'])) {
@@ -702,7 +692,7 @@ JS
         }
 
         // In-line editable blocks should just take you to the page. Editable ones should add the suffix for detail form
-        if (!$this->inlineEditable()) {
+        if (!$this->inlineEditable() || $directLink) {
             $link = Controller::join_links(
                 singleton(CMSPageEditController::class)->Link('EditForm'),
                 $page->ID,
@@ -1039,23 +1029,5 @@ JS
         $odd = (bool) ($this->Pos() % 2);
 
         return  ($odd) ? 'odd' : 'even';
-    }
-
-    /**
-     * @param bool $disable
-     * @return $this
-     */
-    public function setDisableInlineEditing($disable = true)
-    {
-        $this->disableInlineEditing = (bool) $disable;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getDisableInlineEditing()
-    {
-        return (bool) $this->disableInlineEditing;
     }
 }
