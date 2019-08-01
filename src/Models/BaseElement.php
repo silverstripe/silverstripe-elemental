@@ -25,8 +25,10 @@ use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
+use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
+use SilverStripe\View\Requirements;
 
 /**
  * Class BaseElement
@@ -330,6 +332,28 @@ class BaseElement extends DataObject
             // Hide the navigation section of the tabs in the React component {@see silverstripe/admin Tabs}
             $rootTabset = $fields->fieldByName('Root');
             $rootTabset->setSchemaState(['hideNav' => true]);
+
+            if ($this->isInDB()) {
+                $fields->addFieldsToTab('Root.History', [
+                    HistoryViewerField::create('ElementHistory'),
+                ]);
+                // Add class to containing tab
+                $fields->fieldByName('Root.History')
+                    ->addExtraClass('elemental-block__history-tab tab--history-viewer');
+
+                // Hack: automatically navigate to the History tab with `#Root_History` is in the URL
+                // To unhack, fix this: https://github.com/silverstripe/silverstripe-admin/issues/911
+                Requirements::customScript(<<<JS
+    document.addEventListener('DOMContentLoaded', () => {
+        var hash = window.location.hash.substr(1);
+        if (hash !== 'Root_History') {
+            return null;
+        }
+        jQuery('.cms-tabset-nav-primary li[aria-controls="Root_History"] a').trigger('click')
+    });
+JS
+                );
+            }
         });
 
         return parent::getCMSFields();
@@ -642,11 +666,12 @@ class BaseElement extends DataObject
     }
 
     /**
+     * @param bool $directLink Indicates that the GridFieldDetailEdit form link should be given even if the block can be
+     *                         edited in-line.
      * @return null|string
-     * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \SilverStripe\ORM\ValidationException
      */
-    public function CMSEditLink()
+    public function CMSEditLink($directLink = false)
     {
         // Allow for repeated calls to be returned from cache
         if (isset($this->cacheData['cms_edit_link'])) {
@@ -667,7 +692,7 @@ class BaseElement extends DataObject
         }
 
         // In-line editable blocks should just take you to the page. Editable ones should add the suffix for detail form
-        if (!$this->inlineEditable()) {
+        if (!$this->inlineEditable() || $directLink) {
             $link = Controller::join_links(
                 singleton(CMSPageEditController::class)->Link('EditForm'),
                 $page->ID,

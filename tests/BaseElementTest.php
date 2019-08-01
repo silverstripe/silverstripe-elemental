@@ -14,6 +14,7 @@ use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 
 class BaseElementTest extends FunctionalTest
 {
@@ -123,11 +124,29 @@ class BaseElementTest extends FunctionalTest
 
     public function testGetIcon()
     {
-        $element = new ElementContent;
+        $element = new ElementContent();
         $this->assertContains('class="font-icon-block-content"', $element->getIcon());
 
         Config::modify()->set(ElementContent::class, 'icon', '');
         $this->assertEmpty($element->getIcon());
+    }
+
+    public function testNoHistoryForUnsavedElements()
+    {
+        $newElement = new ElementContent();
+        $newElementHistory = $newElement->getCMSFields()->dataFieldByName('ElementHistory');
+        $this->assertNull($newElementHistory, 'Unsaved elements should not have history yet');
+    }
+
+    public function testGetHistoryViewerField()
+    {
+        $this->logInWithPermission();
+
+        /** @var ElementContent $element */
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+
+        $history = $element->getCMSFields()->dataFieldByName('ElementHistory');
+        $this->assertInstanceOf(HistoryViewerField::class, $history, 'History should be added');
     }
 
     public function testStyleVariants()

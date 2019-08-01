@@ -48,7 +48,7 @@ describe('HistoricElementView', () => {
       const link = ReactTestUtils.findRenderedDOMComponentWithClass(history, 'elemental-preview__link');
       expect(link).toBeTruthy();
       expect(link.href).toBeTruthy();
-      expect(link.textContent).toEqual('View block');
+      expect(link.textContent).toEqual('Block history');
     });
   });
 });

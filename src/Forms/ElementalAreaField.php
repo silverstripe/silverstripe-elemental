@@ -163,11 +163,16 @@ class ElementalAreaField extends GridField
                 'data' => [
                     'ElementID' => $element->ID,
                     'ElementType' => $element->getType(),
-                    'ElementIcon' => $element->config()->icon,
+                    'ElementIcon' => $element->config()->get('icon'),
                     'ElementTitle' => $element->Title,
                     // @todo: Change this to block history permalink when that functionality becomes available.
-                    'ElementEditLink' => $element->CMSEditLink()
-                ]
+                    'ElementEditLink' => Controller::join_links(
+                        // Always get the edit link for the block directly, not the in-line edit form if supported
+                        $element->CMSEditLink(true),
+                        // @todo make this auto-permalinking work somehow
+                        '#Root_History'
+                    ),
+                ],
             ]);
 
             return $elementGroup;

@@ -21,5 +21,5 @@
   "ElementHeader.EXPAND": "Show editable fields",
   "ElementEditForm.ERROR_NOTIFICATION": "Error displaying the edit form for this block",
   "ElementSummary.NO_PREVIEW": "No preview available",
-  "HistoricElementView.BLOCK_HISTORY": "View block"
+  "HistoricElementView.VIEW_BLOCK_HISTORY": "Block history"
 }
