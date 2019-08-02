@@ -8,31 +8,17 @@ module, which integrates with search services such as Solr.
 
 ## Usage
 
-When you install the fulltextsearch module, it will auto-discover
-an index provided by elemental: 
-`DNADesign\Elemental\Search\ElementalSolrIndex`.
+You can add elements to your search results by adding them to the
+appropriate index for the solution you've chosen.
 
-It works based on a new `getElementsForSearch` method added to your `Page` class
+Elemental content which is ready for indexing is available through the
+`getElementsForSearch` method added to your `Page` class
 through the `DNADesign\Elemental\Extensions\ElementalPageExtension`.
 This method renders out the full content of all elements,
 strips out the HTML, and indexes it as one field.
 
-## Configuration
-
-In many cases, you'll already have configured your own search index.
-Since the `ElementalSolrIndex` is auto-discovered, it duplicates
-search indexing effort even when it is unused.
-
-You can disable it via YAML config in favour of your own index definition:
-
-```yml
-SilverStripe\FullTextSearch\Search\FullTextSearch:
-  indexes:
-    - MyCustomIndex
-```
-
 You can define whether each block is included in your search index using the
-`search_indexable` configuration variable, which is `true` by default:
+`search_indexable` configuration variable on the block, which is `true` by default:
 
 ```yml
 App\Models\MyCustomElementalBlock:
@@ -49,6 +35,7 @@ want to be indexed.
 If you want to use a specific delimiter between each block, that can be configured
 as well. The default is a space, but you might for example want to use an ellipses
 to make it clear in search results where one piece of content ends and another begins.
+
 ```yml
 Page:
   search_index_element_delimiter: ' ... '
