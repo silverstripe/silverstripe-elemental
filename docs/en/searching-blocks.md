@@ -8,15 +8,21 @@ module, which integrates with search services such as Solr.
 
 ## Usage
 
+<<<<<<< HEAD
 You can add elements to your search results by adding them to the
 appropriate index for the solution you've chosen.
+=======
+You can add elements to your search results by adding them to a
+`SolrIndex` you define for your particular context.
+>>>>>>> 540d8ab (API Remove ElementalSolrIndex)
 
 Elemental content which is ready for indexing is available through the
 `getElementsForSearch` method added to your `Page` class
 through the `DNADesign\Elemental\Extensions\ElementalPageExtension`.
 This method renders out the full content of all elements,
-strips out the HTML, and indexes it as one field.
+strips out the HTML, and indexes it as one field. 
 
+<<<<<<< HEAD
 You can define whether each block is included in your search index using the
 `search_indexable` configuration variable on the block, which is `true` by default:
 
@@ -40,3 +46,22 @@ to make it clear in search results where one piece of content ends and another b
 Page:
   search_index_element_delimiter: ' ... '
 ```
+=======
+```php
+<?php
+
+use Page;
+use SilverStripe\FullTextSearch\Solr\SolrIndex;
+
+class MySolrIndex extends SolrIndex
+{
+    public function init()
+    {
+        $this->addClass(Page::class);
+        $this->addAllFulltextFields();
+        /** @see ElementalArea::getElementsForSearch */
+        $this->addFulltextField('ElementsForSearch');
+    }
+}
+```
+>>>>>>> 540d8ab (API Remove ElementalSolrIndex)
