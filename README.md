@@ -323,9 +323,10 @@ globally in your command line.
 **Note:** If adding or modifying colours, spacing, font sizes etc. please try
 and use an appropriate variable from the silverstripe/admin module if available.
 
-## Advanced setup
+## Integration with other modules 
 
-* [Advanced setup](docs/en/advanced_setup.md)
+* [Multiple languages with tractorcow/silverstripe-fluent](docs/en/advanced_setup.md)
+* [Search through silverstripe/fulltextsearch](docs/en/searching-blocks.md)
 
 ## Upgrading
 
