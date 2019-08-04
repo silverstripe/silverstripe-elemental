@@ -8,7 +8,7 @@ before_install:
 
 env:
   global:
-    - COMPOSER_ROOT_VERSION=4.x-dev
+    - COMPOSER_ROOT_VERSION=5.x-dev
     - TRAVIS_NODE_VERSION="10"
     - DISPLAY=":99"
     - XVFBARGS=":99 -ac -screen 0 1024x768x16"
