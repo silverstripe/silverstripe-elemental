@@ -3,6 +3,8 @@
 namespace DNADesign\Elemental\Models;
 
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
 use SilverStripe\ORM\FieldType\DBField;
 
 class ElementContent extends BaseElement
@@ -29,10 +31,11 @@ class ElementContent extends BaseElement
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(function (FieldList $fields) {
-            $fields
-                ->fieldByName('Root.Main.HTML')
-                ->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'));
+            /** @var HTMLEditorField $editorField */
+            $editorField = $fields->fieldByName('Root.Main.HTML');
+            $editorField->setTitle(_t(__CLASS__ . '.ContentLabel', 'Content'));
         });
+
         return parent::getCMSFields();
     }
 
