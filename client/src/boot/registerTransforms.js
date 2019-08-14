@@ -75,8 +75,8 @@ export default () => {
   // Add elemental editor actions
   Injector.transform('element-actions', (updater) => {
     updater.component('ElementActions', SaveAction, 'ElementActionsWithSave');
-    updater.component('ElementActions', ArchiveAction, 'ElementActionsWithArchive');
     updater.component('ElementActions', PublishAction, 'ElementActionsWithPublish');
     updater.component('ElementActions', UnpublishAction, 'ElementActionsWithUnpublish');
+    updater.component('ElementActions', ArchiveAction, 'ElementActionsWithArchive');
   });
 };
