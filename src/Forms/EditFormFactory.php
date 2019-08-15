@@ -40,14 +40,6 @@ class EditFormFactory extends DefaultFormFactory
         $editorField = $fields->fieldByName('Root.Main.HTML');
         if ($editorField) {
             $editorField->setRows(7);
-
-            $editorConfig = $editorField->getEditorConfig();
-
-            // Only configure if the editor is TinyMCE
-            if ($editorConfig instanceof TinyMCEConfig) {
-                $editorConfig->setOption('statusbar', false);
-                $editorField->setEditorConfig($editorConfig);
-            }
         }
 
         return $fields;
