@@ -51,7 +51,7 @@ class ElementList extends Component {
       return <div>{i18n._t('ElementList.ADD_BLOCKS', 'Add blocks to place your content')}</div>;
     }
 
-    const output = blocks.map((element) => (
+    let output = blocks.map((element) => (
       <div key={element.ID}>
         <ElementComponent
           element={element}
@@ -69,6 +69,10 @@ class ElementList extends Component {
         />}
       </div>
     ));
+
+    output = [
+      <HoverBarComponent key={0} areaId={areaId} elementId={0} elementTypes={allowedElementTypes} />
+    ].concat(output);
 
     const dragIndicatorIndex = this.getDragIndicatorIndex();
     if (isDraggingOver && dragIndicatorIndex !== null) {
