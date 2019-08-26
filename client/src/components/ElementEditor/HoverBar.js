@@ -1,10 +1,12 @@
 /* global window */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import prefixClassNames from '../../lib/prefixClassNames';
 import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
 import i18n from 'i18n';
+
+const classNames = prefixClassNames('element-editor__hover-bar');
 
 /**
  * Render an hoverbar without any state
@@ -16,18 +18,15 @@ function StatelessHoverBar({
   areaId,
   popoverOpen,
   onToggle }) {
-  const hoverBarClassNames = classNames('font-icon-plus-circled', 'hover-bar__line');
-  const areaClasses = classNames(
-    'hover-bar__area',
-    { 'hover-bar__area--focus': popoverOpen }
-  );
+  const lineClasses = `${classNames('__line')} font-icon-plus-circled`;
+  const areaClasses = classNames('__area', { '__area--focus': popoverOpen });
   const label = i18n._t('ElementAddNewButton.ADD_BLOCK', 'Add block');
 
   return (
-    <div className="hover-bar" id={`AddBlockArea_${elementId}`}>
+    <div className={classNames('')} id={`AddBlockArea_${elementId}`}>
       <button className={areaClasses} onClick={onToggle} aria-label={label} title={label}>
-        <span className="hover-bar__area-inner">
-          <span id={`AddBlockHoverBar_${elementId}`} className={hoverBarClassNames} />
+        <span className={classNames('__area-inner')}>
+          <span id={`AddBlockHoverBar_${elementId}`} className={lineClasses} />
         </span>
       </button>
       <AddElementPopoverComponent
