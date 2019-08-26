@@ -2,7 +2,7 @@ import classNames from 'classnames';
 
 /**
  * Utility method wrap around classeNames to prefix the return class names
- * @param cssPrefix
+ * @param {string} cssPrefix
  * @returns {Function}
  */
 const prefixClassNames = (cssPrefix) => (...args) => {
