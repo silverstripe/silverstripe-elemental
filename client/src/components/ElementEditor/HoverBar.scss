@@ -1,80 +1,83 @@
 $transition: all ease .2s;
 
 .element-editor {
+
   &__hover-bar {
     height: 0;
     display: flex;
     width: 100%;
     position: relative;
     align-items: center;
+  }
 
-    &__area {
-      background-color: transparent;
-      min-height: $spacer * 1.5;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      border: none;
+  &__hover-bar-area {
+    background-color: transparent;
+    min-height: $spacer * 1.5;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    transition: $transition;
+    position: relative;
+
+    &:hover, &:focus, &--focus {
       outline: none;
-      transition: $transition;
-      position: relative;
 
-      &-inner {
-        margin: 0 0;
-        display: block;
-        position: relative;
-        transition: $transition;
+      .element-editor__hover-bar-area-inner {
+        margin: 0 20px;
       }
 
-      &:hover, &:focus, &--focus {
-        outline: none;
-
-        .element-editor__hover-bar__area-inner {
-          margin: 0 20px;
+      .element-editor__hover-bar-line {
+        opacity: 1;
+        border-radius: 5px;
+        max-height: 5px;
+        &:before {
+          transform: translateY(calc(3px + -50%))  scale(1);
         }
-        .element-editor__hover-bar__line {
-          opacity: 1;
-          border-radius: 5px;
-          max-height: 5px;
-          &:before {
-            transform: translateY(calc(2px + -50%))  scale(1);
-          }
-        }
-      }
-    }
-
-    &__line {
-      background-color: $blue;
-      transition: $transition;
-      opacity: 0;
-      align-self: center;
-      width: 100%;
-      border: 0;
-      position: absolute;
-      display: flex;
-      justify-content: flex-end;
-      padding: 0;
-      top: 50%;
-      transform: translateY(-66%);
-      max-height: 0;
-      border-radius: 0;
-
-      &:before {
-        font-size: 1.5rem;
-        background-image: radial-gradient(#fff 50%, transparent 50%);
-        // position plus 'button' to be able to modify it's z-index
-        position: relative;
-        z-index: 2;
-        margin-right: 50%;
-        right: -.5em;
-        display: block;
-        height: 1em;
-        // IE-11 fallback
-        transform: translateY(-35%);
-        transform: translateY(calc(-1px + -50%)) scale(0);
-        transition: $transition;
-        color: $blue;
       }
     }
   }
+
+  &__hover-bar-area-inner {
+    margin: 0 0;
+    display: block;
+    position: relative;
+    transition: $transition;
+  }
+
+  &__hover-bar-line {
+    background-color: $blue;
+    transition: $transition;
+    opacity: 0;
+    align-self: center;
+    width: 100%;
+    border: 0;
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0;
+    top: 50%;
+    transform: translateY(-66%);
+    max-height: 0;
+    border-radius: 0;
+
+    &:before {
+      font-size: 1.5rem;
+      background-image: radial-gradient(#fff 50%, transparent 50%);
+      // position plus 'button' to be able to modify it's z-index
+      position: relative;
+      z-index: 2;
+      margin-right: 50%;
+      right: -.5em;
+      display: block;
+      height: 1em;
+      // IE-11 fallback
+      transform: translateY(-35%);
+      transform: translateY(calc(-1px + -50%)) scale(0);
+      transition: $transition;
+      color: $blue;
+    }
+  }
+
 }

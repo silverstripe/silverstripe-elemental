@@ -18,14 +18,14 @@ function StatelessHoverBar({
   areaId,
   popoverOpen,
   onToggle }) {
-  const lineClasses = `${classNames('__line')} font-icon-plus-circled`;
-  const areaClasses = classNames('__area', { '__area--focus': popoverOpen });
+  const lineClasses = `${classNames('-line')} font-icon-plus-circled`;
+  const areaClasses = classNames('-area', { '-area--focus': popoverOpen });
   const label = i18n._t('ElementAddNewButton.ADD_BLOCK', 'Add block');
 
   return (
     <div className={classNames('')} id={`AddBlockArea_${elementId}`}>
       <button className={areaClasses} onClick={onToggle} aria-label={label} title={label}>
-        <span className={classNames('__area-inner')}>
+        <span className={classNames('-area-inner')}>
           <span id={`AddBlockHoverBar_${elementId}`} className={lineClasses} />
         </span>
       </button>
