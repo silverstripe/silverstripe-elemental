@@ -43,18 +43,6 @@ class AddElementPopover extends Component {
   }
 
   /**
-   * Allow closure via `esc` from within popover
-   */
-  handleKeyDown(event) {
-    switch (event.key) {
-      case 'Escape':
-        this.handleToggle();
-        break;
-      default:
-    }
-  }
-
-  /**
    * Pass toggle to parent and clear the search input
    */
   handleToggle() {
