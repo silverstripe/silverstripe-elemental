@@ -19,23 +19,29 @@ function StatelessHoverBar({
   popoverOpen,
   onToggle }) {
   const lineClasses = `${classNames('-line')} font-icon-plus-circled`;
-  const areaClasses = classNames('-area', { '-area--focus': popoverOpen });
   const label = i18n._t('ElementAddNewButton.ADD_BLOCK', 'Add block');
+  const btnProps = {
+    className: classNames('-area', { '-area--focus': popoverOpen }),
+    onClick: onToggle,
+    'aria-label': label,
+    title: label,
+    id: `AddBlockHoverBarArea_${elementId}`
+  };
 
   return (
-    <div className={classNames('')} id={`AddBlockArea_${elementId}`}>
-      <button className={areaClasses} onClick={onToggle} aria-label={label} title={label}>
+    <div className={classNames('')} id={`AddBlockHoverBar_${elementId}`}>
+      <button {...btnProps}>
         <span className={classNames('-area-inner')}>
-          <span id={`AddBlockHoverBar_${elementId}`} className={lineClasses} />
+          <span className={lineClasses} />
         </span>
       </button>
       <AddElementPopoverComponent
         placement="bottom"
-        target={`AddBlockHoverBar_${elementId}`}
+        target={`AddBlockHoverBarArea_${elementId}`}
         isOpen={popoverOpen}
         elementTypes={elementTypes}
         toggle={onToggle}
-        container={`#AddBlockArea_${elementId}`}
+        container={`#AddBlockHoverBar_${elementId}`}
         areaId={areaId}
         insertAfterElement={elementId}
       />
