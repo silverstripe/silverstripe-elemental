@@ -3,6 +3,7 @@
 namespace DNADesign\Elemental\Forms;
 
 use SilverStripe\Control\RequestHandler;
+use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Forms\DefaultFormFactory;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\FormField;
@@ -11,6 +12,16 @@ use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
 
 class EditFormFactory extends DefaultFormFactory
 {
+    use Configurable;
+
+    /**
+     * This will be set the number of rows in HTML field
+     *
+     * @config
+     * @var integer
+     */
+    private static $html_field_rows = 7;
+
     /**
      * @var string
      */
@@ -39,15 +50,7 @@ class EditFormFactory extends DefaultFormFactory
         /** @var HTMLEditorField|null $editorField */
         $editorField = $fields->fieldByName('Root.Main.HTML');
         if ($editorField) {
-            $editorField->setRows(7);
-
-            $editorConfig = $editorField->getEditorConfig();
-
-            // Only configure if the editor is TinyMCE
-            if ($editorConfig instanceof TinyMCEConfig) {
-                $editorConfig->setOption('statusbar', false);
-                $editorField->setEditorConfig($editorConfig);
-            }
+            $editorField->setRows($this->config()->get('html_field_rows'));
         }
 
         return $fields;

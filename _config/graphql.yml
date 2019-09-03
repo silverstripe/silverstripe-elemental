@@ -26,6 +26,7 @@ SilverStripe\GraphQL\Manager:
             nestedQueries:
               Elements:
                 resolver: DNADesign\Elemental\GraphQL\ElementsResolver
+                paginate: false
             operations:
               readOne:
                 resolver: DNADesign\Elemental\GraphQL\ReadOneAreaResolver

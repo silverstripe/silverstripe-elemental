@@ -682,7 +682,9 @@ JS
         $page = $this->getPage();
 
         if (!$page) {
-            return null;
+            $link = null;
+            $this->extend('updateCMSEditLink', $link);
+            return $link;
         }
 
         if (!$page instanceof SiteTree && method_exists($page, 'CMSEditLink')) {
