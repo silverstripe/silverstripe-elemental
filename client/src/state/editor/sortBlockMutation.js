@@ -37,12 +37,12 @@ const config = {
         // Query returns a deeply nested object. Explicit reconstruction via spreads is too verbose.
         // This is an alternative, relatively efficient way to deep clone
         const newData = JSON.parse(JSON.stringify(cachedData));
-        let { edges } = newData.readOneElementalArea.Elements;
+        let blocks = newData.readOneElementalArea.Elements;
 
         // Find the block we reordered
-        const movedBlockIndex = edges.findIndex(edge => edge.node.ID === blockId);
+        const movedBlockIndex = blocks.findIndex(block => block.ID === blockId);
         // Keep it
-        const movedBlock = edges[movedBlockIndex];
+        const movedBlock = blocks[movedBlockIndex];
         // Update the moved block with the new details returned in the GraphQL response
         Object.entries(updatedElementData).forEach(([key, value]) => {
           // Skip the type name as this is always returned but should never change
@@ -53,22 +53,22 @@ const config = {
           movedBlock[key] = value;
         });
         // Remove the moved block
-        edges.splice(movedBlockIndex, 1);
+        blocks.splice(movedBlockIndex, 1);
         // If the target is 0, it's added to the start
         if (!afterBlockId) {
-          edges.unshift(movedBlock);
+          blocks.unshift(movedBlock);
         } else {
           // Else, find the block we inserted after
-          const targetBlockIndex = edges.findIndex(edge => edge.node.ID === afterBlockId);
+          const targetBlockIndex = blocks.findIndex(block => block.ID === afterBlockId);
           // Add it back after the target
-          const end = edges.slice(targetBlockIndex + 1);
-          edges = edges.slice(0, targetBlockIndex + 1);
-          edges.push(movedBlock);
-          edges = edges.concat(end);
+          const end = blocks.slice(targetBlockIndex + 1);
+          blocks = blocks.slice(0, targetBlockIndex + 1);
+          blocks.push(movedBlock);
+          blocks = blocks.concat(end);
         }
 
         // Add it back to the full result
-        newData.readOneElementalArea.Elements.edges = edges;
+        newData.readOneElementalArea.Elements = blocks;
         store.writeQuery({ query: readBlocksQuery, data: newData, variables });
       },
     });

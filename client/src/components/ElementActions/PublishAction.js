@@ -67,9 +67,8 @@ const performSaveForElementWithFormData = (id, formData, securityId) => {
         .data
         .readOneElementalArea
         .Elements
-        .edges
-        .find((elementData) => elementData.node.ID === id);
-      return newElementData && newElementData.node.Version;
+        .find((elementData) => elementData.ID === id);
+      return newElementData && newElementData.Version;
     });
 };
 
