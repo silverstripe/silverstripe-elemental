@@ -32,4 +32,3 @@ class MySolrIndex extends SolrIndex
         $this->addFulltextField('ElementsForSearch');
     }
 }
-```
