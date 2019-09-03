@@ -72,6 +72,14 @@ class ElementalAreasExtension extends DataExtension
     private static $sort_types_alphabetically = true;
 
     /**
+     * Whether or not to replace the default SiteTree content field
+     *
+     * @var boolean
+     * @config
+     */
+    private static $replace_content_field = true;
+
+    /**
      * Get the available element types for this page type,
      *
      * Uses allowed_elements, stop_element_inheritance, disallowed_elements in
@@ -170,7 +178,9 @@ class ElementalAreasExtension extends DataExtension
 
         // add an empty holder for content as some module explicitly use insert
         // after content.
-        $fields->replaceField('Content', new LiteralField('Content', ''));
+        if (Config::inst()->get(ElementalAreasExtension::class, 'replace_content_field')) {
+            $fields->replaceField('Content', new LiteralField('Content', ''));
+        }
         $elementalAreaRelations = $this->owner->getElementalRelations();
 
         foreach ($elementalAreaRelations as $eaRelationship) {
