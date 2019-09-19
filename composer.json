@@ -15,7 +15,7 @@
 		"symbiote/silverstripe-gridfieldextensions": "~2.0",
 		"symbiote/silverstripe-addressable": "~1.0",
 		"heyday/silverstripe-versioneddataobjects": "~2.0",
-		"undefinedoffset/sortablegridfield": "~0.5"
+		"undefinedoffset/sortablegridfield": "~1.0"
 	},
     "require-dev": {
         "phpunit/PHPUnit": "~3.7@stable"
