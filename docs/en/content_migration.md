@@ -12,6 +12,26 @@ content for you. It will:
 
 There are several configuration options and extension hooks to allow customising the functionality of this class.
 
+### Choosing not to replace the standard content editor
+
+If you wish to apply elemental to pages but still retain the default `Content` field, use the config setting
+
+```yml
+DNADesign\Elemental\Extensions\ElementalAreasExtension:
+  keep_content_fields: true
+```
+
+**Note** This setting is globally applied. If you wish to replace the default Content area for all but a few
+select page types, you can instead add a config option to that class
+
+```yml
+YourVendor\YourProject\Pages\SpecialBlockAndContentPage:
+  elemental_keep_content_field: true
+```
+
+The owner class config setting will always take precedence over the global setting (on the extension).
+This makes it possible to e.g. keep content fields globally, except for select page types.
+
 ### Configuring the element that is created
 
 You may configure which element content is migrated to by using the following configuration:

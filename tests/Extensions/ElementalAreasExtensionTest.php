@@ -6,8 +6,11 @@ use DNADesign\Elemental\Extensions\ElementalAreasExtension;
 use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestUnusedElement;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\Forms\LiteralField;
 
 class ElementalAreasExtensionTest extends SapphireTest
 {
@@ -71,5 +74,40 @@ class ElementalAreasExtensionTest extends SapphireTest
         $matches = array_values(array_intersect($actual, $expected));
 
         $this->assertSame($expected, $matches);
+    }
+
+    /**
+     * @dataProvider provideContentFieldPreservationSettings
+     */
+    public function testContentFieldsAreRemovedByDefault($keepGlobal, $keepClass, $expectedType)
+    {
+        Config::inst()->set(ElementalAreasExtension::class, 'keep_content_fields', $keepGlobal);
+        Config::inst()->set(SiteTree::class, 'elemental_keep_content_field', $keepClass);
+        $page = SiteTree::create();
+        $fields = $page->getCMSFields();
+        $this->assertInstanceOf($expectedType, $fields->fieldByName('Root.Main.Content'));
+    }
+
+    /**
+     * Provide data for testing both settings and override precedence of Content field replacement
+     * Settings provided as:
+     * - ElementalAreasExtension.keep_content_fields (the global setting)
+     * - SiteTree.elemental_keep_content_field (the class level setting - should take precedence)
+     * - The expected class of the Field in the FieldList (LiteralField OR HTMLEditorField)
+     *
+     * @return array
+     */
+    public function provideContentFieldPreservationSettings()
+    {
+        // Test both unset (null) and explicitly declined (false) where applicable.
+        return [
+            [null, null, LiteralField::class],
+            [false, false, LiteralField::class],
+            [true, null, HTMLEditorField::class],
+            [true, false, LiteralField::class],
+            [null, true, HTMLEditorField::class],
+            [false, true, HTMLEditorField::class],
+            [true, true, HTMLEditorField::class],
+        ];
     }
 }

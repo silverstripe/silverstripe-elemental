@@ -73,11 +73,13 @@ class ElementalAreasExtension extends DataExtension
 
     /**
      * Whether or not to replace the default SiteTree content field
+     * Applies globally, across all page types; unless a page type overrides this with its own config setting of
+     * `elemental_keep_content_field`
      *
      * @var boolean
      * @config
      */
-    private static $replace_content_field = true;
+    private static $keep_content_fields = false;
 
     /**
      * Get the available element types for this page type,
@@ -176,9 +178,10 @@ class ElementalAreasExtension extends DataExtension
             return;
         }
 
-        // add an empty holder for content as some module explicitly use insert
-        // after content.
-        if (Config::inst()->get(ElementalAreasExtension::class, 'replace_content_field')) {
+        // add an empty holder for content as some module explicitly use insert after content
+        $globalReplace = !Config::inst()->get(self::class, 'keep_content_fields');
+        $classOverride = Config::inst()->get(get_class($this->owner), 'elemental_keep_content_field');
+        if ($globalReplace && !$classOverride || $classOverride === false) {
             $fields->replaceField('Content', new LiteralField('Content', ''));
         }
         $elementalAreaRelations = $this->owner->getElementalRelations();
