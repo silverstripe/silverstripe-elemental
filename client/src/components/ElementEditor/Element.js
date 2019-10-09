@@ -21,6 +21,10 @@ import { elementDragSource, isOverTop } from 'lib/dragHelpers';
  * of an element's details when used in the CMS, including ID, Title and Summary.
  */
 class Element extends Component {
+  static getDerivedStateFromError() {
+    return { childRenderingError: true };
+  }
+
   constructor(props) {
     super(props);
 
@@ -34,6 +38,7 @@ class Element extends Component {
       previewExpanded: false,
       initialTab: '',
       loadingError: false,
+      childRenderingError: false,
     };
   }
 
@@ -181,7 +186,7 @@ class Element extends Component {
       onDragEnd,
     } = this.props;
 
-    const { previewExpanded } = this.state;
+    const { childRenderingError, previewExpanded } = this.state;
 
     if (!element.ID) {
       return null;
@@ -217,22 +222,33 @@ class Element extends Component {
         areaId={areaId}
         expandable={type.inlineEditable}
         link={link}
-        previewExpanded={previewExpanded}
+        previewExpanded={previewExpanded && !childRenderingError}
         handleEditTabsClick={this.handleTabClick}
         activeTab={activeTab}
         disableTooltip={isDragging}
         onDragEnd={onDragEnd}
       />
-      <ContentComponent
-        id={element.ID}
-        fileUrl={element.BlockSchema.fileURL}
-        fileTitle={element.BlockSchema.fileTitle}
-        content={element.BlockSchema.content}
-        previewExpanded={previewExpanded && !isDragging}
-        activeTab={activeTab}
-        onFormInit={() => this.updateFormTab(activeTab)}
-        handleLoadingError={this.handleLoadingError}
-      />
+
+      {
+        !childRenderingError &&
+        <ContentComponent
+          id={element.ID}
+          fileUrl={element.BlockSchema.fileURL}
+          fileTitle={element.BlockSchema.fileTitle}
+          content={element.BlockSchema.content}
+          previewExpanded={previewExpanded && !isDragging}
+          activeTab={activeTab}
+          onFormInit={() => this.updateFormTab(activeTab)}
+          handleLoadingError={this.handleLoadingError}
+        />
+      }
+
+      {
+        childRenderingError &&
+        <div className="alert alert-danger mt-2">
+          {i18n._t('ElementalElement.EDITING_ERROR', 'Something went wrong with this block. Please try saving and refreshing the CMS.')}
+        </div>
+      }
     </div>);
 
     if (!previewExpanded) {
