@@ -246,7 +246,7 @@ class Element extends Component {
       {
         childRenderingError &&
         <div className="alert alert-danger mt-2">
-          {i18n._t('ElementalElement.EDITING_ERROR', 'Something went wrong with this block. Please try saving and refreshing the CMS.')}
+          {i18n._t('ElementalElement.CHILD_RENDERING_ERROR', 'Something went wrong with this block. Please try saving and refreshing the CMS.')}
         </div>
       }
     </div>);
