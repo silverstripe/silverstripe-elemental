@@ -36,7 +36,7 @@ When you release the block will automatically save their new positions, however 
 
 ## Adding blocks between existing blocks {#adding-between-blocks}
 
-An **Add block** button shown as a bar and plus icon can be activated by moving your cursor between blocks. You can select anywhere on the bar to open a block selector which will appear on the right hand side allowing you to add a block between existing blocks.
+An **Add block** button shown as a bar and plus icon can be activated by moving your cursor between blocks. You can select anywhere on the bar to open a block selector which will allow you to add a block between existing blocks.
 
 ![Adding in-page blocks](_images/adding_blocks_between_blocks.png)
 
