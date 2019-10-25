@@ -303,7 +303,19 @@ class ElementalAreasExtension extends DataExtension
             $where[] = $queryDetails . ' IS NULL OR ' . $queryDetails . ' = 0' ;
         }
 
-        foreach ($ownerClass::get()->where(implode(' OR ', $where)) as $elementalObject) {
+        $records = $ownerClass::get()->where(implode(' OR ', $where));
+        if ($ignored_classes = Config::inst()->get(ElementalPageExtension::class, 'ignored_classes')) {
+            $records = $records->exclude('ClassName', $ignored_classes);
+        }
+
+        foreach ($records as $elementalObject) {
+            if ($elementalObject->hasMethod('includeElemental')) {
+                $res = $elementalObject->includeElemental();
+                if ($res === false) {
+                    continue;
+                }
+            }
+
             $needsPublishing = Extensible::has_extension($elementalObject, Versioned::class)
                 && $elementalObject->isPublished();
 
