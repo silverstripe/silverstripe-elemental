@@ -40,11 +40,18 @@ export const elementDragSource = {
 
   endDrag(props, monitor) {
     const { onDragEnd } = props;
+    const dropResult = monitor.getDropResult();
 
-    if (!onDragEnd || !monitor.getDropResult()) {
+    if (!onDragEnd || !dropResult) {
       return;
     }
 
-    onDragEnd(monitor.getItem().ID, monitor.getDropResult().dropAfterID);
+    const itemID = monitor.getItem().ID;
+    const { dropAfterID } = dropResult;
+
+    // Only trigger the drop handler if the dragged element was moved, to avoid unnecessary work
+    if (itemID !== dropAfterID) {
+      onDragEnd(itemID, dropAfterID);
+    }
   }
 };

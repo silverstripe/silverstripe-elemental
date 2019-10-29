@@ -63,6 +63,7 @@ class ElementList extends Component {
           onDragStart={onDragStart}
         />
         {isDraggingOver || <HoverBarComponent
+          key={`create-after-${element.ID}`}
           areaId={areaId}
           elementId={element.ID}
           elementTypes={allowedElementTypes}
@@ -70,9 +71,17 @@ class ElementList extends Component {
       </div>
     ));
 
-    output = [
-      <HoverBarComponent key={0} areaId={areaId} elementId={0} elementTypes={allowedElementTypes} />
-    ].concat(output);
+    // Add a insert point above the first block for consistency
+    if (!isDraggingOver) {
+      output = [
+        <HoverBarComponent
+          key={0}
+          areaId={areaId}
+          elementId={0}
+          elementTypes={allowedElementTypes}
+        />
+      ].concat(output);
+    }
 
     const dragIndicatorIndex = this.getDragIndicatorIndex();
     if (isDraggingOver && dragIndicatorIndex !== null) {
