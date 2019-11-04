@@ -42,7 +42,7 @@ export const elementDragSource = {
     const { onDragEnd } = props;
     const dropResult = monitor.getDropResult();
 
-    if (!onDragEnd || !dropResult) {
+    if (!onDragEnd || !dropResult || !dropResult.dropAfterID) {
       return;
     }
 
