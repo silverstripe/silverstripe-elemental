@@ -54,8 +54,8 @@ const config = {
         });
         // Remove the moved block
         blocks.splice(movedBlockIndex, 1);
-        // If the target is 0, it's added to the start
-        if (!afterBlockId) {
+        // If the target is 0, it's moving to the start
+        if (afterBlockId === '0') {
           blocks.unshift(movedBlock);
         } else {
           // Else, find the block we inserted after
