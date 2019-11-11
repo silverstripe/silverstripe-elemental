@@ -54,12 +54,18 @@ const config = {
         });
         // Remove the moved block
         blocks.splice(movedBlockIndex, 1);
-        // If the target is 0, it's added to the start
-        if (!afterBlockId) {
+        // If the target is 0, it's moving to the start
+        if (afterBlockId === '0') {
           blocks.unshift(movedBlock);
         } else {
           // Else, find the block we inserted after
-          const targetBlockIndex = blocks.findIndex(block => block.ID === afterBlockId);
+          let targetBlockIndex = blocks.findIndex(block => block.ID === afterBlockId);
+
+          // If we can't find the block, it must be the one we're trying to move - put it back!
+          if (targetBlockIndex === -1) {
+            targetBlockIndex = movedBlockIndex - 1;
+          }
+
           // Add it back after the target
           const end = blocks.slice(targetBlockIndex + 1);
           blocks = blocks.slice(0, targetBlockIndex + 1);
