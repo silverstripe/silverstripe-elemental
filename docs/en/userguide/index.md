@@ -1,5 +1,7 @@
+---
 title: Content blocks
 summary: Break up a web page into blocks that allow content like banners, text and media to be independently managed within the CMS.
+---
 
 ## Features
 
@@ -12,7 +14,9 @@ summary: Break up a web page into blocks that allow content like banners, text a
 * [History and rolling back versions](history.md)
 * [Reports](reports.md)
 
-<div class="note" markdown="1">The Content blocks feature is new as of SilverStripe 4 and therefore will continue to develop with functionality.</div>
+[note]
+The Content blocks feature is new as of SilverStripe 4 and therefore will continue to develop with functionality.
+[/note]
 
 ## Content blocks overview
 
@@ -22,7 +26,9 @@ The [Elemental module](https://addons.silverstripe.org/add-ons/dnadesign/silvers
 
 Make sure that your SilverStripe CMS installation has the [Elemental module](https://addons.silverstripe.org/add-ons/dnadesign/silverstripe-elemental) installed.
 
-<div class="note" markdown="1">Developer knowledge is required to enable the functionality within the configuration before you begin.</div>
+[note]
+Developer knowledge is required to enable the functionality within the configuration before you begin.
+[/note]
 
 ## Using content blocks in the CMS
 
