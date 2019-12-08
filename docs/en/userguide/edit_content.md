@@ -1,3 +1,7 @@
+---
+title: Editing content
+---
+
 # Before we begin
 
 To get started, create a new page in the CMS. See [Pages and content](https://userhelp.silverstripe.org/en/4/creating_pages_and_content/) to learn more.
