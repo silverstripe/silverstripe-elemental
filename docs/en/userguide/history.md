@@ -1,3 +1,7 @@
+---
+title: Using history
+---
+
 # Using history
 
 [Pages history](https://userhelp.silverstripe.org/en/4/creating_pages_and_content/pages/rolling_back_pages/) includes content block history out of the box. Blocks have their own versioning and can be viewed as part of a pages **History**.

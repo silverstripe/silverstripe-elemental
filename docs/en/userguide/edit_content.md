@@ -1,3 +1,7 @@
+---
+title: Editing content
+---
+
 # Before we begin
 
 To get started, create a new page in the CMS. See [Pages and content](https://userhelp.silverstripe.org/en/4/creating_pages_and_content/) to learn more.
@@ -18,7 +22,9 @@ To edit, select the content block or click the button ***Expand*** shown as a dr
 
 Enter your content as required, provide a title for the block and choose whether you want the title to be shown on the page or not via the ***Displayed*** checkbox field.
 
-<div class="note" markdown="1"> The content block will remain open until collapsed or the page is reloaded. </div>
+[note]
+ The content block will remain open until collapsed or the page is reloaded. 
+[/note]
 
 ![Expanded content block](_images/inline_editing.png)
 
@@ -26,13 +32,17 @@ Enter your content as required, provide a title for the block and choose whether
 
 To change the order of content blocks in a page, simply click and hold anywhere on the block, then drag and release to reorder the item.
 
-<div class="note" markdown="1"> Expanded blocks will collapse upon pick up.</div>
+[note]
+ Expanded blocks will collapse upon pick up.
+[/note]
 
 ![Reordering content blocks](_images/reorder_blocks.png)
 
 When you release the block will automatically save their new positions, however you may need to publish the page to see the new order.
 
-<div class="note" markdown="1">Similar to the reorganisation of pages, the state of a block is changed after it is relocated and a new version is created.</div>
+[note]
+Similar to the reorganisation of pages, the state of a block is changed after it is relocated and a new version is created.
+[/note]
 
 ## Adding blocks between existing blocks {#adding-between-blocks}
 
