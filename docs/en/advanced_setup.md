@@ -83,6 +83,8 @@ Make sure to properly configure your objects with the `owns` and `cascade_delete
 `Fluent` module provides multiple options how to localise your content, but there is one option which is the best on average: `indirect localisation`.
 The only thing that will be localised directly is the `ElementalArea`relation.
 
+For the new Fluent 4.4, the ForeignKey data type has to be allowed to be translated.
+
 ```php
 class BlockPage extends Page
 {
@@ -92,7 +94,12 @@ class BlockPage extends Page
     private static $field_include = [
         'ElementalAreaID',
     ];
-    
+
+    // For Fluent 4.4
+    private static $data_include = [
+        'ForeignKey',
+    ];
+
     // ...
 }
 ```
