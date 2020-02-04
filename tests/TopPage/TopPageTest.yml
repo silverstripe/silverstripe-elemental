@@ -1,0 +1,55 @@
+# Deeply nested setup
+#
+# Block page
+# - Elemental area
+# -- TestList
+# --- ElementalArea
+# ---- TestContent
+# ----- ChildPage
+# ------- ElementalArea
+# -------- TestList
+# --------- ElementalArea
+# ---------- TestContent
+
+DNADesign\Elemental\Models\ElementalArea:
+  area1:
+    OwnerClassName: DNADesign\Elemental\Tests\TopPage\TestBlockPage
+  area2:
+    OwnerClassName: DNADesign\Elemental\Tests\TopPage\TestChildPage
+  area3:
+    OwnerClassName: DNADesign\Elemental\Tests\TopPage\TestList
+  area4:
+    OwnerClassName: DNADesign\Elemental\Tests\TopPage\TestList
+
+DNADesign\Elemental\Tests\TopPage\TestList:
+  list1:
+    Title: List1
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area1
+    ElementsID: =>DNADesign\Elemental\Models\ElementalArea.area3
+  list2:
+    Title: List2
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area2
+    ElementsID: =>DNADesign\Elemental\Models\ElementalArea.area4
+
+DNADesign\Elemental\Tests\TopPage\TestBlockPage:
+  block-page1:
+    Title: BlockPage1
+    URLSegment: block-page1
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area1
+
+DNADesign\Elemental\Tests\TopPage\TestChildPage:
+  child-page1:
+    Title: ChildPage1
+    URLSegment: child-page1
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.area2
+
+DNADesign\Elemental\Tests\TopPage\TestContent:
+  content1:
+    Title: Content1
+    Content: 'Some content'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area3
+    ChildPageID: =>DNADesign\Elemental\Tests\TopPage\TestChildPage.child-page1
+  content2:
+    Title: Content2
+    Content: 'Some other content'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.area4

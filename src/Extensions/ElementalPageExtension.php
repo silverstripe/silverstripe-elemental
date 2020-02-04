@@ -2,16 +2,14 @@
 
 namespace DNADesign\Elemental\Extensions;
 
-use Exception;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\Control\Controller;
 use SilverStripe\View\Parsers\HTML4Value;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\View\SSViewer;
 
 /**
- * @method ElementalArea ElementalArea
- * @property ElementalArea ElementalArea
+ * @method ElementalArea ElementalArea()
+ * @property int ElementalAreaID
  */
 class ElementalPageExtension extends ElementalAreasExtension
 {

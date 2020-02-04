@@ -275,3 +275,45 @@ FluentState::singleton()->withState(function (FluentState $state) {
 
 This is very important as global state is reverted back after the callback is executed so it's safe to be used.
 Unit tests benefit mostly from this as this makes sure that there are no dependencies between unit tests as the global state is always changed only locally in one test.
+
+## Top page reference feature
+
+In some cases your project setup may have deeply nested blocks, for example:
+
+```
+Page
+  ElementalArea
+    RowBlock (represents grid row on frontend)
+     ElementalArea
+       AccordionBlock (block which can contain other content blocks)
+         ElementalArea
+           ContentBlock
+```
+
+It's quite common to use top page lookups from block context, i.e. a block is querying data from the page that the block belongs to.
+
+Most common cases are:
+
+* `CMS fields` - block level conditional logic depends on page data
+* `templates` - block level render logic depends on page data
+
+This module uses some in-memory caching but this isn't good enough for such deeply nested data structures by default.
+
+In such cases it is recommended to use this feature which stores the top page reference on individual blocks and elemental areas.
+This speeds up data lookup significantly.
+
+If your project makes use of the Fluent module, it is recommended to use the following extensions to replace the ones used by default:
+
+```
+DNADesign\Elemental\Models\BaseElement:
+  extensions:
+    topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
+
+DNADesign\Elemental\Models\ElementalArea:
+  extensions:
+    topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
+```
+
+This will store the locale of the top page on blocks which simplifies top page lookup in case the locale is unknown at the time of page lookup from block context.
+
+The page reference data on the blocks can also be used for maintenance dev tasks as it's easy to identify which blocks belong to which pages in which locale.
