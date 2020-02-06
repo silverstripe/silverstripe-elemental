@@ -251,6 +251,6 @@ class ElementalAreaField extends GridField
             $elements[] = $element;
         }
 
-        $this->extend('onElementsSaved', $elements);
+        $this->extend('onSaveInto', $elements, $dataObject, $elementData);
     }
 }
