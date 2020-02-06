@@ -231,6 +231,7 @@ class ElementalAreaField extends GridField
             return;
         }
 
+        $elements = [];
         foreach ($elementData as $form => $data) {
             // Extract the ID
             $elementId = (int) substr($form, $idPrefixLength);
@@ -247,6 +248,9 @@ class ElementalAreaField extends GridField
 
             $element->updateFromFormData($data);
             $element->write();
+            $elements[] = $element;
         }
+
+        $this->extend('onElementsSaved', $elements);
     }
 }
