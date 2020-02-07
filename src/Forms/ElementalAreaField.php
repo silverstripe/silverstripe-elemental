@@ -231,7 +231,7 @@ class ElementalAreaField extends GridField
             return;
         }
 
-        $elements = [];
+        $elementsUpdated = [];
         foreach ($elementData as $form => $data) {
             // Extract the ID
             $elementId = (int) substr($form, $idPrefixLength);
@@ -243,14 +243,12 @@ class ElementalAreaField extends GridField
                 // Ignore invalid elements
                 continue;
             }
-
             $data = ElementalAreaController::removeNamespacesFromFields($data, $element->ID);
-
             $element->updateFromFormData($data);
             $element->write();
-            $elements[] = $element;
+            $elementsUpdated[] = $element;
         }
 
-        $this->extend('onSaveInto', $elements, $dataObject, $elementData);
+        $this->extend('onSaveInto', $elementsUpdated, $dataObject, $elementData);
     }
 }

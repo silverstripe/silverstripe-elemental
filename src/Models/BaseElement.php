@@ -508,7 +508,6 @@ JS
             if (!$field) {
                 continue;
             }
-
             $field->setSubmittedValue($datum);
             $field->saveInto($this);
         }
