@@ -10,6 +10,7 @@ use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Tests\Extensions\ElementalAreaFieldExtension;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Forms\CompositeField;
@@ -57,15 +58,17 @@ class ElementalAreaFieldTest extends SapphireTest
     {
         $field = ElementalAreaField::create(
             'ElementalAreaField',
-            $this->objFromFixture(ElementalArea::class, 'area1'),
+            $this->objFromFixture(ElementalArea::class, 'area2'),
             [TestElement::class => TestElement::create()->getType()]
         );
 
         /* @var BaseElement $element */
-        $element1 = $this->objFromFixture(TestElement::class, 'element1');
-        $element2 = $this->objFromFixture(TestElement::class, 'element2');
+        $element1 = $this->objFromFixture(TestElement::class, 'element3');
+        $element2 = $this->objFromFixture(TestElement::class, 'element4');
         $element2Value = $element2->TestValue;
         $page = $element1->getPage();
+        $this->assertInstanceOf(TestPage::class, $page);
+
         $formID = sprintf(ElementalAreaController::FORM_NAME_TEMPLATE, $element1->ID);
         $fieldName = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $element1->ID, 'TestValue');
         $elementData = [
@@ -87,8 +90,10 @@ class ElementalAreaFieldTest extends SapphireTest
 
     public function testSaveIntoExtensible()
     {
-        $element = $this->objFromFixture(TestElement::class, 'element1');
+        $element = $this->objFromFixture(TestElement::class, 'element3');
         $page = $element->getPage();
+        $this->assertInstanceOf(TestPage::class, $page);
+        
         $formID = sprintf(ElementalAreaController::FORM_NAME_TEMPLATE, $element->ID);
         $fieldName = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $element->ID, 'TestValue');
 
@@ -113,7 +118,7 @@ class ElementalAreaFieldTest extends SapphireTest
 
         $field = ElementalAreaField::create(
             'ElementalAreaField',
-            $this->objFromFixture(ElementalArea::class, 'area1'),
+            $this->objFromFixture(ElementalArea::class, 'area2'),
             [TestElement::class => TestElement::create()->getType()]
         );
 
