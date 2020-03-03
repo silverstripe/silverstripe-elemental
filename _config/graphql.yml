@@ -8,6 +8,7 @@ SilverStripe\GraphQL\Manager:
         ObjectType: DNADesign\Elemental\GraphQL\Types\ObjectType
       mutations:
         sortBlock: DNADesign\Elemental\GraphQL\SortBlockMutationCreator
+        duplicateBlock: DNADesign\Elemental\GraphQL\DuplicateElementMutation
         addElementToArea: DNADesign\Elemental\GraphQL\AddElementToAreaMutation
       scaffolding:
         types:

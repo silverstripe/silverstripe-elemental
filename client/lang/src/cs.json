@@ -2,6 +2,7 @@
   "ElementArchiveAction.CONFIRM_DELETE": "Jste si jistí, že chcete blok odeslat do archivu?",
   "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Varování: Tento blok bude před odesláním do archivu označen jako nezveřejněný. Opravdu chcete pokračovat?",
   "ElementArchiveAction.ARCHIVE": "Archiv",
+  "ElementArchiveAction.DUPLICATE": "Duplikát",
   "ElementHeader.NOTITLE": "Nepojmenovaný {type} blok",
   "ElementPublishAction.SUCCESS_NOTIFICATION": "Úspěšně zveřejněno '{title}'",
   "ElementPublishAction.ERROR_NOTIFICATION": "Chyba při zveřejnění '{title}'",

@@ -2,6 +2,7 @@
   "ElementArchiveAction.CONFIRM_DELETE": "Sind Sie sicher, dass Sie diesen Block archivieren wollen?",
   "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Warnung: Dieser Block wird von der veröffentlichten Seite entfernt, bevor er archiviert wird. Wollen Sie fortfahren?",
   "ElementArchiveAction.ARCHIVE": "Archiv",
+  "ElementArchiveAction.DUPLICATE": "Duplikat",
   "ElementHeader.NOTITLE": "{type} block ohne Titel",
   "ElementPublishAction.SUCCESS_NOTIFICATION": "'{title}' erfolgreich veröffentlicht",
   "ElementPublishAction.ERROR_NOTIFICATION": "Fehler beim Veröffentlichen von '{title}'",
