@@ -46,7 +46,7 @@ class TextCheckboxGroupField extends CompositeField
 
             $field->setTemplate(CompositeField::class);
             $field->setTitle('Title');
-            
+
             $titleField = $field->fieldByName('Title');
             if ($titleField) {
                 $field->replaceField('Title', LiteralField::create(
