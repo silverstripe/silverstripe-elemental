@@ -47,18 +47,23 @@ class TextCheckboxGroupField extends CompositeField
             $field->setTemplate(CompositeField::class);
             $field->setTitle('Title');
 
-            $field->replaceField('Title', LiteralField::create(
-                'Title',
-                $field->fieldByName('Title')->Value()
-            ));
+            $titleField = $field->fieldByName('Title');
+            if ($titleField) {
+                $field->replaceField('Title', LiteralField::create(
+                    'Title',
+                    $titleField->Value()
+                ));
+            }
 
             $displayedText = _t(__CLASS__ . '.DISPLAYED', 'Displayed');
             $notDisplayedText = _t(__CLASS__ . '.NOT_DISPLAYED', 'Not displayed');
-
-            $field->replaceField('ShowTitle', LiteralField::create(
-                'ShowTitle',
-                $field->fieldByName('ShowTitle')->Value() === 'Yes' ? $displayedText : $notDisplayedText
-            )->addExtraClass('show-title'));
+            $showTitle = $field->fieldByName('ShowTitle');
+            if ($showTitle) {
+                $field->replaceField('ShowTitle', LiteralField::create(
+                    'ShowTitle',
+                    $showTitle->Value() === 'Yes' ? $displayedText : $notDisplayedText
+                )->addExtraClass('show-title'));
+            }
         }
 
         return $field;
