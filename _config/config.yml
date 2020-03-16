@@ -35,15 +35,3 @@ SilverStripe\Core\Injector\Injector:
     properties:
       States:
         topPageTestState: '%$DNADesign\Elemental\TopPage\TestState'
-
-DNADesign\Elemental\Models\BaseElement:
-  extensions:
-    topPageDataExtension: DNADesign\Elemental\TopPage\DataExtension
-
-DNADesign\Elemental\Models\ElementalArea:
-  extensions:
-    topPageDataExtension: DNADesign\Elemental\TopPage\DataExtension
-
-Page:
-  extensions:
-    topPageSiteTreeExtension: DNADesign\Elemental\TopPage\SiteTreeExtension

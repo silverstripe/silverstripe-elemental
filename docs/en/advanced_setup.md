@@ -92,13 +92,13 @@ class BlockPage extends Page
     private static $field_include = [
         'ElementalAreaID',
     ];
-    
+
     // ...
 }
 ```
 
 This configuration allows us to have different `ElementalArea` for different locales of the page.
-We also need to create a copy of the `ElementalArea` when content is being localised. 
+We also need to create a copy of the `ElementalArea` when content is being localised.
 
 ```php
 class BlockPage extends Page
@@ -106,17 +106,17 @@ class BlockPage extends Page
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-    
+
         if (!$this->isDraftedInLocale() && $this->isInDB()) {
             $elementalArea = $this->ElementalArea();
-    
+
             $elementalAreaNew = $elementalArea->duplicate();
             $this->ElementalAreaID = $elementalAreaNew->ID;
         }
-    
+
         return;
     }
-    
+
     // ...
 }
 ```
@@ -159,7 +159,7 @@ class BlockPage extends Page
         ElementalPageExtension::class,
         BlockPageFluentExtension::class,
     ];
-    
+
     // ...
 }
 ```
@@ -174,15 +174,6 @@ class BlockPage extends Page
 
 * the blocks are unaware of their locales which makes bottom up relation lookup slower
 * this can be remedied by some extra data stored in blocks (see notes below)
-
-### Block performance increase
-
-If only one page can own a block, we can store page reference directly on the block.
-This can be done when block is created (`onBeforeWrite`). This is helps significantly when traversing relation from block up to a page.
-Note that there may be a lot of objects sitting between block and a page.
-For example `Content block -> Elemental area -> Layout block -> Elemental area -> Page`.
-
-Additional information can be stored like page locale (relevant for `Fluent` module) to specify the target data even further.
 
 ### Unit tests
 
@@ -276,7 +267,7 @@ FluentState::singleton()->withState(function (FluentState $state) {
 This is very important as global state is reverted back after the callback is executed so it's safe to be used.
 Unit tests benefit mostly from this as this makes sure that there are no dependencies between unit tests as the global state is always changed only locally in one test.
 
-## Top page reference feature
+## Top Page reference performance enhancement
 
 In some cases your project setup may have deeply nested blocks, for example:
 
@@ -290,19 +281,31 @@ Page
            ContentBlock
 ```
 
-It's quite common to use top page lookups from block context, i.e. a block is querying data from the page that the block belongs to.
+It's quite common to use top page lookups from block context, i.e. a block is querying data from the page that the block
+belongs to.
 
-Most common cases are:
+When blocks are owned by a single ElementArea (and therefore a single Page), we can store a reference to the page
+directly on the block as a performance enhancement for this query. A set of extensions to manage this are provided out
+of the box, and can be enabled by applying the following configuration:
 
-* `CMS fields` - block level conditional logic depends on page data
-* `templates` - block level render logic depends on page data
+```
+DNADesign\Elemental\Models\BaseElement:
+  extensions:
+    topPageDataExtension: DNADesign\Elemental\TopPage\DataExtension
 
-This module uses some in-memory caching but this isn't good enough for such deeply nested data structures by default.
+DNADesign\Elemental\Models\ElementalArea:
+  extensions:
+    topPageDataExtension: DNADesign\Elemental\TopPage\DataExtension
 
-In such cases it is recommended to use this feature which stores the top page reference on individual blocks and elemental areas.
-This speeds up data lookup significantly.
+Page:
+  extensions:
+    topPageSiteTreeExtension: DNADesign\Elemental\TopPage\SiteTreeExtension
+```
 
-If your project makes use of the Fluent module, it is recommended to use the following extensions to replace the ones used by default:
+These extensions will be enabled by default in Elemental 5.
+
+If your project makes use of the Fluent module, it is recommended to use the following extensions in place of the ones
+above:
 
 ```
 DNADesign\Elemental\Models\BaseElement:
@@ -314,6 +317,8 @@ DNADesign\Elemental\Models\ElementalArea:
     topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
 ```
 
-This will store the locale of the top page on blocks which simplifies top page lookup in case the locale is unknown at the time of page lookup from block context.
+These variants will also store the locale of the top page on blocks, which simplifies top page lookup in case the locale
+is unknown at the time of page lookup from block context.
 
-The page reference data on the blocks can also be used for maintenance dev tasks as it's easy to identify which blocks belong to which pages in which locale.
+The page reference on the blocks can also be useful for maintenance dev tasks, as it's easy to identify which blocks
+belong to which pages in which locale.
