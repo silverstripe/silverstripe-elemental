@@ -39,6 +39,7 @@ use SilverStripe\View\Requirements;
  * @property int $Sort
  * @property string $ExtraClass
  * @property string $Style
+ * @property int $ParentID
  *
  * @method ElementalArea Parent()
  */
