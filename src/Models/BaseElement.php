@@ -935,6 +935,8 @@ JS
     /**
      * Get a description for this content element, if available
      *
+     * @deprecated 5.0 Removed in Elemental 5.0 to lower the chance it of overriding the Description db field getter.
+     *
      * @return string
      */
     public function getDescription()
@@ -954,7 +956,10 @@ JS
      */
     public function getTypeNice()
     {
-        $description = $this->getDescription();
+        $description = $this->config()->uninherited('description');
+        if ($description) {
+            $description = _t(__CLASS__ . '.Description', $description);
+        }
         $desc = ($description) ? ' <span class="element__note"> &mdash; ' . $description . '</span>' : '';
 
         return DBField::create_field(
