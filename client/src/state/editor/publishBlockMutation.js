@@ -4,13 +4,10 @@ import { config as readBlocksConfig, query as readBlocksQuery } from './readBloc
 
 // GraphQL query for saving a specific block
 const mutation = gql`
-mutation PublishBlock($blockId:ID!, $fromStage:VersionedStage!, $toStage:VersionedStage!, $fromVersion:Int!) {
-  copyBlockToStage(Input: {
+mutation PublishBlock($blockId:ID!) {
+  publishBlock(
     ID: $blockId
-    FromVersion: $fromVersion
-    FromStage: $fromStage
-    ToStage: $toStage
-  }) {
+  ) {
     ID
   }
 }
