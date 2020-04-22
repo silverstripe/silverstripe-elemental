@@ -85,7 +85,6 @@ const PublishAction = (MenuComponent) => (props) => {
       element: {
         ID: id,
         Title: title,
-        Version: version,
       },
       type,
       securityId,
@@ -94,7 +93,7 @@ const PublishAction = (MenuComponent) => (props) => {
       reinitialiseForm,
     } = props;
 
-    let actionFlow = new Promise((resolve) => resolve(version));
+    let actionFlow = new Promise((resolve) => resolve());
 
     // Edits have been made to the form. Peform a "Save & Publish"
     if (formDirty) {
@@ -107,7 +106,7 @@ const PublishAction = (MenuComponent) => (props) => {
 
     // Perform publish. Data is assumed to be up to date
     actionFlow
-      .then((versionToPublish) => handlePublishBlock(id, 'DRAFT', 'LIVE', versionToPublish))
+      .then(() => handlePublishBlock(id))
       .then(() => reportPublicationStatus(type.title, title, true))
       .catch(() => reportPublicationStatus(type.title, title, false));
   };

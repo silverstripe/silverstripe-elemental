@@ -4,13 +4,8 @@ import { config as readBlocksConfig, query as readBlocksQuery } from './readBloc
 
 // GraphQL query for saving a specific block
 const mutation = gql`
-mutation PublishBlock($blockId:ID!, $fromStage:VersionedStage!, $toStage:VersionedStage!, $fromVersion:Int!) {
-  copyBlockToStage(Input: {
-    ID: $blockId
-    FromVersion: $fromVersion
-    FromStage: $fromStage
-    ToStage: $toStage
-  }) {
+mutation PublishBlock($blockId:ID!) {
+  publishBlock(ID: $blockId) {
     ID
   }
 }
@@ -18,12 +13,9 @@ mutation PublishBlock($blockId:ID!, $fromStage:VersionedStage!, $toStage:Version
 
 const config = {
   props: ({ mutate, ownProps: { actions } }) => {
-    const handlePublishBlock = (blockId, fromStage, toStage, fromVersion) => mutate({
+    const handlePublishBlock = (blockId) => mutate({
       variables: {
-        blockId,
-        fromStage,
-        toStage,
-        fromVersion
+        blockId
       },
     });
 
