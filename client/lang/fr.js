@@ -8,7 +8,8 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
   ss.i18n.addDictionary('fr', {
     "ElementArchiveAction.CONFIRM_DELETE": "Êtes-vous sûr de vouloir envoyer ce bloc aux archives ?",
     "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Attention: Ce bloc sera dépublié avant d'être envoyé aux archives. Êtes-vous sûr de vouloir continuer ?",
-    "ElementArchiveAction.ARCHIVE": "Archive",
+    "ElementArchiveAction.ARCHIVE": "Archiver",
+    "ElementArchiveAction.DUPLICATE": "Dupliquer",
     "ElementHeader.NOTITLE": "Bloc {type} sans titre",
     "ElementPublishAction.SUCCESS_NOTIFICATION": "'{title}' publié avec succès",
     "ElementPublishAction.ERROR_NOTIFICATION": "Erreur à la publication de '{title}'",

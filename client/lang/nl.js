@@ -9,6 +9,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementArchiveAction.CONFIRM_DELETE": "Weet je zeker dat je dit blok wil archiveren?",
     "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Waarschuwing: Dit blok wordt teruggezet naar draft voordat het gearchiveerd word. Wilt u doorgaan?",
     "ElementArchiveAction.ARCHIVE": "Archiveren",
+    "ElementArchiveAction.DUPLICATE": "Duplicaat",
     "ElementHeader.NOTITLE": "Onbenoemd {type} blok",
     "ElementPublishAction.SUCCESS_NOTIFICATION": "'{title}' succesvol gepubliceerd",
     "ElementPublishAction.ERROR_NOTIFICATION": "Fout bij het publiceren van '{title}'",
