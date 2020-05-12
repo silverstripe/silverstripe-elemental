@@ -3,6 +3,7 @@
 namespace DNADesign\Elemental\Tests;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
+use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestElement;
@@ -145,5 +146,22 @@ class ElementalAreaTest extends SapphireTest
         $area->setElementsCached($elements);
 
         $this->assertSame($elements, $area->Elements());
+    }
+
+    public function testCacheability()
+    {
+        $area = ElementalArea::create();
+        $area->Elements()->add(BaseElement::create(['Title' => 'Element 1', 'Sort' => 1]));
+        $area->Elements()->add(ElementContent::create(array('Title' => 'Element 2', 'Sort' => 2, 'HTML' => 'Element 2 Content')));
+        $area->write();
+
+        $this->assertFalse($area->isCacheable(), 'Area containing a BaseElement should not be cacheable');
+
+        $area = ElementalArea::create();
+        $area->Elements()->add(ElementContent::create(['Title' => 'Element 1', 'Sort' => 1, 'HTML' => 'Element 1 Content']));
+        $area->Elements()->add(ElementContent::create(array('Title' => 'Element 2', 'Sort' => 2, 'HTML' => 'Element 2 Content')));
+        $area->write();
+
+        $this->assertTrue($area->isCacheable(), 'Area containing only ElementContent should be cacheable');
     }
 }

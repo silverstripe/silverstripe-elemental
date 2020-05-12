@@ -228,4 +228,21 @@ class BaseElementTest extends FunctionalTest
         $element3->write();
         $this->assertEquals($baselineSort + 2, $element3->Sort, 'Sort order should be higher than the max');
     }
+
+    public function testCacheability()
+    {
+        $baseElement = BaseElement::create(array('Title' => 'Element 1', 'Sort' => 1));
+
+        $this->assertFalse($baseElement->isCacheable(), 'Elements should not be cacheable by default');
+
+        $contentElement = $this->objFromFixture(ElementContent::class, 'content1');
+        $this->assertTrue($contentElement->isCacheable(), 'Elemental content is cacheable');
+
+        $anotherInstance = $this->objFromFixture(ElementContent::class, 'content1');
+        $this->assertEquals(
+            $contentElement->getCacheKey(),
+            $anotherInstance->getCacheKey(),
+            'ElementContent cache keys should match for different instances of the block'
+        );
+    }
 }

@@ -55,4 +55,15 @@ class ElementContent extends BaseElement
     {
         return _t(__CLASS__ . '.BlockType', 'Content');
     }
+
+    public function isCacheable()
+    {
+        // check it is not extended by a child class
+        return get_class($this) === self::class;
+    }
+
+    public function getCacheKey()
+    {
+        return hash('sha256', $this->HTML);
+    }
 }

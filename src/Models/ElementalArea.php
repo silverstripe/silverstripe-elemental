@@ -297,4 +297,42 @@ class ElementalArea extends DataObject
 
         return false;
     }
+
+    /**
+     * Return cacheability of the current elemental area instance
+     *
+     * This usually means every block in the current area is cacheable.
+     * If a single block is not cacheable, the whole area becomes not cacheable.
+     *
+     * @return bool
+     */
+    public function isCacheable()
+    {
+        foreach($this->Elements() as $element)
+        {
+            if (!$element->isCacheable()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns a unique cache key of the current elemental area instance
+     *
+     * @return string
+     */
+    public function getCacheKey()
+    {
+        $hash = hash_init('sha256');
+        hash_update($hash, $this->ID.$this->LastEdited);
+
+        foreach($this->Elements() as $element)
+        {
+            hash_update($hash, $element->ID.$element->LastEdited);
+            hash_update($hash, $element->getCacheKey());
+        }
+
+        return hash_final($hash);
+    }
 }

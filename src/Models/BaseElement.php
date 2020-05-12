@@ -1033,4 +1033,38 @@ JS
 
         return  ($odd) ? 'odd' : 'even';
     }
+
+    /**
+     * Returns true if the current block state can be cached
+     *
+     * This describes the current block instance state cacheability.
+     *
+     * E.g. if the block is currently rendering a half-filled form with
+     * private user data, it's not cacheable. If the block state is going to
+     * render a simple HTML content, perhaps it may be cached.
+     *
+     * @return bool False by default
+     */
+    public function isCacheable()
+    {
+        return false;
+    }
+
+    /**
+     * Returns the block cache key
+     *
+     * The key should be unique for every instance of the block (per BaseElement->ID).
+     *
+     * It does not have to be unique across different blocks
+     * nor even different instances of the same block.
+     *
+     * If the block is not cacheable {@see self::isCacheable}, this method may
+     * return anything (e.g. non-unique values).
+     *
+     * @return string
+     */
+    public function getCacheKey()
+    {
+        return '';
+    }
 }
