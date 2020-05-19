@@ -55,7 +55,7 @@ describe('PublishAction', () => {
     // We need to await the promise resolution cycle before asserting.
     await new Promise((resolve) => resolve());
 
-    expect(mockMutation).toHaveBeenCalledWith(123, 'DRAFT', 'LIVE', 234);
+    expect(mockMutation).toHaveBeenCalledWith(123);
   });
 
   it('returns null when is the live version', () => {
