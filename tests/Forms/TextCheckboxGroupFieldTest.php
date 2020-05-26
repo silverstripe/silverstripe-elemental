@@ -44,4 +44,12 @@ class TextCheckboxGroupFieldTest extends SapphireTest
             'Uses CompositeField template for readonly'
         );
     }
+
+    public function testRemovedFieldsCanDoReadonlyTransformation()
+    {
+        $this->field->removeByName('Title');
+        $readonly = $this->field->performReadonlyTransformation();
+
+        $this->assertInstanceOf(TextCheckboxGroupField::class, $readonly);
+    }
 }
