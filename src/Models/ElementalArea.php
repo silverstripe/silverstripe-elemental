@@ -208,7 +208,11 @@ class ElementalArea extends DataObject
                 $areaID = $eaRelationship . 'ID';
 
                 $table = DataObject::getSchema()->tableForField($class, $areaID);
-                $page = DataObject::get_one($class, ["\"{$table}\".\"$areaID\" = ?" => $this->ID]);
+                $baseTable = DataObject::getSchema()->baseDataTable($class);
+                $page = DataObject::get_one($class, [
+                    "\"{$table}\".\"{$areaID}\" = ?" => $this->ID,
+                    "\"{$baseTable}\".\"ClassName\" = ?" => $class
+                ]);
 
                 if ($page) {
                     $this->setOwnerPageCached($page);

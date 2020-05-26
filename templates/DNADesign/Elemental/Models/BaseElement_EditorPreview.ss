@@ -1,5 +1,5 @@
 <div class="elemental-preview">
-    <a href="$CMSEditLink" class="elemental-edit">
+    <a <% if $CMSEditLink %>href="$CMSEditLink"<% end_if %> class="elemental-edit">
         <div class="elemental-preview__icon">$Icon</div>
 
         <div class="elemental-preview__detail">
