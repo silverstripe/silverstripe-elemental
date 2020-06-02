@@ -56,7 +56,7 @@ a look at some other modules:
 
 ## SilverStripe supported content block modules
 
-To learn more about [SilverStripe supported](https://www.silverstripe.org/software/addons/supported-modules-definition/) content block types see, [Creating new blocks](/docs/en/edit_content.md).
+To learn more about [SilverStripe supported](https://www.silverstripe.org/software/addons/supported-modules-definition/) content block types see, [Creating new blocks](/docs/en/userguide/edit_content.md).
 
 * [dnadesign/silverstripe-elemental](https://github.com/dnadesign/silverstripe-elemental): Text content (built-in)
 * [silverstripe/silverstripe-elemental-fileblock](https://github.com/silverstripe/silverstripe-elemental-fileblock): File and image block
