@@ -198,6 +198,9 @@ class ElementalArea extends DataObject
 
         if ($this->OwnerClassName) {
             $class = $this->OwnerClassName;
+            if (!ClassInfo::exists($class)) {
+                return null;
+            }
             $instance = Injector::inst()->get($class);
             if (!ClassInfo::hasMethod($instance, 'getElementalRelations')) {
                 return null;
