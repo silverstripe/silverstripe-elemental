@@ -196,7 +196,7 @@ class ElementalArea extends DataObject
             return $this->cacheData['owner_page'];
         }
 
-        if ($this->OwnerClassName) {
+        if ($this->OwnerClassName && ClassInfo::exists($this->OwnerClassName)) {
             $class = $this->OwnerClassName;
             $instance = Injector::inst()->get($class);
             if (!ClassInfo::hasMethod($instance, 'getElementalRelations')) {
