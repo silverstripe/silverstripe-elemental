@@ -19,3 +19,8 @@
     }
   }
 }
+
+// hide .show-title in the Archives ModelAdmin only
+.cms-edit-form[action*='admin/archive/'] .show-title {
+  display: none;
+}
