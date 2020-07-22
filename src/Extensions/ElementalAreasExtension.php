@@ -227,6 +227,17 @@ class ElementalAreasExtension extends DataExtension
 
         $this->ensureElementalAreasExist($elementalAreaRelations);
 
+        $ownerClassName = get_class($this->owner);
+
+        // Update the OwnerClassName on EA if the class has changed
+        foreach($elementalAreaRelations As $eaRelation) {
+            $ea = $this->owner->$eaRelation();
+            if ($ea->OwnerClassName !== $ownerClassName) {
+                $ea->OwnerClassName = $ownerClassName;
+                $ea->write();
+            }
+        }
+
         if (Config::inst()->get(self::class, 'clear_contentfield')) {
             $this->owner->Content = '';
         }
