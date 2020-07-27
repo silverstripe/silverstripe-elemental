@@ -230,7 +230,7 @@ class ElementalAreasExtension extends DataExtension
         $ownerClassName = get_class($this->owner);
 
         // Update the OwnerClassName on EA if the class has changed
-        foreach($elementalAreaRelations As $eaRelation) {
+        foreach ($elementalAreaRelations as $eaRelation) {
             $ea = $this->owner->$eaRelation();
             if ($ea->OwnerClassName !== $ownerClassName) {
                 $ea->OwnerClassName = $ownerClassName;
