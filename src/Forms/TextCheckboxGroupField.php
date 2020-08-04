@@ -19,7 +19,7 @@ class TextCheckboxGroupField extends CompositeField
     public function __construct($title = null)
     {
         if (!$title) {
-            $title = _t(__CLASS__ . '.TitleLabel', 'Title (displayed if checked)');
+            $title = _t(__CLASS__ . '.TitleLabel', 'Title');
         }
 
         $fields = [

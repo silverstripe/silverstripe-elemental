@@ -49,7 +49,7 @@ Feature: Edit elements in the CMS
     # The entire block should be clickable to reveal the form
     When I click on block 1
     Then I should see the edit form for block 1
-      And I should see "Title (displayed if checked)"
+      And I should see "Title"
       And the "Content" field should contain "Some content"
       And I fill in "<p>New sample content</p>" for the "Content" HTML field
     When I click on the caret button for block 1

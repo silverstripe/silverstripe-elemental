@@ -5,7 +5,7 @@ en:
     DISPLAYED: Displayed
     NOT_DISPLAYED: 'Not displayed'
     ShowTitleLabel: Displayed
-    TitleLabel: 'Title (displayed if checked)'
+    TitleLabel: 'Title'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Block
     CUSTOM_STYLES: 'Select a style..'
