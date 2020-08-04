@@ -17,7 +17,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
     const noTitle = i18n.inject(
       i18n._t(
         'ElementHeader.NOTITLE',
-        'Untitled {type} block'
+        '{type} block'
       ),
       { type: type.title }
     );

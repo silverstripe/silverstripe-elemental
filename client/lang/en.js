@@ -10,7 +10,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?",
     "ElementArchiveAction.ARCHIVE": "Archive",
     "ElementArchiveAction.DUPLICATE": "Duplicate",
-    "ElementHeader.NOTITLE": "Untitled {type} block",
+    "ElementHeader.NOTITLE": "{type} block",
     "ElementPublishAction.SUCCESS_NOTIFICATION": "Published '{title}' successfully",
     "ElementPublishAction.ERROR_NOTIFICATION": "Error publishing '{title}'",
     "ElementPublishAction.PUBLISH": "Publish",

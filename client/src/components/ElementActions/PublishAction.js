@@ -19,7 +19,7 @@ import { initialize } from 'redux-form';
  */
 const reportPublicationStatus = (type, title, success) => {
   const noTitle = i18n.inject(
-    i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
+    i18n._t('ElementHeader.NOTITLE', '{type} block'),
     { type }
   );
   const successMessage = i18n.inject(

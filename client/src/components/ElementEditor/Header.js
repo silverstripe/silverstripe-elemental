@@ -116,7 +116,7 @@ class Header extends Component {
     } = this.props;
 
     const noTitle = i18n.inject(
-      i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
+      i18n._t('ElementHeader.NOTITLE', '{type} block'),
       { type: type.title }
     );
     const titleClasses = classNames({

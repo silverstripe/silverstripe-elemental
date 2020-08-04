@@ -8,7 +8,7 @@ Click the button ***Add block*** and select the type of block you want to create
 
 ![Choose a block type to create](_images/adding_content_block.png)
 
-You'll see the content block type you selected appear in your main content area titled ***Untitled Content block***. If you forget the content block type you've added, hover on the block type icon to view a tooltip.
+You'll see the content block type you selected appear in your main content area titled ***Content block***. If you forget the content block type you've added, hover on the block type icon to view a tooltip.
 
 ![Content block tooltip](_images/tooltip.png)
 

@@ -22,10 +22,10 @@ Feature: Add elements in the CMS
     When I see a list of blocks
     Then I press the "Add block" button
     Then I press the "Content" button in the add block popover
-    Then I should see "Untitled Content block" as the title for block 1
+    Then I should see "Content block" as the title for block 1
 
     When I go to "/admin/pages"
     And I left click on "Blocks Page" in the tree
       And I see a list of blocks
     Then I wait 1 second
-      And I should see "Untitled Content block"
+      And I should see "Content block"
