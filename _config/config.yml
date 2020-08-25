@@ -10,6 +10,10 @@ SilverStripe\Admin\LeftAndMain:
   extensions:
     - DNADesign\Elemental\Extensions\ElementalLeftAndMainExtension
 
+SilverStripe\Admin\Forms\UsedOnTable:
+  extensions:
+    - DNADesign\Elemental\Extensions\ElementalAreaUsedOnTableExtension
+
 SilverStripe\CMS\Controllers\ContentController:
   extensions:
     - DNADesign\Elemental\Extensions\ElementalContentControllerExtension
