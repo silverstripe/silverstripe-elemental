@@ -5,8 +5,11 @@ namespace DNADesign\Elemental\TopPage;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use Page;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Extensible;
 use SilverStripe\ORM\DataExtension as BaseDataExtension;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\Queries\SQLUpdate;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Versioned\Versioned;
 
@@ -40,12 +43,26 @@ class DataExtension extends BaseDataExtension
     ];
 
     /**
+     * Global flag which indicates if this feature is enabled or not
+     *
+     * @see DataExtension::withTopPageUpdate()
      * @var bool
      */
     private $topPageUpdate = true;
 
     /**
+     * Global flag which indicates that automatic page determination is enabled or not
+     * If this is set to a page ID it will be used instead of trying to determine the top page
+     *
+     * @see DataExtension::withFixedTopPage()
+     * @var int|null
+     */
+    private $fixedID = null;
+
+    /**
      * Extension point in @see DataObject::onAfterWrite()
+     *
+     * @throws ValidationException
      */
     public function onAfterWrite(): void
     {
@@ -83,6 +100,10 @@ class DataExtension extends BaseDataExtension
             /** @var DataObject|DataExtension $item */
             $item = array_shift($list);
 
+            if (!$item->exists()) {
+                continue;
+            }
+
             if ($item instanceof Page) {
                 // trivial case
                 return $item;
@@ -90,9 +111,9 @@ class DataExtension extends BaseDataExtension
 
             if ($item->hasExtension(DataExtension::class) && $item->TopPageID > 0) {
                 // top page is stored inside data object - just fetch it via cached call
-                $page = Page::get_by_id($item->TopPageID);
+                $page = $this->getTopPageFromCachedData((int) $item->TopPageID);
 
-                if ($page !== null && $page->exists()) {
+                if ($page) {
                     return $page;
                 }
             }
@@ -101,7 +122,7 @@ class DataExtension extends BaseDataExtension
                 // parent lookup via block
                 $parent = $item->Parent();
 
-                if ($parent !== null && $parent->exists()) {
+                if ($parent !== null) {
                     array_push($list, $parent);
                 }
 
@@ -112,7 +133,7 @@ class DataExtension extends BaseDataExtension
                 // parent lookup via elemental area
                 $parent = $item->getOwnerPage();
 
-                if ($parent !== null && $parent->exists()) {
+                if ($parent !== null) {
                     array_push($list, $parent);
                 }
 
@@ -124,12 +145,17 @@ class DataExtension extends BaseDataExtension
     }
 
     /**
+     * Set top page to an object
+     * If no page is provided as an argument nor as a fixed id via @see DataExtension::withFixedTopPage()
+     * automatic page determination will be attempted
+     * Note that this may not always succeed as your model may not be attached to parent object at the time of this call
+     *
      * @param Page|null $page
      * @throws ValidationException
      */
     public function setTopPage(?Page $page = null): void
     {
-        if (!$this->topPageUpdate) {
+        if (!$this->getTopPageUpdate()) {
             return;
         }
 
@@ -144,6 +170,13 @@ class DataExtension extends BaseDataExtension
             return;
         }
 
+        if ($this->getFixedId() !== null) {
+            $this->assignFixedTopPage();
+            $this->saveChanges();
+
+            return;
+        }
+
         $page = $page ?? $owner->getTopPage();
 
         if ($page === null) {
@@ -152,14 +185,7 @@ class DataExtension extends BaseDataExtension
 
         // set the page to properties in case this object is re-used later
         $this->assignTopPage($page);
-
-        if ($owner->hasExtension(Versioned::class)) {
-            $owner->writeWithoutVersion();
-
-            return;
-        }
-
-        $owner->write();
+        $this->saveChanges();
     }
 
     public function getTopPageUpdate(): bool
@@ -168,8 +194,8 @@ class DataExtension extends BaseDataExtension
     }
 
     /**
-     * Enable top page update
-     * useful for unit tests
+     * Global flag manipulation - enable automatic top page determination
+     * Useful for unit tests as you may want to enable / disable this feature based on need
      */
     public function enableTopPageUpdate(): void
     {
@@ -177,8 +203,8 @@ class DataExtension extends BaseDataExtension
     }
 
     /**
-     * Disable top page update
-     * useful for unit tests
+     * Global flag manipulation - disable automatic top page determination
+     * Useful for unit tests as you may want to enable / disable this feature based on need
      */
     public function disableTopPageUpdate(): void
     {
@@ -187,7 +213,7 @@ class DataExtension extends BaseDataExtension
 
     /**
      * Use this to wrap any code which is supposed to run with desired top page update setting
-     * useful for unit tests
+     * Useful for unit tests as you may want to enable / disable this feature based on need
      *
      * @param bool $update
      * @param callable $callback
@@ -206,12 +232,46 @@ class DataExtension extends BaseDataExtension
     }
 
     /**
+     * Use this to wrap any code which is supposed to run with fixed top page
+     * Useful when top page is known upfront and doesn't need to be determined
+     * For example: model duplication where parent is assigned and saved only after the duplication is done
+     * It's not possible to determine top page in such case however it might be possible to know the top page
+     * even before the operation starts from the specific context
+     * Setting the page id to null disables this feature
+     *
+     * @param int|null $topPageId
+     * @param callable $callback
+     * @return mixed
+     */
+    public function withFixedTopPage(?int $topPageId, callable $callback)
+    {
+        $original = $this->fixedID;
+        $this->fixedID = $topPageId;
+
+        try {
+            return $callback();
+        } finally {
+            $this->fixedID = $original;
+        }
+    }
+
+    /**
+     * Get the ID of a page which is currently set as the fixed top page
+     *
+     * @return int|null
+     */
+    protected function getFixedId(): ?int
+    {
+        return $this->fixedID;
+    }
+
+    /**
      * Registers the object for a TopPage update. Ensures that this operation is deferred to a point
      * when all required relations have been written.
      */
     protected function updateTopPage(): void
     {
-        if (!$this->topPageUpdate) {
+        if (!$this->getTopPageUpdate()) {
             return;
         }
 
@@ -237,5 +297,89 @@ class DataExtension extends BaseDataExtension
     protected function clearTopPage(): void
     {
         $this->owner->TopPageID = 0;
+    }
+
+    /**
+     * Assigns top page relation based on fixed id
+     *
+     * @see DataExtension::withFixedTopPage()
+     */
+    protected function assignFixedTopPage(): void
+    {
+        $this->owner->TopPageID = $this->getFixedId();
+    }
+
+    /**
+     * Save top page changes without using write()
+     * Using raw query here because:
+     * - this is already called during write() and triggering more write() related extension points is undesirable
+     * - we don't want to create a new version if object is versioned
+     * - using writeWithoutVersion() produces some weird edge cases were data is not written
+     * because the fields are not recognised as changed (using forceChange() introduces a new set of issues)
+     */
+    protected function saveChanges(): void
+    {
+        /** @var DataObject|DataExtension $owner */
+        $owner = $this->owner;
+
+        $table = $this->getTopPageTable();
+
+        if (!$table) {
+            return;
+        }
+
+        $query = SQLUpdate::create(
+            sprintf('"%s"', $table),
+            [
+                '"TopPageID"' => $owner->TopPageID,
+            ],
+            ['"ID"' => $owner->ID]
+        );
+
+        $query->execute();
+    }
+
+    /**
+     * Perform a page lookup based on cached data
+     *
+     * @param int $id
+     * @return Page|null
+     */
+    protected function getTopPageFromCachedData(int $id): ?Page
+    {
+        $page = Page::get_by_id($id);
+
+        if (!$page || !$page->exists()) {
+            return null;
+        }
+
+        return $page;
+    }
+
+    /**
+     * Find table name which has the top page fields
+     *
+     * @return string|null
+     */
+    protected function getTopPageTable(): ?string
+    {
+        // Classes are ordered from generic to specific, top-down, left-right
+        $classes = ClassInfo::dataClassesFor($this->owner);
+
+        if (count($classes) === 0) {
+            return null;
+        }
+
+        // Find the first ancestor table which has the extension applied
+        // Note that this extension is expected to be sublassed
+        foreach ($classes as $class) {
+            if (!Extensible::has_extension($class, static::class)) {
+                continue;
+            }
+
+            return DataObject::getSchema()->tableName($class);
+        }
+
+        return null;
     }
 }
