@@ -8,6 +8,10 @@ use GraphQL\Type\Definition\ResolveInfo;
 use InvalidArgumentException;
 use SilverStripe\GraphQL\OperationResolver;
 
+if (!interface_exists(OperationResolver::class)) {
+    return;
+}
+
 class ReadOneAreaResolver implements OperationResolver
 {
     public function resolve($object, array $args, $context, ResolveInfo $info)

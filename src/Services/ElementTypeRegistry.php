@@ -41,7 +41,7 @@ class ElementTypeRegistry
         }
 
         // Get the GraphQL type name
-        $typeName = StaticSchema::inst()->typeNameForDataObject($elementClass);
+        $typeName = $elementClass::getGraphQLTypeName();
 
         $this->elementTypes[] = [
             'icon' => $singleton::config()->get('icon'),

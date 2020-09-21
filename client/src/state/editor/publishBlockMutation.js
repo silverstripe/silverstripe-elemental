@@ -5,8 +5,8 @@ import { config as readBlocksConfig, query as readBlocksQuery } from './readBloc
 // GraphQL query for saving a specific block
 const mutation = gql`
 mutation PublishBlock($blockId:ID!) {
-  publishBlock(ID: $blockId) {
-    ID
+  publishBlock(id: $blockId) {
+    id
   }
 }
 `;

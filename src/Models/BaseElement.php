@@ -18,6 +18,7 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
+use SilverStripe\GraphQL\Schema\Registry\SchemaModelCreatorRegistry;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
@@ -852,10 +853,13 @@ JS
      */
     protected function provideBlockSchema()
     {
+        // Currently GraphQL doesn't expose the correct type name and just returns "base element"s. This is a
+        // workaround until we can scaffold a query client side that specifies by type name
+        // todo: Find out if all of that is still true
+        $typeName = static::getGraphQLTypeName();
+
         return [
-            // Currently GraphQL doesn't expose the correct type name and just returns "base element"s. This is a
-            // workaround until we can scaffold a query client side that specifies by type name
-            'typeName' => StaticSchema::inst()->typeNameForDataObject(static::class),
+            'typeName' => $typeName,
             'actions' => [
                 'edit' => $this->getEditLink(),
             ],
@@ -1032,5 +1036,20 @@ JS
         $odd = (bool) ($this->Pos() % 2);
 
         return  ($odd) ? 'odd' : 'even';
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getGraphQLTypeName(): ?string
+    {
+        /* @var SchemaModelCreatorRegistry $registry */
+        $registry = Injector::inst()->get(SchemaModelCreatorRegistry::class);
+        $model = $registry->getModel(static::class);
+        if ($model) {
+            return $model->getTypeName();
+        }
+
+        return null;
     }
 }

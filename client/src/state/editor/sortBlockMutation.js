@@ -6,12 +6,12 @@ import { query as readBlocksQuery, config as readBlocksConfig } from './readBloc
 const mutation = gql`
 mutation SortBlockMutation($blockId:ID!, $afterBlockId:ID!) {
   sortBlock(
-    ID: $blockId
-    AfterBlockID: $afterBlockId
+    id: $blockId
+    afterBlockID: $afterBlockId
   ) {
-    ID
-    IsLiveVersion
-    IsPublished
+    id
+    isLiveVersion
+    isPublished
   }
 }
 `;

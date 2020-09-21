@@ -7,13 +7,13 @@ import gql from 'graphql-tag';
 const query = gql`
 query ReadHistoryViewerBlock ($block_id: ID!, $limit: Int!, $offset: Int!) {
   readOneBlock(
-    Versioning: {
-      Mode: LATEST
+    versioning: {
+      mode: LATEST
     },
-    ID: $block_id
+    id: $block_id
   ) {
-    ID
-    Versions (limit: $limit, offset: $offset, sortBy: {
+    id
+    versions (limit: $limit, offset: $offset, sortBy: {
       field: Version
       direction: DESC
     }) {
@@ -22,20 +22,20 @@ query ReadHistoryViewerBlock ($block_id: ID!, $limit: Int!, $offset: Int!) {
       }
       edges {
         node {
-          Version
-          AbsoluteLink
-          Author {
-            FirstName
-            Surname
+          version
+          absoluteLink
+          author {
+            firstName
+            surname
           }
-          Publisher {
-            FirstName
-            Surname
+          publisher {
+            firstName
+            surname
           }
-          Published
-          LiveVersion
-          LatestDraftVersion
-          LastEdited
+          published
+          liveVersion
+          latestDraftVersion
+          lastEdited
         }
       }
     }

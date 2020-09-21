@@ -14,6 +14,10 @@ use SilverStripe\GraphQL\MutationCreator;
 use SilverStripe\GraphQL\OperationResolver;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 
+if (!class_exists(MutationCreator::class)) {
+    return;
+}
+
 class DuplicateElementMutation extends MutationCreator implements OperationResolver
 {
     public function attributes()

@@ -6,9 +6,9 @@ import { config as readBlocksConfig, query as readBlocksQuery } from './readBloc
 const mutation = gql`
 mutation UnpublishBlock($blockId:ID!) {
   unpublishBlock(
-    ID: $blockId
+    id: $blockId
       ) {
-    ID
+    id
   }
 }
 `;

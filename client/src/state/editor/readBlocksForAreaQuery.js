@@ -6,16 +6,18 @@ import gql from 'graphql-tag';
 // implementation.
 const query = gql`
 query ReadBlocksForArea($id:ID!) {
-  readOneElementalArea(ID: $id, Versioning: {
-    Mode: DRAFT
+  readOneElementalArea(filter: { id: { eq: $id } }, versioning: {
+    mode: DRAFT
   }){
-    Elements {
-      ID
-      Title
-      BlockSchema
-      IsLiveVersion
-      IsPublished
-      Version   
+    elements {
+      nodes {
+        id
+        title
+        blockSchema
+        isLiveVersion
+        isPublished
+        version
+      }
     }
   }
 }
@@ -41,7 +43,7 @@ const config = {
     let blocks = null;
     if (readOneElementalArea) {
       // Remove the GraphQL pagination keys
-      blocks = readOneElementalArea.Elements;
+      blocks = readOneElementalArea.elements.nodes;
     }
 
     const errors = error && error.graphQLErrors &&

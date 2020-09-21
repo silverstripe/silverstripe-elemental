@@ -13,6 +13,10 @@ use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
 
+if (!interface_exists(OperationResolver::class)) {
+    return;
+}
+
 /**
  * Given a source block ID and the ID of the block to reorder the source block after, update all affected sort
  * orders for the block and its siblings. Only the source block will have a new version written, all siblings
@@ -44,7 +48,7 @@ class SortBlockMutationCreator extends MutationCreator implements OperationResol
     public function resolve($object, array $args, $context, ResolveInfo $info)
     {
         $element = BaseElement::get()->byID($args['ID']);
-        
+
         if (!$element) {
             throw new InvalidArgumentException(sprintf(
                 '%s#%s not found',

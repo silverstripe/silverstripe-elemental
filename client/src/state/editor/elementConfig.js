@@ -19,5 +19,6 @@ export const getElementTypeConfig = (elementType, typeConfig = null) => {
   const types = Array.isArray(typeConfig) ? typeConfig : getConfig().elementTypes;
 
   // Compare to both key (PHP classname) and the name
+  console.log(elementType, types);
   return types.find(value => value.class === elementType || value.name === elementType);
 };

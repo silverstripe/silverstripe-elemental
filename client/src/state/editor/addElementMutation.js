@@ -6,11 +6,11 @@ import { query as readBlocksQuery, config as readBlocksConfig } from './readBloc
 const mutation = gql`
 mutation AddElementToArea($className: String!, $elementalAreaID: ID!, $afterElementID: ID) {
   addElementToArea(
-    ClassName: $className,
-    ElementalAreaID: $elementalAreaID,
-    AfterElementID: $afterElementID
+    className: $className,
+    elementalAreaID: $elementalAreaID,
+    afterElementID: $afterElementID
   ) {
-    ID
+    id
   }
 }
 `;

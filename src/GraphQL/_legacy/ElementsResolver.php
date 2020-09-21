@@ -6,6 +6,10 @@ use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\GraphQL\OperationResolver;
 use SilverStripe\ORM\DataList;
 
+if (!interface_exists(OperationResolver::class)) {
+    return;
+}
+
 class ElementsResolver implements OperationResolver
 {
     public function resolve($object, array $args, $context, ResolveInfo $info)
