@@ -150,6 +150,14 @@ class BaseElement extends DataObject
     private static $inline_editable = true;
 
     /**
+     * Display a show title button
+     *
+     * @config
+     * @var boolean
+     */
+    private static $displays_title_in_template = true;
+
+    /**
      * Store used anchor names, this is to avoid title clashes
      * when calling 'getAnchor'
      *
@@ -302,11 +310,14 @@ class BaseElement extends DataObject
 
             // Add a combined field for "Title" and "Displayed" checkbox in a Bootstrap input group
             $fields->removeByName('ShowTitle');
-            $fields->replaceField(
-                'Title',
-                TextCheckboxGroupField::create()
-                    ->setName('Title')
-            );
+
+            if ($this->config()->get('displays_title_in_template')) {
+                $fields->replaceField(
+                    'Title',
+                    TextCheckboxGroupField::create()
+                        ->setName('Title')
+                );
+            }
 
             // Rename the "Main" tab
             $fields->fieldByName('Root.Main')
