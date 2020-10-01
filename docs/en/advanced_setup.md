@@ -4,6 +4,22 @@ This documentation assumes that the reader is already familiar with basic concep
 of the [Elemental module](https://github.com/dnadesign/silverstripe-elemental) and the [Fluent module](https://github.com/tractorcow-farm/silverstripe-fluent).
 This document provides an advanced setup guide for enterprise scale projects using these modules.
 
+Table of Contents:
+* [Elemental setup](#elemental-setup)
+    * [Page setup](#page-setup)
+    * [Block setup](#block-setup)
+    * [Adding additional Elemental Areas](#adding-additional-elemental-areas)
+        * [Allowing different Block types for different Elemental Areas](#adding-additional-elemental-areas)
+* [Elemental with Fluent setup](#elemental-with-fluent-setup)
+	* [Types of localisation](#types-of-localisation)
+		* [Benefits of indirect localisation](#benefits-of-indirect-localisation)
+		* [Downsides of indirect localisation](#downsides-of-indirect-localisation)
+	* [Unit tests](#unit-tests)
+		* [Make sure your fixture has some locales setup](#make-sure-your-fixture-has-some-locales-setup)
+		* [Localised fixture data (automatic, single locale)](#localised-fixture-data-automatic-single-locale)
+		* [Localised fixture data (manual, single or multiple locales)](#localised-fixture-data-manual-single-or-multiple-locales)
+	* [Working with Fluent state](#working-with-fluent-state)
+* [Top Page reference performance enhancement](#top-page-reference-performance-enhancement)
 
 ## Elemental setup
 
@@ -27,19 +43,19 @@ class BlockPage extends Page
 }
 ```
 
-
 ### Block setup
 
 It is possible to share blocks between pages, but this may be a little bit tricky when it comes to content editing.
 Block should represent a chunk of page content, so editing it should not effect other pages.
 This depends on the project, but in most cases the content authors will be working per page (top down),
 so sharing blocks is probably something to avoid.
-Shared blocks become even less useful when large number of block instances are present as it becomes almost impossible to find the right one.
+Shared blocks become even less useful when large number of block instances are present as it becomes almost impossible
+to find the right one.
 
 The overall recommendation is to only allow a content block to be used on only one page.
 The main benefit of using blocks is to reuse patterns and functionality across pages, not necessarily content data.
-It's possible to add functionality which allows content authors to copy specific blocks to other pages for a quick transfer of content data.
-
+It's possible to add functionality which allows content authors to copy specific blocks to other pages for a quick
+transfer of content data.
 
 Elemental editor `GridField` needs to be adjusted accordingly:
 
@@ -77,6 +93,84 @@ Note that we also want to remove `publish` and `archive` actions from blocks.
 These actions will be done only on page level and will cascade down to blocks.
 Make sure to properly configure your objects with the `owns` and `cascade_deletes`.
 
+### Adding additional Elemental Areas
+
+To keep things simple, we'll assume that you already have one Elemental Area available from applying the default
+`ElementalPageExtension` to your page. This extension is important, as it contains a bunch of required functionality to
+support us adding additional Elemental Areas.
+
+Consider the following default page set up.
+
+```php
+class BlockPage extends Page
+{
+    private static $extensions = [
+        ElementalPageExtension::class,
+    ];
+
+    // ...
+}
+```
+
+In order to add additional Elemental Areas to the page, we can add three very important configurations.
+
+```php
+class BlockPage extends Page
+{
+    private static $extensions = [
+        ElementalPageExtension::class,
+    ];
+
+    // Add the model relationship
+    private static $has_one = [
+        'SidebarElementalArea' => ElementalArea::class,
+    ];
+
+    // Make sure that our page owns that relationship (publishing the page also publishes the Elemental Area and Blocks)
+    private static $owns = [
+        'SidebarElementalArea',
+    ];
+
+    // When we duplicate the page, we also want to duplicate the Elemental Area and Blocks
+    private static $cascade_duplicates = [
+        'SidebarElementalArea',
+    ];
+
+    // ...
+}
+```
+
+And that's actually all you need to get started with multiple Elemental Areas.
+
+#### Allowing different Block types for different Elemental Areas
+
+To restrict different Elemental Areas to different Block types, you need to (manually) manipulate the `types` allowed
+for the Gridfield.
+
+```php
+class BlockPage extends Page
+{
+    // ...
+
+    private static $allowed_sidebar_types = [
+        ElementContent::class,
+    ];
+
+    public function getCMSFields(): FieldList
+    {
+        $fields = parent::getCMSFields();
+
+        /** @var ElementalAreaField $sidebar */
+        $sidebar = $fields->dataFieldByName('SidebarElementalArea');
+
+        if ($sidebar) {
+            $sidebar->setTypes(static::config()->get('allowed_sidebar_types'));
+        }
+
+        return $fields;
+    }
+}
+```
 
 ## Elemental with Fluent setup
 
@@ -164,6 +258,8 @@ class BlockPage extends Page
 }
 ```
 
+### Types of localisation
+
 #### Benefits of indirect localisation
 
 * different localisation of pages can have completely different set of blocks which allows greater flexibility
@@ -224,8 +320,6 @@ App\Pages\OperatorArticlePage:
     URLSegment: article-page1
 ```
 
-
-
 #### Localised fixture data (manual, single or multiple locales)
 
 In some cases you want to have multiple locales of one page set up in your fixtures.
@@ -261,7 +355,7 @@ FluentState::singleton()->withState(function (FluentState $state) {
     $state->setLocale('en_NZ');
 
     // your code goes here
-})
+});
 ```
 
 This is very important as global state is reverted back after the callback is executed so it's safe to be used.
