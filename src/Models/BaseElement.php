@@ -17,9 +17,8 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
-use SilverStripe\GraphQL\Scaffolding\StaticSchema;
+use SilverStripe\GraphQL\Dev\Build;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
-use SilverStripe\GraphQL\Schema\Registry\SchemaModelCreatorRegistry;
 use SilverStripe\GraphQL\Schema\Schema;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
@@ -33,7 +32,7 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
-
+use SilverStripe\GraphQL\Config\ModelConfiguration;
 /**
  * Class BaseElement
  * @package DNADesign\Elemental\Models
@@ -1049,8 +1048,14 @@ JS
      */
     public static function getGraphQLTypeName(): string
     {
-        return Schema::inspect('admin')
-            ->findOrMakeModel(static::class)
-            ->getName();
+        // This gets run at build time, so we need a different code path
+        // for when the build is active.
+        if ($schema = Build::getActiveBuild()) {
+            return $schema->findOrMakeModel(static::class)->getName();
+        }
+
+        // Otherwise, use the cached __type-mapping file
+        return Schema::create('admin')
+            ->getTypeNameForClass(static::class);
     }
 }
