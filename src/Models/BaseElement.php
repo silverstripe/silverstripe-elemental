@@ -18,11 +18,14 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
+use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 use SilverStripe\GraphQL\Schema\Registry\SchemaModelCreatorRegistry;
+use SilverStripe\GraphQL\Schema\Schema;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\ORM\ValidationException;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
@@ -850,6 +853,8 @@ JS
      * to update it from an `Extension`.
      *
      * @return array
+     * @throws SchemaBuilderException
+     * @throws ValidationException
      */
     protected function provideBlockSchema()
     {
@@ -1039,17 +1044,13 @@ JS
     }
 
     /**
-     * @return string|null
+     * @return string
+     * @throws SchemaBuilderException
      */
-    public static function getGraphQLTypeName(): ?string
+    public static function getGraphQLTypeName(): string
     {
-        /* @var SchemaModelCreatorRegistry $registry */
-        $registry = Injector::inst()->get(SchemaModelCreatorRegistry::class);
-        $model = $registry->getModel(static::class);
-        if ($model) {
-            return $model->getTypeName();
-        }
-
-        return null;
+        return Schema::inspect('admin')
+            ->findOrMakeModel(static::class)
+            ->getName();
     }
 }

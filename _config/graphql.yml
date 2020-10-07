@@ -13,8 +13,3 @@ SilverStripe\Core\Injector\Injector:
   SilverStripe\GraphQL\Schema\Registry\ResolverRegistry:
     constructor:
       elementalResolver: '%$DNADesign\Elemental\GraphQL\Resolvers\Resolver'
-
-SilverStripe\GraphQL\Schema\DataObject\DataObjectModel:
-  type_mapping:
-    DNADesign\Elemental\Models\BaseElement: Block
-    DNADesign\Elemental\Models\ElementalArea: ElementalArea
