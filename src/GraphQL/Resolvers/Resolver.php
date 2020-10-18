@@ -111,7 +111,7 @@ class Resolver extends DefaultResolverProvider
      * @return BaseElement
      * @throws ValidationException
      */
-    public function resolveDuplicateBlock($object, array $args, $context, ResolveInfo $info)
+    public static function resolveDuplicateBlock($object, array $args, $context, ResolveInfo $info)
     {
         // load element to clone
         $elementID = $args['id'];
@@ -173,7 +173,7 @@ class Resolver extends DefaultResolverProvider
         }
     }
 
-    public function resolveSortBlock($object, array $args, $context, ResolveInfo $info)
+    public static function resolveSortBlock($object, array $args, $context, ResolveInfo $info)
     {
         $element = BaseElement::get()->byID($args['id']);
 

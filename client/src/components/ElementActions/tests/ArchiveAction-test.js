@@ -19,9 +19,9 @@ describe('ArchiveAction', () => {
       <ActionComponent
         title="My abstract action"
         element={{
-          ID: 123,
-          IsPublished: true,
-          BlockSchema: { type: 'Test' }
+          id: 123,
+          isPublished: true,
+          blockSchema: { type: 'Test' }
         }}
         isPublished
         actions={{ handleArchiveBlock: mockMutation }}
@@ -60,9 +60,9 @@ describe('ArchiveAction', () => {
       <ActionComponent
         title="My abstract action"
         element={{
-          ID: 123,
-          IsPublished: false,
-          BlockSchema: { type: 'Test' }
+          id: 123,
+          isPublished: false,
+          blockSchema: { type: 'Test' }
         }}
         actions={{ handleArchiveBlock: mockMutation }}
         toggle={false}

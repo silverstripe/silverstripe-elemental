@@ -23,7 +23,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
     );
 
     if (handleUnpublishBlock) {
-      handleUnpublishBlock(element.ID)
+      handleUnpublishBlock(element.id)
         .then(() => {
           const preview = $('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -67,7 +67,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
     <MenuComponent {...props}>
       {props.children}
 
-      {element.IsPublished && <AbstractAction {...newProps} />}
+      {element.isPublished && <AbstractAction {...newProps} />}
     </MenuComponent>
   );
 };

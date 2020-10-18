@@ -83,8 +83,8 @@ const PublishAction = (MenuComponent) => (props) => {
 
     const {
       element: {
-        ID: id,
-        Title: title,
+        id,
+        title,
       },
       type,
       securityId,
@@ -122,13 +122,13 @@ const PublishAction = (MenuComponent) => (props) => {
     <MenuComponent {...props}>
       {props.children}
 
-      {(formDirty || !element.IsLiveVersion) && <AbstractAction {...newProps} />}
+      {(formDirty || !element.liveVersion) && <AbstractAction {...newProps} />}
     </MenuComponent>
   );
 };
 
 function mapStateToProps(state, ownProps) {
-  const formName = loadElementFormStateName(ownProps.element.ID);
+  const formName = loadElementFormStateName(ownProps.element.id);
 
   let formData = null;
 

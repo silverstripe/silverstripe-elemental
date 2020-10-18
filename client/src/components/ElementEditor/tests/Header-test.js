@@ -176,8 +176,8 @@ describe('Header', () => {
 
   describe('renderVersionedStateMessage()', () => {
     it('identifies draft versions', () => {
-      element.IsPublished = false;
-      element.IsLiveVersion = false;
+      element.published = false;
+      element.liveVersion = false;
       const wrapper = shallow(
         <Header
           element={element}
@@ -196,8 +196,8 @@ describe('Header', () => {
     });
 
     it('identifies modified versions', () => {
-      element.IsPublished = true;
-      element.IsLiveVersion = false;
+      element.isPublished = true;
+      element.isLiveVersion = false;
       const wrapper = shallow(
         <Header
           areaId={1}
@@ -216,8 +216,8 @@ describe('Header', () => {
     });
 
     it('ignores live versions', () => {
-      element.IsPublished = true;
-      element.IsLiveVersion = true;
+      element.isPublished = true;
+      element.isLiveVersion = true;
       const wrapper = shallow(
         <Header
           areaId={1}
