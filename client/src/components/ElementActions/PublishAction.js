@@ -122,7 +122,7 @@ const PublishAction = (MenuComponent) => (props) => {
     <MenuComponent {...props}>
       {props.children}
 
-      {(formDirty || !element.liveVersion) && <AbstractAction {...newProps} />}
+      {(formDirty || !element.isLiveVersion) && <AbstractAction {...newProps} />}
     </MenuComponent>
   );
 };

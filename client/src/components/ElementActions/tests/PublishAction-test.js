@@ -61,7 +61,7 @@ describe('PublishAction', () => {
   it('returns null when is the live version', () => {
     const draftWrapper = mount(
       <ActionComponent
-        element={{ liveVersion: true, blockSchema: { type: 'Test' } }}
+        element={{ isLiveVersion: true, blockSchema: { type: 'Test' } }}
         actions={{ handlePublishBlock: mockMutation }}
       />
     );

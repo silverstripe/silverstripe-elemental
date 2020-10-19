@@ -29,7 +29,7 @@ const SaveAction = (MenuComponent) => (props) => {
     );
 
     const endpointSpec = {
-      url: loadElementSchemaValue('saveUrl', element.ID),
+      url: loadElementSchemaValue('saveUrl', element.id),
       method: loadElementSchemaValue('saveMethod'),
       payloadFormat: loadElementSchemaValue('payloadFormat'),
       defaultData: {
