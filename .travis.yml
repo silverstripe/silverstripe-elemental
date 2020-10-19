@@ -57,6 +57,9 @@ before_script:
   - cd ../admin
   - git remote add -f uc https://github.com/unclecheese/silverstripe-admin
   - git checkout pulls/1/schemageddon
+  - cd ../versioned
+  - git remote add -f uc https://github.com/unclecheese/silverstripe-versioned
+  - git checkout pulls/1/schemageddon
   - cd ../../../
   ########################################################
 
@@ -71,7 +74,7 @@ before_script:
   - if [[ $NPM_TEST ]]; then nvm install $TRAVIS_NODE_VERSION && nvm use $TRAVIS_NODE_VERSION && npm install -g yarn && yarn install --network-concurrency 1 && (cd vendor/silverstripe/admin && yarn install --network-concurrency 1) && yarn run build; fi
 
 script:
-  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests/; fi
+  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests/ '' flush=1; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml; fi
   - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs src/ tests/ ; fi
   - if [[ $NPM_TEST ]]; then git diff-files --quiet -w --relative=client; fi
