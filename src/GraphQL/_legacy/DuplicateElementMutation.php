@@ -10,9 +10,7 @@ use GraphQL\Type\Definition\Type;
 use InvalidArgumentException;
 use Exception;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\GraphQL\MutationCreator;
-use SilverStripe\GraphQL\OperationResolver;
-use SilverStripe\GraphQL\Scaffolding\StaticSchema;
+use DNADesign\Elemental\GraphQL\Resolvers\Resolver;
 
 if (!class_exists(MutationCreator::class)) {
     return;

@@ -51,6 +51,16 @@ before_script:
   - if [[ $DB == PGSQL ]]; then composer require silverstripe/postgresql:^2 --no-update; fi
   - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
+  # Remove once everything is merged
+  - cd vendor/silverstripe/graphql
+  - git checkout -t origin/master
+  - cd ../admin
+  - git remote add -f uc https://github.com/unclecheese/silverstripe-admin
+  - git checkout pulls/1/schemageddon
+  - cd ../../../
+  ########################################################
+
+
   # Behat bootstrapping
   - if [[ $BEHAT_TEST ]]; then mkdir artifacts; fi
   - if [[ $BEHAT_TEST ]]; then cp composer.lock artifacts/; fi

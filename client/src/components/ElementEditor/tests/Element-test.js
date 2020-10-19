@@ -86,7 +86,7 @@ describe('Element', () => {
         <Element
           element={{
             ...element,
-            IsPublished: false,
+            isPublished: false,
           }}
           areaId={1}
           type={type}
@@ -103,8 +103,8 @@ describe('Element', () => {
         <Element
           element={{
             ...element,
-            IsPublished: true,
-            IsLiveVersion: false,
+            isPublished: true,
+            isLiveVersion: false,
           }}
           areaId={1}
           type={type}

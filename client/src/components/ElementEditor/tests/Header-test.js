@@ -11,8 +11,8 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('Header', () => {
   const ElementActionsComponent = () => <div />;
   const element = {
-    ID: '0',
-    Title: 'Sample File Block',
+    id: '0',
+    title: 'Sample File Block',
   };
   const type = {
     inlineEditable: true,
@@ -27,7 +27,7 @@ describe('Header', () => {
 
   describe('render()', () => {
     it('should render the icon', () => {
-      element.ID = '11';
+      element.id = '11';
       const wrapper = shallow(
         <Header
           element={element}
@@ -45,7 +45,7 @@ describe('Header', () => {
     });
 
     it('should render the title', () => {
-      element.ID = '12';
+      element.id = '12';
       const wrapper = shallow(
         <Header
           element={element}
@@ -62,7 +62,7 @@ describe('Header', () => {
     });
 
     it('should contain a Tooltip', () => {
-      element.ID = '13';
+      element.id = '13';
       const wrapper = shallow(
         <Header
           element={element}

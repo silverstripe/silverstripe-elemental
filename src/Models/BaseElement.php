@@ -33,6 +33,7 @@ use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
 use SilverStripe\GraphQL\Config\ModelConfiguration;
+
 /**
  * Class BaseElement
  * @package DNADesign\Elemental\Models

@@ -194,5 +194,4 @@ class Resolver extends DefaultResolverProvider
         $reorderingService = Injector::inst()->create(ReorderElements::class, $element);
         return $reorderingService->reorder($args['afterBlockID']);
     }
-
 }

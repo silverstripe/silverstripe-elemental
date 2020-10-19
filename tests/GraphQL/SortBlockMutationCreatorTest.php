@@ -2,11 +2,10 @@
 
 namespace DNADesign\Elemental\Tests\GraphQL;
 
-use DNADesign\Elemental\GraphQL\SortBlockMutationCreator;
 use DNADesign\Elemental\Tests\Src\TestElement;
-use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\Security;
+use DNADesign\Elemental\GraphQL\Resolvers\Resolver;
 
 class SortBlockMutationCreatorTest extends SapphireTest
 {
@@ -45,13 +44,12 @@ class SortBlockMutationCreatorTest extends SapphireTest
     {
         $member = Security::getCurrentUser();
 
-        $mutation = new SortBlockMutationCreator();
         $context = ['currentUser' => $member];
-        $resolveInfo = new ResolveInfo([]);
+        $resolveInfo = new FakeResolveInfo();
 
-        $mutation->resolve(null, [
-            'ID' => $id,
-            'AfterBlockID' => $afterBlockId,
+        Resolver::resolveSortBlock(null, [
+            'id' => $id,
+            'afterBlockID' => $afterBlockId,
         ], $context, $resolveInfo);
     }
 }
