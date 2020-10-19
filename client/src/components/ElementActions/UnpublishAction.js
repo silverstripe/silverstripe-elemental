@@ -34,7 +34,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
                 'ElementUnpublishAction.SUCCESS_NOTIFICATION',
                 'Removed \'{title}\' from the published page'
               ),
-              { title: element.Title || noTitle }
+              { title: element.title || noTitle }
             ),
             stay: false,
             type: 'success'
@@ -47,7 +47,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
                 'ElementUnpublishAction.ERROR_NOTIFICATION',
                 'Error unpublishing \'{title}\''
               ),
-              { title: element.Title || noTitle }
+              { title: element.title || noTitle }
             ),
             stay: false,
             type: 'error'
