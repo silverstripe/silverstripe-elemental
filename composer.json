@@ -24,9 +24,6 @@
         "symbiote/silverstripe-gridfieldextensions": "^3.1",
         "silverstripe/vendor-plugin": "^1"
     },
-    "require-dev": {
-        "silverstripe/recipe-testing": "1.x-dev"
-    },
     "suggest": {
         "silverstripe/elemental-blocks": "Adds a set of common SilverStripe content block types",
         "silverstripe/fulltextsearch": "Adds fulltext search capability for elements using Solr",
