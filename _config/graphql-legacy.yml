@@ -1,7 +1,7 @@
 ---
 Name: elementalgraphqlconfig
-only:
-  classexists: SilverStripe\GraphQL\Manager
+Except:
+  classexists: SilverStripe\GraphQL\Schema\Schema
 ---
 SilverStripe\GraphQL\Manager:
   schemas:
