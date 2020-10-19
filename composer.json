@@ -44,6 +44,8 @@
         "psr-4": {
             "DNADesign\\Elemental\\": "src/",
             "DNADesign\\Elemental\\Tests\\": "tests/"
-        }
+        },
+        "classmap": ["src/GraphQL/_legacy"]
+
     }
 }
