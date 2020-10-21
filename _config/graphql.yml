@@ -1,7 +1,7 @@
 ---
 Name: elemental-graphql
 Only:
-  classexists: SilverStripe\GraphQL\Schema\Schema
+  classexists: 'SilverStripe\GraphQL\Schema\Schema'
 ---
 SilverStripe\GraphQL\Schema\Schema:
   schemas:
