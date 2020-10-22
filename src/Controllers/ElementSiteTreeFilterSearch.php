@@ -6,6 +6,7 @@ use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Convert;
 use SilverStripe\Forms\DateField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
@@ -77,11 +78,17 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
             switch ($name) {
                 case 'Term':
                     $query = $query->filterAny([
-                        'URLSegment:PartialMatch' => $val,
+                        'URLSegment:PartialMatch' => Convert::raw2url($val),
                         'Title:PartialMatch' => $val,
                         'MenuTitle:PartialMatch' => $val,
                         'Content:PartialMatch' => $val
                         ] + $this->extraTermFilters); // NB: only modified line
+                    break;
+
+                case 'URLSegment':
+                    $query = $query->filter([
+                        'URLSegment:PartialMatch' => Convert::raw2url($val),
+                    ]);
                     break;
 
                 case 'LastEditedFrom':
