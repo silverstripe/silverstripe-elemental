@@ -13,30 +13,25 @@ query ReadHistoryViewerBlock ($block_id: ID!, $limit: Int!, $offset: Int!) {
     id: $block_id
   ) {
     id
-    versions (limit: $limit, offset: $offset, sortBy: {
-      field: Version
-      direction: DESC
-    }) {
+    versions (limit: $limit, offset: $offset, sort: { version: DESC }) {
       pageInfo {
         totalCount
       }
-      edges {
-        node {
-          version
-          absoluteLink
-          author {
-            firstName
-            surname
-          }
-          publisher {
-            firstName
-            surname
-          }
-          published
-          liveVersion
-          latestDraftVersion
-          lastEdited
+      nodes {
+        version
+        absoluteLink
+        author {
+          firstName
+          surname
         }
+        publisher {
+          firstName
+          surname
+        }
+        published
+        liveVersion
+        latestDraftVersion
+        lastEdited
       }
     }
   }

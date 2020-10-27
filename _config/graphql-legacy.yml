@@ -33,12 +33,15 @@ SilverStripe\GraphQL\Manager:
             operations:
               readOne:
                 resolver: DNADesign\Elemental\GraphQL\ReadOneAreaResolver
+                args:
+                  filter:
+                    type: IDFilterType
+                    required: true
           # Basic member information is required for history views
           SilverStripe\Security\Member:
             fields: [ID, FirstName, Surname]
             operations:
               readOne: true
-      # Define specific names for the models we expose
       typeNames:
         DNADesign\Elemental\Models\BaseElement: Block
         DNADesign\Elemental\Models\ElementalArea: ElementalArea

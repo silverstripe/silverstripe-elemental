@@ -10,14 +10,12 @@ query ReadBlocksForArea($id:ID!) {
     mode: DRAFT
   }){
     elements {
-      nodes {
-        id
-        title
-        blockSchema
-        isLiveVersion
-        isPublished
-        version
-      }
+      id
+      title
+      blockSchema
+      isLiveVersion
+      isPublished
+      version
     }
   }
 }
@@ -43,7 +41,7 @@ const config = {
     let blocks = null;
     if (readOneElementalArea) {
       // Remove the GraphQL pagination keys
-      blocks = readOneElementalArea.elements.nodes;
+      blocks = readOneElementalArea.elements;
     }
 
     const errors = error && error.graphQLErrors &&

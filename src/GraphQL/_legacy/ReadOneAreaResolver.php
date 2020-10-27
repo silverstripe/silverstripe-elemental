@@ -7,6 +7,7 @@ use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
 use InvalidArgumentException;
 use SilverStripe\GraphQL\OperationResolver;
+use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 
 if (!interface_exists(OperationResolver::class)) {
     return;
@@ -16,10 +17,12 @@ class ReadOneAreaResolver implements OperationResolver
 {
     public function resolve($object, array $args, $context, ResolveInfo $info)
     {
-        $area = ElementalArea::get()->byID($args['ID']);
+        $idKey = StaticSchema::inst()->formatField('ID');
+        $id = $args['filter'][$idKey]['eq'];
+        $area = ElementalArea::get()->byID($id);
 
         if (!$area) {
-            throw new InvalidArgumentException('Could not find elemental area matching ID ' . $args['ID']);
+            throw new InvalidArgumentException('Could not find elemental area matching ID ' . $id);
         }
 
         if (!$area->canView($context['currentUser'])) {

@@ -34,17 +34,17 @@ class AddElementToAreaMutation extends MutationCreator implements OperationResol
     public function args()
     {
         return [
-            'ClassName' => ['type' => Type::nonNull(Type::string())],
-            'ElementalAreaID' => ['type' => Type::nonNull(Type::id())],
-            'AfterElementID' => ['type' => Type::id()],
+            'className' => ['type' => Type::nonNull(Type::string())],
+            'elementalAreaID' => ['type' => Type::nonNull(Type::id())],
+            'afterElementID' => ['type' => Type::id()],
         ];
     }
 
     public function resolve($object, array $args, $context, ResolveInfo $info)
     {
-        $elementClass = $args['ClassName'];
-        $elementalAreaID = $args['ElementalAreaID'];
-        $afterElementID = isset($args['AfterElementID']) ? $args['AfterElementID'] : null;
+        $elementClass = $args['className'];
+        $elementalAreaID = $args['elementalAreaID'];
+        $afterElementID = isset($args['afterElementID']) ? $args['afterElementID'] : null;
 
         if (!is_subclass_of($elementClass, BaseElement::class)) {
             throw new InvalidArgumentException("$elementClass is not a subclass of " . BaseElement::class);

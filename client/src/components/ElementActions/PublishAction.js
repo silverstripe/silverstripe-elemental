@@ -66,9 +66,9 @@ const performSaveForElementWithFormData = (id, formData, securityId) => {
       const newElementData = newPageData[0] && newPageData[0]
         .data
         .readOneElementalArea
-        .Elements
-        .find((elementData) => elementData.ID === id);
-      return newElementData && newElementData.Version;
+        .elements
+        .find((elementData) => elementData.id === id);
+      return newElementData && newElementData.version;
     });
 };
 
@@ -144,7 +144,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const formName = loadElementFormStateName(ownProps.element.ID);
+  const formName = loadElementFormStateName(ownProps.element.id);
 
   return {
     reinitialiseForm(savedData) {

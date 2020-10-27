@@ -18,6 +18,7 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\GraphQL\Dev\Build;
+use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 use SilverStripe\GraphQL\Schema\Schema;
 use SilverStripe\ORM\DataObject;
@@ -1049,14 +1050,19 @@ JS
      */
     public static function getGraphQLTypeName(): string
     {
-        // This gets run at build time, so we need a different code path
-        // for when the build is active.
-        if ($schema = Build::getActiveBuild()) {
-            return $schema->findOrMakeModel(static::class)->getName();
+        // GraphQL 4
+        if (class_exists(Schema::class)) {
+            // This gets run at build time, so we need a different code path
+            // for when the build is active.
+            if ($schema = Build::getActiveBuild()) {
+                return $schema->findOrMakeModel(static::class)->getName();
+            }
+
+            // Otherwise, use the cached __type-mapping file
+            return Schema::create('admin')
+                ->getTypeNameForClass(static::class);
         }
 
-        // Otherwise, use the cached __type-mapping file
-        return Schema::create('admin')
-            ->getTypeNameForClass(static::class);
+        return StaticSchema::inst()->typeNameForDataObject(static::class);
     }
 }

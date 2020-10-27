@@ -10,7 +10,9 @@ use GraphQL\Type\Definition\Type;
 use InvalidArgumentException;
 use Exception;
 use SilverStripe\Core\Injector\Injector;
-use DNADesign\Elemental\GraphQL\Resolvers\Resolver;
+use SilverStripe\GraphQL\MutationCreator;
+use SilverStripe\GraphQL\OperationResolver;
+use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 
 if (!class_exists(MutationCreator::class)) {
     return;
@@ -34,14 +36,14 @@ class DuplicateElementMutation extends MutationCreator implements OperationResol
     public function args()
     {
         return [
-            'ID' => ['type' => Type::nonNull(Type::id())],
+            'id' => ['type' => Type::nonNull(Type::id())],
         ];
     }
 
     public function resolve($object, array $args, $context, ResolveInfo $info)
     {
         // load element to clone
-        $elementID = $args['ID'];
+        $elementID = $args['id'];
         $element = BaseElement::get_by_id($elementID);
         if (!$element) {
             throw new InvalidArgumentException("Invalid BaseElementID: $elementID");
