@@ -33,14 +33,30 @@ matrix:
 =======
       env: DB=PGSQL RECIPE_VERSION=4.6.x-dev PHPUNIT_TEST=1
     - php: 7.1
+      env: DB=PGSQL RECIPE_VERSION=4.6.x-dev PHPUNIT_TEST=1 BACKWARD_COMPAT=1
+    - php: 7.1
       env: DB=MYSQL RECIPE_VERSION=4.5.x-dev PHPUNIT_COVERAGE_TEST=1
     - php: 7.2
       env: DB=MYSQL RECIPE_VERSION=4.5.x-dev BEHAT_TEST=1
 >>>>>>> Remove 4.4 test
     - php: 7.2
+<<<<<<< HEAD
       env: DB=MYSQL RECIPE_VERSION=4.7.x-dev BEHAT_TEST=1
     - php: 7.3
       env: DB=MYSQL RECIPE_VERSION=4.7.x-dev NPM_TEST=1
+=======
+      env: DB=MYSQL RECIPE_VERSION=4.5.x-dev BEHAT_TEST=1 BACKWARD_COMPAT=1
+    - php: 7.2
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1
+    - php: 7.3
+      env: DB=MYSQL RECIPE_VERSION=4.6.x-dev NPM_TEST=1
+    - php: 7.3
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1
+    - php: 7.3
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1 BACKWARD_COMPAT=1
+    - php: 7.4
+      env: DB=MYSQL RECIPE_VERSION=4.6.x-dev
+>>>>>>> Prep tests for GraphQL backward compat
     - php: 7.4
       env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1
 
@@ -62,6 +78,7 @@ before_script:
   # Remove once everything is merged
   - cd vendor/silverstripe/graphql
   - git checkout -t origin/master
+  - if [[ $BACKWARD_COMPAT ]]; git remote add -f https://github.com/unclecheese/silverstripe-graphql && git checkout pulls/3/schemageddon-comat; fi
   - cd ../admin
   - git remote add -f uc https://github.com/unclecheese/silverstripe-admin
   - git checkout pulls/1/schemageddon

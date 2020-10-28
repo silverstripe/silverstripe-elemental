@@ -1,10 +1,11 @@
 <?php
 
-namespace DNADesign\Elemental\Tests\GraphQL;
+namespace DNADesign\Elemental\Tests\Legacy\GraphQL;
 
-use DNADesign\Elemental\GraphQL\Resolvers\Resolver;
+use DNADesign\Elemental\GraphQL\AddElementToAreaMutation;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Tests\Src\TestElement;
+use GraphQL\Type\Definition\ResolveInfo;
 use InvalidArgumentException;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\GraphQL\Schema\Schema;
@@ -20,8 +21,8 @@ class AddElementToAreaMutationTest extends SapphireTest
 
     protected function setUp()
     {
-        if (!class_exists(Schema::class)) {
-            $this->markTestSkipped('Skipped GraphQL 4 test ' . __CLASS__);
+        if (class_exists(Schema::class)) {
+            $this->markTestSkipped('Skipped GraphQL 3 test ' . __CLASS__);
         }
         parent::setUp();
     }
@@ -82,18 +83,19 @@ class AddElementToAreaMutationTest extends SapphireTest
 
     protected function runMutation($className, $elementalAreaID, $afterElementId = null)
     {
+        $mutation = new AddElementToAreaMutation();
         $context = ['currentUser' => Security::getCurrentUser()];
-        $resolveInfo = new FakeResolveInfo();
+        $resolveInfo = new ResolveInfo([]);
 
         $args = [
-            'className' => $className,
-            'elementalAreaID' => $elementalAreaID,
+            'ClassName' => $className,
+            'ElementalAreaID' => $elementalAreaID,
         ];
 
         if (!is_null($afterElementId)) {
-            $args['afterElementID'] = $afterElementId;
+            $args['AfterElementID'] = $afterElementId;
         }
 
-        return Resolver::resolveAddElementToArea(null, $args, $context, $resolveInfo);
+        return $mutation->resolve(null, $args, $context, $resolveInfo);
     }
 }
