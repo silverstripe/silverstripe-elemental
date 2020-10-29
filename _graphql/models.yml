@@ -20,7 +20,9 @@ DNADesign\Elemental\Models\BaseElement:
 DNADesign\Elemental\Models\ElementalArea:
   fields:
     id: true
-    elements: true
+    elements:
+      plugins:
+        paginateList: false
   operations:
     readOne: true
 
