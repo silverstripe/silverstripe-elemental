@@ -59,8 +59,8 @@ class SortBlockMutationCreatorTest extends SapphireTest
         $resolveInfo = new ResolveInfo([]);
 
         $mutation->resolve(null, [
-            'ID' => $id,
-            'AfterBlockID' => $afterBlockId,
+            'id' => $id,
+            'afterBlockID' => $afterBlockId,
         ], $context, $resolveInfo);
     }
 }

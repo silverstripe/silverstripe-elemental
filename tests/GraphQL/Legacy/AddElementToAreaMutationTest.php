@@ -88,12 +88,12 @@ class AddElementToAreaMutationTest extends SapphireTest
         $resolveInfo = new ResolveInfo([]);
 
         $args = [
-            'ClassName' => $className,
-            'ElementalAreaID' => $elementalAreaID,
+            'className' => $className,
+            'elementalAreaID' => $elementalAreaID,
         ];
 
         if (!is_null($afterElementId)) {
-            $args['AfterElementID'] = $afterElementId;
+            $args['afterElementID'] = $afterElementId;
         }
 
         return $mutation->resolve(null, $args, $context, $resolveInfo);
