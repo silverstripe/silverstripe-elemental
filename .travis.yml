@@ -73,26 +73,13 @@ before_script:
   - composer require silverstripe/recipe-cms:"$RECIPE_VERSION" silverstripe/recipe-testing:^1 --no-update
   - if [[ $BEHAT_TEST ]]; then composer require --no-update silverstripe/behat-extension:4.x-dev; fi;
   - if [[ $DB == PGSQL ]]; then composer require silverstripe/postgresql:^2 --no-update; fi
+
+  ######## Remove once GraphQL 4 is merged #########
+  - composer require silverstripe/admin:"dev-pulls/1/schemageddon as 1.x-dev" silverstripe/asset-admin:"dev-pulls/1/schemageddon as 1.x-dev" silverstripe/cms:"dev-pulls/4/schemageddon as 4.x-dev" silverstripe/versioned-admin:"dev-pulls/1/schemageddon as 1.x-dev" silverstripe/versioned:"dev-pulls/1/schemageddon as 1.x-dev" silverstripe/graphql:"4.x-dev as 3.x-dev" --no-update
+  - 'if [[ $BACKWARD_COMPAT ]]; then composer require silverstripe/graphql:"dev-pulls/3/schemageddon-compat as 3.x-dev" --no-update; fi'
+  ##################################################
+
   - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
-
-  # Remove once everything is merged
-  - cd vendor/silverstripe/graphql
-  - git checkout -t origin/master
-  - if [[ $BACKWARD_COMPAT ]]; then git remote add -f uc https://github.com/unclecheese/silverstripe-graphql && git checkout pulls/3/schemageddon-compat; fi
-  - cd ../admin
-  - git remote add -f uc https://github.com/unclecheese/silverstripe-admin
-  - git checkout pulls/1/schemageddon
-  - cd ../versioned
-  - git remote add -f uc https://github.com/unclecheese/silverstripe-versioned
-  - git checkout pulls/1/schemageddon
-  - cd ../asset-admin
-  - git remote add -f uc https://github.com/unclecheese/silverstripe-asset-admin
-  - git checkout pulls/1/schemageddon
-  - cd ../../../
-  - 'if [[ ! $BACKWARD_COMPAT ]]; then composer require webonyx/graphql-php:"14.0 as 0.12.6"; fi'
-  - composer dump-autoload -o
-  ########################################################
-
 
   # Behat bootstrapping
   - if [[ $BEHAT_TEST ]]; then mkdir artifacts; fi

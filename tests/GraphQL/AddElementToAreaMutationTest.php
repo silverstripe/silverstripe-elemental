@@ -20,10 +20,10 @@ class AddElementToAreaMutationTest extends SapphireTest
 
     protected function setUp()
     {
+        parent::setUp();
         if (!class_exists(Schema::class)) {
             $this->markTestSkipped('Skipped GraphQL 4 test ' . __CLASS__);
         }
-        parent::setUp();
     }
 
     public function testAddingBlocksInOrder()

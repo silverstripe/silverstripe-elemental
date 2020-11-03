@@ -19,11 +19,10 @@ class SortBlockMutationCreatorTest extends SapphireTest
 
     protected function setUp()
     {
+        parent::setUp();
         if (class_exists(Schema::class)) {
             $this->markTestSkipped('Skipped GraphQL 3 test ' . __CLASS__);
         }
-
-        parent::setUp();
     }
 
     /**
