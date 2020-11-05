@@ -37,7 +37,7 @@ const config = {
         // Query returns a deeply nested object. Explicit reconstruction via spreads is too verbose.
         // This is an alternative, relatively efficient way to deep clone
         const newData = JSON.parse(JSON.stringify(cachedData));
-        let blocks = newData.readOneElementalArea.elements.nodes;
+        let blocks = newData.readOneElementalArea.elements;
         // Find the block we reordered
         const movedBlockIndex = blocks.findIndex(block => block.id === blockId);
         // Keep it
@@ -73,7 +73,7 @@ const config = {
         }
 
         // Add it back to the full result
-        newData.readOneElementalArea.elements.nodes = blocks;
+        newData.readOneElementalArea.elements = blocks;
         store.writeQuery({ query: readBlocksQuery, data: newData, variables });
       },
     });
