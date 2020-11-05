@@ -26,51 +26,19 @@ env:
 matrix:
   include:
     - php: 7.1
-<<<<<<< HEAD
-<<<<<<< HEAD
       env: DB=PGSQL RECIPE_VERSION=4.7.x-dev PHPCS_TEST=1 PHPUNIT_TEST=1
     - php: 7.1
+      env: DB=PGSQL RECIPE_VERSION=4.7.x-dev PHPCS_TEST=1 PHPUNIT_TEST=1 BACKWARD_COMPAT=1
+    - php: 7.1
       env: DB=MYSQL RECIPE_VERSION=4.7.x-dev PHPUNIT_COVERAGE_TEST=1 PDO=1
-=======
-      env: DB=PGSQL RECIPE_VERSION=4.6.x-dev PHPUNIT_TEST=1
-=======
-      env: DB=PGSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1
->>>>>>> Update recipe versions
-    - php: 7.1
-      env: DB=PGSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1 BACKWARD_COMPAT=1
-    - php: 7.1
-      env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_COVERAGE_TEST=1
     - php: 7.2
-<<<<<<< HEAD
-      env: DB=MYSQL RECIPE_VERSION=4.5.x-dev BEHAT_TEST=1
->>>>>>> Remove 4.4 test
-    - php: 7.2
-<<<<<<< HEAD
       env: DB=MYSQL RECIPE_VERSION=4.7.x-dev BEHAT_TEST=1
+    - php: 7.2
+      env: DB=MYSQL RECIPE_VERSION=4.7.x-dev BEHAT_TEST=1 BACKWARD_COMPAT=1
     - php: 7.3
       env: DB=MYSQL RECIPE_VERSION=4.7.x-dev NPM_TEST=1
-=======
-      env: DB=MYSQL RECIPE_VERSION=4.5.x-dev BEHAT_TEST=1 BACKWARD_COMPAT=1
-=======
-      env: DB=MYSQL RECIPE_VERSION=4.x-dev BEHAT_TEST=1
-    - php: 7.2
-      env: DB=MYSQL RECIPE_VERSION=4.x-dev BEHAT_TEST=1 BACKWARD_COMPAT=1
->>>>>>> Update recipe versions
-    - php: 7.2
-      env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1
     - php: 7.3
-      env: DB=MYSQL RECIPE_VERSION=4.x-dev NPM_TEST=1
-    - php: 7.3
-      env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1
-    - php: 7.3
-      env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1 BACKWARD_COMPAT=1
-    - php: 7.4
-<<<<<<< HEAD
-      env: DB=MYSQL RECIPE_VERSION=4.6.x-dev
->>>>>>> Prep tests for GraphQL backward compat
-=======
-      env: DB=MYSQL RECIPE_VERSION=4.x-dev
->>>>>>> Update recipe versions
+      env: DB=MYSQL RECIPE_VERSION=4.7.x-dev NPM_TEST=1 BACKWARD_COMPAT=1
     - php: 7.4
       env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1
 
