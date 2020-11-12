@@ -152,9 +152,8 @@ class Resolver extends DefaultResolverProvider
             throw new Exception("Something went wrong when duplicating element: $elementID");
         }
     }
-
-
-    public static function newTitle(string $title): string
+    
+    public static function newTitle(string $title = ''): ?string
     {
         $hasCopyPattern = '/^.*(\scopy($|\s[0-9]+$))/';
         $hasNumPattern = '/^.*(\s[0-9]+$)/';

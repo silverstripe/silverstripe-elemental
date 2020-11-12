@@ -20,7 +20,12 @@ SilverStripe\GraphQL\Manager:
             fields: [ID, LastEdited, AbsoluteLink, Title, ShowTitle, Sort, BlockSchema, IsPublished, IsLiveVersion]
             operations:
               copyToStage: true
-              readOne: true
+              readOne:
+                args:
+                  filter:
+                    type: IDFilterType
+                    required: true
+                resolver: ['DNADesign\Elemental\GraphQL\ReadOneBlockResolver', 'resolve']
               delete: true
               publish: true
               unpublish: true

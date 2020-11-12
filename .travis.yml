@@ -28,8 +28,6 @@ matrix:
     - php: 7.1
       env: DB=PGSQL RECIPE_VERSION=4.x-dev PHPCS_TEST=1 PHPUNIT_TEST=1
     - php: 7.1
-      env: DB=PGSQL RECIPE_VERSION=4.x-dev PHPCS_TEST=1 PHPUNIT_TEST=1 BACKWARD_COMPAT=1
-    - php: 7.1
       env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_COVERAGE_TEST=1 PDO=1
     - php: 7.2
       env: DB=MYSQL RECIPE_VERSION=4.x-dev BEHAT_TEST=1
@@ -58,8 +56,8 @@ before_script:
 
   ######## Remove once GraphQL 4 is merged #########
   - composer require silverstripe/admin:"dev-pulls/1/schemageddon as 1.x-dev" silverstripe/asset-admin:"dev-pulls/1/schemageddon as 1.x-dev" silverstripe/cms:"dev-pulls/4/schemageddon as 4.x-dev" silverstripe/versioned-admin:"dev-pulls/1/schemageddon as 1.x-dev" silverstripe/versioned:"dev-pulls/1/schemageddon as 1.x-dev" silverstripe/graphql:"4.x-dev as 3.x-dev" --no-update
-  - 'if [[ $BACKWARD_COMPAT ]]; then composer require silverstripe/graphql:"dev-pulls/3/schemageddon-compat as 3.x-dev" --no-update; fi'
   ##################################################
+  - 'if [[ $BACKWARD_COMPAT ]]; then composer require silverstripe/graphql:"dev-pulls/3/schemageddon-compat as 3.x-dev" --no-update; fi'
 
   - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 

@@ -10,7 +10,7 @@ query ReadHistoryViewerBlock ($block_id: ID!, $limit: Int!, $offset: Int!) {
     versioning: {
       mode: LATEST
     },
-    id: $block_id
+    filter: { id: { eq: $block_id } }
   ) {
     id
     versions (limit: $limit, offset: $offset, sort: { version: DESC }) {
