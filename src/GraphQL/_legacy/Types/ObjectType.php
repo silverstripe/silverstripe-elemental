@@ -9,6 +9,8 @@ if (!class_exists(TypeCreator::class)) {
 }
 /**
  * Creates a "scalar" type that is a single dimension object - represented as an associative array on the PHP side.
+ *
+ * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
  */
 class ObjectType extends TypeCreator
 {

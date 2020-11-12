@@ -19,6 +19,8 @@ if (!interface_exists(OperationResolver::class)) {
  * Given a source block ID and the ID of the block to reorder the source block after, update all affected sort
  * orders for the block and its siblings. Only the source block will have a new version written, all siblings
  * will be updated underneath the ORM to avoid this.
+ *
+ * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
  */
 class SortBlockMutationCreator extends MutationCreator implements OperationResolver
 {

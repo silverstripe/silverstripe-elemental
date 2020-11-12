@@ -16,6 +16,10 @@ use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 if (!class_exists(MutationCreator::class)) {
     return;
 }
+
+/**
+ * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
+ */
 class AddElementToAreaMutation extends MutationCreator implements OperationResolver
 {
     public function attributes()

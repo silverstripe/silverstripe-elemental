@@ -18,6 +18,9 @@ if (!class_exists(MutationCreator::class)) {
     return;
 }
 
+/**
+ * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
+ */
 class DuplicateElementMutation extends MutationCreator implements OperationResolver
 {
     public function attributes()

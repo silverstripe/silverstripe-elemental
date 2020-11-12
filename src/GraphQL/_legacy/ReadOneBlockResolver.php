@@ -14,6 +14,9 @@ if (!class_exists(ReadOne::class)) {
     return;
 }
 
+/**
+ * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
+ */
 class ReadOneBlockResolver
 {
     public static function resolve($obj, array $args, array $context, ResolveInfo $info)
