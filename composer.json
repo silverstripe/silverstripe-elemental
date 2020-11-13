@@ -42,7 +42,7 @@
     },
     "autoload": {
         "psr-4": {
-            "DNADesign\\Elemental\\": ["src/", "src/GraphQL/_legacy"],
+            "DNADesign\\Elemental\\": ["src/", "_legacy/"],
             "DNADesign\\Elemental\\Tests\\": "tests/"
         },
         "classmap": ["src/GraphQL/_legacy"]
