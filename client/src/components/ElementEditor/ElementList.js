@@ -52,20 +52,20 @@ class ElementList extends Component {
     }
 
     let output = blocks.map((element) => (
-      <div key={element.ID}>
+      <div key={element.id}>
         <ElementComponent
           element={element}
           areaId={areaId}
-          type={getElementTypeConfig(element.BlockSchema.typeName, elementTypes)}
-          link={element.BlockSchema.actions.edit}
+          type={getElementTypeConfig(element.blockSchema.typeName, elementTypes)}
+          link={element.blockSchema.actions.edit}
           onDragOver={onDragOver}
           onDragEnd={onDragEnd}
           onDragStart={onDragStart}
         />
         {isDraggingOver || <HoverBarComponent
-          key={`create-after-${element.ID}`}
+          key={`create-after-${element.id}`}
           areaId={areaId}
-          elementId={element.ID}
+          elementId={element.id}
           elementTypes={allowedElementTypes}
         />}
       </div>
@@ -151,12 +151,12 @@ const elementListTarget = {
     }
 
     const dropIndex = getDragIndicatorIndex(
-      blocks.map(element => element.ID),
+      blocks.map(element => element.id),
       elementTargetDropResult.target,
       monitor.getItem(),
       elementTargetDropResult.dropSpot,
     );
-    const dropAfterID = blocks[dropIndex - 1] ? blocks[dropIndex - 1].ID : '0';
+    const dropAfterID = blocks[dropIndex - 1] ? blocks[dropIndex - 1].id : '0';
 
     return {
       ...elementTargetDropResult,

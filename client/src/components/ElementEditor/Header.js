@@ -69,7 +69,7 @@ class Header extends Component {
    */
   renderVersionedStateMessage() {
     const {
-      element: { IsLiveVersion: isLiveVersion, IsPublished: isPublished },
+      element: { isLiveVersion, isPublished },
       formDirty,
     } = this.props;
 
@@ -121,7 +121,7 @@ class Header extends Component {
     );
     const titleClasses = classNames({
       'element-editor-header__title': true,
-      'element-editor-header__title--none': !element.Title,
+      'element-editor-header__title--none': !element.title,
     });
     const expandTitle = i18n._t('ElementHeader.EXPAND', 'Show editable fields');
     const containerClasses = classNames(
@@ -137,7 +137,7 @@ class Header extends Component {
         'font-icon-down-open-big': expandable && !previewExpanded,
       }
     );
-    const blockIconId = `element-icon-${element.ID}`;
+    const blockIconId = `element-icon-${element.id}`;
 
     const content = (
       <div className={containerClasses}>
@@ -157,7 +157,7 @@ class Header extends Component {
               {type.title}
             </Tooltip>}
           </div>
-          <h3 className={titleClasses}>{element.Title || noTitle}</h3>
+          <h3 className={titleClasses}>{element.title || noTitle}</h3>
         </div>
         {!simple && <div className="element-editor-header__actions">
           {expandable &&
@@ -208,7 +208,7 @@ Header.defaultProps = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const formName = loadElementFormStateName(ownProps.element.ID);
+  const formName = loadElementFormStateName(ownProps.element.id);
 
   return {
     formDirty: isDirty(`element.${formName}`, getFormState)(state),

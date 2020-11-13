@@ -12,7 +12,7 @@ const DuplicateAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { element: { ID: id }, actions: { handleDuplicateBlock } } = props;
+    const { element: { id }, actions: { handleDuplicateBlock } } = props;
 
     if (handleDuplicateBlock) {
       handleDuplicateBlock(id).then(() => {

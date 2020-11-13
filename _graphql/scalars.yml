@@ -1,0 +1,4 @@
+ObjectType:
+  serialiser: [DNADesign\Elemental\GraphQL\Resolvers\Resolver, 'serialiseObjectType']
+  literalParser: [DNADesign\Elemental\GraphQL\Resolvers\Resolver, 'parseLiteralObjectType']
+  valueParser: [DNADesign\Elemental\GraphQL\Resolvers\Resolver, 'parseValueObjectType']

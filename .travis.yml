@@ -26,13 +26,17 @@ env:
 matrix:
   include:
     - php: 7.1
-      env: DB=PGSQL RECIPE_VERSION=4.7.x-dev PHPCS_TEST=1 PHPUNIT_TEST=1
+      env: DB=PGSQL RECIPE_VERSION=4.x-dev PHPCS_TEST=1 PHPUNIT_TEST=1
     - php: 7.1
-      env: DB=MYSQL RECIPE_VERSION=4.7.x-dev PHPUNIT_COVERAGE_TEST=1 PDO=1
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_COVERAGE_TEST=1 PDO=1
     - php: 7.2
-      env: DB=MYSQL RECIPE_VERSION=4.7.x-dev BEHAT_TEST=1
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev BEHAT_TEST=1
+    - php: 7.2
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev BEHAT_TEST=1 BACKWARD_COMPAT=1
     - php: 7.3
-      env: DB=MYSQL RECIPE_VERSION=4.7.x-dev NPM_TEST=1
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev NPM_TEST=1
+    - php: 7.3
+      env: DB=MYSQL RECIPE_VERSION=4.x-dev NPM_TEST=1 BACKWARD_COMPAT=1
     - php: 7.4
       env: DB=MYSQL RECIPE_VERSION=4.x-dev PHPUNIT_TEST=1
 
@@ -49,6 +53,12 @@ before_script:
   - composer require silverstripe/recipe-cms:"$RECIPE_VERSION" silverstripe/recipe-testing:^1 --no-update
   - if [[ $BEHAT_TEST ]]; then composer require --no-update silverstripe/behat-extension:4.x-dev; fi;
   - if [[ $DB == PGSQL ]]; then composer require silverstripe/postgresql:^2 --no-update; fi
+
+  ######## Remove once GraphQL 4 is merged #########
+  - composer require silverstripe/graphql:"4.x-dev as 3.x-dev" --no-update
+  ##################################################
+  - 'if [[ $BACKWARD_COMPAT ]]; then composer require silverstripe/graphql:"dev-pulls/3/schemageddon-compat as 3.x-dev" --no-update; fi'
+
   - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
   # Behat bootstrapping
@@ -61,7 +71,7 @@ before_script:
   - if [[ $NPM_TEST ]]; then nvm install $TRAVIS_NODE_VERSION && nvm use $TRAVIS_NODE_VERSION && npm install -g yarn && yarn install --network-concurrency 1 && (cd vendor/silverstripe/admin && yarn install --network-concurrency 1) && yarn run build; fi
 
 script:
-  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests/; fi
+  - if [[ $PHPUNIT_TEST ]]; then vendor/bin/phpunit tests/ '' flush=1; fi
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml; fi
   - if [[ $PHPCS_TEST ]]; then vendor/bin/phpcs src/ tests/ ; fi
   - if [[ $NPM_TEST ]]; then git diff-files --quiet -w --relative=client; fi
@@ -74,4 +84,4 @@ after_success:
   - if [[ $PHPUNIT_COVERAGE_TEST ]]; then bash <(curl -s https://codecov.io/bash) -f coverage.xml; fi
 
 after_failure:
-- php ./vendor/silverstripe/framework/tests/behat/travis-upload-artifacts.php --if-env BEHAT_TEST,ARTIFACTS_BUCKET,ARTIFACTS_KEY,ARTIFACTS_SECRET --target-path $TRAVIS_REPO_SLUG/$TRAVIS_BUILD_ID/$TRAVIS_JOB_ID --artifacts-base-url https://s3.amazonaws.com/$ARTIFACTS_BUCKET/ --artifacts-path ./artifacts/
+  - php ./vendor/silverstripe/framework/tests/behat/travis-upload-artifacts.php --if-env BEHAT_TEST,ARTIFACTS_BUCKET,ARTIFACTS_KEY,ARTIFACTS_SECRET --target-path $TRAVIS_REPO_SLUG/$TRAVIS_BUILD_ID/$TRAVIS_JOB_ID --artifacts-base-url https://s3.amazonaws.com/$ARTIFACTS_BUCKET/ --artifacts-path ./artifacts/

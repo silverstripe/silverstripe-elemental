@@ -1,12 +1,13 @@
 <?php
 
-namespace DNADesign\Elemental\Tests\GraphQL;
+namespace DNADesign\Elemental\Tests\Legacy\GraphQL;
 
+use DNADesign\Elemental\GraphQL\SortBlockMutationCreator;
 use DNADesign\Elemental\Tests\Src\TestElement;
+use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\GraphQL\Schema\Schema;
 use SilverStripe\Security\Security;
-use DNADesign\Elemental\GraphQL\Resolvers\Resolver;
 
 class SortBlockMutationCreatorTest extends SapphireTest
 {
@@ -19,8 +20,8 @@ class SortBlockMutationCreatorTest extends SapphireTest
     protected function setUp()
     {
         parent::setUp();
-        if (!class_exists(Schema::class)) {
-            $this->markTestSkipped('Skipped GraphQL 4 test ' . __CLASS__);
+        if (class_exists(Schema::class)) {
+            $this->markTestSkipped('Skipped GraphQL 3 test ' . __CLASS__);
         }
     }
 
@@ -53,10 +54,11 @@ class SortBlockMutationCreatorTest extends SapphireTest
     {
         $member = Security::getCurrentUser();
 
+        $mutation = new SortBlockMutationCreator();
         $context = ['currentUser' => $member];
-        $resolveInfo = new FakeResolveInfo();
+        $resolveInfo = new ResolveInfo([]);
 
-        Resolver::resolveSortBlock(null, [
+        $mutation->resolve(null, [
             'id' => $id,
             'afterBlockID' => $afterBlockId,
         ], $context, $resolveInfo);

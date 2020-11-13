@@ -17,11 +17,15 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
+use SilverStripe\GraphQL\Dev\Build;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
+use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
+use SilverStripe\GraphQL\Schema\Schema;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\ORM\ValidationException;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
@@ -29,6 +33,7 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
+use SilverStripe\GraphQL\Config\ModelConfiguration;
 
 /**
  * Class BaseElement
@@ -849,13 +854,18 @@ JS
      * to update it from an `Extension`.
      *
      * @return array
+     * @throws SchemaBuilderException
+     * @throws ValidationException
      */
     protected function provideBlockSchema()
     {
+        // Currently GraphQL doesn't expose the correct type name and just returns "base element"s. This is a
+        // workaround until we can scaffold a query client side that specifies by type name
+        // todo: Find out if all of that is still true
+        $typeName = static::getGraphQLTypeName();
+
         return [
-            // Currently GraphQL doesn't expose the correct type name and just returns "base element"s. This is a
-            // workaround until we can scaffold a query client side that specifies by type name
-            'typeName' => StaticSchema::inst()->typeNameForDataObject(static::class),
+            'typeName' => $typeName,
             'actions' => [
                 'edit' => $this->getEditLink(),
             ],
@@ -1032,5 +1042,27 @@ JS
         $odd = (bool) ($this->Pos() % 2);
 
         return  ($odd) ? 'odd' : 'even';
+    }
+
+    /**
+     * @return string
+     * @throws SchemaBuilderException
+     */
+    public static function getGraphQLTypeName(): string
+    {
+        // GraphQL 4
+        if (class_exists(Schema::class)) {
+            // This gets run at build time, so we need a different code path
+            // for when the build is active.
+            if ($schema = Build::getActiveBuild()) {
+                return $schema->findOrMakeModel(static::class)->getName();
+            }
+
+            // Otherwise, use the cached __type-mapping file
+            return Schema::create('admin')
+                ->getTypeNameForClass(static::class);
+        }
+
+        return StaticSchema::inst()->typeNameForDataObject(static::class);
     }
 }

@@ -6,12 +6,12 @@ import { query as readBlocksQuery, config as readBlocksConfig } from './readBloc
 const mutation = gql`
 mutation SortBlockMutation($blockId:ID!, $afterBlockId:ID!) {
   sortBlock(
-    ID: $blockId
-    AfterBlockID: $afterBlockId
+    id: $blockId
+    afterBlockID: $afterBlockId
   ) {
-    ID
-    IsLiveVersion
-    IsPublished
+    id
+    isLiveVersion
+    isPublished
   }
 }
 `;
@@ -25,8 +25,8 @@ const config = {
       },
       optimisticResponse: {
         sortBlock: {
-          ID: blockId,
-          IsLiveVersion: false,
+          id: blockId,
+          liveVersion: false,
           __typename: 'Block',
         },
       },
@@ -37,10 +37,9 @@ const config = {
         // Query returns a deeply nested object. Explicit reconstruction via spreads is too verbose.
         // This is an alternative, relatively efficient way to deep clone
         const newData = JSON.parse(JSON.stringify(cachedData));
-        let blocks = newData.readOneElementalArea.Elements;
-
+        let blocks = newData.readOneElementalArea.elements;
         // Find the block we reordered
-        const movedBlockIndex = blocks.findIndex(block => block.ID === blockId);
+        const movedBlockIndex = blocks.findIndex(block => block.id === blockId);
         // Keep it
         const movedBlock = blocks[movedBlockIndex];
         // Update the moved block with the new details returned in the GraphQL response
@@ -59,7 +58,7 @@ const config = {
           blocks.unshift(movedBlock);
         } else {
           // Else, find the block we inserted after
-          let targetBlockIndex = blocks.findIndex(block => block.ID === afterBlockId);
+          let targetBlockIndex = blocks.findIndex(block => block.id === afterBlockId);
 
           // If we can't find the block, it must be the one we're trying to move - put it back!
           if (targetBlockIndex === -1) {
@@ -74,7 +73,7 @@ const config = {
         }
 
         // Add it back to the full result
-        newData.readOneElementalArea.Elements = blocks;
+        newData.readOneElementalArea.elements = blocks;
         store.writeQuery({ query: readBlocksQuery, data: newData, variables });
       },
     });

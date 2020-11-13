@@ -3,13 +3,13 @@ import gql from 'graphql-tag';
 
 const mutation = gql`
 mutation revertBlockToVersion($id:ID!, $fromStage:VersionedStage!, $toStage:VersionedStage!, $fromVersion:Int!) {
-  copyBlockToStage(Input: {
-    ID: $id
-    FromVersion: $fromVersion
-    FromStage: $fromStage
-    ToStage: $toStage
+  copyBlockToStage(input: {
+    id: $id
+    fromVersion: $fromVersion
+    fromStage: $fromStage
+    toStage: $toStage
   }) {
-    ID
+    id
   }
 }
 `;

@@ -25,7 +25,7 @@
         "silverstripe/vendor-plugin": "^1"
     },
     "require-dev": {
-        "silverstripe/recipe-testing": "1.x-dev"
+      "sminnee/phpunit": "^5.7"
     },
     "suggest": {
         "silverstripe/elemental-blocks": "Adds a set of common SilverStripe content block types",
@@ -42,8 +42,10 @@
     },
     "autoload": {
         "psr-4": {
-            "DNADesign\\Elemental\\": "src/",
+            "DNADesign\\Elemental\\": ["src/", "src/GraphQL/_legacy"],
             "DNADesign\\Elemental\\Tests\\": "tests/"
-        }
+        },
+        "classmap": ["src/GraphQL/_legacy"]
+
     }
 }

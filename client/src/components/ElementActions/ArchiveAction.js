@@ -12,7 +12,7 @@ const ArchiveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { element: { ID: id }, isPublished, actions: { handleArchiveBlock } } = props;
+    const { element: { id }, isPublished, actions: { handleArchiveBlock } } = props;
 
     let archiveMessage = i18n._t(
       'ElementArchiveAction.CONFIRM_DELETE',

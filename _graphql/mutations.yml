@@ -1,0 +1,9 @@
+'addElementToArea(className: String!, elementalAreaID: ID!, afterElementID: ID)':
+  model: DNADesign\Elemental\Models\BaseElement
+  description: Adds an Element to an ElementalArea, optionally after another Element
+'duplicateBlock(id: ID!)':
+  model: DNADesign\Elemental\Models\BaseElement
+  description: Duplicate an Element in this ElementalArea
+'sortBlock(id: ID!, afterBlockID: ID!)':
+  model: DNADesign\Elemental\Models\BaseElement
+  description: Changes the sort position of an element

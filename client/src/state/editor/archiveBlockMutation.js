@@ -5,9 +5,7 @@ import { config as readBlocksConfig, query as readBlocksQuery } from './readBloc
 // GraphQL query for deleting a specific block
 const mutation = gql`
 mutation ArchiveBlock($blockId: ID!) {
-  deleteBlock(IDs: [$blockId]) {
-    ID
-  }
+  deleteBlocks(ids: [$blockId])
 }
 `;
 

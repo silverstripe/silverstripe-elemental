@@ -29,7 +29,7 @@ const SaveAction = (MenuComponent) => (props) => {
     );
 
     const endpointSpec = {
-      url: loadElementSchemaValue('saveUrl', element.ID),
+      url: loadElementSchemaValue('saveUrl', element.id),
       method: loadElementSchemaValue('saveMethod'),
       payloadFormat: loadElementSchemaValue('payloadFormat'),
       defaultData: {
@@ -51,7 +51,7 @@ const SaveAction = (MenuComponent) => (props) => {
         const preview = $('.cms-preview');
         preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
 
-        const newTitle = formData ? formData[`PageElements_${element.ID}_Title`] : null;
+        const newTitle = formData ? formData[`PageElements_${element.id}_Title`] : null;
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
@@ -95,7 +95,7 @@ const SaveAction = (MenuComponent) => (props) => {
 };
 
 function mapStateToProps(state, ownProps) {
-  const formName = loadElementFormStateName(ownProps.element.ID);
+  const formName = loadElementFormStateName(ownProps.element.id);
 
   let formData = null;
 
@@ -110,7 +110,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const formName = loadElementFormStateName(ownProps.element.ID);
+  const formName = loadElementFormStateName(ownProps.element.id);
 
   return {
     reinitialiseForm(savedData) {
