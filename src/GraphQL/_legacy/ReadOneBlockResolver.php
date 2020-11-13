@@ -3,7 +3,6 @@
 
 namespace DNADesign\Elemental\GraphQL;
 
-
 use DNADesign\Elemental\Models\BaseElement;
 use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\Core\Injector\Injector;
