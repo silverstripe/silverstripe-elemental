@@ -21,6 +21,7 @@
         "silverstripe/admin": "^1.7@dev",
         "silverstripe/versioned": "^1.7@dev",
         "silverstripe/versioned-admin": "^1.7@dev",
+        "silverstripe/graphql": "^3.4",
         "symbiote/silverstripe-gridfieldextensions": "^3.1",
         "silverstripe/vendor-plugin": "^1"
     },
