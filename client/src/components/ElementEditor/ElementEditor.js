@@ -38,7 +38,7 @@ class ElementEditor extends PureComponent {
    * @param isOverTop
    */
   handleDragOver(element = null, isOverTop = null) {
-    const id = element ? element.ID : false;
+    const id = element ? element.id : false;
 
     this.setState({
       dragTargetElementId: id,
@@ -55,6 +55,7 @@ class ElementEditor extends PureComponent {
    * @param afterId
    */
   handleDragEnd(sourceId, afterId) {
+    console.log('drag end', sourceId, afterId);
     const { actions: { handleSortBlock }, areaId } = this.props;
 
     handleSortBlock(sourceId, afterId, areaId).then(() => {

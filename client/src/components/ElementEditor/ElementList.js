@@ -13,11 +13,10 @@ import { getElementTypeConfig } from 'state/editor/elementConfig';
 class ElementList extends Component {
   getDragIndicatorIndex() {
     const { dragTargetElementId, draggedItem, blocks, dragSpot } = this.props;
-
     return getDragIndicatorIndex(
-      blocks.map(element => element.ID),
+      blocks.map(element => element.id),
       dragTargetElementId,
-      draggedItem && draggedItem.ID,
+      draggedItem && draggedItem.id,
       dragSpot
     );
   }

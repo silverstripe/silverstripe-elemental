@@ -260,7 +260,7 @@ class Element extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const elementId = ownProps.element.ID;
+  const elementId = ownProps.element.id;
   const elementName = loadElementFormStateName(elementId);
   const elementFormSchema = loadElementSchemaValue('schemaUrl', elementId);
 
@@ -332,7 +332,7 @@ const elementTarget = {
     const { element } = props;
 
     return {
-      target: element.ID,
+      target: element.id,
       dropSpot: isOverTop(monitor, component) ? 'top' : 'bottom',
     };
   },
