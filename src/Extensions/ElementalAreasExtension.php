@@ -229,12 +229,22 @@ class ElementalAreasExtension extends DataExtension
 
         $ownerClassName = get_class($this->owner);
 
-        // Update the OwnerClassName on EA if the class has changed
         foreach ($elementalAreaRelations as $eaRelation) {
+            // Update the OwnerClassName on EA if the class has changed
+            /** @var ElementalArea $ea */
             $ea = $this->owner->$eaRelation();
             if ($ea->OwnerClassName !== $ownerClassName) {
                 $ea->OwnerClassName = $ownerClassName;
                 $ea->write();
+            }
+
+            // Owner page will have set its own HasBrokenLink / HasBrokenFile in SiteTreeLinkTracking / FileLinkTracking
+            // on any $page->Content BEFORE we get to this point
+            if (in_array(1, $ea->Elements()->column('HasBrokenLink'))) {
+                $this->owner->HasBrokenLink = true;
+            }
+            if (in_array(1, $ea->Elements()->column('HasBrokenFile'))) {
+                $this->owner->HasBrokenFile = true;
             }
         }
 

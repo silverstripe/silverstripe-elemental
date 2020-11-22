@@ -70,7 +70,9 @@ class BaseElement extends DataObject
         'ShowTitle' => 'Boolean',
         'Sort' => 'Int',
         'ExtraClass' => 'Varchar(255)',
-        'Style' => 'Varchar(255)'
+        'Style' => 'Varchar(255)',
+        'HasBrokenLink' => 'Boolean',
+        'HasBrokenFile' => 'Boolean',
     ];
 
     private static $has_one = [
@@ -291,6 +293,9 @@ class BaseElement extends DataObject
 
             // Remove link and file tracking tabs
             $fields->removeByName(['LinkTracking', 'FileTracking']);
+
+            // Remove SiteTreeLinkTracking and FileLinkTracking fields
+            $fields->removeByName(['HasBrokenLink', 'HasBrokenFile']);
 
             $fields->addFieldToTab(
                 'Root.Settings',

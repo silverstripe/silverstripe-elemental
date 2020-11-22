@@ -3,9 +3,11 @@
 namespace DNADesign\Elemental\Tests\Extensions;
 
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
+use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestUnusedElement;
+use SilverStripe\Assets\File;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
@@ -14,9 +16,12 @@ use SilverStripe\Forms\LiteralField;
 
 class ElementalAreasExtensionTest extends SapphireTest
 {
+
+    protected $usesDatabase = true;
+
     protected static $required_extensions = [
         SiteTree::class => [
-            ElementalAreasExtension::class,
+            ElementalPageExtension::class,
         ],
     ];
 
@@ -109,5 +114,105 @@ class ElementalAreasExtensionTest extends SapphireTest
             [false, true, HTMLEditorField::class],
             [true, true, HTMLEditorField::class],
         ];
+    }
+
+    private function setupBrokenData($type)
+    {
+        $linkedToPage = SiteTree::create();
+        $linkedToPage->write();
+
+        $linkedToFile = File::create();
+        $linkedToFile->write();
+
+        $id = $type == 'links' ? $linkedToPage->ID : $linkedToFile->ID;
+        $shortcode = $type == 'links' ? 'sitetree_link' : 'file_link';
+        // class="ss-broken"
+        $broken = '<p>Lorem <a href="[' . $shortcode . ',id=99999]">internal broken ' . $type . '</a> ip</p>';
+        $unbroken = '<p>Lorem <a href="[' . $shortcode . ',id='. $id .']">internal ' . $type . '</a> ip</p>';
+
+        $page = SiteTree::create();
+        $page->Content = $unbroken;
+        $page->write();
+
+        $elementalArea = $page->ElementalArea();
+        $element = ElementContent::create();
+        $element->HTML = $unbroken;
+        $element->ParentID = $elementalArea->ID;
+        $element->write();
+
+        $page->write();
+        $this->assertFalse($page->HasBrokenLink);
+        $this->assertFalse($page->HasBrokenFile);
+
+        return [
+            'page' => $page,
+            'element' => $element,
+            'broken' => $broken,
+            'unbroken' => $unbroken
+        ];
+    }
+
+    /**
+     * Saving the page updates SiteTree->HasBroken from grandchild ElementContent->HasBrokenLink|HasBrokenFile
+     */
+    public function testHasBrokenSavingPage()
+    {
+        foreach (['links' => 'HasBrokenLink', 'files' => 'HasBrokenFile'] as $type => $field) {
+            list('page' => $page, 'element' => $element, 'broken' => $broken) = $this->setupBrokenData($type);
+            $element->HTML = $broken;
+            $element->write();
+            $page->write();
+            $this->assertTrue($page->$field);
+        }
+    }
+
+    /**
+     * Saving the element does not update grandparent SiteTree->HasBrokenLink|HasBrokenFile
+     */
+    public function testHasBrokenSavingElementDoesNotUpdatePage()
+    {
+        foreach (['links' => 'HasBrokenLink', 'files' => 'HasBrokenFile'] as $type => $field) {
+            list('page' => $page, 'element' => $element, 'broken' => $broken) = $this->setupBrokenData($type);
+            $element->HTML = $broken;
+            $element->write();
+            $this->assertFalse($page->$field);
+        }
+    }
+
+    /**
+     * Fixing a broken element link sets SiteTree->HasBrokenLink|HasBrokenFile to false
+     */
+    public function testHasBrokenFixSetsSiteTreeToFalse()
+    {
+        foreach (['links' => 'HasBrokenLink', 'files' => 'HasBrokenFile'] as $type => $field) {
+            list('page' => $page, 'element' => $element, 'broken' => $broken, 'unbroken' => $unbroken)
+                = $this->setupBrokenData($type);
+            $element->HTML = $broken;
+            $element->write();
+            $page->write();
+            $this->assertTrue($page->$field);
+            $element->HTML = $unbroken;
+            $element->write();
+            $page->write();
+            $this->assertFalse($page->$field);
+        }
+    }
+
+    /**
+     * Unbroken element links do not overwrite SiteTree->HasBrokenLink|HasBrokenFile
+     */
+    public function testHasBrokenUnbrokenDoesNotOverwriteBrokenSiteTree()
+    {
+        foreach (['links' => 'HasBrokenLink', 'files' => 'HasBrokenFile'] as $type => $field) {
+            list('page' => $page, 'element' => $element, 'broken' => $broken, 'unbroken' => $unbroken)
+                = $this->setupBrokenData($type);
+            $page->Content = $broken;
+            $page->write();
+            $this->assertTrue($page->$field);
+            $element->HTML = $unbroken;
+            $element->write();
+            $page->write();
+            $this->assertTrue($page->$field);
+        }
     }
 }
