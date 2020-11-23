@@ -8,8 +8,3 @@ SilverStripe\GraphQL\Schema\Schema:
     admin:
       src:
         elemental: 'dnadesign/silverstripe-elemental: _graphql'
-
-SilverStripe\Core\Injector\Injector:
-  SilverStripe\GraphQL\Schema\Registry\ResolverRegistry:
-    constructor:
-      elementalResolver: '%$DNADesign\Elemental\GraphQL\Resolvers\Resolver'

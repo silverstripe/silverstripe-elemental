@@ -1,4 +1,0 @@
-DataObject:
-  type_mapping:
-    DNADesign\Elemental\Models\BaseElement: Block
-    DNADesign\Elemental\Models\ElementalArea: ElementalArea
