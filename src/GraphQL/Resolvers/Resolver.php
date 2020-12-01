@@ -8,18 +8,11 @@ use DNADesign\Elemental\Services\ReorderElements;
 use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\GraphQL\QueryHandler\QueryHandler;
-use SilverStripe\GraphQL\Schema\Exception\PermissionsException;
-use SilverStripe\GraphQL\Schema\Resolver\DefaultResolverProvider;
-use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ValidationException;
 use InvalidArgumentException;
 use Exception;
 
-if (!class_exists(DefaultResolverProvider::class)) {
-    return;
-}
-
-class Resolver extends DefaultResolverProvider
+class Resolver
 {
     /**
      * @param $value
@@ -152,7 +145,7 @@ class Resolver extends DefaultResolverProvider
             throw new Exception("Something went wrong when duplicating element: $elementID");
         }
     }
-    
+
     public static function newTitle(string $title = ''): ?string
     {
         $hasCopyPattern = '/^.*(\scopy($|\s[0-9]+$))/';
