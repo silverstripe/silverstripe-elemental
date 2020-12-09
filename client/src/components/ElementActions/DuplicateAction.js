@@ -33,7 +33,10 @@ const DuplicateAction = (MenuComponent) => (props) => {
     <MenuComponent {...props}>
       {props.children}
 
-      <AbstractAction {...newProps} />
+      {props.element.canCreate === false
+        ? null
+        : <AbstractAction {...newProps} />
+      }
     </MenuComponent>
   );
 };

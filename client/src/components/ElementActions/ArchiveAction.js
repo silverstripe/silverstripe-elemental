@@ -46,7 +46,10 @@ const ArchiveAction = (MenuComponent) => (props) => {
     <MenuComponent {...props}>
       {props.children}
 
-      <AbstractAction {...newProps} />
+      {props.element.canDelete === false
+        ? null
+        : <AbstractAction {...newProps} />
+      }
     </MenuComponent>
   );
 };

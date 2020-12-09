@@ -15,7 +15,11 @@ query ReadBlocksForArea($id:ID!) {
       BlockSchema
       IsLiveVersion
       IsPublished
-      Version   
+      Version
+      canCreate
+      canPublish
+      canUnpublish
+      canDelete
     }
   }
 }
