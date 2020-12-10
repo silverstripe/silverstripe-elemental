@@ -68,4 +68,15 @@ describe('PublishAction', () => {
 
     expect(draftWrapper.find('button').length).toBe(0);
   });
+
+  it('returns null when user doesn\'t have correct permissions', () => {
+    const draftWrapper = mount(
+      <ActionComponent
+        element={{ IsLiveVersion: false, BlockSchema: { type: 'Test' }, canPublish: false }}
+        actions={{ handlePublishBlock: mockMutation }}
+      />
+    );
+
+    expect(draftWrapper.find('button').length).toBe(0);
+  });
 });

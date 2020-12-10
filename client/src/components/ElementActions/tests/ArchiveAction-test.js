@@ -86,4 +86,22 @@ describe('ArchiveAction', () => {
       'Warning: This block will be unpublished'
     ));
   });
+
+  it('returns null when user doesn\'t have correct permissions', () => {
+    const unpublishedWrapper = mount(
+      <ActionComponent
+        title="My abstract action"
+        element={{
+          ID: 123,
+          IsPublished: false,
+          BlockSchema: { type: 'Test' },
+          canDelete: false
+        }}
+        actions={{ handleArchiveBlock: mockMutation }}
+        toggle={false}
+      />
+    );
+
+    expect(unpublishedWrapper.find('button').length).toBe(0);
+  });
 });
