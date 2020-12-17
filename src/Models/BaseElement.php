@@ -25,6 +25,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\ORM\Queries\SQLUpdate;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
@@ -281,6 +282,39 @@ class BaseElement extends DataObject
             $records = $records->filter('ParentID', $this->ParentID);
 
             $this->Sort = $records->max('Sort') + 1;
+        }
+        $this->updatePageHasBrokenItems();
+    }
+
+    public function onBeforePublish()
+    {
+        $this->updatePageHasBrokenItems('live');
+    }
+
+    private function updatePageHasBrokenItems($stage = 'Stage')
+    {
+        // Update Page HasBrokenLink/HasBrokenFile so that broken links report stays up-to-date
+        // Bypass ORM to prevent any side-effects
+        $page = $this->getPage();
+        if ($page && $page->exists()) {
+            $assignments = [];
+            if (!$page->HasBrokenLink && $this->HasBrokenLink) {
+                $assignments['"HasBrokenLink"'] = true;
+            }
+            if (!$page->HasBrokenFile && $this->HasBrokenFile) {
+                $assignments['"HasBrokenFile"'] = true;
+            }
+            if (!empty($assignments)) {
+                $tableName = DataObject::getSchema()->tableName(SiteTree::class);
+                if (strtolower($stage == 'live')) {
+                    $tableName .= '_Live';
+                }
+                SQLUpdate::create()
+                    ->setTable($tableName)
+                    ->setAssignments($assignments)
+                    ->setWhere('"ID"', $page->ID)
+                    ->execute();
+            }
         }
     }
 
