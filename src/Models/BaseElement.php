@@ -615,6 +615,8 @@ JS
         if ($page = $this->getPage()) {
             $link = $page->AbsoluteLink($action) . '#' . $this->getAnchor();
 
+            $this->extend('updateAbsoluteLink', $link);
+
             return $link;
         }
 
