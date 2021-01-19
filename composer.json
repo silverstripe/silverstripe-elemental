@@ -21,12 +21,12 @@
         "silverstripe/admin": "^1.7@dev",
         "silverstripe/versioned": "^1.7@dev",
         "silverstripe/versioned-admin": "^1.7@dev",
-        "silverstripe/graphql": "^3.4",
+        "silverstripe/graphql": "^3.4 || 4.x-dev",
         "symbiote/silverstripe-gridfieldextensions": "^3.1",
         "silverstripe/vendor-plugin": "^1"
     },
     "require-dev": {
-      "sminnee/phpunit": "^5.7"
+      "silverstripe/recipe-testing": "1.x-dev"
     },
     "suggest": {
         "silverstripe/elemental-blocks": "Adds a set of common SilverStripe content block types",
