@@ -26,7 +26,7 @@
         "silverstripe/vendor-plugin": "^1"
     },
     "require-dev": {
-      "sminnee/phpunit": "^5.7"
+      "silverstripe/recipe-testing": "1.x-dev"
     },
     "suggest": {
         "silverstripe/elemental-blocks": "Adds a set of common SilverStripe content block types",
