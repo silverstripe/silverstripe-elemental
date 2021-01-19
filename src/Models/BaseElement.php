@@ -21,6 +21,7 @@ use SilverStripe\GraphQL\Dev\Build;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 use SilverStripe\GraphQL\Schema\Schema;
+use SilverStripe\GraphQL\Schema\SchemaFactory;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
@@ -1054,15 +1055,10 @@ JS
     {
         // GraphQL 4
         if (class_exists(Schema::class)) {
-            // This gets run at build time, so we need a different code path
-            // for when the build is active.
-            if ($schema = Build::getActiveBuild()) {
-                return $schema->findOrMakeModel(static::class)->getName();
-            }
-
-            // Otherwise, use the cached __type-mapping file
-            return Schema::create('admin')
-                ->getTypeNameForClass(static::class);
+            $schema = SchemaFactory::get('admin');
+            return $schema
+                ? $schema->getTypeNameForClass(static::class)
+                : ClassInfo::shortName(static::class);
         }
 
         return StaticSchema::inst()->typeNameForDataObject(static::class);
