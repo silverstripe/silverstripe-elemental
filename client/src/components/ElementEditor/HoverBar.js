@@ -21,6 +21,7 @@ function StatelessHoverBar({
   const lineClasses = `${classNames('-line')} font-icon-plus-circled`;
   const label = i18n._t('ElementAddNewButton.ADD_BLOCK', 'Add block');
   const btnProps = {
+    type: 'button',
     className: classNames('-area', { '-area--focus': popoverOpen }),
     onClick: onToggle,
     'aria-label': label,
