@@ -1055,10 +1055,14 @@ JS
     {
         // GraphQL 4
         if (class_exists(Schema::class)) {
-            $schema = SchemaFactory::get('admin');
-            return $schema
-                ? $schema->getTypeNameForClass(static::class)
-                : ClassInfo::shortName(static::class);
+            $schema = SchemaFactory::singleton()->get('admin');
+            $typeName = null;
+            if ($schema) {
+                $typeName = $schema->getTypeNameForClass(static::class);
+            }
+            // Have to ensure that something gets returned here because the function
+            // gets executed during the build when not enough info may be available.
+            return $typeName ?: ClassInfo::shortName(static::class);
         }
 
         return StaticSchema::inst()->typeNameForDataObject(static::class);
