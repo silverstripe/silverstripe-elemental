@@ -9,6 +9,7 @@ use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
 use Exception;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\Versioned\Versioned;
