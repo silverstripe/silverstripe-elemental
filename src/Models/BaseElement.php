@@ -21,7 +21,7 @@ use SilverStripe\GraphQL\Dev\Build;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 use SilverStripe\GraphQL\Schema\Schema;
-use SilverStripe\GraphQL\Schema\SchemaFactory;
+use SilverStripe\GraphQL\Schema\SchemaBuilder;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
@@ -1055,7 +1055,7 @@ JS
     {
         // GraphQL 4
         if (class_exists(Schema::class)) {
-            $schema = SchemaFactory::singleton()->get('admin');
+            $schema = SchemaBuilder::singleton()->read('admin');
             $typeName = null;
             if ($schema) {
                 $typeName = $schema->getTypeNameForClass(static::class);
