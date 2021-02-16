@@ -17,7 +17,6 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
-use SilverStripe\GraphQL\Dev\Build;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 use SilverStripe\GraphQL\Schema\Schema;
@@ -34,8 +33,7 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
-use SilverStripe\GraphQL\Config\ModelConfiguration;
-
+use RuntimeException;
 /**
  * Class BaseElement
  * @package DNADesign\Elemental\Models
@@ -865,8 +863,8 @@ JS
         // Currently GraphQL doesn't expose the correct type name and just returns "base element"s. This is a
         // workaround until we can scaffold a query client side that specifies by type name
         // todo: Find out if all of that is still true
-        $typeName = static::getGraphQLTypeName();
-
+        //$typeName = static::getGraphQLTypeName();
+        $typeName = ClassInfo::shortName(static::class);
         return [
             'typeName' => $typeName,
             'actions' => [
@@ -1050,19 +1048,21 @@ JS
     /**
      * @return string
      * @throws SchemaBuilderException
+     * @throws RuntimeException
      */
     public static function getGraphQLTypeName(): string
     {
         // GraphQL 4
         if (class_exists(Schema::class)) {
-            $schema = SchemaBuilder::singleton()->read('admin');
-            $typeName = null;
+            $schema = SchemaBuilder::singleton()->getConfig('admin');
             if ($schema) {
-                $typeName = $schema->getTypeNameForClass(static::class);
+                return $schema->getTypeNameForClass(static::class);
             }
-            // Have to ensure that something gets returned here because the function
-            // gets executed during the build when not enough info may be available.
-            return $typeName ?: ClassInfo::shortName(static::class);
+            throw new RuntimeException(sprintf(
+                '%s was called without a stored "admin" schema. The graphql
+                type name cannot be determined until the schema is built',
+                __FUNCTION__
+            ));
         }
 
         return StaticSchema::inst()->typeNameForDataObject(static::class);
