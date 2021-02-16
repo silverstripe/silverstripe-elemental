@@ -860,13 +860,8 @@ JS
      */
     protected function provideBlockSchema()
     {
-        // Currently GraphQL doesn't expose the correct type name and just returns "base element"s. This is a
-        // workaround until we can scaffold a query client side that specifies by type name
-        // todo: Find out if all of that is still true
-        //$typeName = static::getGraphQLTypeName();
-        $typeName = ClassInfo::shortName(static::class);
         return [
-            'typeName' => $typeName,
+            'typeName' => static::getGraphQLTypeName(),
             'actions' => [
                 'edit' => $this->getEditLink(),
             ],
@@ -1047,24 +1042,9 @@ JS
 
     /**
      * @return string
-     * @throws SchemaBuilderException
-     * @throws RuntimeException
      */
     public static function getGraphQLTypeName(): string
     {
-        // GraphQL 4
-        if (class_exists(Schema::class)) {
-            $schema = SchemaBuilder::singleton()->getConfig('admin');
-            if ($schema) {
-                return $schema->getTypeNameForClass(static::class);
-            }
-            throw new RuntimeException(sprintf(
-                '%s was called without a stored "admin" schema. The graphql
-                type name cannot be determined until the schema is built',
-                __FUNCTION__
-            ));
-        }
-
-        return StaticSchema::inst()->typeNameForDataObject(static::class);
+        return str_replace('\\', '_', static::class);
     }
 }
