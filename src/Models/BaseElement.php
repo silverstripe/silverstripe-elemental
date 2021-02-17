@@ -17,10 +17,10 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
-use SilverStripe\GraphQL\Dev\Build;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 use SilverStripe\GraphQL\Schema\Schema;
+use SilverStripe\GraphQL\Schema\SchemaBuilder;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
@@ -33,8 +33,7 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
-use SilverStripe\GraphQL\Config\ModelConfiguration;
-
+use RuntimeException;
 /**
  * Class BaseElement
  * @package DNADesign\Elemental\Models
@@ -861,13 +860,8 @@ JS
      */
     protected function provideBlockSchema()
     {
-        // Currently GraphQL doesn't expose the correct type name and just returns "base element"s. This is a
-        // workaround until we can scaffold a query client side that specifies by type name
-        // todo: Find out if all of that is still true
-        $typeName = static::getGraphQLTypeName();
-
         return [
-            'typeName' => $typeName,
+            'typeName' => static::getGraphQLTypeName(),
             'actions' => [
                 'edit' => $this->getEditLink(),
             ],
@@ -1048,23 +1042,9 @@ JS
 
     /**
      * @return string
-     * @throws SchemaBuilderException
      */
     public static function getGraphQLTypeName(): string
     {
-        // GraphQL 4
-        if (class_exists(Schema::class)) {
-            // This gets run at build time, so we need a different code path
-            // for when the build is active.
-            if ($schema = Build::getActiveBuild()) {
-                return $schema->findOrMakeModel(static::class)->getName();
-            }
-
-            // Otherwise, use the cached __type-mapping file
-            return Schema::create('admin')
-                ->getTypeNameForClass(static::class);
-        }
-
-        return StaticSchema::inst()->typeNameForDataObject(static::class);
+        return str_replace('\\', '_', static::class);
     }
 }

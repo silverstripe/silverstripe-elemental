@@ -8,6 +8,7 @@ use DNADesign\Elemental\Services\ReorderElements;
 use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\GraphQL\QueryHandler\QueryHandler;
+use SilverStripe\GraphQL\QueryHandler\UserContextProvider;
 use SilverStripe\ORM\ValidationException;
 use InvalidArgumentException;
 use Exception;
@@ -70,14 +71,16 @@ class Resolver
             throw new InvalidArgumentException("Invalid ElementalAreaID: $elementalAreaID");
         }
 
-        if (!$elementalArea->canEdit($context[QueryHandler::CURRENT_USER])) {
+        $member = UserContextProvider::get($context);
+        if (!$elementalArea->canEdit($member)) {
             throw new InvalidArgumentException("The current user has insufficient permission to edit ElementalAreas");
         }
 
         /** @var BaseElement $newElement */
         $newElement = Injector::inst()->create($elementClass);
 
-        if (!$newElement->canEdit($context[QueryHandler::CURRENT_USER])) {
+        $member = UserContextProvider::get($context);
+        if (!$newElement->canEdit($member)) {
             throw new InvalidArgumentException(
                 'The current user has insufficient permission to edit Elements'
             );
@@ -123,7 +126,8 @@ class Resolver
         if (!$area) {
             throw new InvalidArgumentException("Invalid ParentID on BaseElement: $elementID");
         }
-        if (!$area->canEdit($context[QueryHandler::CURRENT_USER])) {
+        $member = UserContextProvider::get($context);
+        if (!$area->canEdit($member)) {
             throw new InvalidArgumentException(
                 "The current user has insufficient permission to edit ElementalArea: $areaID"
             );
@@ -180,8 +184,8 @@ class Resolver
                 $args['ID']
             ));
         }
-
-        if (!$element->canEdit($context[QueryHandler::CURRENT_USER])) {
+        $member = UserContextProvider::get($context);
+        if (!$element->canEdit($member)) {
             throw new InvalidArgumentException(
                 'Changing the sort order of blocks is not allowed for the current user'
             );
