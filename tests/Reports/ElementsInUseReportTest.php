@@ -30,13 +30,21 @@ class ElementsInUseReportTest extends FunctionalTest
     protected function setUp()
     {
         parent::setUp();
-        NaiveSchemaBuilder::activate();
+
+        // GraphQL 4 only
+        if (class_exists(NaiveSchemaBuilder::class)) {
+            NaiveSchemaBuilder::activate();
+        }
     }
 
     protected function tearDown()
     {
         parent::tearDown();
-        NaiveSchemaBuilder::deactivate();
+        
+        // GraphQL 4 only
+        if (class_exists(NaiveSchemaBuilder::class)) {
+            NaiveSchemaBuilder::deactivate();
+        }
     }
 
     public function testReportShowsElementsInUse()

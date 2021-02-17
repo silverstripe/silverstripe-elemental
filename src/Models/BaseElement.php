@@ -34,6 +34,7 @@ use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
 use RuntimeException;
+
 /**
  * Class BaseElement
  * @package DNADesign\Elemental\Models
