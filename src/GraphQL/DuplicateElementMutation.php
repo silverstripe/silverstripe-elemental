@@ -56,6 +56,11 @@ class DuplicateElementMutation extends MutationCreator implements OperationResol
                 "The current user has insufficient permission to edit ElementalArea: $areaID"
             );
         }
+        if (!$element->canCreate($context['currentUser'])) {
+            throw new InvalidArgumentException(
+                "The current user has insufficient permission to create or duplicate BaseElement: $elementID"
+            );
+        }
 
         try {
             // clone element
