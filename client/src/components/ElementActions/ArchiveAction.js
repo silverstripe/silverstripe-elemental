@@ -35,8 +35,15 @@ const ArchiveAction = (MenuComponent) => (props) => {
     }
   };
 
+  const disabled = props.element.canDelete !== undefined && !props.element.canDelete;
+  const label = i18n._t('ElementArchiveAction.ARCHIVE', 'Archive');
+  const title = disabled
+    ? i18n._t('ElementArchiveAction.ARCHIVE_PERMISSION_DENY', 'Archive, insufficient permissions')
+    : label;
   const newProps = {
-    title: i18n._t('ElementArchiveAction.ARCHIVE', 'Archive'),
+    label,
+    title,
+    disabled,
     className: 'element-editor__actions-archive',
     onClick: handleClick,
     toggle: props.toggle,
@@ -45,7 +52,6 @@ const ArchiveAction = (MenuComponent) => (props) => {
   return (
     <MenuComponent {...props}>
       {props.children}
-
       <AbstractAction {...newProps} />
     </MenuComponent>
   );

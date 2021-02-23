@@ -1,0 +1,9 @@
+.element-editor .action-menu {
+
+    & .dropdown-item.disabled {
+      font-style: italic;
+      pointer-events: initial;
+      cursor: not-allowed;
+      color: $gray-500
+    }
+}

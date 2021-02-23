@@ -55,7 +55,6 @@ class ElementEditor extends PureComponent {
    * @param afterId
    */
   handleDragEnd(sourceId, afterId) {
-    console.log('drag end', sourceId, afterId);
     const { actions: { handleSortBlock }, areaId } = this.props;
 
     handleSortBlock(sourceId, afterId, areaId).then(() => {

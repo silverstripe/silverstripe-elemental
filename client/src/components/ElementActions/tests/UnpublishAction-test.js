@@ -63,4 +63,16 @@ describe('UnpublishAction', () => {
     wrapper.find('button').simulate('click');
     expect(mockMutation).toHaveBeenCalled();
   });
+
+  it('is disabled when user doesn\'t have correct permissions', () => {
+    const unpublishWrapper = mount(
+      <ActionComponent
+        element={{ isPublished: true, BlockSchema: { type: 'Test' }, canUnpublish: false }}
+        actions={{ handleUnpublishBlock: mockMutation }}
+        type={{ title: 'Some block' }}
+      />
+    );
+
+    expect(unpublishWrapper.find('button').first().prop('disabled')).toBe(true);
+  });
 });

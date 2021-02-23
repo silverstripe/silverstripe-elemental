@@ -56,8 +56,15 @@ const UnpublishAction = (MenuComponent) => (props) => {
     }
   };
 
+  const disabled = props.element.canUnpublish !== undefined && !props.element.canUnpublish;
+  const label = i18n._t('ElementArchiveAction.UNPUBLISH', 'Unpublish');
+  const title = disabled
+    ? i18n._t('ElementArchiveAction.UNPUBLISH_PERMISSION_DENY', 'Unpublish, insufficient permissions')
+    : label;
   const newProps = {
-    title: i18n._t('ElementUnpublishAction.UNPUBLISH', 'Unpublish'),
+    label,
+    title,
+    disabled,
     className: 'element-editor__actions-unpublish',
     onClick: handleClick,
     toggle: props.toggle,
@@ -66,7 +73,6 @@ const UnpublishAction = (MenuComponent) => (props) => {
   return (
     <MenuComponent {...props}>
       {props.children}
-
       {element.isPublished && <AbstractAction {...newProps} />}
     </MenuComponent>
   );

@@ -111,8 +111,15 @@ const PublishAction = (MenuComponent) => (props) => {
       .catch(() => reportPublicationStatus(type.title, title, false));
   };
 
+  const disabled = props.element.canPublish !== undefined && !props.element.canPublish;
+  const label = i18n._t('ElementArchiveAction.PUBLISH', 'Publish');
+  const title = disabled
+    ? i18n._t('ElementArchiveAction.PUBLISH_PERMISSION_DENY', 'Publish, insufficient permissions')
+    : label;
   const newProps = {
-    title: i18n._t('ElementPublishAction.PUBLISH', 'Publish'),
+    label,
+    title,
+    disabled,
     className: 'element-editor__actions-publish',
     onClick: handleClick,
     toggle: props.toggle,
@@ -121,7 +128,6 @@ const PublishAction = (MenuComponent) => (props) => {
   return (
     <MenuComponent {...props}>
       {props.children}
-
       {(formDirty || !element.isLiveVersion) && <AbstractAction {...newProps} />}
     </MenuComponent>
   );
