@@ -85,6 +85,10 @@ class BaseElement extends DataObject
         'BlockSchema' => DBObjectType::class,
         'IsLiveVersion' => DBBoolean::class,
         'IsPublished' => DBBoolean::class,
+        'canCreate' => DBBoolean::class,
+        'canPublish' => DBBoolean::class,
+        'canUnpublish' => DBBoolean::class,
+        'canDelete' => DBBoolean::class,
     ];
 
     private static $versioned_gridfield_extensions = true;

@@ -40,4 +40,23 @@ describe('AbstractAction', () => {
   it('adds provided extra classes', () => {
     expect(wrapper.find('button').hasClass('foo-bar')).toBe(true);
   });
+
+  it('uses the label prop for the button label if label prop is supplied', () => {
+    const wrapperWithLabel = mount(
+      <AbstractAction
+        title="My title"
+        label="My label"
+      />
+    );
+    expect(wrapperWithLabel.find('button').text()).toBe('My label');
+  });
+
+  it('uses the title prop for the button label if label prop is not supplied', () => {
+    const wrapperWithLabel = mount(
+      <AbstractAction
+        title="My title"
+      />
+    );
+    expect(wrapperWithLabel.find('button').text()).toBe('My title');
+  });
 });

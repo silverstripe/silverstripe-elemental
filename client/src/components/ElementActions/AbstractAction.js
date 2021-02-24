@@ -8,7 +8,7 @@ import { elementTypeType } from 'types/elementTypeType';
  * Renders an action item for the "more actions" dropdown on elements
  */
 const AbstractAction = (props) => {
-  const { className, title } = props;
+  const { className, title, label } = props;
 
   const itemProps = {
     className: classNames(className, 'dropdown-item'),
@@ -17,7 +17,7 @@ const AbstractAction = (props) => {
 
   return (
     <DropdownItem {...itemProps}>
-      {title}
+      {label || title}
     </DropdownItem>
   );
 };
@@ -30,6 +30,7 @@ AbstractAction.propTypes = {
   name: PropTypes.string,
   type: elementTypeType,
   active: PropTypes.bool,
+  label: PropTypes.string
 };
 
 AbstractAction.defaultProps = {
