@@ -205,7 +205,7 @@ class ElementalAreasExtension extends DataExtension
             $insertBefore = Config::inst()->get(get_class($this->owner), 'insert_before_field_name');
             
             if ($insertBefore && $fields->dataFieldByName($insertBefore)) {
-                $fields->addFieldToTab('Root.Main', $editor, $insertBefore);
+                $fields->insertBefore($insertBefore, $editor);
             } else if ($this->owner instanceof SiteTree && $fields->findOrMakeTab('Root.Main')->fieldByName('Metadata')) {
                 $fields->addFieldToTab('Root.Main', $editor, 'Metadata');
             } else {
