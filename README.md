@@ -1,11 +1,11 @@
-# SilverStripe Elemental
+# Silverstripe CMS Elemental
 
-[![Build Status](http://img.shields.io/travis/dnadesign/silverstripe-elemental.svg?style=flat)](https://travis-ci.org/dnadesign/silverstripe-elemental)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dnadesign/silverstripe-elemental/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dnadesign/silverstripe-elemental/?branch=master)
-[![codecov](https://codecov.io/gh/dnadesign/silverstripe-elemental/branch/master/graph/badge.svg)](https://codecov.io/gh/dnadesign/silverstripe-elemental)
-[![SilverStripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
+[![Build Status](http://img.shields.io/travis/silverstripe/silverstripe-elemental.svg?style=flat)](https://travis-ci.com/silverstripe/silverstripe-elemental)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-elemental/badges/quality-score.png?b=4)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-elemental/?branch=4)
+[![codecov](https://codecov.io/gh/silverstripe/silverstripe-elemental/branch/4/graph/badge.svg)](https://codecov.io/gh/silverstripe/silverstripe-elemental)
+[![Silverstripe CMS supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 [![Version](http://img.shields.io/packagist/v/dnadesign/silverstripe-elemental.svg?style=flat)](https://packagist.org/packages/dnadesign/silverstripe-elemental)
-[![License](http://img.shields.io/packagist/l/dnadesign/silverstripe-elemental.svg?style=flat)](LICENSE.md)
+[![License](https://poser.pugx.org/dnadesign/silverstripe-elemental/license.svg)](LICENSE.md)
 
 ## Introduction
 
@@ -22,13 +22,13 @@ For a more detailed overview of using this module, please see [the User help gui
 
 ## Requirements
 
-* SilverStripe CMS ^4.3
+* Silverstripe CMS ^4.3
 * Versioned Admin ^1.0
 * GridFieldExtensions ^3.1
 
-For a SilverStripe 4.1 or 4.2 compatible version of this module, please see the [2.x or 3.x release line](https://github.com/dnadesign/silverstripe-elemental/tree/3#readme).
+For a Silverstripe CMS 4.1 or 4.2 compatible version of this module, please see the [2.x or 3.x release line](https://github.com/silverstripe/silverstripe-elemental/tree/3#readme).
 
-For a SilverStripe 3.x compatible version of this module, please see the [1 branch, or 1.x release line](https://github.com/dnadesign/silverstripe-elemental/tree/1#readme).
+For a Silverstripe CMS 3.x compatible version of this module, please see the [1 branch, or 1.x release line](https://github.com/silverstripe/silverstripe-elemental/tree/1#readme).
 
 ## Installation
 
@@ -54,11 +54,11 @@ In your page type layout template use `$ElementalArea` to render the elements to
 Note that this module comes by default with the base element and a "Content" element. If you need more, take
 a look at some other modules:
 
-## SilverStripe supported content block modules
+## Silverstripe CMS supported content block modules
 
-To learn more about [SilverStripe supported](https://www.silverstripe.org/software/addons/supported-modules-definition/) content block types see, [Creating new blocks](/docs/en/userguide/edit_content.md).
+To learn more about [Silverstripe CMS supported](https://www.silverstripe.org/software/addons/supported-modules-definition/) content block types see, [Creating new blocks](/docs/en/userguide/edit_content.md).
 
-* [dnadesign/silverstripe-elemental](https://github.com/dnadesign/silverstripe-elemental): Text content (built-in)
+* [dnadesign/silverstripe-elemental](https://github.com/silverstripe/silverstripe-elemental): Text content (built-in)
 * [silverstripe/silverstripe-elemental-fileblock](https://github.com/silverstripe/silverstripe-elemental-fileblock): File and image block
 * [silverstripe/silverstripe-elemental-bannerblock](https://github.com/silverstripe/silverstripe-elemental-bannerblock): Banner with call-to-action and content
 * [dnadesign/silverstripe-elemental-userforms](https://github.com/dnadesign/silverstripe-elemental-userforms): Embed a [user defined form](https://github.com/silverstripe/silverstripe-userforms)
@@ -88,7 +88,7 @@ To learn more about [SilverStripe supported](https://www.silverstripe.org/softwa
 ## Helpful modules
 
 These modules can extend functionality, and make elemental
-more compatible with other approaches in SilverStripe:
+more compatible with other approaches in Silverstripe CMS:
 
 * [dnadesign/silverstripe-elemental-subsites](https://github.com/dnadesign/silverstripe-elemental-subsites): Compatibility with the [silverstripe/subsites](https://github.com/silverstripe/silverstripe-subsites) module
 * [dnadesign/silverstripe-elemental-skeletons](https://github.com/dnadesign/silverstripe-elemental-skeletons): Creates a template of elements which can be created for a page in the CMS
@@ -119,7 +119,7 @@ MyElementPage:
 
 ### Migrating existing page content
 
-You can use the `MigrateContentToElement` BuildTask that is provided to assist with migrating content from pages to elements. 
+You can use the `MigrateContentToElement` BuildTask that is provided to assist with migrating content from pages to elements.
 For more information on using this task refer to the [content migration documentation](docs/en/content_migration.md).
 
 ### Customize HTML and markup
@@ -128,7 +128,7 @@ The basic element area is rendered into the `DNADesign/Elemental/Models/Elementa
 each of the element controller instances. Each controller instance will render `$ElementHolder` which represents
 the element contained within a holder `div`. The wrapper div is the `ElementHolder.ss` template.
 
-To customise the ElementEditor in the CMS you will need to use the SilverStripe JS Injector to apply transformations
+To customise the ElementEditor in the CMS you will need to use the Silverstripe CMS JS Injector to apply transformations
 to the necessary React components. [See here](https://docs.silverstripe.org/en/4/developer_guides/customising_the_admin_interface/how_tos/customise_react_components/)
 for more information.
 
@@ -154,7 +154,7 @@ Page:
 ### Sharing elements between pages
 
 By default the page to element relationship is a "has one", meaning you cannot share elements between pages. If this
-functionality is desired, you could take a look at the [silverstripe-elemental-virtual](https://github.com/dnadesign/silverstripe-elemental-virtual)
+functionality is desired, you could take a look at the [silverstripe-elemental-virtual](https://github.com/silverstripe/silverstripe-elemental-virtual)
 module which helps to achieve this.
 
 ### Defining your own elements
@@ -194,7 +194,7 @@ class MyElement extends BaseElement
 
 #### In-line Editing
 
-Elements can be edited in the CMS using an inline form where all your elements appear together. For elements 
+Elements can be edited in the CMS using an inline form where all your elements appear together. For elements
 that are more complex (e.g. use custom `FormField` classes) you can disable the in-line edit form by setting `private static $inline_editable = false` in your
 element class. A `GridFieldDetailForm` will be used to edit blocks that are not in-line editable. Alternatively as the CMS element editor is now React driven, in-line editing functionality can be added to by defining your own React components.
 
@@ -298,8 +298,8 @@ This module used to use GridField to create and update Elements in the CMS. This
 
 ## Building the elemental frontend assets
 
-This module uses the [SilverStripe Webpack module](https://github.com/silverstripe/webpack-config), and inherits
-things from the core SilverStripe 4 modules, such as a core variable sheet and Javascript components.
+This module uses the [Silverstripe CMS Webpack module](https://github.com/silverstripe/webpack-config), and inherits
+things from the core Silverstripe CMS 4 modules, such as a core variable sheet and Javascript components.
 
 When making changes to either the SASS or Javascript files, ensure you change the source files in `client/src/`.
 
@@ -323,7 +323,7 @@ globally in your command line.
 **Note:** If adding or modifying colours, spacing, font sizes etc. please try
 and use an appropriate variable from the silverstripe/admin module if available.
 
-## Integration with other modules 
+## Integration with other modules
 
 * [Multiple languages with tractorcow/silverstripe-fluent](docs/en/advanced_setup.md)
 * [Search through silverstripe/fulltextsearch](docs/en/searching-blocks.md)
@@ -350,8 +350,10 @@ overriding methods then please test your work before upgrading.
 
 ## Reporting Issues
 
-Please [create an issue](https://github.com/dnadesign/silverstripe-elemental/issues) for any bugs you've found, or features you're missing.
+Please [create an issue](https://github.com/silverstripe/silverstripe-elemental/issues) for any bugs you've found, or features you're missing.
 
 ## Credits
+
+Silverstripe Elemental was created by [DNA Design](https://www.dna.co.nz/).
 
 CMS Icon blocks by Creative Stall from the Noun Project.
