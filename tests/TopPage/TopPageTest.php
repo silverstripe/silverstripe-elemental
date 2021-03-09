@@ -231,7 +231,7 @@ class TopPageTest extends SapphireTest
                         /** @var DataObject|TopPage\DataExtension $objectClone */
                         $objectClone = $items->first();
 
-                        $expected = $fixedPageId ?? (int) $page->ID;
+                        $expected = $fixedPageId ?: (int) $page->ID;
                         $this->assertEquals($expected, (int) $objectClone->TopPageID);
 
                         /** @var ElementalArea|TopPage\DataExtension $area */
