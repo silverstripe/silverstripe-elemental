@@ -55,9 +55,9 @@ class DataExtension extends BaseDataExtension
      * If this is set to a page ID it will be used instead of trying to determine the top page
      *
      * @see DataExtension::withFixedTopPage()
-     * @var int|null
+     * @var int
      */
-    private $fixedID = null;
+    private $fixedTopPageID = 0;
 
     /**
      * Extension point in @see DataObject::onAfterWrite()
@@ -170,7 +170,7 @@ class DataExtension extends BaseDataExtension
             return;
         }
 
-        if ($this->getFixedId() !== null) {
+        if ($this->getFixedTopPageId() > 0) {
             $this->assignFixedTopPage();
             $this->saveChanges();
 
@@ -237,32 +237,32 @@ class DataExtension extends BaseDataExtension
      * For example: model duplication where parent is assigned and saved only after the duplication is done
      * It's not possible to determine top page in such case however it might be possible to know the top page
      * even before the operation starts from the specific context
-     * Setting the page id to null disables this feature
+     * Setting the page id to 0 disables this feature
      *
-     * @param int|null $topPageId
+     * @param int $topPageId
      * @param callable $callback
      * @return mixed
      */
-    public function withFixedTopPage(?int $topPageId, callable $callback)
+    public function withFixedTopPage(int $topPageId, callable $callback)
     {
-        $original = $this->fixedID;
-        $this->fixedID = $topPageId;
+        $original = $this->fixedTopPageID;
+        $this->fixedTopPageID = $topPageId;
 
         try {
             return $callback();
         } finally {
-            $this->fixedID = $original;
+            $this->fixedTopPageID = $original;
         }
     }
 
     /**
      * Get the ID of a page which is currently set as the fixed top page
      *
-     * @return int|null
+     * @return int
      */
-    protected function getFixedId(): ?int
+    protected function getFixedTopPageId(): int
     {
-        return $this->fixedID;
+        return $this->fixedTopPageID;
     }
 
     /**
@@ -306,7 +306,7 @@ class DataExtension extends BaseDataExtension
      */
     protected function assignFixedTopPage(): void
     {
-        $this->owner->TopPageID = $this->getFixedId();
+        $this->owner->TopPageID = $this->getFixedTopPageId();
     }
 
     /**
@@ -316,23 +316,29 @@ class DataExtension extends BaseDataExtension
      * - we don't want to create a new version if object is versioned
      * - using writeWithoutVersion() produces some weird edge cases were data is not written
      * because the fields are not recognised as changed (using forceChange() introduces a new set of issues)
+     *
+     * @param array $extraData
      */
-    protected function saveChanges(): void
+    protected function saveChanges(array $extraData = []): void
     {
         /** @var DataObject|DataExtension $owner */
         $owner = $this->owner;
-
         $table = $this->getTopPageTable();
 
         if (!$table) {
             return;
         }
 
-        $query = SQLUpdate::create(
-            sprintf('"%s"', $table),
+        $updates = array_merge(
             [
                 '"TopPageID"' => $owner->TopPageID,
             ],
+            $extraData
+        );
+
+        $query = SQLUpdate::create(
+            sprintf('"%s"', $table),
+            $updates,
             ['"ID"' => $owner->ID]
         );
 
@@ -341,6 +347,11 @@ class DataExtension extends BaseDataExtension
 
     /**
      * Perform a page lookup based on cached data
+     * This function allows more extensibility as it can be fully overridden unlike an extension point
+     * Various projects may decide to alter this by injecting features like tracking, feature flags
+     * and even completely different data lookups
+     * This is a performance driven functionality so extension points are not great as they only allow adding
+     * features on top of existing ones not replacing them
      *
      * @param int $id
      * @return Page|null
@@ -359,19 +370,15 @@ class DataExtension extends BaseDataExtension
     /**
      * Find table name which has the top page fields
      *
-     * @return string|null
+     * @return string
      */
-    protected function getTopPageTable(): ?string
+    protected function getTopPageTable(): string
     {
         // Classes are ordered from generic to specific, top-down, left-right
         $classes = ClassInfo::dataClassesFor($this->owner);
 
-        if (count($classes) === 0) {
-            return null;
-        }
-
         // Find the first ancestor table which has the extension applied
-        // Note that this extension is expected to be sublassed
+        // Note that this extension is expected to be subclassed
         foreach ($classes as $class) {
             if (!Extensible::has_extension($class, static::class)) {
                 continue;
@@ -380,6 +387,6 @@ class DataExtension extends BaseDataExtension
             return DataObject::getSchema()->tableName($class);
         }
 
-        return null;
+        return '';
     }
 }

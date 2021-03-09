@@ -62,26 +62,13 @@ class FluentExtension extends DataExtension
     /*
      * @inheritdoc
      */
-    protected function saveChanges(): void
+    protected function saveChanges(array $extraData = []): void
     {
         /** @var DataObject|FluentExtension $owner */
         $owner = $this->owner;
 
-        $table = $this->getTopPageTable();
-
-        if (!$table) {
-            return;
-        }
-
-        $query = SQLUpdate::create(
-            sprintf('"%s"', $table),
-            [
-                '"TopPageID"' => $owner->TopPageID,
-                '"TopPageLocale"' => $owner->TopPageLocale,
-            ],
-            ['"ID"' => $owner->ID]
-        );
-
-        $query->execute();
+        parent::saveChanges([
+            '"TopPageLocale"' => $owner->TopPageLocale,
+        ]);
     }
 }

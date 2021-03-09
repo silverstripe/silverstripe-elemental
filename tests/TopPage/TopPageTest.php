@@ -179,9 +179,10 @@ class TopPageTest extends SapphireTest
      * This is needed in some edge cases were automatic determination is not possible due to the object not being
      * assigned to the parent object at the time of duplication but rather later
      *
+     * @param int $fixedPageId
      * @dataProvider fixedPagesProvider
      */
-    public function testPageDuplication(?int $fixedPageId): void
+    public function testPageDuplication(int $fixedPageId): void
     {
         /** @var TopPage\DataExtension $extension */
         $extension = singleton(TopPage\DataExtension::class);
@@ -308,7 +309,7 @@ class TopPageTest extends SapphireTest
     public function fixedPagesProvider(): array
     {
         return [
-            [null], // feature is disabled
+            [0], // feature is disabled
             [99], // obviously non-existent page
         ];
     }
