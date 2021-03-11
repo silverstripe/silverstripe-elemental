@@ -1,7 +1,7 @@
 ---
 Name: elemental
 ---
-
+# test comment
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_javascript:
     - 'dnadesign/silverstripe-elemental:client/dist/js/bundle.js'
