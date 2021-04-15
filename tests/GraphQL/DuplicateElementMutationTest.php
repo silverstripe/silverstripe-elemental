@@ -12,6 +12,14 @@ use SilverStripe\Security\Security;
 
 class DuplicateElementMutationTest extends SapphireTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        if (!class_exists(Schema::class)) {
+            $this->markTestSkipped('Skipped GraphQL 4 test ' . __CLASS__);
+        }
+    }
+
     public function testResolvePermissions()
     {
         $cannotEditClass = new class extends BaseElement {
@@ -52,7 +60,7 @@ class DuplicateElementMutationTest extends SapphireTest
             $element->write();
             $mutation = new DuplicateElementMutation();
             $object = null;
-            $args = ['ID' => $element->ID];
+            $args = ['id' => $element->ID];
             $context = ['currentUser' => Security::getCurrentUser()];
             $resolveInfo = new ResolveInfo([]);
 
