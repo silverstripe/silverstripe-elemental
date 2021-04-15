@@ -24,7 +24,8 @@ Feature: Archive elements in the CMS
     Given I see a list of blocks
     When I press the "View actions" button
       Then I should see the archive button for block 1
-    When I press the "Archive" button
+    # Use a css selector instead of the "Archive" button otherwise it will get confused with the Archive ModelAdmin
+    When I click on the ".element-editor__actions-archive.dropdown-item" element
       And I see the text "Are you sure you want to send this block to the archive?" in the alert
       And I confirm the dialog
       And I wait for 2 seconds
