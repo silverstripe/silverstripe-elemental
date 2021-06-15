@@ -12,7 +12,7 @@ class ElementContent extends BaseElement
     private static $icon = 'font-icon-block-content';
 
     private static $db = [
-        'HTML' => 'HTMLText'
+        'HTML' => 'HTMLText',
     ];
 
     private static $table_name = 'ElementContent';
