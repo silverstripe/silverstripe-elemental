@@ -10,16 +10,20 @@ query ReadBlocksForArea($id:ID!) {
     mode: DRAFT
   }){
     elements {
-      id
-      title
-      blockSchema
-      isLiveVersion
-      isPublished
-      version
-      canCreate
-      canPublish
-      canUnpublish
-      canDelete
+      ... on BlockInterface {
+        id
+        title
+        blockSchema
+        isLiveVersion
+        isPublished
+        canCreate
+        canPublish
+        canUnpublish
+        canDelete
+      }
+      ... on Block {
+        version
+      }
     }
   }
 }
