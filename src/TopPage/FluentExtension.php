@@ -66,9 +66,8 @@ class FluentExtension extends DataExtension
     {
         /** @var DataObject|FluentExtension $owner */
         $owner = $this->owner;
+        $extraData['"TopPageLocale"'] = $owner->TopPageLocale;
 
-        parent::saveChanges([
-            '"TopPageLocale"' => $owner->TopPageLocale,
-        ]);
+        parent::saveChanges($extraData);
     }
 }

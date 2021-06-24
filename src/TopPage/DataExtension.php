@@ -170,7 +170,7 @@ class DataExtension extends BaseDataExtension
             return;
         }
 
-        if ($this->getFixedTopPageId() > 0) {
+        if ($this->getFixedTopPageID() > 0) {
             $this->assignFixedTopPage();
             $this->saveChanges();
 
@@ -239,14 +239,14 @@ class DataExtension extends BaseDataExtension
      * even before the operation starts from the specific context
      * Setting the page id to 0 disables this feature
      *
-     * @param int $topPageId
+     * @param int $topPageID
      * @param callable $callback
      * @return mixed
      */
-    public function withFixedTopPage(int $topPageId, callable $callback)
+    public function withFixedTopPage(int $topPageID, callable $callback)
     {
         $original = $this->fixedTopPageID;
-        $this->fixedTopPageID = $topPageId;
+        $this->fixedTopPageID = $topPageID;
 
         try {
             return $callback();
@@ -260,7 +260,7 @@ class DataExtension extends BaseDataExtension
      *
      * @return int
      */
-    protected function getFixedTopPageId(): int
+    protected function getFixedTopPageID(): int
     {
         return $this->fixedTopPageID;
     }
@@ -306,7 +306,7 @@ class DataExtension extends BaseDataExtension
      */
     protected function assignFixedTopPage(): void
     {
-        $this->owner->TopPageID = $this->getFixedTopPageId();
+        $this->owner->TopPageID = $this->getFixedTopPageID();
     }
 
     /**

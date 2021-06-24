@@ -179,17 +179,17 @@ class TopPageTest extends SapphireTest
      * This is needed in some edge cases were automatic determination is not possible due to the object not being
      * assigned to the parent object at the time of duplication but rather later
      *
-     * @param int $fixedPageId
+     * @param int $fixedPageID
      * @dataProvider fixedPagesProvider
      */
-    public function testPageDuplication(int $fixedPageId): void
+    public function testPageDuplication(int $fixedPageID): void
     {
         /** @var TopPage\DataExtension $extension */
         $extension = singleton(TopPage\DataExtension::class);
-        $extension->withFixedTopPage($fixedPageId, function () use ($extension, $fixedPageId) {
+        $extension->withFixedTopPage($fixedPageID, function () use ($extension, $fixedPageID) {
             $extension->withTopPageUpdate(
                 true,
-                function () use ($fixedPageId): void {
+                function () use ($fixedPageID): void {
                     $this->populateTopPageForAllObjects();
 
                     /** @var TestBlockPage $page */
@@ -231,7 +231,7 @@ class TopPageTest extends SapphireTest
                         /** @var DataObject|TopPage\DataExtension $objectClone */
                         $objectClone = $items->first();
 
-                        $expected = $fixedPageId ?: (int) $page->ID;
+                        $expected = $fixedPageID ?: (int) $page->ID;
                         $this->assertEquals($expected, (int) $objectClone->TopPageID);
 
                         /** @var ElementalArea|TopPage\DataExtension $area */
