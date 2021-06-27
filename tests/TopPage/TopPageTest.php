@@ -170,63 +170,78 @@ class TopPageTest extends SapphireTest
         );
     }
 
-    public function testPageDuplication(): void
+    /**
+     * This test is checking for page duplication in two cases
+     * Case 1: standard duplication
+     * Case 2: duplication with a fixed page setting
+     * The seconds case shows that it's possible to use the withFixedTopPage to set the top page to arbitrary value
+     * and completely bypass page determination logic
+     * This is needed in some edge cases were automatic determination is not possible due to the object not being
+     * assigned to the parent object at the time of duplication but rather later
+     *
+     * @param int $fixedPageID
+     * @dataProvider fixedPagesProvider
+     */
+    public function testPageDuplication(int $fixedPageID): void
     {
         /** @var TopPage\DataExtension $extension */
         $extension = singleton(TopPage\DataExtension::class);
-        $extension->withTopPageUpdate(
-            true,
-            function (): void {
-                $this->populateTopPageForAllObjects();
+        $extension->withFixedTopPage($fixedPageID, function () use ($extension, $fixedPageID) {
+            $extension->withTopPageUpdate(
+                true,
+                function () use ($fixedPageID): void {
+                    $this->populateTopPageForAllObjects();
 
-                /** @var TestBlockPage $page */
-                $page = $this->objFromFixture(TestBlockPage::class, 'block-page1');
+                    /** @var TestBlockPage $page */
+                    $page = $this->objFromFixture(TestBlockPage::class, 'block-page1');
 
-                /** @var TestChildPage $childPage */
-                $childPage = $this->objFromFixture(TestChildPage::class, 'child-page1');
+                    /** @var TestChildPage $childPage */
+                    $childPage = $this->objFromFixture(TestChildPage::class, 'child-page1');
 
-                $page->duplicate();
-                $pages = TestBlockPage::get()->filter(['Title' => 'BlockPage1'])->sort('ID', 'DESC');
+                    $page->duplicate();
+                    $pages = TestBlockPage::get()->filter(['Title' => 'BlockPage1'])->sort('ID', 'DESC');
 
-                $this->assertCount(2, $pages);
+                    $this->assertCount(2, $pages);
 
-                $pageClone = $pages->first();
-                $childPages = TestChildPage::get()->filter(['Title' => 'ChildPage1'])->sort('ID', 'DESC');
+                    $pageClone = $pages->first();
+                    $childPages = TestChildPage::get()->filter(['Title' => 'ChildPage1'])->sort('ID', 'DESC');
 
-                $this->assertCount(2, $childPages);
+                    $this->assertCount(2, $childPages);
 
-                $childClone = $childPages->first();
+                    $childClone = $childPages->first();
 
-                $this->assertNotEquals((int) $childPage->ID, (int) $childClone->ID);
+                    $this->assertNotEquals((int) $childPage->ID, (int) $childClone->ID);
 
-                $objects = [
-                    [TestList::class, 'List1', $pageClone],
-                    [TestContent::class, 'Content1', $pageClone],
-                    [TestList::class, 'List2', $childClone],
-                    [TestContent::class, 'Content2', $childClone],
-                ];
+                    $objects = [
+                        [TestList::class, 'List1', $pageClone],
+                        [TestContent::class, 'Content1', $pageClone],
+                        [TestList::class, 'List2', $childClone],
+                        [TestContent::class, 'Content2', $childClone],
+                    ];
 
-                foreach ($objects as $objectData) {
-                    $class = array_shift($objectData);
-                    $title = array_shift($objectData);
-                    $page = array_shift($objectData);
+                    foreach ($objects as $objectData) {
+                        $class = array_shift($objectData);
+                        $title = array_shift($objectData);
+                        $page = array_shift($objectData);
 
-                    $items = DataObject::get($class)->filter(['Title' => $title])->sort('ID', 'DESC');
+                        $items = DataObject::get($class)->filter(['Title' => $title])->sort('ID', 'DESC');
 
-                    $this->assertCount(2, $items);
+                        $this->assertCount(2, $items);
 
-                    /** @var DataObject|TopPage\DataExtension $objectClone */
-                    $objectClone = $items->first();
+                        /** @var DataObject|TopPage\DataExtension $objectClone */
+                        $objectClone = $items->first();
 
-                    $this->assertEquals((int) $page->ID, (int) $objectClone->TopPageID);
+                        $expected = $fixedPageID ?: (int) $page->ID;
+                        $this->assertEquals($expected, (int) $objectClone->TopPageID);
 
-                    /** @var ElementalArea|TopPage\DataExtension $area */
-                    $area = $objectClone->Parent();
+                        /** @var ElementalArea|TopPage\DataExtension $area */
+                        $area = $objectClone->Parent();
 
-                    $this->assertEquals((int) $page->ID, (int) $area->TopPageID);
+                        $this->assertEquals($expected, (int) $area->TopPageID);
+                    }
                 }
-            }
-        );
+            );
+        });
     }
 
     public function objectsProvider(): array
@@ -288,6 +303,14 @@ class TopPageTest extends SapphireTest
         return [
             [true],
             [false],
+        ];
+    }
+
+    public function fixedPagesProvider(): array
+    {
+        return [
+            [0], // feature is disabled
+            [99], // obviously non-existent page
         ];
     }
 

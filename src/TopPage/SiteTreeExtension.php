@@ -7,6 +7,7 @@ use DNADesign\Elemental\Models\ElementalArea;
 use Page;
 use SilverStripe\CMS\Model\SiteTreeExtension as BaseSiteTreeExtension;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\ValidationException;
 
 /**
  * Class SiteTreeExtension
@@ -35,6 +36,8 @@ class SiteTreeExtension extends BaseSiteTreeExtension
 
     /**
      * Extension point in @see DataObject::onAfterWrite()
+     *
+     * @throws ValidationException
      */
     public function onAfterWrite(): void
     {
@@ -57,6 +60,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      *
      * @param Page $original
      * @param bool $doWrite
+     * @throws ValidationException
      */
     public function onAfterDuplicate(Page $original, $doWrite): void
     {
@@ -133,6 +137,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
     {
         /** @var DataExtension $extension */
         $extension = singleton(DataExtension::class);
+
         if (!$extension->getTopPageUpdate()) {
             return;
         }
@@ -156,11 +161,13 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      *
      * @param Page $original
      * @param bool $written
+     * @throws ValidationException
      */
     protected function processDuplication(Page $original, bool $written): void
     {
         /** @var DataExtension $extension */
         $extension = singleton(DataExtension::class);
+
         if (!$extension->getTopPageUpdate()) {
             return;
         }
@@ -179,11 +186,14 @@ class SiteTreeExtension extends BaseSiteTreeExtension
 
     /**
      * Relevant only for duplicated object that were not written at the time of duplication
+     *
+     * @throws ValidationException
      */
     protected function processDuplicationFromOriginal(): void
     {
         /** @var DataExtension $extension */
         $extension = singleton(DataExtension::class);
+
         if (!$extension->getTopPageUpdate()) {
             return;
         }
@@ -206,6 +216,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
 
     /**
      * @param Page|SiteTreeExtension $original
+     * @throws ValidationException
      */
     protected function writeDuplication(Page $original): void
     {
@@ -234,11 +245,14 @@ class SiteTreeExtension extends BaseSiteTreeExtension
     /**
      * Elemental area is created before related page is written so we have to set top page explicitly
      * after page is written and the relations are available
+     *
+     * @throws ValidationException
      */
     protected function setTopPageForElementalArea(): void
     {
         /** @var DataExtension $extension */
         $extension = singleton(DataExtension::class);
+
         if (!$extension->getTopPageUpdate()) {
             return;
         }
