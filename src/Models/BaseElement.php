@@ -1061,6 +1061,8 @@ JS
      */
     public static function getGraphQLTypeName(): string
     {
-        return str_replace('\\', '_', static::class);
+        return class_exists(StaticSchema::class)
+            ? StaticSchema::inst()->typeNameForDataObject(static::class)
+            : str_replace('\\', '_', static::class);
     }
 }
