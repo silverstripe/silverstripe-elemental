@@ -175,6 +175,15 @@ class BaseElement extends DataObject implements CMSPreviewable
     private static $displays_title_in_template = true;
 
     /**
+     * Determines whether a block should be indexable in search.
+     *
+     * @config
+     * @var boolean
+     * @see ElementalPageExtension::getElementsForSearch()
+     */
+    private static $search_indexable = true;
+
+    /**
      * Store used anchor names, this is to avoid title clashes
      * when calling 'getAnchor'
      *
@@ -474,6 +483,33 @@ JS
     public function Top()
     {
         return (Controller::has_curr()) ? Controller::curr() : null;
+    }
+
+    /**
+     * Determines whether this elemental block is indexable in search.
+     *
+     * By default, this uses the configurable variable search_indexable, but
+     * this method can be overridden to provide more complex logic if required.
+     *
+     * @return boolean
+     */
+    public function getSearchIndexable(): bool
+    {
+        return (bool) $this->config()->get('search_indexable');
+    }
+
+    /**
+     * Provides content to be indexed in search.
+     *
+     * @return string
+     */
+    public function getContentForSearchIndex(): string
+    {
+        // Strips tags but be sure there's a space between words.
+        $content = trim(strip_tags(str_replace('<', ' <', $this->forTemplate())));
+        // Allow projects to update indexable content of third-party elements.
+        $this->extend('updateContentForSearchIndex', $content);
+        return $content;
     }
 
     /**

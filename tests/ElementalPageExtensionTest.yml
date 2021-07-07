@@ -25,7 +25,7 @@ DNADesign\Elemental\Models\ElementContent:
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.area53
   content5:
     Title: More paragraph content
-    Sort: 1
+    Sort: 2
     HTML: '<p>More paragraphs</p><p>And yet more</p>'
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.area53
 DNADesign\Elemental\Tests\Src\TestPage:
