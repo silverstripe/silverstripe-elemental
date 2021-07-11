@@ -701,7 +701,6 @@ JS
             return $this->cacheData['cms_edit_link'];
         }
 
-        $relationName = $this->getAreaRelationName();
         $page = $this->getPage();
 
         if (!$page) {
