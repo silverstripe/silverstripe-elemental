@@ -92,7 +92,7 @@ class BaseElement extends DataObject
     ];
     
     private static $indexes = [
-        'Sort' => true,   
+        'Sort' => true,
     ];
 
     private static $versioned_gridfield_extensions = true;
