@@ -7,6 +7,7 @@ de:
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Block
     CUSTOM_STYLES: 'Stil auswählen...'
+    CUSTOM_STYLE_EMPTY_STRING: 'Stil auswählen...'
     ExtraCssClassesLabel: 'Benutzerdefinierte CSS Klassen'
     ExtraCssClassesPlaceholder: 'meine_klasse andere_klasse'
     MainTabLabel: Inhalt

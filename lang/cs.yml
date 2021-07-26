@@ -7,6 +7,7 @@ cs:
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Blok
     CUSTOM_STYLES: 'Vybrat styl'
+    CUSTOM_STYLE_EMPTY_STRING: 'Vybrat styl'
     ExtraCssClassesLabel: 'Vlastní třídy CSS'
     ExtraCssClassesPlaceholder: 'moje_trida dalsi_trida'
     MainTabLabel: Obsah

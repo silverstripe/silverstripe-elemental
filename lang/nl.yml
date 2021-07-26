@@ -4,6 +4,7 @@ nl:
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Blok
     CUSTOM_STYLES: 'Selecteer een stijl...'
+    CUSTOM_STYLE_EMPTY_STRING: 'Selecteer een stijl...'
     ExtraCssClassesLabel: 'Aangepaste CSS klassen'
     ExtraCssClassesPlaceholder: 'my_class another_class'
     MainTabLabel: Inhoud

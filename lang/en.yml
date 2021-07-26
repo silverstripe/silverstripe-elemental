@@ -9,6 +9,7 @@ en:
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Block
     CUSTOM_STYLES: 'Select a style..'
+    CUSTOM_STYLE_EMPTY_STRING: 'Select a style...'
     ExtraCssClassesLabel: 'Custom CSS classes'
     ExtraCssClassesPlaceholder: 'my_class another_class'
     MainTabLabel: Content
