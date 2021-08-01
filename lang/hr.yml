@@ -2,6 +2,7 @@ hr:
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Blok
     CUSTOM_STYLES: 'Odaberi stil...'
+    CUSTOM_STYLE_EMPTY_STRING: 'Odaberi stil...'
     ExtraCssClassesLabel: 'Dodatne CSS klase'
     ExtraCssClassesPlaceholder: 'my_class another_class'
     MainTabLabel: Sadržaj
