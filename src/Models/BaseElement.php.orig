@@ -349,7 +349,11 @@ class BaseElement extends DataObject
 
                 $fields->insertBefore($styleDropdown, 'ExtraClass');
 
+<<<<<<< HEAD
                 $styleDropdown->setEmptyString(_t(__CLASS__.'.CUSTOM_STYLES', 'Select a style..'));
+=======
+                $styleDropdown->setEmptyString(_t(__CLASS__.'.CUSTOM_STYLE_EMPTY_STRING', 'Select a style...'));
+>>>>>>> 1902946cbabd36e3e55fe6421a2f851d30ae2fc6
             } else {
                 $fields->removeByName('Style');
             }
@@ -1065,6 +1069,8 @@ JS
      */
     public static function getGraphQLTypeName(): string
     {
-        return str_replace('\\', '_', static::class);
+        return class_exists(StaticSchema::class)
+            ? StaticSchema::inst()->typeNameForDataObject(static::class)
+            : str_replace('\\', '_', static::class);
     }
 }
