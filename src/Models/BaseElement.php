@@ -91,6 +91,10 @@ class BaseElement extends DataObject
         'canDelete' => DBBoolean::class,
     ];
 
+    private static $indexes = [
+        'Sort' => true,
+    ];
+
     private static $versioned_gridfield_extensions = true;
 
     private static $table_name = 'Element';
