@@ -22,6 +22,9 @@ export default () => {
     ElementList,
     Element,
     ElementActions,
+    // This has been left intentionally empty as it is a section that
+    // is designed to be added to/overridden by other modules
+    ElementCustomActions: () => () => null,
     ElementHeader: Header,
     ElementContent: Content,
     ElementSummary: Summary,

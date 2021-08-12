@@ -112,6 +112,7 @@ class Header extends Component {
       activeTab,
       expandable,
       ElementActionsComponent,
+      ElementCustomActionsComponent,
       handleEditTabsClick,
     } = this.props;
 
@@ -160,6 +161,11 @@ class Header extends Component {
           <h3 className={titleClasses}>{element.title || noTitle}</h3>
         </div>
         {!simple && <div className="element-editor-header__actions">
+          {ElementCustomActionsComponent ? (
+            <div role="none" onClick={(event) => event.stopPropagation()}>
+              <ElementCustomActionsComponent {...this.props} />
+            </div>
+          ) : null}
           {expandable &&
             <div
               role="none"
@@ -224,9 +230,10 @@ export default compose(
   })),
   connect(mapStateToProps),
   inject(
-    ['ElementActions'],
-    (ElementActionsComponent) => ({
+    ['ElementActions', 'ElementCustomActions'],
+    (ElementActionsComponent, ElementCustomActionsComponent) => ({
       ElementActionsComponent,
+      ElementCustomActionsComponent,
     }),
     () => 'ElementEditor.ElementList.Element'
   )
