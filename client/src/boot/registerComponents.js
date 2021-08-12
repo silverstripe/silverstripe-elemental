@@ -1,6 +1,7 @@
 import Injector from 'lib/Injector';
 import Element from 'components/ElementEditor/Element';
 import ElementActions from 'components/ElementEditor/ElementActions';
+import CustomActions from 'components/ElementActions/CustomActions';
 import ElementEditor from 'components/ElementEditor/ElementEditor';
 import ElementList from 'components/ElementEditor/ElementList';
 import Toolbar from 'components/ElementEditor/Toolbar';
@@ -22,9 +23,7 @@ export default () => {
     ElementList,
     Element,
     ElementActions,
-    // This has been left intentionally empty as it is a section that
-    // is designed to be added to/overridden by other modules
-    ElementCustomActions: () => () => null,
+    ElementCustomActions: CustomActions,
     ElementHeader: Header,
     ElementContent: Content,
     ElementSummary: Summary,

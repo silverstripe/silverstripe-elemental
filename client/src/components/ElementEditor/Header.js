@@ -161,11 +161,7 @@ class Header extends Component {
           <h3 className={titleClasses}>{element.title || noTitle}</h3>
         </div>
         {!simple && <div className="element-editor-header__actions">
-          {ElementCustomActionsComponent ? (
-            <div role="none" onClick={(event) => event.stopPropagation()}>
-              <ElementCustomActionsComponent {...this.props} />
-            </div>
-          ) : null}
+          <ElementCustomActionsComponent {...this.props} />
           {expandable &&
             <div
               role="none"
