@@ -18,6 +18,25 @@ class ElementActions extends Component {
   }
 
   /**
+   * Flattens a nested array
+   * Polyfill for Array.flat() which isn't available for jest tests (or IE11)
+   *
+   * @param {Array} arr
+   * @return {Array}
+   */
+  flatten(arr) {
+    let ret = [];
+    arr.forEach(val => {
+      if (Array.isArray(val)) {
+        ret = ret.concat(this.flatten(val));
+      } else {
+        ret.push(val);
+      }
+    });
+    return ret;
+  }
+
+  /**
    * Set the active tab
    *
    * @param {Object} event
@@ -34,9 +53,9 @@ class ElementActions extends Component {
    * @returns {HTMLElement[]|null}
    */
   renderEditTabs() {
-    const { editTabs, activeTab, type } = this.props;
+    const { editTabs, activeTab, type, inlineEditable } = this.props;
 
-    if (!editTabs || !editTabs.length) {
+    if (!inlineEditable || !editTabs || !editTabs.length) {
       return null;
     }
 
@@ -59,9 +78,9 @@ class ElementActions extends Component {
    * @returns {DropdownItem|null}
    */
   renderDivider() {
-    const { children, editTabs } = this.props;
+    const { children, editTabs, inlineEditable } = this.props;
 
-    if (editTabs && editTabs.length && React.Children.count(children)) {
+    if (inlineEditable && editTabs && editTabs.length && React.Children.count(children)) {
       return <DropdownItem divider role="separator" />;
     }
     return null;
@@ -74,7 +93,16 @@ class ElementActions extends Component {
    * @returns {ActionMenuComponent|null}
    */
   render() {
-    const { children, id, ActionMenuComponent } = this.props;
+    const { children, id, ActionMenuComponent, inlineEditable } = this.props;
+
+    // Flatten the recursive structure of children - [[[..., react.element], react.element]
+    // and filter AbstractActions's that can be shown depending if the Element is inlineEditable
+    let kids = children;
+    if (children && Array.isArray(children)) {
+      kids = this.flatten(children).filter(child =>
+        child && child.props && (inlineEditable || child.props.showForNonInlineEditableBlock)
+      );
+    }
 
     const dropdownToggleClassNames = [
       'element-editor-header__actions-toggle',
@@ -93,7 +121,7 @@ class ElementActions extends Component {
       >
         { this.renderEditTabs() }
         { this.renderDivider() }
-        { children }
+        { kids }
       </ActionMenuComponent>
     );
   }
@@ -112,6 +140,7 @@ ElementActions.propTypes = {
     name: PropTypes.string,
   })),
   handleEditTabsClick: PropTypes.func.isRequired,
+  inlineEditable: PropTypes.bool.isRequired,
 };
 
 ElementActions.defaultProps = {

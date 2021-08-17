@@ -14,9 +14,10 @@ const AbstractAction = (props) => {
     className: classNames(className, 'dropdown-item'),
     ...props,
   };
+  const { showForNonInlineEditableBlock, ...reactStrapProps } = itemProps;
 
   return (
-    <DropdownItem {...itemProps}>
+    <DropdownItem {...reactStrapProps}>
       {label || title}
     </DropdownItem>
   );
@@ -30,11 +31,13 @@ AbstractAction.propTypes = {
   name: PropTypes.string,
   type: elementTypeType,
   active: PropTypes.bool,
-  label: PropTypes.string
+  label: PropTypes.string,
+  showForNonInlineEditableBlock: PropTypes.bool
 };
 
 AbstractAction.defaultProps = {
   disabled: false,
+  showForNonInlineEditableBlock: true
 };
 
 export default AbstractAction;

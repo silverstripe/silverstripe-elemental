@@ -134,8 +134,9 @@ class Resolver
         }
 
         try {
-            // clone element
-            $clone = $element->duplicate(false);
+            // clone element - set $doWrite to true to ensure nested relations such as on
+            // silverstripe-elemental-userforms have a non-zero ParentID
+            $clone = $element->duplicate(true);
             $clone->Title = static::newTitle($clone->Title ?? '');
             $clone->Sort = 0; // must be zeroed for reorder to work
             $area->Elements()->add($clone);

@@ -110,7 +110,7 @@ class Header extends Component {
       simple,
       disableTooltip,
       activeTab,
-      expandable,
+      inlineEditable,
       ElementActionsComponent,
       handleEditTabsClick,
     } = this.props;
@@ -132,9 +132,9 @@ class Header extends Component {
     const expandCaretClasses = classNames(
       'element-editor-header__expand',
       {
-        'font-icon-right-open-big': !expandable,
-        'font-icon-up-open-big': expandable && previewExpanded,
-        'font-icon-down-open-big': expandable && !previewExpanded,
+        'font-icon-right-open-big': !inlineEditable,
+        'font-icon-up-open-big': inlineEditable && previewExpanded,
+        'font-icon-down-open-big': inlineEditable && !previewExpanded,
       }
     );
     const blockIconId = `element-icon-${element.id}`;
@@ -160,21 +160,20 @@ class Header extends Component {
           <h3 className={titleClasses}>{element.title || noTitle}</h3>
         </div>
         {!simple && <div className="element-editor-header__actions">
-          {expandable &&
-            <div
-              role="none"
-              onClick={(event) => event.stopPropagation()}
-            >
-              <ElementActionsComponent
-                element={element}
-                type={type}
-                areaId={areaId}
-                activeTab={activeTab}
-                editTabs={type.editTabs}
-                handleEditTabsClick={handleEditTabsClick}
-              />
-            </div>
-          }
+          <div
+            role="none"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <ElementActionsComponent
+              element={element}
+              type={type}
+              areaId={areaId}
+              activeTab={activeTab}
+              editTabs={type.editTabs}
+              handleEditTabsClick={handleEditTabsClick}
+              inlineEditable={inlineEditable}
+            />
+          </div>
           <i className={expandCaretClasses} title={expandTitle} />
         </div>}
       </div>
@@ -201,10 +200,7 @@ Header.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired,
   onDragEnd: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
-};
-
-Header.defaultProps = {
-  expandable: true,
+  inlineEditable: PropTypes.bool
 };
 
 function mapStateToProps(state, ownProps) {

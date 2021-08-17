@@ -83,6 +83,7 @@ const SaveAction = (MenuComponent) => (props) => {
     title: i18n._t('ElementSaveAction.SAVE', 'Save'),
     className: 'element-editor__actions-save',
     onClick: handleClick,
+    showForNonInlineEditableBlock: false
   };
 
   return (

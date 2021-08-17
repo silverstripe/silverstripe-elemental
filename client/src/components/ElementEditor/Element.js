@@ -220,7 +220,7 @@ class Element extends Component {
         element={element}
         type={type}
         areaId={areaId}
-        expandable={type.inlineEditable}
+        inlineEditable={type.inlineEditable}
         link={link}
         previewExpanded={previewExpanded && !childRenderingError}
         handleEditTabsClick={this.handleTabClick}

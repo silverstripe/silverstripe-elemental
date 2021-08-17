@@ -80,13 +80,13 @@ describe('Header', () => {
       expect(tooltip.children().text()).toBe('File');
     });
 
-    it('should render a "right caret" button when not expandable', () => {
+    it('should render a "right caret" button when not inlineEditable', () => {
       const wrapper = shallow(
         <Header
           element={element}
           areaId={1}
           type={type}
-          expandable={false}
+          inlineEditable={false}
           ElementActionsComponent={ElementActionsComponent}
           connectDragSource={content => content}
           connectDragPreview={content => content}
@@ -105,7 +105,7 @@ describe('Header', () => {
           element={element}
           areaId={1}
           type={type}
-          expandable
+          inlineEditable
           previewExpanded={false}
           ElementActionsComponent={ElementActionsComponent}
           connectDragSource={content => content}
@@ -125,7 +125,7 @@ describe('Header', () => {
           element={element}
           areaId={1}
           type={type}
-          expandable
+          inlineEditable
           previewExpanded
           ElementActionsComponent={ElementActionsComponent}
           connectDragSource={content => content}
@@ -137,40 +137,6 @@ describe('Header', () => {
       const expandButton = wrapper.find('.element-editor-header__expand');
       expect(expandButton.length).toBe(1);
       expect(expandButton.hasClass('font-icon-up-open-big')).toBe(true);
-    });
-
-    it('should render an ElementActions component when the element is expandable', () => {
-      const wrapper = shallow(
-        <Header
-          element={element}
-          areaId={1}
-          type={type}
-          expandable
-          ElementActionsComponent={ElementActionsComponent}
-          connectDragSource={content => content}
-          connectDragPreview={content => content}
-          onDragEnd={() => {}}
-        />
-      );
-
-      expect(wrapper.text()).toContain('ElementActionsComponent');
-    });
-
-    it('should not render an ElementActions when the element is not expandable', () => {
-      const wrapper = shallow(
-        <Header
-          element={element}
-          areaId={1}
-          type={type}
-          expandable={false}
-          ElementActionsComponent={ElementActionsComponent}
-          connectDragSource={content => content}
-          connectDragPreview={content => content}
-          onDragEnd={() => {}}
-        />
-      );
-
-      expect(wrapper.text()).not.toContain('ElementActionsComponent');
     });
   });
 
