@@ -38,7 +38,7 @@ class ElementEditor extends PureComponent {
    * @param isOverTop
    */
   handleDragOver(element = null, isOverTop = null) {
-    const id = element ? element.ID : false;
+    const id = element ? element.id : false;
 
     this.setState({
       dragTargetElementId: id,

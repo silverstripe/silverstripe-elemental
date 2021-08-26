@@ -17,15 +17,16 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.1",
-        "silverstripe/cms": "^4.4@dev",
-        "silverstripe/admin": "^1.4@dev",
-        "silverstripe/versioned": "^1.3@dev",
-        "silverstripe/versioned-admin": "^1.2@dev",
+        "silverstripe/cms": "^4.7@dev",
+        "silverstripe/admin": "^1.7@dev",
+        "silverstripe/versioned": "^1.7@dev",
+        "silverstripe/versioned-admin": "^1.7@dev",
+        "silverstripe/graphql": "^3.5 || ^4",
         "symbiote/silverstripe-gridfieldextensions": "^3.1",
         "silverstripe/vendor-plugin": "^1"
     },
     "require-dev": {
-        "silverstripe/recipe-testing": "1.x-dev"
+      "silverstripe/recipe-testing": "1.x-dev"
     },
     "suggest": {
         "silverstripe/elemental-blocks": "Adds a set of common SilverStripe content block types",
@@ -35,9 +36,6 @@
         "dnadesign/silverstripe-elemental-virtual": "Adds support to share blocks between pages"
     },
     "extra": {
-        "branch-alias": {
-            "4.x-dev": "4.4.x-dev"
-        },
         "expose": [
             "client/dist",
             "client/lang"
@@ -45,7 +43,7 @@
     },
     "autoload": {
         "psr-4": {
-            "DNADesign\\Elemental\\": "src/",
+            "DNADesign\\Elemental\\": ["src/", "_legacy/"],
             "DNADesign\\Elemental\\Tests\\": "tests/"
         }
     }

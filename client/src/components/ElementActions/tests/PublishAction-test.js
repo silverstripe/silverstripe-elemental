@@ -22,10 +22,10 @@ describe('PublishAction', () => {
       <ActionComponent
         title="My abstract action"
         element={{
-          ID: 123,
-          Version: 234,
-          IsLiveVersion: false,
-          BlockSchema: { type: 'Test' }
+          id: 123,
+          version: 234,
+          liveVersion: false,
+          blockSchema: { type: 'Test' }
         }}
         actions={{ handlePublishBlock: mockMutation }}
         toggle={false}
@@ -61,11 +61,22 @@ describe('PublishAction', () => {
   it('returns null when is the live version', () => {
     const draftWrapper = mount(
       <ActionComponent
-        element={{ IsLiveVersion: true, BlockSchema: { type: 'Test' } }}
+        element={{ isLiveVersion: true, blockSchema: { type: 'Test' } }}
         actions={{ handlePublishBlock: mockMutation }}
       />
     );
 
     expect(draftWrapper.find('button').length).toBe(0);
+  });
+
+  it('is disabled when user doesn\'t have correct permissions', () => {
+    const draftWrapper = mount(
+      <ActionComponent
+        element={{ IsLiveVersion: false, BlockSchema: { type: 'Test' }, canPublish: false }}
+        actions={{ handlePublishBlock: mockMutation }}
+      />
+    );
+
+    expect(draftWrapper.find('button').first().prop('disabled')).toBe(true);
   });
 });

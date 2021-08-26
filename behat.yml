@@ -8,7 +8,7 @@ default:
   suites:
     silverstripe-elemental:
       paths:
-        - %paths.modules.silverstripe-elemental%/tests/Behat/features
+        - '%paths.modules.silverstripe-elemental%/tests/Behat/features'
       contexts:
         - DNADesign\Elemental\Tests\Behat\Context\FeatureContext
         - SilverStripe\Framework\Tests\Behaviour\CmsFormsContext
@@ -17,10 +17,10 @@ default:
         - SilverStripe\BehatExtension\Context\LoginContext
         -
           DNADesign\Elemental\Tests\Behat\Context\FixtureContext:
-            - %paths.modules.silverstripe-elemental%/tests/Behat
+            - '%paths.modules.silverstripe-elemental%/tests/Behat'
         -
           SilverStripe\Framework\Tests\Behaviour\ConfigContext:
-            - %paths.modules.silverstripe-elemental%/tests/Behat/config
+            - '%paths.modules.silverstripe-elemental%/tests/Behat/config'
   extensions:
     SilverStripe\BehatExtension\MinkExtension:
       default_session: facebook_web_driver
@@ -31,5 +31,5 @@ default:
       browser_name: chrome
     SilverStripe\BehatExtension\Extension:
       bootstrap_file: vendor/silverstripe/cms/tests/behat/serve-bootstrap.php
-      screenshot_path: %paths.base%/artifacts/screenshots
+      screenshot_path: '%paths.base%/artifacts/screenshots'
       retry_seconds: 4 # default is 2

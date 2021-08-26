@@ -23,7 +23,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
     );
 
     if (handleUnpublishBlock) {
-      handleUnpublishBlock(element.ID)
+      handleUnpublishBlock(element.id)
         .then(() => {
           const preview = $('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -34,7 +34,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
                 'ElementUnpublishAction.SUCCESS_NOTIFICATION',
                 'Removed \'{title}\' from the published page'
               ),
-              { title: element.Title || noTitle }
+              { title: element.title || noTitle }
             ),
             stay: false,
             type: 'success'
@@ -47,7 +47,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
                 'ElementUnpublishAction.ERROR_NOTIFICATION',
                 'Error unpublishing \'{title}\''
               ),
-              { title: element.Title || noTitle }
+              { title: element.title || noTitle }
             ),
             stay: false,
             type: 'error'
@@ -56,8 +56,15 @@ const UnpublishAction = (MenuComponent) => (props) => {
     }
   };
 
+  const disabled = props.element.canUnpublish !== undefined && !props.element.canUnpublish;
+  const label = i18n._t('ElementArchiveAction.UNPUBLISH', 'Unpublish');
+  const title = disabled
+    ? i18n._t('ElementArchiveAction.UNPUBLISH_PERMISSION_DENY', 'Unpublish, insufficient permissions')
+    : label;
   const newProps = {
-    title: i18n._t('ElementUnpublishAction.UNPUBLISH', 'Unpublish'),
+    label,
+    title,
+    disabled,
     className: 'element-editor__actions-unpublish',
     onClick: handleClick,
     toggle: props.toggle,
@@ -66,8 +73,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
   return (
     <MenuComponent {...props}>
       {props.children}
-
-      {element.IsPublished && <AbstractAction {...newProps} />}
+      {element.isPublished && <AbstractAction {...newProps} />}
     </MenuComponent>
   );
 };

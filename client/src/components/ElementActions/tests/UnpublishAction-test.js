@@ -21,9 +21,9 @@ describe('UnpublishAction', () => {
       <ActionComponent
         title="My abstract action"
         element={{
-          ID: 123,
-          IsPublished: true,
-          BlockSchema: { type: 'Test' },
+          id: 123,
+          isPublished: true,
+          blockSchema: { type: 'Test' },
         }}
         type={{ title: 'Some block' }}
         actions={{ handleUnpublishBlock: mockMutation }}
@@ -50,7 +50,7 @@ describe('UnpublishAction', () => {
   it('returns null when is not published', () => {
     const draftWrapper = mount(
       <ActionComponent
-        element={{ IsPublished: false, BlockSchema: { type: 'Test' } }}
+        element={{ isPublished: false, blockSchema: { type: 'Test' } }}
         actions={{ handleUnpublishBlock: mockMutation }}
         type={{ title: 'Some block' }}
       />
@@ -62,5 +62,17 @@ describe('UnpublishAction', () => {
   it('calls the unpublish mutation', () => {
     wrapper.find('button').simulate('click');
     expect(mockMutation).toHaveBeenCalled();
+  });
+
+  it('is disabled when user doesn\'t have correct permissions', () => {
+    const unpublishWrapper = mount(
+      <ActionComponent
+        element={{ isPublished: true, BlockSchema: { type: 'Test' }, canUnpublish: false }}
+        actions={{ handleUnpublishBlock: mockMutation }}
+        type={{ title: 'Some block' }}
+      />
+    );
+
+    expect(unpublishWrapper.find('button').first().prop('disabled')).toBe(true);
   });
 });

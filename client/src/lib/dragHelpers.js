@@ -46,7 +46,7 @@ export const elementDragSource = {
       return;
     }
 
-    const itemID = monitor.getItem().ID;
+    const itemID = monitor.getItem().id;
     const { dropAfterID } = dropResult;
 
     // Only trigger the drop handler if the dragged element was moved, to avoid unnecessary work

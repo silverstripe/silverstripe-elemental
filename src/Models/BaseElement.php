@@ -18,10 +18,14 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
+use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
+use SilverStripe\GraphQL\Schema\Schema;
+use SilverStripe\GraphQL\Schema\SchemaBuilder;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\ORM\ValidationException;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
@@ -29,6 +33,7 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
+use RuntimeException;
 
 /**
  * Class BaseElement
@@ -80,6 +85,14 @@ class BaseElement extends DataObject
         'BlockSchema' => DBObjectType::class,
         'IsLiveVersion' => DBBoolean::class,
         'IsPublished' => DBBoolean::class,
+        'canCreate' => DBBoolean::class,
+        'canPublish' => DBBoolean::class,
+        'canUnpublish' => DBBoolean::class,
+        'canDelete' => DBBoolean::class,
+    ];
+
+    private static $indexes = [
+        'Sort' => true,
     ];
 
     private static $versioned_gridfield_extensions = true;
@@ -148,6 +161,14 @@ class BaseElement extends DataObject
      * @var bool
      */
     private static $inline_editable = true;
+
+    /**
+     * Display a show title button
+     *
+     * @config
+     * @var boolean
+     */
+    private static $displays_title_in_template = true;
 
     /**
      * Store used anchor names, this is to avoid title clashes
@@ -302,11 +323,14 @@ class BaseElement extends DataObject
 
             // Add a combined field for "Title" and "Displayed" checkbox in a Bootstrap input group
             $fields->removeByName('ShowTitle');
-            $fields->replaceField(
-                'Title',
-                TextCheckboxGroupField::create()
-                    ->setName('Title')
-            );
+
+            if ($this->config()->get('displays_title_in_template')) {
+                $fields->replaceField(
+                    'Title',
+                    TextCheckboxGroupField::create()
+                        ->setName('Title')
+                );
+            }
 
             // Rename the "Main" tab
             $fields->fieldByName('Root.Main')
@@ -610,6 +634,8 @@ JS
         if ($page = $this->getPage()) {
             $link = $page->AbsoluteLink($action) . '#' . $this->getAnchor();
 
+            $this->extend('updateAbsoluteLink', $link);
+
             return $link;
         }
 
@@ -849,13 +875,13 @@ JS
      * to update it from an `Extension`.
      *
      * @return array
+     * @throws SchemaBuilderException
+     * @throws ValidationException
      */
     protected function provideBlockSchema()
     {
         return [
-            // Currently GraphQL doesn't expose the correct type name and just returns "base element"s. This is a
-            // workaround until we can scaffold a query client side that specifies by type name
-            'typeName' => StaticSchema::inst()->typeNameForDataObject(static::class),
+            'typeName' => static::getGraphQLTypeName(),
             'actions' => [
                 'edit' => $this->getEditLink(),
             ],
@@ -1032,5 +1058,15 @@ JS
         $odd = (bool) ($this->Pos() % 2);
 
         return  ($odd) ? 'odd' : 'even';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getGraphQLTypeName(): string
+    {
+        return class_exists(StaticSchema::class)
+            ? StaticSchema::inst()->typeNameForDataObject(static::class)
+            : str_replace('\\', '_', static::class);
     }
 }

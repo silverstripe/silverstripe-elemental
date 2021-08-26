@@ -9,6 +9,7 @@ use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
+use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 
 class ElementTypeRegistry
 {
@@ -31,6 +32,7 @@ class ElementTypeRegistry
      *
      * @param string $elementClass
      * @return $this
+     * @throws SchemaBuilderException
      */
     public function registerElement($elementClass)
     {
@@ -41,7 +43,7 @@ class ElementTypeRegistry
         }
 
         // Get the GraphQL type name
-        $typeName = StaticSchema::inst()->typeNameForDataObject($elementClass);
+        $typeName = $singleton->getGraphQLTypeName();
 
         $this->elementTypes[] = [
             'icon' => $singleton::config()->get('icon'),

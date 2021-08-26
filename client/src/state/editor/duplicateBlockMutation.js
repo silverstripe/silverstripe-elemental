@@ -5,8 +5,8 @@ import { config as readBlocksConfig, query as readBlocksQuery } from './readBloc
 // GraphQL query for duplicating a specific block
 const mutation = gql`
 mutation DuplicateBlock($blockId: ID!) {
-  duplicateBlock(ID: $blockId) {
-    ID
+  duplicateBlock(id: $blockId) {
+    id
   }
 }
 `;

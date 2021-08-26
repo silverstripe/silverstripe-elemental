@@ -32,7 +32,7 @@ Feature: View types of elements in an area on a page
       Then I should see a list of blocks
 
     When I press the "View actions" button
-      Then I should not see "Title (displayed if checked)"
+      Then I should not see "Title"
 
   Scenario: I can see the block type when I hover over an element's icon
     Given I am logged in with "ADMIN" permissions
@@ -54,7 +54,7 @@ Feature: View types of elements in an area on a page
     # The entire block should be clickable to reveal the form
     When I click on block 1
      Then I should see the edit form for block 1
-      And I should see "Title (displayed if checked)"
+      And I should see "Title"
       And the "Content" field should contain "Some content"
       And I fill in "<p>New sample content</p>" for the "Content" HTML field
 

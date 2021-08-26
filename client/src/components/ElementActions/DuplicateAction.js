@@ -12,7 +12,7 @@ const DuplicateAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { element: { ID: id }, actions: { handleDuplicateBlock } } = props;
+    const { element: { id }, actions: { handleDuplicateBlock } } = props;
 
     if (handleDuplicateBlock) {
       handleDuplicateBlock(id).then(() => {
@@ -22,8 +22,15 @@ const DuplicateAction = (MenuComponent) => (props) => {
     }
   };
 
+  const disabled = props.element.canCreate !== undefined && !props.element.canCreate;
+  const label = i18n._t('ElementArchiveAction.DUPLICATE', 'Duplicate');
+  const title = disabled
+    ? i18n._t('ElementArchiveAction.DUPLICATE_PERMISSION_DENY', 'Duplicate, insufficient permissions')
+    : label;
   const newProps = {
-    title: i18n._t('ElementArchiveAction.DUPLICATE', 'Duplicate'),
+    label,
+    title,
+    disabled,
     className: 'element-editor__actions-duplicate',
     onClick: handleClick,
     toggle: props.toggle,
@@ -32,7 +39,6 @@ const DuplicateAction = (MenuComponent) => (props) => {
   return (
     <MenuComponent {...props}>
       {props.children}
-
       <AbstractAction {...newProps} />
     </MenuComponent>
   );

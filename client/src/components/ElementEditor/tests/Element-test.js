@@ -13,9 +13,9 @@ describe('Element', () => {
   const ContentComponent = () => <div />;
 
   const element = {
-    ID: '2',
-    Title: 'Block Title',
-    BlockSchema: {
+    id: '2',
+    title: 'Block Title',
+    blockSchema: {
       actions: {
         edit: 'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'
       },
@@ -23,9 +23,9 @@ describe('Element', () => {
       iconClass: 'font-icon-block-content',
       type: 'Content'
     },
-    InlineEditable: true,
-    IsLiveVersion: true,
-    IsPublished: true,
+    inlineEditable: true,
+    isLiveVersion: true,
+    isPublished: true,
   };
   const type = {
     icon: 'font-icon-block-content',
@@ -65,7 +65,7 @@ describe('Element', () => {
         <Element
           element={{
             ...element,
-            ID: ''
+            id: ''
           }}
           areaId={1}
           type={type}
@@ -86,7 +86,7 @@ describe('Element', () => {
         <Element
           element={{
             ...element,
-            IsPublished: false,
+            isPublished: false,
           }}
           areaId={1}
           type={type}
@@ -103,8 +103,8 @@ describe('Element', () => {
         <Element
           element={{
             ...element,
-            IsPublished: true,
-            IsLiveVersion: false,
+            isPublished: true,
+            isLiveVersion: false,
           }}
           areaId={1}
           type={type}
@@ -121,8 +121,8 @@ describe('Element', () => {
         <Element
           element={{
             ...element,
-            IsPublished: true,
-            IsLiveVersion: true,
+            isPublished: true,
+            isLiveVersion: true,
           }}
           areaId={1}
           type={type}

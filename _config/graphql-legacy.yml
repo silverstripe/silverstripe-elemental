@@ -1,0 +1,53 @@
+---
+Name: elementalgraphqlconfig
+Except:
+  classexists: 'SilverStripe\GraphQL\Schema\Schema'
+---
+SilverStripe\GraphQL\Manager:
+  schemas:
+    admin:
+      types:
+        ObjectType: DNADesign\Elemental\GraphQL\Types\ObjectType
+      mutations:
+        sortBlock: DNADesign\Elemental\GraphQL\SortBlockMutationCreator
+        duplicateBlock: DNADesign\Elemental\GraphQL\DuplicateElementMutation
+        addElementToArea: DNADesign\Elemental\GraphQL\AddElementToAreaMutation
+        deleteBlocks: DNADesign\Elemental\GraphQL\DeleteBlocksMutation
+      scaffolding:
+        types:
+          # Expose common static fields for the ElementEditor component to use for preview summaries
+          DNADesign\Elemental\Models\BaseElement:
+            fields: [ID, LastEdited, AbsoluteLink, Title, ShowTitle, Sort, BlockSchema, IsPublished, IsLiveVersion, canCreate, canPublish, canUnpublish, canDelete]
+            operations:
+              copyToStage: true
+              readOne:
+                args:
+                  filter:
+                    type: IDFilterType
+                    required: true
+                resolver: ['DNADesign\Elemental\GraphQL\ReadOneBlockResolver', 'resolve']
+              delete: true
+              publish: true
+              unpublish: true
+          # Expose access to Elements via Page -> ElementalArea -> Elements (see resolver)
+          DNADesign\Elemental\Models\ElementalArea:
+            fields: [ID]
+            nestedQueries:
+              Elements:
+                resolver: DNADesign\Elemental\GraphQL\ElementsResolver
+                paginate: false
+            operations:
+              readOne:
+                resolver: DNADesign\Elemental\GraphQL\ReadOneAreaResolver
+                args:
+                  filter:
+                    type: IDFilterType
+                    required: true
+          # Basic member information is required for history views
+          SilverStripe\Security\Member:
+            fields: [ID, FirstName, Surname]
+            operations:
+              readOne: true
+      typeNames:
+        DNADesign\Elemental\Models\BaseElement: Block
+        DNADesign\Elemental\Models\ElementalArea: ElementalArea

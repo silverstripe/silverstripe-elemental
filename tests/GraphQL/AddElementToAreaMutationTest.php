@@ -2,12 +2,12 @@
 
 namespace DNADesign\Elemental\Tests\GraphQL;
 
-use DNADesign\Elemental\GraphQL\AddElementToAreaMutation;
+use DNADesign\Elemental\GraphQL\Resolvers\Resolver;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Tests\Src\TestElement;
-use GraphQL\Type\Definition\ResolveInfo;
 use InvalidArgumentException;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\GraphQL\Schema\Schema;
 use SilverStripe\Security\Security;
 
 class AddElementToAreaMutationTest extends SapphireTest
@@ -17,6 +17,14 @@ class AddElementToAreaMutationTest extends SapphireTest
     protected static $extra_dataobjects = [
         TestElement::class,
     ];
+
+    protected function setUp()
+    {
+        parent::setUp();
+        if (!class_exists(Schema::class)) {
+            $this->markTestSkipped('Skipped GraphQL 4 test ' . __CLASS__);
+        }
+    }
 
     public function testAddingBlocksInOrder()
     {
@@ -74,19 +82,18 @@ class AddElementToAreaMutationTest extends SapphireTest
 
     protected function runMutation($className, $elementalAreaID, $afterElementId = null)
     {
-        $mutation = new AddElementToAreaMutation();
         $context = ['currentUser' => Security::getCurrentUser()];
-        $resolveInfo = new ResolveInfo([]);
+        $resolveInfo = new FakeResolveInfo();
 
         $args = [
-            'ClassName' => $className,
-            'ElementalAreaID' => $elementalAreaID,
+            'className' => $className,
+            'elementalAreaID' => $elementalAreaID,
         ];
 
         if (!is_null($afterElementId)) {
-            $args['AfterElementID'] = $afterElementId;
+            $args['afterElementID'] = $afterElementId;
         }
 
-        return $mutation->resolve(null, $args, $context, $resolveInfo);
+        return Resolver::resolveAddElementToArea(null, $args, $context, $resolveInfo);
     }
 }

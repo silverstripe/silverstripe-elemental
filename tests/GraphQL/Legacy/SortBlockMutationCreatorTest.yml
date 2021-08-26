@@ -1,0 +1,13 @@
+DNADesign\Elemental\Tests\Src\TestElement:
+  element1:
+    ID: 1
+    Sort: 1
+  element2:
+    ID: 2
+    Sort: 2
+  element3:
+    ID: 3
+    Sort: 3
+  element4:
+    ID: 4
+    Sort: 4

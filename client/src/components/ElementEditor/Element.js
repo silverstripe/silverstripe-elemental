@@ -65,11 +65,11 @@ class Element extends Component {
 
     const baseClassName = 'element-editor__element';
 
-    if (!element.IsPublished) {
+    if (!element.isPublished) {
       return `${baseClassName}--draft`;
     }
 
-    if (element.IsPublished && !element.IsLiveVersion) {
+    if (element.isPublished && !element.isLiveVersion) {
       return `${baseClassName}--modified`;
     }
 
@@ -188,7 +188,7 @@ class Element extends Component {
 
     const { childRenderingError, previewExpanded } = this.state;
 
-    if (!element.ID) {
+    if (!element.id) {
       return null;
     }
 
@@ -214,7 +214,7 @@ class Element extends Component {
       role="button"
       tabIndex={0}
       title={linkTitle}
-      key={element.ID}
+      key={element.id}
     >
       <HeaderComponent
         element={element}
@@ -232,10 +232,10 @@ class Element extends Component {
       {
         !childRenderingError &&
         <ContentComponent
-          id={element.ID}
-          fileUrl={element.BlockSchema.fileURL}
-          fileTitle={element.BlockSchema.fileTitle}
-          content={element.BlockSchema.content}
+          id={element.id}
+          fileUrl={element.blockSchema.fileURL}
+          fileTitle={element.blockSchema.fileTitle}
+          content={element.blockSchema.content}
           previewExpanded={previewExpanded && !isDragging}
           activeTab={activeTab}
           onFormInit={() => this.updateFormTab(activeTab)}
@@ -260,7 +260,7 @@ class Element extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const elementId = ownProps.element.ID;
+  const elementId = ownProps.element.id;
   const elementName = loadElementFormStateName(elementId);
   const elementFormSchema = loadElementSchemaValue('schemaUrl', elementId);
 
@@ -293,7 +293,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const elementName = loadElementFormStateName(ownProps.element.ID);
+  const elementName = loadElementFormStateName(ownProps.element.id);
 
   return {
     onActivateTab(tabSetName, activeTabName) {
@@ -332,7 +332,7 @@ const elementTarget = {
     const { element } = props;
 
     return {
-      target: element.ID,
+      target: element.id,
       dropSpot: isOverTop(monitor, component) ? 'top' : 'bottom',
     };
   },

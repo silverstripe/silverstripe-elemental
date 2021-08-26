@@ -176,4 +176,33 @@ class MigrateContentToElementTest extends SapphireTest
         $this->assertFalse($contentElement->isLiveVersion());
         $this->assertFalse($page->isLiveVersion());
     }
+
+    public function testIgnoredClassesContentIsNotCleared()
+    {
+        Config::modify()->set(ElementalPageExtension::class, 'ignored_classes', [TestPage::class]);
+        $task = new MigrateContentToElement();
+
+        // Ensure the page is published to begin with to meet criteria for being migrated
+        /** @var TestPage&Versioned $page */
+        $page = $this->objFromFixture(TestPage::class, 'page3');
+        $page->publishSingle();
+
+        ob_start();
+        $task->run(new HTTPRequest('GET', ''));
+        $output = ob_get_clean();
+
+        $this->assertContains('Finished migrating 0 pages\' content', $output);
+
+        // Get the page and confirm its content has not been altered.
+        $page = $this->objFromFixture(TestPage::class, 'page3');
+        $this->assertSame('This is page 3', $page->Content);
+
+        // Check that no elements were created.
+        /** @var HasManyList $elements */
+        $elements = $page->ElementalArea->Elements();
+        $this->assertCount(0, $elements);
+
+        // Assert that the element is still "live"
+        $this->assertTrue($page->isLiveVersion());
+    }
 }

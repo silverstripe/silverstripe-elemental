@@ -14,6 +14,13 @@ use SilverStripe\GraphQL\MutationCreator;
 use SilverStripe\GraphQL\OperationResolver;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 
+if (!class_exists(MutationCreator::class)) {
+    return;
+}
+
+/**
+ * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
+ */
 class DuplicateElementMutation extends MutationCreator implements OperationResolver
 {
     public function attributes()
@@ -32,14 +39,14 @@ class DuplicateElementMutation extends MutationCreator implements OperationResol
     public function args()
     {
         return [
-            'ID' => ['type' => Type::nonNull(Type::id())],
+            'id' => ['type' => Type::nonNull(Type::id())],
         ];
     }
 
     public function resolve($object, array $args, $context, ResolveInfo $info)
     {
         // load element to clone
-        $elementID = $args['ID'];
+        $elementID = $args['id'];
         $element = BaseElement::get_by_id($elementID);
         if (!$element) {
             throw new InvalidArgumentException("Invalid BaseElementID: $elementID");
@@ -54,6 +61,11 @@ class DuplicateElementMutation extends MutationCreator implements OperationResol
         if (!$area->canEdit($context['currentUser'])) {
             throw new InvalidArgumentException(
                 "The current user has insufficient permission to edit ElementalArea: $areaID"
+            );
+        }
+        if (!$element->canCreate($context['currentUser'])) {
+            throw new InvalidArgumentException(
+                "The current user has insufficient permission to create or duplicate BaseElement: $elementID"
             );
         }
 

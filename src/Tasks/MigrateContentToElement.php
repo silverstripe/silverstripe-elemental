@@ -9,6 +9,7 @@ use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
 use Exception;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\Versioned\Versioned;
@@ -138,6 +139,9 @@ class MigrateContentToElement extends BuildTask
     protected function isMigratable($pageType)
     {
         $migratable = SiteTree::has_extension($pageType, ElementalPageExtension::class);
+        if (in_array($pageType, Config::inst()->get(ElementalPageExtension::class, 'ignored_classes'))) {
+            $migratable = false;
+        }
 
         $this->extend('updateIsMigratable', $migratable, $pageType);
 

@@ -57,6 +57,9 @@ class ElementalPageExtension extends ElementalAreasExtension
 
     public function MetaTags(&$tags)
     {
+        if (!Controller::has_curr()) {
+            return;
+        }
         $controller = Controller::curr();
         $request = $controller->getRequest();
         if ($request->getVar('ElementalPreview') !== null) {

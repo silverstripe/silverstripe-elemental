@@ -20,26 +20,26 @@ describe('ElementList', () => {
 
   const blocks = [
     {
-      ID: '1',
-      Title: 'Title',
-      BlockSchema: {
+      id: '1',
+      title: 'Title',
+      blockSchema: {
         actions: { edit: '' }
       },
-      InlineEditable: true,
-      IsPublished: true,
-      IsLiveVersion: true,
-      Version: 6
+      inlineEditable: true,
+      published: true,
+      liveVersion: true,
+      version: 6
     },
     {
-      ID: '2',
-      Title: 'Title II',
-      BlockSchema: {
+      id: '2',
+      title: 'Title II',
+      blockSchema: {
         actions: { edit: '' }
       },
-      InlineEditable: true,
-      IsPublished: false,
-      IsLiveVersion: false,
-      Version: 2
+      inlineEditable: true,
+      published: false,
+      liveVersion: false,
+      version: 2
     },
   ];
 

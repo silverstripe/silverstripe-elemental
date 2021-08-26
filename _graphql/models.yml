@@ -1,0 +1,40 @@
+# Expose common static fields for the ElementEditor component to use for preview summaries
+DNADesign\Elemental\Models\BaseElement:
+  fields:
+    id: true
+    lastEdited: true
+    absoluteLink: String
+    title: true
+    showTitle: true
+    sort: true
+    blockSchema: ObjectType
+    isPublished: Boolean
+    isLiveVersion: Boolean
+    canCreate: Boolean
+    canPublish: Boolean
+    canUnpublish: Boolean
+    canDelete: Boolean
+  operations:
+    copyToStage: true
+    readOne: true
+    delete: true
+    publish: true
+    unpublish: true
+# Expose access to Elements via Page -> ElementalArea -> Elements (see resolver)
+DNADesign\Elemental\Models\ElementalArea:
+  fields:
+    id: true
+    elements:
+      plugins:
+        paginateList: false
+  operations:
+    readOne: true
+
+# Basic member information is required for history views
+SilverStripe\Security\Member:
+  fields:
+    id: true
+    firstName: true
+    surname: true
+  operations:
+    readOne: true

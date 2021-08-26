@@ -19,9 +19,9 @@ describe('ArchiveAction', () => {
       <ActionComponent
         title="My abstract action"
         element={{
-          ID: 123,
-          IsPublished: true,
-          BlockSchema: { type: 'Test' }
+          id: 123,
+          isPublished: true,
+          blockSchema: { type: 'Test' }
         }}
         isPublished
         actions={{ handleArchiveBlock: mockMutation }}
@@ -60,9 +60,9 @@ describe('ArchiveAction', () => {
       <ActionComponent
         title="My abstract action"
         element={{
-          ID: 123,
-          IsPublished: false,
-          BlockSchema: { type: 'Test' }
+          id: 123,
+          isPublished: false,
+          blockSchema: { type: 'Test' }
         }}
         actions={{ handleArchiveBlock: mockMutation }}
         toggle={false}
@@ -85,5 +85,23 @@ describe('ArchiveAction', () => {
     expect(mockConfirm).toHaveBeenCalledWith(expect.stringContaining(
       'Warning: This block will be unpublished'
     ));
+  });
+
+  it('is disabled when user doesn\'t have correct permissions', () => {
+    const archiveWrapper = mount(
+      <ActionComponent
+        title="My abstract action"
+        element={{
+          ID: 123,
+          IsPublished: false,
+          BlockSchema: { type: 'Test' },
+          canDelete: false
+        }}
+        actions={{ handleArchiveBlock: mockMutation }}
+        toggle={false}
+      />
+    );
+
+    expect(archiveWrapper.find('button').first().prop('disabled')).toBe(true);
   });
 });
