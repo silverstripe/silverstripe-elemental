@@ -109,10 +109,15 @@ class ReorderElements
                 $operator = '+';
                 $filter = "$tableName.\"Sort\" > $sortAfterPosition AND $tableName.\"Sort\" < $currentPosition";
                 $newBlockPosition = $sortAfterPosition + 1;
-            } else {
+            } else if ($sortAfterPosition > $currentPosition){
                 $operator = '-';
                 $filter = "$tableName.\"Sort\" <= $sortAfterPosition AND $tableName.\"Sort\" > $currentPosition";
                 $newBlockPosition = $sortAfterPosition;
+            } else {
+                // In some rare cases where there are duplicate Sort values 
+                // i.e. $sortAfterPosition == $currentPosition
+                $this->reorderAllElements($parentId);
+                return $element;
             }
 
             $query = SQLUpdate::create()
@@ -128,5 +133,23 @@ class ReorderElements
         $element->write();
 
         return $element;
+    }
+
+    /**
+     * Reorder all elements within the current ElementalArea
+     * 
+     * @param $parentId The parent ID of the current element
+     */
+    private function reorderAllElements($parentId)
+    {
+        if (!$parentId) return;
+        
+        $elements = BaseElement::get()->filter('ParentID', $parentId)->sort('Sort', 'asc');
+        $sort = 1;
+
+        foreach ($elements as $element) {
+            $element->Sort = $sort++;
+            $element->write();
+        }
     }
 }
