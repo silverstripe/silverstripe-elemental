@@ -138,18 +138,32 @@ class ReorderElements
     /**
      * Reorder all elements within the current ElementalArea
      * 
-     * @param $parentId The parent ID of the current element
+     * @param int $parentId The parent ID of the current element
      */
-    private function reorderAllElements($parentId)
+    private function reorderAllElements(int $parentId)
     {
         if (!$parentId) return;
         
         $elements = BaseElement::get()->filter('ParentID', $parentId)->sort('Sort', 'asc');
-        $sort = 1;
 
-        foreach ($elements as $element) {
-            $element->Sort = $sort++;
-            $element->write();
+        $baseTableName = Convert::raw2sql(DataObject::getSchema()->tableName(BaseElement::class));
+
+        // Update both the draft and live versions of the records
+        $tableNames = [$baseTableName];
+        if (BaseElement::has_extension(Versioned::class)) {
+            /** @var BaseElement&Versioned $element */
+            $tableNames[] = $this->element->stageTable($baseTableName, Versioned::LIVE);
+        }
+
+        foreach ($tableNames as $tableName) {
+            $sort = 1;
+            foreach ($elements as $element) {
+                $query = SQLUpdate::create()
+                    ->setTable("$tableName")
+                    ->assign('"Sort"', $sort++)
+                    ->addWhere(["$tableName.\"ID\"" => $element->ID, "$tableName.\"ParentID\"" => $parentId]);
+                $query->execute();
+            }
         }
     }
 }
