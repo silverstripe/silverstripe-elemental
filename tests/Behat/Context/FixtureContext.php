@@ -84,7 +84,7 @@ class FixtureContext extends BaseFixtureContext
      */
     public function contentBlocksAreNotInLineEditable()
     {
-        $contentBlockClass = ElementContent::class;
+        $contentBlockClass = TestElementContent::class;
         $config = <<<YAML
 ---
 Name: testonly-content-blocks-not-inline-editable

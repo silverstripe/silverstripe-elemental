@@ -9,6 +9,8 @@ import { destroy } from 'redux-form';
 
 /**
  * Reset the Apollo and Redux stores holding data relating to elemental inline edit forms
+ *
+ * @param {Array} invalidFieldNames Field names that failed server-side validation
  */
 const resetStores = () => {
   // After page level saves we need to reload all the blocks from the server. We can remove
@@ -60,16 +62,35 @@ jQuery.entwine('ss', ($) => {
     },
 
     onunmatch() {
-      resetStores();
+      // Reset the store if the user navigates to a different part of the CMS
+      // Ensure there is not a form submission in progress, as this handler will
+      // also be triggered from a form submission
+      if (this.attr('data-submitting-element-editor') !== '1') {
+        resetStores();
+      }
       ReactDOM.unmountComponentAtNode(this[0]);
     },
 
-    /**
-     * Invalidate cache after the form is submitted to force apollo to re-fetch.
-     */
+    'from .cms-container': {
+      onsubmitform() {
+        this.attr('data-submitting-element-editor', '1');
+      }
+    },
+
     'from .cms-edit-form': {
-      onaftersubmitform() {
-        resetStores();
+      onaftersubmitform(event, data) {
+        this.attr('data-submitting-element-editor', null);
+        const validationResultPjax = JSON.parse(data.xhr.responseText).ValidationResult;
+        const validationResult = JSON.parse(validationResultPjax.replace(/<\/?script[^>]*?>/g, ''));
+
+        // Reset redux store if form is succesfully submitted so apollo to refetches element data
+        // Do not rest if there are any validation errors from either the ElementalAreaField or a
+        // regular page field because we want redux to hydrate the form, rather than then refetching
+        // which will return a value from the database. Instead the user should still
+        // see any modfied value they just entered, whether valid or invalid
+        if (validationResult.isValid) {
+          resetStores();
+        }
       }
     },
   });

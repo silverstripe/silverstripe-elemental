@@ -19,6 +19,13 @@ Feature: Edit elements in the CMS
       And I should see "Alice's Block"
       And I should see "Bob's Block"
 
+  @sboyd
+  Scenario: I retain invalid values client-side
+    When I click on block 1
+    Then I should see "Alice's Block"
+    # Then I change Title
+    # and i save the page
+
   Scenario: I can edit a non in-line editable block
     Given content blocks are not in-line editable
       And I go to "/admin/pages"
