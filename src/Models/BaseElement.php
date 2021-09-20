@@ -77,6 +77,10 @@ class BaseElement extends DataObject
         'Parent' => ElementalArea::class
     ];
 
+    private static $indexes = [
+        'Sort' => true,
+    ];
+
     private static $extensions = [
         Versioned::class
     ];
