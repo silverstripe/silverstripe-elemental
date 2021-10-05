@@ -73,17 +73,20 @@ class ElementController extends Controller
     public function forTemplate()
     {
         $defaultStyles = $this->config()->get('default_styles');
+        $this->extend('updateElementControllerDefaultStyles', $defaultStyles);
+
         if ($this->config()->get('include_default_styles') && !empty($defaultStyles)) {
             foreach ($defaultStyles as $stylePath) {
                 Requirements::css($stylePath);
             }
         }
 
-        $template = $this->element->config()->get('controller_template');
+        $template = 'DNADesign\\Elemental\\'.$this->element->config()->get('controller_template');
+        $this->extend('updateElementControllerTemplate', $template);
 
         return $this->renderWith([
             'type' => 'Layout',
-            'DNADesign\\Elemental\\'.$template
+            $template
         ]);
     }
 
