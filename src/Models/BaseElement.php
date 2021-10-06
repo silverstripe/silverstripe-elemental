@@ -285,17 +285,25 @@ class BaseElement extends DataObject
     {
         parent::onBeforeWrite();
 
-        if (!$this->Sort) {
-            if ($this->hasExtension(Versioned::class)) {
-                $records = Versioned::get_by_stage(BaseElement::class, Versioned::DRAFT);
-            } else {
-                $records = BaseElement::get();
-            }
-
-            $records = $records->filter('ParentID', $this->ParentID);
-
-            $this->Sort = $records->max('Sort') + 1;
+        // If a Sort has already been set, then we can exit early
+        if ($this->Sort) {
+            return;
         }
+
+        // If no ParentID is currently set for the Element, then we don't want to define an initial Sort yet
+        if (!$this->ParentID) {
+            return;
+        }
+
+        if ($this->hasExtension(Versioned::class)) {
+            $records = Versioned::get_by_stage(BaseElement::class, Versioned::DRAFT);
+        } else {
+            $records = BaseElement::get();
+        }
+
+        $records = $records->filter('ParentID', $this->ParentID);
+
+        $this->Sort = $records->max('Sort') + 1;
     }
 
     public function getCMSFields()
