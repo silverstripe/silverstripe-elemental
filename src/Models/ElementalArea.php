@@ -8,7 +8,6 @@ use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
@@ -21,6 +20,8 @@ use SilverStripe\Versioned\Versioned;
  * @package DNADesign\Elemental\Models
  *
  * @property string $OwnerClassName
+ *
+ * @mixin Versioned
  */
 class ElementalArea extends DataObject
 {

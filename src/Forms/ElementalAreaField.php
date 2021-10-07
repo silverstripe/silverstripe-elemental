@@ -2,13 +2,10 @@
 
 namespace DNADesign\Elemental\Forms;
 
-use BlocksPage;
 use DNADesign\Elemental\Controllers\ElementalAreaController;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Services\ElementTabProvider;
 use SilverStripe\Control\Controller;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FieldGroup;
@@ -221,7 +218,6 @@ class ElementalAreaField extends GridField
 
     public function saveInto(DataObjectInterface $dataObject)
     {
-        /** @var BlocksPage $dataObject */
         parent::saveInto($dataObject);
 
         $elementData = $this->Value();
