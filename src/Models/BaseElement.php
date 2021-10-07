@@ -19,8 +19,6 @@ use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
-use SilverStripe\GraphQL\Schema\Schema;
-use SilverStripe\GraphQL\Schema\SchemaBuilder;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
@@ -33,7 +31,6 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
-use RuntimeException;
 
 /**
  * Class BaseElement
@@ -47,6 +44,8 @@ use RuntimeException;
  * @property int $ParentID
  *
  * @method ElementalArea Parent()
+ *
+ * @mixin Versioned
  */
 class BaseElement extends DataObject
 {

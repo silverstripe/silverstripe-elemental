@@ -4,9 +4,11 @@ namespace DNADesign\Elemental\Models;
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
-use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
 use SilverStripe\ORM\FieldType\DBField;
 
+/**
+ * @property string $HTML
+ */
 class ElementContent extends BaseElement
 {
     private static $icon = 'font-icon-block-content';
