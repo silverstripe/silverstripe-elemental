@@ -360,7 +360,8 @@ class BaseElement extends DataObject
 
             if ($this->isInDB()) {
                 $fields->addFieldsToTab('Root.History', [
-                    HistoryViewerField::create('ElementHistory'),
+                    HistoryViewerField::create('ElementHistory')
+                        ->addExtraClass('history-viewer--standalone'),
                 ]);
                 // Add class to containing tab
                 $fields->fieldByName('Root.History')
