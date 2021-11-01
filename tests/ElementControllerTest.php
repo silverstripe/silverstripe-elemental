@@ -26,7 +26,7 @@ class ElementControllerTest extends FunctionalTest
         TestElement::class
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Versioned::set_stage(Versioned::DRAFT);
 
@@ -40,6 +40,6 @@ class ElementControllerTest extends FunctionalTest
         $this->logInWithPermission('ADMIN');
         $controller = new TestElementController($element);
 
-        $this->assertContains('Hello Test', $controller->forTemplate());
+        $this->assertStringContainsString('Hello Test', $controller->forTemplate());
     }
 }

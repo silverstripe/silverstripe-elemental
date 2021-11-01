@@ -6,7 +6,7 @@ use SilverStripe\Dev\SapphireTest;
 
 class ElementTabProviderTest extends SapphireTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->markTestIncomplete('Does not yet test anything, remains to be implemented');

@@ -107,7 +107,7 @@ class BaseElementTest extends FunctionalTest
     {
         $element = $this->objFromFixture(ElementContent::class, 'content1');
 
-        $this->assertContains($element->getPage()->Link(), $element->Link());
+        $this->assertStringContainsString($element->getPage()->Link(), $element->Link());
     }
 
     public function testGetEditLink()
@@ -118,14 +118,14 @@ class BaseElementTest extends FunctionalTest
         $element = $this->objFromFixture(ElementContent::class, 'content1');
         $editLink = $element->getEditLink();
 
-        $this->assertContains('http://example.com', $editLink, 'Link should be absolute');
-        $this->assertContains('pages/edit', $editLink, 'Link should contain reference to the page');
+        $this->assertStringContainsString('http://example.com', $editLink, 'Link should be absolute');
+        $this->assertStringContainsString('pages/edit', $editLink, 'Link should contain reference to the page');
     }
 
     public function testGetIcon()
     {
         $element = new ElementContent();
-        $this->assertContains('class="font-icon-block-content"', $element->getIcon());
+        $this->assertStringContainsString('class="font-icon-block-content"', $element->getIcon());
 
         Config::modify()->set(ElementContent::class, 'icon', '');
         $this->assertEmpty($element->getIcon());

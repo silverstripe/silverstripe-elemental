@@ -85,8 +85,8 @@ class ElementalAreaTest extends SapphireTest
     {
         $area = $this->objFromFixture(ElementalArea::class, 'area1');
 
-        $this->assertContains('Hello Test', $area->forTemplate());
-        $this->assertContains('Hello Test 2', $area->forTemplate());
+        $this->assertStringContainsString('Hello Test', $area->forTemplate());
+        $this->assertStringContainsString('Hello Test 2', $area->forTemplate());
     }
 
     public function testCanBePublished()

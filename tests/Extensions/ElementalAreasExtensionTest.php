@@ -25,7 +25,7 @@ class ElementalAreasExtensionTest extends SapphireTest
         TestUnusedElement::class,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

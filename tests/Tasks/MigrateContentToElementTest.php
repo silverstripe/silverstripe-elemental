@@ -27,7 +27,7 @@ class MigrateContentToElementTest extends SapphireTest
         TestPage::class,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         TestPage::create()->flushCache();
         parent::setUp();
@@ -46,7 +46,7 @@ class MigrateContentToElementTest extends SapphireTest
         $task->run(new HTTPRequest('GET', ''));
         $output = ob_get_clean();
 
-        $this->assertContains('Finished migrating 1 pages\' content', $output);
+        $this->assertStringContainsString('Finished migrating 1 pages\' content', $output);
 
         // Get the page that should've been updated and the content should be removed
         $page = $this->objFromFixture(TestPage::class, 'page3');
@@ -76,20 +76,20 @@ class MigrateContentToElementTest extends SapphireTest
         $task->run(new HTTPRequest('GET', ''));
         $output = ob_get_clean();
 
-        $this->assertContains('Finished migrating 1 pages\' content', $output);
+        $this->assertStringContainsString('Finished migrating 1 pages\' content', $output);
 
         $page = $this->objFromFixture(TestPage::class, 'page3');
-        $this->assertContains('This is page 3', $page->Content, 'Content is not removed from the page');
+        $this->assertStringContainsString('This is page 3', $page->Content, 'Content is not removed from the page');
 
         $element = $page->ElementalArea->Elements()->first();
-        $this->assertContains('This is page 3', $element->HTML, 'Content is still added to a new element');
+        $this->assertStringContainsString('This is page 3', $element->HTML, 'Content is still added to a new element');
 
         // Run the task again and assert the page is not picked up again
         ob_start();
         $task->run(new HTTPRequest('GET', ''));
         $output = ob_get_clean();
 
-        $this->assertContains('Finished migrating 0 pages\' content', $output);
+        $this->assertStringContainsString('Finished migrating 0 pages\' content', $output);
         $page = $this->objFromFixture(TestPage::class, 'page3');
         $this->assertCount(1, $page->ElementalArea->Elements());
     }
@@ -105,7 +105,7 @@ class MigrateContentToElementTest extends SapphireTest
         $task->run(new HTTPRequest('GET', ''));
         $output = ob_get_clean();
 
-        $this->assertContains('Finished migrating 1 pages\' content', $output);
+        $this->assertStringContainsString('Finished migrating 1 pages\' content', $output);
 
         // Get the page that should've been updated and the content should be removed
         $element = $this->objFromFixture(TestPage::class, 'page3')->ElementalArea->Elements()->first();
@@ -129,7 +129,7 @@ class MigrateContentToElementTest extends SapphireTest
         $task->run(new HTTPRequest('GET', ''));
         $output = ob_get_clean();
 
-        $this->assertContains('Finished migrating 1 pages\' content', $output);
+        $this->assertStringContainsString('Finished migrating 1 pages\' content', $output);
 
         // Get the page that should've been updated and the content should be removed
         $page = $this->objFromFixture(TestPage::class, 'page3');
@@ -156,7 +156,7 @@ class MigrateContentToElementTest extends SapphireTest
         $task->run(new HTTPRequest('GET', ''));
         $output = ob_get_clean();
 
-        $this->assertContains('Finished migrating 1 pages\' content', $output);
+        $this->assertStringContainsString('Finished migrating 1 pages\' content', $output);
 
         // Get the page that should've been updated and the content should be removed
         /** @var TestPage&Versioned $page */
@@ -191,7 +191,7 @@ class MigrateContentToElementTest extends SapphireTest
         $task->run(new HTTPRequest('GET', ''));
         $output = ob_get_clean();
 
-        $this->assertContains('Finished migrating 0 pages\' content', $output);
+        $this->assertStringContainsString('Finished migrating 0 pages\' content', $output);
 
         // Get the page and confirm its content has not been altered.
         $page = $this->objFromFixture(TestPage::class, 'page3');

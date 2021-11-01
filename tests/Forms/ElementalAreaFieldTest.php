@@ -23,7 +23,7 @@ class ElementalAreaFieldTest extends SapphireTest
      */
     protected $field;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
