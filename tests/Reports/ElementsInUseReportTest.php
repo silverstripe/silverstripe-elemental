@@ -27,7 +27,7 @@ class ElementsInUseReportTest extends FunctionalTest
         TestPage::class,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -37,7 +37,7 @@ class ElementsInUseReportTest extends FunctionalTest
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         
@@ -53,18 +53,18 @@ class ElementsInUseReportTest extends FunctionalTest
 
         $result = (string) $this->get('admin/reports/show/DNADesign-Elemental-Reports-ElementsInUseReport')->getBody();
 
-        $this->assertContains('Content blocks in use', $result, 'Title is displayed');
+        $this->assertStringContainsString('Content blocks in use', $result, 'Title is displayed');
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'data-class="DNADesign\\Elemental\\Models\\ElementContent"',
             $result,
             'Report contains content elements (bundled with elemental)'
         );
 
-        $this->assertContains('HTML text block', $result, 'Content element "nice" type is shown');
+        $this->assertStringContainsString('HTML text block', $result, 'Content element "nice" type is shown');
 
-        $this->assertContains('My special content block', $result, 'Fixtured content element is shown');
-        $this->assertContains('Stubby Stub', $result, 'Fixtured stub element is shown');
+        $this->assertStringContainsString('My special content block', $result, 'Fixtured content element is shown');
+        $this->assertStringContainsString('Stubby Stub', $result, 'Fixtured stub element is shown');
     }
 
     public function testSourceRecords()
@@ -87,7 +87,7 @@ class ElementsInUseReportTest extends FunctionalTest
         $castros = $records->first();
         $this->assertNotNull($castros, 'Fixtured Castros page exists');
         $this->assertTrue($castros->hasField('EditLink'));
-        $this->assertContains(
+        $this->assertStringContainsString(
             (string) $this->idFromFixture(TestPage::class, 'castros_home'),
             $castros->EditLink,
             'Correct owner page ID is in edit link'

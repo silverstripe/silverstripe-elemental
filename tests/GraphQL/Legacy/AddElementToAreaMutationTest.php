@@ -19,7 +19,7 @@ class AddElementToAreaMutationTest extends SapphireTest
         TestElement::class,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         if (class_exists(Schema::class)) {
@@ -51,20 +51,16 @@ class AddElementToAreaMutationTest extends SapphireTest
         $this->assertIdsInOrder([$five, $one, $three, $two, $four], 'The fifth element is added first, after ID 0');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testBadElementalArea()
     {
+        $this->expectException(InvalidArgumentException::class);
         $areaID = $this->objFromFixture(ElementalArea::class, 'one')->ID;
         $this->runMutation(TestElement::class, $areaID + 1);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testOrderingByWrongElementalArea()
     {
+        $this->expectException(InvalidArgumentException::class);
         $firstArea = ElementalArea::get()->first();
         $elementInFirstArea = TestElement::create();
         $firstArea->Elements()->add($elementInFirstArea);

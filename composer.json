@@ -16,7 +16,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.1 || ^8.0",
+        "php": "^7.3 || ^8.0",
+        "silverstripe/framework": "^4.10@dev",
         "silverstripe/cms": "^4.7@dev",
         "silverstripe/admin": "^1.7@dev",
         "silverstripe/versioned": "^1.7@dev",
@@ -26,7 +27,7 @@
         "silverstripe/vendor-plugin": "^1"
     },
     "require-dev": {
-      "silverstripe/recipe-testing": "1.x-dev"
+      "silverstripe/recipe-testing": "^2"
     },
     "suggest": {
         "silverstripe/elemental-blocks": "Adds a set of common SilverStripe content block types",

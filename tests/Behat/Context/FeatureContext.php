@@ -3,6 +3,7 @@ namespace DNADesign\Elemental\Tests\Behat\Context;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Element\NodeElement;
+use PHPUnit\Framework\Assert;
 use SilverStripe\BehatExtension\Context\BasicContext;
 use SilverStripe\BehatExtension\Context\SilverStripeContext;
 use SilverStripe\Framework\Tests\Behaviour\CmsFormsContext;
@@ -43,10 +44,10 @@ class FeatureContext extends SilverStripeContext
         $form = $block->find('css', '.element-editor-editform');
 
         if ($iShouldNotSee) {
-            assertTrue(!$form || !$form->isVisible(), 'I see the form! Try again later.');
+            Assert::assertTrue(!$form || !$form->isVisible(), 'I see the form! Try again later.');
         } else {
-            assertNotNull($form, 'Edit form not found');
-            assertTrue($form->isVisible());
+            Assert::assertNotNull($form, 'Edit form not found');
+            Assert::assertTrue($form->isVisible());
         }
     }
 
@@ -55,7 +56,7 @@ class FeatureContext extends SilverStripeContext
      */
     public function iShouldSeeAListOfBlocks()
     {
-        assertNotEmpty($this->getBlocks());
+        Assert::assertNotEmpty($this->getBlocks());
     }
 
     /**
@@ -63,7 +64,7 @@ class FeatureContext extends SilverStripeContext
      */
     public function iShouldSeeAnEmptyListOfBlocks()
     {
-        assertEmpty($this->getBlocks());
+        Assert::assertEmpty($this->getBlocks());
     }
 
     /**
@@ -71,7 +72,7 @@ class FeatureContext extends SilverStripeContext
      */
     public function iShouldSeeBlock($position)
     {
-        assertNotNull($this->getSpecificBlock($position));
+        Assert::assertNotNull($this->getSpecificBlock($position));
     }
 
     /**
@@ -80,7 +81,7 @@ class FeatureContext extends SilverStripeContext
     public function iClickOnBlock($position)
     {
         $block = $this->getSpecificBlock($position);
-        assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
+        Assert::assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
         $block->click();
     }
 
@@ -91,7 +92,7 @@ class FeatureContext extends SilverStripeContext
     {
         $block = $this->getSpecificBlock($position);
         $button = $this->getCaretButton($block);
-        assertNotNull($button, 'Caret button for block ' . $position . ' was not found in the page.');
+        Assert::assertNotNull($button, 'Caret button for block ' . $position . ' was not found in the page.');
         $button->click();
     }
 
@@ -102,7 +103,7 @@ class FeatureContext extends SilverStripeContext
     {
         $block = $this->getSpecificBlock($position);
         $title = $block->find('css', '.element-editor-header__title');
-        assertEquals($title->getText(), $text);
+        Assert::assertEquals($title->getText(), $text);
     }
 
     /**
@@ -112,7 +113,7 @@ class FeatureContext extends SilverStripeContext
     {
         $block = $this->getSpecificBlock($position);
         $summary = $block->find('css', '.element-editor-summary__content');
-        assertEquals($summary->getText(), $text);
+        Assert::assertEquals($summary->getText(), $text);
     }
 
     /**
@@ -139,9 +140,9 @@ class FeatureContext extends SilverStripeContext
         $publishButton = $this->findPublishButton($position);
 
         if ($iShouldNotSee) {
-            assertNull($publishButton, 'Publish button displayed (but shouldn\'t)');
+            Assert::assertNull($publishButton, 'Publish button displayed (but shouldn\'t)');
         } else {
-            assertNotNull($publishButton, 'Publish button not displayed (but should be)');
+            Assert::assertNotNull($publishButton, 'Publish button not displayed (but should be)');
         }
     }
 
@@ -158,9 +159,9 @@ class FeatureContext extends SilverStripeContext
         $unpublishButton = $this->findUnpublishButton($position);
 
         if ($iShouldNotSee) {
-            assertNull($unpublishButton, 'Unpublish button displayed (but shouldn\'t)');
+            Assert::assertNull($unpublishButton, 'Unpublish button displayed (but shouldn\'t)');
         } else {
-            assertNotNull($unpublishButton, 'Unpublish button not displayed (but should be)');
+            Assert::assertNotNull($unpublishButton, 'Unpublish button not displayed (but should be)');
         }
     }
 
@@ -172,7 +173,7 @@ class FeatureContext extends SilverStripeContext
     public function iHoverOverBlock($position)
     {
         $block = $this->getSpecificBlock($position);
-        assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
+        Assert::assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
         $block->mouseOver();
     }
 
@@ -184,7 +185,7 @@ class FeatureContext extends SilverStripeContext
     public function iHoverOverTheIconOfBlock($position)
     {
         $block = $this->getSpecificBlock($position);
-        assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
+        Assert::assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
         $icon = $block->find(
             'css',
             '.element-editor-header .element-editor-header__info .element-editor-header__icon-container'
@@ -204,7 +205,7 @@ class FeatureContext extends SilverStripeContext
 
         // Selector preferable not font-icon, but other class shared among all buttons
         $button = $popover->find('css', '.font-icon-block-'. $blockType);
-        assertNotNull($button, "{$text} button not found in Add Block popover");
+        Assert::assertNotNull($button, "{$text} button not found in Add Block popover");
         $button->click();
     }
 
@@ -223,7 +224,7 @@ class FeatureContext extends SilverStripeContext
 
         $button = $popover->find('xpath', sprintf('/button[contains(text(), \'%s\')]', $buttonName));
 
-        assertNotNull($button, sprintf('Could not find button labelled "%s"', $buttonName));
+        Assert::assertNotNull($button, sprintf('Could not find button labelled "%s"', $buttonName));
 
         $button->click();
     }
@@ -274,10 +275,10 @@ class FeatureContext extends SilverStripeContext
     public function iClickOnTheReport($reportName)
     {
         $reportsTable = $this->getSession()->getPage()->find('css', '.all-reports-gridfield .grid-field__table');
-        assertNotNull($reportsTable, 'Report table could not be found');
+        Assert::assertNotNull($reportsTable, 'Report table could not be found');
 
         $report = $reportsTable->find('xpath', sprintf('//a[contains(text(), \'%s\')]', $reportName));
-        assertNotNull($report, 'Specified report "' . $reportName . '" could not be found.');
+        Assert::assertNotNull($report, 'Specified report "' . $reportName . '" could not be found.');
 
         $report->click();
 
@@ -327,10 +328,10 @@ class FeatureContext extends SilverStripeContext
     protected function getArchiveButton($position)
     {
         $block = $this->getSpecificBlock($position);
-        assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
+        Assert::assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
 
         $button = $block->find('css', '.element-editor__actions-archive');
-        assertNotNull($button, 'Archive button not found');
+        Assert::assertNotNull($button, 'Archive button not found');
 
         return $button;
     }
@@ -344,7 +345,7 @@ class FeatureContext extends SilverStripeContext
     protected function findPublishButton($position)
     {
         $block = $this->getSpecificBlock($position);
-        assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
+        Assert::assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
 
         $button = $block->find('css', '.element-editor__actions-publish');
 
@@ -360,7 +361,7 @@ class FeatureContext extends SilverStripeContext
     protected function findUnpublishButton($position)
     {
         $block = $this->getSpecificBlock($position);
-        assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
+        Assert::assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
 
         $button = $block->find('css', '.element-editor__actions-unpublish');
 
@@ -376,7 +377,7 @@ class FeatureContext extends SilverStripeContext
     protected function getCaretButton($block)
     {
         $button = $block->find('css', '.element-editor-header__expand');
-        assertNotNull($button, 'Caret button not found');
+        Assert::assertNotNull($button, 'Caret button not found');
 
         return $button;
     }
@@ -390,8 +391,8 @@ class FeatureContext extends SilverStripeContext
     {
         $label = $block->findAll('xpath', sprintf('//label[contains(text(), \'%s\')]', $name));
 
-        assertNotCount(0, $label, sprintf('Could not find a label for a field with the content "%s"', $name));
-        assertCount(
+        Assert::assertNotCount(0, $label, sprintf('Could not find a label for a field with the content "%s"', $name));
+        Assert::assertCount(
             1,
             $label,
             sprintf(
@@ -405,7 +406,7 @@ class FeatureContext extends SilverStripeContext
         $fieldId = $label->getAttribute('for');
         $field = $block->find('css', '#' . $fieldId);
 
-        assertNotNull($field, sprintf(
+        Assert::assertNotNull($field, sprintf(
             'Label found matching "%s" but there was no field that has the ID matching the "for" attribute ("#%s")',
             $name,
             $fieldId

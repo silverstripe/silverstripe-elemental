@@ -300,7 +300,7 @@ TractorCow\Fluent\Model\Locale:
 In the case your fixture needs to contain data for only a single locale you can specify your desired locale in your unit test like this:
 
 ```php
-protected function setUp()
+protected function setUp(): void
 {
     // Set locale for fixture creation
     FluentState::singleton()->withState(function (FluentState $state) {
