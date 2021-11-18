@@ -19,8 +19,6 @@ use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
-use SilverStripe\GraphQL\Schema\Schema;
-use SilverStripe\GraphQL\Schema\SchemaBuilder;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
@@ -33,7 +31,6 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
-use RuntimeException;
 
 /**
  * Class BaseElement
@@ -47,6 +44,8 @@ use RuntimeException;
  * @property int $ParentID
  *
  * @method ElementalArea Parent()
+ *
+ * @mixin Versioned
  */
 class BaseElement extends DataObject
 {
@@ -285,17 +284,25 @@ class BaseElement extends DataObject
     {
         parent::onBeforeWrite();
 
-        if (!$this->Sort) {
-            if ($this->hasExtension(Versioned::class)) {
-                $records = Versioned::get_by_stage(BaseElement::class, Versioned::DRAFT);
-            } else {
-                $records = BaseElement::get();
-            }
-
-            $records = $records->filter('ParentID', $this->ParentID);
-
-            $this->Sort = $records->max('Sort') + 1;
+        // If a Sort has already been set, then we can exit early
+        if ($this->Sort) {
+            return;
         }
+
+        // If no ParentID is currently set for the Element, then we don't want to define an initial Sort yet
+        if (!$this->ParentID) {
+            return;
+        }
+
+        if ($this->hasExtension(Versioned::class)) {
+            $records = Versioned::get_by_stage(BaseElement::class, Versioned::DRAFT);
+        } else {
+            $records = BaseElement::get();
+        }
+
+        $records = $records->filter('ParentID', $this->ParentID);
+
+        $this->Sort = $records->max('Sort') + 1;
     }
 
     public function getCMSFields()

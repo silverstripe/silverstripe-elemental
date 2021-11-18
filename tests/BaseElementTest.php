@@ -228,4 +228,12 @@ class BaseElementTest extends FunctionalTest
         $element3->write();
         $this->assertEquals($baselineSort + 2, $element3->Sort, 'Sort order should be higher than the max');
     }
+
+    public function testOnBeforeWriteNoParent()
+    {
+        $element1 = new ElementContent();
+        $element1->write();
+
+        $this->assertEquals(0, (int) $element1->Sort);
+    }
 }

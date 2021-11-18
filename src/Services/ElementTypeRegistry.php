@@ -8,7 +8,6 @@ use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 
 class ElementTypeRegistry
