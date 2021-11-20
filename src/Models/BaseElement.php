@@ -965,8 +965,9 @@ JS
     }
 
     /**
-     * This can be overridden on child elements to create a summary for display
-     * in GridFields.
+     * This can be overridden on child elements to create a summary for display in GridFields.
+     * The react Summary component takes `content` (html) and/or `fileUrl` & `fileTitle` (image) props,
+     * which have to be added to the graphql output in `provideBlockSchema()`.
      *
      * @return string
      */
@@ -1023,6 +1024,7 @@ JS
             'actions' => [
                 'edit' => $this->getEditLink(),
             ],
+            'content' => $this->getSummary(),
         ];
     }
 
