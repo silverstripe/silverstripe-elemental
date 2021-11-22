@@ -1,2 +1,2 @@
-require('legacy/ElementEditor/entwine.js');
+require('legacy/ElementEditor/entwine');
 require('boot');
