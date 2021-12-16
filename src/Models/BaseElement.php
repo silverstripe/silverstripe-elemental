@@ -203,7 +203,7 @@ class BaseElement extends DataObject
             }
         }
 
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : false;
     }
 
     /**
@@ -226,7 +226,7 @@ class BaseElement extends DataObject
             }
         }
 
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : false;
     }
 
     /**
@@ -253,7 +253,7 @@ class BaseElement extends DataObject
             }
         }
 
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : false;
     }
 
     /**
@@ -271,7 +271,7 @@ class BaseElement extends DataObject
             return $extended;
         }
 
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : false;
     }
 
     /**
