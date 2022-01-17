@@ -399,7 +399,9 @@ JS
      */
     public function getType()
     {
-        return _t(__CLASS__ . '.BlockType', 'Block');
+        $default = $this->i18n_singular_name() ?: 'Block';
+
+        return _t(__CLASS__ . '.BlockType', $default);
     }
 
     /**
