@@ -106,12 +106,12 @@ class ElementalPageExtensionTest extends FunctionalTest
         $this->assertNotEmpty($output);
 
         // Confirm tags have been stripped
-        $this->assertNotContains('<p>', $output);
-        $this->assertNotContains('</p>', $output);
+        $this->assertStringNotContainsString('<p>', $output);
+        $this->assertStringNotContainsString('</p>', $output);
 
         // Confirm paragraphs don't get smushed together, also across elements
-        $this->assertNotContains('paragraphAnd', $output);
-        $this->assertNotContains('oneMore', $output);
-        $this->assertNotContains('paragraphsAnd', $output);
+        $this->assertStringNotContainsString('paragraphAnd', $output);
+        $this->assertStringNotContainsString('oneMore', $output);
+        $this->assertStringNotContainsString('paragraphsAnd', $output);
     }
 }
