@@ -1,7 +1,5 @@
 resolvers:
   - 'DNADesign\Elemental\GraphQL\Resolvers\Resolver'
-modelConfig:
-  DataObject:
-    type_mapping:
-      DNADesign\Elemental\Models\BaseElement: Block
-      DNADesign\Elemental\Models\ElementalArea: ElementalArea
+typeMapping:
+  DNADesign\Elemental\Models\BaseElement: Block
+  DNADesign\Elemental\Models\ElementalArea: ElementalArea
