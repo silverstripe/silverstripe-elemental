@@ -57,6 +57,9 @@
     "enzyme-adapter-react-16": "^1.5.0",
     "jest-cli": "^23.6.0"
   },
+  "resolutions": {
+    "colors": "1.1.2"
+  },
   "jest": {
     "roots": [
       "client/src"
