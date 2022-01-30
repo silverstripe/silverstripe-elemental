@@ -31,6 +31,7 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
+use SilverStripe\ORM\CMSPreviewable;
 
 /**
  * Class BaseElement
@@ -47,7 +48,7 @@ use SilverStripe\View\Requirements;
  *
  * @mixin Versioned
  */
-class BaseElement extends DataObject
+class BaseElement extends DataObject implements CMSPreviewable
 {
     /**
      * Override this on your custom elements to specify a CSS icon class
@@ -112,6 +113,10 @@ class BaseElement extends DataObject
      * @var ElementController
      */
     protected $controller;
+
+    private static $show_stage_link = true;
+
+    private static $show_live_link = true;
 
     /**
      * Cache various data to improve CMS load time
