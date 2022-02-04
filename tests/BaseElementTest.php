@@ -7,6 +7,7 @@ use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
+use DNADesign\Elemental\Tests\Src\TestContentForSearchIndexExtension;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use Page;
@@ -235,5 +236,22 @@ class BaseElementTest extends FunctionalTest
         $element1->write();
 
         $this->assertEquals(0, (int) $element1->Sort);
+    }
+
+    public function testGetContentForSearchIndex()
+    {
+        $element = $this->objFromFixture(ElementContent::class, 'content4');
+        // Content should have tags stripped with a space before what were the < characters
+        // One closing tag plus one opening tag means there should be two spaced between paragraphs
+        $this->assertEquals('One paragraph  And another one', $element->getContentForSearchIndex());
+    }
+
+    public function testUpdateContentForSearchIndex()
+    {
+        ElementContent::add_extension(TestContentForSearchIndexExtension::class);
+        $element = $this->objFromFixture(ElementContent::class, 'content4');
+        // Content should be updated by the extension
+        $this->assertEquals('This is the updated content.', $element->getContentForSearchIndex());
+        ElementContent::remove_extension(TestContentForSearchIndexExtension::class);
     }
 }

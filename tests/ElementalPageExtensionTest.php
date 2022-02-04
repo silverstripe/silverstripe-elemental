@@ -114,4 +114,19 @@ class ElementalPageExtensionTest extends FunctionalTest
         $this->assertStringNotContainsString('oneMore', $output);
         $this->assertStringNotContainsString('paragraphsAnd', $output);
     }
+
+    public function testSearchIndexElementDelimiter()
+    {
+        /** @var TestPage $page */
+        $page = $this->objFromFixture(TestPage::class, 'page_with_html_elements');
+
+        // Confirm default delimiter of a single space is applied between elements
+        $output = $page->getElementsForSearch();
+        $this->assertStringContainsString('another one More paragraphs', $output);
+
+        // Confirm configured delimiter is applied between elements
+        Config::modify()->set(TestPage::class, 'search_index_element_delimiter', ' ... ');
+        $output = $page->getElementsForSearch();
+        $this->assertStringContainsString('another one ... More paragraphs', $output);
+    }
 }

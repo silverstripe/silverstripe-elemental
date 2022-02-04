@@ -26,6 +26,17 @@ class ElementalPageExtension extends ElementalAreasExtension
     ];
 
     /**
+     * The delimiter to separate distinct elements in indexed content.
+     *
+     * When using the getElementsForSearch() method to index all elements in a single field,
+     * a custom delimiter can be used help to avoid false positive results for phrase queries.
+     *
+     * @config
+     * @var string
+     */
+    private static $search_index_element_delimiter = ' ';
+
+    /**
      * Returns the contents of each ElementalArea has_one's markup for use in Solr or Elastic search indexing
      *
      * @return string
@@ -43,8 +54,14 @@ class ElementalPageExtension extends ElementalAreasExtension
                 /** @var ElementalArea $area */
                 $area = $this->owner->$key();
                 if ($area) {
-                    // Replace HTML tags with spaces
-                    $output[] = strip_tags(str_replace('<', ' <', $area->forTemplate()));
+                    foreach ($area->Elements() as $element) {
+                        if ($element->getSearchIndexable()) {
+                            $content = $element->getContentForSearchIndex();
+                            if ($content) {
+                                $output[] = $content;
+                            }
+                        }
+                    }
                 }
             }
         } finally {
@@ -53,7 +70,7 @@ class ElementalPageExtension extends ElementalAreasExtension
             // CMS layout can break on the response. (SilverStripe 4.1.1)
             SSViewer::set_themes($oldThemes);
         }
-        return implode($output);
+        return implode($this->owner->config()->get('search_index_element_delimiter'), $output);
     }
 
     public function MetaTags(&$tags)
