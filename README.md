@@ -28,7 +28,7 @@ For a more detailed overview of using this module, please see [the User help gui
 
 For a Silverstripe CMS 4.1 or 4.2 compatible version of this module, please see the [2.x or 3.x release line](https://github.com/silverstripe/silverstripe-elemental/tree/3#readme).
 
-For a Silverstripe CMS 3.x compatible version of this module, please see the [1 branch, or 1.x release line](https://github.com/silverstripe/silverstripe-elemental/tree/1#readme).
+For a Silverstripe CMS 3.x compatible version of this module, please see the [1 branch, or 1.x release line](https://github.com/silverstripe/silverstripe-elemental/tree/1.0#readme).
 
 ## Installation
 
