@@ -156,7 +156,7 @@ describe('Header', () => {
       expect(wrapper.text()).toContain('ElementActionsComponent');
     });
 
-    it('should not render an ElementActions when the element is not expandable', () => {
+    it('should render an ElementActions even when the element is not expandable', () => {
       const wrapper = shallow(
         <Header
           element={element}
@@ -170,7 +170,7 @@ describe('Header', () => {
         />
       );
 
-      expect(wrapper.text()).not.toContain('ElementActionsComponent');
+      expect(wrapper.text()).toContain('ElementActionsComponent');
     });
   });
 
