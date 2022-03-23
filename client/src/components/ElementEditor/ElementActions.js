@@ -34,9 +34,10 @@ class ElementActions extends Component {
    * @returns {HTMLElement[]|null}
    */
   renderEditTabs() {
-    const { editTabs, activeTab, type } = this.props;
+    const { editTabs, activeTab, type, expandable } = this.props;
 
-    if (!editTabs || !editTabs.length) {
+    // Don't render tabs if the block is not expandable or if no tabs are defined
+    if (!expandable || !editTabs || !editTabs.length) {
       return null;
     }
 
@@ -59,12 +60,15 @@ class ElementActions extends Component {
    * @returns {DropdownItem|null}
    */
   renderDivider() {
-    const { children, editTabs } = this.props;
+    const { children, editTabs, expandable } = this.props;
 
-    if (editTabs && editTabs.length && React.Children.count(children)) {
-      return <DropdownItem divider role="separator" />;
+    // Don't render divider if the block is not expandable or if no tabs are defined
+    // or if there's no actions displayed after the tab list
+    if (!expandable || !editTabs || !editTabs.length || React.Children.count(children) === 0) {
+      return null;
     }
-    return null;
+
+    return <DropdownItem divider role="separator" />;
   }
 
   /**
@@ -75,6 +79,7 @@ class ElementActions extends Component {
    */
   render() {
     const { children, id, ActionMenuComponent } = this.props;
+
 
     const dropdownToggleClassNames = [
       'element-editor-header__actions-toggle',
@@ -112,10 +117,12 @@ ElementActions.propTypes = {
     name: PropTypes.string,
   })),
   handleEditTabsClick: PropTypes.func.isRequired,
+  expandable: PropTypes.bool
 };
 
 ElementActions.defaultProps = {
   editTabs: [],
+  expandable: true
 };
 
 export { ElementActions as Component };

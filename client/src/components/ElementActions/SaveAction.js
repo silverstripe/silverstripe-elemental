@@ -14,11 +14,18 @@ import { initialize } from 'redux-form';
  * the inline edit form's data for the current block.
  */
 const SaveAction = (MenuComponent) => (props) => {
+  if (!props.expandable) {
+    // Some elemental blocks can not be edited inline (e.g. User form blocks)
+    // We don't want to add a "Save action for those blocks.
+    return (
+      <MenuComponent {...props} />
+    );
+  }
+
   const handleClick = (event) => {
     event.stopPropagation();
 
     const { element, type, securityId, formData, reinitialiseForm } = props;
-
     const { jQuery: $ } = window;
     const noTitle = i18n.inject(
       i18n._t(
