@@ -39,10 +39,10 @@
     update-notifier "^2.2.0"
     yargs "^8.0.2"
 
-"@silverstripe/eslint-config@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@silverstripe/eslint-config/-/eslint-config-0.0.6.tgz#09d44961d70593663624ed8fa2f17b9d46656185"
-  integrity sha512-md4lbarm5EvYXACEKJXqpuhcnIq5Vs7luoS/k55T6z/KOpAqt9iUVcny+g+gfHGVUKvEdwZipAfYOzcycQQrcw==
+"@silverstripe/eslint-config@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@silverstripe/eslint-config/-/eslint-config-0.1.0.tgz#45fc8062be071ac50848fcd8bb517b4099d99f6d"
+  integrity sha512-fl6StID7nvJb82bs2tqxJpULhU7KmF6EZX8HtXyhnHFIvmEYY4V483lQFs8DQkMXrkgqJkTsmsFz7YpxJ/7mPw==
   dependencies:
     eslint "^4.6.1"
     eslint-config-airbnb "^15.1.0"
