@@ -285,6 +285,8 @@ class ElementalAreasExtension extends DataExtension
                 $area->OwnerClassName = get_class($this->owner);
                 $area->write();
                 $this->owner->$areaID = $area->ID;
+
+                $this->owner->extend('onAfterElementalAreaCreation', $area, $eaRelationship);
             }
         }
         return $this->owner;
