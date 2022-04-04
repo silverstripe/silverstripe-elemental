@@ -74,9 +74,9 @@ class ElementList extends Component {
     if (!isDraggingOver) {
       output = [
         <HoverBarComponent
-          key={0}
+          key={`0_${areaId}`} // Make key uniq
           areaId={areaId}
-          elementId={0}
+          elementId={`0_${areaId}`} // Add areaId as suffix to make attr ID uniq
           elementTypes={allowedElementTypes}
         />
       ].concat(output);

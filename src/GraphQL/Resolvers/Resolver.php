@@ -59,7 +59,8 @@ class Resolver
     ): BaseElement {
         $elementClass = $args['className'];
         $elementalAreaID = $args['elementalAreaID'];
-        $afterElementID = $args['afterElementID'] ?? null;
+        // Remove areaaID suffix from 0_${areaaID} value and leave as it is ${elementID} value. We use it in line 99
+        $afterElementID = explode('_',$args['afterElementID'])[0] ?? null;
 
         if (!is_subclass_of($elementClass, BaseElement::class)) {
             throw new InvalidArgumentException("$elementClass is not a subclass of " . BaseElement::class);
