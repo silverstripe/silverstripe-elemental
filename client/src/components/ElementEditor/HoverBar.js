@@ -25,11 +25,11 @@ function StatelessHoverBar({
     onClick: onToggle,
     'aria-label': label,
     title: label,
-    id: `AddBlockHoverBarArea_${elementId}`
+    id: `AddBlockHoverBarArea_${areaId}_${elementId}`
   };
 
   return (
-    <div className={classNames('')} id={`AddBlockHoverBar_${elementId}`}>
+    <div className={classNames('')} id={`AddBlockHoverBar_${areaId}_${elementId}`}>
       <button {...btnProps}>
         <span className={classNames('-area-inner')}>
           <span className={lineClasses} />
@@ -37,11 +37,11 @@ function StatelessHoverBar({
       </button>
       <AddElementPopoverComponent
         placement="bottom"
-        target={`AddBlockHoverBarArea_${elementId}`}
+        target={`AddBlockHoverBarArea_${areaId}_${elementId}`}
         isOpen={popoverOpen}
         elementTypes={elementTypes}
         toggle={onToggle}
-        container={`#AddBlockHoverBar_${elementId}`}
+        container={`#AddBlockHoverBar_${areaId}_${elementId}`}
         areaId={areaId}
         insertAfterElement={elementId}
       />
