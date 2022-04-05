@@ -19,7 +19,7 @@ describe('HoverBar', () => {
   ];
   const AddElementPopoverComponent = () => <div />;
   const hoverBarName = 'AddBlockHoverBar';
-  const hoverBarAreaName = 'AddBlockHoverBarArea'
+  const hoverBarAreaName = 'AddBlockHoverBarArea';
 
   describe('render()', () => {
     it.each([
