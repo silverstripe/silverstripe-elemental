@@ -90,7 +90,7 @@ Feature: View types of elements in an area on a page
     When I go to "/admin/pages"
     And I follow "Blocks Page"
     Then I should not see "Untitled Content Block"
-    And I click on the "#AddBlockHoverBarArea_41_2" element
+    And I click on the "#AddBlockHoverBarArea_1_2" element
     And I wait for 1 seconds
     And I click on the ".popover .font-icon-block-content" element
     And I wait for 5 seconds
