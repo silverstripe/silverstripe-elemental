@@ -442,6 +442,6 @@ class FeatureContext extends SilverStripeContext
         /** @var NodeElement $hoverBarAreas */
         if ($hoverBarAreas[$position] !== false) {
             return $hoverBarAreas[$position];
-        } 
+        }
     }
 }
