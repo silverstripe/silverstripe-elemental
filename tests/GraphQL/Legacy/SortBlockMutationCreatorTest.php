@@ -3,8 +3,8 @@
 namespace DNADesign\Elemental\Tests\Legacy\GraphQL;
 
 use DNADesign\Elemental\GraphQL\SortBlockMutationCreator;
+use DNADesign\Elemental\Tests\GraphQL\FakeResolveInfo;
 use DNADesign\Elemental\Tests\Src\TestElement;
-use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\GraphQL\Schema\Schema;
 use SilverStripe\Security\Security;
@@ -56,7 +56,7 @@ class SortBlockMutationCreatorTest extends SapphireTest
 
         $mutation = new SortBlockMutationCreator();
         $context = ['currentUser' => $member];
-        $resolveInfo = new ResolveInfo([]);
+        $resolveInfo = new FakeResolveInfo();
 
         $mutation->resolve(null, [
             'id' => $id,

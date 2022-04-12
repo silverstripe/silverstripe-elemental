@@ -5,7 +5,7 @@ namespace DNADesign\Elemental\Tests\GraphQL;
 use DNADesign\Elemental\GraphQL\DuplicateElementMutation;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
-use GraphQL\Type\Definition\ResolveInfo;
+use DNADesign\Elemental\Tests\GraphQL\FakeResolveInfo;
 use InvalidArgumentException;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Security\Security;
@@ -62,7 +62,7 @@ class DuplicateElementMutationTest extends SapphireTest
             $object = null;
             $args = ['id' => $element->ID];
             $context = ['currentUser' => Security::getCurrentUser()];
-            $resolveInfo = new ResolveInfo([]);
+            $resolveInfo = new FakeResolveInfo();
 
             $this->expectException(InvalidArgumentException::class);
             $this->expectExceptionMessageRegExp("#insufficient permission to {$operation}#");
