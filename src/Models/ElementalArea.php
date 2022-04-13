@@ -112,7 +112,9 @@ class ElementalArea extends DataObject
      */
     public function setOwnerPageCached(DataObject $page)
     {
-        $this->cacheData['owner_page'] = $page;
+        $cacheKey = 'owner_page_'. Versioned::get_reading_mode();
+
+        $this->cacheData[$cacheKey] = $page;
 
         return $this;
     }
@@ -193,8 +195,10 @@ class ElementalArea extends DataObject
         }
 
         // Allow for repeated calls to read from cache
-        if (isset($this->cacheData['owner_page'])) {
-            return $this->cacheData['owner_page'];
+        $cacheKey = 'owner_page_'. Versioned::get_reading_mode();
+
+        if (isset($this->cacheData[$cacheKey])) {
+            return $this->cacheData[$cacheKey];
         }
 
         if ($this->OwnerClassName && ClassInfo::exists($this->OwnerClassName)) {
@@ -217,6 +221,7 @@ class ElementalArea extends DataObject
 
                 if ($page) {
                     $this->setOwnerPageCached($page);
+
                     return $page;
                 }
             }
@@ -234,7 +239,7 @@ class ElementalArea extends DataObject
             }
 
             try {
-                $page = Versioned::get_by_stage($class, Versioned::DRAFT)->filterAny($areaIDFilters)->first();
+                $page = DataObject::get($class)->filterAny($areaIDFilters)->first();
             } catch (\Exception $ex) {
                 // Usually this is catching cases where test stubs from other modules are trying to be loaded
                 // and failing in unit tests.
@@ -255,7 +260,8 @@ class ElementalArea extends DataObject
                     }
                 }
 
-                $this->cacheData['area_relation_name'] = $page;
+                $this->setOwnerPageCached($page);
+
                 return $page;
             }
         }

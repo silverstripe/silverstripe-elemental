@@ -74,11 +74,29 @@ class ElementalAreaTest extends SapphireTest
 
         // OwnerClassName not set
         $ownerpage1 = $area1->getOwnerPage();
+
         // OwnerClassName set
         $ownerpage2 = $area2->getOwnerPage();
 
         $this->assertEquals("DNADesign\Elemental\Tests\Src\TestPage", $ownerpage1);
         $this->assertEquals("DNADesign\Elemental\Tests\Src\TestPage", $ownerpage2);
+
+        // if ownerpage1 has draft changes then getOwnerPage() should return the
+        // live version of the owner page, since the draft record will be
+        // unviewable by logged out users
+        $ownerpage1->publishRecursive();
+
+        $ownerpage1->Title = 'I have edited the page';
+        $ownerpage1->writeToStage(Versioned::DRAFT);
+
+        $liveOwner = Versioned::withVersionedMode(function () use ($area1) {
+            Versioned::set_stage(Versioned::LIVE);
+            $page = $area1->getOwnerPage();
+
+            return $page;
+        });
+
+        $this->assertEquals($liveOwner->Title, 'Page 1', 'getOwnerPage returns live version of page, not the draft');
     }
 
     public function testForTemplate()
