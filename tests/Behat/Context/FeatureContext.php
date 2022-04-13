@@ -287,6 +287,15 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
+     * @When I click on the add block button in hover bar area for block :position
+     */
+    public function iClickOnHoverBarButton($position)
+    {
+        $hoverBarButton = $this->getSpecificHoverBar($position);
+        $hoverBarButton->click();
+    }
+
+    /**
      * Returns the blocks from the element editor
      *
      * @param string $modifier Optional CSS selector modifier
@@ -413,5 +422,23 @@ class FeatureContext extends SilverStripeContext
         ));
 
         return $field;
+    }
+
+    /**
+     * Returns the selected hover bar element
+     *
+     * @param int $position
+     * @return NodeElement
+     */
+    protected function getSpecificHoverBar($position)
+    {
+        $hoverBarAreas = $this->getSession()
+            ->getPage()
+            ->findAll('css', '.element-editor__hover-bar-area');
+
+        /** @var NodeElement $hoverBarAreas */
+        if ($hoverBarAreas[$position] !== false) {
+            return $hoverBarAreas[$position];
+        }
     }
 }
