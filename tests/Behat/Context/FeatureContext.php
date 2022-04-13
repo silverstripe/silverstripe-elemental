@@ -293,9 +293,6 @@ class FeatureContext extends SilverStripeContext
     {
         $hoverBarButton = $this->getSpecificHoverBar($position);
         $hoverBarButton->click();
-
-        // Wait for the popover will be removed
-        $this->getSession()->wait(1000, 'window.jQuery(".popover-option-set").length === 0');
     }
 
     /**
