@@ -49,7 +49,7 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
 
             // Check whether the search term exists in the nested page content
             $pageContent = $siteTree->getElementsForSearch();
-            return stripos($pageContent, $this->params['Term']) !== false;
+            return stripos($pageContent ?? '', $this->params['Term'] ?? '') !== false;
         });
 
         if ($siteTrees->count()) {

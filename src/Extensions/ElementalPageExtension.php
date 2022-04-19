@@ -70,7 +70,7 @@ class ElementalPageExtension extends ElementalAreasExtension
             // CMS layout can break on the response. (SilverStripe 4.1.1)
             SSViewer::set_themes($oldThemes);
         }
-        return implode($this->owner->config()->get('search_index_element_delimiter'), $output);
+        return implode($this->owner->config()->get('search_index_element_delimiter') ?? '', $output);
     }
 
     public function MetaTags(&$tags)

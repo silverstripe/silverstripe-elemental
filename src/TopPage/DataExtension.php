@@ -6,12 +6,12 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use Page;
 use SilverStripe\Core\ClassInfo;
-use SilverStripe\Core\Extensible;
 use SilverStripe\ORM\DataExtension as BaseDataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\ViewableData;
 
 /**
  * Class DataExtension
@@ -96,7 +96,7 @@ class DataExtension extends BaseDataExtension
     {
         $list = [$this->owner];
 
-        while (count($list) > 0) {
+        while (count($list ?? []) > 0) {
             /** @var DataObject|DataExtension $item */
             $item = array_shift($list);
 
@@ -380,7 +380,7 @@ class DataExtension extends BaseDataExtension
         // Find the first ancestor table which has the extension applied
         // Note that this extension is expected to be subclassed
         foreach ($classes as $class) {
-            if (!Extensible::has_extension($class, static::class)) {
+            if (!ViewableData::has_extension($class, static::class)) {
                 continue;
             }
 

@@ -68,7 +68,7 @@ YAML;
 
         $file = 'content-blocks-not-inline-editable.yml';
         $path = $this->getDestinationConfigFolder($file);
-        file_put_contents($path, $config);
+        file_put_contents($path ?? '', $config);
 
         $this->activatedConfigFiles[] = $path;
 

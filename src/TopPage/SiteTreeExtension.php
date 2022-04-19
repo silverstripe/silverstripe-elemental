@@ -104,7 +104,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
             return;
         }
 
-        if (array_key_exists($key, $this->duplicatedObjects)) {
+        if (array_key_exists($key, $this->duplicatedObjects ?? [])) {
             array_unshift($this->duplicatedObjects[$key], $object);
 
             return;
@@ -123,7 +123,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
     {
         $pages = $this->duplicatedPages;
 
-        if (count($pages) === 0) {
+        if (count($pages ?? []) === 0) {
             return null;
         }
 
@@ -148,7 +148,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
             return;
         }
 
-        if (in_array($key, $this->duplicatedPages)) {
+        if (in_array($key, $this->duplicatedPages ?? [])) {
             // this should never happen as it would indicate a duplication loop
             return;
         }
@@ -228,7 +228,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
             return;
         }
 
-        if (array_key_exists($key, $this->duplicatedObjects)) {
+        if (array_key_exists($key, $this->duplicatedObjects ?? [])) {
             $objects = $this->duplicatedObjects[$key];
 
             /** @var DataObject|DataExtension $object */

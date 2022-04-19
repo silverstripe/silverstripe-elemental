@@ -102,7 +102,7 @@ class ElementalAreaField extends GridField
     {
         $context = $this;
 
-        if (count($properties)) {
+        if (count($properties ?? [])) {
             $context = $this->customise($properties);
         }
 
@@ -119,7 +119,7 @@ class ElementalAreaField extends GridField
         $schemaData['elemental-area-id'] = $area ? (int) $area->ID : null;
 
         $allowedTypes = $this->getTypes();
-        $schemaData['allowed-elements'] = array_keys($allowedTypes);
+        $schemaData['allowed-elements'] = array_keys($allowedTypes ?? []);
 
         return $schemaData;
     }
@@ -189,7 +189,7 @@ class ElementalAreaField extends GridField
         $readOnlyField = $this->castedCopy(CompositeField::class);
         $blockReducer = $this->getReadOnlyBlockReducer();
         $readOnlyField->setChildren(
-            FieldList::create(array_map($blockReducer, $this->getArea()->Elements()->toArray()))
+            FieldList::create(array_map($blockReducer, $this->getArea()->Elements()->toArray() ?? []))
         );
 
         $readOnlyField = $readOnlyField->performReadonlyTransformation();
@@ -213,7 +213,7 @@ class ElementalAreaField extends GridField
     public function setSubmittedValue($value, $data = null)
     {
         // Content comes through as a JSON encoded list through a hidden field.
-        return $this->setValue(json_decode($value, true));
+        return $this->setValue(json_decode($value ?? '', true));
     }
 
     public function saveInto(DataObjectInterface $dataObject)
@@ -221,7 +221,7 @@ class ElementalAreaField extends GridField
         parent::saveInto($dataObject);
 
         $elementData = $this->Value();
-        $idPrefixLength = strlen(sprintf(ElementalAreaController::FORM_NAME_TEMPLATE, ''));
+        $idPrefixLength = strlen(sprintf(ElementalAreaController::FORM_NAME_TEMPLATE ?? '', ''));
 
         if (!$elementData) {
             return;
@@ -229,7 +229,7 @@ class ElementalAreaField extends GridField
 
         foreach ($elementData as $form => $data) {
             // Extract the ID
-            $elementId = (int) substr($form, $idPrefixLength);
+            $elementId = (int) substr($form ?? '', $idPrefixLength ?? 0);
 
             /** @var BaseElement $element */
             $element = $this->getArea()->Elements()->byID($elementId);

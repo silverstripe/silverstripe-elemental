@@ -139,7 +139,7 @@ class MigrateContentToElement extends BuildTask
     protected function isMigratable($pageType)
     {
         $migratable = SiteTree::has_extension($pageType, ElementalPageExtension::class);
-        if (in_array($pageType, Config::inst()->get(ElementalPageExtension::class, 'ignored_classes'))) {
+        if (in_array($pageType, Config::inst()->get(ElementalPageExtension::class, 'ignored_classes') ?? [])) {
             $migratable = false;
         }
 

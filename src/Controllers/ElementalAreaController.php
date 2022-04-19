@@ -48,7 +48,7 @@ class ElementalAreaController extends CMSMain
             'saveUrl' => $this->Link('api/saveForm'),
             'saveMethod' => 'post',
             'payloadFormat' => 'json',
-            'formNameTemplate' => sprintf(static::FORM_NAME_TEMPLATE, '{id}'),
+            'formNameTemplate' => sprintf(static::FORM_NAME_TEMPLATE ?? '', '{id}'),
         ];
 
         // Configuration that is available per element type
@@ -93,7 +93,7 @@ class ElementalAreaController extends CMSMain
         /** @var Form $form */
         $form = $scaffolder->getForm(
             $this,
-            sprintf(static::FORM_NAME_TEMPLATE, $elementID),
+            sprintf(static::FORM_NAME_TEMPLATE ?? '', $elementID),
             ['Record' => $element]
         );
 
@@ -186,7 +186,7 @@ class ElementalAreaController extends CMSMain
         $formName = $request->param('FormName');
 
         // Get the element ID from the form name
-        $id = substr($formName, strlen(sprintf(self::FORM_NAME_TEMPLATE, '')));
+        $id = substr($formName ?? '', strlen(sprintf(self::FORM_NAME_TEMPLATE ?? '', '')));
         $form = $this->getElementForm($id);
 
         $field = $form->getRequestHandler()->handleField($request);
@@ -204,14 +204,14 @@ class ElementalAreaController extends CMSMain
     public static function removeNamespacesFromFields(array $data, $elementID)
     {
         $output = [];
-        $template = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementID, '');
+        $template = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE ?? '', $elementID, '');
         foreach ($data as $key => $value) {
             // Only look at fields that match the namespace template
-            if (substr($key, 0, strlen($template)) !== $template) {
+            if (substr($key ?? '', 0, strlen($template ?? '')) !== $template) {
                 continue;
             }
 
-            $fieldName = substr($key, strlen($template));
+            $fieldName = substr($key ?? '', strlen($template ?? ''));
             $output[$fieldName] = $value;
         }
         return $output;

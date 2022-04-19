@@ -16,6 +16,7 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\ViewableData;
 
 /**
  * This extension handles most of the relationships between pages and element
@@ -114,7 +115,7 @@ class ElementalAreasExtension extends DataExtension
             /** @var BaseElement $inst */
             $inst = singleton($availableClass);
 
-            if (!in_array($availableClass, $disallowedElements) && $inst->canCreate()) {
+            if (!in_array($availableClass, $disallowedElements ?? []) && $inst->canCreate()) {
                 if ($inst->hasMethod('canCreateElement') && !$inst->canCreateElement()) {
                     continue;
                 }
@@ -260,7 +261,7 @@ class ElementalAreasExtension extends DataExtension
             return false;
         } elseif ($ignored = Config::inst()->get(ElementalPageExtension::class, 'ignored_classes')) {
             foreach ($ignored as $check) {
-                if (is_a($this->owner, $check)) {
+                if (is_a($this->owner, $check ?? '')) {
                     return false;
                 }
             }
@@ -327,7 +328,7 @@ class ElementalAreasExtension extends DataExtension
                 }
             }
 
-            $needsPublishing = Extensible::has_extension($elementalObject, Versioned::class)
+            $needsPublishing = ViewableData::has_extension($elementalObject, Versioned::class)
                 && $elementalObject->isPublished();
 
             /** @var ElementalAreasExtension $elementalObject */

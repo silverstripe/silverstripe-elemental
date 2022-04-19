@@ -157,14 +157,14 @@ class Resolver
         $parts = [];
 
         // does $title end with 'copy' (ignoring numbers for now)?
-        if (preg_match($hasCopyPattern, $title, $parts)) {
+        if (preg_match($hasCopyPattern ?? '', $title ?? '', $parts)) {
             $copy = $parts[1];
             // does $title end with numbers?
-            if (preg_match($hasNumPattern, $copy, $parts)) {
-                $num = trim($parts[1]);
-                $len = strlen($num);
+            if (preg_match($hasNumPattern ?? '', $copy ?? '', $parts)) {
+                $num = trim($parts[1] ?? '');
+                $len = strlen($num ?? '');
                 $inc = (int)$num + 1;
-                return substr($title, 0, -$len) . "$inc";
+                return substr($title ?? '', 0, -$len) . "$inc";
             } else {
                 return $title . ' 2';
             }

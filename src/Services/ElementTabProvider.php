@@ -140,6 +140,6 @@ class ElementTabProvider implements Flushable
      */
     protected function getCacheKey($className)
     {
-        return 'Tabs.' . str_replace(['\\'], '-', $className);
+        return 'Tabs.' . str_replace(['\\'], '-', $className ?? '');
     }
 }

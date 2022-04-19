@@ -201,7 +201,7 @@ class FeatureContext extends SilverStripeContext
     {
         $popover = $this->getSession()->getPage()->find('css', '.popover-option-set');
 
-        $blockType = strtolower($text);
+        $blockType = strtolower($text ?? '');
 
         // Selector preferable not font-icon, but other class shared among all buttons
         $button = $popover->find('css', '.font-icon-block-'. $blockType);

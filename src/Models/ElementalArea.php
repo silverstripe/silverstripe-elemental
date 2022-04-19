@@ -4,7 +4,6 @@ namespace DNADesign\Elemental\Models;
 
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
 use SilverStripe\Core\ClassInfo;
-use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\ORM\ArrayList;
@@ -14,6 +13,7 @@ use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\HasManyList;
 use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\ViewableData;
 
 /**
  * Class ElementalArea
@@ -79,7 +79,7 @@ class ElementalArea extends DataObject
         $elementalClasses = [];
 
         foreach (ClassInfo::getValidSubClasses(DataObject::class) as $class) {
-            if (Extensible::has_extension($class, ElementalAreasExtension::class)) {
+            if (ViewableData::has_extension($class, ElementalAreasExtension::class)) {
                 $elementalClasses[] = $class;
             }
         }

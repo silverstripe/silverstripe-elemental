@@ -66,7 +66,7 @@ class EditFormFactory extends DefaultFormFactory
         $elementID = $context['Record']->ID;
 
         foreach ($fields->dataFields() as $field) {
-            $namespacedName = sprintf(self::FIELD_NAMESPACE_TEMPLATE, $elementID, $field->getName());
+            $namespacedName = sprintf(self::FIELD_NAMESPACE_TEMPLATE ?? '', $elementID, $field->getName());
             $field->setName($namespacedName);
         }
     }

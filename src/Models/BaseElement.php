@@ -365,7 +365,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
             $styles = $this->config()->get('styles');
 
-            if ($styles && count($styles) > 0) {
+            if ($styles && count($styles ?? []) > 0) {
                 $styleDropdown = DropdownField::create('Style', _t(__CLASS__.'.STYLE', 'Style variation'), $styles);
 
                 $fields->insertBefore($styleDropdown, 'ExtraClass');
@@ -454,7 +454,7 @@ JS
 
         $controllerClass = self::config()->controller_class;
 
-        if (!class_exists($controllerClass)) {
+        if (!class_exists($controllerClass ?? '')) {
             throw new Exception(
                 'Could not find controller class ' . $controllerClass . ' as defined in ' . static::class
             );
@@ -506,7 +506,7 @@ JS
     public function getContentForSearchIndex(): string
     {
         // Strips tags but be sure there's a space between words.
-        $content = trim(strip_tags(str_replace('<', ' <', $this->forTemplate())));
+        $content = trim(strip_tags(str_replace('<', ' <', $this->forTemplate() ?? '') ?? ''));
         // Allow projects to update indexable content of third-party elements.
         $this->extend('updateContentForSearchIndex', $content);
         return $content;
@@ -539,7 +539,7 @@ JS
     {
         $classes = ClassInfo::ancestry($this->ClassName);
         $classes[static::class] = static::class;
-        $classes = array_reverse($classes);
+        $classes = array_reverse($classes ?? []);
         $templates = [];
 
         foreach ($classes as $key => $class) {
@@ -599,7 +599,7 @@ JS
      */
     protected function stripNamespacing($classname)
     {
-        $classParts = explode('\\', $classname);
+        $classParts = explode('\\', $classname ?? '');
         return array_pop($classParts);
     }
 
@@ -608,7 +608,7 @@ JS
      */
     public function getSimpleClassName()
     {
-        return strtolower($this->sanitiseClassName($this->ClassName, '__'));
+        return strtolower($this->sanitiseClassName($this->ClassName, '__') ?? '');
     }
 
     /**
@@ -833,12 +833,12 @@ JS
      */
     public function sanitiseClassName($class, $delimiter = '-')
     {
-        return str_replace('\\', $delimiter, $class);
+        return str_replace('\\', $delimiter ?? '', $class ?? '');
     }
 
     public function unsanitiseClassName($class, $delimiter = '-')
     {
-        return str_replace($delimiter, '\\', $class);
+        return str_replace($delimiter ?? '', '\\', $class ?? '');
     }
 
     /**
@@ -1041,7 +1041,7 @@ JS
         $styles = $this->config()->get('styles');
 
         if (isset($styles[$style])) {
-            $style = strtolower($style);
+            $style = strtolower($style ?? '');
         } else {
             $style = '';
         }
