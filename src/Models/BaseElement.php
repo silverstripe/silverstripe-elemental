@@ -765,21 +765,38 @@ JS
             return $link;
         }
 
-        if (!$page instanceof SiteTree && method_exists($page, 'CMSEditLink')) {
-            $link = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
+        if (!$page instanceof SiteTree) {
+            if (ClassInfo::hasMethod($page, 'CMSEditLink')) {
+                $link = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
+            } else {
+                $link = null;
+                $this->extend('updateCMSEditLink', $link);
+                return $link;
+            }
         } else {
             $link = $page->CMSEditLink();
         }
 
         // In-line editable blocks should just take you to the page. Editable ones should add the suffix for detail form
         if (!$this->inlineEditable() || $directLink) {
-            $link = Controller::join_links(
-                singleton(CMSPageEditController::class)->Link('EditForm'),
-                $page->ID,
-                'field/' . $relationName . '/item/',
-                $this->ID,
-                'edit'
-            );
+            if (!$page instanceof SiteTree) {
+                $link = Controller::join_links(
+                    $link,
+                    'field',
+                    $relationName,
+                    'item',
+                    $this->ID,
+                    'edit'
+                );
+            } else {
+                $link = Controller::join_links(
+                    singleton(CMSPageEditController::class)->Link('EditForm'),
+                    $page->ID,
+                    'field/' . $relationName . '/item/',
+                    $this->ID,
+                    'edit'
+                );
+            }
         }
 
         $this->extend('updateCMSEditLink', $link);
