@@ -1,0 +1,38 @@
+DNADesign\Elemental\Models\ElementalArea:
+  areaDataObject1:
+    Title: Area 1
+    OwnerClassName: DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink
+  areaDataObject2:
+    Title: Area 2
+    OwnerClassName: DNADesign\Elemental\Tests\Src\TestDataObject
+
+DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink:
+  dataObject1:
+    Title: DataObject with CMSEditLink method 
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject1
+
+DNADesign\Elemental\Tests\Src\TestDataObject:
+  dataObject2:
+    Title: DataObject without CMSEditLink method
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject2
+
+DNADesign\Elemental\Tests\Src\TestElement:
+  elementDataObject1:
+    Title: Element 1
+    TestValue: 'Hello Test'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject1
+  elementDataObject2:
+    Title: Element 2
+    TestValue: 'Hello Test'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject2
+
+DNADesign\Elemental\Tests\Src\TestElementDataObject:
+  testElementDataObject1:
+    Title: Test Element inline-editable
+    TestValue: 'Hello Test'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject1
+
+DNADesign\Elemental\Models\ElementContent:
+  contentDataObject1:
+    HTML: Some content
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject1
