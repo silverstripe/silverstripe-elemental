@@ -16,6 +16,7 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\ViewableData;
 
 /**
  * This extension handles most of the relationships between pages and element
@@ -327,7 +328,7 @@ class ElementalAreasExtension extends DataExtension
                 }
             }
 
-            $needsPublishing = Extensible::has_extension($elementalObject, Versioned::class)
+            $needsPublishing = ViewableData::has_extension($elementalObject, Versioned::class)
                 && $elementalObject->isPublished();
 
             /** @var ElementalAreasExtension $elementalObject */
