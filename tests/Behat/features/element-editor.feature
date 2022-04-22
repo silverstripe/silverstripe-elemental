@@ -65,7 +65,7 @@ Feature: View types of elements in an area on a page
     When I click on the caret button for block 1
       Then I should see the edit form for block 1
       And the "Content" field should contain "<p>New sample content</p>"
-
+      
   Scenario: I can operate blocks with a mouse
     Given a "virtual page" "Virtual Page"
 
@@ -90,7 +90,7 @@ Feature: View types of elements in an area on a page
     When I go to "/admin/pages"
     And I follow "Blocks Page"
     Then I should not see "Untitled Content Block"
-    And I click on the "#AddBlockHoverBarArea_2" element
+    When I click on the add block button in hover bar area for block 1
     And I wait for 1 seconds
     And I click on the ".popover .font-icon-block-content" element
     And I wait for 5 seconds
