@@ -96,7 +96,7 @@ class DataExtension extends BaseDataExtension
     {
         $list = [$this->owner];
 
-        while (count($list) > 0) {
+        while (count($list ?? []) > 0) {
             /** @var DataObject|DataExtension $item */
             $item = array_shift($list);
 

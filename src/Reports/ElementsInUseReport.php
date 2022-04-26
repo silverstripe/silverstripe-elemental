@@ -166,6 +166,6 @@ class ElementsInUseReport extends Report
      */
     protected function unsanitiseClassName($class)
     {
-        return str_replace('-', '\\', $class);
+        return str_replace('-', '\\', $class ?? '');
     }
 }

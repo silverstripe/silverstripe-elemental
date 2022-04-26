@@ -48,7 +48,7 @@ class ElementalAreasExtensionTest extends SapphireTest
         $page = new SiteTree();
         $types = $page->getElementalTypes();
 
-        $this->assertContainsInOrder(['A test element', 'Content', 'Unused Element'], array_values($types));
+        $this->assertContainsInOrder(['A test element', 'Content', 'Unused Element'], array_values($types ?? []));
     }
 
     public function testGetElementalTypesAreNotSortedAlphabetically()
@@ -59,7 +59,7 @@ class ElementalAreasExtensionTest extends SapphireTest
         $page = new SiteTree();
         $types = $page->getElementalTypes();
 
-        $this->assertContainsInOrder(['Content', 'A test element', 'Unused Element'], array_values($types));
+        $this->assertContainsInOrder(['Content', 'A test element', 'Unused Element'], array_values($types ?? []));
     }
 
     /**
@@ -71,7 +71,7 @@ class ElementalAreasExtensionTest extends SapphireTest
      */
     private function assertContainsInOrder(array $expected, array $actual)
     {
-        $matches = array_values(array_intersect($actual, $expected));
+        $matches = array_values(array_intersect($actual ?? [], $expected));
 
         $this->assertSame($expected, $matches);
     }
