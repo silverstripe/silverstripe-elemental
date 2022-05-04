@@ -13,6 +13,7 @@ nl:
       other: '{count} blokken'
     SINGULARNAME: blok
     STYLE: 'Stijl variatie'
+    SettingsTabLabel: Instellingen
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Inhoud
     ContentLabel: Inhoud
@@ -38,3 +39,8 @@ nl:
     Summary: Samenvatting
     Title: Titel
     Type: Type
+  DNADesign\Elemental\Forms\TextCheckboxGroupField:
+    DISPLAYED: Weergegeven
+    NOT_DISPLAYED: 'Niet weergegeven'
+    ShowTitleLabel: Weergegeven
+    TitleLabel: 'Titel (aanvinken om te tonen)'

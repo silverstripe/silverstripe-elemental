@@ -4,6 +4,8 @@ de:
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     ShowTitleLabel: 'Wird angezeigt'
     TitleLabel: 'Titel (angezeigt, wenn ausgewählt)'
+    DISPLAYED: 'Wird angezeigt'
+    NOT_DISPLAYED: 'Wird nicht angezeigt'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Block
     CUSTOM_STYLES: 'Stil auswählen...'
