@@ -701,7 +701,7 @@ JS
 
     /**
      * @param string|null $action
-     * @return string
+     * @return string|null
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \SilverStripe\ORM\ValidationException
      */
@@ -721,16 +721,28 @@ JS
 
     /**
      * @param string|null $action
-     * @return string
+     * @return string|null
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \SilverStripe\ORM\ValidationException
      */
     public function PreviewLink($action = null)
     {
-        $action = $action . '?ElementalPreview=' . mt_rand();
-        $link = $this->Link($action);
-        $this->extend('updatePreviewLink', $link);
+        $link = null;
+        if ($page = $this->getPage()) {
+            if (ClassInfo::hasMethod($page, 'Link')) {
+                $link = $page->Link($action);
+            }
+            if (!$link && ($page instanceof CMSPreviewable)) {
+                $link = $page->PreviewLink($action);
+            }
+            if ($link) {
+                // The ElementalPreview getvar is used in ElementalPageExtension
+                // The anchor must be at the end of the URL to function correctly
+                $link .= '?ElementalPreview=' . mt_rand() . '#' . $this->getAnchor();
+            }
+        }
 
+        $this->extend('updatePreviewLink', $link);
         return $link;
     }
 

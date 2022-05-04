@@ -401,4 +401,50 @@ class BaseElementTest extends FunctionalTest
         $absoluteLink = $object->AbsoluteLink();
         $this->assertEquals($link, $absoluteLink);
     }
+
+    public function previewLinksProvider()
+    {
+        return [
+            // Element on Page
+            [
+                ElementContent::class,
+                'content1',
+                '/test-elemental/',
+            ],
+            // Element in DataObject WITHOUT PreviewLink or Link
+            [
+                TestElement::class,
+                'elementDataObject2',
+                null,
+            ],
+            // Element in DataObject WITH PreviewLink WITHOUT Link
+            [
+                TestElement::class,
+                'elementDataObject3',
+                'preview-link',
+            ],
+            // Element in DataObject WITH PreviewLink AND Link (different paths)
+            [
+                TestElement::class,
+                'elementDataObject4',
+                'base-link',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider previewLinksProvider
+     */
+    public function testPreviewLink(string $class, string $elementIdentifier, ?string $link)
+    {
+        /** @var BaseElement $element */
+        $element = $this->objFromFixture($class, $elementIdentifier);
+
+        if ($link) {
+            $regex = '/^' . preg_quote($link . '?ElementalPreview=', '/') .'\d*#' . $element->getAnchor() . '$/';
+            $this->assertTrue((bool)preg_match($regex, $element->PreviewLink()));
+        } else {
+            $this->assertSame($link, $element->PreviewLink());
+        }
+    }
 }
