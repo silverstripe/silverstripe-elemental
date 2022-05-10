@@ -4,6 +4,8 @@ fi:
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     ShowTitleLabel: Näytetään
     TitleLabel: 'Otsikko (näytetään, jos valittu)'
+    DISPLAYED: Näytetään
+    NOT_DISPLAYED: 'Ei näytetä'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Palikka
     CUSTOM_STYLES: 'Valitse tyyli..'
