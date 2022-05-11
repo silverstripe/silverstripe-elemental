@@ -27,7 +27,8 @@
         "silverstripe/vendor-plugin": "^1"
     },
     "require-dev": {
-      "silverstripe/recipe-testing": "^2"
+      "silverstripe/recipe-testing": "^2",
+      "silverstripe/frameworktest": "4.x-dev"
     },
     "suggest": {
         "silverstripe/elemental-blocks": "Adds a set of common SilverStripe content block types",
