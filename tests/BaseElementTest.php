@@ -8,9 +8,13 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestContentForSearchIndexExtension;
+use DNADesign\Elemental\Tests\Src\TestDataObject;
 use DNADesign\Elemental\Tests\Src\TestElement;
+use DNADesign\Elemental\Tests\Src\TestElementDataObject;
+use DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use Page;
+use ReflectionClass;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
@@ -19,10 +23,19 @@ use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 
 class BaseElementTest extends FunctionalTest
 {
-    protected static $fixture_file = 'ElementalPageExtensionTest.yml';
+    protected static $fixture_file = [
+        'ElementalPageExtensionTest.yml',
+        'ElementalAreaDataObjectTest.yml'
+    ];
 
     protected static $required_extensions = [
         Page::class => [
+            ElementalPageExtension::class,
+        ],
+        TestDataObject::class => [
+            ElementalPageExtension::class,
+        ],
+        TestDataObjectWithCMSEditLink::class => [
             ElementalPageExtension::class,
         ],
     ];
@@ -30,6 +43,9 @@ class BaseElementTest extends FunctionalTest
     protected static $extra_dataobjects = [
         TestPage::class,
         TestElement::class,
+        TestDataObject::class,
+        TestDataObjectWithCMSEditLink::class,
+        TestElementDataObject::class,
     ];
 
     public function testSimpleClassName()
@@ -253,5 +269,136 @@ class BaseElementTest extends FunctionalTest
         // Content should be updated by the extension
         $this->assertEquals('This is the updated content.', $element->getContentForSearchIndex());
         ElementContent::remove_extension(TestContentForSearchIndexExtension::class);
+    }
+
+    public function getElementCMSLinkDataProvider()
+    {
+        return [
+            // Element in DataObject with $directLink === true
+            'element1' => [
+                TestElement::class,
+                'elementDataObject1',
+                'http://localhost/admin/1/ItemEditForm/field/ElementalArea/item/',
+                true
+            ],
+            // Element in DataObject with $inline_editable = false
+            'element2' => [
+                TestElementDataObject::class,
+                'testElementDataObject1',
+                'http://localhost/admin/1/ItemEditForm/field/ElementalArea/item/',
+            ],
+            // Element in DataObject with $inline_editable = true
+            'element3' => [
+                ElementContent::class,
+                'contentDataObject1',
+                'http://localhost/admin/1/ItemEditForm',
+            ],
+            // Element in Page with $inline_editable = true
+            'element4' => [
+                ElementContent::class,
+                'content1',
+                'http://localhost/admin/pages/edit/show/1',
+            ],
+            // Element in DataObject with $directLink === true
+            'element5' => [
+                ElementContent::class,
+                'content1',
+                'admin/pages/edit/EditForm/1/field/ElementalArea/item/1/edit',
+                true
+            ],
+            // DataObject without CMSEditLink method
+            'element6' => [
+                TestElement::class,
+                'elementDataObject2',
+                null
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider getElementCMSLinkDataProvider
+     */
+    public function testCMSEditLink(string $class, string $element, ?string $link, bool $directLink = false)
+    {
+        $object = $this->objFromFixture($class, $element);
+        $editLink = $object->CMSEditLink($directLink);
+
+        if ($link) {
+            $this->assertStringContainsString($link, $editLink);
+        } else {
+            $this->assertNull($link);
+        }
+    }
+
+    public function canDeleteProvider()
+    {
+        return [
+            // Element on Page
+            'element1' => [
+                ElementContent::class,
+                'content1',
+                'ADMIN',
+            ],
+            // Element in DataObject
+            'element2' => [
+                TestElement::class,
+                'elementDataObject1',
+                'CMS_ACCESS_CMSMain',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider canDeleteProvider
+     */
+    public function testCanDelete(
+        string $class,
+        string $element,
+        string $permission
+    ) {
+        $this->logOut();
+        $this->logInWithPermission($permission);
+        $object = $this->objFromFixture($class, $element);
+        $canDelete = $object->canDelete();
+        $this->assertNotNull($canDelete);
+        $this->assertTrue($canDelete);
+    }
+
+    public function linksProvider()
+    {
+        return [
+            // Element on Page
+            'element1' => [
+                ElementContent::class,
+                'content1',
+                '/test-elemental/#e1',
+            ],
+            // Element in DataObject
+            'element2' => [
+                TestElement::class,
+                'elementDataObject1',
+                null,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider linksProvider
+     */
+    public function testLinkWithDataObject(string $class, string $element, ?string $link)
+    {
+        $object = $this->objFromFixture($class, $element);
+        $this->assertEquals($link, $object->Link());
+    }
+
+    /**
+     * @dataProvider linksProvider
+     */
+    public function testAbsoluteLink(string $class, string $element, ?string $link)
+    {
+        $link = $link ? Director::absoluteURL($link) : $link;
+        $object = $this->objFromFixture($class, $element);
+        $absoluteLink = $object->AbsoluteLink();
+        $this->assertEquals($link, $absoluteLink);
     }
 }
