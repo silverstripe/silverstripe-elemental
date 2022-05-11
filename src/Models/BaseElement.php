@@ -257,13 +257,18 @@ class BaseElement extends DataObject implements CMSPreviewable
     public function canDelete($member = null)
     {
         $extended = $this->extendedCan(__FUNCTION__, $member);
+        
         if ($extended !== null) {
             return $extended;
         }
 
         if ($this->hasMethod('getPage')) {
             if ($page = $this->getPage()) {
-                return $page->canArchive($member);
+                if ($page->hasExtension(Versioned::class)) {
+                    return $page->canArchive($member);
+                } else {
+                    return $page->canDelete($member);
+                }
             }
         }
 
@@ -612,7 +617,8 @@ JS
     }
 
     /**
-     * @return null|SiteTree
+     * Despite the name of the method, getPage can return any type of DataObject
+     * @return null|DataObject
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \SilverStripe\ORM\ValidationException
      */
@@ -622,7 +628,6 @@ JS
         if (isset($this->cacheData['page'])) {
             return $this->cacheData['page'];
         }
-
 
         $class = DataObject::getSchema()->hasOneComponent($this, 'Parent');
         $area = ($this->ParentID) ? DataObject::get_by_id($class, $this->ParentID) : null;
@@ -682,9 +687,10 @@ JS
      */
     public function AbsoluteLink($action = null)
     {
-        if ($page = $this->getPage()) {
+        $page = $this->getPage();
+        
+        if ($page && ClassInfo::hasMethod($page, 'AbsoluteLink')) {
             $link = $page->AbsoluteLink($action) . '#' . $this->getAnchor();
-
             $this->extend('updateAbsoluteLink', $link);
 
             return $link;
@@ -701,9 +707,10 @@ JS
      */
     public function Link($action = null)
     {
-        if ($page = $this->getPage()) {
-            $link = $page->Link($action) . '#' . $this->getAnchor();
+        $page = $this->getPage();
 
+        if ($page && ClassInfo::hasMethod($page, 'Link')) {
+            $link = $page->Link($action) . '#' . $this->getAnchor();
             $this->extend('updateLink', $link);
 
             return $link;
@@ -756,35 +763,62 @@ JS
             return $this->cacheData['cms_edit_link'];
         }
 
+        $link = $this->getElementCMSLink($directLink);
+        $this->extend('updateCMSEditLink', $link);
+
+        if ($link) {
+            $this->cacheData['cms_edit_link'] = $link;
+        }
+
+        return $link;
+    }
+
+    /**
+     * @param bool $directLink
+     * @return null|string
+     */
+    private function getElementCMSLink(bool $directLink)
+    {
         $relationName = $this->getAreaRelationName();
         $page = $this->getPage();
 
+        $link = null;
+
         if (!$page) {
-            $link = null;
-            $this->extend('updateCMSEditLink', $link);
             return $link;
         }
 
-        if (!$page instanceof SiteTree && method_exists($page, 'CMSEditLink')) {
-            $link = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
-        } else {
+        if ($page instanceof SiteTree) {
             $link = $page->CMSEditLink();
+        } elseif (ClassInfo::hasMethod($page, 'CMSEditLink')) {
+            $link = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
         }
-
-        // In-line editable blocks should just take you to the page. Editable ones should add the suffix for detail form
+        // In-line editable blocks should just take you to the page.
+        // Editable ones should add the suffix for detail form.
         if (!$this->inlineEditable() || $directLink) {
-            $link = Controller::join_links(
-                singleton(CMSPageEditController::class)->Link('EditForm'),
-                $page->ID,
-                'field/' . $relationName . '/item/',
-                $this->ID,
-                'edit'
-            );
+            if ($page instanceof SiteTree) {
+                return Controller::join_links(
+                    singleton(CMSPageEditController::class)->Link('EditForm'),
+                    $page->ID,
+                    'field',
+                    $relationName,
+                    'item',
+                    $this->ID,
+                    'edit'
+                );
+            } else {
+                // If $page is not a Page, then generate $link base on $page->CMSEditLink()
+                return Controller::join_links(
+                    $link,
+                    'field',
+                    $relationName,
+                    'item',
+                    $this->ID,
+                    'edit'
+                );
+            }
         }
 
-        $this->extend('updateCMSEditLink', $link);
-
-        $this->cacheData['cms_edit_link'] = $link;
         return $link;
     }
 
