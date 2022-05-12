@@ -5,6 +5,12 @@ DNADesign\Elemental\Models\ElementalArea:
   areaDataObject2:
     Title: Area 2
     OwnerClassName: DNADesign\Elemental\Tests\Src\TestDataObject
+  areaDataObject3:
+    Title: Area 3
+    OwnerClassName: DNADesign\Elemental\Tests\Src\TestPreviewableDataObject
+  areaDataObject4:
+    Title: Area 4
+    OwnerClassName: DNADesign\Elemental\Tests\Src\TestPreviewableDataObjectWithLink
 
 DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink:
   dataObject1:
@@ -13,8 +19,18 @@ DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink:
 
 DNADesign\Elemental\Tests\Src\TestDataObject:
   dataObject2:
-    Title: DataObject without CMSEditLink method
+    Title: DataObject without CMSEditLink, Link, or PreviewLink methods
     ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject2
+
+DNADesign\Elemental\Tests\Src\TestPreviewableDataObject:
+  dataObject3:
+    Title: DataObject with PreviewLink method
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject3
+
+DNADesign\Elemental\Tests\Src\TestPreviewableDataObjectWithLink:
+  dataObject4:
+    Title: DataObject with PreviewLink and Link methods
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject4
 
 DNADesign\Elemental\Tests\Src\TestElement:
   elementDataObject1:
@@ -25,6 +41,14 @@ DNADesign\Elemental\Tests\Src\TestElement:
     Title: Element 2
     TestValue: 'Hello Test'
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject2
+  elementDataObject3:
+    Title: Element 3
+    TestValue: 'Hello Test'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject3
+  elementDataObject4:
+    Title: Element 4
+    TestValue: 'Hello Test'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject4
 
 DNADesign\Elemental\Tests\Src\TestElementDataObject:
   testElementDataObject1:
