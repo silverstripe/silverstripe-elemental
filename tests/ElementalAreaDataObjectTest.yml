@@ -14,7 +14,7 @@ DNADesign\Elemental\Models\ElementalArea:
 
 DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink:
   dataObject1:
-    Title: DataObject with CMSEditLink method 
+    Title: DataObject with CMSEditLink method
     ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject1
 
 DNADesign\Elemental\Tests\Src\TestDataObject:
@@ -60,3 +60,12 @@ DNADesign\Elemental\Models\ElementContent:
   contentDataObject1:
     HTML: Some content
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject1
+
+DNADesign\Elemental\Tests\Src\TestMultipleHtmlFieldsElement:
+  multiHtmlFields1:
+    Field1: '<p><a id="anchor1"></a><span name="anchor2"></span></p>'
+    Field2: '<p><a id="anchor1"></a><span name="anchor3"></span></p>'
+    Field3: '<p><a id="anchor4"></a><span name="anchor3"></span></p>'
+  multiHtmlFields2:
+    Field1: '<p>id="not-anchor"</p>'
+    Field2: '<p>name="not-anchor2"</p>'

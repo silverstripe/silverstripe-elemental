@@ -12,6 +12,7 @@ use DNADesign\Elemental\Tests\Src\TestDataObject;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestElementDataObject;
 use DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink;
+use DNADesign\Elemental\Tests\Src\TestMultipleHtmlFieldsElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use Page;
 use ReflectionClass;
@@ -46,6 +47,7 @@ class BaseElementTest extends FunctionalTest
         TestDataObject::class,
         TestDataObjectWithCMSEditLink::class,
         TestElementDataObject::class,
+        TestMultipleHtmlFieldsElement::class,
     ];
 
     public function testSimpleClassName()
@@ -269,6 +271,38 @@ class BaseElementTest extends FunctionalTest
         // Content should be updated by the extension
         $this->assertEquals('This is the updated content.', $element->getContentForSearchIndex());
         ElementContent::remove_extension(TestContentForSearchIndexExtension::class);
+    }
+
+    public function getElementAnchorDataProvider(): array
+    {
+        return [
+            [
+                TestMultipleHtmlFieldsElement::class,
+                'multiHtmlFields1',
+                [
+                    'anchor1',
+                    'anchor2',
+                    'anchor3',
+                    'anchor4',
+                ]
+            ],
+            [
+                TestMultipleHtmlFieldsElement::class,
+                'multiHtmlFields2',
+                []
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider getElementAnchorDataProvider
+     */
+    public function testGetAnchorsInContent(string $elementClass, string $elementName, array $expectedAnchors): void
+    {
+        $element = $this->objFromFixture($elementClass, $elementName);
+        array_unshift($expectedAnchors, $element->getAnchor());
+        // We use array values here because `array_unique` in `getAnchorsInContent()` doesn't reset array indices
+        $this->assertSame($expectedAnchors, array_values($element->getAnchorsInContent()));
     }
 
     public function getElementCMSLinkDataProvider()
