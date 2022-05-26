@@ -4,8 +4,8 @@ namespace DNADesign\Elemental\Tests\Legacy\GraphQL;
 
 use DNADesign\Elemental\GraphQL\AddElementToAreaMutation;
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Tests\GraphQL\FakeResolveInfo;
 use DNADesign\Elemental\Tests\Src\TestElement;
+use SilverStripe\GraphQL\Tests\Fake\FakeResolveInfo;
 use InvalidArgumentException;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\GraphQL\Schema\Schema;
@@ -81,7 +81,7 @@ class AddElementToAreaMutationTest extends SapphireTest
     {
         $mutation = new AddElementToAreaMutation();
         $context = ['currentUser' => Security::getCurrentUser()];
-        $resolveInfo = new FakeResolveInfo();
+        $resolveInfo = new FakeResolveInfo([]);
 
         $args = [
             'className' => $className,
