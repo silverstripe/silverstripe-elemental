@@ -2,7 +2,9 @@
 
 namespace DNADesign\Elemental\Extensions;
 
+use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\View\Parsers\HTML4Value;
 use SilverStripe\View\SSViewer;
@@ -47,23 +49,14 @@ class ElementalPageExtension extends ElementalAreasExtension
         SSViewer::set_themes(SSViewer::config()->get('themes'));
         try {
             $output = [];
-            foreach ($this->owner->hasOne() as $key => $class) {
-                if ($class !== ElementalArea::class) {
-                    continue;
-                }
-                /** @var ElementalArea $area */
-                $area = $this->owner->$key();
-                if ($area) {
-                    foreach ($area->Elements() as $element) {
-                        if ($element->getSearchIndexable()) {
-                            $content = $element->getContentForSearchIndex();
-                            if ($content) {
-                                $output[] = $content;
-                            }
-                        }
+            $this->loopThroughElements(function (BaseElement $element) use (&$output) {
+                if ($element->getSearchIndexable()) {
+                    $content = $element->getContentForSearchIndex();
+                    if ($content) {
+                        $output[] = $content;
                     }
                 }
-            }
+            });
         } finally {
             // Reset theme if an exception occurs, if you don't have a
             // try / finally around code that might throw an Exception,
@@ -71,6 +64,19 @@ class ElementalPageExtension extends ElementalAreasExtension
             SSViewer::set_themes($oldThemes);
         }
         return implode($this->owner->config()->get('search_index_element_delimiter') ?? '', $output);
+    }
+
+    /**
+     * @see SiteTree::getAnchorsOnPage()
+     */
+    public function updateAnchorsOnPage(array &$anchors): void
+    {
+        if (!($this->owner instanceof SiteTree)) {
+            return;
+        }
+        $this->loopThroughElements(function (BaseElement $element) use (&$anchors) {
+            $anchors = array_merge($anchors, $element->getAnchorsInContent());
+        });
     }
 
     public function MetaTags(&$tags)
@@ -89,6 +95,25 @@ class ElementalPageExtension extends ElementalAreasExtension
                 $body->removeChild($tag);
             }
             $tags = $html->getContent();
+        }
+    }
+
+    /**
+     * Call some function over all elements belonging to this page
+     */
+    private function loopThroughElements(callable $callback): void
+    {
+        foreach ($this->owner->hasOne() as $key => $class) {
+            if ($class !== ElementalArea::class) {
+                continue;
+            }
+            /** @var ElementalArea $area */
+            $area = $this->owner->$key();
+            if ($area) {
+                foreach ($area->Elements() as $element) {
+                    $callback($element);
+                }
+            }
         }
     }
 }

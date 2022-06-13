@@ -257,7 +257,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     public function canDelete($member = null)
     {
         $extended = $this->extendedCan(__FUNCTION__, $member);
-        
+
         if ($extended !== null) {
             return $extended;
         }
@@ -680,6 +680,38 @@ JS
     }
 
     /**
+     * Get anchors in this block's content.
+     * Used to populate the "anchor on a page" link in the WYSIWYG
+     *
+     * By default, this finds anchors in any HTMLText field on the block, but
+     * this method should be overridden if anchors are provided in other ways
+     * for this block or if not all HTMLText fields for this block are
+     * displayed on the front-end.
+     */
+    public function getAnchorsInContent(): array
+    {
+        $anchors = [$this->getAnchor()];
+        $anchorRegex = "/\\s+(name|id)\\s*=\\s*([\"'])([^\\2\\s>]*?)\\2|\\s+(name|id)\\s*=\\s*([^\"']+)[\\s +>]/im";
+        $allFields = DataObject::getSchema()->fieldSpecs($this);
+        foreach ($allFields as $field => $fieldSpec) {
+            $fieldObj = $this->owner->dbObject($field);
+            if ($fieldObj instanceof DBHTMLText) {
+                $parseSuccess = preg_match_all($anchorRegex, $fieldObj->getValue() ?? '', $matches);
+                if ($parseSuccess >= 1) {
+                    $fieldAnchors = array_values(array_filter(
+                        array_merge($matches[3], $matches[5])
+                    ));
+                    $anchors = array_merge($anchors, $fieldAnchors);
+                }
+            }
+        }
+        $anchors = array_unique($anchors);
+
+        $this->extend('updateAnchorsInContent', $anchors);
+        return $anchors;
+    }
+
+    /**
      * @param string|null $action
      * @return string|null
      * @throws \Psr\Container\NotFoundExceptionInterface
@@ -688,7 +720,7 @@ JS
     public function AbsoluteLink($action = null)
     {
         $page = $this->getPage();
-        
+
         if ($page && ClassInfo::hasMethod($page, 'AbsoluteLink')) {
             $link = $page->AbsoluteLink($action) . '#' . $this->getAnchor();
             $this->extend('updateAbsoluteLink', $link);

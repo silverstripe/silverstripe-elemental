@@ -13,7 +13,7 @@ if (!class_exists(BaseFixtureContext::class)) {
 class FixtureContext extends BaseFixtureContext
 {
     /**
-     * @Given /(?:the|a) "([^"]+)" "([^"]+)" (?:with|has) a "([^"]+)" content element with "([^"]+)" content/
+     * @Given /(?:the|a) "([^"]+)" "([^"]+)" (?:with|has) a "([^"]+)" content element with "(.*)" content/
      *
      * @param string $pageTitle
      * @param string $type
