@@ -23,6 +23,7 @@ describe('SaveAction', () => {
           BlockSchema: { type: 'Test' },
           canCreate: true
         }}
+        type={{ broken: false }}
         expandable
         actions={{ handlePublishBlock: mockMutation }}
         toggle={false}
@@ -31,7 +32,7 @@ describe('SaveAction', () => {
     expect(wrapper.find('button').length).toBe(1);
   });
 
-  it('does not renders a button when block is not expandable', () => {
+  it('does not render a button when block is not expandable', () => {
     wrapper = mount(
       <ActionComponent
         title="My save action"
@@ -40,7 +41,26 @@ describe('SaveAction', () => {
           BlockSchema: { type: 'Test' },
           canCreate: true
         }}
+        type={{ broken: false }}
         expandable={false}
+        actions={{ handlePublishBlock: mockMutation }}
+        toggle={false}
+      />
+    );
+    expect(wrapper.find('button').length).toBe(0);
+  });
+
+  it('does not render a button when block is broken', () => {
+    wrapper = mount(
+      <ActionComponent
+        title="My save action"
+        element={{
+          ID: 123,
+          BlockSchema: { type: 'Test' },
+          canCreate: true
+        }}
+        type={{ broken: true }}
+        expandable
         actions={{ handlePublishBlock: mockMutation }}
         toggle={false}
       />

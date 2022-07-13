@@ -21,7 +21,7 @@ class ElementDragPreview extends Component {
       transform,
       WebkitTransform: transform,
     };
-    const type = getElementTypeConfig(element.blockSchema.typeName, elementTypes);
+    const type = getElementTypeConfig(element, elementTypes);
 
     return (
       <div className="element-editor-drag-preview" style={style}>

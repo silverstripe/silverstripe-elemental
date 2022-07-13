@@ -37,7 +37,7 @@ class ElementActions extends Component {
     const { editTabs, activeTab, type, expandable } = this.props;
 
     // Don't render tabs if the block is not expandable or if no tabs are defined
-    if (!expandable || !editTabs || !editTabs.length) {
+    if (type.broken || !expandable || !editTabs || !editTabs.length) {
       return null;
     }
 

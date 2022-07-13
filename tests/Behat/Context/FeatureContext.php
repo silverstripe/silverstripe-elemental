@@ -86,7 +86,7 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
-     * @When /^I click on the caret button for block (\d+)(?:\sagain)?$/i
+     * @When /^I (?:click on|press) the caret button for block (\d+)(?:\sagain)?$/i
      */
     public function iClickOnTheCaretButtonForBlock($position)
     {
@@ -94,6 +94,22 @@ class FeatureContext extends SilverStripeContext
         $button = $this->getCaretButton($block);
         Assert::assertNotNull($button, 'Caret button for block ' . $position . ' was not found in the page.');
         $button->click();
+    }
+
+    /**
+     * @When /^I (?:click on|press) the "([a-zA-Z\s]+)" button for block (\d+)(?:\sagain)?$/i
+     */
+    public function iClickTheButtonForBlock($button, $position)
+    {
+        switch ($button) {
+            case 'View actions':
+                $buttonElement = $this->getViewActionsButton($this->getSpecificBlock($position));
+                break;
+            default:
+                $buttonElement = $this->findActionButton($button, $position);
+        }
+        Assert::assertNotNull($buttonElement, "'$button' button for block $position was not found in the page.");
+        $buttonElement->click();
     }
 
     /**
@@ -117,51 +133,22 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
-     * @Then I should see the archive button for block :position
-     *
-     * @param int $position
-     */
-    public function iShouldSeeArchiveButtonForBlock($position)
-    {
-        $this->getArchiveButton($position);
-    }
-
-    /**
-     * @Then /^I should( not |\s+)see the publish button for block (\d+)$/i
-     *
-     * @param string $negative
-     * @param int $position
-     *
-     */
-    public function iShouldSeeThePublishButtonForBlock($negative, $position)
-    {
-        $iShouldNotSee = $negative === ' not ';
-
-        $publishButton = $this->findPublishButton($position);
-
-        if ($iShouldNotSee) {
-            Assert::assertNull($publishButton, 'Publish button displayed (but shouldn\'t)');
-        } else {
-            Assert::assertNotNull($publishButton, 'Publish button not displayed (but should be)');
-        }
-    }
-
-    /**
-     * @Then /^I should( not |\s+)see the unpublish button for block (\d+)$/i
+     * @Then /^I should( not |\s+)see the ([a-zA-Z]+) button for block (\d+)$/i
      *
      * @param string $negative
      * @param int $position
      */
-    public function iShouldSeeTheUnpublishButtonForBlock($negative, $position)
+    public function iShouldSeeTheButtonForBlock($negative, $action, $position)
     {
         $iShouldNotSee = $negative === ' not ';
 
-        $unpublishButton = $this->findUnpublishButton($position);
+        $actionButton = $this->findActionButton($action, $position);
 
+        $actionCapitalised = ucfirst($action);
         if ($iShouldNotSee) {
-            Assert::assertNull($unpublishButton, 'Unpublish button displayed (but shouldn\'t)');
+            Assert::assertNull($actionButton, "$actionCapitalised button displayed (but shouldn't be)");
         } else {
-            Assert::assertNotNull($unpublishButton, 'Unpublish button not displayed (but should be)');
+            Assert::assertNotNull($actionButton, "$actionCapitalised button not displayed (but should be)");
         }
     }
 
@@ -296,6 +283,25 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
+     * Use the block titles separated by commas
+     * e.g. Then the element order should be "Block One,Block Two,Block Three"
+     *
+     * @Then /^the element order should be "(.+?)"$/
+     * @param string $label
+     */
+    public function theElementOrderShouldBe($expected)
+    {
+        $js = <<<JS
+            jQuery('.elemental-editor-list .element-editor-header__title')
+                .map((i, el) => el.textContent)
+                .get()
+                .join()
+        JS;
+        $actual = $this->getSession()->evaluateScript($js);
+        Assert::assertEquals($expected, $actual);
+    }
+
+    /**
      * Returns the blocks from the element editor
      *
      * @param string $modifier Optional CSS selector modifier
@@ -313,6 +319,7 @@ class FeatureContext extends SilverStripeContext
             ->getPage()
             ->findAll('css', '.element-editor__element' . $modifier);
     }
+
     /**
      * Returns the selected element
      *
@@ -329,52 +336,14 @@ class FeatureContext extends SilverStripeContext
     }
 
     /**
-     * Returns the archive button for a specific block
-     *
-     * @param int $position
-     * @return NodeElement
+     * Returns the action button for a specific block if it exists
      */
-    protected function getArchiveButton($position)
+    protected function findActionButton($action, $position): ?NodeElement
     {
         $block = $this->getSpecificBlock($position);
         Assert::assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
 
-        $button = $block->find('css', '.element-editor__actions-archive');
-        Assert::assertNotNull($button, 'Archive button not found');
-
-        return $button;
-    }
-
-    /**
-     * Returns the publish button for a specific block if it exists
-     *
-     * @param int $position
-     * @return NodeElement|null
-     */
-    protected function findPublishButton($position)
-    {
-        $block = $this->getSpecificBlock($position);
-        Assert::assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
-
-        $button = $block->find('css', '.element-editor__actions-publish');
-
-        return $button;
-    }
-
-    /**
-     * Returns the unpublish button for a specific block if it exists
-     *
-     * @param $position
-     * @return NodeElement|null
-     */
-    protected function findUnpublishButton($position)
-    {
-        $block = $this->getSpecificBlock($position);
-        Assert::assertNotNull($block, 'Block ' . $position . ' was not found in the page.');
-
-        $button = $block->find('css', '.element-editor__actions-unpublish');
-
-        return $button;
+        return $block->find('css', ".element-editor__actions-$action");
     }
 
     /**
@@ -387,6 +356,20 @@ class FeatureContext extends SilverStripeContext
     {
         $button = $block->find('css', '.element-editor-header__expand');
         Assert::assertNotNull($button, 'Caret button not found');
+
+        return $button;
+    }
+
+    /**
+     * Returns the View Actions button for a specific block
+     *
+     * @param NodeElement $block
+     * @return NodeElement
+     */
+    protected function getViewActionsButton($block)
+    {
+        $button = $block->find('css', '.element-editor-header__actions-toggle');
+        Assert::assertNotNull($button, 'View Actions button not found');
 
         return $button;
     }

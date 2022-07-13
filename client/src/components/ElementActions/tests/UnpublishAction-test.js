@@ -75,4 +75,21 @@ describe('UnpublishAction', () => {
 
     expect(unpublishWrapper.find('button').first().prop('disabled')).toBe(true);
   });
+
+  it('does not render a button when block is broken', () => {
+    wrapper = mount(
+      <ActionComponent
+        title="My unpublish action"
+        element={{
+          id: 123,
+          isPublished: true,
+          blockSchema: { type: 'Test' },
+        }}
+        type={{ broken: true }}
+        actions={{ handleUnpublishBlock: mockMutation }}
+        toggle={false}
+      />
+    );
+    expect(wrapper.find('button').length).toBe(0);
+  });
 });

@@ -31,6 +31,7 @@ describe('Element', () => {
     icon: 'font-icon-block-content',
     title: 'Content'
   };
+  const typeBroken = Object.assign({}, type, { broken: true });
 
   const identity = el => el;
 
@@ -77,6 +78,21 @@ describe('Element', () => {
       expect(wrapper.find(HeaderComponent)).toHaveLength(0);
       expect(wrapper.find(ContentComponent)).toHaveLength(0);
       expect(wrapper.type()).toBeNull();
+    });
+
+    it('should render even if the element is broken', () => {
+      const wrapper = shallow(
+        <Element
+          element={element}
+          areaId={1}
+          type={typeBroken}
+          link={'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage'}
+          {...defaultProps}
+        />
+      );
+
+      expect(wrapper.find(HeaderComponent)).toHaveLength(1);
+      expect(wrapper.find(ContentComponent)).toHaveLength(1);
     });
   });
 

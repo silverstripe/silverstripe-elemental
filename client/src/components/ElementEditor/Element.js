@@ -77,6 +77,47 @@ class Element extends Component {
   }
 
   /**
+   * Returns the link title for this element
+   *
+   * @param {Object} type
+   * @returns {string}
+   */
+  getLinkTitle(type) {
+    if (type.broken) {
+      return i18n._t('ElementalElement.ARCHIVE_BROKEN', 'Archive this block');
+    }
+    return i18n.inject(
+      i18n._t('ElementalElement.TITLE', 'Edit this {type} block'),
+      { type: type.title }
+    );
+  }
+
+  /**
+   * Returns the summary for this elemen
+   *
+   * @param {Object} element
+   * @param {Object} type
+   * @returns {string|JSX.Element}
+   */
+  getSummary(element, type) {
+    if (type.broken) {
+      // Return a message about the broken block.
+      return element.title ? i18n.inject(
+        i18n._t(
+          'ElementalElement.BROKEN_DESCRIPTION_TITLE',
+          'This block had the title "{title}". It is broken and will not display on the front-end. You can archive it to remove it from this elemental area.'
+        ),
+        { title: element.title }
+      ) : i18n._t(
+        'ElementalElement.BROKEN_DESCRIPTION',
+        'This block is broken and will not display on the front-end. You can archive it to remove it from this elemental area.'
+      );
+    }
+    // Return the configured summary for this block.
+    return element.blockSchema.content;
+  }
+
+  /**
    * Prevents the Element from being expanded in case a loading error occurred.
    * This gets triggered from the InlineEditForm component.
    */
@@ -135,6 +176,10 @@ class Element extends Component {
     const { type, link } = this.props;
     const { loadingError } = this.state;
 
+    if (type.broken) {
+      return;
+    }
+
     if (event.target.type === 'button') {
       // Stop bubbling if the click target was a button within this container
       event.stopPropagation();
@@ -192,15 +237,11 @@ class Element extends Component {
       return null;
     }
 
-    const linkTitle = i18n.inject(
-      i18n._t('ElementalElement.TITLE', 'Edit this {type} block'),
-      { type: type.title }
-    );
-
     const elementClassNames = classNames(
       'element-editor__element',
       {
-        'element-editor__element--expandable': type.inlineEditable,
+        'element-editor__element--broken': type.broken,
+        'element-editor__element--expandable': type.inlineEditable && !type.broken,
         'element-editor__element--dragging': isDragging,
         'element-editor__element--dragged-over': isOver,
       },
@@ -213,7 +254,7 @@ class Element extends Component {
       onKeyUp={this.handleKeyUp}
       role="button"
       tabIndex={0}
-      title={linkTitle}
+      title={this.getLinkTitle(type)}
       key={element.id}
     >
       <HeaderComponent
@@ -235,11 +276,12 @@ class Element extends Component {
           id={element.id}
           fileUrl={element.blockSchema.fileURL}
           fileTitle={element.blockSchema.fileTitle}
-          content={element.blockSchema.content}
+          content={this.getSummary(element, type)}
           previewExpanded={previewExpanded && !isDragging}
           activeTab={activeTab}
           onFormInit={() => this.updateFormTab(activeTab)}
           handleLoadingError={this.handleLoadingError}
+          broken={type.broken}
         />
       }
 

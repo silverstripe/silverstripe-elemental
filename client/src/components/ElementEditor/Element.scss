@@ -17,6 +17,10 @@
     }
   }
 
+  &--broken {
+    cursor: default;
+  }
+
   &--dragging {
     opacity: 0.3;
     cursor: grabbing;

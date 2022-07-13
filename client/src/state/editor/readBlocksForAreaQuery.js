@@ -13,6 +13,7 @@ query ReadBlocksForArea($id:ID!) {
       id
       title
       blockSchema
+      obsoleteClassName
       isLiveVersion
       isPublished
       version
