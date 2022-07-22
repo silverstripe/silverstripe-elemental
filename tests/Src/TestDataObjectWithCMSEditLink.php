@@ -14,7 +14,7 @@ class TestDataObjectWithCMSEditLink extends DataObject implements TestOnly
 {
     private static $table_name = 'TestDataObjectWithCMSEditLink';
 
-    private static array $db = [
+    private static $db = [
         'Title' => 'Varchar(255)',
         'Content' => 'HTMLText',
     ];
