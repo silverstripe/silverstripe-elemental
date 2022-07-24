@@ -13,7 +13,7 @@ class TestElementDataObject extends BaseElement implements TestOnly
         'TestValue' => 'Text',
     ];
 
-    private static bool $inline_editable = false;
+    private static $inline_editable = false;
 
     public function getType()
     {

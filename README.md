@@ -1,6 +1,6 @@
 # Silverstripe CMS Elemental
 
-[![Build Status](http://img.shields.io/travis/silverstripe/silverstripe-elemental.svg?style=flat)](https://travis-ci.com/silverstripe/silverstripe-elemental)
+[![CI](https://github.com/silverstripe/silverstripe-elemental/actions/workflows/ci.yml/badge.svg)](https://github.com/silverstripe/silverstripe-elemental/actions/workflows/ci.yml)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-elemental/badges/quality-score.png?b=4)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-elemental/?branch=4)
 [![codecov](https://codecov.io/gh/silverstripe/silverstripe-elemental/branch/4/graph/badge.svg)](https://codecov.io/gh/silverstripe/silverstripe-elemental)
 [![Silverstripe CMS supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
