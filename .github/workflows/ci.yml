@@ -14,3 +14,10 @@ jobs:
     # Only run cron on the silverstripe account
     if: (github.event_name == 'schedule' && startsWith(github.repository, 'silverstripe/')) || (github.event_name != 'schedule')
     uses: silverstripe/gha-ci/.github/workflows/ci.yml@v1
+    # debug remvove
+    with:
+      phpunit: false
+      endtoend: false
+      js: false
+      extra_jobs: |
+        - endtoend: true

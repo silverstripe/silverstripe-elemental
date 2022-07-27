@@ -4,6 +4,7 @@ I want to link to anchors in my content
 So that I can direct users directly to the relevant information
 
   Background:
+    Given I take a screenshot after every step
     Given a "page" "No Blocks" has the "Content" "<p>My awesome content<a name="normal-anchor"></a></p>"
       And a "BasicElementalPage" "Elemental" with a "Anchor Test Block" content element with "<p>My awesomer content<a name="element-anchor"></a></p>" content
       And the "BasicElementalPage" "Elemental" has a "Same Page Anchor Block" content element with "<p><a id="another-anchor"></a></p>" content
@@ -44,6 +45,7 @@ So that I can direct users directly to the relevant information
     # Close the dialog now that we're done with it.
     When I click on the "button.close" element
 
+@sboyd
   Scenario: I can link to anchors in an elemental block from another elemental block
     Given I left click on "Elemental" in the tree
       And I should see a list of blocks
