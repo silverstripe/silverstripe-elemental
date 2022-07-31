@@ -1,11 +1,7 @@
 # Silverstripe CMS Elemental
 
 [![CI](https://github.com/silverstripe/silverstripe-elemental/actions/workflows/ci.yml/badge.svg)](https://github.com/silverstripe/silverstripe-elemental/actions/workflows/ci.yml)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-elemental/badges/quality-score.png?b=4)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-elemental/?branch=4)
-[![codecov](https://codecov.io/gh/silverstripe/silverstripe-elemental/branch/4/graph/badge.svg)](https://codecov.io/gh/silverstripe/silverstripe-elemental)
-[![Silverstripe CMS supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
-[![Version](http://img.shields.io/packagist/v/dnadesign/silverstripe-elemental.svg?style=flat)](https://packagist.org/packages/dnadesign/silverstripe-elemental)
-[![License](https://poser.pugx.org/dnadesign/silverstripe-elemental/license.svg)](LICENSE.md)
+[![Silverstripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
 ## Introduction
 
@@ -231,7 +227,6 @@ structure (PHP class namespace) to ensure that your new template version takes p
 convention, which allows developers to style individual parts of the DOM without unnecessarily nested CSS. Where
 possible, we encourage you to follow this naming system.
 
-
 #### Position Helpers
 
 In your `BaseElement` template you can use the following variables for additional
@@ -243,7 +238,6 @@ methods work either returning a `Boolean`, `String` or a `Int`
   1. `$Pos` (int)
   1. `$TotalItems` (int)
   1. `$EvenOdd` (string - 'even' or 'odd')
-
 
 ```
 <div class="element element--{$EvenOdd} <% if First %>element--first<% end_if %> <% if Last %>element--last<% end_if %>">
@@ -264,7 +258,6 @@ DNADesign\Elemental\Models\ElementContent:
     light: 'Light Background'
     dark: 'Dark Background'
 ```
-
 
 ### Disabling the default stylesheets
 
