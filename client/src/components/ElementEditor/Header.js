@@ -56,6 +56,30 @@ class Header extends Component {
     }
   }
 
+  /**
+   * Returns the title for this block
+   *
+   * @param {Object} element
+   * @param {Object} type
+   * @returns {string}
+   */
+  getBlockTitle(element, type) {
+    if (type.broken) {
+      return i18n.inject(
+        i18n._t('ElementHeader.BROKEN', 'This element is of obsolete type {type}.'),
+        { type: type.obsoleteClassName }
+      );
+    }
+    if (element.title) {
+      return element.title;
+    }
+    return i18n.inject(
+      i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
+      { type: type.title }
+    );
+  }
+
+
   toggle() {
     this.setState({
       tooltipOpen: !this.state.tooltipOpen
@@ -115,10 +139,7 @@ class Header extends Component {
       handleEditTabsClick,
     } = this.props;
 
-    const noTitle = i18n.inject(
-      i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
-      { type: type.title }
-    );
+    const title = this.getBlockTitle(element, type);
     const titleClasses = classNames({
       'element-editor-header__title': true,
       'element-editor-header__title--none': !element.title,
@@ -127,6 +148,12 @@ class Header extends Component {
     const containerClasses = classNames(
       'element-editor-header', {
         'element-editor-header--simple': simple,
+      }
+    );
+    const iconContainerClasses = classNames(
+      'element-editor-header__icon-container',
+      {
+        'element-editor-header__icon-container--broken': type.broken,
       }
     );
     const expandCaretClasses = classNames(
@@ -145,10 +172,10 @@ class Header extends Component {
           <i className="font-icon-drag-handle" />
         </div>
         <div className="element-editor-header__info">
-          <div className="element-editor-header__icon-container">
+          <div className={iconContainerClasses}>
             <i className={type.icon} id={blockIconId} />
             {this.renderVersionedStateMessage()}
-            {!simple && <Tooltip
+            {!type.broken && !simple && <Tooltip
               placement="top"
               isOpen={this.state.tooltipOpen && !disableTooltip}
               target={blockIconId}
@@ -157,7 +184,7 @@ class Header extends Component {
               {type.title}
             </Tooltip>}
           </div>
-          <h3 className={titleClasses}>{element.title || noTitle}</h3>
+          <h3 className={titleClasses}>{title}</h3>
         </div>
         {!simple && <div className="element-editor-header__actions">
           <div role="none" onClick={(event) => event.stopPropagation()}>
@@ -171,7 +198,7 @@ class Header extends Component {
               expandable={expandable}
             />
           </div>
-          <i className={expandCaretClasses} title={expandTitle} />
+          {!type.broken && <i className={expandCaretClasses} title={expandTitle} />}
         </div>}
       </div>
     );

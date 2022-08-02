@@ -27,6 +27,7 @@ describe('PublishAction', () => {
           liveVersion: false,
           blockSchema: { type: 'Test' }
         }}
+        type={{ broken: false }}
         actions={{ handlePublishBlock: mockMutation }}
         toggle={false}
       />
@@ -62,6 +63,7 @@ describe('PublishAction', () => {
     const draftWrapper = mount(
       <ActionComponent
         element={{ isLiveVersion: true, blockSchema: { type: 'Test' } }}
+        type={{ broken: false }}
         actions={{ handlePublishBlock: mockMutation }}
       />
     );
@@ -73,10 +75,29 @@ describe('PublishAction', () => {
     const draftWrapper = mount(
       <ActionComponent
         element={{ IsLiveVersion: false, BlockSchema: { type: 'Test' }, canPublish: false }}
+        type={{ broken: false }}
         actions={{ handlePublishBlock: mockMutation }}
       />
     );
 
     expect(draftWrapper.find('button').first().prop('disabled')).toBe(true);
+  });
+
+  it('does not render a button when block is broken', () => {
+    wrapper = mount(
+      <ActionComponent
+        title="My publish action"
+        element={{
+          id: 123,
+          version: 234,
+          liveVersion: false,
+          blockSchema: { type: 'Test' }
+        }}
+        type={{ broken: true }}
+        actions={{ handlePublishBlock: mockMutation }}
+        toggle={false}
+      />
+    );
+    expect(wrapper.find('button').length).toBe(0);
   });
 });

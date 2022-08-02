@@ -65,7 +65,7 @@ Feature: View types of elements in an area on a page
     When I click on the caret button for block 1
       Then I should see the edit form for block 1
       And the "Content" field should contain "<p>New sample content</p>"
-      
+
   Scenario: I can operate blocks with a mouse
     Given a "virtual page" "Virtual Page"
 
@@ -75,17 +75,17 @@ Feature: View types of elements in an area on a page
     # Content blocks are not applied to other page types
     When I follow "Virtual Page"
     Then I should not see "Add block"
-    
+
     # Publish to remove the draft icons
     # Would be used so that we could assert presence of modified icons to test drag and drop
     # And I press the "Publish" button
     # And I wait for 5 seconds
-    
+
     # Drag and drop the first content block to below the second content block
     # (commented out as chromedriver doesn't appear to like this react component)
     # When I drag the ".elemental-editor-list > div:nth-of-type(2) .element-editor-summary" element by "0,150"
     # And I wait for 5 seconds
-        
+
     # Add a block in between two existing blocks
     When I go to "/admin/pages"
     And I follow "Blocks Page"

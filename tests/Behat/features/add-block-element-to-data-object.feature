@@ -3,7 +3,7 @@ Feature: Add elements in the CMS DataObject
   As a CMS user
   I want to add elements in the CMS DataObject
   So that I can use multiple elements in a Dataobject
-  
+
   Background:
     Given I am logged in with "ADMIN" permissions
 

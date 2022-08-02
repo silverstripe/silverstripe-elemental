@@ -21,6 +21,7 @@ class Content extends PureComponent {
       onFormInit,
       handleLoadingError,
       formDirty,
+      broken,
     } = this.props;
 
     return (
@@ -31,6 +32,7 @@ class Content extends PureComponent {
             content={content}
             fileUrl={fileUrl}
             fileTitle={fileTitle}
+            broken={broken}
           />
         }
         {previewExpanded &&
@@ -66,6 +68,7 @@ Content.propTypes = {
   SummaryComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   InlineEditFormComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   handleLoadingError: PropTypes.func,
+  broken: PropTypes.bool,
 };
 
 Content.defaultProps = {};

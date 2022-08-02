@@ -257,7 +257,7 @@ class BaseElement extends DataObject implements CMSPreviewable
     public function canDelete($member = null)
     {
         $extended = $this->extendedCan(__FUNCTION__, $member);
-        
+
         if ($extended !== null) {
             return $extended;
         }
@@ -291,6 +291,15 @@ class BaseElement extends DataObject implements CMSPreviewable
         }
 
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+    }
+
+    public function write($showDebug = false, $forceInsert = false, $forceWrite = false, $writeComponents = false)
+    {
+        // Skips writes for broken blocks, so that we can still publish the page to allow all other blocks to publish.
+        if ($this->ObsoleteClassName) {
+            return $this->ID;
+        }
+        return parent::write($showDebug, $forceInsert, $forceWrite, $writeComponents);
     }
 
     /**
@@ -688,7 +697,7 @@ JS
     public function AbsoluteLink($action = null)
     {
         $page = $this->getPage();
-        
+
         if ($page && ClassInfo::hasMethod($page, 'AbsoluteLink')) {
             $link = $page->AbsoluteLink($action) . '#' . $this->getAnchor();
             $this->extend('updateAbsoluteLink', $link);

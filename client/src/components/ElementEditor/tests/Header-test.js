@@ -24,6 +24,7 @@ describe('Header', () => {
         { name: 'history', title: 'History' },
       ],
   };
+  const typeBroken = Object.assign({}, type, { broken: true, obsoleteClassName: 'RemovedClass' });
 
   describe('render()', () => {
     it('should render the icon', () => {
@@ -61,6 +62,23 @@ describe('Header', () => {
       expect(wrapper.text()).toContain('Sample File Block');
     });
 
+    it('The title should be overridden for broken elements', () => {
+      element.id = '12';
+      const wrapper = shallow(
+        <Header
+          element={element}
+          areaId={1}
+          type={typeBroken}
+          ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
+        />
+      );
+
+      expect(wrapper.text()).toContain('This element is of obsolete type RemovedClass');
+    });
+
     it('should contain a Tooltip', () => {
       element.id = '13';
       const wrapper = shallow(
@@ -78,6 +96,24 @@ describe('Header', () => {
       const tooltip = wrapper.find('Tooltip');
       expect(tooltip.length).toBe(1);
       expect(tooltip.children().text()).toBe('File');
+    });
+
+    it('should not contain a Tooltip for a broken element', () => {
+      element.id = '13';
+      const wrapper = shallow(
+        <Header
+          element={element}
+          areaId={1}
+          type={typeBroken}
+          ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
+        />
+      );
+
+      const tooltip = wrapper.find('Tooltip');
+      expect(tooltip.length).toBe(0);
     });
 
     it('should render a "right caret" button when not expandable', () => {
@@ -139,6 +175,24 @@ describe('Header', () => {
       expect(expandButton.hasClass('font-icon-up-open-big')).toBe(true);
     });
 
+    it('should not render a "caret" button for a broken element', () => {
+      const wrapper = shallow(
+        <Header
+          element={element}
+          areaId={1}
+          type={typeBroken}
+          expandable={false}
+          ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
+        />
+      );
+
+      const expandButton = wrapper.find('.element-editor-header__expand');
+      expect(expandButton.length).toBe(0);
+    });
+
     it('should render an ElementActions component when the element is expandable', () => {
       const wrapper = shallow(
         <Header
@@ -163,6 +217,23 @@ describe('Header', () => {
           areaId={1}
           type={type}
           expandable={false}
+          ElementActionsComponent={ElementActionsComponent}
+          connectDragSource={content => content}
+          connectDragPreview={content => content}
+          onDragEnd={() => {}}
+        />
+      );
+
+      expect(wrapper.text()).toContain('ElementActionsComponent');
+    });
+
+    it('should render an ElementActions even when the element is broken', () => {
+      const wrapper = shallow(
+        <Header
+          element={element}
+          areaId={1}
+          type={typeBroken}
+          expandable
           ElementActionsComponent={ElementActionsComponent}
           connectDragSource={content => content}
           connectDragPreview={content => content}

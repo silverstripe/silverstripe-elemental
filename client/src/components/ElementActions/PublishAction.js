@@ -76,6 +76,13 @@ const performSaveForElementWithFormData = (id, formData, securityId) => {
  * Adds the elemental menu action to publish a draft/modified block
  */
 const PublishAction = (MenuComponent) => (props) => {
+  if (props.type.broken) {
+    // Don't allow this action for a broken element.
+    return (
+      <MenuComponent {...props} />
+    );
+  }
+
   const { element, formDirty } = props;
 
   const handleClick = (event) => {

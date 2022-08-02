@@ -14,9 +14,9 @@ import { initialize } from 'redux-form';
  * the inline edit form's data for the current block.
  */
 const SaveAction = (MenuComponent) => (props) => {
-  if (!props.expandable) {
+  if (!props.expandable || props.type.broken) {
     // Some elemental blocks can not be edited inline (e.g. User form blocks)
-    // We don't want to add a "Save action for those blocks.
+    // We don't want to add a "Save" action for those blocks.
     return (
       <MenuComponent {...props} />
     );
