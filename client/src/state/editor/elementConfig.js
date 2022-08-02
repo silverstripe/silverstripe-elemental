@@ -11,13 +11,19 @@ export const getConfig = () => Config.getSection('DNADesign\\Elemental\\Controll
  * Get the configuration for the given element type from the (optional) given config.
  * If config to pull from is not given it will auto-resolve the element types from client config
  *
- * @param {string} elementType
+ * @param {object} element
  * @param {object} typeConfig
  * @returns {object|null}
  */
-export const getElementTypeConfig = (elementType, typeConfig = null) => {
+export const getElementTypeConfig = (element, typeConfig = null) => {
+  const elementType = element.blockSchema.typeName;
   const types = Array.isArray(typeConfig) ? typeConfig : getConfig().elementTypes;
 
   // Compare to both key (PHP classname) and the name
-  return types.find(value => value.class === elementType || value.name === elementType);
+  let type = types.find(value => value.class === elementType || value.name === elementType);
+  if (element.obsoleteClassName) {
+    type = Object.assign({ obsoleteClassName: element.obsoleteClassName }, type);
+    Object.preventExtensions(type);
+  }
+  return type;
 };

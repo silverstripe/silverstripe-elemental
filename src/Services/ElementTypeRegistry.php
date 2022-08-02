@@ -9,6 +9,7 @@ use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
+use stdClass;
 
 class ElementTypeRegistry
 {
@@ -35,6 +36,11 @@ class ElementTypeRegistry
      */
     public function registerElement($elementClass)
     {
+        if ($elementClass === BaseElement::class) {
+            $this->registerBrokenElement();
+            return $this;
+        }
+
         $singleton = singleton($elementClass);
 
         if (!$singleton instanceof BaseElement) {
@@ -53,9 +59,25 @@ class ElementTypeRegistry
             'editTabs' => $this->getTabProvider()->getTabsForElement($elementClass),
             // Cast to object as React prop-types expects it.
             'config' => (object) $singleton::getBlockConfig(),
+            'broken' => false,
         ];
 
         return $this;
+    }
+
+    private function registerBrokenElement()
+    {
+        $singleton = singleton(BaseElement::class);
+        $this->elementTypes[] = [
+            'icon' => 'font-icon-block',
+            'name' => $singleton->getGraphQLTypeName(),
+            'class' => BaseElement::class,
+            'title' => '',
+            'inlineEditable' => false,
+            'editTabs' => [],
+            'config' => new stdClass(),
+            'broken' => true,
+        ];
     }
 
     /**
@@ -126,10 +148,6 @@ class ElementTypeRegistry
         // Find all element types
         $classNames = ClassInfo::getValidSubClasses(BaseElement::class);
         foreach ($classNames as $class) {
-            // Skip the "abstract" element
-            if ($class === BaseElement::class) {
-                continue;
-            }
             $registry->registerElement($class);
         }
 

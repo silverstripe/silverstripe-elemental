@@ -104,4 +104,22 @@ describe('ArchiveAction', () => {
 
     expect(archiveWrapper.find('button').first().prop('disabled')).toBe(true);
   });
+
+  it('renders a button even when block is broken', () => {
+    wrapper = mount(
+      <ActionComponent
+        title="My unpublish action"
+        element={{
+          id: 123,
+          isPublished: true,
+          blockSchema: { type: 'Test' }
+        }}
+        isPublished
+        type={{ broken: true }}
+        actions={{ handleArchiveBlock: mockMutation }}
+        toggle={false}
+      />
+    );
+    expect(wrapper.find('button').length).toBe(1);
+  });
 });

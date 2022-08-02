@@ -23,7 +23,7 @@ class ReorderElements
      */
     public function __construct(BaseElement $element)
     {
-        if (!is_subclass_of($element, BaseElement::class)) {
+        if (!($element instanceof BaseElement)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid %s passed to %s, got class %s instead',
                 BaseElement::class,

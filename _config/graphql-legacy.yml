@@ -17,7 +17,7 @@ SilverStripe\GraphQL\Manager:
         types:
           # Expose common static fields for the ElementEditor component to use for preview summaries
           DNADesign\Elemental\Models\BaseElement:
-            fields: [ID, LastEdited, AbsoluteLink, Title, ShowTitle, Sort, BlockSchema, IsPublished, IsLiveVersion, canCreate, canPublish, canUnpublish, canDelete]
+            fields: [ID, LastEdited, AbsoluteLink, Title, ShowTitle, Sort, BlockSchema, ObsoleteClassName, IsPublished, IsLiveVersion, canCreate, canPublish, canUnpublish, canDelete]
             operations:
               copyToStage: true
               readOne:

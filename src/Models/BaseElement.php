@@ -293,6 +293,15 @@ class BaseElement extends DataObject implements CMSPreviewable
         return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
     }
 
+    public function write($showDebug = false, $forceInsert = false, $forceWrite = false, $writeComponents = false)
+    {
+        // Skips writes for broken blocks, so that we can still publish the page to allow all other blocks to publish.
+        if ($this->ObsoleteClassName) {
+            return $this->ID;
+        }
+        return parent::write($showDebug, $forceInsert, $forceWrite, $writeComponents);
+    }
+
     /**
      * Increment the sort order if one hasn't been already defined. This
      * ensures that new elements are created at the end of the list by default.

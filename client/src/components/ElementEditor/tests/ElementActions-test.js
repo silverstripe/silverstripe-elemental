@@ -95,5 +95,25 @@ describe('ElementActions', () => {
       expect(wrapper.html()).not.toContain('Settings');
       expect(wrapper.html()).not.toContain('History');
     });
+
+    it('should not render inline-edit items for a broken block', () => {
+      const wrapper = shallow(
+        <ElementActions
+          areaId={1}
+          editTabs={testTabs}
+          type={{ title: 'Some block', broken: true }}
+          ActionMenuComponent={ActionMenuComponent}
+          handleEditTabsClick={editTabsClick}
+        />
+      );
+
+      // No dropdown separator should exist when there are no non-CMS actions
+      expect(wrapper.find('DropdownItem').length).toBe(0);
+
+      // See all the relevant action menu options
+      expect(wrapper.html()).not.toContain('Content');
+      expect(wrapper.html()).not.toContain('Settings');
+      expect(wrapper.html()).not.toContain('History');
+    });
   });
 });

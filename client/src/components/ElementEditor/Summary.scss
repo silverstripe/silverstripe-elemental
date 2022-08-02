@@ -18,5 +18,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &--broken {
+      overflow: visible;
+      white-space: normal;
+    }
   }
 }

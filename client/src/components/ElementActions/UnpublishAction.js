@@ -9,6 +9,13 @@ import i18n from 'i18n';
  * Adds the elemental menu action to unpublish a published block
  */
 const UnpublishAction = (MenuComponent) => (props) => {
+  if (props.type.broken) {
+    // Don't allow this action for a broken element.
+    return (
+      <MenuComponent {...props} />
+    );
+  }
+
   const { element, type, actions: { handleUnpublishBlock } } = props;
 
   const handleClick = (event) => {

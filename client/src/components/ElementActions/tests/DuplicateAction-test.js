@@ -23,6 +23,7 @@ describe('DuplicateAction', () => {
           BlockSchema: { type: 'Test' },
           canCreate: true
         }}
+        type={{ broken: false }}
         actions={{ handlePublishBlock: mockMutation }}
         toggle={false}
       />
@@ -41,11 +42,29 @@ describe('DuplicateAction', () => {
           BlockSchema: { type: 'Test' },
           canCreate: false
         }}
+        type={{ broken: false }}
         actions={{ handleDuplicateBlock: mockMutation }}
         toggle={false}
       />
     );
 
     expect(duplicateWrapper.find('button').first().prop('disabled')).toBe(true);
+  });
+
+  it('does not render a button when block is broken', () => {
+    wrapper = mount(
+      <ActionComponent
+        title="My duplicate action"
+        element={{
+          ID: 123,
+          BlockSchema: { type: 'Test' },
+          canCreate: true
+        }}
+        type={{ broken: true }}
+        actions={{ handleDuplicateBlock: mockMutation }}
+        toggle={false}
+      />
+    );
+    expect(wrapper.find('button').length).toBe(0);
   });
 });

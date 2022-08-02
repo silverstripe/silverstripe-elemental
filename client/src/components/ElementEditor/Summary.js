@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import i18n from 'i18n';
 
 class Summary extends PureComponent {
@@ -15,8 +16,15 @@ class Summary extends PureComponent {
    *  - if there is no file, and no text, substitute and show "no preview" text.
    */
   render() {
-    const { fileUrl, fileTitle, content } = this.props;
+    const { fileUrl, fileTitle, content, broken } = this.props;
     const noContent = i18n._t('ElementSummary.NO_PREVIEW', 'No preview available');
+
+    const summaryClassNames = classNames(
+      'element-editor-summary__content',
+      {
+        'element-editor-summary__content--broken': broken,
+      }
+    );
 
     return (
 
@@ -29,7 +37,7 @@ class Summary extends PureComponent {
         />
         }
         {(content || !fileUrl) &&
-        <p className="element-editor-summary__content">
+        <p className={summaryClassNames}>
           {content || noContent}
         </p>
         }
@@ -44,6 +52,7 @@ Summary.propTypes = {
   content: PropTypes.string,
   fileUrl: PropTypes.string,
   fileTitle: PropTypes.string,
+  broken: PropTypes.bool,
 };
 
 export default Summary;

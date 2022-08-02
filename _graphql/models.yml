@@ -8,6 +8,7 @@ DNADesign\Elemental\Models\BaseElement:
     showTitle: true
     sort: true
     blockSchema: ObjectType
+    obsoleteClassName: String
     isPublished: Boolean
     isLiveVersion: Boolean
     canCreate: Boolean
