@@ -1159,8 +1159,10 @@ JS
      */
     public static function getGraphQLTypeName(): string
     {
-        return class_exists(StaticSchema::class)
-            ? StaticSchema::inst()->typeNameForDataObject(static::class)
-            : str_replace('\\', '_', static::class);
+        // For GraphQL 3, use the static schema type name - except for BaseElement for which this is inconsistent.
+        if (class_exists(StaticSchema::class) && static::class !== self::class) {
+            return StaticSchema::inst()->typeNameForDataObject(static::class);
+        }
+        return str_replace('\\', '_', static::class);
     }
 }
