@@ -9,10 +9,12 @@
         "content blocks"
     ],
     "license": "BSD-3-Clause",
-    "authors": [{
-        "name": "Alexandre Saelens",
-        "email": "alexandre.saelens@dna.co.nz"
-    }],
+    "authors": [
+        {
+            "name": "Alexandre Saelens",
+            "email": "alexandre.saelens@dna.co.nz"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
@@ -33,9 +35,6 @@
         "dnadesign/silverstripe-elemental-virtual": "Adds support to share blocks between pages"
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "5.x-dev"
-        },
         "expose": [
             "client/dist",
             "client/lang"
