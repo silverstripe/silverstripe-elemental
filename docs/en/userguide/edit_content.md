@@ -1,3 +1,8 @@
+---
+title: Creating and editing content
+summary: Learn how to edit content in a content block
+---
+
 # Before we begin
 
 To get started, create a new page in the CMS. See [Pages and content](https://userhelp.silverstripe.org/en/4/creating_pages_and_content/) to learn more.
