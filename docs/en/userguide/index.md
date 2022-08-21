@@ -1,10 +1,12 @@
+---
 title: Content blocks
 summary: Break up a web page into blocks that allow content like banners, text and media to be independently managed within the CMS.
+---
 
 ## Features
 
 * [Creating content blocks](edit_content.md#creating-blocks)
-* [Reordering blocks](edit_content.md#reordering-blocks) 
+* [Reordering blocks](edit_content.md#reordering-blocks)
 * [Adding blocks between existing blocks](edit_content.md#adding-between-blocks)
 * [Block state indicators](edit_content.md#state-indicators)
 * [More options](edit_content.md#more-options)
