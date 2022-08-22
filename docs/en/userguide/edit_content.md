@@ -19,7 +19,7 @@ You'll see the content block type you selected appear in your main content area 
 
 Most blocks are directly editable from within the page allowing you to have easy access adding and editing blocks without switching page views.
 
-To edit, select the content block or click the button ***Expand*** shown as a dropdown arrow icon.
+To edit, select the content block or click the ***Expand*** button shown as a dropdown arrow icon.
 
 Enter your content as required, provide a title for the block and choose whether you want the title to be shown on the page or not via the ***Displayed*** checkbox field.
 
