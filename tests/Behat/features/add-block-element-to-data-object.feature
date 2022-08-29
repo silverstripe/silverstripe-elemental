@@ -5,7 +5,8 @@ Feature: Add elements in the CMS DataObject
   So that I can use multiple elements in a Dataobject
 
   Background:
-    Given I am logged in with "ADMIN" permissions
+    Given the "group" "EDITOR" has permissions "CMS_ACCESS_CMSMain"
+    And I am logged in as a member of "EDITOR" group
 
   Scenario: I can add inline-editable elements to the DataObject
     When I go to "/admin/elemental-behat-test-admin/"
