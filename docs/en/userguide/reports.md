@@ -1,3 +1,6 @@
+---
+title: Content block reports
+---
 # Content block reports
 
 The [Elemental module](https://addons.silverstripe.org/add-ons/dnadesign/silverstripe-elemental) will add new
