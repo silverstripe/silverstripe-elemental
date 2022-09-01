@@ -217,7 +217,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
         }
 
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+        return Permission::check('CMS_ACCESS', 'any', $member);
     }
 
     /**
@@ -240,7 +240,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
         }
 
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+        return Permission::check('CMS_ACCESS', 'any', $member);
     }
 
     /**
@@ -272,7 +272,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             }
         }
 
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+        return Permission::check('CMS_ACCESS', 'any', $member);
     }
 
     /**
@@ -290,7 +290,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             return $extended;
         }
 
-        return (Permission::check('CMS_ACCESS', 'any', $member)) ? true : null;
+        return Permission::check('CMS_ACCESS', 'any', $member);
     }
 
     public function write($showDebug = false, $forceInsert = false, $forceWrite = false, $writeComponents = false)
