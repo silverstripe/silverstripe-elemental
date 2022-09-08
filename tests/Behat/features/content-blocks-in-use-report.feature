@@ -7,7 +7,8 @@ Feature: View the report for content blocks in use
     Given I add an extension "DNADesign\Elemental\Extensions\ElementalPageExtension" to the "Page" class
     And a "page" "Blocks Page" with a "Alice's Block" content element with "Some content" content
 
-    And I am logged in with "ADMIN" permissions
+    And the "group" "EDITOR" has permissions "Access to 'Reports' section" and "Access to 'Pages' section"
+    And I am logged in as a member of "EDITOR" group
     And I go to "/admin/reports"
     Then I should see "Content blocks in use"
 
