@@ -8,7 +8,8 @@ Feature: View types of elements in a report
     And a "page" "My page" with a "My block" content element with "Some content" content
 
   Scenario: I can view the types of elements used
-    Given I am logged in with "ADMIN" permissions
+    Given the "group" "EDITOR" has permissions "Access to 'Pages' section" and "Access to 'Reports' section"
+    And I am logged in as a member of "EDITOR" group
     And I go to "/admin/reports"
 
     # View content blocks in use

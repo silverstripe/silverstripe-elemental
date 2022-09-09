@@ -10,7 +10,8 @@ Feature: Broken element in CMS
       And the "page" "Blocks Page" has a broken element named "This one is broken"
       And the "page" "Blocks Page" has a "Bob's Block" content element with "Some content II" content
 
-    Given I am logged in with "ADMIN" permissions
+    Given the "group" "EDITOR" has permissions "Access to 'Pages' section"
+      And I am logged in as a member of "EDITOR" group
       And I go to "/admin/pages"
       And I left click on "Blocks Page" in the tree
     When I see a list of blocks

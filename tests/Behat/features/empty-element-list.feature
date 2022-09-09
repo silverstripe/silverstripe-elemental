@@ -8,7 +8,8 @@ Feature: View an elemental area with no blocks on a page
     Given I add an extension "DNADesign\Elemental\Extensions\ElementalPageExtension" to the "Page" class
       And a "page" "Blocks Page"
 
-  Given I am logged in with "ADMIN" permissions
+    Given the "group" "EDITOR" has permissions "Access to 'Pages' section"
+      And I am logged in as a member of "EDITOR" group
       And I go to "/admin/pages"
       And I left click on "Blocks Page" in the tree
 

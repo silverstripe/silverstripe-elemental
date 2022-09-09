@@ -10,7 +10,8 @@ Feature: Publish elements in the CMS
     And a "page" "Blocks Page" with a "Block A" content element with "Some content" content
     And the "page" "Blocks Page" has a "Block B" content element with "Some content II" content
 
-    Given I am logged in with "ADMIN" permissions
+    Given the "group" "EDITOR" has permissions "Access to 'Pages' section"
+      And I am logged in as a member of "EDITOR" group
       # Remove with 'And I click "Blocks Page" in the ".breadcrumbs-wrapper" element' once the ElementalArea refreshes,
       # See https://github.com/dnadesign/silverstripe-elemental/issues/320
     And I go to "/admin/pages"

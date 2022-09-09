@@ -7,7 +7,8 @@ So that I can direct users directly to the relevant information
     Given a "page" "No Blocks" has the "Content" "<p>My awesome content<a name="normal-anchor"></a></p>"
       And a "BasicElementalPage" "Elemental" with a "Anchor Test Block" content element with "<p>My awesomer content<a name="element-anchor"></a></p>" content
       And the "BasicElementalPage" "Elemental" has a "Same Page Anchor Block" content element with "<p><a id="another-anchor"></a></p>" content
-      And I am logged in with "ADMIN" permissions
+      And the "group" "EDITOR" has permissions "Access to 'Pages' section"
+      And I am logged in as a member of "EDITOR" group
       And I go to "/admin/pages"
 
   Scenario: I can link to anchors in an elemental block from a normal page

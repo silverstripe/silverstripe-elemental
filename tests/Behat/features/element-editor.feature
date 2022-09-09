@@ -6,12 +6,12 @@ Feature: View types of elements in an area on a page
 
   Background:
     Given I add an extension "DNADesign\Elemental\Extensions\ElementalPageExtension" to the "Page" class
-    And a "group" "AUTHOR group" has permissions "Access to 'Pages' section"
+    And a "group" "AUTHOR" has permissions "Access to 'Pages' section"
     And a "page" "Blocks Page" with a "Alice's Block" content element with "Some content" content
     And the "page" "Blocks Page" has a "Bob's Block" content element with "Some content II" content
 
   Scenario Outline: I can see the title and summary of each element
-    Given I am logged in with "<group>" permissions
+    Given I am logged in as a member of "AUTHOR" group
     When I go to "/admin/pages"
       And I left click on "Blocks Page" in the tree
     Then I should see a list of blocks
@@ -26,7 +26,7 @@ Feature: View types of elements in an area on a page
       | AUTHOR |
 
   Scenario: Opening the "more actions" menu will not expand a block
-    Given I am logged in with "ADMIN" permissions
+    Given I am logged in as a member of "AUTHOR" group
     When I go to "/admin/pages"
     And I left click on "Blocks Page" in the tree
       Then I should see a list of blocks
@@ -35,7 +35,7 @@ Feature: View types of elements in an area on a page
       Then I should not see "Title"
 
   Scenario: I can see the block type when I hover over an element's icon
-    Given I am logged in with "ADMIN" permissions
+    Given I am logged in as a member of "AUTHOR" group
     When I go to "/admin/pages"
       And I left click on "Blocks Page" in the tree
 
@@ -45,7 +45,7 @@ Feature: View types of elements in an area on a page
 
   @unsavedChanges
   Scenario: I can preview a block and hide the form again
-    Given I am logged in with "ADMIN" permissions
+    Given I am logged in as a member of "AUTHOR" group
     When I go to "/admin/pages"
       And I left click on "Blocks Page" in the tree
     When I see a list of blocks
@@ -69,7 +69,7 @@ Feature: View types of elements in an area on a page
   Scenario: I can operate blocks with a mouse
     Given a "virtual page" "Virtual Page"
 
-    Given I am logged in with "ADMIN" permissions
+    Given I am logged in as a member of "AUTHOR" group
     When I go to "/admin/pages"
 
     # Content blocks are not applied to other page types
@@ -111,7 +111,7 @@ Feature: View types of elements in an area on a page
 
   @unsavedChanges
   Scenario: I can operate blocks with a keyboard
-    Given I am logged in with "ADMIN" permissions
+    Given I am logged in as a member of "AUTHOR" group
     When I go to "/admin/pages"
     And I follow "Blocks Page"
 
