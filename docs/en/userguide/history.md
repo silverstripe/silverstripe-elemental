@@ -5,7 +5,7 @@ summary: View and recover older versions of content blocks
 
 # Using history
 
-[Pages history](https://userhelp.silverstripe.org/en/4/creating_pages_and_content/pages/rolling_back_pages/) includes content block history out of the box. Blocks have their own versioning and can be viewed as part of a pages **History**.
+[Pages history](https://userhelp.silverstripe.org/en/5/creating_pages_and_content/pages/rolling_back_pages/) includes content block history out of the box. Blocks have their own versioning and can be viewed as part of a pages **History**.
 
 ## Finding historic versions of content
 
@@ -27,7 +27,7 @@ This will create a new draft version with its most recent content. You will need
 
 ## Compare mode
 
-Navigate to the **History** tab. Similar to Pages see [Comparing snapshots](https://userhelp.silverstripe.org/en/4/creating_pages_and_content/pages/rolling_back_pages/#comparing-snapshots) to learn how to view what has changed between 2 different versions of a page.
+Navigate to the **History** tab. Similar to Pages see [Comparing snapshots](https://userhelp.silverstripe.org/en/5/creating_pages_and_content/pages/rolling_back_pages/#comparing-snapshots) to learn how to view what has changed between 2 different versions of a page.
 
 When viewing a version, history has a few extra features Page history does not include:
 * Select ***View block*** to take you to edit mode.

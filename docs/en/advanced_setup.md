@@ -396,12 +396,10 @@ Page:
     topPageSiteTreeExtension: DNADesign\Elemental\TopPage\SiteTreeExtension
 ```
 
-These extensions will be enabled by default in Elemental 5.
-
 If your project makes use of the Fluent module, it is recommended to use the following extensions in place of the ones
 above:
 
-```
+```yaml
 DNADesign\Elemental\Models\BaseElement:
   extensions:
     topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
