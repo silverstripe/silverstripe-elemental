@@ -380,21 +380,8 @@ belongs to.
 
 When blocks are owned by a single ElementArea (and therefore a single Page), we can store a reference to the page
 directly on the block as a performance enhancement for this query. A set of extensions to manage this are provided out
-of the box, and can be enabled by applying the following configuration:
-
-```
-DNADesign\Elemental\Models\BaseElement:
-  extensions:
-    topPageDataExtension: DNADesign\Elemental\TopPage\DataExtension
-
-DNADesign\Elemental\Models\ElementalArea:
-  extensions:
-    topPageDataExtension: DNADesign\Elemental\TopPage\DataExtension
-
-Page:
-  extensions:
-    topPageSiteTreeExtension: DNADesign\Elemental\TopPage\SiteTreeExtension
-```
+of the box for elements on pages. You can use `$TopPage` in your template to get access to the page, which is more performant
+than using `$Page`.
 
 These extensions will be enabled by default in Elemental 5.
 

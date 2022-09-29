@@ -13,7 +13,6 @@ use TractorCow\Fluent\State\FluentState;
  * Class FluentExtension
  *
  * Use in place of @see DataExtension if you use the Fluent module for page localisation.
- * Be sure to also update @see TestState to use this extension
  *
  * @link https://github.com/tractorcow-farm/silverstripe-fluent
  * @property string $TopPageLocale
