@@ -13,8 +13,7 @@ if (!class_exists(SolrIndex::class)) {
  * Provides ability to index Elemental content for a page, so it can be returned in the context of the page
  * that the elements belong to
  *
- * @deprecated 4.2.0 This index will be removed from the default setup, use a custom index to replicate
- * the functionality
+ * @deprecated 4.2.0 Use a custom index instead
  */
 class ElementalSolrIndex extends SolrIndex
 {
