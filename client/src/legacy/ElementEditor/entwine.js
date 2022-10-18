@@ -10,7 +10,18 @@ import { destroy } from 'redux-form';
 /**
  * Reset the Apollo and Redux stores holding data relating to elemental inline edit forms
  */
-const resetStores = () => {
+const resetStores = (numAttempts = 0) => {
+  // If there are queries waiting to be performed, resetting the cache store will cancel them.
+  // Make sure all queries are complete before resetting stores.
+  // Only try 3 times - after that clearing the store is more likely to cause noticable issues
+  // than resolve them.
+  if (window.ss.apolloClient.queryManager.fetchQueryRejectFns.size > 0 && numAttempts < 3) {
+    setTimeout(() => {
+      resetStores(numAttempts + 1);
+    }, 200);
+    return;
+  }
+
   // After page level saves we need to reload all the blocks from the server. We can remove
   // this if we can figure out a way to optimistically update the apollo cache. See:
   // https://github.com/dnadesign/silverstripe-elemental/pull/439#issuecomment-428773370
