@@ -2,6 +2,7 @@
 
 namespace DNADesign\Elemental\Extensions;
 
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Admin\Forms\UsedOnTable;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\DataExtension;
@@ -35,6 +36,7 @@ class ElementalAreaUsedOnTableExtension extends DataExtension
      */
     public function updateUsage(ArrayList &$usage, DataObject &$record)
     {
+        Deprecation::notice('4.5.0', 'Use updateUsageExcludedClasses() instead');
         // noop
     }
 

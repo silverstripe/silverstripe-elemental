@@ -2,6 +2,7 @@
 
 namespace DNADesign\Elemental\Search;
 
+use SilverStripe\Dev\Deprecation;
 use Page;
 use SilverStripe\FullTextSearch\Solr\SolrIndex;
 
@@ -17,6 +18,11 @@ if (!class_exists(SolrIndex::class)) {
  */
 class ElementalSolrIndex extends SolrIndex
 {
+    public function __construct()
+    {
+        Deprecation::notice('4.2.0', 'Use a custom index instead', Deprecation::SCOPE_CLASS);
+    }
+
     public function init()
     {
         $this->addClass(Page::class);
