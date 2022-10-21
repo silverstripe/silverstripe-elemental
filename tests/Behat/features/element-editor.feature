@@ -97,11 +97,11 @@ Feature: View types of elements in an area on a page
     Then I should see "Untitled Content Block"
 
     # Expand blocks for inline editing
-    Then I should not see a ".mce-tinymce" element
+    Then I should not see a ".tox-tinymce" element
     # This will click on the first content block
     When I click on the ".element-editor-header__title" element
     And I wait for 1 seconds
-    Then I should see a ".mce-tinymce" element
+    Then I should see a ".tox-tinymce" element
 
     # Navigate between primary block tabs
     Then I should not see "Custom CSS classes"
@@ -119,7 +119,7 @@ Feature: View types of elements in an area on a page
     # to press the tab key is predictable
     When I click on the ".element-editor-header__title" element
     And I wait for 1 seconds
-    Then I should see a ".mce-tinymce" element
+    Then I should see a ".tox-tinymce" element
 
     # More actions menu can be accessed with keyboard actions
     When I press the "tab" key globally
@@ -133,9 +133,9 @@ Feature: View types of elements in an area on a page
     When I press the "shift-tab" key globally
     And I press the "space" key globally
     And I wait for 1 seconds
-    Then I should not see a ".mce-tinymce" element
+    Then I should not see a ".tox-tinymce" element
 
     # Block can be expanded with keyboard actions
     When I press the "space" key globally
     And I wait for 1 seconds
-    Then I should see a ".mce-tinymce" element
+    Then I should see a ".tox-tinymce" element

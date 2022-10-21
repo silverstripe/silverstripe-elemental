@@ -15,7 +15,7 @@ So that I can direct users directly to the relevant information
     Given I left click on "No Blocks" in the tree
       And I select "awesome" in the "Content" HTML field
       And I press the "Insert link" HTML field button
-      And I click "Anchor on a page" in the ".mce-menu" element
+      And I click "Anchor on a page" in the ".tox-menu" element
     Then I should see an "form#Form_editorAnchorLink" element
       And I should see "No Blocks" in the "#Form_editorAnchorLink_PageID_Holder .Select-multi-value-wrapper" element
     When I click "No Blocks" in the "#Form_editorAnchorLink_PageID_Holder .Select-multi-value-wrapper" element
@@ -34,7 +34,7 @@ So that I can direct users directly to the relevant information
       Then the "Content" field for block 1 should contain "My awesomer content"
     When I select "awesomer" in the "Content" HTML field
       And I press the "Insert link" HTML field button
-      And I click "Anchor on a page" in the ".mce-menu" element
+      And I click "Anchor on a page" in the ".tox-menu" element
     Then I should see an "form#Form_editorAnchorLink" element
       And I should see "Elemental" in the "#Form_editorAnchorLink_PageID_Holder .Select-multi-value-wrapper" element
     When I click "Elemental" in the "#Form_editorAnchorLink_PageID_Holder .Select-multi-value-wrapper" element
@@ -53,7 +53,7 @@ So that I can direct users directly to the relevant information
       Then the "Content" field for block 1 should contain "My awesomer content"
     When I select "awesomer" in the "Content" HTML field
       And I press the "Insert link" HTML field button
-      And I click "Anchor on a page" in the ".mce-menu" element
+      And I click "Anchor on a page" in the ".tox-menu" element
     Then I should see an "form#Form_editorAnchorLink" element
       And I should see "Elemental" in the "#Form_editorAnchorLink_PageID_Holder .Select-multi-value-wrapper" element
     When I click "Select or enter anchor" in the "#Form_editorAnchorLink_Anchor_Holder .Select-multi-value-wrapper" element
