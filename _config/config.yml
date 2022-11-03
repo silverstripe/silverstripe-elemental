@@ -35,7 +35,3 @@ Symbiote\GridFieldExtensions\GridFieldAddNewMultiClassHandler:
 SilverStripe\Core\Injector\Injector:
   SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search:
     class: DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch
-  SilverStripe\Dev\State\SapphireTestState:
-    properties:
-      States:
-        topPageTestState: '%$DNADesign\Elemental\TopPage\TestState'

@@ -20,8 +20,10 @@ use TractorCow\Fluent\State\FluentState;
  * @property BaseElement|ElementalArea|$this $owner
  * @package DNADesign\Elemental\TopPage
  */
-class FluentExtension extends DataExtension
+class FluentExtension
 {
+    use TopPageTrait;
+
     /**
      * @var array
      */
@@ -34,7 +36,7 @@ class FluentExtension extends DataExtension
      */
     protected function assignTopPage(Page $page): void
     {
-        parent::assignTopPage($page);
+        TopPageTrait::assignTopPage($page);
 
         $this->owner->TopPageLocale = FluentState::singleton()->getLocale();
     }
@@ -44,7 +46,7 @@ class FluentExtension extends DataExtension
      */
     protected function clearTopPage(): void
     {
-        parent::clearTopPage();
+        TopPageTrait::clearTopPage();
 
         $this->owner->TopPageLocale = null;
     }
@@ -54,7 +56,7 @@ class FluentExtension extends DataExtension
      */
     protected function assignFixedTopPage(): void
     {
-        parent::assignFixedTopPage();
+        TopPageTrait::assignFixedTopPage();
 
         $this->owner->TopPageLocale = FluentState::singleton()->getLocale();
     }
@@ -68,6 +70,6 @@ class FluentExtension extends DataExtension
         $owner = $this->owner;
         $extraData['"TopPageLocale"'] = $owner->TopPageLocale;
 
-        parent::saveChanges($extraData);
+        TopPageTrait::saveChanges($extraData);
     }
 }

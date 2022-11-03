@@ -3,6 +3,8 @@
 namespace DNADesign\Elemental\Models;
 
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
+use DNADesign\Elemental\TopPage\TopPageTrait;
+use Page;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\TestOnly;
@@ -25,12 +27,18 @@ use SilverStripe\View\ViewableData;
  */
 class ElementalArea extends DataObject
 {
+    use TopPageTrait;
+
     private static $db = [
         'OwnerClassName' => 'Varchar(255)',
     ];
 
     private static $has_many = [
         'Elements' => BaseElement::class,
+    ];
+
+    private static $has_one = [
+        'TopPage' => Page::class,
     ];
 
     private static $extensions = [
@@ -53,6 +61,10 @@ class ElementalArea extends DataObject
         'Title' => 'Title',
     ];
 
+    private static $indexes = [
+        'TopPageID' => true,
+    ];
+
     private static $table_name = 'ElementalArea';
 
     /**
@@ -70,6 +82,15 @@ class ElementalArea extends DataObject
      * @var array
      */
     protected $cacheData = [];
+
+    /**
+     * Global flag which indicates that automatic page determination is enabled or not
+     * If this is set to a page ID it will be used instead of trying to determine the top page
+     *
+     * @see TopPageTrait::withFixedTopPage()
+     * @var int
+     */
+    private $fixedTopPageID = 0;
 
     /**
      * @return array

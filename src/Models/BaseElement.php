@@ -5,7 +5,9 @@ namespace DNADesign\Elemental\Models;
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use DNADesign\Elemental\ORM\FieldType\DBObjectType;
+use DNADesign\Elemental\TopPage\TopPageTrait;
 use Exception;
+use Page;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
@@ -50,6 +52,9 @@ use SilverStripe\ORM\CMSPreviewable;
  */
 class BaseElement extends DataObject implements CMSPreviewable
 {
+
+    use TopPageTrait;
+
     /**
      * Override this on your custom elements to specify a CSS icon class
      *
@@ -74,7 +79,8 @@ class BaseElement extends DataObject implements CMSPreviewable
     ];
 
     private static $has_one = [
-        'Parent' => ElementalArea::class
+        'Parent' => ElementalArea::class,
+        'TopPage' => Page::class,
     ];
 
     private static $extensions = [
@@ -93,6 +99,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
     private static $indexes = [
         'Sort' => true,
+        'TopPageID' => true,
     ];
 
     private static $versioned_gridfield_extensions = true;
@@ -197,6 +204,15 @@ class BaseElement extends DataObject implements CMSPreviewable
      * @var string
      */
     protected $anchor = null;
+
+    /**
+     * Global flag which indicates that automatic page determination is enabled or not
+     * If this is set to a page ID it will be used instead of trying to determine the top page
+     *
+     * @see TopPageTrait::withFixedTopPage()
+     * @var int
+     */
+    private $fixedTopPageID = 0;
 
     /**
      * Basic permissions, defaults to page perms where possible.
@@ -339,6 +355,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             // Remove relationship fields
             $fields->removeByName('ParentID');
             $fields->removeByName('Sort');
+            $fields->removeByName('TopPageID');
 
             // Remove link and file tracking tabs
             $fields->removeByName(['LinkTracking', 'FileTracking']);

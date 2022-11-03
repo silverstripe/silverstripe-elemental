@@ -94,10 +94,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     public function addDuplicatedObject(DataObject $object): void
     {
-        if (!$object->hasExtension(DataExtension::class)) {
-            return;
-        }
-
         $key = $this->getDuplicatedPageKey();
 
         if ($key === null) {
@@ -135,13 +131,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function initDuplication(Page $original): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
-
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
-
         $key = $original->getDuplicationKey();
 
         if ($key === null) {
@@ -165,13 +154,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function processDuplication(Page $original, bool $written): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
-
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
-
         if ($written) {
             $this->writeDuplication($original);
 
@@ -191,13 +173,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function processDuplicationFromOriginal(): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
-
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
-
         $owner = $this->owner;
 
         if (!isset($owner->duplicationOriginal)) {
@@ -231,7 +206,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
         if (array_key_exists($key, $this->duplicatedObjects ?? [])) {
             $objects = $this->duplicatedObjects[$key];
 
-            /** @var DataObject|DataExtension $object */
+            /** @var DataObject $object */
             foreach ($objects as $object) {
                 // attach current page ID to the object
                 $object->setTopPage($this->owner);
@@ -250,13 +225,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function setTopPageForElementalArea(): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
-
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
-
         /** @var Page|ElementalPageExtension $owner */
         $owner = $this->owner;
 
@@ -268,14 +236,10 @@ class SiteTreeExtension extends BaseSiteTreeExtension
             return;
         }
 
-        /** @var ElementalArea|DataExtension $area */
+        /** @var ElementalArea $area */
         $area = $owner->ElementalArea();
 
         if (!$area->exists()) {
-            return;
-        }
-
-        if (!$area->hasExtension(DataExtension::class)) {
             return;
         }
 
