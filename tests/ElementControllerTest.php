@@ -13,8 +13,6 @@ class ElementControllerTest extends FunctionalTest
 {
     protected static $fixture_file = 'ElementControllerTest.yml';
 
-    protected static $use_draft_site = true;
-
     protected static $required_extensions = [
         TestPage::class => [
             ElementalPageExtension::class,

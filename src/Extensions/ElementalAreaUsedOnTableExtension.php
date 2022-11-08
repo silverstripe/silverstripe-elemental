@@ -36,7 +36,6 @@ class ElementalAreaUsedOnTableExtension extends DataExtension
      */
     public function updateUsage(ArrayList &$usage, DataObject &$record)
     {
-        Deprecation::notice('4.5.0', 'Use updateUsageExcludedClasses() instead');
         // noop
     }
 
