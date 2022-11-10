@@ -9,6 +9,7 @@ fr:
     PLURALS:
       one: 'Un bloc'
       other: '{count} blocs'
+      many: '{count} blocs'
     SINGULARNAME: bloc
     STYLE: 'Variation de style'
   DNADesign\Elemental\Models\ElementContent:
@@ -18,12 +19,14 @@ fr:
     PLURALS:
       one: 'Un bloc contenu'
       other: '{count} blocs contenu'
+      many: '{count} blocs contenu'
     SINGULARNAME: 'bloc contenu'
   DNADesign\Elemental\Models\ElementalArea:
     PLURALNAME: 'Elemental Areas'
     PLURALS:
       one: 'An Elemental Area'
       other: '{count} Elemental Areas'
+      many: '{count} Elemental Areas'
     SINGULARNAME: 'Elemental Area'
   DNADesign\Elemental\Reports\ElementTypeReport:
     Title: 'Types de blocs'
