@@ -2,11 +2,22 @@
 
 namespace DNADesign\Elemental\TopPage;
 
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Dev\State\TestState as BaseState;
 
+/**
+ * @deprecated 4.13.0 Will be removed without equivalent functionality to replace it
+ */
 class TestState implements BaseState
 {
+    public function __construct()
+    {
+        Deprecation::withNoReplacement(function () {
+            Deprecation::notice('4.13.0', 'Will be removed without equivalent functionality to replace it.');
+        });
+    }
+
     public function setUp(SapphireTest $test): void
     {
         $this->disableTopPageUpdate();
@@ -33,8 +44,10 @@ class TestState implements BaseState
      */
     private function disableTopPageUpdate(): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
-        $extension->disableTopPageUpdate();
+        Deprecation::withNoReplacement(function () {
+            /** @var DataExtension $extension */
+            $extension = singleton(DataExtension::class);
+            $extension->disableTopPageUpdate();
+        });
     }
 }

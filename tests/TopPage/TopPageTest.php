@@ -8,6 +8,7 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\TopPage;
 use Page;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
 
@@ -90,6 +91,9 @@ class TopPageTest extends SapphireTest
         string $objectIdentifier,
         string $objectClass
     ): void {
+        if (Deprecation::isEnabled()) {
+            $this->markTestSkipped('Test calls deprecated code');
+        }
         /** @var TopPage\DataExtension $extension */
         $extension = singleton(TopPage\DataExtension::class);
         $extension->withTopPageUpdate(
@@ -100,8 +104,9 @@ class TopPageTest extends SapphireTest
 
                 /** @var DataObject|TopPage\DataExtension $object */
                 $object = $this->objFromFixture($objectClass, $objectIdentifier);
+                $initialObj = $objectClass::get()->sort('ID', 'DESC');
 
-                $this->assertEquals(0, (int) $object->TopPageID);
+                $this->assertEquals(0, (int) $initialObj->TopPageID);
 
                 $object->forceChange();
                 $id = $object->write();
@@ -121,6 +126,9 @@ class TopPageTest extends SapphireTest
 
     public function testNewPage(): void
     {
+        if (Deprecation::isEnabled()) {
+            $this->markTestSkipped('Test calls deprecated code');
+        }
         /** @var TopPage\DataExtension $extension */
         $extension = singleton(TopPage\DataExtension::class);
         $extension->withTopPageUpdate(
@@ -143,6 +151,9 @@ class TopPageTest extends SapphireTest
      */
     public function testNewBlock(bool $populateTopPage): void
     {
+        if (Deprecation::isEnabled()) {
+            $this->markTestSkipped('Test calls deprecated code');
+        }
         /** @var TopPage\DataExtension $extension */
         $extension = singleton(TopPage\DataExtension::class);
         $extension->withTopPageUpdate(
@@ -184,6 +195,9 @@ class TopPageTest extends SapphireTest
      */
     public function testPageDuplication(int $fixedPageID): void
     {
+        if (Deprecation::isEnabled()) {
+            $this->markTestSkipped('Test calls deprecated code');
+        }
         /** @var TopPage\DataExtension $extension */
         $extension = singleton(TopPage\DataExtension::class);
         $extension->withFixedTopPage($fixedPageID, function () use ($extension, $fixedPageID) {

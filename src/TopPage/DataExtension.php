@@ -6,6 +6,7 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use Page;
 use SilverStripe\Core\ClassInfo;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\ORM\DataExtension as BaseDataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
@@ -155,9 +156,11 @@ class DataExtension extends BaseDataExtension
      */
     public function setTopPage(?Page $page = null): void
     {
-        if (!$this->getTopPageUpdate()) {
-            return;
-        }
+        Deprecation::withNoReplacement(function () {
+            if (!$this->getTopPageUpdate()) {
+                return;
+            }
+        });
 
         /** @var BaseElement|ElementalArea|Versioned|DataExtension $owner */
         $owner = $this->owner;
@@ -188,26 +191,34 @@ class DataExtension extends BaseDataExtension
         $this->saveChanges();
     }
 
+    /**
+     * @deprecated 4.13.0 Will be removed without equivalent functionality to replace it
+     */
     public function getTopPageUpdate(): bool
     {
+        Deprecation::notice('4.13.0', 'Will be removed without equivalent functionality to replace it.');
         return $this->topPageUpdate;
     }
 
     /**
      * Global flag manipulation - enable automatic top page determination
      * Useful for unit tests as you may want to enable / disable this feature based on need
+     * @deprecated 4.13.0 Will be removed without equivalent functionality to replace it
      */
     public function enableTopPageUpdate(): void
     {
+        Deprecation::notice('4.13.0', 'Will be removed without equivalent functionality to replace it.');
         $this->topPageUpdate = true;
     }
 
     /**
      * Global flag manipulation - disable automatic top page determination
      * Useful for unit tests as you may want to enable / disable this feature based on need
+     * @deprecated 4.13.0 Will be removed without equivalent functionality to replace it
      */
     public function disableTopPageUpdate(): void
     {
+        Deprecation::notice('4.13.0', 'Will be removed without equivalent functionality to replace it.');
         $this->topPageUpdate = false;
     }
 
@@ -217,10 +228,12 @@ class DataExtension extends BaseDataExtension
      *
      * @param bool $update
      * @param callable $callback
+     * @deprecated 4.13.0 Will be removed without equivalent functionality to replace it
      * @return mixed
      */
     public function withTopPageUpdate(bool $update, callable $callback)
     {
+        Deprecation::notice('4.13.0', 'Will be removed without equivalent functionality to replace it.');
         $original = $this->topPageUpdate;
         $this->topPageUpdate = $update;
 
@@ -271,9 +284,11 @@ class DataExtension extends BaseDataExtension
      */
     protected function updateTopPage(): void
     {
-        if (!$this->getTopPageUpdate()) {
-            return;
-        }
+        Deprecation::withNoReplacement(function () {
+            if (!$this->getTopPageUpdate()) {
+                return;
+            }
+        });
 
         /** @var SiteTreeExtension $extension */
         $extension = singleton(SiteTreeExtension::class);

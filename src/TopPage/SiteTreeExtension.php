@@ -6,6 +6,7 @@ use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\ElementalArea;
 use Page;
 use SilverStripe\CMS\Model\SiteTreeExtension as BaseSiteTreeExtension;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationException;
 
@@ -135,12 +136,14 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function initDuplication(Page $original): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
+        Deprecation::withNoReplacement(function () {
+            /** @var DataExtension $extension */
+            $extension = singleton(DataExtension::class);
 
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
+            if (!$extension->getTopPageUpdate()) {
+                return;
+            }
+        });
 
         $key = $original->getDuplicationKey();
 
@@ -165,12 +168,14 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function processDuplication(Page $original, bool $written): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
+        Deprecation::withNoReplacement(function () {
+            /** @var DataExtension $extension */
+            $extension = singleton(DataExtension::class);
 
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
+            if (!$extension->getTopPageUpdate()) {
+                return;
+            }
+        });
 
         if ($written) {
             $this->writeDuplication($original);
@@ -191,12 +196,14 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function processDuplicationFromOriginal(): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
+        Deprecation::withNoReplacement(function () {
+            /** @var DataExtension $extension */
+            $extension = singleton(DataExtension::class);
 
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
+            if (!$extension->getTopPageUpdate()) {
+                return;
+            }
+        });
 
         $owner = $this->owner;
 
@@ -250,12 +257,14 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function setTopPageForElementalArea(): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
+        Deprecation::withNoReplacement(function () {
+            /** @var DataExtension $extension */
+            $extension = singleton(DataExtension::class);
 
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
+            if (!$extension->getTopPageUpdate()) {
+                return;
+            }
+        });
 
         /** @var Page|ElementalPageExtension $owner */
         $owner = $this->owner;
