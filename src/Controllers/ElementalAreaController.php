@@ -121,7 +121,7 @@ class ElementalAreaController extends CMSMain
             return null;
         }
 
-        $data = Convert::json2array($request->getBody());
+        $data = json_decode($request->getBody(), true);
         if (empty($data)) {
             $this->jsonError(400);
             return null;
@@ -166,7 +166,7 @@ class ElementalAreaController extends CMSMain
             return null;
         }
 
-        $body = Convert::raw2json([
+        $body = json_encode([
             'status' => 'success',
             'updated' => $updated,
         ]);
