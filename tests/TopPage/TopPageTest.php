@@ -90,51 +90,38 @@ class TopPageTest extends SapphireTest
         string $objectIdentifier,
         string $objectClass
     ): void {
-        /** @var TopPage\DataExtension $extension */
-        $extension = singleton(TopPage\DataExtension::class);
-        $extension->withTopPageUpdate(
-            true,
-            function () use ($pageIdentifier, $pageClass, $objectIdentifier, $objectClass): void {
-                /** @var Page|TopPage\SiteTreeExtension $content */
-                $page = $this->objFromFixture($pageClass, $pageIdentifier);
+        /** @var Page|TopPage\SiteTreeExtension $content */
+        $page = $this->objFromFixture($pageClass, $pageIdentifier);
 
-                /** @var DataObject|TopPage\DataExtension $object */
-                $object = $this->objFromFixture($objectClass, $objectIdentifier);
+        /** @var DataObject|TopPage\DataExtension $object */
+        $object = $this->objFromFixture($objectClass, $objectIdentifier);
+        $initialObj = $objectClass::get()->sort('ID', 'DESC');
 
-                $this->assertEquals(0, (int) $object->TopPageID);
+        $this->assertEquals(0, (int) $initialObj->TopPageID);
 
-                $object->forceChange();
-                $id = $object->write();
-                $object = DataObject::get($object->ClassName)->byID($id);
+        $object->forceChange();
+        $id = $object->write();
+        $object = DataObject::get($object->ClassName)->byID($id);
 
-                $this->assertEquals((int) $page->ID, (int) $object->TopPageID);
+        $this->assertEquals((int) $page->ID, (int) $object->TopPageID);
 
-                // do a second write to make sure that we won't override existing top page
-                $object->forceChange();
-                $id = $object->write();
-                $object = DataObject::get($object->ClassName)->byID($id);
+        // do a second write to make sure that we won't override existing top page
+        $object->forceChange();
+        $id = $object->write();
+        $object = DataObject::get($object->ClassName)->byID($id);
 
-                $this->assertEquals((int) $page->ID, (int) $object->TopPageID);
-            }
-        );
+        $this->assertEquals((int) $page->ID, (int) $object->TopPageID);
     }
 
     public function testNewPage(): void
     {
-        /** @var TopPage\DataExtension $extension */
-        $extension = singleton(TopPage\DataExtension::class);
-        $extension->withTopPageUpdate(
-            true,
-            function (): void {
-                $page = TestBlockPage::create();
-                $page->Title = 'New page test';
-                $page->write();
+        $page = TestBlockPage::create();
+        $page->Title = 'New page test';
+        $page->write();
 
-                /** @var ElementalArea|TopPage\DataExtension $area */
-                $area = $page->ElementalArea();
-                $this->assertEquals((int) $page->ID, (int) $area->TopPageID);
-            }
-        );
+        /** @var ElementalArea|TopPage\DataExtension $area */
+        $area = $page->ElementalArea();
+        $this->assertEquals((int) $page->ID, (int) $area->TopPageID);
     }
 
     /**
@@ -143,31 +130,24 @@ class TopPageTest extends SapphireTest
      */
     public function testNewBlock(bool $populateTopPage): void
     {
-        /** @var TopPage\DataExtension $extension */
-        $extension = singleton(TopPage\DataExtension::class);
-        $extension->withTopPageUpdate(
-            true,
-            function () use ($populateTopPage): void {
-                if ($populateTopPage) {
-                    $this->populateTopPageForAllObjects();
-                }
+        if ($populateTopPage) {
+            $this->populateTopPageForAllObjects();
+        }
 
-                /** @var TestBlockPage $page */
-                $page = $this->objFromFixture(TestBlockPage::class, 'block-page1');
+        /** @var TestBlockPage $page */
+        $page = $this->objFromFixture(TestBlockPage::class, 'block-page1');
 
-                /** @var ElementalArea $area */
-                $area = $this->objFromFixture(ElementalArea::class, 'area3');
+        /** @var ElementalArea $area */
+        $area = $this->objFromFixture(ElementalArea::class, 'area3');
 
-                /** @var TestContent|TopPage\DataExtension $content */
-                $content = TestContent::create();
-                $content->Title = 'Fresh block';
+        /** @var TestContent|TopPage\DataExtension $content */
+        $content = TestContent::create();
+        $content->Title = 'Fresh block';
 
-                $area->Elements()->add($content);
-                $content = DataObject::get($content->ClassName)->byID($content->ID);
+        $area->Elements()->add($content);
+        $content = DataObject::get($content->ClassName)->byID($content->ID);
 
-                $this->assertEquals((int) $page->ID, (int) $content->TopPageID);
-            }
-        );
+        $this->assertEquals((int) $page->ID, (int) $content->TopPageID);
     }
 
     /**
@@ -186,61 +166,56 @@ class TopPageTest extends SapphireTest
     {
         /** @var TopPage\DataExtension $extension */
         $extension = singleton(TopPage\DataExtension::class);
-        $extension->withFixedTopPage($fixedPageID, function () use ($extension, $fixedPageID) {
-            $extension->withTopPageUpdate(
-                true,
-                function () use ($fixedPageID): void {
-                    $this->populateTopPageForAllObjects();
+        $extension->withFixedTopPage($fixedPageID, function () use ($fixedPageID) {
+            $this->populateTopPageForAllObjects();
 
-                    /** @var TestBlockPage $page */
-                    $page = $this->objFromFixture(TestBlockPage::class, 'block-page1');
+            /** @var TestBlockPage $page */
+            $page = $this->objFromFixture(TestBlockPage::class, 'block-page1');
 
-                    /** @var TestChildPage $childPage */
-                    $childPage = $this->objFromFixture(TestChildPage::class, 'child-page1');
+            /** @var TestChildPage $childPage */
+            $childPage = $this->objFromFixture(TestChildPage::class, 'child-page1');
 
-                    $page->duplicate();
-                    $pages = TestBlockPage::get()->filter(['Title' => 'BlockPage1'])->sort('ID', 'DESC');
+            $page->duplicate();
+            $pages = TestBlockPage::get()->filter(['Title' => 'BlockPage1'])->sort('ID', 'DESC');
 
-                    $this->assertCount(2, $pages);
+            $this->assertCount(2, $pages);
 
-                    $pageClone = $pages->first();
-                    $childPages = TestChildPage::get()->filter(['Title' => 'ChildPage1'])->sort('ID', 'DESC');
+            $pageClone = $pages->first();
+            $childPages = TestChildPage::get()->filter(['Title' => 'ChildPage1'])->sort('ID', 'DESC');
 
-                    $this->assertCount(2, $childPages);
+            $this->assertCount(2, $childPages);
 
-                    $childClone = $childPages->first();
+            $childClone = $childPages->first();
 
-                    $this->assertNotEquals((int) $childPage->ID, (int) $childClone->ID);
+            $this->assertNotEquals((int) $childPage->ID, (int) $childClone->ID);
 
-                    $objects = [
-                        [TestList::class, 'List1', $pageClone],
-                        [TestContent::class, 'Content1', $pageClone],
-                        [TestList::class, 'List2', $childClone],
-                        [TestContent::class, 'Content2', $childClone],
-                    ];
+            $objects = [
+                [TestList::class, 'List1', $pageClone],
+                [TestContent::class, 'Content1', $pageClone],
+                [TestList::class, 'List2', $childClone],
+                [TestContent::class, 'Content2', $childClone],
+            ];
 
-                    foreach ($objects as $objectData) {
-                        $class = array_shift($objectData);
-                        $title = array_shift($objectData);
-                        $page = array_shift($objectData);
+            foreach ($objects as $objectData) {
+                $class = array_shift($objectData);
+                $title = array_shift($objectData);
+                $page = array_shift($objectData);
 
-                        $items = DataObject::get($class)->filter(['Title' => $title])->sort('ID', 'DESC');
+                $items = DataObject::get($class)->filter(['Title' => $title])->sort('ID', 'DESC');
 
-                        $this->assertCount(2, $items);
+                $this->assertCount(2, $items);
 
-                        /** @var DataObject|TopPage\DataExtension $objectClone */
-                        $objectClone = $items->first();
+                /** @var DataObject|TopPage\DataExtension $objectClone */
+                $objectClone = $items->first();
 
-                        $expected = $fixedPageID ?: (int) $page->ID;
-                        $this->assertEquals($expected, (int) $objectClone->TopPageID);
+                $expected = $fixedPageID ?: (int) $page->ID;
+                $this->assertEquals($expected, (int) $objectClone->TopPageID);
 
-                        /** @var ElementalArea|TopPage\DataExtension $area */
-                        $area = $objectClone->Parent();
+                /** @var ElementalArea|TopPage\DataExtension $area */
+                $area = $objectClone->Parent();
 
-                        $this->assertEquals($expected, (int) $area->TopPageID);
-                    }
-                }
-            );
+                $this->assertEquals($expected, (int) $area->TopPageID);
+            }
         });
     }
 

@@ -24,6 +24,10 @@ SilverStripe\CMS\Controllers\CMSMain:
   extensions:
     - DNADesign\Elemental\Extensions\ElementalCMSMainExtension
 
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    topPageSiteTreeExtension: DNADesign\Elemental\TopPage\SiteTreeExtension
+
 SilverStripe\Versioned\VersionedGridFieldItemRequest:
   extensions:
     - 'DNADesign\Elemental\Extensions\GridFieldDetailFormItemRequestExtension'
@@ -35,7 +39,3 @@ Symbiote\GridFieldExtensions\GridFieldAddNewMultiClassHandler:
 SilverStripe\Core\Injector\Injector:
   SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search:
     class: DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch
-  SilverStripe\Dev\State\SapphireTestState:
-    properties:
-      States:
-        topPageTestState: '%$DNADesign\Elemental\TopPage\TestState'

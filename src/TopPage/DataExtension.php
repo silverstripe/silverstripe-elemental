@@ -43,14 +43,6 @@ class DataExtension extends BaseDataExtension
     ];
 
     /**
-     * Global flag which indicates if this feature is enabled or not
-     *
-     * @see DataExtension::withTopPageUpdate()
-     * @var bool
-     */
-    private $topPageUpdate = true;
-
-    /**
      * Global flag which indicates that automatic page determination is enabled or not
      * If this is set to a page ID it will be used instead of trying to determine the top page
      *
@@ -155,10 +147,6 @@ class DataExtension extends BaseDataExtension
      */
     public function setTopPage(?Page $page = null): void
     {
-        if (!$this->getTopPageUpdate()) {
-            return;
-        }
-
         /** @var BaseElement|ElementalArea|Versioned|DataExtension $owner */
         $owner = $this->owner;
 
@@ -186,49 +174,6 @@ class DataExtension extends BaseDataExtension
         // set the page to properties in case this object is re-used later
         $this->assignTopPage($page);
         $this->saveChanges();
-    }
-
-    public function getTopPageUpdate(): bool
-    {
-        return $this->topPageUpdate;
-    }
-
-    /**
-     * Global flag manipulation - enable automatic top page determination
-     * Useful for unit tests as you may want to enable / disable this feature based on need
-     */
-    public function enableTopPageUpdate(): void
-    {
-        $this->topPageUpdate = true;
-    }
-
-    /**
-     * Global flag manipulation - disable automatic top page determination
-     * Useful for unit tests as you may want to enable / disable this feature based on need
-     */
-    public function disableTopPageUpdate(): void
-    {
-        $this->topPageUpdate = false;
-    }
-
-    /**
-     * Use this to wrap any code which is supposed to run with desired top page update setting
-     * Useful for unit tests as you may want to enable / disable this feature based on need
-     *
-     * @param bool $update
-     * @param callable $callback
-     * @return mixed
-     */
-    public function withTopPageUpdate(bool $update, callable $callback)
-    {
-        $original = $this->topPageUpdate;
-        $this->topPageUpdate = $update;
-
-        try {
-            return $callback();
-        } finally {
-            $this->topPageUpdate = $original;
-        }
     }
 
     /**
@@ -271,10 +216,6 @@ class DataExtension extends BaseDataExtension
      */
     protected function updateTopPage(): void
     {
-        if (!$this->getTopPageUpdate()) {
-            return;
-        }
-
         /** @var SiteTreeExtension $extension */
         $extension = singleton(SiteTreeExtension::class);
         $extension->addDuplicatedObject($this->owner);

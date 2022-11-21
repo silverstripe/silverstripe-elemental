@@ -135,13 +135,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function initDuplication(Page $original): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
-
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
-
         $key = $original->getDuplicationKey();
 
         if ($key === null) {
@@ -165,13 +158,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function processDuplication(Page $original, bool $written): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
-
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
-
         if ($written) {
             $this->writeDuplication($original);
 
@@ -191,13 +177,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function processDuplicationFromOriginal(): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
-
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
-
+        /** @var Page|ElementalPageExtension $owner */
         $owner = $this->owner;
 
         if (!isset($owner->duplicationOriginal)) {
@@ -250,13 +230,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function setTopPageForElementalArea(): void
     {
-        /** @var DataExtension $extension */
-        $extension = singleton(DataExtension::class);
-
-        if (!$extension->getTopPageUpdate()) {
-            return;
-        }
-
         /** @var Page|ElementalPageExtension $owner */
         $owner = $this->owner;
 
