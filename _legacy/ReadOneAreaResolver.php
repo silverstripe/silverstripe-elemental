@@ -2,6 +2,7 @@
 
 namespace DNADesign\Elemental\GraphQL;
 
+use SilverStripe\Dev\Deprecation;
 use DNADesign\Elemental\Models\ElementalArea;
 use Exception;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -14,10 +15,15 @@ if (!interface_exists(OperationResolver::class)) {
 }
 
 /**
- * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
+ * @deprecated 4.8.0 Use silverstripe/graphql:^4 functionality instead
  */
 class ReadOneAreaResolver implements OperationResolver
 {
+    public function __construct()
+    {
+        Deprecation::notice('4.8.0', 'Use silverstripe/graphql:^4 functionality instead', Deprecation::SCOPE_CLASS);
+    }
+
     public function resolve($object, array $args, $context, ResolveInfo $info)
     {
         $idKey = StaticSchema::inst()->formatField('ID');
