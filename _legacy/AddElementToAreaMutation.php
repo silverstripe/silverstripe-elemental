@@ -2,6 +2,7 @@
 
 namespace DNADesign\Elemental\GraphQL;
 
+use SilverStripe\Dev\Deprecation;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Services\ReorderElements;
@@ -12,16 +13,23 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\GraphQL\MutationCreator;
 use SilverStripe\GraphQL\OperationResolver;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
+use SilverStripe\GraphQL\Manager;
 
 if (!class_exists(MutationCreator::class)) {
     return;
 }
 
 /**
- * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
+ * @deprecated 4.8.0 Use silverstripe/graphql:^4 functionality instead
  */
 class AddElementToAreaMutation extends MutationCreator implements OperationResolver
 {
+    public function __construct(Manager $manager = null)
+    {
+        Deprecation::notice('4.8.0', 'Use silverstripe/graphql:^4 functionality instead', Deprecation::SCOPE_CLASS);
+        parent::__construct($manager);
+    }
+
     public function attributes()
     {
         return [

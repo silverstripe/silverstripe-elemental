@@ -1,6 +1,7 @@
 <?php
 namespace DNADesign\Elemental\GraphQL;
 
+use SilverStripe\Dev\Deprecation;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Services\ReorderElements;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -10,6 +11,7 @@ use SilverStripe\GraphQL\MutationCreator;
 use SilverStripe\GraphQL\OperationResolver;
 use SilverStripe\GraphQL\Scaffolding\StaticSchema;
 use InvalidArgumentException;
+use SilverStripe\GraphQL\Manager;
 
 if (!interface_exists(OperationResolver::class)) {
     return;
@@ -20,10 +22,16 @@ if (!interface_exists(OperationResolver::class)) {
  * orders for the block and its siblings. Only the source block will have a new version written, all siblings
  * will be updated underneath the ORM to avoid this.
  *
- * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
+ * @deprecated 4.8.0 Use silverstripe/graphql:^4 functionality instead
  */
 class SortBlockMutationCreator extends MutationCreator implements OperationResolver
 {
+    public function __construct(Manager $manager = null)
+    {
+        Deprecation::notice('4.8.0', 'Use silverstripe/graphql:^4 functionality instead', Deprecation::SCOPE_CLASS);
+        parent::__construct($manager);
+    }
+
     public function attributes()
     {
         return [

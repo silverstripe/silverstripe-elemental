@@ -3,20 +3,28 @@
 
 namespace DNADesign\Elemental\GraphQL;
 
+use SilverStripe\Dev\Deprecation;
 use DNADesign\Elemental\Models\BaseElement;
 use GraphQL\Type\Definition\Type;
 use SilverStripe\GraphQL\MutationCreator;
 use SilverStripe\GraphQL\Scaffolding\Scaffolders\CRUD\Delete;
+use SilverStripe\GraphQL\Manager;
 
 if (!class_exists(MutationCreator::class)) {
     return;
 }
 
 /**
- * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
+ * @deprecated 4.8.0 Use silverstripe/graphql:^4 functionality instead
  */
 class DeleteBlocksMutation extends MutationCreator
 {
+    public function __construct(Manager $manager = null)
+    {
+        Deprecation::notice('4.8.0', 'Use silverstripe/graphql:^4 functionality instead', Deprecation::SCOPE_CLASS);
+        parent::__construct($manager);
+    }
+
     public function attributes()
     {
         return [
