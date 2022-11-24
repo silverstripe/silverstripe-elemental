@@ -382,7 +382,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             if ($styles && count($styles ?? []) > 0) {
                 $styleDropdown = DropdownField::create('Style', _t(__CLASS__.'.STYLE', 'Style variation'), $styles);
 
-                $fields->insertBefore($styleDropdown, 'ExtraClass');
+                $fields->insertBefore('ExtraClass', $styleDropdown);
 
                 $styleDropdown->setEmptyString(_t(__CLASS__.'.CUSTOM_STYLES', 'Select a style..'));
             } else {
