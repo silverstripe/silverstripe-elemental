@@ -374,9 +374,9 @@ class BaseElement extends DataObject implements CMSPreviewable
                 ->setTitle(_t(__CLASS__ . '.MainTabLabel', 'Content'));
 
             $fields->addFieldsToTab('Root.Main', [
-                HiddenField::create('AbsoluteLink', false, Director::absoluteURL($this->PreviewLink())),
-                HiddenField::create('LiveLink', false, Director::absoluteURL($this->Link())),
-                HiddenField::create('StageLink', false, Director::absoluteURL($this->PreviewLink())),
+                HiddenField::create('AbsoluteLink', false, Director::absoluteURL((string) $this->PreviewLink())),
+                HiddenField::create('LiveLink', false, Director::absoluteURL((string) $this->Link())),
+                HiddenField::create('StageLink', false, Director::absoluteURL((string) $this->PreviewLink())),
             ]);
 
             $styles = $this->config()->get('styles');
@@ -384,7 +384,7 @@ class BaseElement extends DataObject implements CMSPreviewable
             if ($styles && count($styles ?? []) > 0) {
                 $styleDropdown = DropdownField::create('Style', _t(__CLASS__.'.STYLE', 'Style variation'), $styles);
 
-                $fields->insertBefore($styleDropdown, 'ExtraClass');
+                $fields->insertBefore('ExtraClass', $styleDropdown);
 
                 $styleDropdown->setEmptyString(_t(__CLASS__.'.CUSTOM_STYLES', 'Select a style..'));
             } else {
@@ -937,7 +937,7 @@ JS
      */
     public function getEditLink()
     {
-        return Director::absoluteURL($this->CMSEditLink());
+        return Director::absoluteURL((string) $this->CMSEditLink());
     }
 
     /**
