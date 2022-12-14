@@ -3,6 +3,7 @@
 
 namespace DNADesign\Elemental\GraphQL;
 
+use SilverStripe\Dev\Deprecation;
 use DNADesign\Elemental\Models\BaseElement;
 use GraphQL\Type\Definition\ResolveInfo;
 use SilverStripe\Core\Injector\Injector;
@@ -14,10 +15,15 @@ if (!class_exists(ReadOne::class)) {
 }
 
 /**
- * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
+ * @deprecated 4.8.0 Use silverstripe/graphql:^4 functionality instead
  */
 class ReadOneBlockResolver
 {
+    public function __construct()
+    {
+        Deprecation::notice('4.8.0', 'Use silverstripe/graphql:^4 functionality instead', Deprecation::SCOPE_CLASS);
+    }
+
     public static function resolve($obj, array $args, array $context, ResolveInfo $info)
     {
         $idKey = StaticSchema::inst()->formatField('ID');

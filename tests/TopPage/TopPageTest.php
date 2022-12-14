@@ -8,6 +8,7 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\TopPage;
 use Page;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
 
@@ -164,6 +165,9 @@ class TopPageTest extends SapphireTest
      */
     public function testPageDuplication(int $fixedPageID): void
     {
+        if (Deprecation::isEnabled()) {
+            $this->markTestSkipped('Test calls deprecated code');
+        }
         /** @var TopPage\DataExtension $extension */
         $extension = singleton(TopPage\DataExtension::class);
         $extension->withFixedTopPage($fixedPageID, function () use ($fixedPageID) {

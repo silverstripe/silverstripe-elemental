@@ -1,6 +1,7 @@
 <?php
 namespace DNADesign\Elemental\GraphQL\Types;
 
+use SilverStripe\Dev\Deprecation;
 use GraphQL\Type\Definition\CustomScalarType;
 use SilverStripe\GraphQL\TypeCreator;
 
@@ -10,10 +11,16 @@ if (!class_exists(TypeCreator::class)) {
 /**
  * Creates a "scalar" type that is a single dimension object - represented as an associative array on the PHP side.
  *
- * @deprecated 4.8..5.0 Use silverstripe/graphql:^4 functionality.
+ * @deprecated 4.8.0 Use silverstripe/graphql:^4 functionality instead
  */
 class ObjectType extends TypeCreator
 {
+    public function __construct()
+    {
+        Deprecation::notice('4.8.0', 'Use silverstripe/graphql:^4 functionality instead', Deprecation::SCOPE_CLASS);
+        parent::__construct();
+    }
+
     public function toType()
     {
         return new CustomScalarType([
