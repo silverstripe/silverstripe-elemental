@@ -1,0 +1,53 @@
+pl:
+  DNADesign\Elemental\Controllers\ElementalAreaController:
+    MENUTITLE: 'Edytuj stronę'
+  DNADesign\Elemental\Forms\TextCheckboxGroupField:
+    DISPLAYED: Wyświetlany
+    NOT_DISPLAYED: 'Nie wyświetlony'
+    ShowTitleLabel: Pokazany
+    Title: Tytuł
+    TitleLabel: 'Tytuł (zaznacz aby pokazać)'
+  DNADesign\Elemental\Models\BaseElement:
+    BlockType: Blok
+    CUSTOM_STYLES: 'Wybierz styl...'
+    ExtraCssClassesLabel: 'Dodaj niestandardowe klasy CSS'
+    ExtraCssClassesPlaceholder: 'my_class another_class'
+    MainTabLabel: Zawartość
+    PLURALNAME: bloki
+    PLURALS:
+      one: Blok
+      few: 'Bloków {count}'
+      many: 'Bloków {count}'
+      other: 'Bloki {count}'
+    SINGULARNAME: blok
+    STYLE: 'Opcje dla style'
+    SettingsTabLabel: Preferencje
+  DNADesign\Elemental\Models\ElementContent:
+    BlockType: Zawartość
+    ContentLabel: Zawartość
+    PLURALNAME: 'zawartość bloków'
+    PLURALS:
+      one: 'Blok treści'
+      few: 'Bloków treści {count}'
+      many: 'Bloków treści {count}'
+      other: 'Bloki treści {count}'
+    SINGULARNAME: zawartość
+  DNADesign\Elemental\Models\ElementalArea:
+    PLURALNAME: 'Elemental Areas'
+    PLURALS:
+      one: 'Elemental Areas'
+      few: 'Kilka Elemental Areas {count}'
+      many: 'Wiele Elemental Areas {count}'
+      other: 'Inne Elemental Areas {count}'
+    SINGULARNAME: 'Elemental Area'
+  DNADesign\Elemental\Reports\ElementTypeReport:
+    Title: 'Typy zawartość bloków '
+    Total: Razem
+    Type: 'Typ zawartości'
+  DNADesign\Elemental\Reports\ElementsInUseReport:
+    None: None
+    Page: Strona
+    ReportTitle: 'Bloki treści w użyciu'
+    Summary: Podsumowanie
+    Title: Tytuł
+    Type: Typ
