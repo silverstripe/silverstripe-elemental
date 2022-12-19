@@ -14,6 +14,7 @@ it:
     PLURALS:
       one: 'Un blocco'
       other: '{count} blocchi'
+      many: '{count} blocchi'
     SettingsTabLabel: Impostazioni
     SINGULARNAME: blocco
     STYLE: 'Variazione di stile'
@@ -24,12 +25,14 @@ it:
     PLURALS:
       one: 'Un blocco di contenuto'
       other: '{count} blocchi dei contenuti'
+      many: '{count} blocchi dei contenuti'
     SINGULARNAME: 'blocchi dei contenuti'
   DNADesign\Elemental\Models\ElementalArea:
     PLURALNAME: 'Aree Elementi'
     PLURALS:
       one: 'Un''Area Elementi'
       other: '{count} Aree Elementali'
+      many: '{count} Aree Elementali'
     SINGULARNAME: 'Area Elementi'
   DNADesign\Elemental\Reports\ElementTypeReport:
     Title: 'Tipi di blocchi dei contenuti'
