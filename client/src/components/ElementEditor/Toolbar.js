@@ -23,7 +23,7 @@ Toolbar.defaultProps = {};
 Toolbar.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   areaId: PropTypes.number.isRequired,
-  AddNewButtonComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+  AddNewButtonComponent: PropTypes.elementType.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   onDragOver: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
   onDragDrop: PropTypes.func, // eslint-disable-line react/no-unused-prop-types

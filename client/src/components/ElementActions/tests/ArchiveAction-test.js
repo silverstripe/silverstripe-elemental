@@ -13,6 +13,8 @@ describe('ArchiveAction', () => {
   const mockMutation = jest.fn(() => new Promise((resolve) => { resolve(); }));
   const WrappedComponent = (props) => <div>{props.children}</div>;
   const ActionComponent = ArchiveAction(WrappedComponent);
+  const jQuery = jest.fn();
+  window.jQuery = jQuery;
 
   beforeEach(() => {
     wrapper = mount(

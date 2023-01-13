@@ -17,12 +17,10 @@ So that I can direct users directly to the relevant information
       And I press the "Insert link" HTML field button
       And I click "Anchor on a page" in the ".tox-menu" element
     Then I should see an "form#Form_editorAnchorLink" element
-      And I should see "No Blocks" in the "#Form_editorAnchorLink_PageID_Holder .Select-multi-value-wrapper" element
-    When I click "No Blocks" in the "#Form_editorAnchorLink_PageID_Holder .Select-multi-value-wrapper" element
-      And I click "Elemental" in the "#Form_editorAnchorLink_PageID_Holder .Select-menu-outer" element
-      And I click "Select or enter anchor" in the "#Form_editorAnchorLink_Anchor_Holder .Select-multi-value-wrapper" element
-      And I click "element-anchor" in the "#Form_editorAnchorLink_Anchor_Holder .Select-menu-outer" element
-    Then I should see "element-anchor" in the "#Form_editorAnchorLink_Anchor_Holder .Select-value" element
+      And I should see "No Blocks" in the ".treedropdownfield__value-container" element
+    When I select "Elemental" in the "#Form_editorAnchorLink_PageID_Holder" tree dropdown
+      And I select "element-anchor" in the "#Form_editorAnchorLink_Anchor_Holder" anchor dropdown
+    Then I should see "element-anchor" in the ".anchorselectorfield__value-container" element
     # Close the dialog now that we're done with it.
     When I click on the "button.close" element
 
@@ -36,12 +34,10 @@ So that I can direct users directly to the relevant information
       And I press the "Insert link" HTML field button
       And I click "Anchor on a page" in the ".tox-menu" element
     Then I should see an "form#Form_editorAnchorLink" element
-      And I should see "Elemental" in the "#Form_editorAnchorLink_PageID_Holder .Select-multi-value-wrapper" element
-    When I click "Elemental" in the "#Form_editorAnchorLink_PageID_Holder .Select-multi-value-wrapper" element
-      And I click "No Blocks" in the "#Form_editorAnchorLink_PageID_Holder .Select-menu-outer" element
-      And I click "Select or enter anchor" in the "#Form_editorAnchorLink_Anchor_Holder .Select-multi-value-wrapper" element
-      And I click "normal-anchor" in the "#Form_editorAnchorLink_Anchor_Holder .Select-menu-outer" element
-    Then I should see "normal-anchor" in the "#Form_editorAnchorLink_Anchor_Holder .Select-value" element
+      And I should see "Elemental" in the ".treedropdownfield__value-container" element
+    When I select "No Blocks" in the "#Form_editorAnchorLink_PageID_Holder" tree dropdown
+      And I select "normal-anchor" in the "#Form_editorAnchorLink_Anchor_Holder" anchor dropdown
+    Then I should see "normal-anchor" in the ".anchorselectorfield__value-container" element
     # Close the dialog now that we're done with it.
     When I click on the "button.close" element
 
@@ -55,9 +51,8 @@ So that I can direct users directly to the relevant information
       And I press the "Insert link" HTML field button
       And I click "Anchor on a page" in the ".tox-menu" element
     Then I should see an "form#Form_editorAnchorLink" element
-      And I should see "Elemental" in the "#Form_editorAnchorLink_PageID_Holder .Select-multi-value-wrapper" element
-    When I click "Select or enter anchor" in the "#Form_editorAnchorLink_Anchor_Holder .Select-multi-value-wrapper" element
-      And I click "another-anchor" in the "#Form_editorAnchorLink_Anchor_Holder .Select-menu-outer" element
-    Then I should see "another-anchor" in the "#Form_editorAnchorLink_Anchor_Holder .Select-value" element
+      And I should see "Elemental" in the ".treedropdownfield__value-container" element
+    When I select "another-anchor" in the "#Form_editorAnchorLink_Anchor_Holder" anchor dropdown
+    Then I should see "another-anchor" in the ".anchorselectorfield__value-container" element
     # Close the dialog now that we're done with it.
     When I click on the "button.close" element

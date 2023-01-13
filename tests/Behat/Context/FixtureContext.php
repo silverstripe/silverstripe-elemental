@@ -4,14 +4,11 @@ namespace DNADesign\Elemental\Tests\Behat\Context;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
-use SilverStripe\BehatExtension\Context\FixtureContext as BaseFixtureContext;
+use SilverStripe\CMS\Tests\Behaviour\FixtureContext as BaseFixtureContext;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\Queries\SQLInsert;
 
-if (!class_exists(BaseFixtureContext::class)) {
-    return;
-}
 /**
  * Context used to create fixtures in the SilverStripe ORM.
  */

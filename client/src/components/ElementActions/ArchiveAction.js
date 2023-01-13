@@ -30,7 +30,9 @@ const ArchiveAction = (MenuComponent) => (props) => {
     if (handleArchiveBlock && window.confirm(archiveMessage)) {
       handleArchiveBlock(id).then(() => {
         const preview = window.jQuery('.cms-preview');
-        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        if (preview && typeof preview.entwine === 'function') {
+          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        }
       });
     }
   };

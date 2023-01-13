@@ -217,7 +217,7 @@ Header.propTypes = {
   areaId: PropTypes.number,
   activeTab: PropTypes.string,
   simple: PropTypes.bool,
-  ElementActionsComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  ElementActionsComponent: PropTypes.elementType,
   previewExpanded: PropTypes.bool,
   disableTooltip: PropTypes.bool,
   formDirty: PropTypes.bool,

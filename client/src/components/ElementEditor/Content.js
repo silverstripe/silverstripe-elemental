@@ -65,8 +65,8 @@ Content.propTypes = {
   fileUrl: PropTypes.string,
   fileTitle: PropTypes.string,
   previewExpanded: PropTypes.bool,
-  SummaryComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  InlineEditFormComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  SummaryComponent: PropTypes.elementType,
+  InlineEditFormComponent: PropTypes.elementType,
   handleLoadingError: PropTypes.func,
   broken: PropTypes.bool,
 };
