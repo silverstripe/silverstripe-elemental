@@ -2,11 +2,8 @@
 
 namespace DNADesign\Elemental\Extensions;
 
-use SilverStripe\Dev\Deprecation;
-use SilverStripe\Admin\Forms\UsedOnTable;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\DataExtension;
-use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationException;
 use DNADesign\Elemental\Models\ElementalArea;
@@ -23,23 +20,6 @@ class ElementalAreaUsedOnTableExtension extends DataExtension
     public function updateUsageExcludedClasses(array &$excludedClasses)
     {
         $excludedClasses[] = ElementalArea::class;
-    }
-
-    /**
-     * Legacy function kept for semver, replaced with updateUsageExcludedClasses above
-     *
-     * @return void
-     * @var ArrayList $usage
-     * @var DataObject $record
-     * @see UsedOnTable::updateUsage
-     * @deprecated 4.5.0 Use updateUsageExcludedClasses() instead
-     */
-    public function updateUsage(ArrayList &$usage, DataObject &$record)
-    {
-        Deprecation::withNoReplacement(function () {
-            Deprecation::notice('4.5.0', 'Use updateUsageExcludedClasses() instead');
-        });
-        // noop
     }
 
     /**
