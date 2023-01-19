@@ -4,7 +4,7 @@ namespace DNADesign\Elemental\TopPage;
 
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
-use Page;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
 use TractorCow\Fluent\State\FluentState;
@@ -31,7 +31,7 @@ class FluentExtension extends DataExtension
     /*
      * @inheritdoc
      */
-    protected function assignTopPage(Page $page): void
+    protected function assignTopPage(SiteTree $page): void
     {
         parent::assignTopPage($page);
 

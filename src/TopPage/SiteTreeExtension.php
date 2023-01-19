@@ -4,7 +4,7 @@ namespace DNADesign\Elemental\TopPage;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\ElementalArea;
-use Page;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Model\SiteTreeExtension as BaseSiteTreeExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationException;
@@ -15,7 +15,7 @@ use SilverStripe\ORM\ValidationException;
  * This extension must be present on pagetypes that need to support Elemental TopPage functionality.
  * It can be applied directly to Page, as it only takes effect in the presence of a ElementalArea.
  *
- * @property Page|$this $owner
+ * @property SiteTree|$this $owner
  * @package DNADesign\Elemental\TopPage
  */
 class SiteTreeExtension extends BaseSiteTreeExtension
@@ -48,9 +48,9 @@ class SiteTreeExtension extends BaseSiteTreeExtension
     /**
      * Extension point in @see DataObject::duplicate()
      *
-     * @param Page $original
+     * @param SiteTree $original
      */
-    public function onBeforeDuplicate(Page $original): void
+    public function onBeforeDuplicate(SiteTree $original): void
     {
         $this->initDuplication($original);
     }
@@ -58,11 +58,11 @@ class SiteTreeExtension extends BaseSiteTreeExtension
     /**
      * Extension point in @see DataObject::duplicate()
      *
-     * @param Page $original
+     * @param SiteTree $original
      * @param bool $doWrite
      * @throws ValidationException
      */
-    public function onAfterDuplicate(Page $original, $doWrite): void
+    public function onAfterDuplicate(SiteTree $original, $doWrite): void
     {
         $this->processDuplication($original, (bool) $doWrite);
     }
@@ -131,9 +131,9 @@ class SiteTreeExtension extends BaseSiteTreeExtension
     }
 
     /**
-     * @param Page|SiteTreeExtension $original
+     * @param SiteTree|SiteTreeExtension $original
      */
-    protected function initDuplication(Page $original): void
+    protected function initDuplication(SiteTree $original): void
     {
         $key = $original->getDuplicationKey();
 
@@ -152,11 +152,11 @@ class SiteTreeExtension extends BaseSiteTreeExtension
     /**
      * Update top page reference during duplication process
      *
-     * @param Page $original
+     * @param SiteTree $original
      * @param bool $written
      * @throws ValidationException
      */
-    protected function processDuplication(Page $original, bool $written): void
+    protected function processDuplication(SiteTree $original, bool $written): void
     {
         if ($written) {
             $this->writeDuplication($original);
@@ -177,7 +177,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function processDuplicationFromOriginal(): void
     {
-        /** @var Page|ElementalPageExtension $owner */
+        /** @var SiteTree|ElementalPageExtension $owner */
         $owner = $this->owner;
 
         if (!isset($owner->duplicationOriginal)) {
@@ -186,7 +186,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
 
         $original = $owner->duplicationOriginal;
 
-        if (!$original instanceof Page) {
+        if (!$original instanceof SiteTree) {
             return;
         }
 
@@ -195,10 +195,10 @@ class SiteTreeExtension extends BaseSiteTreeExtension
     }
 
     /**
-     * @param Page|SiteTreeExtension $original
+     * @param SiteTree|SiteTreeExtension $original
      * @throws ValidationException
      */
-    protected function writeDuplication(Page $original): void
+    protected function writeDuplication(SiteTree $original): void
     {
         $key = $original->getDuplicationKey();
         $currentKey = $this->getDuplicatedPageKey();
@@ -230,7 +230,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function setTopPageForElementalArea(): void
     {
-        /** @var Page|ElementalPageExtension $owner */
+        /** @var SiteTree|ElementalPageExtension $owner */
         $owner = $this->owner;
 
         if (!$owner->hasExtension(ElementalPageExtension::class)) {

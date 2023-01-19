@@ -4,7 +4,7 @@ namespace DNADesign\Elemental\TopPage;
 
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
-use Page;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataExtension as BaseDataExtension;
 use SilverStripe\ORM\DataObject;
@@ -20,7 +20,7 @@ use SilverStripe\View\ViewableData;
  * with deeply nested block structures. Apply to @see BaseElement and @see ElementalArea.
  *
  * @property int $TopPageID
- * @method Page TopPage()
+ * @method SiteTree TopPage()
  * @property BaseElement|ElementalArea|$this $owner
  * @package DNADesign\Elemental\TopPage
  */
@@ -31,7 +31,7 @@ class DataExtension extends BaseDataExtension
      * @var array
      */
     private static $has_one = [
-        'TopPage' => Page::class,
+        'TopPage' => SiteTree::class,
     ];
 
     /**
@@ -78,13 +78,13 @@ class DataExtension extends BaseDataExtension
     }
 
     /**
-     * Finds the top-level Page object for a Block / ElementalArea, using the cached TopPageID
+     * Finds the top-level SiteTree object for a Block / ElementalArea, using the cached TopPageID
      * reference when possible.
      *
-     * @return Page|null
+     * @return SiteTree|null
      * @throws ValidationException
      */
-    public function getTopPage(): ?Page
+    public function getTopPage(): ?SiteTree
     {
         $list = [$this->owner];
 
@@ -96,7 +96,7 @@ class DataExtension extends BaseDataExtension
                 continue;
             }
 
-            if ($item instanceof Page) {
+            if ($item instanceof SiteTree) {
                 // trivial case
                 return $item;
             }
@@ -142,10 +142,10 @@ class DataExtension extends BaseDataExtension
      * automatic page determination will be attempted
      * Note that this may not always succeed as your model may not be attached to parent object at the time of this call
      *
-     * @param Page|null $page
+     * @param SiteTree|null $page
      * @throws ValidationException
      */
-    public function setTopPage(?Page $page = null): void
+    public function setTopPage(?SiteTree $page = null): void
     {
         /** @var BaseElement|ElementalArea|Versioned|DataExtension $owner */
         $owner = $this->owner;
@@ -224,9 +224,9 @@ class DataExtension extends BaseDataExtension
     /**
      * Assigns top page relation
      *
-     * @param Page $page
+     * @param SiteTree $page
      */
-    protected function assignTopPage(Page $page): void
+    protected function assignTopPage(SiteTree $page): void
     {
         $this->owner->TopPageID = (int) $page->ID;
     }
@@ -295,11 +295,11 @@ class DataExtension extends BaseDataExtension
      * features on top of existing ones not replacing them
      *
      * @param int $id
-     * @return Page|null
+     * @return SiteTree|null
      */
-    protected function getTopPageFromCachedData(int $id): ?Page
+    protected function getTopPageFromCachedData(int $id): ?SiteTree
     {
-        $page = Page::get_by_id($id);
+        $page = SiteTree::get_by_id($id);
 
         if (!$page || !$page->exists()) {
             return null;
