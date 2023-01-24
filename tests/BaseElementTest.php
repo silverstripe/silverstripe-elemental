@@ -405,7 +405,7 @@ class BaseElementTest extends FunctionalTest
             'element1' => [
                 ElementContent::class,
                 'content1',
-                '/test-elemental/#e1',
+                '/test-elemental#e1',
             ],
             // Element in DataObject
             'element2' => [
@@ -443,7 +443,7 @@ class BaseElementTest extends FunctionalTest
             [
                 ElementContent::class,
                 'content1',
-                '/test-elemental/',
+                '/test-elemental',
             ],
             // Element in DataObject WITHOUT PreviewLink or Link
             [
