@@ -6,7 +6,7 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
-use SilverStripe\View\Parsers\HTML4Value;
+use SilverStripe\View\Parsers\HTMLValue;
 use SilverStripe\View\SSViewer;
 
 /**
@@ -87,7 +87,7 @@ class ElementalPageExtension extends ElementalAreasExtension
         $controller = Controller::curr();
         $request = $controller->getRequest();
         if ($request->getVar('ElementalPreview') !== null) {
-            $html = HTML4Value::create($tags);
+            $html = HTMLValue::create($tags);
             $xpath = "//meta[@name='x-page-id' or @name='x-cms-edit-link']";
             $removeTags = $html->query($xpath);
             $body = $html->getBody();
