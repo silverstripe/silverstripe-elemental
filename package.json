@@ -1,9 +1,11 @@
 {
   "name": "silverstripe-elemental",
-  "version": "1.0.0",
   "description": "Compose your SilverStripe content of Elements",
+  "engines": {
+    "node": "^18.x"
+  },
   "scripts": {
-    "build": "yarn && yarn lint && yarn test && NODE_ENV=production webpack -p --bail --progress",
+    "build": "yarn && yarn lint && yarn test && rm -rf client/dist/* && NODE_ENV=production webpack --mode production --bail --progress",
     "dev": "NODE_ENV=development webpack --progress",
     "watch": "NODE_ENV=development webpack --watch --progress",
     "css": "WEBPACK_CHILD=css npm run build",
@@ -31,45 +33,55 @@
   },
   "homepage": "https://github.com/dnadesign/silverstripe-elemental#readme",
   "dependencies": {
-    "apollo-client": "^2.3.1",
-    "bootstrap": "^4.3.1",
-    "classnames": "^2.2.5",
-    "graphql": "^14.0.0",
-    "graphql-tag": "^2.10.0",
-    "jquery": "^3.5.0",
-    "popper.js": "^1.14.7",
-    "prop-types": "^15.6.2",
-    "react": "^16.6.1",
-    "react-apollo": "^2.1.0",
+    "@apollo/client": "^3.7.1",
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^4.6.2",
+    "classnames": "^2.3.2",
+    "graphql": "^16.6.0",
+    "graphql-tag": "^2.12.6",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
     "react-dnd": "^5.0.0",
     "react-dnd-html5-backend": "^5.0.1",
-    "react-dom": "^16.6.1",
-    "react-redux": "^5.0.7",
-    "reactstrap": "^6.4.0",
-    "redux": "^4.0.0",
-    "redux-form": "^6.8.0"
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.4",
+    "reactstrap": "^8.9.0",
+    "redux": "^4.2.0",
+    "redux-form": "^8.3.8"
   },
   "devDependencies": {
-    "@silverstripe/eslint-config": "^0.1.0",
-    "@silverstripe/webpack-config": "^1.5.0",
-    "babel-jest": "^23.6.0",
-    "enzyme": "^3.6.0",
-    "enzyme-adapter-react-16": "^1.5.0",
-    "jest-cli": "^23.6.0"
+    "@silverstripe/eslint-config": "^1.0.0-alpha6",
+    "@silverstripe/webpack-config": "^2.0.0-alpha5",
+    "babel-jest": "^29.2.2",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "jest-cli": "^29.2.2",
+    "jest-environment-jsdom": "^29.3.1",
+    "react-16": "npm:react@^16.14.0",
+    "react-dom-16": "npm:react-dom@^16.14.0",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^5.0.0"
   },
   "resolutions": {
-    "colors": "1.1.2"
+    "colors": "1.4.0"
   },
+  "browserslist": [
+    "defaults"
+  ],
   "jest": {
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "^react-dom/client$": "react-dom-16",
+      "^react-dom((/.*)?)$": "react-dom-16$1",
+      "^react((/.*)?)$": "react-16$1"
+    },
     "roots": [
       "client/src"
     ],
     "moduleDirectories": [
       "client/src",
-      "node_modules",
-      "node_modules/@silverstripe/webpack-config/node_modules",
-      "../../admin/client/src",
-      "../../admin/node_modules",
+      "../admin/client/src",
+      "../admin/node_modules",
       "vendor/silverstripe/admin/client/src",
       "vendor/silverstripe/admin/node_modules"
     ],
@@ -79,17 +91,5 @@
     "transform": {
       ".*": "babel-jest"
     }
-  },
-  "babel": {
-    "presets": [
-      "env",
-      "react"
-    ],
-    "plugins": [
-      "transform-object-rest-spread"
-    ]
-  },
-  "engines": {
-    "node": "^10.x"
   }
 }

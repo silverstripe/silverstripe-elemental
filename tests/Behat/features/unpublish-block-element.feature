@@ -33,5 +33,5 @@ Feature: Unpublish elements in the CMS
       But I should not see the publish button for block 1
     When I press the "Unpublish" button
       And I wait 1 second
-    Then I should see a "Removed 'Block A' from the published page" notice
+    Then I should see a "Removed 'Block A' from the published page" success toast
 

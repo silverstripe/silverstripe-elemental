@@ -1,6 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* global jest, describe, it, expect */
 
+jest.mock('isomorphic-fetch', () =>
+  () => Promise.resolve({
+    json: () => ({}),
+  })
+);
+
 import React from 'react';
 import { Component as SaveAction } from '../SaveAction';
 import Enzyme, { mount } from 'enzyme';

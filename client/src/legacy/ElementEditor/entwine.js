@@ -2,7 +2,7 @@
 
 import jQuery from 'jquery';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { loadComponent } from 'lib/Injector';
 import { getConfig } from 'state/editor/elementConfig';
 import { destroy } from 'redux-form';
@@ -40,6 +40,8 @@ const resetStores = () => {
  */
 jQuery.entwine('ss', ($) => {
   $('.js-injector-boot .element-editor__container').entwine({
+    ReactRoot: null,
+
     onmatch() {
       const context = {};
       const ElementEditorComponent = loadComponent('ElementEditor', context);
@@ -53,15 +55,21 @@ jQuery.entwine('ss', ($) => {
         elementTypes,
       };
 
-      ReactDOM.render(
-        <ElementEditorComponent {...props} />,
-        this[0]
-      );
+      let root = this.getReactRoot();
+      if (!root) {
+        root = createRoot(this[0]);
+        this.setReactRoot(root);
+      }
+      root.render(<ElementEditorComponent {...props} />);
     },
 
     onunmatch() {
       resetStores();
-      ReactDOM.unmountComponentAtNode(this[0]);
+      const root = this.getReactRoot();
+      if (root) {
+        root.unmount();
+        this.setReactRoot(null);
+      }
     },
 
     /**

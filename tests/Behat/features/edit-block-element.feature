@@ -68,7 +68,7 @@ Feature: Edit elements in the CMS
       And I fill in "Charlie's Block" for "Title" for block 2
     When I press the "Save" button in the actions menu for block 2
       And I wait 1 second
-      Then I should see a "Saved 'Charlie's Block' successfully" notice
+      Then I should see a "Saved 'Charlie's Block' successfully" success toast
     When I click on the caret button for block 2
       Then I should see "New sample content"
 
@@ -82,7 +82,7 @@ Feature: Edit elements in the CMS
       Then I fill in "<p>Alternate HTML within element 2</p>" for "Content" for block 2
       And I fill in "Bob's Radically Redesigned Revolutionary Element" for "Title" for block 2
     When I press the "Save" button
-    Then I should see a "Saved 'Blocks Page' successfully" notice
+    Then I should see a "Saved 'Blocks Page' successfully" success toast
       And I should see "Alice's Much Improved Block"
       And I should see "New content for block 1"
       And I should see "Bob's Radically Redesigned Revolutionary Element"

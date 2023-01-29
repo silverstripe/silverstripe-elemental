@@ -9,7 +9,7 @@ const elementTypeType = PropTypes.shape({
   // A font-icon class to be used for the icon of the element
   icon: PropTypes.string,
   // Whether the element is in-line editable
-  inlineEditable: PropTypes.boolean,
+  inlineEditable: PropTypes.bool,
   // The top level edit tabs for this element (Usually "Content" and "Settings")
   editTabs: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,

@@ -1,4 +1,4 @@
-import { graphql } from 'react-apollo';
+import { graphql } from '@apollo/client/react/hoc';
 import gql from 'graphql-tag';
 import { query as readBlocksQuery, config as readBlocksConfig } from './readBlocksForAreaQuery';
 
@@ -26,7 +26,8 @@ const config = {
       optimisticResponse: {
         sortBlock: {
           id: blockId,
-          liveVersion: false,
+          isLiveVersion: false,
+          isPublished: false,
           __typename: 'Block',
         },
       },

@@ -1,4 +1,4 @@
-import { graphql } from 'react-apollo';
+import { graphql } from '@apollo/client/react/hoc';
 import gql from 'graphql-tag';
 
 // GraphQL query for retrieving the current state of elements for an area. The results of the query

@@ -1,6 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* global jest, describe, it, expect, window */
 
+jest.mock('isomorphic-fetch', () =>
+  () => Promise.resolve({
+    json: () => ({}),
+  })
+);
+
 import React from 'react';
 import { Component as PublishAction } from '../PublishAction';
 import Enzyme, { mount } from 'enzyme';

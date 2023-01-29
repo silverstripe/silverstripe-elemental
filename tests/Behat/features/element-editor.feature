@@ -10,7 +10,7 @@ Feature: View types of elements in an area on a page
     And a "page" "Blocks Page" with a "Alice's Block" content element with "Some content" content
     And the "page" "Blocks Page" has a "Bob's Block" content element with "Some content II" content
 
-  Scenario Outline: I can see the title and summary of each element
+  Scenario: I can see the title and summary of each element
     Given I am logged in as a member of "AUTHOR" group
     When I go to "/admin/pages"
       And I left click on "Blocks Page" in the tree
@@ -19,11 +19,6 @@ Feature: View types of elements in an area on a page
       And I should see "Some content" as the summary for block 1
       And I should see "Bob's Block" as the title for block 2
       And I should see "Some content II" as the summary for block 2
-
-    Examples:
-      | group  |
-      | ADMIN  |
-      | AUTHOR |
 
   Scenario: Opening the "more actions" menu will not expand a block
     Given I am logged in as a member of "AUTHOR" group
@@ -121,13 +116,25 @@ Feature: View types of elements in an area on a page
     And I wait for 1 seconds
     Then I should see a ".tox-tinymce" element
 
-    # More actions menu can be accessed with keyboard actions
+    # More actions menu can be accessed and hidden with keyboard actions
+    # Doing so does not collapse the block as a whole
     When I press the "tab" key globally
     Then I should not see "Duplicate"
+    And I should see a ".tox-tinymce" element
+    # open menu with space and close with escape
     When I press the "space" key globally
     Then I should see "Duplicate"
-    When I press the "enter" key globally
+    And I should see a ".tox-tinymce" element
+    When I press the "escape" key globally
     Then I should not see "Duplicate"
+    And I should see a ".tox-tinymce" element
+    # open menu with enter and close with escape
+    When I press the "enter" key globally
+    Then I should see "Duplicate"
+    And I should see a ".tox-tinymce" element
+    When I press the "escape" key globally
+    Then I should not see "Duplicate"
+    And I should see a ".tox-tinymce" element
 
     # Block can be collapsed with keyboard actions
     When I press the "shift-tab" key globally
