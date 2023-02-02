@@ -9,7 +9,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementArchiveAction.CONFIRM_DELETE": "Weet je zeker dat je dit blok wil archiveren?",
     "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Waarschuwing: Dit blok wordt teruggezet naar draft voordat het gearchiveerd word. Wilt u doorgaan?",
     "ElementArchiveAction.ARCHIVE": "Archiveren",
-    "ElementArchiveAction.DUPLICATE": "Duplicate",
+    "ElementArchiveAction.DUPLICATE": "Dupliceren",
     "ElementHeader.NOTITLE": "Nieuw: {type}",
     "ElementPublishAction.SUCCESS_NOTIFICATION": "'{title}' succesvol gepubliceerd",
     "ElementPublishAction.ERROR_NOTIFICATION": "Fout bij het publiceren van '{title}'",
@@ -30,11 +30,11 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementEditForm.ERROR_NOTIFICATION": "Fout bij het laten zien van het bewerkformulier van dit blok",
     "ElementSummary.NO_PREVIEW": "Geen voorbeeld beschikbaar",
     "HistoricElementView.BLOCK_HISTORY": "Toon blok",
-    "ElementArchiveAction.ARCHIVE_PERMISSION_DENY": "Archive, insufficient permissions",
-    "ElementArchiveAction.DUPLICATE_PERMISSION_DENY": "Duplicate, insufficient permissions",
-    "ElementPublishAction.PUBLISH_PERMISSION_DENY": "Publish, insufficient permissions",
-    "ElementUnpublishAction.UNPUBLISH_PERMISSION_DENY": "Unpublish, insufficient permissions",
-    "ElementalElement.CHILD_RENDERING_ERROR": "Something went wrong with this block. Please try saving and refreshing the CMS.",
-    "HistoricElementView.VIEW_BLOCK_HISTORY": "Block history"
+    "ElementArchiveAction.ARCHIVE_PERMISSION_DENY": "Geen rechten om te archiveren",
+    "ElementArchiveAction.DUPLICATE_PERMISSION_DENY": "Geen rechten om te dupliceren",
+    "ElementPublishAction.PUBLISH_PERMISSION_DENY": "Geen rechten om te publiceren",
+    "ElementUnpublishAction.UNPUBLISH_PERMISSION_DENY": "Geen rechten om te depubliceren",
+    "ElementalElement.CHILD_RENDERING_ERROR": "Er is iets misgegaan met dit blok. Probeer het op te slaan en het CMS te verversen.",
+    "HistoricElementView.VIEW_BLOCK_HISTORY": "Bewerk-historie van blok"
 });
 }
