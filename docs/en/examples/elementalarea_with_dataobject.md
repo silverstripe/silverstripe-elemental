@@ -101,11 +101,10 @@ And finally, add `ElementalAreasExtension` to the `DataObject`
 
 ```yml
 App\Models\BlogPost:
-  extensions: 
+  extensions:
     - DNADesign\Elemental\Extensions\ElementalAreasExtension
 ```
 
 ## Related Documentation
 
-* [Preview](https://docs.silverstripe.org/en/4/developer_guides/customising_the_admin_interface/preview/)
-(note that this requires at least `silverstripe/admin` 4.11.0 and `dnadesign/silverstripe-elemental` 4.9.0)
+* [Preview](https://docs.silverstripe.org/en/5/developer_guides/customising_the_admin_interface/preview/)

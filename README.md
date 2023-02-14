@@ -18,18 +18,18 @@ For a more detailed overview of using this module, please see [the User help gui
 
 ## Requirements
 
-* Silverstripe CMS ^4.3
-* Versioned Admin ^1.0
-* GridFieldExtensions ^3.1
+* Silverstripe CMS ^5.0
+* Versioned Admin ^2.0
+* GridFieldExtensions ^4.0
+
+For a CMS 4.3+ compatible version of this module, please see the [4.x release line](https://github.com/silverstripe/silverstripe-elemental/tree/4#readme).
 
 For a Silverstripe CMS 4.1 or 4.2 compatible version of this module, please see the [2.x or 3.x release line](https://github.com/silverstripe/silverstripe-elemental/tree/3#readme).
-
-For a Silverstripe CMS 3.x compatible version of this module, please see the [1 branch, or 1.x release line](https://github.com/silverstripe/silverstripe-elemental/tree/1.0#readme).
 
 ## Installation
 
 ```
-composer require dnadesign/silverstripe-elemental ^4
+composer require dnadesign/silverstripe-elemental
 ```
 
 The following YAML config will enable elements on every `Page` object,
@@ -125,7 +125,7 @@ each of the element controller instances. Each controller instance will render `
 the element contained within a holder `div`. The wrapper div is the `ElementHolder.ss` template.
 
 To customise the ElementEditor in the CMS you will need to use the Silverstripe CMS JS Injector to apply transformations
-to the necessary React components. [See here](https://docs.silverstripe.org/en/4/developer_guides/customising_the_admin_interface/how_tos/customise_react_components/)
+to the necessary React components. [See here](https://docs.silverstripe.org/en/5/developer_guides/customising_the_admin_interface/how_tos/customise_react_components/)
 for more information.
 
 ### Limit allowed elements
@@ -196,7 +196,7 @@ element class. A `GridFieldDetailForm` will be used to edit blocks that are not 
 
 **Note: The default is that all elements are in-line editable.**
 
-If in-line editing is not disabled, whilst not having a custom component defined, custom fields will not be rendered unless the field's `schemaDataType` is set See [Framework's FormField definition](https://github.com/silverstripe/silverstripe-framework/blob/4/src/Forms/FormField.php).
+If in-line editing is not disabled, whilst not having a custom component defined, custom fields will not be rendered unless the field's `schemaDataType` is set See [Framework's FormField definition](https://api.silverstripe.org/5/SilverStripe/Forms/FormField.html#method_getSchemaDataType).
 
 After building your own React components and including them into the CMS, altering the applicable Element's PHP definition to use the new React component can be achieved by setting some `protected` properties of that class.
 
@@ -208,7 +208,7 @@ After building your own React components and including them into the CMS, alteri
 - The `$schemaDataType` does not need to be CUSTOM, but should not be STRUCTURAL as structural types are not submitted as form data.
 - The `$schemaComponent` is the name of the React component you have created to be used.
 
-The above example was taken from [`silverstripe/elemental-bannerblock`](https://github.com/silverstripe/silverstripe-elemental-bannerblock/blob/master/src/Block/BannerBlock.php)
+The above example was taken from [`silverstripe/elemental-bannerblock`](https://github.com/silverstripe/silverstripe-elemental-bannerblock/blob/3/src/Block/BannerBlock.php)
 
 ### Defining your own HTML
 
@@ -239,7 +239,7 @@ methods work either returning a `Boolean`, `String` or a `Int`
   1. `$TotalItems` (int)
   1. `$EvenOdd` (string - 'even' or 'odd')
 
-```
+```html
 <div class="element element--{$EvenOdd} <% if First %>element--first<% end_if %> <% if Last %>element--last<% end_if %>">
     // ...
 </div>
@@ -305,7 +305,7 @@ This module used to use GridField to create and update Elements in the CMS. This
 ## Building the elemental frontend assets
 
 This module uses the [Silverstripe CMS Webpack module](https://github.com/silverstripe/webpack-config), and inherits
-things from the core Silverstripe CMS 4 modules, such as a core variable sheet and Javascript components.
+things from the core Silverstripe CMS modules, such as a core variable sheet and Javascript components.
 
 When making changes to either the SASS or Javascript files, ensure you change the source files in `client/src/`.
 
@@ -333,10 +333,6 @@ and use an appropriate variable from the silverstripe/admin module if available.
 
 * [Multiple languages with tractorcow/silverstripe-fluent](docs/en/advanced_setup.md)
 * [Search through silverstripe/fulltextsearch](docs/en/searching-blocks.md)
-
-## Upgrading
-
-For developers upgrading from Elemental 3 to 4, [see the upgrade guide](docs/en/upgrading_to_4.md).
 
 ## Screenshots
 
