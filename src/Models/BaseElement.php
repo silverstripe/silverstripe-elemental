@@ -779,7 +779,7 @@ JS
             if ($link) {
                 // The ElementalPreview getvar is used in ElementalPageExtension
                 // The anchor must be at the end of the URL to function correctly
-                $link .= '?ElementalPreview=' . mt_rand() . '#' . $this->getAnchor();
+                $link = Controller::join_links($link, '?ElementalPreview=' . mt_rand() . '#' . $this->getAnchor());
             }
         }
 
