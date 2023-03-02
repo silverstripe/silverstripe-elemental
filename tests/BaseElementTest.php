@@ -14,6 +14,7 @@ use DNADesign\Elemental\Tests\Src\TestElementDataObject;
 use DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink;
 use DNADesign\Elemental\Tests\Src\TestMultipleHtmlFieldsElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
+use DNADesign\Elemental\Tests\Src\TestPreviewableDataObjectWithLink;
 use Page;
 use ReflectionClass;
 use SilverStripe\Control\Director;
@@ -48,6 +49,7 @@ class BaseElementTest extends FunctionalTest
         TestDataObjectWithCMSEditLink::class,
         TestElementDataObject::class,
         TestMultipleHtmlFieldsElement::class,
+        TestPreviewableDataObjectWithLink::class,
     ];
 
     public function testSimpleClassName()
@@ -463,6 +465,12 @@ class BaseElementTest extends FunctionalTest
                 'elementDataObject4',
                 'base-link',
             ],
+            // Element in DataObject WITH PreviewLink AND Link which has its own query string and anchor link
+            [
+                TestElement::class,
+                'elementDataObject5',
+                'base-link?something=value&somethingelse=value2',
+            ],
         ];
     }
 
@@ -473,12 +481,18 @@ class BaseElementTest extends FunctionalTest
     {
         /** @var BaseElement $element */
         $element = $this->objFromFixture($class, $elementIdentifier);
+        $previewLink = $element->PreviewLink();
 
         if ($link) {
-            $regex = '/^' . preg_quote($link . '?ElementalPreview=', '/') .'\d*#' . $element->getAnchor() . '$/';
-            $this->assertTrue((bool)preg_match($regex, $element->PreviewLink()));
+            $regex = '/^' . preg_quote($link, '/') . '[?&]' . preg_quote('ElementalPreview=', '/')
+                .'\d*#' . $element->getAnchor() . '$/';
+            $this->assertMatchesRegularExpression($regex, $previewLink);
+            // Doesn't try to blindly append query string and anchor - but instead merges intelligently with
+            // whatever's already there
+            $this->assertSame(1, substr_count($previewLink, '?'));
+            $this->assertSame(1, substr_count($previewLink, '#'));
         } else {
-            $this->assertSame($link, $element->PreviewLink());
+            $this->assertSame($link, $previewLink);
         }
     }
 }
