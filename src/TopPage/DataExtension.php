@@ -12,6 +12,7 @@ use SilverStripe\ORM\Queries\SQLUpdate;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ViewableData;
+use SilverStripe\Forms\FieldList;
 
 /**
  * Class DataExtension
@@ -253,6 +254,11 @@ class DataExtension extends BaseDataExtension
         } finally {
             $this->fixedTopPageID = $original;
         }
+    }
+
+    public function updateCMSFields(FieldList $fields)
+    {
+        $fields->removeByName('TopPageID');
     }
 
     /**
