@@ -6,6 +6,7 @@ sl:
     NOT_DISPLAYED: Skrito
     ShowTitleLabel: Prikazan
     TitleLabel: 'Naslov (označite)'
+    Title: Naslov
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Gradnik
     CUSTOM_STYLES: 'Izberite stil ...'

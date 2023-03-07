@@ -28,5 +28,9 @@
     "ElementPublishAction.PUBLISH_PERMISSION_DENY": "Publish, insufficient permissions",
     "ElementUnpublishAction.UNPUBLISH_PERMISSION_DENY": "Unpublish, insufficient permissions",
     "ElementalElement.CHILD_RENDERING_ERROR": "Something went wrong with this block. Please try saving and refreshing the CMS.",
-    "HistoricElementView.VIEW_BLOCK_HISTORY": "Block history"
+    "HistoricElementView.VIEW_BLOCK_HISTORY": "Block history",
+    "ElementHeader.BROKEN": "This element is of obsolete type {type}.",
+    "ElementalElement.ARCHIVE_BROKEN": "Archive this block",
+    "ElementalElement.BROKEN_DESCRIPTION": "This block is broken and will not display on the front-end. You can archive it to remove it from this elemental area.",
+    "ElementalElement.BROKEN_DESCRIPTION_TITLE": "This block had the title \"{title}\". It is broken and will not display on the front-end. You can archive it to remove it from this elemental area."
 }

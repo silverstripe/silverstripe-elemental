@@ -4,6 +4,8 @@ cs:
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     ShowTitleLabel: Zobrazeno
     TitleLabel: 'Titulek (zobrazený, pokud zaškrtnuto)'
+    DISPLAYED: Zobrazeno
+    Title: Titulek
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Blok
     CUSTOM_STYLES: 'Vybrat styl'

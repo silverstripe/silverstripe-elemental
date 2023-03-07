@@ -6,6 +6,7 @@ de:
     TitleLabel: 'Titel (angezeigt, wenn ausgewählt)'
     DISPLAYED: 'Wird angezeigt'
     NOT_DISPLAYED: 'Wird nicht angezeigt'
+    Title: Titel
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Block
     CUSTOM_STYLES: 'Stil auswählen...'
