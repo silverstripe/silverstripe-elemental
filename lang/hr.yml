@@ -27,3 +27,8 @@ hr:
     Summary: Sažetak
     Title: Naslov
     Type: Tip
+  DNADesign\Elemental\Forms\TextCheckboxGroupField:
+    DISPLAYED: Prikazano
+    ShowTitleLabel: Prikazano
+    Title: Naslov
+    TitleLabel: 'Naslov (vidljiv ako je odabran)'

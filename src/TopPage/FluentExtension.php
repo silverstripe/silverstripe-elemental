@@ -8,6 +8,7 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
 use TractorCow\Fluent\State\FluentState;
+use SilverStripe\Forms\FieldList;
 
 /**
  * Class FluentExtension
@@ -27,6 +28,12 @@ class FluentExtension extends DataExtension
     private static $db = [
         'TopPageLocale' => 'Varchar',
     ];
+
+    public function updateCMSFields(FieldList $fields)
+    {
+        $fields->removeByName('TopPageID');
+        $fields->removeByName('TopPageLocale');
+    }
 
     /*
      * @inheritdoc
