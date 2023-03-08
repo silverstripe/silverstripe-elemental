@@ -39,3 +39,8 @@ fr:
     Summary: Résumé
     Title: Titre
     Type: Type
+  DNADesign\Elemental\Forms\TextCheckboxGroupField:
+    DISPLAYED: Affiché
+    ShowTitleLabel: Affiché
+    Title: Titre
+    TitleLabel: 'Titre (affiché si coché)'

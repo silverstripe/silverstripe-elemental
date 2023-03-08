@@ -4,6 +4,8 @@ it:
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     ShowTitleLabel: Visualizza
     TitleLabel: 'Titolo (visualizzato se si seleziona la checkbox)'
+    DISPLAYED: Visualizza
+    Title: Titolo
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Blocco
     CUSTOM_STYLES: 'Seleziona uno stile..'

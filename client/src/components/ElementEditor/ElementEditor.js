@@ -10,6 +10,7 @@ import { DropTarget } from 'react-dnd';
 import sortBlockMutation from 'state/editor/sortBlockMutation';
 import ElementDragPreview from 'components/ElementEditor/ElementDragPreview';
 import withDragDropContext from 'lib/withDragDropContext';
+import { createSelector } from 'reselect';
 
 /**
  * The ElementEditor is used in the CMS to manage a list or nested lists of
@@ -127,20 +128,29 @@ ElementEditor.propTypes = {
   }),
 };
 
-function mapStateToProps(state) {
-  const formNamePattern = loadElementFormStateName('[0-9]+');
-  const elementFormState = state.form.formState.element;
+const elementFormSelector = createSelector([
+  (state) => {
+    const elementFormState = state.form.formState.element;
 
   if (!elementFormState) {
     return {};
   }
 
-  const formState = Object.keys(elementFormState)
-    .filter(key => key.match(formNamePattern))
-    .reduce((accumulator, key) => ({
-        ...accumulator,
-        [key]: elementFormState[key].values
-    }), {});
+  return elementFormState;
+  }], (elementFormState) => {
+    const formNamePattern = loadElementFormStateName('[0-9]+');
+
+  return Object.keys(elementFormState)
+  .filter(key => key.match(formNamePattern))
+  .reduce((accumulator, key) => ({
+    ...accumulator,
+    [key]: elementFormState[key].values
+  }), {});
+});
+
+function mapStateToProps(state) {
+  // memoize form state and value changes
+  const formState = elementFormSelector(state);
 
   return { formState };
 }

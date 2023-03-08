@@ -28,5 +28,9 @@
     "ElementPublishAction.PUBLISH_PERMISSION_DENY": "Geen rechten om te publiceren",
     "ElementUnpublishAction.UNPUBLISH_PERMISSION_DENY": "Geen rechten om te depubliceren",
     "ElementalElement.CHILD_RENDERING_ERROR": "Er is iets misgegaan met dit blok. Probeer het op te slaan en het CMS te verversen.",
-    "HistoricElementView.VIEW_BLOCK_HISTORY": "Bewerk-historie van blok"
+    "HistoricElementView.VIEW_BLOCK_HISTORY": "Bewerk-historie van blok",
+    "ElementHeader.BROKEN": "Dit element is van het verouderde type {type}.",
+    "ElementalElement.ARCHIVE_BROKEN": "Archiveer dit blok",
+    "ElementalElement.BROKEN_DESCRIPTION": "Dit blok werkt niet meer en wordt niet weergegeven op de site. Het kan gearchiveerd worden om het ook uit deze lijst te verwijderen.",
+    "ElementalElement.BROKEN_DESCRIPTION_TITLE": "Dit blok had de titel \"{title}\". Het blok werkt niet meer en wordt niet weergegeven op de site. Het kan gearchiveerd worden om het ook uit deze lijst te verwijderen."
 }
