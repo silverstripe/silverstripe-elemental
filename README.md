@@ -159,6 +159,8 @@ An element is as simple as a PHP class which extends `DNADesign\Elemental\Models
 with it (unless you want it to use the default template). After you add the class, ensure you have rebuilt your
 database and reload the CMS.
 
+The `getSummary()` method will be used to provide a short summary to content authors of what data is in the element.
+
 ```php
 <?php
 
@@ -179,6 +181,11 @@ class MyElement extends BaseElement
         // ...
 
         return $fields;
+    }
+
+    public function getSummary(): string
+    {
+        return /* some string that represents the data in this element */;
     }
 
     public function getType()
