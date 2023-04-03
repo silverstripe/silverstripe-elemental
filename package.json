@@ -51,8 +51,8 @@
     "reselect": "^4.1.7"
   },
   "devDependencies": {
-    "@silverstripe/eslint-config": "^1.0.0-alpha6",
-    "@silverstripe/webpack-config": "^2.0.0-alpha5",
+    "@silverstripe/eslint-config": "^1.0.0",
+    "@silverstripe/webpack-config": "^2.0.0",
     "babel-jest": "^29.2.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
