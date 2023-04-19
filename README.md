@@ -16,26 +16,18 @@ the `$Content` variable with `$ElementalArea` in your page templates, and rely o
 
 For a more detailed overview of using this module, please see [the User help guides](docs/en/userguide/index.md).
 
-## Requirements
-
-* Silverstripe CMS ^4.3
-* Versioned Admin ^1.0
-* GridFieldExtensions ^3.1
-
-For a Silverstripe CMS 4.1 or 4.2 compatible version of this module, please see the [2.x or 3.x release line](https://github.com/silverstripe/silverstripe-elemental/tree/3#readme).
-
-For a Silverstripe CMS 3.x compatible version of this module, please see the [1 branch, or 1.x release line](https://github.com/silverstripe/silverstripe-elemental/tree/1.0#readme).
-
 ## Installation
 
+```sh
+composer require dnadesign/silverstripe-elemental
 ```
-composer require dnadesign/silverstripe-elemental ^4
-```
+
+## Setup
 
 The following YAML config will enable elements on every `Page` object,
 replacing the standard `Content` rich text field.
 
-**mysite/\_config/elements.yml**
+**mysite/_config/elements.yml**
 
 ```yaml
 Page:
@@ -125,7 +117,7 @@ each of the element controller instances. Each controller instance will render `
 the element contained within a holder `div`. The wrapper div is the `ElementHolder.ss` template.
 
 To customise the ElementEditor in the CMS you will need to use the Silverstripe CMS JS Injector to apply transformations
-to the necessary React components. [See here](https://docs.silverstripe.org/en/4/developer_guides/customising_the_admin_interface/how_tos/customise_react_components/)
+to the necessary React components. [See here](https://docs.silverstripe.org/en/developer_guides/customising_the_admin_interface/how_tos/customise_react_components/)
 for more information.
 
 ### Limit allowed elements
@@ -312,7 +304,7 @@ This module used to use GridField to create and update Elements in the CMS. This
 ## Building the elemental frontend assets
 
 This module uses the [Silverstripe CMS Webpack module](https://github.com/silverstripe/webpack-config), and inherits
-things from the core Silverstripe CMS 4 modules, such as a core variable sheet and Javascript components.
+things from the core Silverstripe CMS modules, such as a core variable sheet and Javascript components.
 
 When making changes to either the SASS or Javascript files, ensure you change the source files in `client/src/`.
 
