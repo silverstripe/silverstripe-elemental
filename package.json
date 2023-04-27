@@ -60,7 +60,7 @@
     "jest-environment-jsdom": "^29.3.1",
     "react-16": "npm:react@^16.14.0",
     "react-dom-16": "npm:react-dom@^16.14.0",
-    "webpack": "^5.74.0",
+    "webpack": "^5.76.0",
     "webpack-cli": "^5.0.0"
   },
   "resolutions": {
