@@ -1,5 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect, window */
+/* global jest, test, describe, it, expect, window */
+import React from 'react';
+import { Component as PublishAction } from '../PublishAction';
+import { fireEvent, render } from '@testing-library/react';
 
 jest.mock('isomorphic-fetch', () =>
   () => Promise.resolve({
@@ -7,103 +10,84 @@ jest.mock('isomorphic-fetch', () =>
   })
 );
 
-import React from 'react';
-import { Component as PublishAction } from '../PublishAction';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+window.jQuery = {
+  noticeAdd: () => null
+};
 
-Enzyme.configure({ adapter: new Adapter() });
+const WrappedComponent = (props) => <div>{props.children}</div>;
+const ActionComponent = PublishAction(WrappedComponent);
 
-describe('PublishAction', () => {
-  let wrapper = null;
-  let mockMutation = null;
-  const WrappedComponent = (props) => <div>{props.children}</div>;
-  const ActionComponent = PublishAction(WrappedComponent);
-  const jQuery = jest.fn();
-  window.jQuery = jQuery;
+function makeProps(obj = {}) {
+  return {
+    element: {
+      id: 123,
+      version: 234,
+      liveVersion: false,
+      blockSchema: { type: 'Test' }
+    },
+    type: {
+      broken: false
+    },
+    actions: {
+      handlePublishBlock: () => {}
+    },
+    toggle: false,
+    ...obj,
+  };
+}
 
-  beforeEach(() => {
-    mockMutation = jest.fn(() => new Promise((resolve) => resolve()));
-    wrapper = mount(
-      <ActionComponent
-        title="My abstract action"
-        element={{
-          id: 123,
-          version: 234,
-          liveVersion: false,
-          blockSchema: { type: 'Test' }
-        }}
-        type={{ broken: false }}
-        actions={{ handlePublishBlock: mockMutation }}
-        toggle={false}
-      />
-    );
+test('PublishAction renders the wrapped component', () => {
+  const { container } = render(<ActionComponent {...makeProps()}/>);
+  expect(container.querySelector('button.element-editor__actions-publish').textContent).toBe('Publish');
+});
 
-    jQuery.noticeAdd = jest.fn();
-  });
+test('PublishAction publishes from draft to live', async () => {
+  const mockMutation = jest.fn(() => new Promise((resolve) => resolve()));
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      actions: {
+        handlePublishBlock: mockMutation
+      }
+    })}
+    />
+  );
+  fireEvent.click(container.querySelector('button.element-editor__actions-publish'));
+  await new Promise((resolve) => resolve());
+  expect(mockMutation).toHaveBeenCalledWith(123);
+});
 
-  it('renders the wrapped component', () => {
-    expect(wrapper.children().first().type()).toEqual(WrappedComponent);
-  });
+test('PublishAction returns null when is the live version', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      element: {
+        isLiveVersion: true
+      }
+    })}
+    />
+  );
+  expect(container.querySelector('button.element-editor__actions-publish')).toBe(null);
+});
 
-  it('renders a button', () => {
-    expect(wrapper.find('button').length).toBe(1);
-  });
+test('PublishAction is disabled when user doesn\'t have correct permissions', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      element: {
+        canPublish: false
+      }
+    })}
+    />
+  );
+  expect(container.querySelector('button.element-editor__actions-publish').disabled).toBe(true);
+});
 
-  it('renders the title and class', () => {
-    expect(wrapper.find('button').text()).toContain('Publish');
-    expect(wrapper.find('button').hasClass('element-editor__actions-publish')).toBe(true);
-  });
-
-  it('publishes from draft to live', async () => {
-    wrapper.find('button').simulate('click');
-
-    // The click handler does not return a promise, but it does USE one.
-    // We need to await the promise resolution cycle before asserting.
-    await new Promise((resolve) => resolve());
-
-    expect(mockMutation).toHaveBeenCalledWith(123);
-  });
-
-  it('returns null when is the live version', () => {
-    const draftWrapper = mount(
-      <ActionComponent
-        element={{ isLiveVersion: true, blockSchema: { type: 'Test' } }}
-        type={{ broken: false }}
-        actions={{ handlePublishBlock: mockMutation }}
-      />
-    );
-
-    expect(draftWrapper.find('button').length).toBe(0);
-  });
-
-  it('is disabled when user doesn\'t have correct permissions', () => {
-    const draftWrapper = mount(
-      <ActionComponent
-        element={{ IsLiveVersion: false, BlockSchema: { type: 'Test' }, canPublish: false }}
-        type={{ broken: false }}
-        actions={{ handlePublishBlock: mockMutation }}
-      />
-    );
-
-    expect(draftWrapper.find('button').first().prop('disabled')).toBe(true);
-  });
-
-  it('does not render a button when block is broken', () => {
-    wrapper = mount(
-      <ActionComponent
-        title="My publish action"
-        element={{
-          id: 123,
-          version: 234,
-          liveVersion: false,
-          blockSchema: { type: 'Test' }
-        }}
-        type={{ broken: true }}
-        actions={{ handlePublishBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-    expect(wrapper.find('button').length).toBe(0);
-  });
+test('PublishAction does not render a button when block is broken', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      type: {
+        broken: true
+      }
+    })}
+    />
+  );
+  expect(container.querySelector('button.element-editor__actions-publish')).toBeNull();
 });

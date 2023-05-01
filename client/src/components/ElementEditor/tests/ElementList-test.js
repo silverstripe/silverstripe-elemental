@@ -1,116 +1,88 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global jest, test, describe, it, expect */
 
 import React from 'react';
 import { Component as ElementList } from '../ElementList';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { render } from '@testing-library/react';
 
-Enzyme.configure({ adapter: new Adapter() });
+const elementTypes = [
+  {
+    name: 'Main',
+    title: 'Content',
+    icon: '',
+    tabs: ['', '']
+  }
+];
 
-describe('ElementList', () => {
-  const elementTypes = [
-    {
-      name: 'Main',
-      title: 'Content',
-      icon: '',
-      tabs: ['', '']
-    }
-  ];
-
-  const blocks = [
-    {
-      id: '1',
-      title: 'Title',
-      blockSchema: {
-        actions: { edit: '' }
+function makeProps(obj = {}) {
+  return {
+    key: '1',
+    blocks: [
+      {
+        id: '1',
+        title: 'Title',
+        blockSchema: {
+          actions: { edit: '' }
+        },
+        inlineEditable: true,
+        published: true,
+        liveVersion: true,
+        version: 6
       },
-      inlineEditable: true,
-      published: true,
-      liveVersion: true,
-      version: 6
-    },
-    {
-      id: '2',
-      title: 'Title II',
-      blockSchema: {
-        actions: { edit: '' }
+      {
+        id: '2',
+        title: 'Title II',
+        blockSchema: {
+          actions: { edit: '' }
+        },
+        inlineEditable: true,
+        published: false,
+        liveVersion: false,
+        version: 2
       },
-      inlineEditable: true,
-      published: false,
-      liveVersion: false,
-      version: 2
-    },
-  ];
+    ],
+    allowedElementTypes: elementTypes,
+    elementTypes,
+    ElementComponent: () => <div className="test-element" />,
+    LoadingComponent: () => <div className="test-loading" />,
+    HoverBarComponent: () => <div className="test-hover-bar" />,
+    loading: false,
+    areaId: 1,
+    connectDropTarget: (content) => content,
+    ...obj,
+  };
+}
 
-  const Element = () => <div />;
-  const Loading = () => <div />;
-  const connectDropTarget = content => content;
-  const HoverBar = 'div';
+test('ElementList renders elements when blocks are provided as props', () => {
+  const { container } = render(<ElementList {...makeProps()}/>);
+  expect(container.querySelectorAll('.test-element')).toHaveLength(2);
+  expect(container.querySelector('.test-loading')).toBeNull();
+});
 
-  describe('renderBlocks()', () => {
-    it('renders elements when blocks are provided as props', () => {
-      const wrapper = shallow(
-        <ElementList
-          key={'1'}
-          blocks={blocks}
-          allowedElementTypes={elementTypes}
-          elementTypes={elementTypes}
-          ElementComponent={Element}
-          LoadingComponent={Loading}
-          HoverBarComponent={HoverBar}
-          loading={false}
-          areaId={1}
-          connectDropTarget={connectDropTarget}
-        />
-      );
+test('ElementList renders a loading component', () => {
+  const { container } = render(
+    <ElementList {...makeProps({
+      key: '2',
+      blocks: [],
+      loading: true
+    })}
+    />
+  );
+  expect(container.querySelector('.test-element')).toBeNull();
+  expect(container.querySelector('.test-loading')).not.toBeNull();
+});
 
-      expect(wrapper.name()).toEqual('div');
-      expect(wrapper.find(Element).length).toBe(2);
-      expect(wrapper.find(Loading).length).toBe(0);
-    });
-
-    it('renders a loading component', () => {
-      const wrapper = shallow(
-        <ElementList
-          key={'2'}
-          blocks={[]}
-          allowedElementTypes={elementTypes}
-          elementTypes={elementTypes}
-          ElementComponent={Element}
-          LoadingComponent={Loading}
-          HoverBarComponent={HoverBar}
-          loading
-          areaId={1}
-          connectDropTarget={connectDropTarget}
-        />
-      );
-
-      expect(wrapper.name()).toEqual('div');
-      expect(wrapper.find(Element).length).toBe(0);
-      expect(wrapper.find(Loading).length).toBe(1);
-    });
-
-    it('renders a placeholder message when no elements are provided as props', () => {
-      const wrapper = shallow(
-        <ElementList
-          key={'3'}
-          blocks={[]}
-          allowedElementTypes={elementTypes}
-          elementTypes={elementTypes}
-          ElementComponent={Element}
-          LoadingComponent={Loading}
-          HoverBarComponent={HoverBar}
-          loading={false}
-          areaId={1}
-          connectDropTarget={connectDropTarget}
-        />
-      );
-
-      expect(wrapper.name()).toEqual('div');
-      expect(wrapper.find(Element).length).toBe(0);
-      expect(wrapper.find(Loading).length).toBe(0);
-      expect(wrapper.find('Add blocks to place your content').length).toBe(0);
-    });
-  });
+test('ElementList renders a placeholder message when no elements are provided as props', () => {
+  const { container } = render(
+    <ElementList {...makeProps({
+      key: '3',
+      blocks: [],
+      loading: false
+    })}
+    />
+  );
+  expect(container.querySelector('.test-element')).toBeNull();
+  expect(container.querySelector('.test-loading')).toBeNull();
+  const placeholder = container.querySelector('.elemental-editor-list--empty');
+  expect(placeholder.textContent).toBe('Add blocks to place your content');
 });

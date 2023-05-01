@@ -1,102 +1,80 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global jest, test, describe, it, expect */
 
 import React from 'react';
 import { Component as ElementEditor } from '../ElementEditor';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { render, screen } from '@testing-library/react';
 
-Enzyme.configure({ adapter: new Adapter() });
+function makeProps(obj = {}) {
+  return {
+    ToolbarComponent: ({ elementTypes }) => <div data-testid="test-toolbar" data-elementtypes={elementTypes.map(type => type.class).join(',')} />,
+    ListComponent: () => <div className="test-list" />,
+    areaId: 8,
+    elementTypes: [
+      {
+        name: 'TestElement',
+        title: 'Test Block',
+        class: 'Test\\Class\\TestElement',
+        icon: 'nothing',
+        tabs: [
+          { title: 'Content', name: 'Main' },
+          { title: 'History', name: 'History' }
+        ],
+      },
+      {
+        name: 'Aye',
+        title: 'Aye',
+        class: 'Test\\Class\\Aye',
+        icon: 'nothing',
+        tabs: [
+          { title: 'Content', name: 'Main' },
+          { title: 'History', name: 'History' }
+        ],
+      },
+      {
+        name: 'Bee',
+        title: 'Bee',
+        class: 'Test\\Class\\Bee',
+        icon: 'nothing',
+        tabs: [
+          { title: 'Content', name: 'Main' },
+          { title: 'History', name: 'History' }
+        ],
+      },
+    ],
+    allowedElements: [
+      'Test\\Class\\Aye',
+      'Test\\Class\\Bee',
+      'Test\\Class\\TestElement'
+    ],
+    elementalAreaId: 1,
+    connectDropTarget: (content) => content,
+    ...obj,
+  };
+}
 
-describe('ElementEditor', () => {
-  const ToolbarComponent = () => <div />;
-  const ListComponent = () => <div className="elemental-editor__list" />;
-  const connectDropTarget = content => content;
-  const testElementTypes = [
-    {
-      name: 'TestElement',
-      title: 'Test Block',
-      class: 'Test\\Class\\TestElement',
-      icon: 'nothing',
-      tabs: [
-        { title: 'Content', name: 'Main' },
-        { title: 'History', name: 'History' }
-      ],
-    },
-    {
-      name: 'Aye',
-      title: 'Aye',
-      class: 'Test\\Class\\Aye',
-      icon: 'nothing',
-      tabs: [
-        { title: 'Content', name: 'Main' },
-        { title: 'History', name: 'History' }
-      ],
-    },
-    {
-      name: 'Bee',
-      title: 'Bee',
-      class: 'Test\\Class\\Bee',
-      icon: 'nothing',
-      tabs: [
-        { title: 'Content', name: 'Main' },
-        { title: 'History', name: 'History' }
-      ],
-    },
-  ];
+test('ElementEditor should render ElementList and Toolbar', () => {
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  expect(container.querySelector('.test-list')).not.toBeNull();
+  expect(container.querySelector('[data-testid="test-toolbar"]')).not.toBeNull();
+});
 
-  describe('render()', () => {
-    it('should render ElementList and Toolbar', () => {
-      const wrapper = shallow(
-        <ElementEditor
-          ToolbarComponent={ToolbarComponent}
-          ListComponent={ListComponent}
-          areaId={8}
-          elementTypes={[testElementTypes[0]]}
-          allowedElements={[testElementTypes[0].class]}
-          elementalAreaId={1}
-          connectDropTarget={connectDropTarget}
-        />
-      );
+test('ElementEditor should filter all element types by those allowed for this editor', () => {
+  render(
+    <ElementEditor {...makeProps({
+      allowedElements: ['Test\\Class\\Aye']
+    })}
+    />
+  );
+  expect(screen.getByTestId('test-toolbar').getAttribute('data-elementtypes')).toBe('Test\\Class\\Aye');
+});
 
-      expect(wrapper.name()).toEqual('div');
-      expect(wrapper.find(ListComponent)).toHaveLength(1);
-      expect(wrapper.find(ToolbarComponent)).toHaveLength(1);
-    });
-
-    it('should filter all element types by those allowed for this editor', () => {
-      const wrapper = shallow(
-        <ElementEditor
-          ToolbarComponent={ToolbarComponent}
-          ListComponent={ListComponent}
-          areaId={8}
-          elementTypes={testElementTypes}
-          allowedElements={['Test\\Class\\Aye']}
-          elementalAreaId={1}
-          connectDropTarget={connectDropTarget}
-        />
-      );
-
-      expect(wrapper.find(ToolbarComponent).props().elementTypes).toEqual([testElementTypes[1]]);
-    });
-
-    it('should retain the order specified by the allowed elements config', () => {
-      const wrapper = shallow(
-        <ElementEditor
-          ToolbarComponent={ToolbarComponent}
-          ListComponent={ListComponent}
-          areaId={8}
-          elementTypes={testElementTypes}
-          allowedElements={['Test\\Class\\Bee', 'Test\\Class\\TestElement']}
-          elementalAreaId={1}
-          connectDropTarget={connectDropTarget}
-        />
-      );
-
-      const names = wrapper.find(ToolbarComponent).props().elementTypes.map(type => type.name);
-
-      expect(names[0]).toBe('Bee');
-      expect(names[1]).toBe('TestElement');
-    });
-  });
+test('ElementEditor should retain the order specified by the allowed elements config', () => {
+  render(
+    <ElementEditor {...makeProps({
+      allowedElements: ['Test\\Class\\Bee', 'Test\\Class\\TestElement']
+    })}
+    />
+  );
+  expect(screen.getByTestId('test-toolbar').getAttribute('data-elementtypes')).toBe('Test\\Class\\Bee,Test\\Class\\TestElement');
 });
