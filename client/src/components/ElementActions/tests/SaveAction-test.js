@@ -1,5 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global jest, test, describe, it, expect */
+
+import React from 'react';
+import { Component as SaveAction } from '../SaveAction';
+import { render } from '@testing-library/react';
 
 jest.mock('isomorphic-fetch', () =>
   () => Promise.resolve({
@@ -7,70 +11,50 @@ jest.mock('isomorphic-fetch', () =>
   })
 );
 
-import React from 'react';
-import { Component as SaveAction } from '../SaveAction';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+const WrappedComponent = (props) => <div>{props.children}</div>;
+const ActionComponent = SaveAction(WrappedComponent);
 
-Enzyme.configure({ adapter: new Adapter() });
+function makeProps(obj = {}) {
+  return {
+    title: 'My save action',
+    element: {
+      ID: 123,
+      BlockSchema: { type: 'Test' },
+      canCreate: true,
+    },
+    type: { broken: false },
+    expandable: true,
+    actions: { handlePublishBlock: () => { } },
+    toggle: false,
+    ...obj,
+  };
+}
 
-describe('SaveAction', () => {
-  let wrapper = null;
-  const mockMutation = jest.fn(() => new Promise((resolve) => { resolve(); }));
-  const WrappedComponent = (props) => <div>{props.children}</div>;
-  const ActionComponent = SaveAction(WrappedComponent);
+test('SaveAction renders a button when block is expandable', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps()} />
+  );
+  expect(container.querySelector('button.element-editor__actions-save')).not.toBeNull();
+});
 
-  it('renders a button when block is expandable', () => {
-    wrapper = mount(
-      <ActionComponent
-        title="My save action"
-        element={{
-          ID: 123,
-          BlockSchema: { type: 'Test' },
-          canCreate: true
-        }}
-        type={{ broken: false }}
-        expandable
-        actions={{ handlePublishBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-    expect(wrapper.find('button').length).toBe(1);
-  });
+test('SaveAction does not render a button when block is not expandable', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      expandable: false
+    })}
+    />
+  );
+  expect(container.querySelector('button.element-editor__actions-save')).toBeNull();
+});
 
-  it('does not render a button when block is not expandable', () => {
-    wrapper = mount(
-      <ActionComponent
-        title="My save action"
-        element={{
-          ID: 123,
-          BlockSchema: { type: 'Test' },
-          canCreate: true
-        }}
-        type={{ broken: false }}
-        expandable={false}
-        actions={{ handlePublishBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-    expect(wrapper.find('button').length).toBe(0);
-  });
-
-  it('does not render a button when block is broken', () => {
-    wrapper = mount(
-      <ActionComponent
-        title="My save action"
-        element={{
-          ID: 123,
-          BlockSchema: { type: 'Test' },
-          canCreate: true
-        }}
-        type={{ broken: true }}
-        expandable
-        actions={{ handlePublishBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-    expect(wrapper.find('button').length).toBe(0);
-  });
+test('SaveAction does not render a button when block is broken', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      type: {
+        broken: true
+      }
+    })}
+    />
+  );
+  expect(container.querySelector('button.element-editor__actions-save')).toBeNull();
 });

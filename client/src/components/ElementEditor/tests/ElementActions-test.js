@@ -1,119 +1,73 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global jest, test, describe, it, expect */
 
 import React from 'react';
 import { Component as ElementActions } from '../ElementActions';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import AbstractAction from 'components/ElementActions/AbstractAction';
+import { render } from '@testing-library/react';
 
-Enzyme.configure({ adapter: new Adapter() });
+function makeProps(obj = {}) {
+  return {
+    areaId: 1,
+    editTabs: [
+      { title: 'Content', name: 'Main' },
+      { title: 'Settings', name: 'Settings' },
+      { title: 'History', name: 'History' }
+    ],
+    type: {
+      title: 'Some block'
+    },
+    ActionMenuComponent: (props) => <div className="test-action-menu">{props.children}</div>,
+    handleEditTabsClick: () => {},
+    ...obj,
+  };
+}
 
-describe('ElementActions', () => {
-  const ActionMenuComponent = (props) => <div>{props.children}</div>;
-  const testTabs = [
-    { title: 'Content', name: 'Main' },
-    { title: 'Settings', name: 'Settings' },
-    { title: 'History', name: 'History' }
-  ];
-  const editTabsClick = () => {};
+test('ElementActions should map input tabs into an array of buttons', () => {
+  const { container } = render(<ElementActions {...makeProps()}/>);
+  const actions = container.querySelectorAll('.dropdown-item');
+  expect(actions).toHaveLength(3);
+  expect(actions[0].textContent).toEqual('Content');
+  expect(actions[1].textContent).toEqual('Settings');
+  expect(actions[2].textContent).toEqual('History');
+  // No drop down separator should exist when there are no non-CMS actions
+  expect(container.querySelector('.dropdown-divider')).toBeNull();
+});
 
-  describe('renderEditTabs()', () => {
-    it('should map input tabs into an array of buttons', () => {
-      const wrapper = shallow(
-        <ElementActions
-          areaId={1}
-          editTabs={testTabs}
-          type={{ title: 'Some block' }}
-          ActionMenuComponent={ActionMenuComponent}
-          handleEditTabsClick={editTabsClick}
-        />
-      );
 
-      const actions = wrapper.find(AbstractAction);
-      expect(actions).toHaveLength(3);
-      expect(actions.at(0).props().title).toEqual('Content');
-      expect(actions.at(1).props().title).toEqual('Settings');
-      expect(actions.at(2).props().title).toEqual('History');
-    });
-  });
+test('ElementActions should render a divider when CMS tab actions and default actions are rendered', () => {
+  const { container } = render(
+    <ElementActions {...makeProps()}>
+      <AbstractAction title="some button" />
+    </ElementActions>
+  );
+  const actions = container.querySelectorAll('.dropdown-item');
+  expect(actions).toHaveLength(4);
+  expect(actions[0].textContent).toEqual('Content');
+  expect(actions[1].textContent).toEqual('Settings');
+  expect(actions[2].textContent).toEqual('History');
+  expect(container.querySelector('.dropdown-divider')).not.toBeNull();
+  expect(actions[3].textContent).toEqual('some button');
+});
 
-  describe('render()', () => {
-    it('should render the given "edit tabs" in the action menu', () => {
-      const wrapper = shallow(
-        <ElementActions
-          areaId={1}
-          editTabs={testTabs}
-          type={{ title: 'Some block' }}
-          ActionMenuComponent={ActionMenuComponent}
-          handleEditTabsClick={editTabsClick}
-        />
-      );
+test('ElementActions should not render inline-edit items for non-expandable block', () => {
+  const { container } = render(
+    <ElementActions {...makeProps({
+      expandable: false
+    })}
+    />
+  );
+  expect(container.querySelectorAll('.dropdown-item')).toHaveLength(0);
+});
 
-      // No dropdown separator should exist when there are no non-CMS actions
-      expect(wrapper.find('DropdownItem').length).toBe(0);
-
-      // See all the relevant action menu options
-      expect(wrapper.html()).toContain('Content');
-      expect(wrapper.html()).toContain('Settings');
-      expect(wrapper.html()).toContain('History');
-    });
-
-    it('should render a divider when CMS tab actions and default actions are rendered', () => {
-      const wrapper = shallow(
-        <ElementActions
-          areaId={1}
-          editTabs={testTabs}
-          type={{ title: 'Some block' }}
-          ActionMenuComponent={ActionMenuComponent}
-          handleEditTabsClick={editTabsClick}
-        >
-          <AbstractAction title="some button" />
-        </ElementActions>
-      );
-
-      expect(wrapper.find('DropdownItem').length).toBe(1);
-    });
-
-    it('should not render inline-edit items for non-expandable block', () => {
-      const wrapper = shallow(
-        <ElementActions
-          areaId={1}
-          expandable={false}
-          editTabs={testTabs}
-          type={{ title: 'Some block' }}
-          ActionMenuComponent={ActionMenuComponent}
-          handleEditTabsClick={editTabsClick}
-        />
-      );
-
-      // No dropdown separator should exist when there are no non-CMS actions
-      expect(wrapper.find('DropdownItem').length).toBe(0);
-
-      // See all the relevant action menu options
-      expect(wrapper.html()).not.toContain('Content');
-      expect(wrapper.html()).not.toContain('Settings');
-      expect(wrapper.html()).not.toContain('History');
-    });
-
-    it('should not render inline-edit items for a broken block', () => {
-      const wrapper = shallow(
-        <ElementActions
-          areaId={1}
-          editTabs={testTabs}
-          type={{ title: 'Some block', broken: true }}
-          ActionMenuComponent={ActionMenuComponent}
-          handleEditTabsClick={editTabsClick}
-        />
-      );
-
-      // No dropdown separator should exist when there are no non-CMS actions
-      expect(wrapper.find('DropdownItem').length).toBe(0);
-
-      // See all the relevant action menu options
-      expect(wrapper.html()).not.toContain('Content');
-      expect(wrapper.html()).not.toContain('Settings');
-      expect(wrapper.html()).not.toContain('History');
-    });
-  });
+test('ElementActions should not render inline-edit items for a broken block', () => {
+  const { container } = render(
+    <ElementActions {...makeProps({
+      type: {
+        broken: true
+      }
+    })}
+    />
+  );
+  expect(container.querySelectorAll('.dropdown-item')).toHaveLength(0);
 });

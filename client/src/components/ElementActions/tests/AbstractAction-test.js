@@ -1,62 +1,60 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global jest, test, describe, it, expect */
 
 import React from 'react';
 import AbstractAction from '../AbstractAction';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16/build/index';
+import { render, fireEvent } from '@testing-library/react';
 
-Enzyme.configure({ adapter: new Adapter() });
+function makeProps(obj = {}) {
+  return {
+    onClick: () => {},
+    title: 'My abstract action',
+    disabled: false,
+    className: 'foo-bar',
+    toggle: false,
+    ...obj,
+  };
+}
 
-describe('AbstractAction', () => {
-  const clickHandler = jest.fn();
-  let wrapper = null;
+test('AbstractAction renders a DropdownItem', () => {
+  const { container } = render(<AbstractAction {...makeProps()}/>);
+  expect(container.querySelector('.dropdown-item')).not.toBeNull();
+});
 
-  beforeEach(() => {
-    wrapper = mount(
-      <AbstractAction
-        onClick={clickHandler}
-        title="My abstract action"
-        disabled={false}
-        className="foo-bar"
-        toggle={false}
-      />
-    );
-  });
+test('AbstractAction includes the title text', () => {
+  const { container } = render(<AbstractAction {...makeProps()}/>);
+  expect(container.querySelector('.dropdown-item').textContent).toBe('My abstract action');
+});
 
-  it('renders a DropdownItem', () => {
-    expect(wrapper.find('DropdownItem').length).toBe(1);
-  });
+test('AbstractAction delegates clicking to the provided handler', () => {
+  const onClick = jest.fn();
+  const { container } = render(<AbstractAction {...makeProps({ onClick })}/>);
+  fireEvent.click(container.querySelector('.dropdown-item'));
+  expect(onClick).toHaveBeenCalled();
+});
 
-  it('includes the title text', () => {
-    expect(wrapper.text()).toContain('My abstract action');
-  });
+test('AbstractAction adds provided extra classes', () => {
+  const { container } = render(<AbstractAction {...makeProps()}/>);
+  expect(container.querySelector('.dropdown-item').classList.contains('foo-bar')).toBe(true);
+});
 
-  it('delegates clicking to the provided handler', () => {
-    wrapper.find('button').simulate('click');
-    expect(clickHandler).toHaveBeenCalled();
-  });
+test('AbstractAction uses the label prop for the button label if label prop is supplied', () => {
+  const { container } = render(
+    <AbstractAction {...makeProps({
+      title: 'My title',
+      label: 'My label'
+    })}
+    />
+  );
+  expect(container.querySelector('.dropdown-item').textContent).toBe('My label');
+});
 
-  it('adds provided extra classes', () => {
-    expect(wrapper.find('button').hasClass('foo-bar')).toBe(true);
-  });
-
-  it('uses the label prop for the button label if label prop is supplied', () => {
-    const wrapperWithLabel = mount(
-      <AbstractAction
-        title="My title"
-        label="My label"
-      />
-    );
-    expect(wrapperWithLabel.find('button').text()).toBe('My label');
-  });
-
-  it('uses the title prop for the button label if label prop is not supplied', () => {
-    const wrapperWithLabel = mount(
-      <AbstractAction
-        title="My title"
-      />
-    );
-    expect(wrapperWithLabel.find('button').text()).toBe('My title');
-  });
+test('AbstractAction uses the title prop for the button label if label prop is not supplied', () => {
+  const { container } = render(
+    <AbstractAction {...makeProps({
+      title: 'My title'
+    })}
+    />
+  );
+  expect(container.querySelector('.dropdown-item').textContent).toBe('My title');
 });

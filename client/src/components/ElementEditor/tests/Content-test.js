@@ -1,64 +1,50 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global jest, test, describe, it, expect */
 
 import React from 'react';
 import { Component as Content } from '../Content';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { render } from '@testing-library/react';
 
-Enzyme.configure({ adapter: new Adapter() });
+function makeProps(obj = {}) {
+  return {
+    fileUrl: '/ss4/assets/Uploads/c70617f2e4/sample__FillWzEwMCwxMDBd.jpeg',
+    fileTitle: '',
+    content: '',
+    previewExpanded: false,
+    InlineEditFormComponent: () => <div className="test-inline-edit-form" />,
+    SummaryComponent: () => <div className="test-summary" />,
+    ...obj,
+  };
+}
 
-describe('Content', () => {
-  const InlineEditFormComponent = () => <div />;
-  const SummaryComponent = () => <div />;
+test('Content should render the Summary component if the preview is not expanded', () => {
+  const { container } = render(<Content {...makeProps()} />);
+  expect(container.querySelector('.element-editor-content')).not.toBeNull();
+  expect(container.querySelector('.test-inline-edit-form')).toBeNull();
+  expect(container.querySelector('.test-summary')).not.toBeNull();
+});
 
-  describe('render()', () => {
-    it('should render the Summary component if the preview is not expanded', () => {
-      const wrapper = shallow(
-        <Content
-          fileUrl="/ss4/assets/Uploads/c70617f2e4/sample__FillWzEwMCwxMDBd.jpeg"
-          fileTitle=""
-          content=""
-          previewExpanded={false}
-          InlineEditFormComponent={InlineEditFormComponent}
-          SummaryComponent={SummaryComponent}
-        />
-      );
+test('Content should render the InlineEditForm component if the preview is expanded', () => {
+  const { container } = render(
+    <Content {...makeProps({
+      previewExpanded: true
+    })}
+    />
+  );
+  expect(container.querySelector('.element-editor-content')).not.toBeNull();
+  expect(container.querySelector('.test-inline-edit-form')).not.toBeNull();
+  expect(container.querySelector('.test-summary')).toBeNull();
+});
 
-      expect(wrapper.name()).toEqual('div');
-      expect(wrapper.find(SummaryComponent)).toHaveLength(1);
-    });
-
-    it('should render the InlineEditForm component if the preview is expanded', () => {
-      const wrapper = shallow(
-        <Content
-          fileUrl="/ss4/assets/Uploads/c70617f2e4/sample__FillWzEwMCwxMDBd.jpeg"
-          fileTitle=""
-          content=""
-          previewExpanded
-          InlineEditFormComponent={InlineEditFormComponent}
-          SummaryComponent={SummaryComponent}
-        />
-      );
-
-      expect(wrapper.name()).toEqual('div');
-      expect(wrapper.find(InlineEditFormComponent)).toHaveLength(1);
-    });
-
-    it('returns a div when no content or image is provided', () => {
-      const wrapper = shallow(
-        <Content
-          fileUrl=""
-          fileTitle=""
-          content=""
-          previewExpanded
-          InlineEditFormComponent={InlineEditFormComponent}
-          SummaryComponent={SummaryComponent}
-        />
-      );
-
-      expect(wrapper.type()).toEqual('div');
-      expect(wrapper.find(SummaryComponent)).toHaveLength(0);
-    });
-  });
+test('Content returns a div when no content or image is provided', () => {
+  const { container } = render(
+    <Content {...makeProps({
+      fileUrl: '',
+      previewExpanded: true
+    })}
+    />
+  );
+  expect(container.querySelector('.element-editor-content')).not.toBeNull();
+  expect(container.querySelector('.test-inline-edit-form')).not.toBeNull();
+  expect(container.querySelector('.test-summary')).toBeNull();
 });
