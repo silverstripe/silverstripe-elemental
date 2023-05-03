@@ -16,7 +16,8 @@ function makeProps(obj = {}) {
 
 test('Summary should render an image if the fileUrl prop is provided', () => {
   const { container } = render(<Summary {...makeProps()}/>);
-  expect(container.querySelector('.element-editor-summary__thumbnail-image')).not.toBeNull();
+  expect(container.querySelectorAll('img.element-editor-summary__thumbnail-image')).toHaveLength(1);
+  expect(container.querySelector('img.element-editor-summary__thumbnail-image').getAttribute('src')).toBe('/ss4/assets/Uploads/c70617f2e4/sample__FillWzEwMCwxMDBd.jpeg');
 });
 
 test('Summary should not render an image if the fileUrl prop is not provided', () => {
@@ -26,12 +27,12 @@ test('Summary should not render an image if the fileUrl prop is not provided', (
     })}
     />
   );
-  expect(container.querySelector('.element-editor-summary__thumbnail-image')).toBeNull();
+  expect(container.querySelectorAll('img.element-editor-summary__thumbnail-image')).toHaveLength(0);
 });
 
 test('Summary should render a content summary if the content is provided', () => {
   const { container } = render(<Summary {...makeProps()}/>);
-  expect(container.querySelector('.element-editor-summary__content')).not.toBeNull();
+  expect(container.querySelectorAll('.element-editor-summary__content')).toHaveLength(1);
 });
 
 test('Summary should not render a content summary if the content prop is not provided', () => {
@@ -41,5 +42,5 @@ test('Summary should not render a content summary if the content prop is not pro
     })}
     />
   );
-  expect(container.querySelector('.element-editor-summary__content')).toBeNull();
+  expect(container.querySelectorAll('.element-editor-summary__content')).toHaveLength(0);
 });

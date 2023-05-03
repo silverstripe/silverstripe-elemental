@@ -34,7 +34,7 @@ test('SaveAction renders a button when block is expandable', () => {
   const { container } = render(
     <ActionComponent {...makeProps()} />
   );
-  expect(container.querySelector('button.element-editor__actions-save')).not.toBeNull();
+  expect(container.querySelectorAll('button.element-editor__actions-save')).toHaveLength(1);
 });
 
 test('SaveAction does not render a button when block is not expandable', () => {
@@ -44,7 +44,7 @@ test('SaveAction does not render a button when block is not expandable', () => {
     })}
     />
   );
-  expect(container.querySelector('button.element-editor__actions-save')).toBeNull();
+  expect(container.querySelectorAll('button.element-editor__actions-save')).toHaveLength(0);
 });
 
 test('SaveAction does not render a button when block is broken', () => {
@@ -56,5 +56,5 @@ test('SaveAction does not render a button when block is broken', () => {
     })}
     />
   );
-  expect(container.querySelector('button.element-editor__actions-save')).toBeNull();
+  expect(container.querySelectorAll('button.element-editor__actions-save')).toHaveLength(0);
 });
