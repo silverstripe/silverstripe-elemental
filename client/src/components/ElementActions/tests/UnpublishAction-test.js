@@ -1,95 +1,88 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect, window */
+/* global jest, test, describe, it, expect, window */
 
 import React from 'react';
 import { Component as UnpublishAction } from '../UnpublishAction';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { fireEvent, render } from '@testing-library/react';
 
-Enzyme.configure({ adapter: new Adapter() });
+window.jQuery = {
+  noticeAdd: jest.fn()
+};
 
-describe('UnpublishAction', () => {
-  let wrapper = null;
+function makeProps(obj = {}) {
+  return {
+    title: 'My unpublish action',
+    element: {
+      id: 123,
+      isPublished: true,
+      blockSchema: { type: 'Test' },
+    },
+    type: { title: 'Some block' },
+    actions: {
+      handleUnpublishBlock: () => {}
+    },
+    toggle: false,
+    ...obj,
+  };
+}
+
+const WrappedComponent = (props) => <div>{props.children}</div>;
+const ActionComponent = UnpublishAction(WrappedComponent);
+
+test('UnpublishAction renders the wrapped component', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps()} />
+  );
+  expect(container.querySelector('button.element-editor__actions-unpublish').textContent).toBe('Unpublish');
+});
+
+test('UnpublishAction returns null when is not published', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      element: {
+        isPublished: false
+      }
+    })}
+    />
+  );
+  expect(container.querySelector('button')).toBeNull();
+});
+
+test('UnpublishAction calls the unpublish mutation', () => {
   const mockMutation = jest.fn(() => new Promise((resolve) => { resolve(); }));
-  const WrappedComponent = (props) => <div>{props.children}</div>;
-  const ActionComponent = UnpublishAction(WrappedComponent);
-  const jQuery = jest.fn();
-  window.jQuery = jQuery;
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      actions: {
+        handleUnpublishBlock: mockMutation
+      }
+    })}
+    />
+  );
+  fireEvent.click(container.querySelector('button.element-editor__actions-unpublish'));
+  expect(mockMutation).toHaveBeenCalledWith(123);
+});
 
-  beforeEach(() => {
-    wrapper = mount(
-      <ActionComponent
-        title="My abstract action"
-        element={{
-          id: 123,
-          isPublished: true,
-          blockSchema: { type: 'Test' },
-        }}
-        type={{ title: 'Some block' }}
-        actions={{ handleUnpublishBlock: mockMutation }}
-        toggle={false}
-      />
-    );
+test('UnpublishAction is disabled when user doesn\'t have correct permissions', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      element: {
+        isPublished: true,
+        canUnpublish: false
+      }
+    })}
+    />
+  );
+  expect(container.querySelector('button.element-editor__actions-unpublish').disabled).toBe(true);
+});
 
-    jQuery.noticeAdd = jest.fn();
-  });
-
-  it('renders the wrapped component', () => {
-    expect(wrapper.children().first().type()).toEqual(WrappedComponent);
-  });
-
-  it('renders a button', () => {
-    expect(wrapper.find('button').length).toBe(1);
-  });
-
-  it('renders the title and class', () => {
-    expect(wrapper.find('button').text()).toContain('Unpublish');
-    expect(wrapper.find('button').hasClass('element-editor__actions-unpublish')).toBe(true);
-  });
-
-  it('returns null when is not published', () => {
-    const draftWrapper = mount(
-      <ActionComponent
-        element={{ isPublished: false, blockSchema: { type: 'Test' } }}
-        actions={{ handleUnpublishBlock: mockMutation }}
-        type={{ title: 'Some block' }}
-      />
-    );
-
-    expect(draftWrapper.find('button').length).toBe(0);
-  });
-
-  it('calls the unpublish mutation', () => {
-    wrapper.find('button').simulate('click');
-    expect(mockMutation).toHaveBeenCalled();
-  });
-
-  it('is disabled when user doesn\'t have correct permissions', () => {
-    const unpublishWrapper = mount(
-      <ActionComponent
-        element={{ isPublished: true, BlockSchema: { type: 'Test' }, canUnpublish: false }}
-        actions={{ handleUnpublishBlock: mockMutation }}
-        type={{ title: 'Some block' }}
-      />
-    );
-
-    expect(unpublishWrapper.find('button').first().prop('disabled')).toBe(true);
-  });
-
-  it('does not render a button when block is broken', () => {
-    wrapper = mount(
-      <ActionComponent
-        title="My unpublish action"
-        element={{
-          id: 123,
-          isPublished: true,
-          blockSchema: { type: 'Test' },
-        }}
-        type={{ broken: true }}
-        actions={{ handleUnpublishBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-    expect(wrapper.find('button').length).toBe(0);
-  });
+test('UnpublishAction does not render a button when block is broken', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      type: {
+        broken: true
+      }
+    })}
+    />
+  );
+  expect(container.querySelector('button.element-editor__actions-unpublish')).toBeNull();
 });

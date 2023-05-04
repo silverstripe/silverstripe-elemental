@@ -28,6 +28,8 @@ For a Silverstripe CMS 4.1 or 4.2 compatible version of this module, please see 
 
 ## Installation
 
+```sh
+composer require dnadesign/silverstripe-elemental
 ```
 composer require dnadesign/silverstripe-elemental
 ```
@@ -35,7 +37,7 @@ composer require dnadesign/silverstripe-elemental
 The following YAML config will enable elements on every `Page` object,
 replacing the standard `Content` rich text field.
 
-**mysite/\_config/elements.yml**
+**mysite/_config/elements.yml**
 
 ```yaml
 Page:

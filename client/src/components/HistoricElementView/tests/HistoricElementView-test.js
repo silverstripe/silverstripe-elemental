@@ -1,54 +1,41 @@
-/* global jest, describe, beforeEach, it, expect */
+/* global jest, test, describe, beforeEach, it, expect */
 
 import React from 'react';
-import ReactTestUtils from 'react-dom/test-utils';
 import ElementalAreaHistoryFactory from '../HistoricElementView';
+import { render } from '@testing-library/react';
 
-describe('HistoricElementView', () => {
-  class FieldGroupStub extends React.Component {
-    getLegend() {
-      return 'nah';
-    }
-    getClassName() {
-      return 'ok';
-    }
-    render() {
-      return <div>Group</div>;
-    }
-  }
-  const datumSet = {
-    ElementType: 'Stub',
-    ElementTitle: 'Pretend Element',
-    ElementEditLink: 'http://localhost:8080/'
+function makeProps(obj = {}) {
+  return {
+    data: {
+      ElementID: 1,
+      ElementType: 'Stub',
+      ElementTitle: 'Pretend Element',
+      ElementEditLink: 'http://localhost:8080/',
+      tag: 'div'
+    },
+    ...obj
   };
-  const HistoricElementView = ElementalAreaHistoryFactory(FieldGroupStub);
-  let history = null;
+}
 
-  // Temporarily disable (with xdescribe):
-  xdescribe('render', () => {
-    beforeEach(() => {
-      history = ReactTestUtils.renderIntoDocument(
-        <HistoricElementView data={datumSet} />
-      );
-    });
+class FieldGroupStub extends React.Component {
+  getLegend() {
+    return 'nah';
+  }
+  getClassName() {
+    return 'ok';
+  }
+  render() {
+    return <div className="test-field-group-stub">Group</div>;
+  }
+}
 
-    it('The header should feature the Element type', () => {
-      const type = ReactTestUtils.findRenderedDOMComponentWithTag(history, 'small').textContent;
-      expect(type).toBeTruthy();
-      expect(type).toEqual('Stub');
-    });
+const HistoricElementView = ElementalAreaHistoryFactory(FieldGroupStub);
 
-    it('should should list the Element\'s title', () => {
-      const title = ReactTestUtils.findRenderedDOMComponentWithClass(history, 'elemental-preview__detail').textContent;
-      expect(title).toBeTruthy();
-      expect(title).toMatch(/^Pretend Element\b/);
-    });
-
-    it('should should have a link in the header', () => {
-      const link = ReactTestUtils.findRenderedDOMComponentWithClass(history, 'elemental-preview__link');
-      expect(link).toBeTruthy();
-      expect(link.href).toBeTruthy();
-      expect(link.textContent).toEqual('Block history');
-    });
-  });
+test('HistoricElementView render ', () => {
+  const { container } = render(<HistoricElementView {...makeProps()}/>);
+  expect(container.querySelector('.elemental-area__element--historic-inner.ok')).not.toBeNull();
+  expect(container.querySelector('.elemental-preview__detail h3').textContent).toContain('Pretend Element');
+  expect(container.querySelector('.elemental-preview__detail small').textContent).toBe('Stub');
+  expect(container.querySelector('.elemental-preview__link').href).toBe('http://localhost:8080/');
+  expect(container.querySelector('.elemental-preview__link-text').textContent).toBe('Block history');
 });

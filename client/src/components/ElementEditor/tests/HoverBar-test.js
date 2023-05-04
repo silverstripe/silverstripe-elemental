@@ -1,46 +1,47 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global jest, test, describe, it, expect */
 
 import React from 'react';
 import { Component as HoverBar } from '../HoverBar';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { render } from '@testing-library/react';
 
-Enzyme.configure({ adapter: new Adapter() });
+function makeProps(obj = {}) {
+  return {
+    key: 0,
+    areaId: 0,
+    elementId: 0,
+    elementTypes: [
+      {
+        name: 'Main',
+        title: 'Content',
+        icon: '',
+        tabs: ['', '']
+      }
+    ],
+    AddElementPopoverComponent: () => <div />,
+    ...obj
+  };
+}
 
-describe('HoverBar', () => {
-  const elementTypes = [
-    {
-      name: 'Main',
-      title: 'Content',
-      icon: '',
-      tabs: ['', '']
-    }
-  ];
-  const AddElementPopoverComponent = () => <div />;
-  const hoverBarName = 'AddBlockHoverBar';
-  const hoverBarAreaName = 'AddBlockHoverBarArea';
+const hoverBarName = 'AddBlockHoverBar';
+const hoverBarAreaName = 'AddBlockHoverBarArea';
 
-  describe('render()', () => {
-    it.each([
-      { areaId: 1, elementId: 0 },
-      { areaId: 2, elementId: 3 },
-    ])('renders top HoverBarComponent', ({ areaId, elementId }) => {
-      const wrapper = mount(
-        <HoverBar
-          key={elementId}
-          areaId={areaId}
-          elementId={elementId}
-          elementTypes={elementTypes}
-          AddElementPopoverComponent={AddElementPopoverComponent}
-        />
-      );
-
-      expect(wrapper.name()).toBe('HoverBar');
-      expect(wrapper.find('div.element-editor__hover-bar').prop('id')).toBe(`${hoverBarName}_${areaId}_${elementId}`);
-      expect(wrapper.find('button').prop('id')).toBe(`${hoverBarAreaName}_${areaId}_${elementId}`);
-      expect(wrapper.find('AddElementPopoverComponent').prop('target')).toBe(`${hoverBarAreaName}_${areaId}_${elementId}`);
-      expect(wrapper.find('AddElementPopoverComponent').prop('container')).toBe(`#${hoverBarName}_${areaId}_${elementId}`);
-    });
+test('HoverBar renders top HoverBarComponent', () => {
+  [
+    { areaId: 1, elementId: 0 },
+    { areaId: 2, elementId: 3 },
+  ].forEach(({ areaId, elementId }) => {
+    const { container } = render(
+      <HoverBar {...makeProps({
+        areaId,
+        elementId,
+        key: elementId
+      })}
+      />
+    );
+    const hoverBar = container.querySelector('.element-editor__hover-bar');
+    const hoverBarArea = container.querySelector('button.element-editor__hover-bar-area');
+    expect(hoverBar.getAttribute('id')).toBe(`${hoverBarName}_${areaId}_${elementId}`);
+    expect(hoverBarArea.getAttribute('id')).toBe(`${hoverBarAreaName}_${areaId}_${elementId}`);
   });
 });

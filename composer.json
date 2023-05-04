@@ -9,10 +9,12 @@
         "content blocks"
     ],
     "license": "BSD-3-Clause",
-    "authors": [{
-        "name": "Alexandre Saelens",
-        "email": "alexandre.saelens@dna.co.nz"
-    }],
+    "authors": [
+        {
+            "name": "Alexandre Saelens",
+            "email": "alexandre.saelens@dna.co.nz"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
@@ -45,7 +47,10 @@
     },
     "autoload": {
         "psr-4": {
-            "DNADesign\\Elemental\\": ["src/", "_legacy/"],
+            "DNADesign\\Elemental\\": [
+                "src/",
+                "_legacy/"
+            ],
             "DNADesign\\Elemental\\Tests\\": "tests/"
         }
     }

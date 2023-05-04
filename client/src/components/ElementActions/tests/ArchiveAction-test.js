@@ -1,127 +1,101 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global jest, test, describe, it, expect */
 
 import React from 'react';
 import { Component as ArchiveAction } from '../ArchiveAction';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { render, fireEvent } from '@testing-library/react';
 
-Enzyme.configure({ adapter: new Adapter() });
+const WrappedComponent = (props) => <div>{props.children}</div>;
+const ActionComponent = ArchiveAction(WrappedComponent);
+const jQuery = jest.fn();
+window.jQuery = jQuery;
 
-describe('ArchiveAction', () => {
-  let wrapper = null;
+function makeProps(obj = {}) {
+  return {
+    title: 'My abstract action',
+    element: {
+      id: 123,
+      isPublished: true,
+      blockSchema: { type: 'Test' }
+    },
+    isPublished: true,
+    actions: {
+      handleArchiveBlock: () => {}
+    },
+    toggle: false,
+    ...obj,
+  };
+}
+
+test('ArchiveAction renders the wrapped component', () => {
+  const { container } = render(<ActionComponent {...makeProps()}/>);
+  expect(container.querySelector('button.element-editor__actions-archive').textContent).toBe('Archive');
+});
+
+test('ArchiveAction does not archive when declining the confirmation', () => {
+  global.confirm = () => false;
   const mockMutation = jest.fn(() => new Promise((resolve) => { resolve(); }));
-  const WrappedComponent = (props) => <div>{props.children}</div>;
-  const ActionComponent = ArchiveAction(WrappedComponent);
-  const jQuery = jest.fn();
-  window.jQuery = jQuery;
+  const { container } = render(<ActionComponent {...makeProps({
+    actions: {
+      handleArchiveBlock: mockMutation
+    }
+  })}
+  />);
+  fireEvent.click(container.querySelector('button.element-editor__actions-archive'));
+  expect(mockMutation).not.toHaveBeenCalled();
+});
 
-  beforeEach(() => {
-    wrapper = mount(
-      <ActionComponent
-        title="My abstract action"
-        element={{
-          id: 123,
-          isPublished: true,
-          blockSchema: { type: 'Test' }
-        }}
-        isPublished
-        actions={{ handleArchiveBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-  });
+test('ArchiveAction archives when accepting the confirmation', () => {
+  global.confirm = () => true;
+  const mockMutation = jest.fn(() => new Promise((resolve) => { resolve(); }));
+  const { container } = render(<ActionComponent {...makeProps({
+    actions: {
+      handleArchiveBlock: mockMutation
+    }
+  })}
+  />);
+  fireEvent.click(container.querySelector('button.element-editor__actions-archive'));
+  expect(mockMutation).toHaveBeenCalled();
+});
 
-  it('renders the wrapped component', () => {
-    expect(wrapper.children().first().type()).toEqual(WrappedComponent);
-  });
+test('ArchiveAction indicates that the block will be sent to archive when it is unpublished', () => {
+  const mockConfirm = jest.fn();
+  global.confirm = mockConfirm;
+  const { container } = render(<ActionComponent {...makeProps({
+    isPublished: false,
+  })}
+  />);
+  fireEvent.click(container.querySelector('button.element-editor__actions-archive'));
+  expect(mockConfirm).toHaveBeenCalledWith('Are you sure you want to send this block to the archive?');
+});
 
-  it('renders a button', () => {
-    expect(wrapper.find('button').length).toBe(1);
-  });
+test('ArchiveAction indicates that the block will be sent to archive when it is published', () => {
+  const mockConfirm = jest.fn();
+  global.confirm = mockConfirm;
+  const { container } = render(<ActionComponent {...makeProps({
+    isPublished: true,
+  })}
+  />);
+  fireEvent.click(container.querySelector('button.element-editor__actions-archive'));
+  expect(mockConfirm).toHaveBeenCalledWith('Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?');
+});
 
-  it('renders the title and class', () => {
-    expect(wrapper.find('button').text()).toContain('Archive');
-    expect(wrapper.find('button').hasClass('element-editor__actions-archive')).toBe(true);
-  });
+test('ArchiveAction is disabled when user doesn\'t have correct permissions', () => {
+  const { container } = render(<ActionComponent {...makeProps({
+    element: {
+      canDelete: false
+    }
+  })}
+  />);
+  expect(container.querySelector('button.element-editor__actions-archive').disabled).toBe(true);
+});
 
-  it('does not archive when declining the confirmation', () => {
-    global.confirm = () => false;
-    wrapper.find('button').simulate('click');
-    expect(mockMutation).not.toHaveBeenCalled();
-  });
-
-  it('archives when accepting the confirmation', () => {
-    global.confirm = () => true;
-    wrapper.find('button').simulate('click');
-    expect(mockMutation).toHaveBeenCalled();
-  });
-
-  it('indicates that the block will be sent to archive', () => {
-    const unpublishedWrapper = mount(
-      <ActionComponent
-        title="My abstract action"
-        element={{
-          id: 123,
-          isPublished: false,
-          blockSchema: { type: 'Test' }
-        }}
-        actions={{ handleArchiveBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-    const mockConfirm = jest.fn();
-    global.confirm = mockConfirm;
-
-    unpublishedWrapper.find('button').simulate('click');
-    expect(mockConfirm).toHaveBeenCalledWith(
-      'Are you sure you want to send this block to the archive?'
-    );
-  });
-
-  it('indicates that the block will be unpublished before archiving', () => {
-    const mockConfirm = jest.fn();
-    global.confirm = mockConfirm;
-
-    wrapper.find('button').simulate('click');
-    expect(mockConfirm).toHaveBeenCalledWith(expect.stringContaining(
-      'Warning: This block will be unpublished'
-    ));
-  });
-
-  it('is disabled when user doesn\'t have correct permissions', () => {
-    const archiveWrapper = mount(
-      <ActionComponent
-        title="My abstract action"
-        element={{
-          ID: 123,
-          IsPublished: false,
-          BlockSchema: { type: 'Test' },
-          canDelete: false
-        }}
-        actions={{ handleArchiveBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-
-    expect(archiveWrapper.find('button').first().prop('disabled')).toBe(true);
-  });
-
-  it('renders a button even when block is broken', () => {
-    wrapper = mount(
-      <ActionComponent
-        title="My unpublish action"
-        element={{
-          id: 123,
-          isPublished: true,
-          blockSchema: { type: 'Test' }
-        }}
-        isPublished
-        type={{ broken: true }}
-        actions={{ handleArchiveBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-    expect(wrapper.find('button').length).toBe(1);
-  });
+test('ArchiveAction renders a button even when block is broken', () => {
+  const { container } = render(<ActionComponent {...makeProps({
+    type: {
+      broken: true
+    }
+  })}
+  />);
+  expect(container.querySelector('button.element-editor__actions-archive')).not.toBeNull();
 });

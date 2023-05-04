@@ -1,70 +1,56 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* global jest, describe, it, expect */
+/* global jest, test, describe, it, expect */
 
 import React from 'react';
 import { Component as DuplicateAction } from '../DuplicateAction';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { render } from '@testing-library/react';
 
-Enzyme.configure({ adapter: new Adapter() });
+const WrappedComponent = (props) => <div>{props.children}</div>;
+const ActionComponent = DuplicateAction(WrappedComponent);
 
-describe('DuplicateAction', () => {
-  let wrapper = null;
-  const mockMutation = jest.fn(() => new Promise((resolve) => { resolve(); }));
-  const WrappedComponent = (props) => <div>{props.children}</div>;
-  const ActionComponent = DuplicateAction(WrappedComponent);
+function makeProps(obj = {}) {
+  return {
+    title: 'My duplicate action',
+    element: {
+      ID: 123,
+      BlockSchema: { type: 'Test' },
+      canCreate: true,
+    },
+    type: {
+      broken: false
+    },
+    actions: {
+      handlePublishBlock: () => {}
+    },
+    toggle: false,
+    ...obj,
+  };
+}
 
-  beforeEach(() => {
-    wrapper = mount(
-      <ActionComponent
-        title="My duplicate action"
-        element={{
-          ID: 123,
-          BlockSchema: { type: 'Test' },
-          canCreate: true
-        }}
-        type={{ broken: false }}
-        actions={{ handlePublishBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-  });
+test('DuplicateAction renders a button', () => {
+  const { container } = render(<ActionComponent {...makeProps()}/>);
+  expect(container.querySelector('button.element-editor__actions-duplicate')).not.toBeNull();
+});
 
-  it('renders a button', () => {
-    expect(wrapper.find('button').length).toBe(1);
-  });
+test('DuplicateAction is disabled when user doesn\'t have correct permissions', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      element: {
+        BlockSchema: { type: 'Test' },
+        canCreate: false
+      }
+    })}
+    />
+  );
+  expect(container.querySelector('button.element-editor__actions-duplicate').disabled).toBe(true);
+});
 
-  it('is disabled when user doesn\'t have correct permissions', () => {
-    const duplicateWrapper = mount(
-      <ActionComponent
-        title="My duplicate action"
-        element={{
-          BlockSchema: { type: 'Test' },
-          canCreate: false
-        }}
-        type={{ broken: false }}
-        actions={{ handleDuplicateBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-
-    expect(duplicateWrapper.find('button').first().prop('disabled')).toBe(true);
-  });
-
-  it('does not render a button when block is broken', () => {
-    wrapper = mount(
-      <ActionComponent
-        title="My duplicate action"
-        element={{
-          ID: 123,
-          BlockSchema: { type: 'Test' },
-          canCreate: true
-        }}
-        type={{ broken: true }}
-        actions={{ handleDuplicateBlock: mockMutation }}
-        toggle={false}
-      />
-    );
-    expect(wrapper.find('button').length).toBe(0);
-  });
+test('DuplicateAction does not render a button when block is broken', () => {
+  const { container } = render(
+    <ActionComponent {...makeProps({
+      type: { broken: true }
+    })}
+    />
+  );
+  expect(container.querySelector('button.element-editor__actions-duplicate')).toBeNull();
 });
