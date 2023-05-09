@@ -36,7 +36,7 @@ function makeProps(obj = {}) {
   };
 }
 
-test('PublishAction renders the wrapped component', () => {
+test('PublishAction renders the title and class', () => {
   const { container } = render(<ActionComponent {...makeProps()}/>);
   expect(container.querySelector('button.element-editor__actions-publish').textContent).toBe('Publish');
 });
@@ -89,5 +89,5 @@ test('PublishAction does not render a button when block is broken', () => {
     })}
     />
   );
-  expect(container.querySelector('button.element-editor__actions-publish')).toBeNull();
+  expect(container.querySelectorAll('button.element-editor__actions-publish')).toHaveLength(0);
 });

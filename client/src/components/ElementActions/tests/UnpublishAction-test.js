@@ -29,7 +29,7 @@ function makeProps(obj = {}) {
 const WrappedComponent = (props) => <div>{props.children}</div>;
 const ActionComponent = UnpublishAction(WrappedComponent);
 
-test('UnpublishAction renders the wrapped component', () => {
+test('UnpublishAction renders the title and class', () => {
   const { container } = render(
     <ActionComponent {...makeProps()} />
   );
@@ -45,7 +45,7 @@ test('UnpublishAction returns null when is not published', () => {
     })}
     />
   );
-  expect(container.querySelector('button')).toBeNull();
+  expect(container.querySelectorAll('button')).toHaveLength(0);
 });
 
 test('UnpublishAction calls the unpublish mutation', () => {
@@ -84,5 +84,5 @@ test('UnpublishAction does not render a button when block is broken', () => {
     })}
     />
   );
-  expect(container.querySelector('button.element-editor__actions-unpublish')).toBeNull();
+  expect(container.querySelectorAll('button.element-editor__actions-unpublish')).toHaveLength(0);
 });

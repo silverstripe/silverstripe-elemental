@@ -49,7 +49,7 @@ function makeProps(obj = {}) {
 
 test('Header should render the icon', () => {
   const { container } = render(<Header {...makeProps()}/>);
-  expect(container.querySelector('i.font-icon-block-file')).not.toBeNull();
+  expect(container.querySelectorAll('i.font-icon-block-file')).toHaveLength(1);
 });
 
 test('Header should render the title', () => {
@@ -65,7 +65,7 @@ test('Header should render the title', () => {
   expect(container.querySelector('.element-editor-header__title').textContent).toBe('Sample File Block');
 });
 
-test('Header should render the title for broken elements', () => {
+test('Header should override the title for broken elements', () => {
   const { container } = render(
     <Header {...makeProps({
       type: {
@@ -89,8 +89,8 @@ test('Header should contain a Tooltip', async () => {
     />
   );
   fireEvent.mouseOver(container.querySelector('#element-icon-13.font-icon-block-file'));
-  const tooltip = await screen.findByText('File');
-  expect(tooltip.getAttribute('role')).toBe('tooltip');
+  const tooltip = await screen.findByRole('tooltip', {}, { timeout: 500, onTimeout: () => null });
+  expect(tooltip.textContent).toBe('File');
 });
 
 test('Header should not contain a Tooltip for a broken element', async () => {
@@ -108,11 +108,12 @@ test('Header should not contain a Tooltip for a broken element', async () => {
     />
   );
   fireEvent.mouseOver(container.querySelector('#element-icon-13'));
-  // wait for 500 milliseconds for the tooltip to appear (which is should not)
-  // https://testing-library.com/docs/dom-testing-library/api-async/#waitfor
-  await waitFor(() => null, { timeout: 500 });
-  // use "queryBy" because it does not throw an error on fail - https://testing-library.com/docs/queries/about
-  expect(screen.queryByText('File')).toBeNull();
+  // Normally we would use "queryByRole" here because it does not throw an error on fail - but
+  // in this case that provides a false negative result (confirmed by trying a timeout
+  // with queryByRole in the "Header should not contain a Tooltip for a broken element" test
+  // which causes that test to fail)
+  const tooltip = await screen.findByRole('tooltip', {}, { timeout: 500, onTimeout: () => null });
+  expect(tooltip).toBeNull();
 });
 
 test('Header should render a right caret button when not expandable', () => {
@@ -120,7 +121,8 @@ test('Header should render a right caret button when not expandable', () => {
     expandable: false
   })}
   />);
-  expect(container.querySelector('.element-editor-header__expand.font-icon-right-open-big')).not.toBeNull();
+  expect(container.querySelectorAll('.element-editor-header__expand')).toHaveLength(1);
+  expect(container.querySelector('.element-editor-header__expand').classList.contains('font-icon-right-open-big')).toBe(true);
 });
 
 test('Header should render a down caret button when not expanded', () => {
@@ -129,7 +131,8 @@ test('Header should render a down caret button when not expanded', () => {
     previewExpanded: false
   })}
   />);
-  expect(container.querySelector('.element-editor-header__expand.font-icon-down-open-big')).not.toBeNull();
+  expect(container.querySelectorAll('.element-editor-header__expand')).toHaveLength(1);
+  expect(container.querySelector('.element-editor-header__expand').classList.contains('font-icon-down-open-big')).toBe(true);
 });
 
 test('Header should render an up caret button when expanded', () => {
@@ -138,7 +141,8 @@ test('Header should render an up caret button when expanded', () => {
     previewExpanded: true
   })}
   />);
-  expect(container.querySelector('.element-editor-header__expand.font-icon-up-open-big')).not.toBeNull();
+  expect(container.querySelectorAll('.element-editor-header__expand')).toHaveLength(1);
+  expect(container.querySelector('.element-editor-header__expand').classList.contains('font-icon-up-open-big')).toBe(true);
 });
 
 test('Header should not render a caret button for a broken element', () => {
@@ -150,7 +154,7 @@ test('Header should not render a caret button for a broken element', () => {
     }
   })}
   />);
-  expect(container.querySelector('.element-editor-header__expand')).toBeNull();
+  expect(container.querySelectorAll('.element-editor-header__expand')).toHaveLength(0);
 });
 
 test('Header should render an ElementActions component when the element is expandable', () => {
@@ -158,7 +162,7 @@ test('Header should render an ElementActions component when the element is expan
     expandable: true,
   })}
   />);
-  expect(container.querySelector('.test-element-actions')).not.toBeNull();
+  expect(container.querySelectorAll('.test-element-actions')).toHaveLength(1);
 });
 
 test('Header should render an ElementActions component when the element is not expandable', () => {
@@ -166,7 +170,7 @@ test('Header should render an ElementActions component when the element is not e
     expandable: false,
   })}
   />);
-  expect(container.querySelector('.test-element-actions')).not.toBeNull();
+  expect(container.querySelectorAll('.test-element-actions')).toHaveLength(1);
 });
 
 test('Header should render an ElementActions component even when the element is broken', () => {
@@ -177,7 +181,7 @@ test('Header should render an ElementActions component even when the element is 
     }
   })}
   />);
-  expect(container.querySelector('.test-element-actions')).not.toBeNull();
+  expect(container.querySelectorAll('.test-element-actions')).toHaveLength(1);
 });
 
 test('Header should render a versioned state message when the element is not published', () => {
@@ -189,7 +193,7 @@ test('Header should render a versioned state message when the element is not pub
     }
   })}
   />);
-  expect(container.querySelector('.element-editor-header__version-state--draft').getAttribute('title')).toContain('not been published');
+  expect(container.querySelector('.element-editor-header__version-state.element-editor-header__version-state--draft').getAttribute('title')).toContain('not been published');
 });
 
 test('Header should render a versioned state message when the element is modified', () => {
@@ -201,10 +205,10 @@ test('Header should render a versioned state message when the element is modifie
     }
   })}
   />);
-  expect(container.querySelector('.element-editor-header__version-state--modified').getAttribute('title')).toContain('has unpublished changes');
+  expect(container.querySelector('.element-editor-header__version-state.element-editor-header__version-state--modified').getAttribute('title')).toContain('has unpublished changes');
 });
 
-test('Header should render a versioned state message when the element is published', () => {
+test('Header should not render a versioned state message when the element is published', () => {
   const { container } = render(<Header {...makeProps({
     element: {
       id: '14',
@@ -213,5 +217,5 @@ test('Header should render a versioned state message when the element is publish
     }
   })}
   />);
-  expect(container.querySelector('.element-editor-header__version-state')).toBeNull();
+  expect(container.querySelectorAll('.element-editor-header__version-state')).toHaveLength(0);
 });

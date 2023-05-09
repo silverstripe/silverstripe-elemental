@@ -27,7 +27,7 @@ function makeProps(obj = {}) {
   };
 }
 
-test('ArchiveAction renders the wrapped component', () => {
+test('ArchiveAction renders the title and class', () => {
   const { container } = render(<ActionComponent {...makeProps()}/>);
   expect(container.querySelector('button.element-editor__actions-archive').textContent).toBe('Archive');
 });
@@ -97,5 +97,5 @@ test('ArchiveAction renders a button even when block is broken', () => {
     }
   })}
   />);
-  expect(container.querySelector('button.element-editor__actions-archive')).not.toBeNull();
+  expect(container.querySelectorAll('button.element-editor__actions-archive')).toHaveLength(1);
 });

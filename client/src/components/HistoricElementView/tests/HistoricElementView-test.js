@@ -31,9 +31,9 @@ class FieldGroupStub extends React.Component {
 
 const HistoricElementView = ElementalAreaHistoryFactory(FieldGroupStub);
 
-test('HistoricElementView render ', () => {
+test('HistoricElementView renders', () => {
   const { container } = render(<HistoricElementView {...makeProps()}/>);
-  expect(container.querySelector('.elemental-area__element--historic-inner.ok')).not.toBeNull();
+  expect(container.querySelectorAll('.elemental-area__element--historic-inner.ok')).toHaveLength(1);
   expect(container.querySelector('.elemental-preview__detail h3').textContent).toContain('Pretend Element');
   expect(container.querySelector('.elemental-preview__detail small').textContent).toBe('Stub');
   expect(container.querySelector('.elemental-preview__link').href).toBe('http://localhost:8080/');

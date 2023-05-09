@@ -55,8 +55,8 @@ function makeProps(obj = {}) {
 
 test('ElementEditor should render ElementList and Toolbar', () => {
   const { container } = render(<ElementEditor {...makeProps()}/>);
-  expect(container.querySelector('.test-list')).not.toBeNull();
-  expect(container.querySelector('[data-testid="test-toolbar"]')).not.toBeNull();
+  expect(container.querySelectorAll('.test-list')).toHaveLength(1);
+  expect(container.querySelectorAll('[data-testid="test-toolbar"]')).toHaveLength(1);
 });
 
 test('ElementEditor should filter all element types by those allowed for this editor', () => {

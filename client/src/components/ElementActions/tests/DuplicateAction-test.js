@@ -29,7 +29,7 @@ function makeProps(obj = {}) {
 
 test('DuplicateAction renders a button', () => {
   const { container } = render(<ActionComponent {...makeProps()}/>);
-  expect(container.querySelector('button.element-editor__actions-duplicate')).not.toBeNull();
+  expect(container.querySelectorAll('button.element-editor__actions-duplicate')).toHaveLength(1);
 });
 
 test('DuplicateAction is disabled when user doesn\'t have correct permissions', () => {
@@ -52,5 +52,5 @@ test('DuplicateAction does not render a button when block is broken', () => {
     })}
     />
   );
-  expect(container.querySelector('button.element-editor__actions-duplicate')).toBeNull();
+  expect(container.querySelectorAll('button.element-editor__actions-duplicate')).toHaveLength(0);
 });
