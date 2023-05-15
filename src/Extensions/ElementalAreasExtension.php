@@ -5,14 +5,12 @@ namespace DNADesign\Elemental\Extensions;
 use DNADesign\Elemental\Forms\ElementalAreaField;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\Validators\ElementalAreasValidator;
 use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Extensible;
-use SilverStripe\Forms\CompositeValidator;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
@@ -244,14 +242,6 @@ class ElementalAreasExtension extends DataExtension
         if (Config::inst()->get(self::class, 'clear_contentfield')) {
             $this->owner->Content = '';
         }
-    }
-
-    /**
-     * @param CompositeValidator $compositeValidator
-     */
-    public function updateCMSCompositeValidator(CompositeValidator $compositeValidator): void
-    {
-        $compositeValidator->addValidator(ElementalAreasValidator::create());
     }
 
     /**

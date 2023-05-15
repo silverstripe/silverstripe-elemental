@@ -2,12 +2,10 @@
 
 namespace DNADesign\Elemental\Forms;
 
-use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Control\RequestHandler;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Forms\DefaultFormFactory;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 
 class EditFormFactory extends DefaultFormFactory
@@ -37,8 +35,8 @@ class EditFormFactory extends DefaultFormFactory
         // Namespace all fields - do this after getting getFormFields so they still get populated
         $formFields = $form->Fields();
         $this->namespaceFields($formFields, $context);
-        $this->addClassNameField($formFields, $context['Record']);
         $form->setFields($formFields);
+
         return $form;
     }
 
@@ -71,18 +69,5 @@ class EditFormFactory extends DefaultFormFactory
             $namespacedName = sprintf(self::FIELD_NAMESPACE_TEMPLATE ?? '', $elementID, $field->getName());
             $field->setName($namespacedName);
         }
-    }
-
-    /**
-     * @param FieldList $formFields
-     * @param BaseElement $record
-     */
-    private function addClassNameField(FieldList $formFields, BaseElement $record)
-    {
-        $fieldName = sprintf(self::FIELD_NAMESPACE_TEMPLATE, $record->ID, 'ClassName');
-        $formFields->addFieldsToTab(
-            'Root.Main',
-            new HiddenField($fieldName, 'ClassName', get_class($record))
-        );
     }
 }

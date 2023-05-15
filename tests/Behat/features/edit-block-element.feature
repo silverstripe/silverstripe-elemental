@@ -19,13 +19,6 @@ Feature: Edit elements in the CMS
       And I should see "Alice's Block"
       And I should see "Bob's Block"
 
-  @sboyd
-  Scenario: I retain invalid values client-side
-    When I click on block 1
-    Then I should see "Alice's Block"
-    # Then I change Title
-    # and i save the page
-
   Scenario: I can edit a non in-line editable block
     Given content blocks are not in-line editable
       And I go to "/admin/pages"
@@ -76,8 +69,12 @@ Feature: Edit elements in the CMS
     When I press the "Save" button in the actions menu for block 2
       And I wait 1 second
       Then I should see a "Saved 'Charlie's Block' successfully" notice
+      And the "Content" field for block 2 should contain "New sample content"
+      And the "Title" field for block 2 should contain "Charlie's Block"
+    # The block is still expanded. Here we collapse it to see the summary.
     When I click on the caret button for block 2
       Then I should see "New sample content"
+      And I should see "Charlie's Block"
 
   @unsavedChanges
   Scenario: I can edit inline-editable blocks and save the page as a whole
@@ -97,5 +94,6 @@ Feature: Edit elements in the CMS
     When I wait 1 second
       And I click on block 2
       Then the "Content" field for block 2 should contain "<p>Alternate HTML within element 2</p>"
+      And the "Title" field for block 2 should contain "Alice's Much Improved Block"
 
 
