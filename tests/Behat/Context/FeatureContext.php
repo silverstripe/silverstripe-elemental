@@ -240,19 +240,27 @@ class FeatureContext extends SilverStripeContext
     public function theFieldForBlockShouldContain($field, $blockNumber, $negate, $content)
     {
         $block = $this->getSpecificBlock($blockNumber);
-        $field = $this->findFieldInBlock($block, $field);
-        $isTinyMCE = $field->getAttribute('data-editor') === 'tinyMCE';
+        $fieldElem = $this->findFieldInBlock($block, $field);
+        $isTinyMCE = $fieldElem->getAttribute('data-editor') === 'tinyMCE';
 
         if ($isTinyMCE) {
             $this->cmsContext->theHtmlFieldShouldContain(
-                $field->getAttribute('name'),
+                $fieldElem->getAttribute('name'),
                 $negate,
                 $content
             );
-        } elseif ($negate) {
-            $this->assertFieldNotContains($field, $content);
+            return;
+        }
+
+        $actual = (string) $fieldElem->getValue();
+        $regex = '/^' . preg_quote($content, '/') . '$/ui';
+
+        if ($negate) {
+            $message = sprintf('The field "%s" value is "%s", but "%s" expected.', $field, $actual, $content);
+            Assert::isTrue((bool) preg_match($regex, $actual), $message);
         } else {
-            $this->assertFieldContains($field, $content);
+            $message = sprintf('The field "%s" value is "%s", but it should not be.', $field, $actual);
+            Assert::isFalse((bool) preg_match($regex, $actual), $message);
         }
     }
 
