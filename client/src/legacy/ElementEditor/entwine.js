@@ -60,16 +60,29 @@ jQuery.entwine('ss', ($) => {
     },
 
     onunmatch() {
-      resetStores();
+      // Reset the store if the user navigates to a different part of the CMS
+      // or after submission if there are no validation errors
+      if (!$('.cms-edit-form').data('hasValidationErrors')) {
+        resetStores();
+      }
       ReactDOM.unmountComponentAtNode(this[0]);
     },
 
-    /**
-     * Invalidate cache after the form is submitted to force apollo to re-fetch.
-     */
     'from .cms-edit-form': {
-      onaftersubmitform() {
-        resetStores();
+      onaftersubmitform(event, data) {
+        const validationResultPjax = JSON.parse(data.xhr.responseText).ValidationResult;
+        const validationResult = JSON.parse(validationResultPjax.replace(/<\/?script[^>]*?>/g, ''));
+
+        // Reset redux store if form is succesfully submitted so apollo to refetches element data
+        // Do not reset if there are any validation errors because we want redux to hydrate the
+        // form, rather than then refetching which will return a value from the database.
+        // Instead the user should still see any modfied value they just entered.
+        if (validationResult.isValid) {
+          $('.cms-edit-form').data('hasValidationErrors', false);
+          resetStores();
+        } else {
+          $('.cms-edit-form').data('hasValidationErrors', true);
+        }
       }
     },
   });

@@ -21,7 +21,7 @@
         "php": "^7.4 || ^8.0",
         "silverstripe/framework": "^4.12@dev",
         "silverstripe/cms": "^4.7@dev",
-        "silverstripe/admin": "^1.7@dev",
+        "silverstripe/admin": "^1.13.2@dev",
         "silverstripe/versioned": "^1.7@dev",
         "silverstripe/versioned-admin": "^1.7@dev",
         "silverstripe/graphql": "^3.5 || ^4",
