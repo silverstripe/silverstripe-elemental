@@ -41,11 +41,11 @@ function makeProps(obj = {}) {
 
 test('Element should render the HeaderComponent and the ContentComponent', () => {
   const { container } = render(<Element {...makeProps()}/>);
-  expect(container.querySelector('.element-editor__element .test-header')).not.toBeNull();
-  expect(container.querySelector('.element-editor__element .test-content')).not.toBeNull();
+  expect(container.querySelectorAll('.element-editor__element .test-header')).toHaveLength(1);
+  expect(container.querySelectorAll('.element-editor__element .test-content')).toHaveLength(1);
 });
 
-test('Element should render null if no ID is given', () => {
+test('Element should not render at all if no ID is given', () => {
   const { container } = render(
     <Element {...makeProps({
       element: {
@@ -55,8 +55,7 @@ test('Element should render null if no ID is given', () => {
     })}
     />
   );
-  expect(container.querySelector('.element-editor__element .test-header')).toBeNull();
-  expect(container.querySelector('.element-editor__element .test-content')).toBeNull();
+  expect(container.querySelectorAll('.element-editor__element')).toHaveLength(0);
 });
 
 test('Element should render even if the element is broken', () => {
@@ -68,8 +67,8 @@ test('Element should render even if the element is broken', () => {
     })}
     />
   );
-  expect(container.querySelector('.element-editor__element .test-header')).not.toBeNull();
-  expect(container.querySelector('.element-editor__element .test-content')).not.toBeNull();
+  expect(container.querySelectorAll('.element-editor__element .test-header')).toHaveLength(1);
+  expect(container.querySelectorAll('.element-editor__element .test-content')).toHaveLength(1);
 });
 
 test('Element getVersionedStateClassName() should identify draft elements', () => {
@@ -82,7 +81,7 @@ test('Element getVersionedStateClassName() should identify draft elements', () =
     })}
     />
   );
-  expect(container.querySelector('.element-editor__element--draft')).not.toBeNull();
+  expect(container.querySelector('.element-editor__element').classList.contains('element-editor__element--draft')).toBe(true);
 });
 
 test('Element getVersionedStateClassName() should identify modified elements', () => {
@@ -96,7 +95,7 @@ test('Element getVersionedStateClassName() should identify modified elements', (
     })}
     />
   );
-  expect(container.querySelector('.element-editor__element--modified')).not.toBeNull();
+  expect(container.querySelectorAll('.element-editor__element--modified')).toHaveLength(1);
 });
 
 test('Element getVersionedStateClassName() should identify published elements', () => {
@@ -110,5 +109,5 @@ test('Element getVersionedStateClassName() should identify published elements', 
     })}
     />
   );
-  expect(container.querySelector('.element-editor__element--published')).not.toBeNull();
+  expect(container.querySelectorAll('.element-editor__element--published')).toHaveLength(1);
 });

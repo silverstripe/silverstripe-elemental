@@ -31,7 +31,7 @@ test('ElementActions should map input tabs into an array of buttons', () => {
   expect(actions[1].textContent).toEqual('Settings');
   expect(actions[2].textContent).toEqual('History');
   // No drop down separator should exist when there are no non-CMS actions
-  expect(container.querySelector('.dropdown-divider')).toBeNull();
+  expect(container.querySelectorAll('.dropdown-divider')).toHaveLength(0);
 });
 
 
@@ -46,7 +46,7 @@ test('ElementActions should render a divider when CMS tab actions and default ac
   expect(actions[0].textContent).toEqual('Content');
   expect(actions[1].textContent).toEqual('Settings');
   expect(actions[2].textContent).toEqual('History');
-  expect(container.querySelector('.dropdown-divider')).not.toBeNull();
+  expect(container.querySelectorAll('.dropdown-divider')).toHaveLength(1);
   expect(actions[3].textContent).toEqual('some button');
 });
 

@@ -18,7 +18,7 @@ function makeProps(obj = {}) {
 
 test('AbstractAction renders a DropdownItem', () => {
   const { container } = render(<AbstractAction {...makeProps()}/>);
-  expect(container.querySelector('.dropdown-item')).not.toBeNull();
+  expect(container.querySelectorAll('.dropdown-item')).toHaveLength(1);
 });
 
 test('AbstractAction includes the title text', () => {

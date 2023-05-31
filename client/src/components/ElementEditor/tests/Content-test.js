@@ -19,9 +19,9 @@ function makeProps(obj = {}) {
 
 test('Content should render the Summary component if the preview is not expanded', () => {
   const { container } = render(<Content {...makeProps()} />);
-  expect(container.querySelector('.element-editor-content')).not.toBeNull();
-  expect(container.querySelector('.test-inline-edit-form')).toBeNull();
-  expect(container.querySelector('.test-summary')).not.toBeNull();
+  expect(container.querySelectorAll('.element-editor-content')).toHaveLength(1);
+  expect(container.querySelectorAll('.test-inline-edit-form')).toHaveLength(0);
+  expect(container.querySelectorAll('.test-summary')).toHaveLength(1);
 });
 
 test('Content should render the InlineEditForm component if the preview is expanded', () => {
@@ -31,12 +31,12 @@ test('Content should render the InlineEditForm component if the preview is expan
     })}
     />
   );
-  expect(container.querySelector('.element-editor-content')).not.toBeNull();
-  expect(container.querySelector('.test-inline-edit-form')).not.toBeNull();
-  expect(container.querySelector('.test-summary')).toBeNull();
+  expect(container.querySelectorAll('.element-editor-content')).toHaveLength(1);
+  expect(container.querySelectorAll('.test-inline-edit-form')).toHaveLength(1);
+  expect(container.querySelectorAll('.test-summary')).toHaveLength(0);
 });
 
-test('Content returns a div when no content or image is provided', () => {
+test('Content renders even when no content or image is provided', () => {
   const { container } = render(
     <Content {...makeProps({
       fileUrl: '',
@@ -44,7 +44,7 @@ test('Content returns a div when no content or image is provided', () => {
     })}
     />
   );
-  expect(container.querySelector('.element-editor-content')).not.toBeNull();
-  expect(container.querySelector('.test-inline-edit-form')).not.toBeNull();
-  expect(container.querySelector('.test-summary')).toBeNull();
+  expect(container.querySelectorAll('.element-editor-content')).toHaveLength(1);
+  expect(container.querySelectorAll('.test-inline-edit-form')).toHaveLength(1);
+  expect(container.querySelectorAll('.test-summary')).toHaveLength(0);
 });

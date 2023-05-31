@@ -56,7 +56,7 @@ function makeProps(obj = {}) {
 test('ElementList renders elements when blocks are provided as props', () => {
   const { container } = render(<ElementList {...makeProps()}/>);
   expect(container.querySelectorAll('.test-element')).toHaveLength(2);
-  expect(container.querySelector('.test-loading')).toBeNull();
+  expect(container.querySelectorAll('.test-loading')).toHaveLength(0);
 });
 
 test('ElementList renders a loading component', () => {
@@ -68,8 +68,8 @@ test('ElementList renders a loading component', () => {
     })}
     />
   );
-  expect(container.querySelector('.test-element')).toBeNull();
-  expect(container.querySelector('.test-loading')).not.toBeNull();
+  expect(container.querySelectorAll('.test-element')).toHaveLength(0);
+  expect(container.querySelectorAll('.test-loading')).toHaveLength(1);
 });
 
 test('ElementList renders a placeholder message when no elements are provided as props', () => {
@@ -81,8 +81,8 @@ test('ElementList renders a placeholder message when no elements are provided as
     })}
     />
   );
-  expect(container.querySelector('.test-element')).toBeNull();
-  expect(container.querySelector('.test-loading')).toBeNull();
+  expect(container.querySelectorAll('.test-element')).toHaveLength(0);
+  expect(container.querySelectorAll('.test-loading')).toHaveLength(0);
   const placeholder = container.querySelector('.elemental-editor-list--empty');
   expect(placeholder.textContent).toBe('Add blocks to place your content');
 });
