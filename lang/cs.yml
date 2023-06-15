@@ -21,6 +21,7 @@ cs:
     SettingsTabLabel: Nastavení
     SINGULARNAME: blok
     STYLE: 'Varianta stylu'
+    db_Title: Titulek
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Obsah
     ContentLabel: Obsah

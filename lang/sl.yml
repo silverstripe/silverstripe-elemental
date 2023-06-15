@@ -22,6 +22,7 @@ sl:
     SINGULARNAME: Gradnik
     STYLE: 'Stilna različica'
     SettingsTabLabel: Nastavitve
+    db_Title: Naslov
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Besedilo
     ContentLabel: Oznaka

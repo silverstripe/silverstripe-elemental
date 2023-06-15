@@ -8,6 +8,7 @@ hr:
     PLURALNAME: blokovi
     SINGULARNAME: blok
     STYLE: 'Stil varijanta'
+    db_Title: Naslov
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Sadržaj
     ContentLabel: Sadržaj

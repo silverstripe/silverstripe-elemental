@@ -12,6 +12,7 @@ fr:
       many: '{count} blocs'
     SINGULARNAME: bloc
     STYLE: 'Variation de style'
+    db_Title: Titre
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Contenu
     ContentLabel: Contenu

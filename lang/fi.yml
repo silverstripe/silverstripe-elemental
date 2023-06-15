@@ -20,6 +20,7 @@ fi:
     SettingsTabLabel: Asetukset
     SINGULARNAME: palikka
     STYLE: Tyylivariaatio
+    db_Title: Otsikko
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Sisältö
     ContentLabel: Sisältö
