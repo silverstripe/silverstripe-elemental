@@ -20,6 +20,7 @@ de:
     SettingsTabLabel: Einstellungen
     SINGULARNAME: Block
     STYLE: Stilvariation
+    db_Title: Titel
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Inhalt
     ContentLabel: Inhalt

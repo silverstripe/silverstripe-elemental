@@ -14,6 +14,7 @@ nl:
     SINGULARNAME: blok
     STYLE: 'Stijl variatie'
     SettingsTabLabel: Instellingen
+    db_Title: Titel
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Inhoud
     ContentLabel: Inhoud
