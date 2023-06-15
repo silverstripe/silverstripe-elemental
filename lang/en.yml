@@ -20,6 +20,14 @@ en:
     SINGULARNAME: block
     STYLE: 'Style variation'
     SettingsTabLabel: Settings
+    db_ExtraClass: 'Extra class'
+    db_ShowTitle: 'Show title'
+    db_Sort: Sort
+    db_Style: Style
+    db_Title: Title
+    db_Version: Version
+    has_one_Parent: Parent
+    has_one_TopPage: 'Top page'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Content
     ContentLabel: Content
@@ -28,12 +36,17 @@ en:
       one: 'A content block'
       other: '{count} content blocks'
     SINGULARNAME: 'content block'
+    db_HTML: HTML
   DNADesign\Elemental\Models\ElementalArea:
     PLURALNAME: 'Elemental Areas'
     PLURALS:
       one: 'An Elemental Area'
       other: '{count} Elemental Areas'
     SINGULARNAME: 'Elemental Area'
+    db_OwnerClassName: 'Owner class name'
+    db_Version: Version
+    has_many_Elements: Elements
+    has_one_TopPage: 'Top page'
   DNADesign\Elemental\Reports\ElementTypeReport:
     Title: 'Content block types'
     Total: Total
@@ -45,3 +58,11 @@ en:
     Summary: Summary
     Title: Title
     Type: Type
+  DNADesign\Elemental\Extensions\ElementalPageExtension:
+    has_one_ElementalArea: 'Elemental area'
+  DNADesign\Elemental\TopPage\DataExtension:
+    has_one_TopPage: 'Top page'
+  DNADesign\Elemental\TopPage\FluentExtension:
+    db_TopPageLocale: 'Top page locale'
+  SilverStripe\CMS\Controllers\CMSPageHistoryController:
+    PREVIEW: 'Website preview'
