@@ -1,8 +1,8 @@
 /* global jest, test, describe, beforeEach, it, expect */
 
 import React from 'react';
-import ElementalAreaHistoryFactory from '../HistoricElementView';
 import { render } from '@testing-library/react';
+import ElementalAreaHistoryFactory from '../HistoricElementView';
 
 function makeProps(obj = {}) {
   return {
@@ -21,9 +21,11 @@ class FieldGroupStub extends React.Component {
   getLegend() {
     return 'nah';
   }
+
   getClassName() {
     return 'ok';
   }
+
   render() {
     return <div className="test-field-group-stub">Group</div>;
   }

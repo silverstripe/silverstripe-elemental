@@ -2,8 +2,8 @@
 /* global jest, test, describe, it, expect */
 
 import React from 'react';
-import Summary from '../Summary';
 import { render } from '@testing-library/react';
+import Summary from '../Summary';
 
 function makeProps(obj = {}) {
   return {

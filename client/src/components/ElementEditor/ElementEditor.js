@@ -132,20 +132,20 @@ const elementFormSelector = createSelector([
   (state) => {
     const elementFormState = state.form.formState.element;
 
-  if (!elementFormState) {
-    return {};
-  }
+    if (!elementFormState) {
+      return {};
+    }
 
-  return elementFormState;
+    return elementFormState;
   }], (elementFormState) => {
-    const formNamePattern = loadElementFormStateName('[0-9]+');
+  const formNamePattern = loadElementFormStateName('[0-9]+');
 
   return Object.keys(elementFormState)
-  .filter(key => key.match(formNamePattern))
-  .reduce((accumulator, key) => ({
-    ...accumulator,
-    [key]: elementFormState[key].values
-  }), {});
+    .filter(key => key.match(formNamePattern))
+    .reduce((accumulator, key) => ({
+      ...accumulator,
+      [key]: elementFormState[key].values
+    }), {});
 });
 
 function mapStateToProps(state) {
@@ -173,4 +173,3 @@ export default compose(
   ),
   sortBlockMutation
 )(ElementEditor);
-

@@ -121,11 +121,11 @@ class Element extends Component {
    * Prevents the Element from being expanded in case a loading error occurred.
    * This gets triggered from the InlineEditForm component.
    */
-   handleLoadingError() {
+  handleLoadingError() {
     this.setState({
       loadingError: true
     });
-   }
+  }
 
   /**
    * Dispatcher to Tabs redux store for this element's tabset
@@ -187,9 +187,9 @@ class Element extends Component {
     }
 
     if (type.inlineEditable && !loadingError) {
-      this.setState({
-        previewExpanded: !this.state.previewExpanded
-      });
+      this.setState((prevState) => ({
+        previewExpanded: !prevState.previewExpanded
+      }));
       return;
     }
 
@@ -325,9 +325,7 @@ function mapStateToProps(state, ownProps) {
     state.tabs &&
     state.tabs.fields &&
     state.tabs.fields[uniqueFieldId] &&
-    state.tabs.fields[uniqueFieldId].activeTab
-  ;
-
+    state.tabs.fields[uniqueFieldId].activeTab;
   return {
     tabSetName,
     activeTab,

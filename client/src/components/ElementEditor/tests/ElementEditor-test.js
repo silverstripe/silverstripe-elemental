@@ -2,8 +2,8 @@
 /* global jest, test, describe, it, expect */
 
 import React from 'react';
-import { Component as ElementEditor } from '../ElementEditor';
 import { render, screen } from '@testing-library/react';
+import { Component as ElementEditor } from '../ElementEditor';
 
 function makeProps(obj = {}) {
   return {

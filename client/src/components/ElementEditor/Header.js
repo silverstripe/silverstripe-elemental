@@ -15,7 +15,6 @@ import getFormState from 'lib/getFormState';
 import { elementDragSource } from 'lib/dragHelpers';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
-
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -79,11 +78,10 @@ class Header extends Component {
     );
   }
 
-
   toggle() {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen
-    });
+    this.setState((prevState) => ({
+      tooltipOpen: !prevState.tooltipOpen
+    }));
   }
 
   /**

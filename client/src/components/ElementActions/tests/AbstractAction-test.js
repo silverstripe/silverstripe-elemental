@@ -2,8 +2,8 @@
 /* global jest, test, describe, it, expect */
 
 import React from 'react';
-import AbstractAction from '../AbstractAction';
 import { render, fireEvent } from '@testing-library/react';
+import AbstractAction from '../AbstractAction';
 
 function makeProps(obj = {}) {
   return {

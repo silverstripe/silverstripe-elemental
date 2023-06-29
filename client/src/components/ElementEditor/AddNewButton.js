@@ -17,9 +17,9 @@ class AddNewButton extends Component {
   }
 
   toggle() {
-    this.setState({
-      popoverOpen: !this.state.popoverOpen
-    });
+    this.setState((prevState) => ({
+      popoverOpen: !prevState.popoverOpen,
+    }));
   }
 
   /**
