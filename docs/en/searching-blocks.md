@@ -40,3 +40,33 @@ to make it clear in search results where one piece of content ends and another b
 Page:
   search_index_element_delimiter: ' ... '
 ```
+
+## CMS page search
+
+CMS page search will include search results for pages with elements that match the search query.
+
+By default it uses the same method as the search indexing where it will fully render every element that is
+being searched. This is an expensive operation and can cause performance issues if you have a large site with a lot of elements.
+
+To increase performance by a large amount, likely more than doubling it, you can disable the rendering of elements and instead just look at the database values of the elements directly.
+
+```yml
+DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch:
+  render_elements: false
+```
+
+If `render_elements` is `false`, then all fields that have stored as a Varchar or Text like are searched. Individual fields on blocks can be excluded from the search by adding fields to the `exclude_fields_from_cms_search` array config variable on the element class. e.g.
+
+```yml
+App\MyElement:
+  fields_excluded_from_cms_search:
+    - MyFieldToExclude
+    - AnotherFieldToExclude
+```
+
+If the above is still not performant enough, searching elements for content in CMS page search can be disabled entirely:
+
+```yml
+DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch:
+  search_for_term_in_content: false
+```

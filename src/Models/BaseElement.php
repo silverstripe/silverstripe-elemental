@@ -33,6 +33,8 @@ use SilverStripe\View\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\CMSPreviewable;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\ORM\DataObjectSchema;
 
 /**
  * Class BaseElement
@@ -65,6 +67,14 @@ class BaseElement extends DataObject implements CMSPreviewable
      * @var string
      */
     private static $description = 'Base element class';
+
+    /**
+     * List of fields to exclude from CMS SiteTree seatch
+     * @see ElementSiteTreeFilterSearch::applyDefaultFilters()
+     */
+    private static array $fields_excluded_from_cms_search = [
+        'ExtraClass',
+    ];
 
     private static $db = [
         'Title' => 'Varchar(255)',
@@ -526,6 +536,59 @@ JS
         // Allow projects to update indexable content of third-party elements.
         $this->extend('updateContentForSearchIndex', $content);
         return $content;
+    }
+
+    /**
+     * Provides content for CMS search if ElementSiteTreeFilterSearch.render_elements is false
+     */
+    public function getContentForCmsSearch(): string
+    {
+        $fieldNames = $this->getTextualDatabaseFieldNames();
+        $excludedFieldNames = $this->getFieldNamesExcludedFromCmsSearch();
+        $contents = [];
+        foreach ($fieldNames as $fieldName) {
+            if (in_array($fieldName, $excludedFieldNames)) {
+                continue;
+            }
+            $contents[] = $this->$fieldName;
+        }
+        // Allow projects to update contents of third-party elements.
+        $this->extend('updateContentForCmsSearch', $contents);
+        
+        // Use |#| to delimit different fields rather than space so that you don't
+        // accidentally join results of two columns that are next to each other in a table
+        $content = implode('|#|', array_filter($contents));
+
+        // Strips tags and be sure there's a space between words.
+        $content = trim(strip_tags(str_replace('<', ' <', $content)));
+
+        return $content;
+    }
+
+    /**
+     * Get field names that have a Varchar or Text like type in the database
+     */
+    private function getTextualDatabaseFieldNames(): array
+    {
+        $fieldNames = [];
+        $textualDatabaseFields = DataObject::getSchema()->databaseFields($this);
+        foreach ($textualDatabaseFields as $fieldName => $databaseFieldType) {
+            $lcType = strtolower(strtok($databaseFieldType ?? '', '('));
+            if (str_contains($lcType, 'varchar') || str_contains($lcType, 'text')) {
+                $fieldNames[] = $fieldName;
+            }
+        }
+        return $fieldNames;
+    }
+
+    private function getFieldNamesExcludedFromCmsSearch(): array
+    {
+        return [
+            // `fixed_fields` contains ['ID', 'ClassName', 'LastEdited', 'Created'] and possibly more
+            ...array_keys(static::config()->get('fixed_fields')),
+            // manually excluded fields
+            ...static::config()->get('fields_excluded_from_cms_search')
+        ];
     }
 
     /**

@@ -17,3 +17,12 @@ DNADesign\Elemental\Models\ElementContent:
     Title: Content
     HTML: Specifically blocks page content
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.blocks_page_area
+    MyInt: 123
+    MyEnum: Cloudy
+  blocks_page_unrendered_content:
+    Title: My title
+    HTML: This content is rendered
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.blocks_page_area
+    UnrenderedField: This field is unrendered
+    MyInt: 456
+    MyEnum: Sunny

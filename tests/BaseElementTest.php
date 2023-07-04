@@ -495,4 +495,12 @@ class BaseElementTest extends FunctionalTest
             $this->assertSame($link, $previewLink);
         }
     }
+
+    public function testGetContentForCmsSearch()
+    {
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+        $this->assertSame('Test Content', $element->getContentForCmsSearch());
+        $element = $this->objFromFixture(TestElement::class, 'elementDataObject3');
+        $this->assertSame('Hello Test|#|Element 3', $element->getContentForCmsSearch());
+    }
 }

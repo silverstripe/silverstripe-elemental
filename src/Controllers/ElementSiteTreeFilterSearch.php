@@ -21,6 +21,11 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
     private static $search_for_term_in_content = true;
 
     /**
+     * Whether to render elements with templates when doing a CMS SiteTree search
+     */
+    private static bool $render_elements = true;
+
+    /**
      * @var array
      */
     private $extraTermFilters = [];
@@ -47,8 +52,13 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
                 return false;
             }
 
-            // Check whether the search term exists in the nested page content
-            $pageContent = $siteTree->getElementsForSearch();
+            if ($this->config()->get('render_elements') === true) {
+                // Check whether the search term exists in the nested page content
+                $pageContent = $siteTree->getElementsForSearch();
+            } else {
+                $pageContent = $siteTree->getContentFromElementsForCmsSearch();
+            }
+
             return stripos($pageContent ?? '', $this->params['Term'] ?? '') !== false;
         });
 
