@@ -39,6 +39,13 @@ class ElementalPageExtension extends ElementalAreasExtension
     private static $search_index_element_delimiter = ' ';
 
     /**
+     * Used to cache all ElementalArea's prior to eager loading elements
+     *
+     * @internal
+     */
+    private static ?array $elementalAreas = null;
+
+    /**
      * Returns the contents of each ElementalArea has_one's markup for use in Solr or Elastic search indexing
      *
      * @return string
@@ -49,14 +56,17 @@ class ElementalPageExtension extends ElementalAreasExtension
         SSViewer::set_themes(SSViewer::config()->get('themes'));
         try {
             $output = [];
-            $this->loopThroughElements(function (BaseElement $element) use (&$output) {
-                if ($element->getSearchIndexable()) {
-                    $content = $element->getContentForSearchIndex();
-                    if ($content) {
-                        $output[] = $content;
-                    }
+            $elements = $this->getEagerLoadedElements();
+            /** @var BaseElement $element */
+            foreach ($elements as $element) {
+                if (!$element->getSearchIndexable()) {
+                    continue;
                 }
-            });
+                $content = $element->getContentForSearchIndex();
+                if ($content) {
+                    $output[] = $content;
+                }
+            }
         } finally {
             // Reset theme if an exception occurs, if you don't have a
             // try / finally around code that might throw an Exception,
@@ -64,6 +74,28 @@ class ElementalPageExtension extends ElementalAreasExtension
             SSViewer::set_themes($oldThemes);
         }
         return implode($this->owner->config()->get('search_index_element_delimiter') ?? '', $output);
+    }
+
+    /**
+     * Returns the contents of all Elements on the pages ElementalAreas for use in CMS search
+     */
+    public function getContentFromElementsForCmsSearch(): string
+    {
+        $output = [];
+        $elements = $this->getEagerLoadedElements();
+        /** @var BaseElement $element */
+        foreach ($elements as $element) {
+            if (!$element->getSearchIndexable()) {
+                continue;
+            }
+            $content = $element->getContentForCmsSearch();
+            if ($content) {
+                $output[] = $content;
+            }
+        }
+        // Use |%| to delimite different elements rather than space so that you don't
+        // accidentally join results of two elements that are next to each other in a table
+        return implode('|%|', $output);
     }
 
     /**
@@ -96,6 +128,32 @@ class ElementalPageExtension extends ElementalAreasExtension
             }
             $tags = $html->getContent();
         }
+    }
+
+    private function getEagerLoadedElements(): array
+    {
+        $elements = [];
+        if (is_null(self::$elementalAreas)) {
+            self::$elementalAreas = [];
+            foreach (ElementalArea::get()->eagerLoad('Elements') as $elementalArea) {
+                self::$elementalAreas[$elementalArea->ID] = $elementalArea;
+            }
+        }
+        foreach ($this->owner->hasOne() as $relation => $class) {
+            if (!is_a($class, ElementalArea::class, true)) {
+                continue;
+            }
+            $elementalAreaID = $this->owner->{"{$relation}ID"};
+            if ($elementalAreaID && array_key_exists($elementalAreaID, self::$elementalAreas)) {
+                $elementalArea = self::$elementalAreas[$elementalAreaID];
+            } else {
+                $elementalArea = $this->owner->$relation();
+            }
+            foreach ($elementalArea->Elements() as $element) {
+                $elements[] = $element;
+            }
+        }
+        return $elements;
     }
 
     /**
