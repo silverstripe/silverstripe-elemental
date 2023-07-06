@@ -482,9 +482,17 @@ class BaseElementTest extends FunctionalTest
         /** @var BaseElement $element */
         $element = $this->objFromFixture($class, $elementIdentifier);
         $previewLink = $element->PreviewLink();
+        // Remove SubsiteID from preview link in case subsites is installed
+        $rx = '/[?|&]SubsiteID=[0-9]+/';
+        if (preg_match($rx, $previewLink)) {
+            $previewLink = preg_replace($rx, '', $previewLink);
+        }
 
         if ($link) {
-            $regex = '/^' . preg_quote($link, '/') . '[?&]' . preg_quote('ElementalPreview=', '/')
+            // Note that the preview link is suffixed with forward slash when subsites is installed
+            // because of BaseElementSubsites::updatePreviewLink() use of HTTP::setGetVar()
+            // which turns relative urls to absolute urls
+            $regex = '/^\/?' . preg_quote($link, '/') . '[?&]' . preg_quote('ElementalPreview=', '/')
                 .'\d*#' . $element->getAnchor() . '$/';
             $this->assertMatchesRegularExpression($regex, $previewLink);
             // Doesn't try to blindly append query string and anchor - but instead merges intelligently with
@@ -492,7 +500,7 @@ class BaseElementTest extends FunctionalTest
             $this->assertSame(1, substr_count($previewLink, '?'));
             $this->assertSame(1, substr_count($previewLink, '#'));
         } else {
-            $this->assertSame($link, $previewLink);
+            $this->assertEmpty(rtrim($previewLink ?? '', '/'));
         }
     }
 
