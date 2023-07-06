@@ -481,7 +481,7 @@ class BaseElementTest extends FunctionalTest
     {
         /** @var BaseElement $element */
         $element = $this->objFromFixture($class, $elementIdentifier);
-        $previewLink = $element->PreviewLink();
+        $previewLink = $element->PreviewLink() ?? '';
         // Remove SubsiteID from preview link in case subsites is installed
         $rx = '/[?|&]SubsiteID=[0-9]+/';
         if (preg_match($rx, $previewLink)) {
