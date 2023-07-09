@@ -2,8 +2,8 @@
 /* global jest, test, describe, it, expect */
 
 import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Component as Header } from '../Header';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 // Fixes issue when rendering reactstrap tooltip
 // Warning: `NaN` is an invalid value for the `left` css style property.

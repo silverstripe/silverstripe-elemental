@@ -2,8 +2,8 @@
 /* global jest, test, describe, it, expect */
 
 import React from 'react';
-import { Component as DuplicateAction } from '../DuplicateAction';
 import { render } from '@testing-library/react';
+import { Component as DuplicateAction } from '../DuplicateAction';
 
 const WrappedComponent = (props) => <div>{props.children}</div>;
 const ActionComponent = DuplicateAction(WrappedComponent);

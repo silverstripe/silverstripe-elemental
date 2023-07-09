@@ -2,8 +2,8 @@
 /* global jest, test, describe, it, expect, window */
 
 import React from 'react';
-import { Component as UnpublishAction } from '../UnpublishAction';
 import { fireEvent, render } from '@testing-library/react';
+import { Component as UnpublishAction } from '../UnpublishAction';
 
 window.jQuery = {
   noticeAdd: jest.fn()

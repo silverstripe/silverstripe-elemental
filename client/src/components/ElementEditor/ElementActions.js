@@ -24,9 +24,8 @@ class ElementActions extends Component {
    */
   handleEditTabsClick(event) {
     const { handleEditTabsClick } = this.props;
-     handleEditTabsClick(event.target.name);
+    handleEditTabsClick(event.target.name);
   }
-
 
   /**
    * Render buttons for the edit form tabs that will be a part of the edit form (if they exist)
@@ -80,7 +79,6 @@ class ElementActions extends Component {
   render() {
     const { children, id, ActionMenuComponent } = this.props;
 
-
     const dropdownToggleClassNames = [
       'element-editor-header__actions-toggle',
       'btn',
@@ -92,7 +90,7 @@ class ElementActions extends Component {
     return (
       <ActionMenuComponent
         id={`element-editor-actions-${id}`}
-        className={'element-editor-header__actions-dropdown'}
+        className="element-editor-header__actions-dropdown"
         dropdownMenuProps={{ right: true }}
         dropdownToggleClassNames={dropdownToggleClassNames}
       >
@@ -136,4 +134,3 @@ export default compose(
     () => 'ElementEditor.ElementList.Element'
   )
 )(ElementActions);
-

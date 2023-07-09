@@ -1,10 +1,10 @@
 /* global window */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import prefixClassNames from '../../lib/prefixClassNames';
 import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
 import i18n from 'i18n';
+import prefixClassNames from '../../lib/prefixClassNames';
 
 const classNames = prefixClassNames('element-editor__hover-bar');
 
@@ -63,9 +63,9 @@ class HoverBar extends Component {
   }
 
   toggle() {
-    this.setState({
-      popoverOpen: !this.state.popoverOpen
-    });
+    this.setState((prevState) => ({
+      popoverOpen: !prevState.popoverOpen
+    }));
   }
 
   render() {
@@ -77,7 +77,6 @@ class HoverBar extends Component {
     return <StatelessHoverBar {...props} />;
   }
 }
-
 
 HoverBar.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,

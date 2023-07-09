@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* global jest, test, describe, it, expect, window */
 import React from 'react';
-import { Component as PublishAction } from '../PublishAction';
 import { fireEvent, render } from '@testing-library/react';
+import { Component as PublishAction } from '../PublishAction';
 
 jest.mock('isomorphic-fetch', () =>
   () => Promise.resolve({

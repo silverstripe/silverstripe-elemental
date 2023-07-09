@@ -2,9 +2,9 @@
 /* global jest, test, describe, it, expect */
 
 import React from 'react';
-import { Component as ElementActions } from '../ElementActions';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import { render } from '@testing-library/react';
+import { Component as ElementActions } from '../ElementActions';
 
 function makeProps(obj = {}) {
   return {
@@ -33,7 +33,6 @@ test('ElementActions should map input tabs into an array of buttons', () => {
   // No drop down separator should exist when there are no non-CMS actions
   expect(container.querySelectorAll('.dropdown-divider')).toHaveLength(0);
 });
-
 
 test('ElementActions should render a divider when CMS tab actions and default actions are rendered', () => {
   const { container } = render(

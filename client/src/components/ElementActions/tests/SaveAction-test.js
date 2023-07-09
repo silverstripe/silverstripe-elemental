@@ -2,8 +2,8 @@
 /* global jest, test, describe, it, expect */
 
 import React from 'react';
-import { Component as SaveAction } from '../SaveAction';
 import { render } from '@testing-library/react';
+import { Component as SaveAction } from '../SaveAction';
 
 jest.mock('isomorphic-fetch', () =>
   () => Promise.resolve({

@@ -2,8 +2,8 @@
 /* global jest, test, describe, it, expect */
 
 import React from 'react';
-import { Component as ArchiveAction } from '../ArchiveAction';
 import { render, fireEvent } from '@testing-library/react';
+import { Component as ArchiveAction } from '../ArchiveAction';
 
 const WrappedComponent = (props) => <div>{props.children}</div>;
 const ActionComponent = ArchiveAction(WrappedComponent);
