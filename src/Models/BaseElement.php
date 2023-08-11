@@ -899,13 +899,42 @@ JS
     }
 
     /**
+     * @param boolean $directLink
+     * @param integer|null $elementID
+     * @return void
+     * @throws \SilverStripe\ORM\ValidationException
+     */
+    public function MovedElementCMSLink(bool $directLink, int $elementID = null)
+    {
+        // Allow for repeated calls to be returned from cache
+        if (isset($this->cacheData['cms_edit_link'])) {
+            return $this->cacheData['cms_edit_link'];
+        }
+
+        $link = $this->getElementCMSLink($directLink, $elementID);
+        $this->extend('updateCMSEditLink', $link);
+
+        if ($link) {
+            $this->cacheData['cms_edit_link'] = $link;
+        }
+
+        return $link;
+    }
+
+    /**
      * @param bool $directLink
+     * @param int $elementID
      * @return null|string
      */
-    private function getElementCMSLink(bool $directLink)
+    private function getElementCMSLink(bool $directLink, int $elementID = null)
     {
         $relationName = $this->getAreaRelationName();
-        $page = $this->getPage();
+        if ($elementID) {
+            $element = BaseElement::get_by_id($elementID);
+            $page = $element->getPage();
+        } else {
+            $page = $this->getPage();
+        }
 
         $link = null;
 

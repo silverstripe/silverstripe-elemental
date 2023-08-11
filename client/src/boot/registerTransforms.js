@@ -9,6 +9,7 @@ import DuplicateAction from 'components/ElementActions/DuplicateAction';
 import PublishAction from 'components/ElementActions/PublishAction';
 import SaveAction from 'components/ElementActions/SaveAction';
 import UnpublishAction from 'components/ElementActions/UnpublishAction';
+import MoveAction from 'components/ElementActions/MoveAction';
 
 export default () => {
   Injector.transform(
@@ -79,6 +80,7 @@ export default () => {
     updater.component('ElementActions', PublishAction, 'ElementActionsWithPublish');
     updater.component('ElementActions', UnpublishAction, 'ElementActionsWithUnpublish');
     updater.component('ElementActions', DuplicateAction, 'ElementActionsWithDuplicate');
+    updater.component('ElementActions', MoveAction, 'ElementActionsWithMove');
     updater.component('ElementActions', ArchiveAction, 'ElementActionsWithArchive');
   });
 };
