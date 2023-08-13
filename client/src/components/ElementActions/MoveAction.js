@@ -13,8 +13,7 @@ import i18n from 'i18n';
 const MoveAction = (MenuComponent) => (props) => {
   const FormBuilderModal = loadComponent('FormBuilderModal');
   const [modalOpen, setModalOpen] = useState(false);
-  // const { element: { id }, isPublished, actions: { handleMoveBlock } } = props;
-  const { element: { id } } = props;
+  const { element: { id }, actions: { handleMoveBlock } } = props;
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -23,7 +22,13 @@ const MoveAction = (MenuComponent) => (props) => {
   };
 
   const closeModal = () => {
-    // TODO: refetch the elemental list when the modal is closed
+    if (handleMoveBlock) {
+      handleMoveBlock(id).then(() => {
+        const preview = window.jQuery('.cms-preview');
+        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+      });
+    }
+
     setModalOpen(false);
   };
 

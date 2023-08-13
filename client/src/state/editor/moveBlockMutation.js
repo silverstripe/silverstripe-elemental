@@ -15,11 +15,9 @@ mutation MoveBlock($blockId:ID!) {
 
 const config = {
   props: ({ mutate, ownProps: { actions } }) => {
-    const handleMoveBlock = (blockId, fromPageId, toPageId) => mutate({
+    const handleMoveBlock = (blockId) => mutate({
       variables: {
         blockId,
-        fromPageId,
-        toPageId,
       },
     });
 

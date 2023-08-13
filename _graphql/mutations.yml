@@ -7,3 +7,6 @@
 'sortBlock(id: ID!, afterBlockID: ID!)':
   model: DNADesign\Elemental\Models\BaseElement
   description: Changes the sort position of an element
+'moveBlock(id: ID!)':
+  model: DNADesign\Elemental\Models\BaseElement
+  description: Move an element to another page
