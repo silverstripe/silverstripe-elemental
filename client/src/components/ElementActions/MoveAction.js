@@ -44,7 +44,7 @@ const MoveAction = (MenuComponent) => (props) => {
     disabled,
     className: 'element-editor__actions-move',
     onClick: handleClick,
-    toggle: props.toggle, // todo: what is this?
+    toggle: props.toggle,
   };
 
   const modalSchemaUrl = `${getConfig().form.elementForm.moveModalSchemaUrl}/${id}`;

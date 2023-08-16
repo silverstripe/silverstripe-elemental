@@ -4,6 +4,7 @@ namespace DNADesign\Elemental\Forms;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\Controller;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
@@ -23,7 +24,7 @@ class MoveElementHandler
      *
      * @var Controller
      */
-    protected $controller;
+    protected ?Controller $controller;
 
     public function __construct($controller = null)
     {
@@ -35,7 +36,11 @@ class MoveElementHandler
         $fields = FieldList::create([
             LiteralField::create(
                 'MoveWarning',
-                '<p class="alert alert-info"><strong>Note</strong>: All published blocks will changed draft state once moved.</p>'
+                '<p class="alert alert-info">' .
+                '<strong>Note</strong>: All published blocks will changed draft state once moved. ' .
+                'If you would like to copy this block to another page, duplicate this block and then ' .
+                'move the duplicate.' .
+                '</p>'
             ),
             HiddenField::create(
                 'ElementID',
@@ -80,7 +85,8 @@ class MoveElementHandler
         if (!$page->ElementalArea()->exists()) {
             throw $this->validationResult(_t(
                 __CLASS__ . '.ElementalAreaNotFound',
-                'Could not find an elemental area on <strong>{PageName}</strong> to move <strong>{BlockName}</strong> to',
+                'Could not find an elemental area on <strong>{PageName}</strong> to move ' .
+                '<strong>{BlockName}</strong> to',
                 [
                     'PageName' => $page->Title,
                     'BlockName' => $element->Title
@@ -91,7 +97,8 @@ class MoveElementHandler
         if (!$page->canEdit() || !$element->canEdit()) {
             throw $this->validationResult(_t(
                 __CLASS__ . '.InsufficientPermissions',
-                'Can not move <strong>{PageName}</strong> to <strong>{BlockName}</strong> due to insufficient permissions',
+                'Can not move <strong>{PageName}</strong> to <strong>{BlockName}</strong> due to ' .
+                'insufficient permissions',
                 [
                     'PageName' => $page->Title,
                     'BlockName' => $element->Title
