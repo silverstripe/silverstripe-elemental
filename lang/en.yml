@@ -1,6 +1,8 @@
 en:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Edit Page'
+  DNADesign\Elemental\Extensions\ElementalPageExtension:
+    has_one_ElementalArea: 'Elemental area'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Displayed
     NOT_DISPLAYED: 'Not displayed'
@@ -58,8 +60,6 @@ en:
     Summary: Summary
     Title: Title
     Type: Type
-  DNADesign\Elemental\Extensions\ElementalPageExtension:
-    has_one_ElementalArea: 'Elemental area'
   DNADesign\Elemental\TopPage\DataExtension:
     has_one_TopPage: 'Top page'
   DNADesign\Elemental\TopPage\FluentExtension:

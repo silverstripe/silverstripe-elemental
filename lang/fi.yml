@@ -2,11 +2,11 @@ fi:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Muokkaa sivua'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
-    ShowTitleLabel: Näytetään
-    TitleLabel: 'Otsikko (näytetään, jos valittu)'
     DISPLAYED: Näytetään
     NOT_DISPLAYED: 'Ei näytetä'
+    ShowTitleLabel: Näytetään
     Title: Otsikko
+    TitleLabel: 'Otsikko (näytetään, jos valittu)'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Palikka
     CUSTOM_STYLES: 'Valitse tyyli..'
@@ -17,9 +17,9 @@ fi:
     PLURALS:
       one: Palikka
       other: '{count} palikkaa'
-    SettingsTabLabel: Asetukset
     SINGULARNAME: palikka
     STYLE: Tyylivariaatio
+    SettingsTabLabel: Asetukset
     db_Title: Otsikko
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Sisältö
