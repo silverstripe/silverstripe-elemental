@@ -37,7 +37,7 @@ class MoveElementHandler
             LiteralField::create(
                 'MoveWarning',
                 '<p class="alert alert-info">' .
-                '<strong>Note</strong>: All published blocks will changed draft state once moved. ' .
+                '<strong>Note</strong>: All published blocks will change to draft state once moved. ' .
                 'If you would like to copy this block to another page, duplicate this block and then ' .
                 'move the duplicate.' .
                 '</p>'
