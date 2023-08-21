@@ -1,6 +1,12 @@
 nl:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Pagina Bewerken'
+  DNADesign\Elemental\Forms\TextCheckboxGroupField:
+    DISPLAYED: Weergegeven
+    NOT_DISPLAYED: 'Niet weergegeven'
+    ShowTitleLabel: Weergegeven
+    Title: Titel
+    TitleLabel: 'Titel (aanvinken om te tonen)'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Blok
     CUSTOM_STYLES: 'Selecteer een stijl...'
@@ -40,9 +46,3 @@ nl:
     Summary: Samenvatting
     Title: Titel
     Type: Type
-  DNADesign\Elemental\Forms\TextCheckboxGroupField:
-    DISPLAYED: Weergegeven
-    NOT_DISPLAYED: 'Niet weergegeven'
-    ShowTitleLabel: Weergegeven
-    TitleLabel: 'Titel (aanvinken om te tonen)'
-    Title: Titel

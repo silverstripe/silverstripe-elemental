@@ -1,4 +1,9 @@
 fr:
+  DNADesign\Elemental\Forms\TextCheckboxGroupField:
+    DISPLAYED: Affiché
+    ShowTitleLabel: Affiché
+    Title: Titre
+    TitleLabel: 'Titre (affiché si coché)'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Bloc
     CUSTOM_STYLES: 'Sélectionner un style..'
@@ -7,9 +12,9 @@ fr:
     MainTabLabel: Contenu
     PLURALNAME: blocs
     PLURALS:
+      many: '{count} blocs'
       one: 'Un bloc'
       other: '{count} blocs'
-      many: '{count} blocs'
     SINGULARNAME: bloc
     STYLE: 'Variation de style'
     db_Title: Titre
@@ -18,16 +23,16 @@ fr:
     ContentLabel: Contenu
     PLURALNAME: 'blocs contenu'
     PLURALS:
+      many: '{count} blocs contenu'
       one: 'Un bloc contenu'
       other: '{count} blocs contenu'
-      many: '{count} blocs contenu'
     SINGULARNAME: 'bloc contenu'
   DNADesign\Elemental\Models\ElementalArea:
     PLURALNAME: 'Elemental Areas'
     PLURALS:
+      many: '{count} Elemental Areas'
       one: 'An Elemental Area'
       other: '{count} Elemental Areas'
-      many: '{count} Elemental Areas'
     SINGULARNAME: 'Elemental Area'
   DNADesign\Elemental\Reports\ElementTypeReport:
     Title: 'Types de blocs'
@@ -40,8 +45,3 @@ fr:
     Summary: Résumé
     Title: Titre
     Type: Type
-  DNADesign\Elemental\Forms\TextCheckboxGroupField:
-    DISPLAYED: Affiché
-    ShowTitleLabel: Affiché
-    Title: Titre
-    TitleLabel: 'Titre (affiché si coché)'

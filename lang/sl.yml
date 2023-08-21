@@ -5,8 +5,8 @@ sl:
     DISPLAYED: Prikazano
     NOT_DISPLAYED: Skrito
     ShowTitleLabel: Prikazan
-    TitleLabel: 'Naslov (označite)'
     Title: Naslov
+    TitleLabel: 'Naslov (označite)'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Gradnik
     CUSTOM_STYLES: 'Izberite stil ...'
@@ -15,10 +15,10 @@ sl:
     MainTabLabel: Vsebina
     PLURALNAME: gradniki
     PLURALS:
-      one: Gradnik
-      two: '{count} gradnika'
       few: '{count} gradnikov'
+      one: Gradnik
       other: '{count} gradnikov'
+      two: '{count} gradnika'
     SINGULARNAME: Gradnik
     STYLE: 'Stilna različica'
     SettingsTabLabel: Nastavitve
@@ -28,18 +28,18 @@ sl:
     ContentLabel: Oznaka
     PLURALNAME: Besedila
     PLURALS:
-      one: Besedilo
-      two: '{count} besedili'
       few: '{count} besedil'
+      one: Besedilo
       other: '{count} besedil'
+      two: '{count} besedili'
     SINGULARNAME: Besedilo
   DNADesign\Elemental\Models\ElementalArea:
     PLURALNAME: Bloki
     PLURALS:
-      one: Blok
-      two: '{count} bloka'
       few: '{count} blokov'
+      one: Blok
       other: '{count} blokov'
+      two: '{count} bloka'
     SINGULARNAME: Blok
   DNADesign\Elemental\Reports\ElementTypeReport:
     Title: 'Tipi gradnikov'

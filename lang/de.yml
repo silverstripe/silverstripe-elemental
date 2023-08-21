@@ -2,11 +2,11 @@ de:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Seite bearbeiten'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
-    ShowTitleLabel: 'Wird angezeigt'
-    TitleLabel: 'Titel (angezeigt, wenn ausgewählt)'
     DISPLAYED: 'Wird angezeigt'
     NOT_DISPLAYED: 'Wird nicht angezeigt'
+    ShowTitleLabel: 'Wird angezeigt'
     Title: Titel
+    TitleLabel: 'Titel (angezeigt, wenn ausgewählt)'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Block
     CUSTOM_STYLES: 'Stil auswählen...'
@@ -17,9 +17,9 @@ de:
     PLURALS:
       one: 'Ein Block'
       other: '{count} Blöcke'
-    SettingsTabLabel: Einstellungen
     SINGULARNAME: Block
     STYLE: Stilvariation
+    SettingsTabLabel: Einstellungen
     db_Title: Titel
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Inhalt

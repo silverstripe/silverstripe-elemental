@@ -2,10 +2,10 @@ cs:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Upravit stránku'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
-    ShowTitleLabel: Zobrazeno
-    TitleLabel: 'Titulek (zobrazený, pokud zaškrtnuto)'
     DISPLAYED: Zobrazeno
+    ShowTitleLabel: Zobrazeno
     Title: Titulek
+    TitleLabel: 'Titulek (zobrazený, pokud zaškrtnuto)'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Blok
     CUSTOM_STYLES: 'Vybrat styl'
@@ -14,30 +14,30 @@ cs:
     MainTabLabel: Obsah
     PLURALNAME: bloky
     PLURALS:
-      one: Blok
       few: '{count} bloky'
       many: '{count} bloků'
+      one: Blok
       other: '{count} bloků'
-    SettingsTabLabel: Nastavení
     SINGULARNAME: blok
     STYLE: 'Varianta stylu'
+    SettingsTabLabel: Nastavení
     db_Title: Titulek
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Obsah
     ContentLabel: Obsah
     PLURALNAME: 'blok obsahu'
     PLURALS:
-      one: 'Blok obsahu'
       few: '{count} bloků obsahu'
       many: '{count} bloků obsahu'
+      one: 'Blok obsahu'
       other: '{count} bloků obsahu'
     SINGULARNAME: 'blok obsahu'
   DNADesign\Elemental\Models\ElementalArea:
     PLURALNAME: 'Elemental oblasti'
     PLURALS:
-      one: 'Elemental oblast'
       few: '{count} Elemental oblasti'
       many: '{count} Elemental oblastí'
+      one: 'Elemental oblast'
       other: '{count} Elemental oblastí'
     SINGULARNAME: 'Elemental oblast'
   DNADesign\Elemental\Reports\ElementTypeReport:

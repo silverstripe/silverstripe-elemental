@@ -1,4 +1,9 @@
 hr:
+  DNADesign\Elemental\Forms\TextCheckboxGroupField:
+    DISPLAYED: Prikazano
+    ShowTitleLabel: Prikazano
+    Title: Naslov
+    TitleLabel: 'Naslov (vidljiv ako je odabran)'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Blok
     CUSTOM_STYLES: 'Odaberi stil...'
@@ -28,8 +33,3 @@ hr:
     Summary: Sažetak
     Title: Naslov
     Type: Tip
-  DNADesign\Elemental\Forms\TextCheckboxGroupField:
-    DISPLAYED: Prikazano
-    ShowTitleLabel: Prikazano
-    Title: Naslov
-    TitleLabel: 'Naslov (vidljiv ako je odabran)'
