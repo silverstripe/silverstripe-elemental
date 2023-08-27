@@ -894,16 +894,19 @@ JS
         $result = 'ElementalArea';
 
         if ($page) {
-            $has_one = $page->config()->get('has_one');
-            $area = $this->Parent();
+            $class = DataObject::getSchema()->hasOneComponent($this, 'Parent');
+            $area = $this->ParentID ? DataObject::get_by_id($class, $this->ParentID) : null;
 
-            foreach ($has_one as $relationName => $relationClass) {
-                if ($page instanceof BaseElement && $relationName === 'Parent') {
-                    continue;
-                }
-                if ($relationClass === $area->ClassName && $page->{$relationName}()->ID === $area->ID) {
-                    $result = $relationName;
-                    break;
+            if ($area) {
+                $has_one = $page->config()->get('has_one');
+                foreach ($has_one as $relationName => $relationClass) {
+                    if ($page instanceof BaseElement && $relationName === 'Parent') {
+                        continue;
+                    }
+                    if ($relationClass === $area->ClassName && $page->{$relationName}()->ID === $area->ID) {
+                        $result = $relationName;
+                        break;
+                    }
                 }
             }
         }

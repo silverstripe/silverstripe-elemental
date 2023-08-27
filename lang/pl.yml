@@ -15,9 +15,9 @@ pl:
     MainTabLabel: Zawartość
     PLURALNAME: bloki
     PLURALS:
-      one: Blok
       few: 'Bloków {count}'
       many: 'Bloków {count}'
+      one: Blok
       other: 'Bloki {count}'
     SINGULARNAME: blok
     STYLE: 'Opcje dla style'
@@ -28,17 +28,17 @@ pl:
     ContentLabel: Zawartość
     PLURALNAME: 'zawartość bloków'
     PLURALS:
-      one: 'Blok treści'
       few: 'Bloków treści {count}'
       many: 'Bloków treści {count}'
+      one: 'Blok treści'
       other: 'Bloki treści {count}'
     SINGULARNAME: zawartość
   DNADesign\Elemental\Models\ElementalArea:
     PLURALNAME: 'Elemental Areas'
     PLURALS:
-      one: 'Elemental Areas'
       few: 'Kilka Elemental Areas {count}'
       many: 'Wiele Elemental Areas {count}'
+      one: 'Elemental Areas'
       other: 'Inne Elemental Areas {count}'
     SINGULARNAME: 'Elemental Area'
   DNADesign\Elemental\Reports\ElementTypeReport:
