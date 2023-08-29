@@ -1,10 +1,10 @@
 name: Keepalive
 
 on:
-  workflow_dispatch:
-  # The 4th of every month at 10:50am UTC
+  # At 6:30 AM UTC, on day 11 of the month
   schedule:
-    - cron: '50 10 4 * *'
+    - cron: '30 6 11 * *'
+  workflow_dispatch:
 
 jobs:
   keepalive:
