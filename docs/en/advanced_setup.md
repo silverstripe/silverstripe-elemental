@@ -201,7 +201,7 @@ class BlockPage extends Page
     {
         parent::onBeforeWrite();
 
-        if (!$this->isDraftedInLocale() && $this->isInDB()) {
+        if (!$this->isDraftedInLocale() && $this->isInDB() && !$this->isArchived()) {
             $elementalArea = $this->ElementalArea();
 
             $elementalAreaNew = $elementalArea->duplicate();
