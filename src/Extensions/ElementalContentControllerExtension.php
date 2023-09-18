@@ -4,6 +4,7 @@ namespace DNADesign\Elemental\Extensions;
 
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
+use DNADesign\ElementalVirtual\Model\ElementVirtual;
 use SilverStripe\Core\Extension;
 
 class ElementalContentControllerExtension extends Extension
@@ -35,12 +36,26 @@ class ElementalContentControllerExtension extends Extension
         }
 
         foreach ($elementalAreaRelations as $elementalAreaRelation) {
-            $element = $elementOwner->$elementalAreaRelation()->Elements()
+            $elements = $elementOwner->$elementalAreaRelation()->Elements();
+
+            $element = $elements
                 ->filter('ID', $id)
                 ->First();
 
             if ($element) {
                 return $element->getController();
+            }
+
+            if (class_exists(ElementVirtual::class)) {
+                $element = $elements
+                    ->innerJoin('ElementVirtual', '"ElementVirtual"."ID" = "Element"."ID"')
+                    ->filter('ClassName', ElementVirtual::class)
+                    ->where(['"LinkedElementID"' => $id])
+                    ->First();
+
+                if ($element) {
+                    return $element->LinkedElement()->getController();
+                }
             }
         }
 
