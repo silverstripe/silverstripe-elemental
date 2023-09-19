@@ -31,8 +31,6 @@ For a Silverstripe CMS 4.1 or 4.2 compatible version of this module, please see 
 ```sh
 composer require dnadesign/silverstripe-elemental
 ```
-composer require dnadesign/silverstripe-elemental
-```
 
 The following YAML config will enable elements on every `Page` object,
 replacing the standard `Content` rich text field.
@@ -210,8 +208,8 @@ If in-line editing is not disabled, whilst not having a custom component defined
 After building your own React components and including them into the CMS, altering the applicable Element's PHP definition to use the new React component can be achieved by setting some `protected` properties of that class.
 
 ```php
-    protected $schemaDataType = FormField::SCHEMA_DATA_TYPE_CUSTOM;
-    protected $schemaComponent = 'BlockLinkField';
+protected $schemaDataType = FormField::SCHEMA_DATA_TYPE_CUSTOM;
+protected $schemaComponent = 'BlockLinkField';
 ```
 
 - The `$schemaDataType` does not need to be CUSTOM, but should not be STRUCTURAL as structural types are not submitted as form data.
@@ -232,9 +230,9 @@ To customise existing block templates such as `Content` and `Form` templates, co
 `vendor/dnadesign/silverstripe-elemental/templates` to your theme. When doing this, ensure you match the folder
 structure (PHP class namespace) to ensure that your new template version takes priority.
 
-**Note:** The default set of elements follow the [BEM (Block Element Modifier])(http://getbem.com/) class naming
-convention, which allows developers to style individual parts of the DOM without unnecessarily nested CSS. Where
-possible, we encourage you to follow this naming system.
+> [!NOTE]
+> The default set of elements follow the [BEM (Block Element Modifier])(http://getbem.com/) class naming convention, which allows developers to style individual parts of the DOM without unnecessarily nested CSS.
+> Where possible, we encourage you to follow this naming system.
 
 #### Position Helpers
 
@@ -289,10 +287,9 @@ this index in your search engine to ensure that a page's elemental area content 
 
 For information on configuring Solr please see [the fulltextsearch documentation](https://github.com/silverstripe/silverstripe-fulltextsearch).
 
-**Note:** If using this indexer, be aware that HTML tags will be stripped from the content before it is indexed.
-The Solr search results may add in emphasis tags or other formatting around matched key words, so you may need
-to allow unescaped HTML in your search results template. You should use the `$Excerpt` property (see
-`SolrIndex::search` for more) to display the relevant search matches.
+> [!WARNING]
+> If using this indexer, be aware that HTML tags will be stripped from the content before it is indexed.
+> The Solr search results may add in emphasis tags or other formatting around matched key words, so you may need to allow unescaped HTML in your search results template. You should use the `$Excerpt` property (see `SolrIndex::search` for more) to display the relevant search matches.
 
 ### Disabling CMS content search
 
@@ -335,8 +332,8 @@ yarn build
 You'll need to have [yarn installed](https://yarnpkg.com/en/docs/install)
 globally in your command line.
 
-**Note:** If adding or modifying colours, spacing, font sizes etc. please try
-and use an appropriate variable from the silverstripe/admin module if available.
+> [!NOTE]
+> If adding or modifying colours, spacing, font sizes etc. please try and use an appropriate variable from the silverstripe/admin module if available.
 
 ## Integration with other modules
 
