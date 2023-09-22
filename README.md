@@ -31,8 +31,6 @@ For a Silverstripe CMS 4.1 or 4.2 compatible version of this module, please see 
 ```sh
 composer require dnadesign/silverstripe-elemental
 ```
-composer require dnadesign/silverstripe-elemental
-```
 
 The following YAML config will enable elements on every `Page` object,
 replacing the standard `Content` rich text field.
@@ -210,8 +208,8 @@ If in-line editing is not disabled, whilst not having a custom component defined
 After building your own React components and including them into the CMS, altering the applicable Element's PHP definition to use the new React component can be achieved by setting some `protected` properties of that class.
 
 ```php
-    protected $schemaDataType = FormField::SCHEMA_DATA_TYPE_CUSTOM;
-    protected $schemaComponent = 'BlockLinkField';
+protected $schemaDataType = FormField::SCHEMA_DATA_TYPE_CUSTOM;
+protected $schemaComponent = 'BlockLinkField';
 ```
 
 - The `$schemaDataType` does not need to be CUSTOM, but should not be STRUCTURAL as structural types are not submitted as form data.
