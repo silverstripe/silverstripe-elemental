@@ -629,21 +629,28 @@ JS
 
     /**
      * Despite the name of the method, getPage can return any type of DataObject
+     *
      * @return null|DataObject
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \SilverStripe\ORM\ValidationException
      */
     public function getPage()
     {
-        // Allow for repeated calls to be cached
         if (isset($this->cacheData['page'])) {
-            return $this->cacheData['page'];
+            if (isset($this->cacheData['parent_id']) && $this->cacheData['parent_id'] === $this->ParentID) {
+                return $this->cacheData['page'];
+            }
         }
 
         $class = DataObject::getSchema()->hasOneComponent($this, 'Parent');
         $area = ($this->ParentID) ? DataObject::get_by_id($class, $this->ParentID) : null;
+
         if ($area instanceof ElementalArea && $area->exists()) {
-            $this->cacheData['page'] = $area->getOwnerPage();
+            $page = $area->getOwnerPage();
+
+            $this->cacheData['page'] = $page;
+            $this->cacheData['parent_id'] = $this->ParentID;
+
             return $this->cacheData['page'];
         }
 
