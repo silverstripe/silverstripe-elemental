@@ -511,4 +511,17 @@ class BaseElementTest extends FunctionalTest
         $element = $this->objFromFixture(TestElement::class, 'elementDataObject3');
         $this->assertSame('Hello Test|#|Element 3', $element->getContentForCmsSearch());
     }
+
+
+    public function testGetPage()
+    {
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+
+        $this->assertStringContainsString($element->getPage()->Title, 'Test Elemental');
+
+        $newArea = $this->objFromFixture(ElementalArea::class, 'area52');
+        $element->ParentID = $newArea->ID;
+
+        $this->assertStringContainsString($element->getPage()->Title, 'Page with one elements');
+    }
 }
