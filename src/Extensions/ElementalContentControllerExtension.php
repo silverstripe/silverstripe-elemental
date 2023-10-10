@@ -35,9 +35,7 @@ class ElementalContentControllerExtension extends Extension
         }
 
         foreach ($elementalAreaRelations as $elementalAreaRelation) {
-            $element = $elementOwner->$elementalAreaRelation()->Elements()
-                ->filter('ID', $id)
-                ->First();
+            $element = $this->findElement($elementOwner->{$elementalAreaRelation}()->Elements(), $id);
 
             if ($element) {
                 return $element->getController();
@@ -46,5 +44,36 @@ class ElementalContentControllerExtension extends Extension
 
         user_error('Element $id not found for this page', E_USER_ERROR);
         return false;
+    }
+
+    private function findElement($elements, $id)
+    {
+        $element = $elements->filter('ID', $id)->First();
+
+        if ($element) {
+            return $element;
+        }
+
+        foreach ($elements as $el) {
+            if (!$el->hasMethod('Elements')) {
+                continue;
+            }
+
+            $subElementAreaRelations = $el->getElementalRelations();
+
+            if (!$subElementAreaRelations) {
+                continue;
+            }
+
+            foreach ($subElementAreaRelations as $subElementalAreaRelation) {
+                $element = $this->findElement($el->{$subElementalAreaRelation}()->Elements(), $id);
+
+                if ($element) {
+                    return $element;
+                }
+            }
+        }
+
+        return null;
     }
 }
