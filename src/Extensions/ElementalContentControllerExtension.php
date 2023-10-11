@@ -2,9 +2,10 @@
 
 namespace DNADesign\Elemental\Extensions;
 
+use SilverStripe\Core\Extension;
+use SilverStripe\ORM\DataObject;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
-use SilverStripe\Core\Extension;
 
 class ElementalContentControllerExtension extends Extension
 {
@@ -24,52 +25,51 @@ class ElementalContentControllerExtension extends Extension
             return false;
         }
 
-        /** @var SiteTree $elementOwner */
+        /** @var DataObject $elementOwner */
         $elementOwner = $this->owner->data();
 
-        $elementalAreaRelations = $this->owner->getElementalRelations();
-
-        if (!$elementalAreaRelations) {
-            user_error(get_class($this->owner) . ' has no ElementalArea relationships', E_USER_ERROR);
+        if (!$elementOwner->hasExtension(ElementalAreasExtension::class)) {
+            user_error(get_class($elementOwner) . ' doesnt have the ElementalAreasExtension applied', E_USER_ERROR);
             return false;
         }
 
-        foreach ($elementalAreaRelations as $elementalAreaRelation) {
-            $element = $this->findElement($elementOwner->{$elementalAreaRelation}()->Elements(), $id);
+        $elementalAreaRelations = $elementOwner->getElementalRelations();
+        if (!$elementalAreaRelations) {
+            user_error(get_class($elementOwner) . ' has no ElementalArea relationships', E_USER_ERROR);
+            return false;
+        }
 
-            if ($element) {
-                return $element->getController();
-            }
+        $element = $this->findElement($elementalAreaRelations, $elementOwner, $id);
+
+        if ($element) {
+            return $element->getController();
         }
 
         user_error('Element $id not found for this page', E_USER_ERROR);
         return false;
     }
 
-    private function findElement($elements, $id)
+    private function findElement(iterable $elementalAreaRelations, DataObject $owner, $id): ?DataObject
     {
-        $element = $elements->filter('ID', $id)->First();
+        foreach ($elementalAreaRelations as $elementalAreaRelation) {
+            $elements = $owner->$elementalAreaRelation()->Elements();
+            $found = $elements->filter('ID', $id)->First();
 
-        if ($element) {
-            return $element;
-        }
-
-        foreach ($elements as $el) {
-            if (!$el->hasMethod('Elements')) {
-                continue;
+            if ($found) {
+                return $found;
             }
 
-            $subElementAreaRelations = $el->getElementalRelations();
+            /** @var BaseElement $element */
+            foreach ($elements as $element) {
+                if (!$element->hasExtension(ElementalAreasExtension::class)) {
+                    continue;
+                }
 
-            if (!$subElementAreaRelations) {
-                continue;
-            }
+                /** @var BaseElement&ElementalAreasExtension $element */
+                $found = $this->findElement($element->getElementalRelations(), $element, $id);
 
-            foreach ($subElementAreaRelations as $subElementalAreaRelation) {
-                $element = $this->findElement($el->{$subElementalAreaRelation}()->Elements(), $id);
-
-                if ($element) {
-                    return $element;
+                if ($found) {
+                    return $found;
                 }
             }
         }
