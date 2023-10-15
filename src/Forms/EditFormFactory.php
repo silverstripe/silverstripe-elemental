@@ -2,6 +2,7 @@
 
 namespace DNADesign\Elemental\Forms;
 
+use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Control\RequestHandler;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Forms\DefaultFormFactory;
@@ -66,6 +67,10 @@ class EditFormFactory extends DefaultFormFactory
         $elementID = $context['Record']->ID;
 
         foreach ($fields->dataFields() as $field) {
+            if ($field instanceof UploadField) {
+                // Apply audo-detection of multi-upload before changing the name.
+                $field->setIsMultiUpload($field->getIsMultiUpload());
+            }
             $namespacedName = sprintf(self::FIELD_NAMESPACE_TEMPLATE ?? '', $elementID, $field->getName());
             $field->setName($namespacedName);
         }
