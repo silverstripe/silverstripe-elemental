@@ -49,8 +49,6 @@ const SaveAction = (MenuComponent) => (props) => {
         // Update the Apollo query cache with the new form data
         const { apolloClient } = window.ss;
 
-        // @todo optimistically update the data for the current element instead of
-        // rerunning the whole query
         apolloClient.queryManager.reFetchObservableQueries();
         reinitialiseForm(formData);
 
