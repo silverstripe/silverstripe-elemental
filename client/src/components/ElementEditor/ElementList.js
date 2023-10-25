@@ -121,7 +121,6 @@ class ElementList extends Component {
 }
 
 ElementList.propTypes = {
-  // @todo support either ElementList or Element children in an array (or both)
   blocks: PropTypes.arrayOf(elementType),
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   allowedElementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
