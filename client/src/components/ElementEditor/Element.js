@@ -1,6 +1,6 @@
 /* global window */
 
-import React, { Component } from 'react';
+import React, { Component, createContext } from 'react';
 import PropTypes from 'prop-types';
 import { elementType } from 'types/elementType';
 import { elementTypeType } from 'types/elementTypeType';
@@ -39,6 +39,7 @@ class Element extends Component {
       initialTab: '',
       loadingError: false,
       childRenderingError: false,
+      formSchema: {}
     };
   }
 
@@ -215,6 +216,18 @@ class Element extends Component {
     }
   }
 
+  getFailureHandlers() {
+    // using method to create object rather then defining object directly in render()
+    // to prevent linting warning about "consider useMemo() instead"
+    return {
+      onFailedSave: (formSchema) => {
+        this.setState({
+          formSchema
+        });
+      }
+    };
+  }
+
   render() {
     const {
       element,
@@ -231,7 +244,7 @@ class Element extends Component {
       onDragEnd,
     } = this.props;
 
-    const { childRenderingError, previewExpanded } = this.state;
+    const { childRenderingError, previewExpanded, formSchema } = this.state;
 
     if (!element.id) {
       return null;
@@ -248,6 +261,8 @@ class Element extends Component {
       this.getVersionedStateClassName()
     );
 
+    const failureHandlers = this.getFailureHandlers();
+
     const content = connectDropTarget(<div
       className={elementClassNames}
       onClick={this.handleExpand}
@@ -257,40 +272,42 @@ class Element extends Component {
       title={this.getLinkTitle(type)}
       key={element.id}
     >
-      <HeaderComponent
-        element={element}
-        type={type}
-        areaId={areaId}
-        expandable={type.inlineEditable}
-        link={link}
-        previewExpanded={previewExpanded && !childRenderingError}
-        handleEditTabsClick={this.handleTabClick}
-        activeTab={activeTab}
-        disableTooltip={isDragging}
-        onDragEnd={onDragEnd}
-      />
-
-      {
-        !childRenderingError &&
-        <ContentComponent
-          id={element.id}
-          fileUrl={element.blockSchema.fileURL}
-          fileTitle={element.blockSchema.fileTitle}
-          content={this.getSummary(element, type)}
-          previewExpanded={previewExpanded && !isDragging}
+      <ElementContext.Provider value={failureHandlers}>
+        <HeaderComponent
+          element={element}
+          type={type}
+          areaId={areaId}
+          expandable={type.inlineEditable}
+          link={link}
+          previewExpanded={previewExpanded && !childRenderingError}
+          handleEditTabsClick={this.handleTabClick}
           activeTab={activeTab}
-          onFormInit={() => this.updateFormTab(activeTab)}
-          handleLoadingError={this.handleLoadingError}
-          broken={type.broken}
+          disableTooltip={isDragging}
+          onDragEnd={onDragEnd}
+          failureHandlers={failureHandlers}
         />
-      }
-
-      {
-        childRenderingError &&
-        <div className="alert alert-danger mt-2">
-          {i18n._t('ElementalElement.CHILD_RENDERING_ERROR', 'Something went wrong with this block. Please try saving and refreshing the CMS.')}
-        </div>
-      }
+        {
+          !childRenderingError &&
+          <ContentComponent
+            id={element.id}
+            fileUrl={element.blockSchema.fileURL}
+            fileTitle={element.blockSchema.fileTitle}
+            content={this.getSummary(element, type)}
+            previewExpanded={previewExpanded && !isDragging}
+            activeTab={activeTab}
+            onFormInit={() => this.updateFormTab(activeTab)}
+            handleLoadingError={this.handleLoadingError}
+            broken={type.broken}
+            formSchema={formSchema}
+          />
+        }
+        {
+          childRenderingError &&
+          <div className="alert alert-danger mt-2">
+            {i18n._t('ElementalElement.CHILD_RENDERING_ERROR', 'Something went wrong with this block. Please try saving and refreshing the CMS.')}
+          </div>
+        }
+      </ElementContext.Provider>
     </div>);
 
     if (!previewExpanded) {
@@ -341,6 +358,9 @@ function mapDispatchToProps(dispatch, ownProps) {
     },
   };
 }
+
+const ElementContext = createContext({});
+export { ElementContext as ElementContext };
 
 Element.propTypes = {
   element: elementType,

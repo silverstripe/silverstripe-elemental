@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import FormBuilder from 'components/FormBuilder/FormBuilder';
 import FormBuilderLoader from 'containers/FormBuilderLoader/FormBuilderLoader';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import i18n from 'i18n';
@@ -42,7 +43,7 @@ class InlineEditForm extends PureComponent {
   }
 
   render() {
-    const { elementId, extraClass, onClick, onFormInit, formHasState } = this.props;
+    const { elementId, extraClass, onClick, onFormInit, formHasState, formSchema } = this.props;
     const { loadingError } = this.state;
 
     const classNames = classnames('element-editor-editform', extraClass);
@@ -56,6 +57,12 @@ class InlineEditForm extends PureComponent {
       onLoadingError: this.handleLoadingError
     };
 
+    console.log(['formSchema is', formSchema]);
+
+    if (typeof formSchema !== 'undefined' && Object.keys(formSchema).length > 0) {
+      formProps.schema = formSchema;
+    }
+
     if (loadingError) {
       formProps.loading = false;
     }
@@ -64,9 +71,36 @@ class InlineEditForm extends PureComponent {
       formProps.onReduxFormInit = onFormInit;
     }
 
+    // ==== BORROWED FROM FormBuilderLoader to use on FormBuilder ===
+    // function createFormIdentifierFromProps({ identifier, schema = {} }) {
+    //   return [
+    //     identifier,
+    //     schema.schema && schema.schema.name,
+    //   ].filter(id => id).join('.');
+    // }
+    
+    // function getIdentifier() {
+    //   return createFormIdentifierFromProps(this.props);
+    // }
+
+    // if (formProps.hasOwnProperty('schema')) {
+    //   formProps.form = getIdentifier(),
+    //   onSubmit: this.handleSubmit,
+    //   onAutofill: this.handleAutofill,
+    // }
+    // ======================================
+
     return (
       <div className={classNames} onClick={onClick} role="presentation">
-        <FormBuilderLoader {...formProps} />
+        {formProps.hasOwnProperty('schema') &&
+          <>
+            <div>I HAVE A FORM SCHEMA</div>
+            <FormBuilder {...formProps} />
+          </>
+        }
+        {!formProps.hasOwnProperty('schema') &&
+          <FormBuilderLoader {...formProps} />
+        }
       </div>
     );
   }
@@ -77,10 +111,11 @@ InlineEditForm.propTypes = {
   onClick: PropTypes.func,
   elementId: PropTypes.string,
   handleLoadingError: PropTypes.func,
+  formSchema: PropTypes.object,
 };
 
 function mapStateToProps(state, ownProps) {
-  const formName = loadElementFormStateName(ownProps.elementId);
+  const formName = loadElementFormStateName(ownProps.elementId); // ElementForm_3
 
   return {
     formHasState: state.form.formState && state.form.formState.element &&

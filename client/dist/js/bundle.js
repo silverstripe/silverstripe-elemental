@@ -1,4 +1,2548 @@
-!function(){"use strict";var e={7274:function(e,t,n){var r=o(n(9521)),a=o(n(4437));function o(e){return e&&e.__esModule?e:{default:e}}window.document.addEventListener("DOMContentLoaded",(()=>{(0,r.default)(),(0,a.default)()}))},9521:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=v(n(6648)),a=v(n(176)),o=v(n(7328)),l=v(n(2111)),i=v(n(6249)),d=v(n(8792)),u=v(n(4415)),s=v(n(9397)),c=v(n(8947)),f=v(n(9097)),p=v(n(9192)),m=v(n(79)),g=v(n(8544)),h=v(n(9475)),y=v(n(5515));function v(e){return e&&e.__esModule?e:{default:e}}t.default=()=>{r.default.component.registerMany({ElementEditor:l.default,ElementToolbar:d.default,ElementAddNewButton:u.default,ElementList:i.default,Element:a.default,ElementActions:o.default,ElementHeader:s.default,ElementContent:c.default,ElementSummary:f.default,ElementInlineEditForm:p.default,AddElementPopover:m.default,HoverBar:g.default,DragPositionIndicator:h.default,TextCheckboxGroupField:y.default})}},4437:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=m(n(6648)),a=m(n(2939)),o=m(n(9405)),l=m(n(9650)),i=m(n(2806)),d=m(n(1637)),u=m(n(7867)),s=m(n(6380)),c=m(n(4566)),f=m(n(9355)),p=m(n(6095));function m(e){return e&&e.__esModule?e:{default:e}}t.default=()=>{r.default.transform("elemental-fieldgroup",(e=>{e.component("FieldGroup.HistoryViewer.VersionDetail",o.default,"HistoricElement")}),{after:"field-holders"}),r.default.transform("elements-history",(e=>{e.component("HistoryViewer.Form_ItemEditForm",a.default,"ElementHistoryViewer")})),r.default.transform("blocks-history-revert",(e=>{e.component("HistoryViewerToolbar.VersionedAdmin.HistoryViewer.Element.HistoryViewerVersionDetail",l.default,"BlockRevertMutation")})),r.default.transform("cms-element-editor",(e=>{e.component("ElementList",i.default,"PageElements")})),r.default.transform("cms-element-adder",(e=>{e.component("AddElementPopover",d.default,"ElementAddButton")})),r.default.transform("element-actions",(e=>{e.component("ElementActions",f.default,"ElementActionsWithSave"),e.component("ElementActions",c.default,"ElementActionsWithPublish"),e.component("ElementActions",p.default,"ElementActionsWithUnpublish"),e.component("ElementActions",s.default,"ElementActionsWithDuplicate"),e.component("ElementActions",u.default,"ElementActionsWithArchive")}))}},3363:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=d(n(7363)),a=d(n(7086)),o=d(n(7820)),l=n(8127),i=n(7286);function d(e){return e&&e.__esModule?e:{default:e}}const u=e=>{const{className:t,title:n,label:a}=e,i={className:(0,o.default)(t,"dropdown-item"),...e};return r.default.createElement(l.DropdownItem,i,a||n)};u.propTypes={disabled:a.default.bool,className:a.default.string,onClick:a.default.func,title:a.default.string,name:a.default.string,type:i.elementTypeType,active:a.default.bool,label:a.default.string},u.defaultProps={disabled:!1};t.default=u},7867:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=d(n(7363)),a=n(2827),o=d(n(3363)),l=d(n(2409)),i=d(n(4754));function d(e){return e&&e.__esModule?e:{default:e}}const u=e=>t=>{const n=void 0!==t.element.canDelete&&!t.element.canDelete,a=i.default._t("ElementArchiveAction.ARCHIVE","Archive"),l={label:a,title:n?i.default._t("ElementArchiveAction.ARCHIVE_PERMISSION_DENY","Archive, insufficient permissions"):a,disabled:n,className:"element-editor__actions-archive",onClick:e=>{e.stopPropagation();const{element:{id:n},isPublished:r,actions:{handleArchiveBlock:a}}=t;let o=i.default._t("ElementArchiveAction.CONFIRM_DELETE","Are you sure you want to send this block to the archive?");r&&(o=i.default._t("ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH","Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?")),a&&window.confirm(o)&&a(n).then((()=>{const e=window.jQuery(".cms-preview");e&&"function"==typeof e.entwine&&e.entwine("ss.preview")._loadUrl(e.find("iframe").attr("src"))}))},toggle:t.toggle};return r.default.createElement(e,t,t.children,r.default.createElement(o.default,l))};t.Component=u;t.default=(0,a.compose)(l.default,u)},6380:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=d(n(7363)),a=n(2827),o=d(n(3363)),l=d(n(8046)),i=d(n(4754));function d(e){return e&&e.__esModule?e:{default:e}}const u=e=>t=>{if(t.type.broken)return r.default.createElement(e,t);const n=void 0!==t.element.canCreate&&!t.element.canCreate,a=i.default._t("ElementArchiveAction.DUPLICATE","Duplicate"),l={label:a,title:n?i.default._t("ElementArchiveAction.DUPLICATE_PERMISSION_DENY","Duplicate, insufficient permissions"):a,disabled:n,className:"element-editor__actions-duplicate",onClick:e=>{e.stopPropagation();const{element:{id:n},actions:{handleDuplicateBlock:r}}=t;r&&r(n).then((()=>{const e=window.jQuery(".cms-preview");e.entwine("ss.preview")._loadUrl(e.find("iframe").attr("src"))}))},toggle:t.toggle};return r.default.createElement(e,t,t.children,r.default.createElement(o.default,l))};t.Component=u;t.default=(0,a.compose)(l.default,u)},4566:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=p(n(7363)),a=n(2827),o=p(n(3363)),l=p(n(6426)),i=p(n(4754)),d=p(n(5159)),u=n(1624),s=n(9536),c=n(920),f=n(5762);function p(e){return e&&e.__esModule?e:{default:e}}const m=(e,t,n)=>{const r=i.default.inject(i.default._t("ElementHeader.NOTITLE","Untitled {type} block"),{type:e}),a=i.default.inject(i.default._t("ElementPublishAction.SUCCESS_NOTIFICATION","Published '{title}' successfully"),{title:t||r}),o=i.default.inject(i.default._t("ElementPublishAction.ERROR_NOTIFICATION","Error publishing '{title}'"),{title:t||r});window.jQuery.noticeAdd({text:n?a:o,stay:!1,type:n?"success":"error"})},g=e=>t=>{if(t.type.broken)return r.default.createElement(e,t);const{element:n,formDirty:a}=t,l=void 0!==t.element.canPublish&&!t.element.canPublish,u=i.default._t("ElementArchiveAction.PUBLISH","Publish"),c={label:u,title:l?i.default._t("ElementArchiveAction.PUBLISH_PERMISSION_DENY","Publish, insufficient permissions"):u,disabled:l,className:"element-editor__actions-publish",onClick:e=>{e.stopPropagation();const{element:{id:n,title:r},type:o,securityId:l,formData:i,actions:{handlePublishBlock:u},reinitialiseForm:c}=t;let f=new Promise((e=>e()));a&&(f=((e,t,n)=>d.default.createEndpointFetcher({url:(0,s.loadElementSchemaValue)("saveUrl",e),method:(0,s.loadElementSchemaValue)("saveMethod"),payloadFormat:(0,s.loadElementSchemaValue)("payloadFormat"),defaultData:{SecurityID:n}})(t).then((()=>window.ss.apolloClient.queryManager.reFetchObservableQueries())).then((e=>{const t=window.jQuery(".cms-preview");return t.entwine("ss.preview")._loadUrl(t.find("iframe").attr("src")),e})).then((t=>{const n=t[0]&&t[0].data.readOneElementalArea.elements.find((t=>t.id===e));return n&&n.version})))(n,i,l).then((e=>(c(i),e)))),f.then((()=>u(n))).then((()=>m(o.title,r,!0))).catch((()=>m(o.title,r,!1)))},toggle:t.toggle};return r.default.createElement(e,t,t.children,(a||!n.isLiveVersion)&&r.default.createElement(o.default,c))};t.Component=g;t.default=(0,a.compose)(l.default,(0,u.connect)((function(e,t){const n=(0,c.loadElementFormStateName)(t.element.id);let r=null;return e.form.formState.element&&e.form.formState.element[n]&&(r=e.form.formState.element[n].values),{formData:r,securityId:e.config.SecurityID,formDirty:e.unsavedForms.find((e=>e.name===`element.${n}`))}}),(function(e,t){const n=(0,c.loadElementFormStateName)(t.element.id);return{reinitialiseForm(t){e((0,f.initialize)(`element.${n}`,t))}}})),g)},9355:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=f(n(7363)),a=n(2827),o=n(1624),l=f(n(3363)),i=f(n(5159)),d=f(n(4754)),u=n(9536),s=n(920),c=n(5762);function f(e){return e&&e.__esModule?e:{default:e}}const p=e=>t=>{if(!t.expandable||t.type.broken)return r.default.createElement(e,t);const n={title:d.default._t("ElementSaveAction.SAVE","Save"),className:"element-editor__actions-save",onClick:e=>{e.stopPropagation();const{element:n,type:r,securityId:a,formData:o,reinitialiseForm:l}=t,{jQuery:s}=window,c=d.default.inject(d.default._t("ElementHeader.NOTITLE","Untitled {type} block"),{type:r.title}),f={url:(0,u.loadElementSchemaValue)("saveUrl",n.id),method:(0,u.loadElementSchemaValue)("saveMethod"),payloadFormat:(0,u.loadElementSchemaValue)("payloadFormat"),defaultData:{SecurityID:a}};i.default.createEndpointFetcher(f)(o).then((()=>{const{apolloClient:e}=window.ss;e.queryManager.reFetchObservableQueries(),l(o);const t=s(".cms-preview");t.entwine("ss.preview")._loadUrl(t.find("iframe").attr("src"));const r=o?o[`PageElements_${n.id}_Title`]:null;s.noticeAdd({text:d.default.inject(d.default._t("ElementSaveAction.SUCCESS_NOTIFICATION","Saved '{title}' successfully"),{title:r||c}),stay:!1,type:"success"})})).catch((()=>{s.noticeAdd({text:d.default.inject(d.default._t("ElementSaveAction.ERROR_NOTIFICATION","Error saving '{title}'"),{title:n.Title||c}),stay:!1,type:"error"})}))}};return r.default.createElement(e,t,t.children,r.default.createElement(l.default,n))};t.Component=p;t.default=(0,a.compose)((0,o.connect)((function(e,t){const n=(0,s.loadElementFormStateName)(t.element.id);let r=null;return e.form.formState.element&&e.form.formState.element[n]&&(r=e.form.formState.element[n].values),{formData:r,securityId:e.config.SecurityID}}),(function(e,t){const n=(0,s.loadElementFormStateName)(t.element.id);return{reinitialiseForm(t){e((0,c.initialize)(`element.${n}`,t))}}})),p)},6095:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=d(n(7363)),a=n(2827),o=d(n(3363)),l=d(n(495)),i=d(n(4754));function d(e){return e&&e.__esModule?e:{default:e}}const u=e=>t=>{if(t.type.broken)return r.default.createElement(e,t);const{element:n,type:a,actions:{handleUnpublishBlock:l}}=t,d=void 0!==t.element.canUnpublish&&!t.element.canUnpublish,u=i.default._t("ElementArchiveAction.UNPUBLISH","Unpublish"),s={label:u,title:d?i.default._t("ElementArchiveAction.UNPUBLISH_PERMISSION_DENY","Unpublish, insufficient permissions"):u,disabled:d,className:"element-editor__actions-unpublish",onClick:e=>{e.stopPropagation();const{jQuery:t}=window,r=i.default.inject(i.default._t("ElementHeader.NOTITLE","Untitled {type} block"),{type:a.title});l&&l(n.id).then((()=>{const e=t(".cms-preview");e.entwine("ss.preview")._loadUrl(e.find("iframe").attr("src")),t.noticeAdd({text:i.default.inject(i.default._t("ElementUnpublishAction.SUCCESS_NOTIFICATION","Removed '{title}' from the published page"),{title:n.title||r}),stay:!1,type:"success"})})).catch((()=>{t.noticeAdd({text:i.default.inject(i.default._t("ElementUnpublishAction.ERROR_NOTIFICATION","Error unpublishing '{title}'"),{title:n.title||r}),stay:!1,type:"error"})}))},toggle:t.toggle};return r.default.createElement(e,t,t.children,n.isPublished&&r.default.createElement(o.default,s))};t.Component=u;t.default=(0,a.compose)(l.default,u)},79:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=s(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=u(n(7086)),o=u(n(7820)),l=n(6648),i=n(7286),d=u(n(4754));function u(e){return e&&e.__esModule?e:{default:e}}function s(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(s=function(e){return e?n:t})(e)}class c extends r.Component{constructor(e){super(e),this.handleToggle=this.handleToggle.bind(this)}getElementButtonClickHandler(e){return t=>{const{actions:{handleAddElementToArea:n},insertAfterElement:r}=this.props;t.preventDefault(),n(e.class,r).then((()=>{const e=window.jQuery(".cms-preview");e.entwine("ss.preview")._loadUrl(e.find("iframe").attr("src"))})),this.handleToggle()}}handleToggle(){const{toggle:e}=this.props;e()}render(){const{PopoverOptionSetComponent:e,elementTypes:t,container:n,extraClass:a,isOpen:l,placement:i,target:u}=this.props,s=(0,o.default)("element-editor-add-element",a),c=t.map((e=>({content:e.title,key:e.name,className:(0,o.default)(e.icon,"btn--icon-xl","element-editor-add-element__button"),onClick:this.getElementButtonClickHandler(e)})));return r.default.createElement(e,{buttons:c,searchPlaceholder:d.default._t("ElementAddElementPopover.SEARCH_BLOCKS","Search blocks"),extraClass:s,container:n,isOpen:l,placement:i,target:u,toggle:this.handleToggle})}}c.propTypes={container:a.default.oneOfType([a.default.string,a.default.func,a.default.object]),elementTypes:a.default.arrayOf(i.elementTypeType).isRequired,extraClass:a.default.oneOfType([a.default.string,a.default.array,a.default.object]),isOpen:a.default.bool.isRequired,placement:a.default.string,target:a.default.oneOfType([a.default.string,a.default.func,a.default.object]).isRequired,toggle:a.default.func.isRequired,areaId:a.default.number.isRequired,insertAfterElement:a.default.oneOfType([a.default.number,a.default.string])};t.default=(0,l.inject)(["PopoverOptionSet"],(e=>({PopoverOptionSetComponent:e})),(()=>"ElementEditor"))(c)},4415:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=s(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=u(n(7086)),o=n(8127),l=u(n(4754)),i=n(7286),d=n(6648);function u(e){return e&&e.__esModule?e:{default:e}}function s(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(s=function(e){return e?n:t})(e)}class c extends r.Component{constructor(e){super(e),this.toggle=this.toggle.bind(this),this.state={popoverOpen:!1}}toggle(){this.setState((e=>({popoverOpen:!e.popoverOpen})))}render(){const{AddElementPopoverComponent:e,elementTypes:t,areaId:n}=this.props,a={id:`ElementalArea${n}_AddButton`,color:"primary",onClick:this.toggle,className:"font-icon-plus"};return r.default.createElement("div",null,r.default.createElement(o.Button,a,l.default._t("ElementAddNewButton.ADD_BLOCK","Add block")),r.default.createElement(e,{placement:"bottom-start",target:a.id,isOpen:this.state.popoverOpen,elementTypes:t,toggle:this.toggle,areaId:n,insertAfterElement:0}))}}t.Component=c,c.defaultProps={},c.propTypes={elementTypes:a.default.arrayOf(i.elementTypeType).isRequired,areaId:a.default.number.isRequired};t.default=(0,d.inject)(["AddElementPopover"],(e=>({AddElementPopoverComponent:e})),(()=>"ElementEditor.ElementList.AddNewButton"))(c)},8947:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=f(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=c(n(7086)),o=n(6648),l=n(2827),i=n(1624),d=n(920),u=n(5762),s=c(n(720));function c(e){return e&&e.__esModule?e:{default:e}}function f(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(f=function(e){return e?n:t})(e)}class p extends r.PureComponent{render(){const{id:e,fileUrl:t,fileTitle:n,content:a,previewExpanded:o,InlineEditFormComponent:l,SummaryComponent:i,activeTab:d,onFormInit:u,handleLoadingError:s,formDirty:c,broken:f}=this.props;return r.default.createElement("div",{className:"element-editor-content"},!o&&r.default.createElement(i,{content:a,fileUrl:t,fileTitle:n,broken:f}),o&&r.default.createElement(l,{extraClass:{"element-editor-editform--collapsed":!o},onClick:e=>e.stopPropagation(),elementId:e,activeTab:d,onFormInit:u,handleLoadingError:s}),c&&r.default.createElement("input",{type:"hidden",name:"change-tracker",className:"element-form-dirty-state",value:"1"}))}}t.Component=p,p.propTypes={id:a.default.string,content:a.default.string,fileUrl:a.default.string,fileTitle:a.default.string,previewExpanded:a.default.bool,SummaryComponent:a.default.elementType,InlineEditFormComponent:a.default.elementType,handleLoadingError:a.default.func,broken:a.default.bool},p.defaultProps={};t.default=(0,l.compose)((0,o.inject)(["ElementSummary","ElementInlineEditForm"],((e,t)=>({SummaryComponent:e,InlineEditFormComponent:t})),(()=>"ElementEditor.ElementList.Element")),(0,i.connect)((function(e,t){const n=(0,d.loadElementFormStateName)(t.id);return{formDirty:(0,u.isDirty)(`element.${n}`,s.default)(e)}})))(p)},9475:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=a(t);if(n&&n.has(e))return n.get(e);var r={},o=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var l in e)if("default"!==l&&Object.prototype.hasOwnProperty.call(e,l)){var i=o?Object.getOwnPropertyDescriptor(e,l):null;i&&(i.get||i.set)?Object.defineProperty(r,l,i):r[l]=e[l]}r.default=e,n&&n.set(e,r);return r}(n(7363));function a(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(a=function(e){return e?n:t})(e)}class o extends r.PureComponent{render(){return r.default.createElement("div",{className:"elemental-editor-drag-indicator"},r.default.createElement("div",{className:"elemental-editor-drag-indicator__ball"}))}}t.default=o},176:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=E(n(7363)),a=v(n(7086)),o=n(5407),l=n(7286),i=n(2827),d=n(6648),u=v(n(4754)),s=v(n(7820)),c=n(1624),f=n(920),p=n(9536),m=E(n(1789)),g=n(2084),h=n(1211),y=n(8883);function v(e){return e&&e.__esModule?e:{default:e}}function b(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(b=function(e){return e?n:t})(e)}function E(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=b(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}return r.default=e,n&&n.set(e,r),r}class _ extends r.Component{static getDerivedStateFromError(){return{childRenderingError:!0}}constructor(e){super(e),this.handleKeyUp=this.handleKeyUp.bind(this),this.handleExpand=this.handleExpand.bind(this),this.handleLoadingError=this.handleLoadingError.bind(this),this.handleTabClick=this.handleTabClick.bind(this),this.updateFormTab=this.updateFormTab.bind(this),this.state={previewExpanded:!1,initialTab:"",loadingError:!1,childRenderingError:!1}}componentDidMount(){const{connectDragPreview:e}=this.props;e&&e((0,h.getEmptyImage)(),{captureDraggingState:!0})}getVersionedStateClassName(){const{element:e}=this.props,t="element-editor__element";return e.isPublished?e.isPublished&&!e.isLiveVersion?`${t}--modified`:`${t}--published`:`${t}--draft`}getLinkTitle(e){return e.broken?u.default._t("ElementalElement.ARCHIVE_BROKEN","Archive this block"):u.default.inject(u.default._t("ElementalElement.TITLE","Edit this {type} block"),{type:e.title})}getSummary(e,t){return t.broken?e.title?u.default.inject(u.default._t("ElementalElement.BROKEN_DESCRIPTION_TITLE",'This block had the title "{title}". It is broken and will not display on the front-end. You can archive it to remove it from this elemental area.'),{title:e.title}):u.default._t("ElementalElement.BROKEN_DESCRIPTION","This block is broken and will not display on the front-end. You can archive it to remove it from this elemental area."):e.blockSchema.content}handleLoadingError(){this.setState({loadingError:!0})}updateFormTab(e){const{tabSetName:t,onActivateTab:n}=this.props,{initialTab:r}=this.state;if(r||this.setState({initialTab:e}),e||r)n(t,e||r);else{n(t,"Main")}}handleTabClick(e){const{activeTab:t}=this.props,{loadingError:n}=this.state;e===t||n||(this.setState({previewExpanded:!0}),this.updateFormTab(e))}handleExpand(e){const{type:t,link:n}=this.props,{loadingError:r}=this.state;t.broken||("button"!==e.target.type?!t.inlineEditable||r?window.location=n:this.setState((e=>({previewExpanded:!e.previewExpanded}))):e.stopPropagation())}handleKeyUp(e){const{nodeName:t}=e.target;" "!==e.key&&"Enter"!==e.key||["input","textarea"].includes(t.toLowerCase())||this.handleExpand(e)}render(){const{element:e,type:t,areaId:n,HeaderComponent:a,ContentComponent:o,link:l,activeTab:i,connectDragSource:d,connectDropTarget:c,isDragging:f,isOver:p,onDragEnd:m}=this.props,{childRenderingError:g,previewExpanded:h}=this.state;if(!e.id)return null;const y=(0,s.default)("element-editor__element",{"element-editor__element--broken":t.broken,"element-editor__element--expandable":t.inlineEditable&&!t.broken,"element-editor__element--dragging":f,"element-editor__element--dragged-over":p},this.getVersionedStateClassName()),v=c(r.default.createElement("div",{className:y,onClick:this.handleExpand,onKeyUp:this.handleKeyUp,role:"button",tabIndex:0,title:this.getLinkTitle(t),key:e.id},r.default.createElement(a,{element:e,type:t,areaId:n,expandable:t.inlineEditable,link:l,previewExpanded:h&&!g,handleEditTabsClick:this.handleTabClick,activeTab:i,disableTooltip:f,onDragEnd:m}),!g&&r.default.createElement(o,{id:e.id,fileUrl:e.blockSchema.fileURL,fileTitle:e.blockSchema.fileTitle,content:this.getSummary(e,t),previewExpanded:h&&!f,activeTab:i,onFormInit:()=>this.updateFormTab(i),handleLoadingError:this.handleLoadingError,broken:t.broken}),g&&r.default.createElement("div",{className:"alert alert-danger mt-2"},u.default._t("ElementalElement.CHILD_RENDERING_ERROR","Something went wrong with this block. Please try saving and refreshing the CMS."))));return h?v:d(v)}}t.Component=_,_.propTypes={element:o.elementType,type:l.elementTypeType.isRequired,areaId:a.default.number.isRequired,link:a.default.string.isRequired,activeTab:a.default.string,tabSetName:a.default.string,onActivateTab:a.default.func,connectDragSource:a.default.func.isRequired,connectDragPreview:a.default.func.isRequired,connectDropTarget:a.default.func.isRequired,isDragging:a.default.bool.isRequired,isOver:a.default.bool.isRequired,onDragOver:a.default.func,onDragEnd:a.default.func,onDragStart:a.default.func},_.defaultProps={element:null};const O={drop(e,t,n){const{element:r}=e;return{target:r.id,dropSpot:(0,y.isOverTop)(t,n)?"top":"bottom"}},hover(e,t,n){const{element:r,onDragOver:a}=e;a&&a(r,(0,y.isOverTop)(t,n))}};t.default=(0,i.compose)((0,g.DropTarget)("element",O,((e,t)=>({connectDropTarget:e.dropTarget(),isOver:t.isOver()}))),(0,g.DragSource)("element",y.elementDragSource,((e,t)=>({connectDragSource:e.dragSource(),connectDragPreview:e.dragPreview(),isDragging:t.isDragging()}))),(0,c.connect)((function(e,t){const n=t.element.id,r=(0,f.loadElementFormStateName)(n),a=(0,p.loadElementSchemaValue)("schemaUrl",n),o=e.form&&e.form.formSchemas[a]&&e.form.formSchemas[a].schema&&e.form.formSchemas[a].schema.fields.find((e=>"Tabs"===e.component)),l=o&&o.id,i=`element.${r}__${l}`;return{tabSetName:l,activeTab:e.tabs&&e.tabs.fields&&e.tabs.fields[i]&&e.tabs.fields[i].activeTab}}),(function(e,t){const n=(0,f.loadElementFormStateName)(t.element.id);return{onActivateTab(t,r){e(m.activateTab(`element.${n}__${t}`,r))}}})),(0,d.inject)(["ElementHeader","ElementContent"],((e,t)=>({HeaderComponent:e,ContentComponent:t})),(()=>"ElementEditor.ElementList.Element")))(_)},7328:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=f(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=c(n(7086)),o=n(2827),l=n(8127),i=n(6648),d=n(5407),u=n(7286),s=c(n(3363));function c(e){return e&&e.__esModule?e:{default:e}}function f(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(f=function(e){return e?n:t})(e)}class p extends r.Component{constructor(e){super(e),this.handleEditTabsClick=this.handleEditTabsClick.bind(this)}handleEditTabsClick(e){const{handleEditTabsClick:t}=this.props;t(e.target.name)}renderEditTabs(){const{editTabs:e,activeTab:t,type:n,expandable:a}=this.props;return!n.broken&&a&&e&&e.length?e.map((e=>{let{name:a,title:o}=e;return r.default.createElement(s.default,{key:a,name:a,title:o,type:n,onClick:this.handleEditTabsClick,active:a===t})})):null}renderDivider(){const{children:e,editTabs:t,expandable:n}=this.props;return n&&t&&t.length&&0!==r.default.Children.count(e)?r.default.createElement(l.DropdownItem,{divider:!0,role:"separator"}):null}render(){const{children:e,id:t,ActionMenuComponent:n}=this.props;return r.default.createElement(n,{id:`element-editor-actions-${t}`,className:"element-editor-header__actions-dropdown",dropdownMenuProps:{right:!0},dropdownToggleClassNames:["element-editor-header__actions-toggle","btn","btn-sm","btn--no-text","font-icon-dot-3"]},this.renderEditTabs(),this.renderDivider(),e)}}t.Component=p,p.propTypes={element:d.elementType,type:u.elementTypeType.isRequired,areaId:a.default.number.isRequired,activeTab:a.default.string,editTabs:a.default.arrayOf(a.default.shape({title:a.default.string,name:a.default.string})),handleEditTabsClick:a.default.func.isRequired,expandable:a.default.bool},p.defaultProps={editTabs:[],expandable:!0};t.default=(0,o.compose)((0,i.inject)(["ActionMenu"],(e=>({ActionMenuComponent:e})),(()=>"ElementEditor.ElementList.Element")))(p)},2964:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=c(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=s(n(7086)),o=s(n(9397)),l=n(2084),i=n(5407),d=n(7286),u=n(3558);function s(e){return e&&e.__esModule?e:{default:e}}function c(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(c=function(e){return e?n:t})(e)}class f extends r.Component{render(){const{isDragging:e,element:t,elementTypes:n,currentOffset:a}=this.props;if(!e||!a)return null;const{x:l,y:i}=a,d=`translate(${l}px, ${i}px)`,s={transform:d,WebkitTransform:d},c=(0,u.getElementTypeConfig)(t,n);return r.default.createElement("div",{className:"element-editor-drag-preview",style:s},r.default.createElement(o.default,{element:t,type:c,simple:!0}))}}f.propTypes={element:i.elementType,elementTypes:a.default.arrayOf(d.elementTypeType),isDragging:a.default.bool,currentOffset:a.default.shape({x:a.default.number.isRequired,y:a.default.number.isRequired})};t.default=(0,l.DragLayer)((e=>({element:e.getItem(),currentOffset:e.getSourceClientOffset(),isDragging:e.isDragging()})))(f)},2111:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=h(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=g(n(7086)),o=n(6648),l=n(2827),i=n(7286),d=n(1624),u=n(920),s=n(2084),c=g(n(5386)),f=g(n(2964)),p=g(n(7431)),m=n(573);function g(e){return e&&e.__esModule?e:{default:e}}function h(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(h=function(e){return e?n:t})(e)}class y extends r.PureComponent{constructor(e){super(e),this.state={dragTargetElementId:null,dragSpot:null},this.handleDragOver=this.handleDragOver.bind(this),this.handleDragEnd=this.handleDragEnd.bind(this)}handleDragOver(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:null,t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:null;const n=!!e&&e.id;this.setState({dragTargetElementId:n,dragSpot:!1===t?"bottom":"top"})}handleDragEnd(e,t){const{actions:{handleSortBlock:n},areaId:r}=this.props;n(e,t,r).then((()=>{const e=window.jQuery(".cms-preview");e.entwine("ss.preview")._loadUrl(e.find("iframe").attr("src"))})),this.setState({dragTargetElementId:null,dragSpot:null})}render(){const{fieldName:e,formState:t,ToolbarComponent:n,ListComponent:a,areaId:o,elementTypes:l,isDraggingOver:i,connectDropTarget:d,allowedElements:u}=this.props,{dragTargetElementId:s,dragSpot:c}=this.state,p=u.map((e=>l.find((t=>t.class===e))));return d(r.default.createElement("div",{className:"element-editor"},r.default.createElement(n,{elementTypes:p,areaId:o,onDragOver:this.handleDragOver}),r.default.createElement(a,{allowedElementTypes:p,elementTypes:l,areaId:o,onDragOver:this.handleDragOver,onDragStart:this.handleDragStart,onDragEnd:this.handleDragEnd,dragSpot:c,isDraggingOver:i,dragTargetElementId:s}),r.default.createElement(f.default,{elementTypes:l}),r.default.createElement("input",{name:e,type:"hidden",value:JSON.stringify(t)||"",className:"no-change-track"})))}}t.Component=y,y.propTypes={fieldName:a.default.string,elementTypes:a.default.arrayOf(i.elementTypeType).isRequired,allowedElements:a.default.arrayOf(a.default.string).isRequired,areaId:a.default.number.isRequired,actions:a.default.shape({handleSortBlock:a.default.func})};const v=(0,m.createSelector)([e=>{const t=e.form.formState.element;return t||{}}],(e=>{const t=(0,u.loadElementFormStateName)("[0-9]+");return Object.keys(e).filter((e=>e.match(t))).reduce(((t,n)=>({...t,[n]:e[n].values})),{})}));t.default=(0,l.compose)(p.default,(0,s.DropTarget)("element",{},((e,t)=>({connectDropTarget:e.dropTarget(),isDraggingOver:t.isOver()}))),(0,d.connect)((function(e){return{formState:v(e)}})),(0,o.inject)(["ElementToolbar","ElementList"],((e,t)=>({ToolbarComponent:e,ListComponent:t})),(()=>"ElementEditor")),c.default)(y)},6249:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=g(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=m(n(7086)),o=n(5407),l=n(7286),i=n(2827),d=n(6648),u=m(n(7820)),s=m(n(4754)),c=n(2084),f=n(8883),p=n(3558);function m(e){return e&&e.__esModule?e:{default:e}}function g(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(g=function(e){return e?n:t})(e)}class h extends r.Component{getDragIndicatorIndex(){const{dragTargetElementId:e,draggedItem:t,blocks:n,dragSpot:r}=this.props;return(0,f.getDragIndicatorIndex)(n.map((e=>e.id)),e,t&&t.id,r)}renderBlocks(){const{ElementComponent:e,HoverBarComponent:t,DragIndicatorComponent:n,blocks:a,allowedElementTypes:o,elementTypes:l,areaId:i,onDragEnd:d,onDragOver:u,onDragStart:c,isDraggingOver:f}=this.props;if(!a)return null;if(a&&!a.length)return r.default.createElement("div",null,s.default._t("ElementList.ADD_BLOCKS","Add blocks to place your content"));let m=a.map((n=>r.default.createElement("div",{key:n.id},r.default.createElement(e,{element:n,areaId:i,type:(0,p.getElementTypeConfig)(n,l),link:n.blockSchema.actions.edit,onDragOver:u,onDragEnd:d,onDragStart:c}),f||r.default.createElement(t,{key:`create-after-${n.id}`,areaId:i,elementId:n.id,elementTypes:o}))));f||(m=[r.default.createElement(t,{key:0,areaId:i,elementId:0,elementTypes:o})].concat(m));const g=this.getDragIndicatorIndex();return f&&null!==g&&m.splice(g,0,r.default.createElement(n,{key:"DropIndicator"})),m}renderLoading(){const{loading:e,LoadingComponent:t}=this.props;return e?r.default.createElement(t,null):null}render(){const{blocks:e}=this.props,t=(0,u.default)("elemental-editor-list",{"elemental-editor-list--empty":!e||!e.length});return this.props.connectDropTarget(r.default.createElement("div",{className:t},this.renderLoading(),this.renderBlocks()))}}t.Component=h,h.propTypes={blocks:a.default.arrayOf(o.elementType),elementTypes:a.default.arrayOf(l.elementTypeType).isRequired,allowedElementTypes:a.default.arrayOf(l.elementTypeType).isRequired,loading:a.default.bool,areaId:a.default.number.isRequired,dragTargetElementId:a.default.oneOfType([a.default.string,a.default.bool]),onDragOver:a.default.func,onDragStart:a.default.func,onDragEnd:a.default.func},h.defaultProps={blocks:[],loading:!1};const y={drop(e,t){const{blocks:n}=e,r=t.getDropResult();if(!r)return{};const a=(0,f.getDragIndicatorIndex)(n.map((e=>e.id)),r.target,t.getItem(),r.dropSpot),o=n[a-1]?n[a-1].id:"0";return{...r,dropAfterID:o}}};t.default=(0,i.compose)((0,c.DropTarget)("element",y,((e,t)=>({connectDropTarget:e.dropTarget(),draggedItem:t.getItem()}))),(0,d.inject)(["Element","Loading","HoverBar","DragPositionIndicator"],((e,t,n,r)=>({ElementComponent:e,LoadingComponent:t,HoverBarComponent:n,DragIndicatorComponent:r})),(()=>"ElementEditor.ElementList")))(h)},9397:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=E(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=b(n(7086)),o=n(8127),l=n(5407),i=n(7286),d=n(2827),u=n(1624),s=n(6648),c=b(n(4754)),f=b(n(7820)),p=n(920),m=n(5762),g=n(2084),h=b(n(720)),y=n(8883),v=n(1211);function b(e){return e&&e.__esModule?e:{default:e}}function E(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(E=function(e){return e?n:t})(e)}class _ extends r.Component{constructor(e){super(e),this.toggle=this.toggle.bind(this),this.state={tooltipOpen:!1}}componentDidMount(){const{connectDragPreview:e}=this.props;e&&e((0,v.getEmptyImage)(),{captureDraggingState:!0})}componentDidUpdate(){const{tooltipOpen:e}=this.state,{disableTooltip:t}=this.props;e&&t&&this.setState({tooltipOpen:!1})}getBlockTitle(e,t){return t.broken?c.default.inject(c.default._t("ElementHeader.BROKEN","This element is of obsolete type {type}."),{type:t.obsoleteClassName}):e.title?e.title:c.default.inject(c.default._t("ElementHeader.NOTITLE","Untitled {type} block"),{type:t.title})}toggle(){this.setState((e=>({tooltipOpen:!e.tooltipOpen})))}renderVersionedStateMessage(){const{element:{isLiveVersion:e,isPublished:t},formDirty:n}=this.props;if(!n&&t&&e)return null;let a="";const o=["element-editor-header__version-state"];return n?(a=c.default._t("ElementHeader.STATE_UNSAVED","Item has unsaved changes"),o.push("element-editor-header__version-state--unsaved")):t?e||(a=c.default._t("ElementHeader.STATE_MODIFIED","Item has unpublished changes"),o.push("element-editor-header__version-state--modified")):(a=c.default._t("ElementHeader.STATE_DRAFT","Item has not been published yet"),o.push("element-editor-header__version-state--draft")),r.default.createElement("span",{className:(0,f.default)(o),title:a})}render(){const{connectDragSource:e,element:t,type:n,areaId:a,previewExpanded:l,simple:i,disableTooltip:d,activeTab:u,expandable:s,ElementActionsComponent:p,handleEditTabsClick:m}=this.props,g=this.getBlockTitle(t,n),h=(0,f.default)({"element-editor-header__title":!0,"element-editor-header__title--none":!t.title}),y=c.default._t("ElementHeader.EXPAND","Show editable fields"),v=(0,f.default)("element-editor-header",{"element-editor-header--simple":i}),b=(0,f.default)("element-editor-header__icon-container",{"element-editor-header__icon-container--broken":n.broken}),E=(0,f.default)("element-editor-header__expand",{"font-icon-right-open-big":!s,"font-icon-up-open-big":s&&l,"font-icon-down-open-big":s&&!l}),_=`element-icon-${t.id}`,O=r.default.createElement("div",{className:v},r.default.createElement("div",{className:"element-editor-header__drag-handle"},r.default.createElement("i",{className:"font-icon-drag-handle"})),r.default.createElement("div",{className:"element-editor-header__info"},r.default.createElement("div",{className:b},r.default.createElement("i",{className:n.icon,id:_}),this.renderVersionedStateMessage(),!n.broken&&!i&&r.default.createElement(o.Tooltip,{placement:"top",isOpen:this.state.tooltipOpen&&!d,target:_,toggle:this.toggle},n.title)),r.default.createElement("h3",{className:h},g)),!i&&r.default.createElement("div",{className:"element-editor-header__actions"},r.default.createElement("div",{role:"none",onClick:e=>e.stopPropagation()},r.default.createElement(p,{element:t,type:n,areaId:a,activeTab:u,editTabs:n.editTabs,handleEditTabsClick:m,expandable:s})),!n.broken&&r.default.createElement("i",{className:E,title:y})));return l?e(O):O}}t.Component=_,_.propTypes={element:l.elementType.isRequired,type:i.elementTypeType.isRequired,areaId:a.default.number,activeTab:a.default.string,simple:a.default.bool,ElementActionsComponent:a.default.elementType,previewExpanded:a.default.bool,disableTooltip:a.default.bool,formDirty:a.default.bool,connectDragSource:a.default.func.isRequired,connectDragPreview:a.default.func.isRequired,onDragEnd:a.default.func},_.defaultProps={expandable:!0};t.default=(0,d.compose)((0,g.DragSource)("element",y.elementDragSource,(e=>({connectDragSource:e.dragSource(),connectDragPreview:e.dragPreview()}))),(0,u.connect)((function(e,t){const n=(0,p.loadElementFormStateName)(t.element.id);return{formDirty:(0,m.isDirty)(`element.${n}`,h.default)(e)}})),(0,s.inject)(["ElementActions"],(e=>({ElementActionsComponent:e})),(()=>"ElementEditor.ElementList.Element")))(_)},8544:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=t.Component=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=u(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=d(n(7086)),o=n(6648),l=n(7286),i=d(n(4754));function d(e){return e&&e.__esModule?e:{default:e}}function u(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(u=function(e){return e?n:t})(e)}const s=(0,d(n(8665)).default)("element-editor__hover-bar");function c(e){let{AddElementPopoverComponent:t,elementTypes:n,elementId:a,areaId:o,popoverOpen:l,onToggle:d}=e;const u=`${s("-line")} font-icon-plus-circled`,c=i.default._t("ElementAddNewButton.ADD_BLOCK","Add block"),f={className:s("-area",{"-area--focus":l}),onClick:d,"aria-label":c,title:c,id:`AddBlockHoverBarArea_${o}_${a}`};return r.default.createElement("div",{className:s(""),id:`AddBlockHoverBar_${o}_${a}`},r.default.createElement("button",f,r.default.createElement("span",{className:s("-area-inner")},r.default.createElement("span",{className:u}))),r.default.createElement(t,{placement:"bottom",target:`AddBlockHoverBarArea_${o}_${a}`,isOpen:l,elementTypes:n,toggle:d,container:`#AddBlockHoverBar_${o}_${a}`,areaId:o,insertAfterElement:a}))}class f extends r.Component{constructor(e){super(e),this.toggle=this.toggle.bind(this),this.state={popoverOpen:!1}}toggle(){this.setState((e=>({popoverOpen:!e.popoverOpen})))}render(){const e={...this.state,...this.props,onToggle:this.toggle};return r.default.createElement(c,e)}}t.Component=f,f.propTypes={elementTypes:a.default.arrayOf(l.elementTypeType).isRequired,elementId:a.default.oneOfType([a.default.string,a.default.number]).isRequired,areaId:a.default.oneOfType([a.default.number,a.default.string]).isRequired};t.default=(0,o.inject)(["AddElementPopover"],(e=>({AddElementPopoverComponent:e})),(()=>"ElementEditor.ElementList.HoverBar"))(f)},9192:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=f(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=c(n(7086)),o=c(n(7820)),l=c(n(8238)),i=n(9536),d=c(n(4754)),u=n(920),s=n(1624);function c(e){return e&&e.__esModule?e:{default:e}}function f(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(f=function(e){return e?n:t})(e)}class p extends r.PureComponent{constructor(e){super(e),this.handleLoadingError=this.handleLoadingError.bind(this),this.state={loadingError:null}}handleLoadingError(){const{jQuery:e}=window,{handleLoadingError:t}=this.props;this.setState({loadingError:!0}),e.noticeAdd({text:d.default.inject(d.default._t("ElementEditForm.ERROR_NOTIFICATION","Error displaying the edit form for this block")),stay:!0,type:"notice"}),t()}render(){const{elementId:e,extraClass:t,onClick:n,onFormInit:a,formHasState:d}=this.props,{loadingError:u}=this.state,s=(0,o.default)("element-editor-editform",t),c={formTag:"div",schemaUrl:(0,i.loadElementSchemaValue)("schemaUrl",e),identifier:"element",refetchSchemaOnMount:!d,onLoadingError:this.handleLoadingError};return u&&(c.loading=!1),"function"==typeof a&&(c.onReduxFormInit=a),r.default.createElement("div",{className:s,onClick:n,role:"presentation"},r.default.createElement(l.default,c))}}p.propTypes={extraClass:a.default.oneOfType([a.default.string,a.default.object]),onClick:a.default.func,elementId:a.default.string,handleLoadingError:a.default.func};t.default=(0,s.connect)((function(e,t){const n=(0,u.loadElementFormStateName)(t.elementId);return{formHasState:e.form.formState&&e.form.formState.element&&!!e.form.formState.element[n]}}))(p)},9097:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=d(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),a=i(n(7086)),o=i(n(7820)),l=i(n(4754));function i(e){return e&&e.__esModule?e:{default:e}}function d(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(d=function(e){return e?n:t})(e)}class u extends r.PureComponent{render(){const{fileUrl:e,fileTitle:t,content:n,broken:a}=this.props,i=l.default._t("ElementSummary.NO_PREVIEW","No preview available"),d=(0,o.default)("element-editor-summary__content",{"element-editor-summary__content--broken":a});return r.default.createElement("div",{className:"element-editor-summary"},e&&r.default.createElement("img",{className:"element-editor-summary__thumbnail-image",src:e,alt:t}),(n||!e)&&r.default.createElement("p",{className:d},n||i))}}u.defaultProps={},u.propTypes={content:a.default.string,fileUrl:a.default.string,fileTitle:a.default.string,broken:a.default.bool};t.default=u},8792:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r,a=function(e,t){if(!t&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var n=u(t);if(n&&n.has(e))return n.get(e);var r={},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if("default"!==o&&Object.prototype.hasOwnProperty.call(e,o)){var l=a?Object.getOwnPropertyDescriptor(e,o):null;l&&(l.get||l.set)?Object.defineProperty(r,o,l):r[o]=e[o]}r.default=e,n&&n.set(e,r);return r}(n(7363)),o=(r=n(7086))&&r.__esModule?r:{default:r},l=n(6648),i=n(7286),d=n(2084);function u(e){if("function"!=typeof WeakMap)return null;var t=new WeakMap,n=new WeakMap;return(u=function(e){return e?n:t})(e)}class s extends a.PureComponent{render(){const{AddNewButtonComponent:e,elementTypes:t,areaId:n,connectDropTarget:r}=this.props;return r(a.default.createElement("div",{className:"element-editor__toolbar"},a.default.createElement(e,{elementTypes:t,areaId:n})))}}s.defaultProps={},s.propTypes={elementTypes:o.default.arrayOf(i.elementTypeType).isRequired,areaId:o.default.number.isRequired,AddNewButtonComponent:o.default.elementType.isRequired,connectDropTarget:o.default.func.isRequired,onDragOver:o.default.func,onDragDrop:o.default.func};const c={hover(e){const{onDragOver:t}=e;t&&t()}};t.default=(0,d.DropTarget)("element",c,(e=>({connectDropTarget:e.dropTarget()})))((0,l.inject)(["ElementAddNewButton"],(e=>({AddNewButtonComponent:e})),(()=>"ElementEditor.ElementToolbar"))(s))},9405:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=l(n(7363)),a=l(n(4754)),o=l(n(7820));function l(e){return e&&e.__esModule?e:{default:e}}t.default=e=>class extends e{getClassName(){const e=[super.getClassName()];return this.props.data.ElementID&&e.unshift("elemental-area__element--historic-inner"),(0,o.default)(e)}render(){const e=this.getLegend(),t=this.props.data.tag||"div",n=this.getClassName(),{data:o}=this.props;return o.ElementID?r.default.createElement(t,{className:n},e,r.default.createElement("div",{className:"elemental-preview elemental-preview--historic"},o.ElementEditLink&&r.default.createElement("a",{className:"elemental-preview__link",href:o.ElementEditLink},r.default.createElement("span",{className:"elemental-preview__link-text"},a.default._t("HistoricElementView.VIEW_BLOCK_HISTORY","Block history")),r.default.createElement("i",{className:"font-icon-angle-right btn--icon-lg elemental-preview__link-caret"})),r.default.createElement("div",{className:"elemental-preview__icon"},r.default.createElement("i",{className:o.ElementIcon})),r.default.createElement("div",{className:"elemental-preview__detail"},r.default.createElement("h3",null,o.ElementTitle," ",r.default.createElement("small",null,o.ElementType)))),this.props.children):super.render()}}},5515:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r=l(n(7363)),a=n(8127),o=l(n(1042));function l(e){return e&&e.__esModule?e:{default:e}}t.default=(0,o.default)((e=>{const{children:t}=e,n=r.default.Children.toArray(r.default.Children.map(t,((t,n)=>{const a={noHolder:!0};return 0===n&&(a.id=e.id),r.default.cloneElement(t,a)})));return e.readOnly?r.default.createElement("div",{className:"text-checkbox-group-field--read-only"},n):1===n.length?n[0]:r.default.createElement(a.InputGroup,{className:"text-checkbox-group-field"},n[0],r.default.createElement(a.InputGroupAddon,{addonType:"append"},r.default.createElement(a.InputGroupText,null,n[1])))}))},7489:function(e,t,n){var r=u(n(5311)),a=u(n(7363)),o=n(9691),l=n(6648),i=n(3558),d=n(5762);function u(e){return e&&e.__esModule?e:{default:e}}const s=()=>{window.ss.apolloClient.resetStore(),setTimeout((()=>{const{store:e}=window.ss;e&&e.dispatch((0,d.destroy)(...Object.keys(e.getState().form.formState.element||{}).map((e=>`element.${e}`))))}),0)};r.default.entwine("ss",(e=>{e(".js-injector-boot .element-editor__container").entwine({ReactRoot:null,onmatch(){const e=(0,l.loadComponent)("ElementEditor",{}),t=this.data("schema"),n=(0,i.getConfig)().elementTypes,r={fieldName:this.attr("name"),areaId:t["elemental-area-id"],allowedElements:t["allowed-elements"],elementTypes:n};let d=this.getReactRoot();d||(d=(0,o.createRoot)(this[0]),this.setReactRoot(d)),d.render(a.default.createElement(e,r))},onunmatch(){e(".cms-edit-form").data("hasValidationErrors")||s();const t=this.getReactRoot();t&&(t.unmount(),this.setReactRoot(null))},"from .cms-edit-form":{onaftersubmitform(t,n){const r=JSON.parse(n.xhr.responseText).ValidationResult;JSON.parse(r.replace(/<\/?script[^>]*?>/g,"")).isValid?(e(".cms-edit-form").data("hasValidationErrors",!1),s()):e(".cms-edit-form").data("hasValidationErrors",!0)}}}),e(".js-injector-boot .element-editor__container .element-form-dirty-state").entwine({onmatch(){e(".cms-edit-form").trigger("change")},onunmatch(){e(".cms-edit-form").trigger("change")}}),e(".cms-edit-form").entwine({getChangeTrackerOptions(){const t=void 0===this.entwineData("ChangeTrackerOptions");let n=this._super();return t&&(n=e.extend({},n),n.ignoreFieldSelector+=", .elementalarea :input:not(.element-form-dirty-state)",this.setChangeTrackerOptions(n)),n}})}))},8883:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.isOverTop=t.getDragIndicatorIndex=t.elementDragSource=void 0;var r=n(394);t.isOverTop=(e,t)=>{const n=e.getClientOffset(),a=(0,r.findDOMNode)(t).getBoundingClientRect();return n.y<a.y+a.height/2};t.getDragIndicatorIndex=(e,t,n,r)=>{if(null===t||!n)return null;let a=t?e.findIndex((e=>e===t)):0;const o=e.findIndex((e=>e===n));return"bottom"===r&&(a+=1),o===a||o+1===a?null:a};t.elementDragSource={beginDrag(e){return e.element},endDrag(e,t){const{onDragEnd:n}=e,r=t.getDropResult();if(!n||!r||!r.dropAfterID)return;const a=t.getItem().id,{dropAfterID:o}=r;a!==o&&n(a,o)}}},8665:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var r,a=(r=n(7820))&&r.__esModule?r:{default:r};t.default=e=>function(){const t=t=>`${e}${t}`;for(var n=arguments.length,r=new Array(n),o=0;o<n;o++)r[o]=arguments[o];const l=r.map((e=>!(!e&&""!==e)&&("object"==typeof e?Array.isArray(e)?e.map(t):Object.entries(e).reduce(((e,n)=>{let[r,a]=n;return Object.assign({},e,{[t(r)]:a})}),{}):t(e))));return(0,a.default)(...l)}},1637:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.mutation=t.default=t.config=void 0;var r,a=n(3732),o=(r=n(1306))&&r.__esModule?r:{default:r},l=n(2806);const i=t.mutation=o.default`
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./client/src/boot/index.js":
+/*!**********************************!*\
+  !*** ./client/src/boot/index.js ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+
+
+var _registerComponents = _interopRequireDefault(__webpack_require__(/*! boot/registerComponents */ "./client/src/boot/registerComponents.js"));
+var _registerTransforms = _interopRequireDefault(__webpack_require__(/*! boot/registerTransforms */ "./client/src/boot/registerTransforms.js"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+window.document.addEventListener('DOMContentLoaded', () => {
+  (0, _registerComponents.default)();
+  (0, _registerTransforms.default)();
+});
+
+/***/ }),
+
+/***/ "./client/src/boot/registerComponents.js":
+/*!***********************************************!*\
+  !*** ./client/src/boot/registerComponents.js ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _Injector = _interopRequireDefault(__webpack_require__(/*! lib/Injector */ "lib/Injector"));
+var _Element = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/Element */ "./client/src/components/ElementEditor/Element.js"));
+var _ElementActions = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/ElementActions */ "./client/src/components/ElementEditor/ElementActions.js"));
+var _ElementEditor = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/ElementEditor */ "./client/src/components/ElementEditor/ElementEditor.js"));
+var _ElementList = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/ElementList */ "./client/src/components/ElementEditor/ElementList.js"));
+var _Toolbar = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/Toolbar */ "./client/src/components/ElementEditor/Toolbar.js"));
+var _AddNewButton = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/AddNewButton */ "./client/src/components/ElementEditor/AddNewButton.js"));
+var _Header = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/Header */ "./client/src/components/ElementEditor/Header.js"));
+var _Content = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/Content */ "./client/src/components/ElementEditor/Content.js"));
+var _Summary = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/Summary */ "./client/src/components/ElementEditor/Summary.js"));
+var _InlineEditForm = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/InlineEditForm */ "./client/src/components/ElementEditor/InlineEditForm.js"));
+var _AddElementPopover = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/AddElementPopover */ "./client/src/components/ElementEditor/AddElementPopover.js"));
+var _HoverBar = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/HoverBar */ "./client/src/components/ElementEditor/HoverBar.js"));
+var _DragPositionIndicator = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/DragPositionIndicator */ "./client/src/components/ElementEditor/DragPositionIndicator.js"));
+var _TextCheckboxGroupField = _interopRequireDefault(__webpack_require__(/*! components/TextCheckboxGroupField/TextCheckboxGroupField */ "./client/src/components/TextCheckboxGroupField/TextCheckboxGroupField.js"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _default = () => {
+  _Injector.default.component.registerMany({
+    ElementEditor: _ElementEditor.default,
+    ElementToolbar: _Toolbar.default,
+    ElementAddNewButton: _AddNewButton.default,
+    ElementList: _ElementList.default,
+    Element: _Element.default,
+    ElementActions: _ElementActions.default,
+    ElementHeader: _Header.default,
+    ElementContent: _Content.default,
+    ElementSummary: _Summary.default,
+    ElementInlineEditForm: _InlineEditForm.default,
+    AddElementPopover: _AddElementPopover.default,
+    HoverBar: _HoverBar.default,
+    DragPositionIndicator: _DragPositionIndicator.default,
+    TextCheckboxGroupField: _TextCheckboxGroupField.default
+  });
+};
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./client/src/boot/registerTransforms.js":
+/*!***********************************************!*\
+  !*** ./client/src/boot/registerTransforms.js ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _Injector = _interopRequireDefault(__webpack_require__(/*! lib/Injector */ "lib/Injector"));
+var _readOneBlockQuery = _interopRequireDefault(__webpack_require__(/*! state/history/readOneBlockQuery */ "./client/src/state/history/readOneBlockQuery.js"));
+var _HistoricElementView = _interopRequireDefault(__webpack_require__(/*! components/HistoricElementView/HistoricElementView */ "./client/src/components/HistoricElementView/HistoricElementView.js"));
+var _revertToBlockVersionMutation = _interopRequireDefault(__webpack_require__(/*! state/history/revertToBlockVersionMutation */ "./client/src/state/history/revertToBlockVersionMutation.js"));
+var _readBlocksForAreaQuery = _interopRequireDefault(__webpack_require__(/*! state/editor/readBlocksForAreaQuery */ "./client/src/state/editor/readBlocksForAreaQuery.js"));
+var _addElementMutation = _interopRequireDefault(__webpack_require__(/*! state/editor/addElementMutation */ "./client/src/state/editor/addElementMutation.js"));
+var _ArchiveAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/ArchiveAction */ "./client/src/components/ElementActions/ArchiveAction.js"));
+var _DuplicateAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/DuplicateAction */ "./client/src/components/ElementActions/DuplicateAction.js"));
+var _PublishAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/PublishAction */ "./client/src/components/ElementActions/PublishAction.js"));
+var _SaveAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/SaveAction */ "./client/src/components/ElementActions/SaveAction.js"));
+var _UnpublishAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/UnpublishAction */ "./client/src/components/ElementActions/UnpublishAction.js"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _default = () => {
+  _Injector.default.transform('elemental-fieldgroup', updater => {
+    updater.component('FieldGroup.HistoryViewer.VersionDetail', _HistoricElementView.default, 'HistoricElement');
+  }, {
+    after: 'field-holders'
+  });
+  _Injector.default.transform('elements-history', updater => {
+    updater.component('HistoryViewer.Form_ItemEditForm', _readOneBlockQuery.default, 'ElementHistoryViewer');
+  });
+  _Injector.default.transform('blocks-history-revert', updater => {
+    updater.component('HistoryViewerToolbar.VersionedAdmin.HistoryViewer.Element.HistoryViewerVersionDetail', _revertToBlockVersionMutation.default, 'BlockRevertMutation');
+  });
+  _Injector.default.transform('cms-element-editor', updater => {
+    updater.component('ElementList', _readBlocksForAreaQuery.default, 'PageElements');
+  });
+  _Injector.default.transform('cms-element-adder', updater => {
+    updater.component('AddElementPopover', _addElementMutation.default, 'ElementAddButton');
+  });
+  _Injector.default.transform('element-actions', updater => {
+    updater.component('ElementActions', _SaveAction.default, 'ElementActionsWithSave');
+    updater.component('ElementActions', _PublishAction.default, 'ElementActionsWithPublish');
+    updater.component('ElementActions', _UnpublishAction.default, 'ElementActionsWithUnpublish');
+    updater.component('ElementActions', _DuplicateAction.default, 'ElementActionsWithDuplicate');
+    updater.component('ElementActions', _ArchiveAction.default, 'ElementActionsWithArchive');
+  });
+};
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./client/src/components/ElementActions/AbstractAction.js":
+/*!****************************************************************!*\
+  !*** ./client/src/components/ElementActions/AbstractAction.js ***!
+  \****************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "classnames"));
+var _reactstrap = __webpack_require__(/*! reactstrap */ "reactstrap");
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const AbstractAction = props => {
+  const {
+    className,
+    title,
+    label
+  } = props;
+  const itemProps = {
+    className: (0, _classnames.default)(className, 'dropdown-item'),
+    ...props
+  };
+  return _react.default.createElement(_reactstrap.DropdownItem, itemProps, label || title);
+};
+AbstractAction.propTypes = {
+  disabled: _propTypes.default.bool,
+  className: _propTypes.default.string,
+  onClick: _propTypes.default.func,
+  title: _propTypes.default.string,
+  name: _propTypes.default.string,
+  type: _elementTypeType.elementTypeType,
+  active: _propTypes.default.bool,
+  label: _propTypes.default.string
+};
+AbstractAction.defaultProps = {
+  disabled: false
+};
+var _default = exports["default"] = AbstractAction;
+
+/***/ }),
+
+/***/ "./client/src/components/ElementActions/ArchiveAction.js":
+/*!***************************************************************!*\
+  !*** ./client/src/components/ElementActions/ArchiveAction.js ***!
+  \***************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _AbstractAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/AbstractAction */ "./client/src/components/ElementActions/AbstractAction.js"));
+var _archiveBlockMutation = _interopRequireDefault(__webpack_require__(/*! state/editor/archiveBlockMutation */ "./client/src/state/editor/archiveBlockMutation.js"));
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const ArchiveAction = MenuComponent => props => {
+  const handleClick = event => {
+    event.stopPropagation();
+    const {
+      element: {
+        id
+      },
+      isPublished,
+      actions: {
+        handleArchiveBlock
+      }
+    } = props;
+    let archiveMessage = _i18n.default._t('ElementArchiveAction.CONFIRM_DELETE', 'Are you sure you want to send this block to the archive?');
+    if (isPublished) {
+      archiveMessage = _i18n.default._t('ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH', 'Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?');
+    }
+    if (handleArchiveBlock && window.confirm(archiveMessage)) {
+      handleArchiveBlock(id).then(() => {
+        const preview = window.jQuery('.cms-preview');
+        if (preview && typeof preview.entwine === 'function') {
+          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        }
+      });
+    }
+  };
+  const disabled = props.element.canDelete !== undefined && !props.element.canDelete;
+  const label = _i18n.default._t('ElementArchiveAction.ARCHIVE', 'Archive');
+  const title = disabled ? _i18n.default._t('ElementArchiveAction.ARCHIVE_PERMISSION_DENY', 'Archive, insufficient permissions') : label;
+  const newProps = {
+    label,
+    title,
+    disabled,
+    className: 'element-editor__actions-archive',
+    onClick: handleClick,
+    toggle: props.toggle
+  };
+  return _react.default.createElement(MenuComponent, props, props.children, _react.default.createElement(_AbstractAction.default, newProps));
+};
+exports.Component = ArchiveAction;
+var _default = exports["default"] = (0, _redux.compose)(_archiveBlockMutation.default, ArchiveAction);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementActions/DuplicateAction.js":
+/*!*****************************************************************!*\
+  !*** ./client/src/components/ElementActions/DuplicateAction.js ***!
+  \*****************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _AbstractAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/AbstractAction */ "./client/src/components/ElementActions/AbstractAction.js"));
+var _duplicateBlockMutation = _interopRequireDefault(__webpack_require__(/*! state/editor/duplicateBlockMutation */ "./client/src/state/editor/duplicateBlockMutation.js"));
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const DuplicateAction = MenuComponent => props => {
+  if (props.type.broken) {
+    return _react.default.createElement(MenuComponent, props);
+  }
+  const handleClick = event => {
+    event.stopPropagation();
+    const {
+      element: {
+        id
+      },
+      actions: {
+        handleDuplicateBlock
+      }
+    } = props;
+    if (handleDuplicateBlock) {
+      handleDuplicateBlock(id).then(() => {
+        const preview = window.jQuery('.cms-preview');
+        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+      });
+    }
+  };
+  const disabled = props.element.canCreate !== undefined && !props.element.canCreate;
+  const label = _i18n.default._t('ElementArchiveAction.DUPLICATE', 'Duplicate');
+  const title = disabled ? _i18n.default._t('ElementArchiveAction.DUPLICATE_PERMISSION_DENY', 'Duplicate, insufficient permissions') : label;
+  const newProps = {
+    label,
+    title,
+    disabled,
+    className: 'element-editor__actions-duplicate',
+    onClick: handleClick,
+    toggle: props.toggle
+  };
+  return _react.default.createElement(MenuComponent, props, props.children, _react.default.createElement(_AbstractAction.default, newProps));
+};
+exports.Component = DuplicateAction;
+var _default = exports["default"] = (0, _redux.compose)(_duplicateBlockMutation.default, DuplicateAction);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementActions/PublishAction.js":
+/*!***************************************************************!*\
+  !*** ./client/src/components/ElementActions/PublishAction.js ***!
+  \***************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _AbstractAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/AbstractAction */ "./client/src/components/ElementActions/AbstractAction.js"));
+var _publishBlockMutation = _interopRequireDefault(__webpack_require__(/*! state/editor/publishBlockMutation */ "./client/src/state/editor/publishBlockMutation.js"));
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+var _Backend = _interopRequireDefault(__webpack_require__(/*! lib/Backend */ "lib/Backend"));
+var _reactRedux = __webpack_require__(/*! react-redux */ "react-redux");
+var _loadElementSchemaValue = __webpack_require__(/*! state/editor/loadElementSchemaValue */ "./client/src/state/editor/loadElementSchemaValue.js");
+var _loadElementFormStateName = __webpack_require__(/*! state/editor/loadElementFormStateName */ "./client/src/state/editor/loadElementFormStateName.js");
+var _reduxForm = __webpack_require__(/*! redux-form */ "redux-form");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const reportPublicationStatus = (type, title, success) => {
+  const noTitle = _i18n.default.inject(_i18n.default._t('ElementHeader.NOTITLE', 'Untitled {type} block'), {
+    type
+  });
+  const successMessage = _i18n.default.inject(_i18n.default._t('ElementPublishAction.SUCCESS_NOTIFICATION', 'Published \'{title}\' successfully'), {
+    title: title || noTitle
+  });
+  const errorMessage = _i18n.default.inject(_i18n.default._t('ElementPublishAction.ERROR_NOTIFICATION', 'Error publishing \'{title}\''), {
+    title: title || noTitle
+  });
+  window.jQuery.noticeAdd({
+    text: success ? successMessage : errorMessage,
+    stay: false,
+    type: success ? 'success' : 'error'
+  });
+};
+const performSaveForElementWithFormData = (id, formData, securityId) => {
+  const saveEndpoint = _Backend.default.createEndpointFetcher({
+    url: (0, _loadElementSchemaValue.loadElementSchemaValue)('saveUrl', id),
+    method: (0, _loadElementSchemaValue.loadElementSchemaValue)('saveMethod'),
+    payloadFormat: (0, _loadElementSchemaValue.loadElementSchemaValue)('payloadFormat'),
+    defaultData: {
+      SecurityID: securityId
+    }
+  });
+  return saveEndpoint(formData).then(() => window.ss.apolloClient.queryManager.reFetchObservableQueries()).then(input => {
+    const preview = window.jQuery('.cms-preview');
+    preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+    return input;
+  }).then(newPageData => {
+    const newElementData = newPageData[0] && newPageData[0].data.readOneElementalArea.elements.find(elementData => elementData.id === id);
+    return newElementData && newElementData.version;
+  });
+};
+const PublishAction = MenuComponent => props => {
+  if (props.type.broken) {
+    return _react.default.createElement(MenuComponent, props);
+  }
+  const {
+    element,
+    formDirty
+  } = props;
+  const handleClick = event => {
+    event.stopPropagation();
+    const {
+      element: {
+        id,
+        title
+      },
+      type,
+      securityId,
+      formData,
+      actions: {
+        handlePublishBlock
+      },
+      reinitialiseForm
+    } = props;
+    let actionFlow = new Promise(resolve => resolve());
+    if (formDirty) {
+      actionFlow = performSaveForElementWithFormData(id, formData, securityId).then(passthrough => {
+        reinitialiseForm(formData);
+        return passthrough;
+      });
+    }
+    actionFlow.then(() => handlePublishBlock(id)).then(() => reportPublicationStatus(type.title, title, true)).catch(() => reportPublicationStatus(type.title, title, false));
+  };
+  const disabled = props.element.canPublish !== undefined && !props.element.canPublish;
+  const label = _i18n.default._t('ElementArchiveAction.PUBLISH', 'Publish');
+  const title = disabled ? _i18n.default._t('ElementArchiveAction.PUBLISH_PERMISSION_DENY', 'Publish, insufficient permissions') : label;
+  const newProps = {
+    label,
+    title,
+    disabled,
+    className: 'element-editor__actions-publish',
+    onClick: handleClick,
+    toggle: props.toggle
+  };
+  return _react.default.createElement(MenuComponent, props, props.children, (formDirty || !element.isLiveVersion) && _react.default.createElement(_AbstractAction.default, newProps));
+};
+exports.Component = PublishAction;
+function mapStateToProps(state, ownProps) {
+  const formName = (0, _loadElementFormStateName.loadElementFormStateName)(ownProps.element.id);
+  let formData = null;
+  if (state.form.formState.element && state.form.formState.element[formName]) {
+    formData = state.form.formState.element[formName].values;
+  }
+  return {
+    formData,
+    securityId: state.config.SecurityID,
+    formDirty: state.unsavedForms.find(unsaved => unsaved.name === `element.${formName}`)
+  };
+}
+function mapDispatchToProps(dispatch, ownProps) {
+  const formName = (0, _loadElementFormStateName.loadElementFormStateName)(ownProps.element.id);
+  return {
+    reinitialiseForm(savedData) {
+      dispatch((0, _reduxForm.initialize)(`element.${formName}`, savedData));
+    }
+  };
+}
+var _default = exports["default"] = (0, _redux.compose)(_publishBlockMutation.default, (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps), PublishAction);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementActions/SaveAction.js":
+/*!************************************************************!*\
+  !*** ./client/src/components/ElementActions/SaveAction.js ***!
+  \************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _reactRedux = __webpack_require__(/*! react-redux */ "react-redux");
+var _AbstractAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/AbstractAction */ "./client/src/components/ElementActions/AbstractAction.js"));
+var _Backend = _interopRequireDefault(__webpack_require__(/*! lib/Backend */ "lib/Backend"));
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+var _loadElementSchemaValue = __webpack_require__(/*! state/editor/loadElementSchemaValue */ "./client/src/state/editor/loadElementSchemaValue.js");
+var _loadElementFormStateName = __webpack_require__(/*! state/editor/loadElementFormStateName */ "./client/src/state/editor/loadElementFormStateName.js");
+var _reduxForm = __webpack_require__(/*! redux-form */ "redux-form");
+var _Element = __webpack_require__(/*! components/ElementEditor/Element */ "./client/src/components/ElementEditor/Element.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+const SaveAction = MenuComponent => props => {
+  const failureHandlers = (0, _react.useContext)(_Element.ElementContext);
+  console.log(['SaveAction.props is', props]);
+  if (!props.expandable || props.type.broken) {
+    return _react.default.createElement(MenuComponent, props);
+  }
+  const handleClick = event => {
+    event.stopPropagation();
+    const {
+      element,
+      type,
+      securityId,
+      formData,
+      reinitialiseForm,
+      submitForm
+    } = props;
+    const {
+      jQuery: $
+    } = window;
+    const noTitle = _i18n.default.inject(_i18n.default._t('ElementHeader.NOTITLE', 'Untitled {type} block'), {
+      type: type.title
+    });
+    submitForm();
+    return;
+    const endpointSpec = {
+      url: (0, _loadElementSchemaValue.loadElementSchemaValue)('saveUrl', element.id),
+      method: (0, _loadElementSchemaValue.loadElementSchemaValue)('saveMethod'),
+      payloadFormat: (0, _loadElementSchemaValue.loadElementSchemaValue)('payloadFormat'),
+      defaultData: {
+        SecurityID: securityId
+      }
+    };
+    const endpoint = _Backend.default.createEndpointFetcher(endpointSpec);
+    endpoint(formData).then(() => {
+      const {
+        apolloClient
+      } = window.ss;
+      apolloClient.queryManager.reFetchObservableQueries();
+      reinitialiseForm(formData);
+      const preview = $('.cms-preview');
+      preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+      const newTitle = formData ? formData[`PageElements_${element.id}_Title`] : null;
+      $.noticeAdd({
+        text: _i18n.default.inject(_i18n.default._t('ElementSaveAction.SUCCESS_NOTIFICATION', 'Saved \'{title}\' successfully'), {
+          title: newTitle || noTitle
+        }),
+        stay: false,
+        type: 'success'
+      });
+    }).catch(e => {
+      $.noticeAdd({
+        text: _i18n.default.inject(_i18n.default._t('ElementSaveAction.ERROR_NOTIFICATION', 'Error saving \'{title}\''), {
+          title: element.Title || noTitle
+        }),
+        stay: false,
+        type: 'error'
+      });
+      e.response.json().then(formSchema => {
+        failureHandlers.onFailedSave(formSchema);
+      });
+    });
+  };
+  const newProps = {
+    title: _i18n.default._t('ElementSaveAction.SAVE', 'Save'),
+    className: 'element-editor__actions-save',
+    onClick: handleClick
+  };
+  return _react.default.createElement(MenuComponent, props, props.children, _react.default.createElement(_AbstractAction.default, newProps));
+};
+exports.Component = SaveAction;
+function mapStateToProps(state, ownProps) {
+  const formName = (0, _loadElementFormStateName.loadElementFormStateName)(ownProps.element.id);
+  let formData = null;
+  if (state.form.formState.element && state.form.formState.element[formName]) {
+    formData = state.form.formState.element[formName].values;
+  }
+  return {
+    formData,
+    securityId: state.config.SecurityID
+  };
+}
+function mapDispatchToProps(dispatch, ownProps) {
+  const formName = (0, _loadElementFormStateName.loadElementFormStateName)(ownProps.element.id);
+  return {
+    reinitialiseForm(savedData) {
+      dispatch((0, _reduxForm.initialize)(`element.${formName}`, savedData));
+    },
+    submitForm() {
+      console.log('submitting form for elmenet with ID 3 - THIS IS HARDCODED TO element #3');
+      dispatch((0, _reduxForm.submit)('element.ElementForm_3'));
+    }
+  };
+}
+var _default = exports["default"] = (0, _redux.compose)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps), SaveAction);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementActions/UnpublishAction.js":
+/*!*****************************************************************!*\
+  !*** ./client/src/components/ElementActions/UnpublishAction.js ***!
+  \*****************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _AbstractAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/AbstractAction */ "./client/src/components/ElementActions/AbstractAction.js"));
+var _unpublishBlockMutation = _interopRequireDefault(__webpack_require__(/*! state/editor/unpublishBlockMutation */ "./client/src/state/editor/unpublishBlockMutation.js"));
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const UnpublishAction = MenuComponent => props => {
+  if (props.type.broken) {
+    return _react.default.createElement(MenuComponent, props);
+  }
+  const {
+    element,
+    type,
+    actions: {
+      handleUnpublishBlock
+    }
+  } = props;
+  const handleClick = event => {
+    event.stopPropagation();
+    const {
+      jQuery: $
+    } = window;
+    const noTitle = _i18n.default.inject(_i18n.default._t('ElementHeader.NOTITLE', 'Untitled {type} block'), {
+      type: type.title
+    });
+    if (handleUnpublishBlock) {
+      handleUnpublishBlock(element.id).then(() => {
+        const preview = $('.cms-preview');
+        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        $.noticeAdd({
+          text: _i18n.default.inject(_i18n.default._t('ElementUnpublishAction.SUCCESS_NOTIFICATION', 'Removed \'{title}\' from the published page'), {
+            title: element.title || noTitle
+          }),
+          stay: false,
+          type: 'success'
+        });
+      }).catch(() => {
+        $.noticeAdd({
+          text: _i18n.default.inject(_i18n.default._t('ElementUnpublishAction.ERROR_NOTIFICATION', 'Error unpublishing \'{title}\''), {
+            title: element.title || noTitle
+          }),
+          stay: false,
+          type: 'error'
+        });
+      });
+    }
+  };
+  const disabled = props.element.canUnpublish !== undefined && !props.element.canUnpublish;
+  const label = _i18n.default._t('ElementArchiveAction.UNPUBLISH', 'Unpublish');
+  const title = disabled ? _i18n.default._t('ElementArchiveAction.UNPUBLISH_PERMISSION_DENY', 'Unpublish, insufficient permissions') : label;
+  const newProps = {
+    label,
+    title,
+    disabled,
+    className: 'element-editor__actions-unpublish',
+    onClick: handleClick,
+    toggle: props.toggle
+  };
+  return _react.default.createElement(MenuComponent, props, props.children, element.isPublished && _react.default.createElement(_AbstractAction.default, newProps));
+};
+exports.Component = UnpublishAction;
+var _default = exports["default"] = (0, _redux.compose)(_unpublishBlockMutation.default, UnpublishAction);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/AddElementPopover.js":
+/*!******************************************************************!*\
+  !*** ./client/src/components/ElementEditor/AddElementPopover.js ***!
+  \******************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "classnames"));
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class AddElementPopover extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.handleToggle = this.handleToggle.bind(this);
+  }
+  getElementButtonClickHandler(elementType) {
+    return event => {
+      const {
+        actions: {
+          handleAddElementToArea
+        },
+        insertAfterElement
+      } = this.props;
+      event.preventDefault();
+      handleAddElementToArea(elementType.class, insertAfterElement).then(() => {
+        const preview = window.jQuery('.cms-preview');
+        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+      });
+      this.handleToggle();
+    };
+  }
+  handleToggle() {
+    const {
+      toggle
+    } = this.props;
+    toggle();
+  }
+  render() {
+    const {
+      PopoverOptionSetComponent,
+      elementTypes,
+      container,
+      extraClass,
+      isOpen,
+      placement,
+      target
+    } = this.props;
+    const popoverClassNames = (0, _classnames.default)('element-editor-add-element', extraClass);
+    const buttons = elementTypes.map(elementType => ({
+      content: elementType.title,
+      key: elementType.name,
+      className: (0, _classnames.default)(elementType.icon, 'btn--icon-xl', 'element-editor-add-element__button'),
+      onClick: this.getElementButtonClickHandler(elementType)
+    }));
+    return _react.default.createElement(PopoverOptionSetComponent, {
+      buttons: buttons,
+      searchPlaceholder: _i18n.default._t('ElementAddElementPopover.SEARCH_BLOCKS', 'Search blocks'),
+      extraClass: popoverClassNames,
+      container: container,
+      isOpen: isOpen,
+      placement: placement,
+      target: target,
+      toggle: this.handleToggle
+    });
+  }
+}
+AddElementPopover.propTypes = {
+  container: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.func, _propTypes.default.object]),
+  elementTypes: _propTypes.default.arrayOf(_elementTypeType.elementTypeType).isRequired,
+  extraClass: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.array, _propTypes.default.object]),
+  isOpen: _propTypes.default.bool.isRequired,
+  placement: _propTypes.default.string,
+  target: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.func, _propTypes.default.object]).isRequired,
+  toggle: _propTypes.default.func.isRequired,
+  areaId: _propTypes.default.number.isRequired,
+  insertAfterElement: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string])
+};
+var _default = exports["default"] = (0, _Injector.inject)(['PopoverOptionSet'], PopoverOptionSetComponent => ({
+  PopoverOptionSetComponent
+}), () => 'ElementEditor')(AddElementPopover);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/AddNewButton.js":
+/*!*************************************************************!*\
+  !*** ./client/src/components/ElementEditor/AddNewButton.js ***!
+  \*************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _reactstrap = __webpack_require__(/*! reactstrap */ "reactstrap");
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class AddNewButton extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      popoverOpen: false
+    };
+  }
+  toggle() {
+    this.setState(prevState => ({
+      popoverOpen: !prevState.popoverOpen
+    }));
+  }
+  render() {
+    const {
+      AddElementPopoverComponent,
+      elementTypes,
+      areaId
+    } = this.props;
+    const buttonAttributes = {
+      id: `ElementalArea${areaId}_AddButton`,
+      color: 'primary',
+      onClick: this.toggle,
+      className: 'font-icon-plus'
+    };
+    return _react.default.createElement("div", null, _react.default.createElement(_reactstrap.Button, buttonAttributes, _i18n.default._t('ElementAddNewButton.ADD_BLOCK', 'Add block')), _react.default.createElement(AddElementPopoverComponent, {
+      placement: "bottom-start",
+      target: buttonAttributes.id,
+      isOpen: this.state.popoverOpen,
+      elementTypes: elementTypes,
+      toggle: this.toggle,
+      areaId: areaId,
+      insertAfterElement: 0
+    }));
+  }
+}
+exports.Component = AddNewButton;
+AddNewButton.defaultProps = {};
+AddNewButton.propTypes = {
+  elementTypes: _propTypes.default.arrayOf(_elementTypeType.elementTypeType).isRequired,
+  areaId: _propTypes.default.number.isRequired
+};
+var _default = exports["default"] = (0, _Injector.inject)(['AddElementPopover'], AddElementPopoverComponent => ({
+  AddElementPopoverComponent
+}), () => 'ElementEditor.ElementList.AddNewButton')(AddNewButton);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/Content.js":
+/*!********************************************************!*\
+  !*** ./client/src/components/ElementEditor/Content.js ***!
+  \********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _reactRedux = __webpack_require__(/*! react-redux */ "react-redux");
+var _loadElementFormStateName = __webpack_require__(/*! state/editor/loadElementFormStateName */ "./client/src/state/editor/loadElementFormStateName.js");
+var _reduxForm = __webpack_require__(/*! redux-form */ "redux-form");
+var _getFormState = _interopRequireDefault(__webpack_require__(/*! lib/getFormState */ "lib/getFormState"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class Content extends _react.PureComponent {
+  render() {
+    const {
+      id,
+      fileUrl,
+      fileTitle,
+      content,
+      previewExpanded,
+      InlineEditFormComponent,
+      SummaryComponent,
+      activeTab,
+      onFormInit,
+      handleLoadingError,
+      formDirty,
+      broken,
+      formSchema
+    } = this.props;
+    return _react.default.createElement("div", {
+      className: "element-editor-content"
+    }, !previewExpanded && _react.default.createElement(SummaryComponent, {
+      content: content,
+      fileUrl: fileUrl,
+      fileTitle: fileTitle,
+      broken: broken
+    }), previewExpanded && _react.default.createElement(InlineEditFormComponent, {
+      extraClass: {
+        'element-editor-editform--collapsed': !previewExpanded
+      },
+      onClick: event => event.stopPropagation(),
+      elementId: id,
+      activeTab: activeTab,
+      onFormInit: onFormInit,
+      handleLoadingError: handleLoadingError,
+      formSchema: formSchema
+    }), formDirty && _react.default.createElement("input", {
+      type: "hidden",
+      name: "change-tracker",
+      className: "element-form-dirty-state",
+      value: "1"
+    }));
+  }
+}
+exports.Component = Content;
+Content.propTypes = {
+  id: _propTypes.default.string,
+  content: _propTypes.default.string,
+  fileUrl: _propTypes.default.string,
+  fileTitle: _propTypes.default.string,
+  previewExpanded: _propTypes.default.bool,
+  SummaryComponent: _propTypes.default.elementType,
+  InlineEditFormComponent: _propTypes.default.elementType,
+  handleLoadingError: _propTypes.default.func,
+  broken: _propTypes.default.bool,
+  formSchema: _propTypes.default.object
+};
+Content.defaultProps = {};
+function mapStateToProps(state, ownProps) {
+  const formName = (0, _loadElementFormStateName.loadElementFormStateName)(ownProps.id);
+  return {
+    formDirty: (0, _reduxForm.isDirty)(`element.${formName}`, _getFormState.default)(state)
+  };
+}
+var _default = exports["default"] = (0, _redux.compose)((0, _Injector.inject)(['ElementSummary', 'ElementInlineEditForm'], (SummaryComponent, InlineEditFormComponent) => ({
+  SummaryComponent,
+  InlineEditFormComponent
+}), () => 'ElementEditor.ElementList.Element'), (0, _reactRedux.connect)(mapStateToProps))(Content);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/DragPositionIndicator.js":
+/*!**********************************************************************!*\
+  !*** ./client/src/components/ElementEditor/DragPositionIndicator.js ***!
+  \**********************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class DragPositionIndicator extends _react.PureComponent {
+  render() {
+    return _react.default.createElement("div", {
+      className: "elemental-editor-drag-indicator"
+    }, _react.default.createElement("div", {
+      className: "elemental-editor-drag-indicator__ball"
+    }));
+  }
+}
+var _default = exports["default"] = DragPositionIndicator;
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/Element.js":
+/*!********************************************************!*\
+  !*** ./client/src/components/ElementEditor/Element.js ***!
+  \********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.ElementContext = exports.Component = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _elementType = __webpack_require__(/*! types/elementType */ "./client/src/types/elementType.js");
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "classnames"));
+var _reactRedux = __webpack_require__(/*! react-redux */ "react-redux");
+var _loadElementFormStateName = __webpack_require__(/*! state/editor/loadElementFormStateName */ "./client/src/state/editor/loadElementFormStateName.js");
+var _loadElementSchemaValue = __webpack_require__(/*! state/editor/loadElementSchemaValue */ "./client/src/state/editor/loadElementSchemaValue.js");
+var TabsActions = _interopRequireWildcard(__webpack_require__(/*! state/tabs/TabsActions */ "state/tabs/TabsActions"));
+var _reactDnd = __webpack_require__(/*! react-dnd */ "react-dnd");
+var _reactDndHtml5Backend = __webpack_require__(/*! react-dnd-html5-backend */ "react-dnd-html5-backend");
+var _dragHelpers = __webpack_require__(/*! lib/dragHelpers */ "./client/src/lib/dragHelpers.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class Element extends _react.Component {
+  static getDerivedStateFromError() {
+    return {
+      childRenderingError: true
+    };
+  }
+  constructor(props) {
+    super(props);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.handleExpand = this.handleExpand.bind(this);
+    this.handleLoadingError = this.handleLoadingError.bind(this);
+    this.handleTabClick = this.handleTabClick.bind(this);
+    this.updateFormTab = this.updateFormTab.bind(this);
+    this.state = {
+      previewExpanded: false,
+      initialTab: '',
+      loadingError: false,
+      childRenderingError: false,
+      formSchema: {}
+    };
+  }
+  componentDidMount() {
+    const {
+      connectDragPreview
+    } = this.props;
+    if (connectDragPreview) {
+      connectDragPreview((0, _reactDndHtml5Backend.getEmptyImage)(), {
+        captureDraggingState: true
+      });
+    }
+  }
+  getVersionedStateClassName() {
+    const {
+      element
+    } = this.props;
+    const baseClassName = 'element-editor__element';
+    if (!element.isPublished) {
+      return `${baseClassName}--draft`;
+    }
+    if (element.isPublished && !element.isLiveVersion) {
+      return `${baseClassName}--modified`;
+    }
+    return `${baseClassName}--published`;
+  }
+  getLinkTitle(type) {
+    if (type.broken) {
+      return _i18n.default._t('ElementalElement.ARCHIVE_BROKEN', 'Archive this block');
+    }
+    return _i18n.default.inject(_i18n.default._t('ElementalElement.TITLE', 'Edit this {type} block'), {
+      type: type.title
+    });
+  }
+  getSummary(element, type) {
+    if (type.broken) {
+      return element.title ? _i18n.default.inject(_i18n.default._t('ElementalElement.BROKEN_DESCRIPTION_TITLE', 'This block had the title "{title}". It is broken and will not display on the front-end. You can archive it to remove it from this elemental area.'), {
+        title: element.title
+      }) : _i18n.default._t('ElementalElement.BROKEN_DESCRIPTION', 'This block is broken and will not display on the front-end. You can archive it to remove it from this elemental area.');
+    }
+    return element.blockSchema.content;
+  }
+  handleLoadingError() {
+    this.setState({
+      loadingError: true
+    });
+  }
+  updateFormTab(activeTab) {
+    const {
+      tabSetName,
+      onActivateTab
+    } = this.props;
+    const {
+      initialTab
+    } = this.state;
+    if (!initialTab) {
+      this.setState({
+        initialTab: activeTab
+      });
+    }
+    if (activeTab || initialTab) {
+      onActivateTab(tabSetName, activeTab || initialTab);
+    } else {
+      const defaultFirstTab = 'Main';
+      onActivateTab(tabSetName, defaultFirstTab);
+    }
+  }
+  handleTabClick(toBeActiveTab) {
+    const {
+      activeTab
+    } = this.props;
+    const {
+      loadingError
+    } = this.state;
+    if (toBeActiveTab !== activeTab && !loadingError) {
+      this.setState({
+        previewExpanded: true
+      });
+      this.updateFormTab(toBeActiveTab);
+    }
+  }
+  handleExpand(event) {
+    const {
+      type,
+      link
+    } = this.props;
+    const {
+      loadingError
+    } = this.state;
+    if (type.broken) {
+      return;
+    }
+    if (event.target.type === 'button') {
+      event.stopPropagation();
+      return;
+    }
+    if (type.inlineEditable && !loadingError) {
+      this.setState(prevState => ({
+        previewExpanded: !prevState.previewExpanded
+      }));
+      return;
+    }
+    window.location = link;
+  }
+  handleKeyUp(event) {
+    const {
+      nodeName
+    } = event.target;
+    if ((event.key === ' ' || event.key === 'Enter') && !['input', 'textarea'].includes(nodeName.toLowerCase())) {
+      this.handleExpand(event);
+    }
+  }
+  getFailureHandlers() {
+    return {
+      onFailedSave: formSchema => {
+        this.setState({
+          formSchema
+        });
+      }
+    };
+  }
+  render() {
+    const {
+      element,
+      type,
+      areaId,
+      HeaderComponent,
+      ContentComponent,
+      link,
+      activeTab,
+      connectDragSource,
+      connectDropTarget,
+      isDragging,
+      isOver,
+      onDragEnd
+    } = this.props;
+    const {
+      childRenderingError,
+      previewExpanded,
+      formSchema
+    } = this.state;
+    if (!element.id) {
+      return null;
+    }
+    const elementClassNames = (0, _classnames.default)('element-editor__element', {
+      'element-editor__element--broken': type.broken,
+      'element-editor__element--expandable': type.inlineEditable && !type.broken,
+      'element-editor__element--dragging': isDragging,
+      'element-editor__element--dragged-over': isOver
+    }, this.getVersionedStateClassName());
+    const failureHandlers = this.getFailureHandlers();
+    const content = connectDropTarget(_react.default.createElement("div", {
+      className: elementClassNames,
+      onClick: this.handleExpand,
+      onKeyUp: this.handleKeyUp,
+      role: "button",
+      tabIndex: 0,
+      title: this.getLinkTitle(type),
+      key: element.id
+    }, _react.default.createElement(ElementContext.Provider, {
+      value: failureHandlers
+    }, _react.default.createElement(HeaderComponent, {
+      element: element,
+      type: type,
+      areaId: areaId,
+      expandable: type.inlineEditable,
+      link: link,
+      previewExpanded: previewExpanded && !childRenderingError,
+      handleEditTabsClick: this.handleTabClick,
+      activeTab: activeTab,
+      disableTooltip: isDragging,
+      onDragEnd: onDragEnd,
+      failureHandlers: failureHandlers
+    }), !childRenderingError && _react.default.createElement(ContentComponent, {
+      id: element.id,
+      fileUrl: element.blockSchema.fileURL,
+      fileTitle: element.blockSchema.fileTitle,
+      content: this.getSummary(element, type),
+      previewExpanded: previewExpanded && !isDragging,
+      activeTab: activeTab,
+      onFormInit: () => this.updateFormTab(activeTab),
+      handleLoadingError: this.handleLoadingError,
+      broken: type.broken,
+      formSchema: formSchema
+    }), childRenderingError && _react.default.createElement("div", {
+      className: "alert alert-danger mt-2"
+    }, _i18n.default._t('ElementalElement.CHILD_RENDERING_ERROR', 'Something went wrong with this block. Please try saving and refreshing the CMS.')))));
+    if (!previewExpanded) {
+      return connectDragSource(content);
+    }
+    return content;
+  }
+}
+exports.Component = Element;
+function mapStateToProps(state, ownProps) {
+  const elementId = ownProps.element.id;
+  const elementName = (0, _loadElementFormStateName.loadElementFormStateName)(elementId);
+  const elementFormSchema = (0, _loadElementSchemaValue.loadElementSchemaValue)('schemaUrl', elementId);
+  const filterFieldsForTabs = field => field.component === 'Tabs';
+  const tabSet = state.form && state.form.formSchemas[elementFormSchema] && state.form.formSchemas[elementFormSchema].schema && state.form.formSchemas[elementFormSchema].schema.fields.find(filterFieldsForTabs);
+  const tabSetName = tabSet && tabSet.id;
+  const uniqueFieldId = `element.${elementName}__${tabSetName}`;
+  const activeTab = state.tabs && state.tabs.fields && state.tabs.fields[uniqueFieldId] && state.tabs.fields[uniqueFieldId].activeTab;
+  return {
+    tabSetName,
+    activeTab
+  };
+}
+function mapDispatchToProps(dispatch, ownProps) {
+  const elementName = (0, _loadElementFormStateName.loadElementFormStateName)(ownProps.element.id);
+  return {
+    onActivateTab(tabSetName, activeTabName) {
+      dispatch(TabsActions.activateTab(`element.${elementName}__${tabSetName}`, activeTabName));
+    }
+  };
+}
+const ElementContext = exports.ElementContext = (0, _react.createContext)({});
+Element.propTypes = {
+  element: _elementType.elementType,
+  type: _elementTypeType.elementTypeType.isRequired,
+  areaId: _propTypes.default.number.isRequired,
+  link: _propTypes.default.string.isRequired,
+  activeTab: _propTypes.default.string,
+  tabSetName: _propTypes.default.string,
+  onActivateTab: _propTypes.default.func,
+  connectDragSource: _propTypes.default.func.isRequired,
+  connectDragPreview: _propTypes.default.func.isRequired,
+  connectDropTarget: _propTypes.default.func.isRequired,
+  isDragging: _propTypes.default.bool.isRequired,
+  isOver: _propTypes.default.bool.isRequired,
+  onDragOver: _propTypes.default.func,
+  onDragEnd: _propTypes.default.func,
+  onDragStart: _propTypes.default.func
+};
+Element.defaultProps = {
+  element: null
+};
+const elementTarget = {
+  drop(props, monitor, component) {
+    const {
+      element
+    } = props;
+    return {
+      target: element.id,
+      dropSpot: (0, _dragHelpers.isOverTop)(monitor, component) ? 'top' : 'bottom'
+    };
+  },
+  hover(props, monitor, component) {
+    const {
+      element,
+      onDragOver
+    } = props;
+    if (onDragOver) {
+      onDragOver(element, (0, _dragHelpers.isOverTop)(monitor, component));
+    }
+  }
+};
+var _default = exports["default"] = (0, _redux.compose)((0, _reactDnd.DropTarget)('element', elementTarget, (connector, monitor) => ({
+  connectDropTarget: connector.dropTarget(),
+  isOver: monitor.isOver()
+})), (0, _reactDnd.DragSource)('element', _dragHelpers.elementDragSource, (connector, monitor) => ({
+  connectDragSource: connector.dragSource(),
+  connectDragPreview: connector.dragPreview(),
+  isDragging: monitor.isDragging()
+})), (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps), (0, _Injector.inject)(['ElementHeader', 'ElementContent'], (HeaderComponent, ContentComponent) => ({
+  HeaderComponent,
+  ContentComponent
+}), () => 'ElementEditor.ElementList.Element'))(Element);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/ElementActions.js":
+/*!***************************************************************!*\
+  !*** ./client/src/components/ElementEditor/ElementActions.js ***!
+  \***************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _reactstrap = __webpack_require__(/*! reactstrap */ "reactstrap");
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+var _elementType = __webpack_require__(/*! types/elementType */ "./client/src/types/elementType.js");
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+var _AbstractAction = _interopRequireDefault(__webpack_require__(/*! components/ElementActions/AbstractAction */ "./client/src/components/ElementActions/AbstractAction.js"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class ElementActions extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.handleEditTabsClick = this.handleEditTabsClick.bind(this);
+  }
+  handleEditTabsClick(event) {
+    const {
+      handleEditTabsClick
+    } = this.props;
+    handleEditTabsClick(event.target.name);
+  }
+  renderEditTabs() {
+    const {
+      editTabs,
+      activeTab,
+      type,
+      expandable
+    } = this.props;
+    if (type.broken || !expandable || !editTabs || !editTabs.length) {
+      return null;
+    }
+    return editTabs.map(_ref => {
+      let {
+        name,
+        title
+      } = _ref;
+      return _react.default.createElement(_AbstractAction.default, {
+        key: name,
+        name: name,
+        title: title,
+        type: type,
+        onClick: this.handleEditTabsClick,
+        active: name === activeTab
+      });
+    });
+  }
+  renderDivider() {
+    const {
+      children,
+      editTabs,
+      expandable
+    } = this.props;
+    if (!expandable || !editTabs || !editTabs.length || _react.default.Children.count(children) === 0) {
+      return null;
+    }
+    return _react.default.createElement(_reactstrap.DropdownItem, {
+      divider: true,
+      role: "separator"
+    });
+  }
+  render() {
+    const {
+      children,
+      id,
+      ActionMenuComponent
+    } = this.props;
+    const dropdownToggleClassNames = ['element-editor-header__actions-toggle', 'btn', 'btn-sm', 'btn--no-text', 'font-icon-dot-3'];
+    return _react.default.createElement(ActionMenuComponent, {
+      id: `element-editor-actions-${id}`,
+      className: "element-editor-header__actions-dropdown",
+      dropdownMenuProps: {
+        right: true
+      },
+      dropdownToggleClassNames: dropdownToggleClassNames
+    }, this.renderEditTabs(), this.renderDivider(), children);
+  }
+}
+exports.Component = ElementActions;
+ElementActions.propTypes = {
+  element: _elementType.elementType,
+  type: _elementTypeType.elementTypeType.isRequired,
+  areaId: _propTypes.default.number.isRequired,
+  activeTab: _propTypes.default.string,
+  editTabs: _propTypes.default.arrayOf(_propTypes.default.shape({
+    title: _propTypes.default.string,
+    name: _propTypes.default.string
+  })),
+  handleEditTabsClick: _propTypes.default.func.isRequired,
+  expandable: _propTypes.default.bool
+};
+ElementActions.defaultProps = {
+  editTabs: [],
+  expandable: true
+};
+var _default = exports["default"] = (0, _redux.compose)((0, _Injector.inject)(['ActionMenu'], ActionMenuComponent => ({
+  ActionMenuComponent
+}), () => 'ElementEditor.ElementList.Element'))(ElementActions);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/ElementDragPreview.js":
+/*!*******************************************************************!*\
+  !*** ./client/src/components/ElementEditor/ElementDragPreview.js ***!
+  \*******************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _Header = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/Header */ "./client/src/components/ElementEditor/Header.js"));
+var _reactDnd = __webpack_require__(/*! react-dnd */ "react-dnd");
+var _elementType = __webpack_require__(/*! types/elementType */ "./client/src/types/elementType.js");
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+var _elementConfig = __webpack_require__(/*! state/editor/elementConfig */ "./client/src/state/editor/elementConfig.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class ElementDragPreview extends _react.Component {
+  render() {
+    const {
+      isDragging,
+      element,
+      elementTypes,
+      currentOffset
+    } = this.props;
+    if (!isDragging || !currentOffset) {
+      return null;
+    }
+    const {
+      x,
+      y
+    } = currentOffset;
+    const transform = `translate(${x}px, ${y}px)`;
+    const style = {
+      transform,
+      WebkitTransform: transform
+    };
+    const type = (0, _elementConfig.getElementTypeConfig)(element, elementTypes);
+    return _react.default.createElement("div", {
+      className: "element-editor-drag-preview",
+      style: style
+    }, _react.default.createElement(_Header.default, {
+      element: element,
+      type: type,
+      simple: true
+    }));
+  }
+}
+ElementDragPreview.propTypes = {
+  element: _elementType.elementType,
+  elementTypes: _propTypes.default.arrayOf(_elementTypeType.elementTypeType),
+  isDragging: _propTypes.default.bool,
+  currentOffset: _propTypes.default.shape({
+    x: _propTypes.default.number.isRequired,
+    y: _propTypes.default.number.isRequired
+  })
+};
+var _default = exports["default"] = (0, _reactDnd.DragLayer)(monitor => ({
+  element: monitor.getItem(),
+  currentOffset: monitor.getSourceClientOffset(),
+  isDragging: monitor.isDragging()
+}))(ElementDragPreview);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/ElementEditor.js":
+/*!**************************************************************!*\
+  !*** ./client/src/components/ElementEditor/ElementEditor.js ***!
+  \**************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+var _reactRedux = __webpack_require__(/*! react-redux */ "react-redux");
+var _loadElementFormStateName = __webpack_require__(/*! state/editor/loadElementFormStateName */ "./client/src/state/editor/loadElementFormStateName.js");
+var _reactDnd = __webpack_require__(/*! react-dnd */ "react-dnd");
+var _sortBlockMutation = _interopRequireDefault(__webpack_require__(/*! state/editor/sortBlockMutation */ "./client/src/state/editor/sortBlockMutation.js"));
+var _ElementDragPreview = _interopRequireDefault(__webpack_require__(/*! components/ElementEditor/ElementDragPreview */ "./client/src/components/ElementEditor/ElementDragPreview.js"));
+var _withDragDropContext = _interopRequireDefault(__webpack_require__(/*! lib/withDragDropContext */ "lib/withDragDropContext"));
+var _reselect = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class ElementEditor extends _react.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dragTargetElementId: null,
+      dragSpot: null
+    };
+    this.handleDragOver = this.handleDragOver.bind(this);
+    this.handleDragEnd = this.handleDragEnd.bind(this);
+  }
+  handleDragOver() {
+    let element = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    let isOverTop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    const id = element ? element.id : false;
+    this.setState({
+      dragTargetElementId: id,
+      dragSpot: isOverTop === false ? 'bottom' : 'top'
+    });
+  }
+  handleDragEnd(sourceId, afterId) {
+    const {
+      actions: {
+        handleSortBlock
+      },
+      areaId
+    } = this.props;
+    handleSortBlock(sourceId, afterId, areaId).then(() => {
+      const preview = window.jQuery('.cms-preview');
+      preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+    });
+    this.setState({
+      dragTargetElementId: null,
+      dragSpot: null
+    });
+  }
+  render() {
+    const {
+      fieldName,
+      formState,
+      ToolbarComponent,
+      ListComponent,
+      areaId,
+      elementTypes,
+      isDraggingOver,
+      connectDropTarget,
+      allowedElements
+    } = this.props;
+    const {
+      dragTargetElementId,
+      dragSpot
+    } = this.state;
+    const allowedElementTypes = allowedElements.map(className => elementTypes.find(type => type.class === className));
+    return connectDropTarget(_react.default.createElement("div", {
+      className: "element-editor"
+    }, _react.default.createElement(ToolbarComponent, {
+      elementTypes: allowedElementTypes,
+      areaId: areaId,
+      onDragOver: this.handleDragOver
+    }), _react.default.createElement(ListComponent, {
+      allowedElementTypes: allowedElementTypes,
+      elementTypes: elementTypes,
+      areaId: areaId,
+      onDragOver: this.handleDragOver,
+      onDragStart: this.handleDragStart,
+      onDragEnd: this.handleDragEnd,
+      dragSpot: dragSpot,
+      isDraggingOver: isDraggingOver,
+      dragTargetElementId: dragTargetElementId
+    }), _react.default.createElement(_ElementDragPreview.default, {
+      elementTypes: elementTypes
+    }), _react.default.createElement("input", {
+      name: fieldName,
+      type: "hidden",
+      value: JSON.stringify(formState) || '',
+      className: "no-change-track"
+    })));
+  }
+}
+exports.Component = ElementEditor;
+ElementEditor.propTypes = {
+  fieldName: _propTypes.default.string,
+  elementTypes: _propTypes.default.arrayOf(_elementTypeType.elementTypeType).isRequired,
+  allowedElements: _propTypes.default.arrayOf(_propTypes.default.string).isRequired,
+  areaId: _propTypes.default.number.isRequired,
+  actions: _propTypes.default.shape({
+    handleSortBlock: _propTypes.default.func
+  })
+};
+const elementFormSelector = (0, _reselect.createSelector)([state => {
+  const elementFormState = state.form.formState.element;
+  if (!elementFormState) {
+    return {};
+  }
+  return elementFormState;
+}], elementFormState => {
+  const formNamePattern = (0, _loadElementFormStateName.loadElementFormStateName)('[0-9]+');
+  return Object.keys(elementFormState).filter(key => key.match(formNamePattern)).reduce((accumulator, key) => ({
+    ...accumulator,
+    [key]: elementFormState[key].values
+  }), {});
+});
+function mapStateToProps(state) {
+  const formState = elementFormSelector(state);
+  return {
+    formState
+  };
+}
+var _default = exports["default"] = (0, _redux.compose)(_withDragDropContext.default, (0, _reactDnd.DropTarget)('element', {}, (connector, monitor) => ({
+  connectDropTarget: connector.dropTarget(),
+  isDraggingOver: monitor.isOver()
+})), (0, _reactRedux.connect)(mapStateToProps), (0, _Injector.inject)(['ElementToolbar', 'ElementList'], (ToolbarComponent, ListComponent) => ({
+  ToolbarComponent,
+  ListComponent
+}), () => 'ElementEditor'), _sortBlockMutation.default)(ElementEditor);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/ElementList.js":
+/*!************************************************************!*\
+  !*** ./client/src/components/ElementEditor/ElementList.js ***!
+  \************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _elementType = __webpack_require__(/*! types/elementType */ "./client/src/types/elementType.js");
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "classnames"));
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+var _reactDnd = __webpack_require__(/*! react-dnd */ "react-dnd");
+var _dragHelpers = __webpack_require__(/*! lib/dragHelpers */ "./client/src/lib/dragHelpers.js");
+var _elementConfig = __webpack_require__(/*! state/editor/elementConfig */ "./client/src/state/editor/elementConfig.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class ElementList extends _react.Component {
+  getDragIndicatorIndex() {
+    const {
+      dragTargetElementId,
+      draggedItem,
+      blocks,
+      dragSpot
+    } = this.props;
+    return (0, _dragHelpers.getDragIndicatorIndex)(blocks.map(element => element.id), dragTargetElementId, draggedItem && draggedItem.id, dragSpot);
+  }
+  renderBlocks() {
+    const {
+      ElementComponent,
+      HoverBarComponent,
+      DragIndicatorComponent,
+      blocks,
+      allowedElementTypes,
+      elementTypes,
+      areaId,
+      onDragEnd,
+      onDragOver,
+      onDragStart,
+      isDraggingOver
+    } = this.props;
+    if (!blocks) {
+      return null;
+    }
+    if (blocks && !blocks.length) {
+      return _react.default.createElement("div", null, _i18n.default._t('ElementList.ADD_BLOCKS', 'Add blocks to place your content'));
+    }
+    let output = blocks.map(element => _react.default.createElement("div", {
+      key: element.id
+    }, _react.default.createElement(ElementComponent, {
+      element: element,
+      areaId: areaId,
+      type: (0, _elementConfig.getElementTypeConfig)(element, elementTypes),
+      link: element.blockSchema.actions.edit,
+      onDragOver: onDragOver,
+      onDragEnd: onDragEnd,
+      onDragStart: onDragStart
+    }), isDraggingOver || _react.default.createElement(HoverBarComponent, {
+      key: `create-after-${element.id}`,
+      areaId: areaId,
+      elementId: element.id,
+      elementTypes: allowedElementTypes
+    })));
+    if (!isDraggingOver) {
+      output = [_react.default.createElement(HoverBarComponent, {
+        key: 0,
+        areaId: areaId,
+        elementId: 0,
+        elementTypes: allowedElementTypes
+      })].concat(output);
+    }
+    const dragIndicatorIndex = this.getDragIndicatorIndex();
+    if (isDraggingOver && dragIndicatorIndex !== null) {
+      output.splice(dragIndicatorIndex, 0, _react.default.createElement(DragIndicatorComponent, {
+        key: "DropIndicator"
+      }));
+    }
+    return output;
+  }
+  renderLoading() {
+    const {
+      loading,
+      LoadingComponent
+    } = this.props;
+    if (loading) {
+      return _react.default.createElement(LoadingComponent, null);
+    }
+    return null;
+  }
+  render() {
+    const {
+      blocks
+    } = this.props;
+    const listClassNames = (0, _classnames.default)('elemental-editor-list', {
+      'elemental-editor-list--empty': !blocks || !blocks.length
+    });
+    return this.props.connectDropTarget(_react.default.createElement("div", {
+      className: listClassNames
+    }, this.renderLoading(), this.renderBlocks()));
+  }
+}
+exports.Component = ElementList;
+ElementList.propTypes = {
+  blocks: _propTypes.default.arrayOf(_elementType.elementType),
+  elementTypes: _propTypes.default.arrayOf(_elementTypeType.elementTypeType).isRequired,
+  allowedElementTypes: _propTypes.default.arrayOf(_elementTypeType.elementTypeType).isRequired,
+  loading: _propTypes.default.bool,
+  areaId: _propTypes.default.number.isRequired,
+  dragTargetElementId: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.bool]),
+  onDragOver: _propTypes.default.func,
+  onDragStart: _propTypes.default.func,
+  onDragEnd: _propTypes.default.func
+};
+ElementList.defaultProps = {
+  blocks: [],
+  loading: false
+};
+const elementListTarget = {
+  drop(props, monitor) {
+    const {
+      blocks
+    } = props;
+    const elementTargetDropResult = monitor.getDropResult();
+    if (!elementTargetDropResult) {
+      return {};
+    }
+    const dropIndex = (0, _dragHelpers.getDragIndicatorIndex)(blocks.map(element => element.id), elementTargetDropResult.target, monitor.getItem(), elementTargetDropResult.dropSpot);
+    const dropAfterID = blocks[dropIndex - 1] ? blocks[dropIndex - 1].id : '0';
+    return {
+      ...elementTargetDropResult,
+      dropAfterID
+    };
+  }
+};
+var _default = exports["default"] = (0, _redux.compose)((0, _reactDnd.DropTarget)('element', elementListTarget, (connector, monitor) => ({
+  connectDropTarget: connector.dropTarget(),
+  draggedItem: monitor.getItem()
+})), (0, _Injector.inject)(['Element', 'Loading', 'HoverBar', 'DragPositionIndicator'], (ElementComponent, LoadingComponent, HoverBarComponent, DragIndicatorComponent) => ({
+  ElementComponent,
+  LoadingComponent,
+  HoverBarComponent,
+  DragIndicatorComponent
+}), () => 'ElementEditor.ElementList'))(ElementList);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/Header.js":
+/*!*******************************************************!*\
+  !*** ./client/src/components/ElementEditor/Header.js ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _reactstrap = __webpack_require__(/*! reactstrap */ "reactstrap");
+var _elementType = __webpack_require__(/*! types/elementType */ "./client/src/types/elementType.js");
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+var _redux = __webpack_require__(/*! redux */ "redux");
+var _reactRedux = __webpack_require__(/*! react-redux */ "react-redux");
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "classnames"));
+var _loadElementFormStateName = __webpack_require__(/*! state/editor/loadElementFormStateName */ "./client/src/state/editor/loadElementFormStateName.js");
+var _reduxForm = __webpack_require__(/*! redux-form */ "redux-form");
+var _reactDnd = __webpack_require__(/*! react-dnd */ "react-dnd");
+var _getFormState = _interopRequireDefault(__webpack_require__(/*! lib/getFormState */ "lib/getFormState"));
+var _dragHelpers = __webpack_require__(/*! lib/dragHelpers */ "./client/src/lib/dragHelpers.js");
+var _reactDndHtml5Backend = __webpack_require__(/*! react-dnd-html5-backend */ "react-dnd-html5-backend");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class Header extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      tooltipOpen: false
+    };
+  }
+  componentDidMount() {
+    const {
+      connectDragPreview
+    } = this.props;
+    if (connectDragPreview) {
+      connectDragPreview((0, _reactDndHtml5Backend.getEmptyImage)(), {
+        captureDraggingState: true
+      });
+    }
+  }
+  componentDidUpdate() {
+    const {
+      tooltipOpen
+    } = this.state;
+    const {
+      disableTooltip
+    } = this.props;
+    if (tooltipOpen && disableTooltip) {
+      this.setState({
+        tooltipOpen: false
+      });
+    }
+  }
+  getBlockTitle(element, type) {
+    if (type.broken) {
+      return _i18n.default.inject(_i18n.default._t('ElementHeader.BROKEN', 'This element is of obsolete type {type}.'), {
+        type: type.obsoleteClassName
+      });
+    }
+    if (element.title) {
+      return element.title;
+    }
+    return _i18n.default.inject(_i18n.default._t('ElementHeader.NOTITLE', 'Untitled {type} block'), {
+      type: type.title
+    });
+  }
+  toggle() {
+    this.setState(prevState => ({
+      tooltipOpen: !prevState.tooltipOpen
+    }));
+  }
+  renderVersionedStateMessage() {
+    const {
+      element: {
+        isLiveVersion,
+        isPublished
+      },
+      formDirty
+    } = this.props;
+    if (!formDirty && isPublished && isLiveVersion) {
+      return null;
+    }
+    let versionStateButtonTitle = '';
+    const stateClassNames = ['element-editor-header__version-state'];
+    if (formDirty) {
+      versionStateButtonTitle = _i18n.default._t('ElementHeader.STATE_UNSAVED', 'Item has unsaved changes');
+      stateClassNames.push('element-editor-header__version-state--unsaved');
+    } else if (!isPublished) {
+      versionStateButtonTitle = _i18n.default._t('ElementHeader.STATE_DRAFT', 'Item has not been published yet');
+      stateClassNames.push('element-editor-header__version-state--draft');
+    } else if (!isLiveVersion) {
+      versionStateButtonTitle = _i18n.default._t('ElementHeader.STATE_MODIFIED', 'Item has unpublished changes');
+      stateClassNames.push('element-editor-header__version-state--modified');
+    }
+    return _react.default.createElement("span", {
+      className: (0, _classnames.default)(stateClassNames),
+      title: versionStateButtonTitle
+    });
+  }
+  render() {
+    const {
+      connectDragSource,
+      element,
+      type,
+      areaId,
+      previewExpanded,
+      simple,
+      disableTooltip,
+      activeTab,
+      expandable,
+      ElementActionsComponent,
+      handleEditTabsClick
+    } = this.props;
+    const title = this.getBlockTitle(element, type);
+    const titleClasses = (0, _classnames.default)({
+      'element-editor-header__title': true,
+      'element-editor-header__title--none': !element.title
+    });
+    const expandTitle = _i18n.default._t('ElementHeader.EXPAND', 'Show editable fields');
+    const containerClasses = (0, _classnames.default)('element-editor-header', {
+      'element-editor-header--simple': simple
+    });
+    const iconContainerClasses = (0, _classnames.default)('element-editor-header__icon-container', {
+      'element-editor-header__icon-container--broken': type.broken
+    });
+    const expandCaretClasses = (0, _classnames.default)('element-editor-header__expand', {
+      'font-icon-right-open-big': !expandable,
+      'font-icon-up-open-big': expandable && previewExpanded,
+      'font-icon-down-open-big': expandable && !previewExpanded
+    });
+    const blockIconId = `element-icon-${element.id}`;
+    const content = _react.default.createElement("div", {
+      className: containerClasses
+    }, _react.default.createElement("div", {
+      className: "element-editor-header__drag-handle"
+    }, _react.default.createElement("i", {
+      className: "font-icon-drag-handle"
+    })), _react.default.createElement("div", {
+      className: "element-editor-header__info"
+    }, _react.default.createElement("div", {
+      className: iconContainerClasses
+    }, _react.default.createElement("i", {
+      className: type.icon,
+      id: blockIconId
+    }), this.renderVersionedStateMessage(), !type.broken && !simple && _react.default.createElement(_reactstrap.Tooltip, {
+      placement: "top",
+      isOpen: this.state.tooltipOpen && !disableTooltip,
+      target: blockIconId,
+      toggle: this.toggle
+    }, type.title)), _react.default.createElement("h3", {
+      className: titleClasses
+    }, title)), !simple && _react.default.createElement("div", {
+      className: "element-editor-header__actions"
+    }, _react.default.createElement("div", {
+      role: "none",
+      onClick: event => event.stopPropagation()
+    }, _react.default.createElement(ElementActionsComponent, {
+      element: element,
+      type: type,
+      areaId: areaId,
+      activeTab: activeTab,
+      editTabs: type.editTabs,
+      handleEditTabsClick: handleEditTabsClick,
+      expandable: expandable
+    })), !type.broken && _react.default.createElement("i", {
+      className: expandCaretClasses,
+      title: expandTitle
+    })));
+    if (previewExpanded) {
+      return connectDragSource(content);
+    }
+    return content;
+  }
+}
+exports.Component = Header;
+Header.propTypes = {
+  element: _elementType.elementType.isRequired,
+  type: _elementTypeType.elementTypeType.isRequired,
+  areaId: _propTypes.default.number,
+  activeTab: _propTypes.default.string,
+  simple: _propTypes.default.bool,
+  ElementActionsComponent: _propTypes.default.elementType,
+  previewExpanded: _propTypes.default.bool,
+  disableTooltip: _propTypes.default.bool,
+  formDirty: _propTypes.default.bool,
+  connectDragSource: _propTypes.default.func.isRequired,
+  connectDragPreview: _propTypes.default.func.isRequired,
+  onDragEnd: _propTypes.default.func
+};
+Header.defaultProps = {
+  expandable: true
+};
+function mapStateToProps(state, ownProps) {
+  const formName = (0, _loadElementFormStateName.loadElementFormStateName)(ownProps.element.id);
+  return {
+    formDirty: (0, _reduxForm.isDirty)(`element.${formName}`, _getFormState.default)(state)
+  };
+}
+var _default = exports["default"] = (0, _redux.compose)((0, _reactDnd.DragSource)('element', _dragHelpers.elementDragSource, connector => ({
+  connectDragSource: connector.dragSource(),
+  connectDragPreview: connector.dragPreview()
+})), (0, _reactRedux.connect)(mapStateToProps), (0, _Injector.inject)(['ElementActions'], ElementActionsComponent => ({
+  ElementActionsComponent
+}), () => 'ElementEditor.ElementList.Element'))(Header);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/HoverBar.js":
+/*!*********************************************************!*\
+  !*** ./client/src/components/ElementEditor/HoverBar.js ***!
+  \*********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.Component = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+var _prefixClassNames = _interopRequireDefault(__webpack_require__(/*! ../../lib/prefixClassNames */ "./client/src/lib/prefixClassNames.js"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+const classNames = (0, _prefixClassNames.default)('element-editor__hover-bar');
+function StatelessHoverBar(_ref) {
+  let {
+    AddElementPopoverComponent,
+    elementTypes,
+    elementId,
+    areaId,
+    popoverOpen,
+    onToggle
+  } = _ref;
+  const lineClasses = `${classNames('-line')} font-icon-plus-circled`;
+  const label = _i18n.default._t('ElementAddNewButton.ADD_BLOCK', 'Add block');
+  const btnProps = {
+    className: classNames('-area', {
+      '-area--focus': popoverOpen
+    }),
+    onClick: onToggle,
+    'aria-label': label,
+    title: label,
+    id: `AddBlockHoverBarArea_${areaId}_${elementId}`
+  };
+  return _react.default.createElement("div", {
+    className: classNames(''),
+    id: `AddBlockHoverBar_${areaId}_${elementId}`
+  }, _react.default.createElement("button", btnProps, _react.default.createElement("span", {
+    className: classNames('-area-inner')
+  }, _react.default.createElement("span", {
+    className: lineClasses
+  }))), _react.default.createElement(AddElementPopoverComponent, {
+    placement: "bottom",
+    target: `AddBlockHoverBarArea_${areaId}_${elementId}`,
+    isOpen: popoverOpen,
+    elementTypes: elementTypes,
+    toggle: onToggle,
+    container: `#AddBlockHoverBar_${areaId}_${elementId}`,
+    areaId: areaId,
+    insertAfterElement: elementId
+  }));
+}
+class HoverBar extends _react.Component {
+  constructor(props) {
+    super(props);
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      popoverOpen: false
+    };
+  }
+  toggle() {
+    this.setState(prevState => ({
+      popoverOpen: !prevState.popoverOpen
+    }));
+  }
+  render() {
+    const props = {
+      ...this.state,
+      ...this.props,
+      onToggle: this.toggle
+    };
+    return _react.default.createElement(StatelessHoverBar, props);
+  }
+}
+exports.Component = HoverBar;
+HoverBar.propTypes = {
+  elementTypes: _propTypes.default.arrayOf(_elementTypeType.elementTypeType).isRequired,
+  elementId: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]).isRequired,
+  areaId: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]).isRequired
+};
+var _default = exports["default"] = (0, _Injector.inject)(['AddElementPopover'], AddElementPopoverComponent => ({
+  AddElementPopoverComponent
+}), () => 'ElementEditor.ElementList.HoverBar')(HoverBar);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/InlineEditForm.js":
+/*!***************************************************************!*\
+  !*** ./client/src/components/ElementEditor/InlineEditForm.js ***!
+  \***************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "classnames"));
+var _FormBuilder = _interopRequireDefault(__webpack_require__(/*! components/FormBuilder/FormBuilder */ "components/FormBuilder/FormBuilder"));
+var _FormBuilderLoader = _interopRequireDefault(__webpack_require__(/*! containers/FormBuilderLoader/FormBuilderLoader */ "containers/FormBuilderLoader/FormBuilderLoader"));
+var _loadElementSchemaValue = __webpack_require__(/*! state/editor/loadElementSchemaValue */ "./client/src/state/editor/loadElementSchemaValue.js");
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+var _loadElementFormStateName = __webpack_require__(/*! state/editor/loadElementFormStateName */ "./client/src/state/editor/loadElementFormStateName.js");
+var _reactRedux = __webpack_require__(/*! react-redux */ "react-redux");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class InlineEditForm extends _react.PureComponent {
+  constructor(props) {
+    super(props);
+    this.handleLoadingError = this.handleLoadingError.bind(this);
+    this.state = {
+      loadingError: null
+    };
+  }
+  handleLoadingError() {
+    const {
+      jQuery: $
+    } = window;
+    const {
+      handleLoadingError
+    } = this.props;
+    this.setState({
+      loadingError: true
+    });
+    $.noticeAdd({
+      text: _i18n.default.inject(_i18n.default._t('ElementEditForm.ERROR_NOTIFICATION', 'Error displaying the edit form for this block')),
+      stay: true,
+      type: 'notice'
+    });
+    handleLoadingError();
+  }
+  render() {
+    const {
+      elementId,
+      extraClass,
+      onClick,
+      onFormInit,
+      formHasState,
+      formSchema
+    } = this.props;
+    const {
+      loadingError
+    } = this.state;
+    const classNames = (0, _classnames.default)('element-editor-editform', extraClass);
+    const schemaUrl = (0, _loadElementSchemaValue.loadElementSchemaValue)('schemaUrl', elementId);
+    const formProps = {
+      formTag: 'div',
+      schemaUrl,
+      identifier: 'element',
+      refetchSchemaOnMount: !formHasState,
+      onLoadingError: this.handleLoadingError
+    };
+    console.log(['formSchema is', formSchema]);
+    if (typeof formSchema !== 'undefined' && Object.keys(formSchema).length > 0) {
+      formProps.schema = formSchema;
+    }
+    if (loadingError) {
+      formProps.loading = false;
+    }
+    if (typeof onFormInit === 'function') {
+      formProps.onReduxFormInit = onFormInit;
+    }
+    return _react.default.createElement("div", {
+      className: classNames,
+      onClick: onClick,
+      role: "presentation"
+    }, formProps.hasOwnProperty('schema') && _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", null, "I HAVE A FORM SCHEMA"), _react.default.createElement(_FormBuilder.default, formProps)), !formProps.hasOwnProperty('schema') && _react.default.createElement(_FormBuilderLoader.default, formProps));
+  }
+}
+InlineEditForm.propTypes = {
+  extraClass: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.object]),
+  onClick: _propTypes.default.func,
+  elementId: _propTypes.default.string,
+  handleLoadingError: _propTypes.default.func,
+  formSchema: _propTypes.default.object
+};
+function mapStateToProps(state, ownProps) {
+  const formName = (0, _loadElementFormStateName.loadElementFormStateName)(ownProps.elementId);
+  return {
+    formHasState: state.form.formState && state.form.formState.element && !!state.form.formState.element[formName]
+  };
+}
+var _default = exports["default"] = (0, _reactRedux.connect)(mapStateToProps)(InlineEditForm);
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/Summary.js":
+/*!********************************************************!*\
+  !*** ./client/src/components/ElementEditor/Summary.js ***!
+  \********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "classnames"));
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class Summary extends _react.PureComponent {
+  render() {
+    const {
+      fileUrl,
+      fileTitle,
+      content,
+      broken
+    } = this.props;
+    const noContent = _i18n.default._t('ElementSummary.NO_PREVIEW', 'No preview available');
+    const summaryClassNames = (0, _classnames.default)('element-editor-summary__content', {
+      'element-editor-summary__content--broken': broken
+    });
+    return _react.default.createElement("div", {
+      className: "element-editor-summary"
+    }, fileUrl && _react.default.createElement("img", {
+      className: "element-editor-summary__thumbnail-image",
+      src: fileUrl,
+      alt: fileTitle
+    }), (content || !fileUrl) && _react.default.createElement("p", {
+      className: summaryClassNames
+    }, content || noContent));
+  }
+}
+Summary.defaultProps = {};
+Summary.propTypes = {
+  content: _propTypes.default.string,
+  fileUrl: _propTypes.default.string,
+  fileTitle: _propTypes.default.string,
+  broken: _propTypes.default.bool
+};
+var _default = exports["default"] = Summary;
+
+/***/ }),
+
+/***/ "./client/src/components/ElementEditor/Toolbar.js":
+/*!********************************************************!*\
+  !*** ./client/src/components/ElementEditor/Toolbar.js ***!
+  \********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+var _elementTypeType = __webpack_require__(/*! types/elementTypeType */ "./client/src/types/elementTypeType.js");
+var _reactDnd = __webpack_require__(/*! react-dnd */ "react-dnd");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+class Toolbar extends _react.PureComponent {
+  render() {
+    const {
+      AddNewButtonComponent,
+      elementTypes,
+      areaId,
+      connectDropTarget
+    } = this.props;
+    return connectDropTarget(_react.default.createElement("div", {
+      className: "element-editor__toolbar"
+    }, _react.default.createElement(AddNewButtonComponent, {
+      elementTypes: elementTypes,
+      areaId: areaId
+    })));
+  }
+}
+Toolbar.defaultProps = {};
+Toolbar.propTypes = {
+  elementTypes: _propTypes.default.arrayOf(_elementTypeType.elementTypeType).isRequired,
+  areaId: _propTypes.default.number.isRequired,
+  AddNewButtonComponent: _propTypes.default.elementType.isRequired,
+  connectDropTarget: _propTypes.default.func.isRequired,
+  onDragOver: _propTypes.default.func,
+  onDragDrop: _propTypes.default.func
+};
+const toolbarTarget = {
+  hover(props) {
+    const {
+      onDragOver
+    } = props;
+    if (onDragOver) {
+      onDragOver();
+    }
+  }
+};
+var _default = exports["default"] = (0, _reactDnd.DropTarget)('element', toolbarTarget, connect => ({
+  connectDropTarget: connect.dropTarget()
+}))((0, _Injector.inject)(['ElementAddNewButton'], AddNewButtonComponent => ({
+  AddNewButtonComponent
+}), () => 'ElementEditor.ElementToolbar')(Toolbar));
+
+/***/ }),
+
+/***/ "./client/src/components/HistoricElementView/HistoricElementView.js":
+/*!**************************************************************************!*\
+  !*** ./client/src/components/HistoricElementView/HistoricElementView.js ***!
+  \**************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _i18n = _interopRequireDefault(__webpack_require__(/*! i18n */ "i18n"));
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "classnames"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const ElementalAreaHistoryFactory = FieldGroup => class HistoricElementView extends FieldGroup {
+  getClassName() {
+    const classlist = [super.getClassName()];
+    if (this.props.data.ElementID) {
+      classlist.unshift('elemental-area__element--historic-inner');
+    }
+    return (0, _classnames.default)(classlist);
+  }
+  render() {
+    const legend = this.getLegend();
+    const Tag = this.props.data.tag || 'div';
+    const classNames = this.getClassName();
+    const {
+      data
+    } = this.props;
+    if (!data.ElementID) {
+      return super.render();
+    }
+    return _react.default.createElement(Tag, {
+      className: classNames
+    }, legend, _react.default.createElement("div", {
+      className: "elemental-preview elemental-preview--historic"
+    }, data.ElementEditLink && _react.default.createElement("a", {
+      className: "elemental-preview__link",
+      href: data.ElementEditLink
+    }, _react.default.createElement("span", {
+      className: "elemental-preview__link-text"
+    }, _i18n.default._t('HistoricElementView.VIEW_BLOCK_HISTORY', 'Block history')), _react.default.createElement("i", {
+      className: "font-icon-angle-right btn--icon-lg elemental-preview__link-caret"
+    })), _react.default.createElement("div", {
+      className: "elemental-preview__icon"
+    }, _react.default.createElement("i", {
+      className: data.ElementIcon
+    })), _react.default.createElement("div", {
+      className: "elemental-preview__detail"
+    }, _react.default.createElement("h3", null, data.ElementTitle, " ", _react.default.createElement("small", null, data.ElementType)))), this.props.children);
+  }
+};
+var _default = exports["default"] = ElementalAreaHistoryFactory;
+
+/***/ }),
+
+/***/ "./client/src/components/TextCheckboxGroupField/TextCheckboxGroupField.js":
+/*!********************************************************************************!*\
+  !*** ./client/src/components/TextCheckboxGroupField/TextCheckboxGroupField.js ***!
+  \********************************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _reactstrap = __webpack_require__(/*! reactstrap */ "reactstrap");
+var _FieldHolder = _interopRequireDefault(__webpack_require__(/*! components/FieldHolder/FieldHolder */ "components/FieldHolder/FieldHolder"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const TextCheckboxGroupField = props => {
+  const {
+    children
+  } = props;
+  const childrenWithProps = _react.default.Children.toArray(_react.default.Children.map(children, (child, index) => {
+    const additionalProps = {
+      noHolder: true
+    };
+    if (index === 0) {
+      additionalProps.id = props.id;
+    }
+    return _react.default.cloneElement(child, additionalProps);
+  }));
+  if (props.readOnly) {
+    return _react.default.createElement("div", {
+      className: "text-checkbox-group-field--read-only"
+    }, childrenWithProps);
+  }
+  if (childrenWithProps.length === 1) {
+    return childrenWithProps[0];
+  }
+  return _react.default.createElement(_reactstrap.InputGroup, {
+    className: "text-checkbox-group-field"
+  }, childrenWithProps[0], _react.default.createElement(_reactstrap.InputGroupAddon, {
+    addonType: "append"
+  }, _react.default.createElement(_reactstrap.InputGroupText, null, childrenWithProps[1])));
+};
+var _default = exports["default"] = (0, _FieldHolder.default)(TextCheckboxGroupField);
+
+/***/ }),
+
+/***/ "./client/src/legacy/ElementEditor/entwine.js":
+/*!****************************************************!*\
+  !*** ./client/src/legacy/ElementEditor/entwine.js ***!
+  \****************************************************/
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+
+
+var _jquery = _interopRequireDefault(__webpack_require__(/*! jquery */ "jquery"));
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _client = __webpack_require__(/*! react-dom/client */ "react-dom/client");
+var _Injector = __webpack_require__(/*! lib/Injector */ "lib/Injector");
+var _elementConfig = __webpack_require__(/*! state/editor/elementConfig */ "./client/src/state/editor/elementConfig.js");
+var _reduxForm = __webpack_require__(/*! redux-form */ "redux-form");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const resetStores = () => {
+  window.ss.apolloClient.resetStore();
+  setTimeout(() => {
+    const {
+      store
+    } = window.ss;
+    if (!store) {
+      return;
+    }
+    store.dispatch((0, _reduxForm.destroy)(...Object.keys(store.getState().form.formState.element || {}).map(name => `element.${name}`)));
+  }, 0);
+};
+_jquery.default.entwine('ss', $ => {
+  $('.js-injector-boot .element-editor__container').entwine({
+    ReactRoot: null,
+    onmatch() {
+      const context = {};
+      const ElementEditorComponent = (0, _Injector.loadComponent)('ElementEditor', context);
+      const schemaData = this.data('schema');
+      const elementTypes = (0, _elementConfig.getConfig)().elementTypes;
+      const props = {
+        fieldName: this.attr('name'),
+        areaId: schemaData['elemental-area-id'],
+        allowedElements: schemaData['allowed-elements'],
+        elementTypes
+      };
+      let root = this.getReactRoot();
+      if (!root) {
+        root = (0, _client.createRoot)(this[0]);
+        this.setReactRoot(root);
+      }
+      root.render(_react.default.createElement(ElementEditorComponent, props));
+    },
+    onunmatch() {
+      if (!$('.cms-edit-form').data('hasValidationErrors')) {
+        resetStores();
+      }
+      const root = this.getReactRoot();
+      if (root) {
+        root.unmount();
+        this.setReactRoot(null);
+      }
+    },
+    'from .cms-edit-form': {
+      onaftersubmitform(event, data) {
+        const validationResultPjax = JSON.parse(data.xhr.responseText).ValidationResult;
+        const validationResult = JSON.parse(validationResultPjax.replace(/<\/?script[^>]*?>/g, ''));
+        if (validationResult.isValid) {
+          $('.cms-edit-form').data('hasValidationErrors', false);
+          resetStores();
+        } else {
+          $('.cms-edit-form').data('hasValidationErrors', true);
+        }
+      }
+    }
+  });
+  $('.js-injector-boot .element-editor__container .element-form-dirty-state').entwine({
+    onmatch() {
+      $('.cms-edit-form').trigger('change');
+    },
+    onunmatch() {
+      $('.cms-edit-form').trigger('change');
+    }
+  });
+  $('.cms-edit-form').entwine({
+    getChangeTrackerOptions() {
+      const isDefault = this.entwineData('ChangeTrackerOptions') === undefined;
+      let opts = this._super();
+      if (isDefault) {
+        opts = $.extend({}, opts);
+        opts.ignoreFieldSelector += ', .elementalarea :input:not(.element-form-dirty-state)';
+        this.setChangeTrackerOptions(opts);
+      }
+      return opts;
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./client/src/lib/dragHelpers.js":
+/*!***************************************!*\
+  !*** ./client/src/lib/dragHelpers.js ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.isOverTop = exports.getDragIndicatorIndex = exports.elementDragSource = void 0;
+var _reactDom = __webpack_require__(/*! react-dom */ "react-dom");
+const isOverTop = (monitor, component) => {
+  const clientOffset = monitor.getClientOffset();
+  const componentRect = (0, _reactDom.findDOMNode)(component).getBoundingClientRect();
+  return clientOffset.y < componentRect.y + componentRect.height / 2;
+};
+exports.isOverTop = isOverTop;
+const getDragIndicatorIndex = (items, dragTarget, draggedItem, dragSpot) => {
+  if (dragTarget === null || !draggedItem) {
+    return null;
+  }
+  let targetIndex = dragTarget ? items.findIndex(element => element === dragTarget) : 0;
+  const sourceIndex = items.findIndex(item => item === draggedItem);
+  if (dragSpot === 'bottom') {
+    targetIndex += 1;
+  }
+  if (sourceIndex === targetIndex || sourceIndex + 1 === targetIndex) {
+    return null;
+  }
+  return targetIndex;
+};
+exports.getDragIndicatorIndex = getDragIndicatorIndex;
+const elementDragSource = exports.elementDragSource = {
+  beginDrag(props) {
+    return props.element;
+  },
+  endDrag(props, monitor) {
+    const {
+      onDragEnd
+    } = props;
+    const dropResult = monitor.getDropResult();
+    if (!onDragEnd || !dropResult || !dropResult.dropAfterID) {
+      return;
+    }
+    const itemID = monitor.getItem().id;
+    const {
+      dropAfterID
+    } = dropResult;
+    if (itemID !== dropAfterID) {
+      onDragEnd(itemID, dropAfterID);
+    }
+  }
+};
+
+/***/ }),
+
+/***/ "./client/src/lib/prefixClassNames.js":
+/*!********************************************!*\
+  !*** ./client/src/lib/prefixClassNames.js ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "classnames"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const prefixClassNames = cssPrefix => function () {
+  const prefix = str => `${cssPrefix}${str}`;
+  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+  const prefixArgs = args.map(arg => {
+    if (!arg && arg !== '') {
+      return false;
+    }
+    if (typeof arg === 'object') {
+      return Array.isArray(arg) ? arg.map(prefix) : Object.entries(arg).reduce((accumulator, _ref) => {
+        let [key, value] = _ref;
+        return Object.assign({}, accumulator, {
+          [prefix(key)]: value
+        });
+      }, {});
+    }
+    return prefix(arg);
+  });
+  return (0, _classnames.default)(...prefixArgs);
+};
+var _default = exports["default"] = prefixClassNames;
+
+/***/ }),
+
+/***/ "./client/src/state/editor/addElementMutation.js":
+/*!*******************************************************!*\
+  !*** ./client/src/state/editor/addElementMutation.js ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.mutation = exports["default"] = exports.config = void 0;
+var _hoc = __webpack_require__(/*! @apollo/client/react/hoc */ "@apollo/client/react/hoc");
+var _graphqlTag = _interopRequireDefault(__webpack_require__(/*! graphql-tag */ "graphql-tag"));
+var _readBlocksForAreaQuery = __webpack_require__(/*! ./readBlocksForAreaQuery */ "./client/src/state/editor/readBlocksForAreaQuery.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const mutation = exports.mutation = (0, _graphqlTag.default)`
 mutation AddElementToArea($className: String!, $elementalAreaID: ID!, $afterElementID: ID) {
   addElementToArea(
     className: $className,
@@ -8,23 +2552,334 @@ mutation AddElementToArea($className: String!, $elementalAreaID: ID!, $afterElem
     id
   }
 }
-`,d=t.config={props:e=>{let{mutate:t,ownProps:{actions:n,areaId:r}}=e;return{actions:{...n,handleAddElementToArea:(e,n)=>t({variables:{className:e,elementalAreaID:r,afterElementID:n}})}}},options:e=>{let{areaId:t}=e;return{refetchQueries:[{query:l.query,variables:l.config.options({areaId:t}).variables}]}}};t.default=(0,a.graphql)(i,d)},2409:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.mutation=t.default=t.config=void 0;var r,a=n(3732),o=(r=n(1306))&&r.__esModule?r:{default:r},l=n(2806);const i=t.mutation=o.default`
+`;
+const config = exports.config = {
+  props: _ref => {
+    let {
+      mutate,
+      ownProps: {
+        actions,
+        areaId
+      }
+    } = _ref;
+    const handleAddElementToArea = (className, afterElementID) => mutate({
+      variables: {
+        className,
+        elementalAreaID: areaId,
+        afterElementID
+      }
+    });
+    return {
+      actions: {
+        ...actions,
+        handleAddElementToArea
+      }
+    };
+  },
+  options: _ref2 => {
+    let {
+      areaId
+    } = _ref2;
+    return {
+      refetchQueries: [{
+        query: _readBlocksForAreaQuery.query,
+        variables: _readBlocksForAreaQuery.config.options({
+          areaId
+        }).variables
+      }]
+    };
+  }
+};
+var _default = exports["default"] = (0, _hoc.graphql)(mutation, config);
+
+/***/ }),
+
+/***/ "./client/src/state/editor/archiveBlockMutation.js":
+/*!*********************************************************!*\
+  !*** ./client/src/state/editor/archiveBlockMutation.js ***!
+  \*********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.mutation = exports["default"] = exports.config = void 0;
+var _hoc = __webpack_require__(/*! @apollo/client/react/hoc */ "@apollo/client/react/hoc");
+var _graphqlTag = _interopRequireDefault(__webpack_require__(/*! graphql-tag */ "graphql-tag"));
+var _readBlocksForAreaQuery = __webpack_require__(/*! ./readBlocksForAreaQuery */ "./client/src/state/editor/readBlocksForAreaQuery.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const mutation = exports.mutation = (0, _graphqlTag.default)`
 mutation ArchiveBlock($blockId: ID!) {
   deleteBlocks(ids: [$blockId])
 }
-`,d=t.config={props:e=>{let{mutate:t,ownProps:{actions:n}}=e;return{actions:{...n,handleArchiveBlock:e=>t({variables:{blockId:e}})}}},options:e=>{let{areaId:t}=e;return{refetchQueries:[{query:l.query,variables:l.config.options({areaId:t}).variables}]}}};t.default=(0,a.graphql)(i,d)},8046:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.mutation=t.default=t.config=void 0;var r,a=n(3732),o=(r=n(1306))&&r.__esModule?r:{default:r},l=n(2806);const i=t.mutation=o.default`
+`;
+const config = exports.config = {
+  props: _ref => {
+    let {
+      mutate,
+      ownProps: {
+        actions
+      }
+    } = _ref;
+    const handleArchiveBlock = blockId => mutate({
+      variables: {
+        blockId
+      }
+    });
+    return {
+      actions: {
+        ...actions,
+        handleArchiveBlock
+      }
+    };
+  },
+  options: _ref2 => {
+    let {
+      areaId
+    } = _ref2;
+    return {
+      refetchQueries: [{
+        query: _readBlocksForAreaQuery.query,
+        variables: _readBlocksForAreaQuery.config.options({
+          areaId
+        }).variables
+      }]
+    };
+  }
+};
+var _default = exports["default"] = (0, _hoc.graphql)(mutation, config);
+
+/***/ }),
+
+/***/ "./client/src/state/editor/duplicateBlockMutation.js":
+/*!***********************************************************!*\
+  !*** ./client/src/state/editor/duplicateBlockMutation.js ***!
+  \***********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.mutation = exports["default"] = exports.config = void 0;
+var _hoc = __webpack_require__(/*! @apollo/client/react/hoc */ "@apollo/client/react/hoc");
+var _graphqlTag = _interopRequireDefault(__webpack_require__(/*! graphql-tag */ "graphql-tag"));
+var _readBlocksForAreaQuery = __webpack_require__(/*! ./readBlocksForAreaQuery */ "./client/src/state/editor/readBlocksForAreaQuery.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const mutation = exports.mutation = (0, _graphqlTag.default)`
 mutation DuplicateBlock($blockId: ID!) {
   duplicateBlock(id: $blockId) {
     id
   }
 }
-`,d=t.config={props:e=>{let{mutate:t,ownProps:{actions:n}}=e;return{actions:{...n,handleDuplicateBlock:e=>t({variables:{blockId:e}})}}},options:e=>{let{areaId:t}=e;return{refetchQueries:[{query:l.query,variables:l.config.options({areaId:t}).variables}]}}};t.default=(0,a.graphql)(i,d)},3558:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.getElementTypeConfig=t.getConfig=void 0;var r,a=(r=n(4510))&&r.__esModule?r:{default:r};const o=()=>a.default.getSection("DNADesign\\Elemental\\Controllers\\ElementalAreaController");t.getConfig=o;t.getElementTypeConfig=function(e){let t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:null;const n=e.blockSchema.typeName;let r=(Array.isArray(t)?t:o().elementTypes).find((e=>e.class===n||e.name===n));return e.obsoleteClassName&&(r=Object.assign({obsoleteClassName:e.obsoleteClassName},r),Object.preventExtensions(r)),r}},920:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.loadElementFormStateName=void 0;var r,a=(r=n(4510))&&r.__esModule?r:{default:r};t.loadElementFormStateName=function(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:null;const t=a.default.getSection("DNADesign\\Elemental\\Controllers\\ElementalAreaController").form.elementForm.formNameTemplate;return e?t.replace("{id}",e):t}},9536:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.loadElementSchemaValue=void 0;var r,a=(r=n(4510))&&r.__esModule?r:{default:r};t.loadElementSchemaValue=function(e){let t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:null;const n=a.default.getSection("DNADesign\\Elemental\\Controllers\\ElementalAreaController").form.elementForm[e]||"";return t?`${n}/${t}`:n}},6426:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.mutation=t.default=t.config=void 0;var r,a=n(3732),o=(r=n(1306))&&r.__esModule?r:{default:r},l=n(2806);const i=t.mutation=o.default`
+`;
+const config = exports.config = {
+  props: _ref => {
+    let {
+      mutate,
+      ownProps: {
+        actions
+      }
+    } = _ref;
+    const handleDuplicateBlock = blockId => mutate({
+      variables: {
+        blockId
+      }
+    });
+    return {
+      actions: {
+        ...actions,
+        handleDuplicateBlock
+      }
+    };
+  },
+  options: _ref2 => {
+    let {
+      areaId
+    } = _ref2;
+    return {
+      refetchQueries: [{
+        query: _readBlocksForAreaQuery.query,
+        variables: _readBlocksForAreaQuery.config.options({
+          areaId
+        }).variables
+      }]
+    };
+  }
+};
+var _default = exports["default"] = (0, _hoc.graphql)(mutation, config);
+
+/***/ }),
+
+/***/ "./client/src/state/editor/elementConfig.js":
+/*!**************************************************!*\
+  !*** ./client/src/state/editor/elementConfig.js ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.getElementTypeConfig = exports.getConfig = void 0;
+var _Config = _interopRequireDefault(__webpack_require__(/*! lib/Config */ "lib/Config"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const getConfig = () => _Config.default.getSection('DNADesign\\Elemental\\Controllers\\ElementalAreaController');
+exports.getConfig = getConfig;
+const getElementTypeConfig = function (element) {
+  let typeConfig = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  const elementType = element.blockSchema.typeName;
+  const types = Array.isArray(typeConfig) ? typeConfig : getConfig().elementTypes;
+  let type = types.find(value => value.class === elementType || value.name === elementType);
+  if (element.obsoleteClassName) {
+    type = Object.assign({
+      obsoleteClassName: element.obsoleteClassName
+    }, type);
+    Object.preventExtensions(type);
+  }
+  return type;
+};
+exports.getElementTypeConfig = getElementTypeConfig;
+
+/***/ }),
+
+/***/ "./client/src/state/editor/loadElementFormStateName.js":
+/*!*************************************************************!*\
+  !*** ./client/src/state/editor/loadElementFormStateName.js ***!
+  \*************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.loadElementFormStateName = void 0;
+var _Config = _interopRequireDefault(__webpack_require__(/*! lib/Config */ "lib/Config"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const loadElementFormStateName = function () {
+  let elementId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  const sectionKey = 'DNADesign\\Elemental\\Controllers\\ElementalAreaController';
+  const section = _Config.default.getSection(sectionKey);
+  const formNameTemplate = section.form.elementForm.formNameTemplate;
+  if (elementId) {
+    return formNameTemplate.replace('{id}', elementId);
+  }
+  return formNameTemplate;
+};
+exports.loadElementFormStateName = loadElementFormStateName;
+
+/***/ }),
+
+/***/ "./client/src/state/editor/loadElementSchemaValue.js":
+/*!***********************************************************!*\
+  !*** ./client/src/state/editor/loadElementSchemaValue.js ***!
+  \***********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.loadElementSchemaValue = void 0;
+var _Config = _interopRequireDefault(__webpack_require__(/*! lib/Config */ "lib/Config"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const loadElementSchemaValue = function (key) {
+  let elementId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  const sectionKey = 'DNADesign\\Elemental\\Controllers\\ElementalAreaController';
+  const section = _Config.default.getSection(sectionKey);
+  const schemaValue = section.form.elementForm[key] || '';
+  if (elementId) {
+    return `${schemaValue}/${elementId}`;
+  }
+  return schemaValue;
+};
+exports.loadElementSchemaValue = loadElementSchemaValue;
+
+/***/ }),
+
+/***/ "./client/src/state/editor/publishBlockMutation.js":
+/*!*********************************************************!*\
+  !*** ./client/src/state/editor/publishBlockMutation.js ***!
+  \*********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.mutation = exports["default"] = exports.config = void 0;
+var _hoc = __webpack_require__(/*! @apollo/client/react/hoc */ "@apollo/client/react/hoc");
+var _graphqlTag = _interopRequireDefault(__webpack_require__(/*! graphql-tag */ "graphql-tag"));
+var _readBlocksForAreaQuery = __webpack_require__(/*! ./readBlocksForAreaQuery */ "./client/src/state/editor/readBlocksForAreaQuery.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const mutation = exports.mutation = (0, _graphqlTag.default)`
 mutation PublishBlock($blockId:ID!) {
   publishBlock(id: $blockId) {
     id
   }
 }
-`,d=t.config={props:e=>{let{mutate:t,ownProps:{actions:n}}=e;return{actions:{...n,handlePublishBlock:e=>t({variables:{blockId:e}})}}},options:e=>{let{areaId:t}=e;return{refetchQueries:[{query:l.query,variables:l.config.options({areaId:t}).variables}]}}};t.default=(0,a.graphql)(i,d)},2806:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.query=t.default=t.config=void 0;var r,a=n(3732),o=(r=n(1306))&&r.__esModule?r:{default:r};const l=t.query=o.default`
+`;
+const config = exports.config = {
+  props: _ref => {
+    let {
+      mutate,
+      ownProps: {
+        actions
+      }
+    } = _ref;
+    const handlePublishBlock = blockId => mutate({
+      variables: {
+        blockId
+      }
+    });
+    return {
+      actions: {
+        ...actions,
+        handlePublishBlock
+      }
+    };
+  },
+  options: _ref2 => {
+    let {
+      areaId
+    } = _ref2;
+    return {
+      refetchQueries: [{
+        query: _readBlocksForAreaQuery.query,
+        variables: _readBlocksForAreaQuery.config.options({
+          areaId
+        }).variables
+      }]
+    };
+  }
+};
+var _default = exports["default"] = (0, _hoc.graphql)(mutation, config);
+
+/***/ }),
+
+/***/ "./client/src/state/editor/readBlocksForAreaQuery.js":
+/*!***********************************************************!*\
+  !*** ./client/src/state/editor/readBlocksForAreaQuery.js ***!
+  \***********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.query = exports["default"] = exports.config = void 0;
+var _hoc = __webpack_require__(/*! @apollo/client/react/hoc */ "@apollo/client/react/hoc");
+var _graphqlTag = _interopRequireDefault(__webpack_require__(/*! graphql-tag */ "graphql-tag"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const query = exports.query = (0, _graphqlTag.default)`
 query ReadBlocksForArea($id:ID!) {
   readOneElementalArea(filter: { id: { eq: $id } }, versioning: {
     mode: DRAFT
@@ -44,7 +2899,59 @@ query ReadBlocksForArea($id:ID!) {
     }
   }
 }
-`,i=t.config={options(e){let{areaId:t}=e;return{variables:{id:t}}},props(e){let{data:{error:t,readOneElementalArea:n,loading:r}}=e,a=null;n&&(a=n.elements);return{loading:r||!a,blocks:a,graphQLErrors:t&&t.graphQLErrors&&t.graphQLErrors.map((e=>e.message))}}};t.default=(0,a.graphql)(l,i)},5386:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.mutation=t.default=t.config=void 0;var r,a=n(3732),o=(r=n(1306))&&r.__esModule?r:{default:r},l=n(2806);const i=t.mutation=o.default`
+`;
+const config = exports.config = {
+  options(_ref) {
+    let {
+      areaId
+    } = _ref;
+    return {
+      variables: {
+        id: areaId
+      }
+    };
+  },
+  props(_ref2) {
+    let {
+      data: {
+        error,
+        readOneElementalArea,
+        loading: networkLoading
+      }
+    } = _ref2;
+    let blocks = null;
+    if (readOneElementalArea) {
+      blocks = readOneElementalArea.elements;
+    }
+    const errors = error && error.graphQLErrors && error.graphQLErrors.map(graphQLError => graphQLError.message);
+    return {
+      loading: networkLoading || !blocks,
+      blocks,
+      graphQLErrors: errors
+    };
+  }
+};
+var _default = exports["default"] = (0, _hoc.graphql)(query, config);
+
+/***/ }),
+
+/***/ "./client/src/state/editor/sortBlockMutation.js":
+/*!******************************************************!*\
+  !*** ./client/src/state/editor/sortBlockMutation.js ***!
+  \******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.mutation = exports["default"] = exports.config = void 0;
+var _hoc = __webpack_require__(/*! @apollo/client/react/hoc */ "@apollo/client/react/hoc");
+var _graphqlTag = _interopRequireDefault(__webpack_require__(/*! graphql-tag */ "graphql-tag"));
+var _readBlocksForAreaQuery = __webpack_require__(/*! ./readBlocksForAreaQuery */ "./client/src/state/editor/readBlocksForAreaQuery.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const mutation = exports.mutation = (0, _graphqlTag.default)`
 mutation SortBlockMutation($blockId:ID!, $afterBlockId:ID!) {
   sortBlock(
     id: $blockId
@@ -55,7 +2962,102 @@ mutation SortBlockMutation($blockId:ID!, $afterBlockId:ID!) {
     isPublished
   }
 }
-`,d=t.config={props:e=>{let{mutate:t,ownProps:{actions:n}}=e;return{actions:{...n,handleSortBlock:(e,n,r)=>t({variables:{blockId:e,afterBlockId:n},optimisticResponse:{sortBlock:{id:e,isLiveVersion:!1,isPublished:!1,__typename:"Block"}},update:(t,a)=>{let{data:{sortBlock:o}}=a;const i=l.config.options({areaId:r}).variables,d=t.readQuery({query:l.query,variables:i}),u=JSON.parse(JSON.stringify(d));let s=u.readOneElementalArea.elements;const c=s.findIndex((t=>t.id===e)),f=s[c];if(Object.entries(o).forEach((e=>{let[t,n]=e;"__typename"!==t&&(f[t]=n)})),s.splice(c,1),"0"===n)s.unshift(f);else{let e=s.findIndex((e=>e.id===n));-1===e&&(e=c-1);const t=s.slice(e+1);s=s.slice(0,e+1),s.push(f),s=s.concat(t)}u.readOneElementalArea.elements=s,t.writeQuery({query:l.query,data:u,variables:i})}})}}}};t.default=(0,a.graphql)(i,d)},495:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.mutation=t.default=t.config=void 0;var r,a=n(3732),o=(r=n(1306))&&r.__esModule?r:{default:r},l=n(2806);const i=t.mutation=o.default`
+`;
+const config = exports.config = {
+  props: _ref => {
+    let {
+      mutate,
+      ownProps: {
+        actions
+      }
+    } = _ref;
+    const handleSortBlock = (blockId, afterBlockId, areaId) => mutate({
+      variables: {
+        blockId,
+        afterBlockId
+      },
+      optimisticResponse: {
+        sortBlock: {
+          id: blockId,
+          isLiveVersion: false,
+          isPublished: false,
+          __typename: 'Block'
+        }
+      },
+      update: (store, _ref2) => {
+        let {
+          data: {
+            sortBlock: updatedElementData
+          }
+        } = _ref2;
+        const variables = _readBlocksForAreaQuery.config.options({
+          areaId
+        }).variables;
+        const cachedData = store.readQuery({
+          query: _readBlocksForAreaQuery.query,
+          variables
+        });
+        const newData = JSON.parse(JSON.stringify(cachedData));
+        let blocks = newData.readOneElementalArea.elements;
+        const movedBlockIndex = blocks.findIndex(block => block.id === blockId);
+        const movedBlock = blocks[movedBlockIndex];
+        Object.entries(updatedElementData).forEach(_ref3 => {
+          let [key, value] = _ref3;
+          if (key === '__typename') {
+            return;
+          }
+          movedBlock[key] = value;
+        });
+        blocks.splice(movedBlockIndex, 1);
+        if (afterBlockId === '0') {
+          blocks.unshift(movedBlock);
+        } else {
+          let targetBlockIndex = blocks.findIndex(block => block.id === afterBlockId);
+          if (targetBlockIndex === -1) {
+            targetBlockIndex = movedBlockIndex - 1;
+          }
+          const end = blocks.slice(targetBlockIndex + 1);
+          blocks = blocks.slice(0, targetBlockIndex + 1);
+          blocks.push(movedBlock);
+          blocks = blocks.concat(end);
+        }
+        newData.readOneElementalArea.elements = blocks;
+        store.writeQuery({
+          query: _readBlocksForAreaQuery.query,
+          data: newData,
+          variables
+        });
+      }
+    });
+    return {
+      actions: {
+        ...actions,
+        handleSortBlock
+      }
+    };
+  }
+};
+var _default = exports["default"] = (0, _hoc.graphql)(mutation, config);
+
+/***/ }),
+
+/***/ "./client/src/state/editor/unpublishBlockMutation.js":
+/*!***********************************************************!*\
+  !*** ./client/src/state/editor/unpublishBlockMutation.js ***!
+  \***********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.mutation = exports["default"] = exports.config = void 0;
+var _hoc = __webpack_require__(/*! @apollo/client/react/hoc */ "@apollo/client/react/hoc");
+var _graphqlTag = _interopRequireDefault(__webpack_require__(/*! graphql-tag */ "graphql-tag"));
+var _readBlocksForAreaQuery = __webpack_require__(/*! ./readBlocksForAreaQuery */ "./client/src/state/editor/readBlocksForAreaQuery.js");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const mutation = exports.mutation = (0, _graphqlTag.default)`
 mutation UnpublishBlock($blockId:ID!) {
   unpublishBlock(
     id: $blockId
@@ -63,7 +3065,64 @@ mutation UnpublishBlock($blockId:ID!) {
     id
   }
 }
-`,d=t.config={props:e=>{let{mutate:t,ownProps:{actions:n}}=e;return{actions:{...n,handleUnpublishBlock:(e,n,r,a)=>t({variables:{blockId:e,fromStage:n,toStage:r,fromVersion:a}})}}},options:e=>{let{areaId:t}=e;return{refetchQueries:[{query:l.query,variables:l.config.options({areaId:t}).variables}]}}};t.default=(0,a.graphql)(i,d)},2939:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.query=t.default=t.config=void 0;var r,a=n(3732),o=(r=n(1306))&&r.__esModule?r:{default:r};const l=t.query=o.default`
+`;
+const config = exports.config = {
+  props: _ref => {
+    let {
+      mutate,
+      ownProps: {
+        actions
+      }
+    } = _ref;
+    const handleUnpublishBlock = (blockId, fromStage, toStage, fromVersion) => mutate({
+      variables: {
+        blockId,
+        fromStage,
+        toStage,
+        fromVersion
+      }
+    });
+    return {
+      actions: {
+        ...actions,
+        handleUnpublishBlock
+      }
+    };
+  },
+  options: _ref2 => {
+    let {
+      areaId
+    } = _ref2;
+    return {
+      refetchQueries: [{
+        query: _readBlocksForAreaQuery.query,
+        variables: _readBlocksForAreaQuery.config.options({
+          areaId
+        }).variables
+      }]
+    };
+  }
+};
+var _default = exports["default"] = (0, _hoc.graphql)(mutation, config);
+
+/***/ }),
+
+/***/ "./client/src/state/history/readOneBlockQuery.js":
+/*!*******************************************************!*\
+  !*** ./client/src/state/history/readOneBlockQuery.js ***!
+  \*******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.query = exports["default"] = exports.config = void 0;
+var _hoc = __webpack_require__(/*! @apollo/client/react/hoc */ "@apollo/client/react/hoc");
+var _graphqlTag = _interopRequireDefault(__webpack_require__(/*! graphql-tag */ "graphql-tag"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const query = exports.query = (0, _graphqlTag.default)`
 query ReadHistoryViewerBlock ($block_id: ID!, $limit: Int!, $offset: Int!) {
   readOneBlock(
     versioning: {
@@ -95,7 +3154,80 @@ query ReadHistoryViewerBlock ($block_id: ID!, $limit: Int!, $offset: Int!) {
     }
   }
 }
-`,i=t.config={options(e){let{recordId:t,limit:n,page:r}=e;return{variables:{limit:n,offset:((r||1)-1)*n,block_id:t}}},props(e){let{data:{error:t,refetch:n,readOneBlock:r,loading:a},ownProps:{actions:o={versions:{}},limit:l,recordId:i}}=e;const d=r||null;return{loading:a||!d,versions:d,graphQLErrors:t&&t.graphQLErrors&&t.graphQLErrors.map((e=>e.message)),actions:{...o,versions:{...d,goToPage(e){n({offset:((e||1)-1)*l,limit:l,block_id:i})}}}}}};t.default=(0,a.graphql)(l,i)},9650:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.mutation=t.default=t.config=void 0;var r,a=n(3732),o=(r=n(1306))&&r.__esModule?r:{default:r};const l=t.mutation=o.default`
+`;
+const config = exports.config = {
+  options(_ref) {
+    let {
+      recordId,
+      limit,
+      page
+    } = _ref;
+    return {
+      variables: {
+        limit,
+        offset: ((page || 1) - 1) * limit,
+        block_id: recordId
+      }
+    };
+  },
+  props(_ref2) {
+    let {
+      data: {
+        error,
+        refetch,
+        readOneBlock,
+        loading: networkLoading
+      },
+      ownProps: {
+        actions = {
+          versions: {}
+        },
+        limit,
+        recordId
+      }
+    } = _ref2;
+    const versions = readOneBlock || null;
+    const errors = error && error.graphQLErrors && error.graphQLErrors.map(graphQLError => graphQLError.message);
+    return {
+      loading: networkLoading || !versions,
+      versions,
+      graphQLErrors: errors,
+      actions: {
+        ...actions,
+        versions: {
+          ...versions,
+          goToPage(page) {
+            refetch({
+              offset: ((page || 1) - 1) * limit,
+              limit,
+              block_id: recordId
+            });
+          }
+        }
+      }
+    };
+  }
+};
+var _default = exports["default"] = (0, _hoc.graphql)(query, config);
+
+/***/ }),
+
+/***/ "./client/src/state/history/revertToBlockVersionMutation.js":
+/*!******************************************************************!*\
+  !*** ./client/src/state/history/revertToBlockVersionMutation.js ***!
+  \******************************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.mutation = exports["default"] = exports.config = void 0;
+var _hoc = __webpack_require__(/*! @apollo/client/react/hoc */ "@apollo/client/react/hoc");
+var _graphqlTag = _interopRequireDefault(__webpack_require__(/*! graphql-tag */ "graphql-tag"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const mutation = exports.mutation = (0, _graphqlTag.default)`
 mutation revertBlockToVersion($id:ID!, $fromStage:VersionedStage!, $toStage:VersionedStage!, $fromVersion:Int!) {
   copyBlockToStage(input: {
     id: $id
@@ -106,4 +3238,709 @@ mutation revertBlockToVersion($id:ID!, $fromStage:VersionedStage!, $toStage:Vers
     id
   }
 }
-`,i=t.config={props:e=>{let{mutate:t,ownProps:{actions:n}}=e;return{actions:{...n,revertToVersion:(e,n,r,a)=>t({variables:{id:e,fromVersion:n,fromStage:r,toStage:a}})}}},options:{refetchQueries:["ReadHistoryViewerBlock"]}};t.default=(0,a.graphql)(l,i)},5407:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.elementType=void 0;var r,a=(r=n(7086))&&r.__esModule?r:{default:r};t.elementType=a.default.shape({id:a.default.string.isRequired,title:a.default.string,blockSchema:a.default.object,inlineEditable:a.default.bool,published:a.default.bool,liveVersion:a.default.bool,version:a.default.number})},7286:function(e,t,n){Object.defineProperty(t,"__esModule",{value:!0}),t.elementTypeType=void 0;var r,a=(r=n(7086))&&r.__esModule?r:{default:r};t.elementTypeType=a.default.shape({name:a.default.string,title:a.default.string,icon:a.default.string,inlineEditable:a.default.bool,editTabs:a.default.arrayOf(a.default.shape({title:a.default.string,name:a.default.string})),config:a.default.object})},573:function(e,t,n){n.r(t),n.d(t,{createSelector:function(){return i},createSelectorCreator:function(){return l},createStructuredSelector:function(){return d},defaultEqualityCheck:function(){return a},defaultMemoize:function(){return o}});var r="NOT_FOUND";var a=function(e,t){return e===t};function o(e,t){var n,o,l="object"==typeof t?t:{equalityCheck:t},i=l.equalityCheck,d=void 0===i?a:i,u=l.maxSize,s=void 0===u?1:u,c=l.resultEqualityCheck,f=function(e){return function(t,n){if(null===t||null===n||t.length!==n.length)return!1;for(var r=t.length,a=0;a<r;a++)if(!e(t[a],n[a]))return!1;return!0}}(d),p=1===s?(n=f,{get:function(e){return o&&n(o.key,e)?o.value:r},put:function(e,t){o={key:e,value:t}},getEntries:function(){return o?[o]:[]},clear:function(){o=void 0}}):function(e,t){var n=[];function a(e){var a=n.findIndex((function(n){return t(e,n.key)}));if(a>-1){var o=n[a];return a>0&&(n.splice(a,1),n.unshift(o)),o.value}return r}return{get:a,put:function(t,o){a(t)===r&&(n.unshift({key:t,value:o}),n.length>e&&n.pop())},getEntries:function(){return n},clear:function(){n=[]}}}(s,f);function m(){var t=p.get(arguments);if(t===r){if(t=e.apply(null,arguments),c){var n=p.getEntries().find((function(e){return c(e.value,t)}));n&&(t=n.value)}p.put(arguments,t)}return t}return m.clearCache=function(){return p.clear()},m}function l(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];return function(){for(var t=arguments.length,r=new Array(t),a=0;a<t;a++)r[a]=arguments[a];var o,l=0,i={memoizeOptions:void 0},d=r.pop();if("object"==typeof d&&(i=d,d=r.pop()),"function"!=typeof d)throw new Error("createSelector expects an output function after the inputs, but received: ["+typeof d+"]");var u=i.memoizeOptions,s=void 0===u?n:u,c=Array.isArray(s)?s:[s],f=function(e){var t=Array.isArray(e[0])?e[0]:e;if(!t.every((function(e){return"function"==typeof e}))){var n=t.map((function(e){return"function"==typeof e?"function "+(e.name||"unnamed")+"()":typeof e})).join(", ");throw new Error("createSelector expects all input-selectors to be functions, but received the following types: ["+n+"]")}return t}(r),p=e.apply(void 0,[function(){return l++,d.apply(null,arguments)}].concat(c)),m=e((function(){for(var e=[],t=f.length,n=0;n<t;n++)e.push(f[n].apply(null,arguments));return o=p.apply(null,e)}));return Object.assign(m,{resultFunc:d,memoizedResultFunc:p,dependencies:f,lastResult:function(){return o},recomputations:function(){return l},resetRecomputations:function(){return l=0}}),m}}var i=l(o),d=function(e,t){if(void 0===t&&(t=i),"object"!=typeof e)throw new Error("createStructuredSelector expects first argument to be an object where each property is a selector, instead received a "+typeof e);var n=Object.keys(e),r=t(n.map((function(t){return e[t]})),(function(){for(var e=arguments.length,t=new Array(e),r=0;r<e;r++)t[r]=arguments[r];return t.reduce((function(e,t,r){return e[n[r]]=t,e}),{})}));return r}},3732:function(e){e.exports=ApolloClientReactHoc},5159:function(e){e.exports=Backend},4510:function(e){e.exports=Config},1042:function(e){e.exports=FieldHolder},8238:function(e){e.exports=FormBuilderLoader},1306:function(e){e.exports=GraphQLTag},6648:function(e){e.exports=Injector},7086:function(e){e.exports=PropTypes},7363:function(e){e.exports=React},2084:function(e){e.exports=ReactDND},1211:function(e){e.exports=ReactDNDHtml5Backend},394:function(e){e.exports=ReactDom},9691:function(e){e.exports=ReactDomClient},1624:function(e){e.exports=ReactRedux},8127:function(e){e.exports=Reactstrap},2827:function(e){e.exports=Redux},5762:function(e){e.exports=ReduxForm},1789:function(e){e.exports=TabsActions},7820:function(e){e.exports=classnames},720:function(e){e.exports=getFormState},4754:function(e){e.exports=i18n},5311:function(e){e.exports=jQuery},7431:function(e){e.exports=withDragDropContext}},t={};function n(r){var a=t[r];if(void 0!==a)return a.exports;var o=t[r]={exports:{}};return e[r](o,o.exports,n),o.exports}n.d=function(e,t){for(var r in t)n.o(t,r)&&!n.o(e,r)&&Object.defineProperty(e,r,{enumerable:!0,get:t[r]})},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n(7489),n(7274)}();
+`;
+const config = exports.config = {
+  props: _ref => {
+    let {
+      mutate,
+      ownProps: {
+        actions
+      }
+    } = _ref;
+    const revertToVersion = (id, fromVersion, fromStage, toStage) => mutate({
+      variables: {
+        id,
+        fromVersion,
+        fromStage,
+        toStage
+      }
+    });
+    return {
+      actions: {
+        ...actions,
+        revertToVersion
+      }
+    };
+  },
+  options: {
+    refetchQueries: ['ReadHistoryViewerBlock']
+  }
+};
+var _default = exports["default"] = (0, _hoc.graphql)(mutation, config);
+
+/***/ }),
+
+/***/ "./client/src/types/elementType.js":
+/*!*****************************************!*\
+  !*** ./client/src/types/elementType.js ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.elementType = void 0;
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const elementType = exports.elementType = _propTypes.default.shape({
+  id: _propTypes.default.string.isRequired,
+  title: _propTypes.default.string,
+  blockSchema: _propTypes.default.object,
+  inlineEditable: _propTypes.default.bool,
+  published: _propTypes.default.bool,
+  liveVersion: _propTypes.default.bool,
+  version: _propTypes.default.number
+});
+
+/***/ }),
+
+/***/ "./client/src/types/elementTypeType.js":
+/*!*********************************************!*\
+  !*** ./client/src/types/elementTypeType.js ***!
+  \*********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.elementTypeType = void 0;
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const elementTypeType = exports.elementTypeType = _propTypes.default.shape({
+  name: _propTypes.default.string,
+  title: _propTypes.default.string,
+  icon: _propTypes.default.string,
+  inlineEditable: _propTypes.default.bool,
+  editTabs: _propTypes.default.arrayOf(_propTypes.default.shape({
+    title: _propTypes.default.string,
+    name: _propTypes.default.string
+  })),
+  config: _propTypes.default.object
+});
+
+/***/ }),
+
+/***/ "./node_modules/reselect/es/defaultMemoize.js":
+/*!****************************************************!*\
+  !*** ./node_modules/reselect/es/defaultMemoize.js ***!
+  \****************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createCacheKeyComparator: function() { return /* binding */ createCacheKeyComparator; },
+/* harmony export */   defaultEqualityCheck: function() { return /* binding */ defaultEqualityCheck; },
+/* harmony export */   defaultMemoize: function() { return /* binding */ defaultMemoize; }
+/* harmony export */ });
+// Cache implementation based on Erik Rasmussen's `lru-memoize`:
+// https://github.com/erikras/lru-memoize
+var NOT_FOUND = 'NOT_FOUND';
+
+function createSingletonCache(equals) {
+  var entry;
+  return {
+    get: function get(key) {
+      if (entry && equals(entry.key, key)) {
+        return entry.value;
+      }
+
+      return NOT_FOUND;
+    },
+    put: function put(key, value) {
+      entry = {
+        key: key,
+        value: value
+      };
+    },
+    getEntries: function getEntries() {
+      return entry ? [entry] : [];
+    },
+    clear: function clear() {
+      entry = undefined;
+    }
+  };
+}
+
+function createLruCache(maxSize, equals) {
+  var entries = [];
+
+  function get(key) {
+    var cacheIndex = entries.findIndex(function (entry) {
+      return equals(key, entry.key);
+    }); // We found a cached entry
+
+    if (cacheIndex > -1) {
+      var entry = entries[cacheIndex]; // Cached entry not at top of cache, move it to the top
+
+      if (cacheIndex > 0) {
+        entries.splice(cacheIndex, 1);
+        entries.unshift(entry);
+      }
+
+      return entry.value;
+    } // No entry found in cache, return sentinel
+
+
+    return NOT_FOUND;
+  }
+
+  function put(key, value) {
+    if (get(key) === NOT_FOUND) {
+      // TODO Is unshift slow?
+      entries.unshift({
+        key: key,
+        value: value
+      });
+
+      if (entries.length > maxSize) {
+        entries.pop();
+      }
+    }
+  }
+
+  function getEntries() {
+    return entries;
+  }
+
+  function clear() {
+    entries = [];
+  }
+
+  return {
+    get: get,
+    put: put,
+    getEntries: getEntries,
+    clear: clear
+  };
+}
+
+var defaultEqualityCheck = function defaultEqualityCheck(a, b) {
+  return a === b;
+};
+function createCacheKeyComparator(equalityCheck) {
+  return function areArgumentsShallowlyEqual(prev, next) {
+    if (prev === null || next === null || prev.length !== next.length) {
+      return false;
+    } // Do this in a for loop (and not a `forEach` or an `every`) so we can determine equality as fast as possible.
+
+
+    var length = prev.length;
+
+    for (var i = 0; i < length; i++) {
+      if (!equalityCheck(prev[i], next[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+}
+// defaultMemoize now supports a configurable cache size with LRU behavior,
+// and optional comparison of the result value with existing values
+function defaultMemoize(func, equalityCheckOrOptions) {
+  var providedOptions = typeof equalityCheckOrOptions === 'object' ? equalityCheckOrOptions : {
+    equalityCheck: equalityCheckOrOptions
+  };
+  var _providedOptions$equa = providedOptions.equalityCheck,
+      equalityCheck = _providedOptions$equa === void 0 ? defaultEqualityCheck : _providedOptions$equa,
+      _providedOptions$maxS = providedOptions.maxSize,
+      maxSize = _providedOptions$maxS === void 0 ? 1 : _providedOptions$maxS,
+      resultEqualityCheck = providedOptions.resultEqualityCheck;
+  var comparator = createCacheKeyComparator(equalityCheck);
+  var cache = maxSize === 1 ? createSingletonCache(comparator) : createLruCache(maxSize, comparator); // we reference arguments instead of spreading them for performance reasons
+
+  function memoized() {
+    var value = cache.get(arguments);
+
+    if (value === NOT_FOUND) {
+      // @ts-ignore
+      value = func.apply(null, arguments);
+
+      if (resultEqualityCheck) {
+        var entries = cache.getEntries();
+        var matchingEntry = entries.find(function (entry) {
+          return resultEqualityCheck(entry.value, value);
+        });
+
+        if (matchingEntry) {
+          value = matchingEntry.value;
+        }
+      }
+
+      cache.put(arguments, value);
+    }
+
+    return value;
+  }
+
+  memoized.clearCache = function () {
+    return cache.clear();
+  };
+
+  return memoized;
+}
+
+/***/ }),
+
+/***/ "./node_modules/reselect/es/index.js":
+/*!*******************************************!*\
+  !*** ./node_modules/reselect/es/index.js ***!
+  \*******************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createSelector: function() { return /* binding */ createSelector; },
+/* harmony export */   createSelectorCreator: function() { return /* binding */ createSelectorCreator; },
+/* harmony export */   createStructuredSelector: function() { return /* binding */ createStructuredSelector; },
+/* harmony export */   defaultEqualityCheck: function() { return /* reexport safe */ _defaultMemoize__WEBPACK_IMPORTED_MODULE_0__.defaultEqualityCheck; },
+/* harmony export */   defaultMemoize: function() { return /* reexport safe */ _defaultMemoize__WEBPACK_IMPORTED_MODULE_0__.defaultMemoize; }
+/* harmony export */ });
+/* harmony import */ var _defaultMemoize__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./defaultMemoize */ "./node_modules/reselect/es/defaultMemoize.js");
+
+
+
+function getDependencies(funcs) {
+  var dependencies = Array.isArray(funcs[0]) ? funcs[0] : funcs;
+
+  if (!dependencies.every(function (dep) {
+    return typeof dep === 'function';
+  })) {
+    var dependencyTypes = dependencies.map(function (dep) {
+      return typeof dep === 'function' ? "function " + (dep.name || 'unnamed') + "()" : typeof dep;
+    }).join(', ');
+    throw new Error("createSelector expects all input-selectors to be functions, but received the following types: [" + dependencyTypes + "]");
+  }
+
+  return dependencies;
+}
+
+function createSelectorCreator(memoize) {
+  for (var _len = arguments.length, memoizeOptionsFromArgs = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    memoizeOptionsFromArgs[_key - 1] = arguments[_key];
+  }
+
+  var createSelector = function createSelector() {
+    for (var _len2 = arguments.length, funcs = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      funcs[_key2] = arguments[_key2];
+    }
+
+    var _recomputations = 0;
+
+    var _lastResult; // Due to the intricacies of rest params, we can't do an optional arg after `...funcs`.
+    // So, start by declaring the default value here.
+    // (And yes, the words 'memoize' and 'options' appear too many times in this next sequence.)
+
+
+    var directlyPassedOptions = {
+      memoizeOptions: undefined
+    }; // Normally, the result func or "output selector" is the last arg
+
+    var resultFunc = funcs.pop(); // If the result func is actually an _object_, assume it's our options object
+
+    if (typeof resultFunc === 'object') {
+      directlyPassedOptions = resultFunc; // and pop the real result func off
+
+      resultFunc = funcs.pop();
+    }
+
+    if (typeof resultFunc !== 'function') {
+      throw new Error("createSelector expects an output function after the inputs, but received: [" + typeof resultFunc + "]");
+    } // Determine which set of options we're using. Prefer options passed directly,
+    // but fall back to options given to createSelectorCreator.
+
+
+    var _directlyPassedOption = directlyPassedOptions,
+        _directlyPassedOption2 = _directlyPassedOption.memoizeOptions,
+        memoizeOptions = _directlyPassedOption2 === void 0 ? memoizeOptionsFromArgs : _directlyPassedOption2; // Simplifying assumption: it's unlikely that the first options arg of the provided memoizer
+    // is an array. In most libs I've looked at, it's an equality function or options object.
+    // Based on that, if `memoizeOptions` _is_ an array, we assume it's a full
+    // user-provided array of options. Otherwise, it must be just the _first_ arg, and so
+    // we wrap it in an array so we can apply it.
+
+    var finalMemoizeOptions = Array.isArray(memoizeOptions) ? memoizeOptions : [memoizeOptions];
+    var dependencies = getDependencies(funcs);
+    var memoizedResultFunc = memoize.apply(void 0, [function recomputationWrapper() {
+      _recomputations++; // apply arguments instead of spreading for performance.
+
+      return resultFunc.apply(null, arguments);
+    }].concat(finalMemoizeOptions)); // If a selector is called with the exact same arguments we don't need to traverse our dependencies again.
+
+    var selector = memoize(function dependenciesChecker() {
+      var params = [];
+      var length = dependencies.length;
+
+      for (var i = 0; i < length; i++) {
+        // apply arguments instead of spreading and mutate a local list of params for performance.
+        // @ts-ignore
+        params.push(dependencies[i].apply(null, arguments));
+      } // apply arguments instead of spreading for performance.
+
+
+      _lastResult = memoizedResultFunc.apply(null, params);
+      return _lastResult;
+    });
+    Object.assign(selector, {
+      resultFunc: resultFunc,
+      memoizedResultFunc: memoizedResultFunc,
+      dependencies: dependencies,
+      lastResult: function lastResult() {
+        return _lastResult;
+      },
+      recomputations: function recomputations() {
+        return _recomputations;
+      },
+      resetRecomputations: function resetRecomputations() {
+        return _recomputations = 0;
+      }
+    });
+    return selector;
+  }; // @ts-ignore
+
+
+  return createSelector;
+}
+var createSelector = /* #__PURE__ */createSelectorCreator(_defaultMemoize__WEBPACK_IMPORTED_MODULE_0__.defaultMemoize);
+// Manual definition of state and output arguments
+var createStructuredSelector = function createStructuredSelector(selectors, selectorCreator) {
+  if (selectorCreator === void 0) {
+    selectorCreator = createSelector;
+  }
+
+  if (typeof selectors !== 'object') {
+    throw new Error('createStructuredSelector expects first argument to be an object ' + ("where each property is a selector, instead received a " + typeof selectors));
+  }
+
+  var objectKeys = Object.keys(selectors);
+  var resultSelector = selectorCreator( // @ts-ignore
+  objectKeys.map(function (key) {
+    return selectors[key];
+  }), function () {
+    for (var _len3 = arguments.length, values = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      values[_key3] = arguments[_key3];
+    }
+
+    return values.reduce(function (composition, value, index) {
+      composition[objectKeys[index]] = value;
+      return composition;
+    }, {});
+  });
+  return resultSelector;
+};
+
+/***/ }),
+
+/***/ "@apollo/client/react/hoc":
+/*!***************************************!*\
+  !*** external "ApolloClientReactHoc" ***!
+  \***************************************/
+/***/ (function(module) {
+
+module.exports = ApolloClientReactHoc;
+
+/***/ }),
+
+/***/ "lib/Backend":
+/*!**************************!*\
+  !*** external "Backend" ***!
+  \**************************/
+/***/ (function(module) {
+
+module.exports = Backend;
+
+/***/ }),
+
+/***/ "lib/Config":
+/*!*************************!*\
+  !*** external "Config" ***!
+  \*************************/
+/***/ (function(module) {
+
+module.exports = Config;
+
+/***/ }),
+
+/***/ "components/FieldHolder/FieldHolder":
+/*!******************************!*\
+  !*** external "FieldHolder" ***!
+  \******************************/
+/***/ (function(module) {
+
+module.exports = FieldHolder;
+
+/***/ }),
+
+/***/ "components/FormBuilder/FormBuilder":
+/*!******************************!*\
+  !*** external "FormBuilder" ***!
+  \******************************/
+/***/ (function(module) {
+
+module.exports = FormBuilder;
+
+/***/ }),
+
+/***/ "containers/FormBuilderLoader/FormBuilderLoader":
+/*!************************************!*\
+  !*** external "FormBuilderLoader" ***!
+  \************************************/
+/***/ (function(module) {
+
+module.exports = FormBuilderLoader;
+
+/***/ }),
+
+/***/ "graphql-tag":
+/*!*****************************!*\
+  !*** external "GraphQLTag" ***!
+  \*****************************/
+/***/ (function(module) {
+
+module.exports = GraphQLTag;
+
+/***/ }),
+
+/***/ "lib/Injector":
+/*!***************************!*\
+  !*** external "Injector" ***!
+  \***************************/
+/***/ (function(module) {
+
+module.exports = Injector;
+
+/***/ }),
+
+/***/ "prop-types":
+/*!****************************!*\
+  !*** external "PropTypes" ***!
+  \****************************/
+/***/ (function(module) {
+
+module.exports = PropTypes;
+
+/***/ }),
+
+/***/ "react":
+/*!************************!*\
+  !*** external "React" ***!
+  \************************/
+/***/ (function(module) {
+
+module.exports = React;
+
+/***/ }),
+
+/***/ "react-dnd":
+/*!***************************!*\
+  !*** external "ReactDND" ***!
+  \***************************/
+/***/ (function(module) {
+
+module.exports = ReactDND;
+
+/***/ }),
+
+/***/ "react-dnd-html5-backend":
+/*!***************************************!*\
+  !*** external "ReactDNDHtml5Backend" ***!
+  \***************************************/
+/***/ (function(module) {
+
+module.exports = ReactDNDHtml5Backend;
+
+/***/ }),
+
+/***/ "react-dom":
+/*!***************************!*\
+  !*** external "ReactDom" ***!
+  \***************************/
+/***/ (function(module) {
+
+module.exports = ReactDom;
+
+/***/ }),
+
+/***/ "react-dom/client":
+/*!*********************************!*\
+  !*** external "ReactDomClient" ***!
+  \*********************************/
+/***/ (function(module) {
+
+module.exports = ReactDomClient;
+
+/***/ }),
+
+/***/ "react-redux":
+/*!*****************************!*\
+  !*** external "ReactRedux" ***!
+  \*****************************/
+/***/ (function(module) {
+
+module.exports = ReactRedux;
+
+/***/ }),
+
+/***/ "reactstrap":
+/*!*****************************!*\
+  !*** external "Reactstrap" ***!
+  \*****************************/
+/***/ (function(module) {
+
+module.exports = Reactstrap;
+
+/***/ }),
+
+/***/ "redux":
+/*!************************!*\
+  !*** external "Redux" ***!
+  \************************/
+/***/ (function(module) {
+
+module.exports = Redux;
+
+/***/ }),
+
+/***/ "redux-form":
+/*!****************************!*\
+  !*** external "ReduxForm" ***!
+  \****************************/
+/***/ (function(module) {
+
+module.exports = ReduxForm;
+
+/***/ }),
+
+/***/ "state/tabs/TabsActions":
+/*!******************************!*\
+  !*** external "TabsActions" ***!
+  \******************************/
+/***/ (function(module) {
+
+module.exports = TabsActions;
+
+/***/ }),
+
+/***/ "classnames":
+/*!*****************************!*\
+  !*** external "classnames" ***!
+  \*****************************/
+/***/ (function(module) {
+
+module.exports = classnames;
+
+/***/ }),
+
+/***/ "lib/getFormState":
+/*!*******************************!*\
+  !*** external "getFormState" ***!
+  \*******************************/
+/***/ (function(module) {
+
+module.exports = getFormState;
+
+/***/ }),
+
+/***/ "i18n":
+/*!***********************!*\
+  !*** external "i18n" ***!
+  \***********************/
+/***/ (function(module) {
+
+module.exports = i18n;
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/***/ (function(module) {
+
+module.exports = jQuery;
+
+/***/ }),
+
+/***/ "lib/withDragDropContext":
+/*!**************************************!*\
+  !*** external "withDragDropContext" ***!
+  \**************************************/
+/***/ (function(module) {
+
+module.exports = withDragDropContext;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+!function() {
+/*!**************************************!*\
+  !*** ./client/src/bundles/bundle.js ***!
+  \**************************************/
+
+
+__webpack_require__(/*! legacy/ElementEditor/entwine */ "./client/src/legacy/ElementEditor/entwine.js");
+__webpack_require__(/*! boot */ "./client/src/boot/index.js");
+}();
+/******/ })()
+;
+//# sourceMappingURL=bundle.js.map
