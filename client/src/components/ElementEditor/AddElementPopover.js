@@ -31,7 +31,6 @@ class AddElementPopover extends Component {
       } = this.props;
 
       event.preventDefault();
-      // TODO This should probably use the GraphQL element type name (element.__typeName)
       handleAddElementToArea(elementType.class, insertAfterElement).then(
         () => {
           const preview = window.jQuery('.cms-preview');
