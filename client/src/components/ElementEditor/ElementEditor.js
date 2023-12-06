@@ -128,28 +128,37 @@ ElementEditor.propTypes = {
   }),
 };
 
+const defaultElementFormState = {};
+
+// Use a memoization to prevent mapStateToProps() re-rendering on formstate changes
+// Any formstate change, including unrelated ones such as from another FormBuilderLoader component
+// will trigger the ElementalEditor to re-render
 const elementFormSelector = createSelector([
   (state) => {
     const elementFormState = state.form.formState.element;
 
     if (!elementFormState) {
-      return {};
+      // This needs to a reference to the defaultElementFormState variable rather than a new object
+      // or redux will think the state has changed and cause the component to re-render
+      return defaultElementFormState;
     }
 
     return elementFormState;
   }], (elementFormState) => {
   const formNamePattern = loadElementFormStateName('[0-9]+');
 
-  return Object.keys(elementFormState)
+  const filteredElementFormState = Object.keys(elementFormState)
     .filter(key => key.match(formNamePattern))
     .reduce((accumulator, key) => ({
       ...accumulator,
       [key]: elementFormState[key].values
     }), {});
+
+  return filteredElementFormState;
 });
 
 function mapStateToProps(state) {
-  // memoize form state and value changes
+  // Memoize form state and value changes
   const formState = elementFormSelector(state);
 
   return { formState };
