@@ -10,8 +10,8 @@ use SilverStripe\View\Parsers\HTMLValue;
 use SilverStripe\View\SSViewer;
 
 /**
- * @method ElementalArea ElementalArea()
  * @property int ElementalAreaID
+ * @method ElementalArea ElementalArea()
  */
 class ElementalPageExtension extends ElementalAreasExtension
 {
