@@ -21,9 +21,9 @@ use SilverStripe\Forms\FieldList;
  * with deeply nested block structures. Apply to @see BaseElement and @see ElementalArea.
  *
  * @property int $TopPageID
- * @method SiteTree TopPage()
  * @property BaseElement|ElementalArea|$this $owner
  * @package DNADesign\Elemental\TopPage
+ * @method SiteTree TopPage()
  */
 class DataExtension extends BaseDataExtension
 {

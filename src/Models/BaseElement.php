@@ -47,9 +47,8 @@ use SilverStripe\ORM\DataObjectSchema;
  * @property string $Style
  * @property int $ParentID
  *
- * @method ElementalArea Parent()
- *
  * @mixin Versioned
+ * @method ElementalArea Parent()
  */
 class BaseElement extends DataObject implements CMSPreviewable
 {
