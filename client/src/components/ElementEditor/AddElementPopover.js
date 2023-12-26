@@ -19,6 +19,8 @@ class AddElementPopover extends Component {
   }
 
   /**
+   * #graphql
+   * 
    * click handler that preserves the details of what was clicked
    * @param {object} elementType in the shape of types/elmementTypeType
    * @returns {function}
@@ -40,6 +42,16 @@ class AddElementPopover extends Component {
       );
       this.handleToggle();
     };
+  }
+
+  /**
+   * #rpc
+   * - call add element to area endpoint (areaID, elementType, insertAfterElementID)
+   * - then call read blocks from area endpoint (areaID)
+   * - also then update the preview via jquery/entwine
+   */
+  handleButtonOnClick(elementType) {
+    // todo
   }
 
   /**
@@ -66,11 +78,14 @@ class AddElementPopover extends Component {
       extraClass
     );
 
+    const globalUseGraphqQL = false;
+    const buttonOnClickHandler = globalUseGraphqQL ? this.getElementButtonClickHandler : this.handleButtonOnClick;
+
     const buttons = elementTypes.map((elementType) => ({
       content: elementType.title,
       key: elementType.name,
       className: classNames(elementType.icon, 'btn--icon-xl', 'element-editor-add-element__button'),
-      onClick: this.getElementButtonClickHandler(elementType),
+      onClick: buttonOnClickHandler(elementType),
     }));
 
     return (
