@@ -78,8 +78,8 @@ class AddElementPopover extends Component {
       extraClass
     );
 
-    const globalUseGraphqQL = false;
-    const buttonOnClickHandler = globalUseGraphqQL ? this.getElementButtonClickHandler : this.handleButtonOnClick;
+    const globalUseGraphQL = false;
+    const buttonOnClickHandler = globalUseGraphQL ? this.getElementButtonClickHandler : this.handleButtonOnClick;
 
     const buttons = elementTypes.map((elementType) => ({
       content: elementType.title,

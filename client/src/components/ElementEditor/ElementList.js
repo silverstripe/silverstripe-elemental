@@ -11,6 +11,27 @@ import { getDragIndicatorIndex } from 'lib/dragHelpers';
 import { getElementTypeConfig } from 'state/editor/elementConfig';
 
 class ElementList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      contentBlocks: [],
+    };
+  }
+
+  // #RPC
+  // it should make an ajax call to the server and do the equivalent of readBlocksForAreaQuery
+  // it should the call this.setState `contentBlocks` with the result
+  // this will cause a re-render of the component
+  // this callback should be passed to other components via context and get called after doing mutations
+  fetchContentBlocks() {
+    const globalUseGraphQL = false;
+    if (globalUseGraphQL) {
+      return;
+    }
+    // TODO: implement
+  }
+
   getDragIndicatorIndex() {
     const { dragTargetElementId, draggedItem, blocks, dragSpot } = this.props;
     return getDragIndicatorIndex(
@@ -31,7 +52,7 @@ class ElementList extends Component {
       ElementComponent,
       HoverBarComponent,
       DragIndicatorComponent,
-      blocks,
+      blocks, // graphql - comes from readBlocksForAreaQuery
       allowedElementTypes,
       elementTypes,
       areaId,
@@ -41,16 +62,19 @@ class ElementList extends Component {
       isDraggingOver,
     } = this.props;
 
+    const globalUseGraphQL = false;
+    const contentBlocks = globalUseGraphQL ? blocks : this.state.contentBlocks;
+
     // Blocks can be either null or an empty array
-    if (!blocks) {
+    if (!contentBlocks) {
       return null;
     }
 
-    if (blocks && !blocks.length) {
+    if (contentBlocks && !contentBlocks.length) {
       return <div>{i18n._t('ElementList.ADD_BLOCKS', 'Add blocks to place your content')}</div>;
     }
 
-    let output = blocks.map((element) => (
+    let output = contentBlocks.map((element) => (
       <div key={element.id}>
         <ElementComponent
           element={element}
@@ -97,8 +121,10 @@ class ElementList extends Component {
    */
   renderLoading() {
     const { loading, LoadingComponent } = this.props;
+    const globalUseGraphQL = false;
+    const isLoading = globalUseGraphQL ? loading : this.state.isLoading;
 
-    if (loading) {
+    if (isLoading) {
       return <LoadingComponent />;
     }
     return null;
@@ -106,9 +132,12 @@ class ElementList extends Component {
 
   render() {
     const { blocks } = this.props;
+    const globalUseGraphQL = false;
+    const contentBlocks = globalUseGraphQL ? blocks : this.state.contentBlocks;
+
     const listClassNames = classNames(
       'elemental-editor-list',
-      { 'elemental-editor-list--empty': !blocks || !blocks.length }
+      { 'elemental-editor-list--empty': !contentBlocks || !contentBlocks.length }
     );
 
     return this.props.connectDropTarget(
@@ -121,11 +150,12 @@ class ElementList extends Component {
 }
 
 ElementList.propTypes = {
-  // @todo support either ElementList or Element children in an array (or both)
+  // blocks and loading come from readBlocksForAreaQuery
   blocks: PropTypes.arrayOf(elementType),
+  loading: PropTypes.bool,
+  //
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   allowedElementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  loading: PropTypes.bool,
   areaId: PropTypes.number.isRequired,
   dragTargetElementId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onDragOver: PropTypes.func,
