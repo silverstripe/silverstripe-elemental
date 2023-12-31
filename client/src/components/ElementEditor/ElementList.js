@@ -25,7 +25,7 @@ class ElementList extends Component {
   // this will cause a re-render of the component
   // this callback should be passed to other components via context and get called after doing mutations
   fetchContentBlocks() {
-    const globalUseGraphQL = false;
+    const globalUseGraphQL = true;
     if (globalUseGraphQL) {
       return;
     }
@@ -62,7 +62,7 @@ class ElementList extends Component {
       isDraggingOver,
     } = this.props;
 
-    const globalUseGraphQL = false;
+    const globalUseGraphQL = true;
     const contentBlocks = globalUseGraphQL ? blocks : this.state.contentBlocks;
 
     // Blocks can be either null or an empty array
@@ -121,7 +121,7 @@ class ElementList extends Component {
    */
   renderLoading() {
     const { loading, LoadingComponent } = this.props;
-    const globalUseGraphQL = false;
+    const globalUseGraphQL = true;
     const isLoading = globalUseGraphQL ? loading : this.state.isLoading;
 
     if (isLoading) {
@@ -132,7 +132,7 @@ class ElementList extends Component {
 
   render() {
     const { blocks } = this.props;
-    const globalUseGraphQL = false;
+    const globalUseGraphQL = true;
     const contentBlocks = globalUseGraphQL ? blocks : this.state.contentBlocks;
 
     const listClassNames = classNames(

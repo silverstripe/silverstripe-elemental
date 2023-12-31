@@ -1015,7 +1015,7 @@ var AddElementPopover = function (_Component) {
 
       var popoverClassNames = (0, _classnames2.default)('element-editor-add-element', extraClass);
 
-      var globalUseGraphQL = false;
+      var globalUseGraphQL = true;
       var buttonOnClickHandler = globalUseGraphQL ? this.getElementButtonClickHandler : this.handleButtonOnClick;
 
       var buttons = elementTypes.map(function (elementType) {
@@ -2144,8 +2144,8 @@ var ElementEditor = function (_PureComponent) {
           areaId = _props.areaId;
 
 
-      var globalUseGraphqQL = true;
-      if (globalUseGraphqQL) {
+      var globalUseGraphQL = true;
+      if (globalUseGraphQL) {
         handleSortBlock(sourceId, afterId, areaId).then(function () {
           var preview = window.jQuery('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -2327,7 +2327,7 @@ var ElementList = function (_Component) {
   _createClass(ElementList, [{
     key: 'fetchContentBlocks',
     value: function fetchContentBlocks() {
-      var globalUseGraphQL = false;
+      var globalUseGraphQL = true;
       if (globalUseGraphQL) {
         return;
       }
@@ -2362,7 +2362,7 @@ var ElementList = function (_Component) {
           isDraggingOver = _props2.isDraggingOver;
 
 
-      var globalUseGraphQL = false;
+      var globalUseGraphQL = true;
       var contentBlocks = globalUseGraphQL ? blocks : this.state.contentBlocks;
 
       if (!contentBlocks) {
@@ -2422,7 +2422,7 @@ var ElementList = function (_Component) {
           loading = _props3.loading,
           LoadingComponent = _props3.LoadingComponent;
 
-      var globalUseGraphQL = false;
+      var globalUseGraphQL = true;
       var isLoading = globalUseGraphQL ? loading : this.state.isLoading;
 
       if (isLoading) {
@@ -2435,7 +2435,7 @@ var ElementList = function (_Component) {
     value: function render() {
       var blocks = this.props.blocks;
 
-      var globalUseGraphQL = false;
+      var globalUseGraphQL = true;
       var contentBlocks = globalUseGraphQL ? blocks : this.state.contentBlocks;
 
       var listClassNames = (0, _classnames2.default)('elemental-editor-list', { 'elemental-editor-list--empty': !contentBlocks || !contentBlocks.length });

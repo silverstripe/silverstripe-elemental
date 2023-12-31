@@ -57,8 +57,8 @@ class ElementEditor extends PureComponent {
   handleDragEnd(sourceId, afterId) {
     const { actions: { handleSortBlock }, areaId } = this.props;
 
-    const globalUseGraphqQL = true;
-    if (globalUseGraphqQL) {
+    const globalUseGraphQL = true;
+    if (globalUseGraphQL) {
       // see sortBlockMutation.js for reference
       handleSortBlock(sourceId, afterId, areaId).then(() => {
         const preview = window.jQuery('.cms-preview');
