@@ -67,7 +67,8 @@ class ElementEditor extends PureComponent {
     } else {
       // # rpc
       // make a call to a sort endpoint with (ID, afterBlocKID)
-      // after that is done, get ElementList to refetch the list of blocks
+      // after sort there is NOT a call to readAll elements, GraphQL will only do a fairly pointless
+      // call to read the element that was moved
       // (strange code for sorting is in this component and not ElementList, however do not refator it)
       // update the preview via jquery/entwine (see graphql code above)
     }

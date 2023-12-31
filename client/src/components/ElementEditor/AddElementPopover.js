@@ -25,7 +25,7 @@ class AddElementPopover extends Component {
    * @param {object} elementType in the shape of types/elmementTypeType
    * @returns {function}
    */
-  getElementButtonClickHandler(elementType) {
+  getGraphQLElementButtonClickHandler(elementType) {
     return (event) => {
       const {
         actions: { handleAddElementToArea },
@@ -50,7 +50,7 @@ class AddElementPopover extends Component {
    * - then call read blocks from area endpoint (areaID)
    * - also then update the preview via jquery/entwine
    */
-  handleButtonOnClick(elementType) {
+  getElementButtonClickHandler(elementType) {
     // todo
   }
 
@@ -79,13 +79,14 @@ class AddElementPopover extends Component {
     );
 
     const globalUseGraphQL = true;
-    const buttonOnClickHandler = globalUseGraphQL ? this.getElementButtonClickHandler : this.handleButtonOnClick;
 
     const buttons = elementTypes.map((elementType) => ({
       content: elementType.title,
       key: elementType.name,
       className: classNames(elementType.icon, 'btn--icon-xl', 'element-editor-add-element__button'),
-      onClick: buttonOnClickHandler(elementType),
+      onClick: globalUseGraphQL
+        ? this.getGraphQLElementButtonClickHandler(elementType)
+        : this.getElementButtonClickHandler(elementType),
     }));
 
     return (

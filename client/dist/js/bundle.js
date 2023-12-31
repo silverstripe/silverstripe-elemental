@@ -970,8 +970,8 @@ var AddElementPopover = function (_Component) {
   }
 
   _createClass(AddElementPopover, [{
-    key: 'getElementButtonClickHandler',
-    value: function getElementButtonClickHandler(elementType) {
+    key: 'getGraphQLElementButtonClickHandler',
+    value: function getGraphQLElementButtonClickHandler(elementType) {
       var _this2 = this;
 
       return function (event) {
@@ -990,8 +990,8 @@ var AddElementPopover = function (_Component) {
       };
     }
   }, {
-    key: 'handleButtonOnClick',
-    value: function handleButtonOnClick(elementType) {}
+    key: 'getElementButtonClickHandler',
+    value: function getElementButtonClickHandler(elementType) {}
   }, {
     key: 'handleToggle',
     value: function handleToggle() {
@@ -1003,6 +1003,8 @@ var AddElementPopover = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this3 = this;
+
       var _props2 = this.props,
           PopoverOptionSetComponent = _props2.PopoverOptionSetComponent,
           elementTypes = _props2.elementTypes,
@@ -1016,14 +1018,13 @@ var AddElementPopover = function (_Component) {
       var popoverClassNames = (0, _classnames2.default)('element-editor-add-element', extraClass);
 
       var globalUseGraphQL = true;
-      var buttonOnClickHandler = globalUseGraphQL ? this.getElementButtonClickHandler : this.handleButtonOnClick;
 
       var buttons = elementTypes.map(function (elementType) {
         return {
           content: elementType.title,
           key: elementType.name,
           className: (0, _classnames2.default)(elementType.icon, 'btn--icon-xl', 'element-editor-add-element__button'),
-          onClick: buttonOnClickHandler(elementType)
+          onClick: globalUseGraphQL ? _this3.getGraphQLElementButtonClickHandler(elementType) : _this3.getElementButtonClickHandler(elementType)
         };
       });
 
