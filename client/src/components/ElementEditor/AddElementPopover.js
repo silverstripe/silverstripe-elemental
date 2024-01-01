@@ -54,7 +54,7 @@ class AddElementPopover extends Component {
   getElementButtonClickHandler(elementType) {
     return (event) => {
       event.preventDefault();
-      backend.post(`/admin/elemental-area/add/`,{
+      backend.post(`/admin/elemental-area/add/`, {
         elementClass: elementType.class,
         elementalAreaID: this.props.areaId,
         insertAfterElementID: this.props.insertAfterElement,

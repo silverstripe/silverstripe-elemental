@@ -10,6 +10,7 @@ import { DropTarget } from 'react-dnd';
 import sortBlockMutation from 'state/editor/sortBlockMutation';
 import ElementDragPreview from 'components/ElementEditor/ElementDragPreview';
 import withDragDropContext from 'lib/withDragDropContext';
+import backend from 'lib/Backend';
 
 /**
  * The ElementEditor is used in the CMS to manage a list or nested lists of
@@ -79,6 +80,16 @@ class ElementEditor extends PureComponent {
     });
   }
 
+  fetchBlocks() {
+    // # rpc
+    // todo
+    // make a call to readAll elements endpoint (areaID)
+    backend.get(`/admin/elemental-area/readBlocks/${this.props.areaId}`)
+      .then((response) => {
+        console.log('readBlocks', response);
+      });
+  }
+
   render() {
     const {
       fieldName,
@@ -92,6 +103,11 @@ class ElementEditor extends PureComponent {
       allowedElements,
     } = this.props;
     const { dragTargetElementId, dragSpot } = this.state;
+
+    const globalUseGraphqQL = true;
+    if (globalUseGraphqQL) {
+      this.fetchBlocks();
+    }
 
     // Map the allowed elements because we want to retain the sort order provided by that array.
     const allowedElementTypes = allowedElements.map(className =>

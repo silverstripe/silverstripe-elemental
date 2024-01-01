@@ -2114,6 +2114,10 @@ var _withDragDropContext = __webpack_require__(21);
 
 var _withDragDropContext2 = _interopRequireDefault(_withDragDropContext);
 
+var _Backend = __webpack_require__(12);
+
+var _Backend2 = _interopRequireDefault(_Backend);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -2177,6 +2181,13 @@ var ElementEditor = function (_PureComponent) {
       });
     }
   }, {
+    key: 'fetchBlocks',
+    value: function fetchBlocks() {
+      _Backend2.default.get('/admin/elemental-area/readBlocks/' + this.props.areaId).then(function (response) {
+        console.log('readBlocks', response);
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _props2 = this.props,
@@ -2192,6 +2203,12 @@ var ElementEditor = function (_PureComponent) {
       var _state = this.state,
           dragTargetElementId = _state.dragTargetElementId,
           dragSpot = _state.dragSpot;
+
+
+      var globalUseGraphqQL = true;
+      if (globalUseGraphqQL) {
+        this.fetchBlocks();
+      }
 
       var allowedElementTypes = allowedElements.map(function (className) {
         return elementTypes.find(function (type) {
