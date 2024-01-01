@@ -2177,6 +2177,8 @@ var ElementEditor = function (_PureComponent) {
   }, {
     key: 'handleDragEnd',
     value: function handleDragEnd(sourceId, afterId) {
+      var _this2 = this;
+
       var globalUseGraphQL = false;
       if (globalUseGraphQL) {
         var _props = this.props,
@@ -2191,10 +2193,8 @@ var ElementEditor = function (_PureComponent) {
         _Backend2.default.post('/admin/elemental-area/sort', {
           ID: sourceId,
           afterBlockID: afterId
-        }).then(function (response) {
-          return response.json();
-        }).then(function (responseJson) {
-          console.log(responseJson);
+        }).then(function () {
+          return _this2.fetchBlocks();
         });
       }
 
@@ -2206,7 +2206,7 @@ var ElementEditor = function (_PureComponent) {
   }, {
     key: 'fetchBlocks',
     value: function fetchBlocks() {
-      var _this2 = this;
+      var _this3 = this;
 
       var doSetLoadingState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
@@ -2218,7 +2218,7 @@ var ElementEditor = function (_PureComponent) {
       _Backend2.default.get('/admin/elemental-area/readBlocks/' + this.props.areaId).then(function (response) {
         return response.json();
       }).then(function (responseJson) {
-        _this2.setState(_extends({}, _this2.state, {
+        _this3.setState(_extends({}, _this3.state, {
           contentBlocks: responseJson,
           isLoading: false
         }));

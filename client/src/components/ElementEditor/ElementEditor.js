@@ -80,15 +80,7 @@ class ElementEditor extends PureComponent {
         ID: sourceId,
         afterBlockID: afterId,
       })
-        .then(response => response.json())
-        .then(responseJson => {
-          console.log(responseJson);
-          // this.setState({
-          //   ...this.state,
-          //   contentBlocks: responseJson,
-          //   isLoading: false,
-          // })
-        });
+        .then(() => this.fetchBlocks())
     }
 
     this.setState({
