@@ -241,6 +241,9 @@ var _UnpublishAction2 = _interopRequireDefault(_UnpublishAction);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function () {
+
+  var globalUseGraphqQL = false;
+
   _Injector2.default.transform('elemental-fieldgroup', function (updater) {
     updater.component('FieldGroup.HistoryViewer.VersionDetail', _HistoricElementView2.default, 'HistoricElement');
   }, {
@@ -255,16 +258,17 @@ exports.default = function () {
     updater.component('HistoryViewerToolbar.VersionedAdmin.HistoryViewer.Element.HistoryViewerVersionDetail', _revertToBlockVersionMutation2.default, 'BlockRevertMutation');
   });
 
-  var globalUseGraphqQL = false;
   if (globalUseGraphqQL) {
     _Injector2.default.transform('cms-element-editor', function (updater) {
       updater.component('ElementList', _readBlocksForAreaQuery2.default, 'PageElements');
     });
   }
 
-  _Injector2.default.transform('cms-element-adder', function (updater) {
-    updater.component('AddElementPopover', _addElementMutation2.default, 'ElementAddButton');
-  });
+  if (globalUseGraphqQL) {
+    _Injector2.default.transform('cms-element-adder', function (updater) {
+      updater.component('AddElementPopover', _addElementMutation2.default, 'ElementAddButton');
+    });
+  }
 
   _Injector2.default.transform('element-actions', function (updater) {
     updater.component('ElementActions', _SaveAction2.default, 'ElementActionsWithSave');
@@ -312,7 +316,7 @@ var _classnames = __webpack_require__(7);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _reactstrap = __webpack_require__(10);
+var _reactstrap = __webpack_require__(11);
 
 var _elementTypeType = __webpack_require__("./client/src/types/elementTypeType.js");
 
@@ -383,28 +387,46 @@ var _i18n = __webpack_require__(2);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
+var _ElementEditor = __webpack_require__("./client/src/components/ElementEditor/ElementEditor.js");
+
+var _Backend = __webpack_require__(8);
+
+var _Backend2 = _interopRequireDefault(_Backend);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ArchiveAction = function ArchiveAction(MenuComponent) {
   return function (props) {
+    var _useContext = (0, _react.useContext)(_ElementEditor.ElementEditorContext),
+        fetchBlocks = _useContext.fetchBlocks;
+
     var handleClick = function handleClick(event) {
       event.stopPropagation();
-
-      var id = props.element.id,
-          isPublished = props.isPublished,
-          handleArchiveBlock = props.actions.handleArchiveBlock;
-
-
+      var isPublished = props.element.isPublished;
       var archiveMessage = _i18n2.default._t('ElementArchiveAction.CONFIRM_DELETE', 'Are you sure you want to send this block to the archive?');
-
       if (isPublished) {
         archiveMessage = _i18n2.default._t('ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH', 'Warning: This block will be unpublished before being sent to the archive. Are you sure you want to proceed?');
       }
+      if (!window.confirm(archiveMessage)) {
+        return;
+      }
+      var globalUseGraphqQL = false;
+      if (globalUseGraphqQL) {
+        var id = props.element.id,
+            handleArchiveBlock = props.actions.handleArchiveBlock;
 
-      if (handleArchiveBlock && window.confirm(archiveMessage)) {
-        handleArchiveBlock(id).then(function () {
-          var preview = window.jQuery('.cms-preview');
-          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        if (handleArchiveBlock) {
+          handleArchiveBlock(id).then(function () {
+            var preview = window.jQuery('.cms-preview');
+            preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+          });
+        }
+      } else {
+        var _id = props.element.id;
+        _Backend2.default.post('/admin/elemental-area/archive', {
+          ID: _id
+        }).then(function () {
+          return fetchBlocks();
         });
       }
     };
@@ -464,25 +486,42 @@ var _i18n = __webpack_require__(2);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
+var _ElementEditor = __webpack_require__("./client/src/components/ElementEditor/ElementEditor.js");
+
+var _Backend = __webpack_require__(8);
+
+var _Backend2 = _interopRequireDefault(_Backend);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var DuplicateAction = function DuplicateAction(MenuComponent) {
   return function (props) {
+    var _useContext = (0, _react.useContext)(_ElementEditor.ElementEditorContext),
+        fetchBlocks = _useContext.fetchBlocks;
+
     if (props.type.broken) {
       return _react2.default.createElement(MenuComponent, props);
     }
 
     var handleClick = function handleClick(event) {
       event.stopPropagation();
+      var globalUseGraphqQL = false;
+      if (globalUseGraphqQL) {
+        var id = props.element.id,
+            handleDuplicateBlock = props.actions.handleDuplicateBlock;
 
-      var id = props.element.id,
-          handleDuplicateBlock = props.actions.handleDuplicateBlock;
-
-
-      if (handleDuplicateBlock) {
-        handleDuplicateBlock(id).then(function () {
-          var preview = window.jQuery('.cms-preview');
-          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        if (handleDuplicateBlock) {
+          handleDuplicateBlock(id).then(function () {
+            var preview = window.jQuery('.cms-preview');
+            preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+          });
+        }
+      } else {
+        var _id = props.element.id;
+        _Backend2.default.post('/admin/elemental-area/duplicate', {
+          ID: _id
+        }).then(function () {
+          return fetchBlocks();
         });
       }
     };
@@ -542,17 +581,19 @@ var _i18n = __webpack_require__(2);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _Backend = __webpack_require__(12);
+var _Backend = __webpack_require__(8);
 
 var _Backend2 = _interopRequireDefault(_Backend);
 
-var _reactRedux = __webpack_require__(8);
+var _reactRedux = __webpack_require__(9);
 
 var _loadElementSchemaValue = __webpack_require__("./client/src/state/editor/loadElementSchemaValue.js");
 
 var _loadElementFormStateName = __webpack_require__("./client/src/state/editor/loadElementFormStateName.js");
 
-var _reduxForm = __webpack_require__(11);
+var _reduxForm = __webpack_require__(12);
+
+var _ElementEditor = __webpack_require__("./client/src/components/ElementEditor/ElementEditor.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -593,6 +634,9 @@ var performSaveForElementWithFormData = function performSaveForElementWithFormDa
 
 var PublishAction = function PublishAction(MenuComponent) {
   return function (props) {
+    var _useContext = (0, _react.useContext)(_ElementEditor.ElementEditorContext),
+        fetchBlocks = _useContext.fetchBlocks;
+
     if (props.type.broken) {
       return _react2.default.createElement(MenuComponent, props);
     }
@@ -600,6 +644,23 @@ var PublishAction = function PublishAction(MenuComponent) {
     var element = props.element,
         formDirty = props.formDirty;
 
+
+    var publishElement = function publishElement() {
+      var globalUseGraphqQL = false;
+      if (globalUseGraphqQL) {
+        var id = props.element.id,
+            handleArchiveBlock = props.actions.handleArchiveBlock;
+
+        return handleArchiveBlock(id);
+      } else {
+        var _id = props.element.id;
+        return _Backend2.default.post('/admin/elemental-area/publish', {
+          ID: _id
+        }).then(function () {
+          return fetchBlocks();
+        });
+      }
+    };
 
     var handleClick = function handleClick(event) {
       event.stopPropagation();
@@ -610,7 +671,6 @@ var PublishAction = function PublishAction(MenuComponent) {
           type = props.type,
           securityId = props.securityId,
           formData = props.formData,
-          handlePublishBlock = props.actions.handlePublishBlock,
           reinitialiseForm = props.reinitialiseForm;
 
 
@@ -626,7 +686,7 @@ var PublishAction = function PublishAction(MenuComponent) {
       }
 
       actionFlow.then(function () {
-        return handlePublishBlock(id);
+        return publishElement();
       }).then(function () {
         return reportPublicationStatus(type.title, title, true);
       }).catch(function () {
@@ -705,13 +765,13 @@ var _react2 = _interopRequireDefault(_react);
 
 var _redux = __webpack_require__(4);
 
-var _reactRedux = __webpack_require__(8);
+var _reactRedux = __webpack_require__(9);
 
 var _AbstractAction = __webpack_require__("./client/src/components/ElementActions/AbstractAction.js");
 
 var _AbstractAction2 = _interopRequireDefault(_AbstractAction);
 
-var _Backend = __webpack_require__(12);
+var _Backend = __webpack_require__(8);
 
 var _Backend2 = _interopRequireDefault(_Backend);
 
@@ -723,7 +783,7 @@ var _loadElementSchemaValue = __webpack_require__("./client/src/state/editor/loa
 
 var _loadElementFormStateName = __webpack_require__("./client/src/state/editor/loadElementFormStateName.js");
 
-var _reduxForm = __webpack_require__(11);
+var _reduxForm = __webpack_require__(12);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -829,7 +889,7 @@ exports.default = (0, _redux.compose)((0, _reactRedux.connect)(mapStateToProps, 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function($) {
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -854,44 +914,66 @@ var _i18n = __webpack_require__(2);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
+var _Backend = __webpack_require__(8);
+
+var _Backend2 = _interopRequireDefault(_Backend);
+
+var _ElementEditor = __webpack_require__("./client/src/components/ElementEditor/ElementEditor.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var UnpublishAction = function UnpublishAction(MenuComponent) {
   return function (props) {
+    var _useContext = (0, _react.useContext)(_ElementEditor.ElementEditorContext),
+        fetchBlocks = _useContext.fetchBlocks;
+
+    var globalUseGraphqQL = false;
+
     if (props.type.broken) {
       return _react2.default.createElement(MenuComponent, props);
     }
 
+    var reportUnpublicationStatus = function reportUnpublicationStatus(type, title, success) {
+      var noTitle = _i18n2.default.inject(_i18n2.default._t('ElementHeader.NOTITLE', 'Untitled {type} block'), { type: type });
+      var successMessage = _i18n2.default.inject(_i18n2.default._t('ElementUnpublishAction.SUCCESS_NOTIFICATION', 'Removed \'{title}\' from the published page'), { title: title || noTitle });
+      var errorMessage = _i18n2.default.inject(_i18n2.default._t('ElementUnpublishAction.ERROR_NOTIFICATION', 'Error unpublishing \'{title}\''), { title: title || noTitle });
+      window.jQuery.noticeAdd({
+        text: success ? successMessage : errorMessage,
+        stay: false,
+        type: success ? 'success' : 'error'
+      });
+    };
+
+    var unpublishElement = function unpublishElement() {
+      if (globalUseGraphqQL) {
+        var id = props.element.id,
+            handleUnpublishBlock = props.actions.handleUnpublishBlock;
+
+        return handleUnpublishBlock(id).then(function () {
+          var preview = $('.cms-preview');
+          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        });
+      } else {
+        var _id = props.element.id;
+        return _Backend2.default.post('/admin/elemental-area/unpublish', {
+          ID: _id
+        }).then(function () {
+          return fetchBlocks();
+        });
+      }
+    };
+
     var element = props.element,
-        type = props.type,
-        handleUnpublishBlock = props.actions.handleUnpublishBlock;
+        type = props.type;
 
 
     var handleClick = function handleClick(event) {
       event.stopPropagation();
-      var _window = window,
-          $ = _window.jQuery;
-
-      var noTitle = _i18n2.default.inject(_i18n2.default._t('ElementHeader.NOTITLE', 'Untitled {type} block'), { type: type.title });
-
-      if (handleUnpublishBlock) {
-        handleUnpublishBlock(element.id).then(function () {
-          var preview = $('.cms-preview');
-          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
-
-          $.noticeAdd({
-            text: _i18n2.default.inject(_i18n2.default._t('ElementUnpublishAction.SUCCESS_NOTIFICATION', 'Removed \'{title}\' from the published page'), { title: element.title || noTitle }),
-            stay: false,
-            type: 'success'
-          });
-        }).catch(function () {
-          $.noticeAdd({
-            text: _i18n2.default.inject(_i18n2.default._t('ElementUnpublishAction.ERROR_NOTIFICATION', 'Error unpublishing \'{title}\''), { title: element.title || noTitle }),
-            stay: false,
-            type: 'error'
-          });
-        });
-      }
+      unpublishElement().then(function () {
+        return reportUnpublicationStatus(type.title, element.title, true);
+      }).catch(function () {
+        return reportUnpublicationStatus(type.title, element.title, false);
+      });
     };
 
     var disabled = props.element.canUnpublish !== undefined && !props.element.canUnpublish;
@@ -917,6 +999,7 @@ var UnpublishAction = function UnpublishAction(MenuComponent) {
 
 exports.Component = UnpublishAction;
 exports.default = (0, _redux.compose)(_unpublishBlockMutation2.default, UnpublishAction);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
 
 /***/ }),
 
@@ -952,7 +1035,7 @@ var _i18n = __webpack_require__(2);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _Backend = __webpack_require__(12);
+var _Backend = __webpack_require__(8);
 
 var _Backend2 = _interopRequireDefault(_Backend);
 
@@ -1116,7 +1199,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactstrap = __webpack_require__(10);
+var _reactstrap = __webpack_require__(11);
 
 var _i18n = __webpack_require__(2);
 
@@ -1238,11 +1321,11 @@ var _Injector = __webpack_require__(3);
 
 var _redux = __webpack_require__(4);
 
-var _reactRedux = __webpack_require__(8);
+var _reactRedux = __webpack_require__(9);
 
 var _loadElementFormStateName = __webpack_require__("./client/src/state/editor/loadElementFormStateName.js");
 
-var _reduxForm = __webpack_require__(11);
+var _reduxForm = __webpack_require__(12);
 
 var _getFormState = __webpack_require__(16);
 
@@ -1436,17 +1519,17 @@ var _classnames = __webpack_require__(7);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _reactRedux = __webpack_require__(8);
+var _reactRedux = __webpack_require__(9);
 
 var _loadElementFormStateName = __webpack_require__("./client/src/state/editor/loadElementFormStateName.js");
 
 var _loadElementSchemaValue = __webpack_require__("./client/src/state/editor/loadElementSchemaValue.js");
 
-var _TabsActions = __webpack_require__(19);
+var _TabsActions = __webpack_require__(20);
 
 var TabsActions = _interopRequireWildcard(_TabsActions);
 
-var _reactDnd = __webpack_require__(9);
+var _reactDnd = __webpack_require__(10);
 
 var _reactDndHtml5Backend = __webpack_require__(14);
 
@@ -1829,7 +1912,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _redux = __webpack_require__(4);
 
-var _reactstrap = __webpack_require__(10);
+var _reactstrap = __webpack_require__(11);
 
 var _Injector = __webpack_require__(3);
 
@@ -1993,7 +2076,7 @@ var _Header = __webpack_require__("./client/src/components/ElementEditor/Header.
 
 var _Header2 = _interopRequireDefault(_Header);
 
-var _reactDnd = __webpack_require__(9);
+var _reactDnd = __webpack_require__(10);
 
 var _elementType = __webpack_require__("./client/src/types/elementType.js");
 
@@ -2106,11 +2189,11 @@ var _redux = __webpack_require__(4);
 
 var _elementTypeType = __webpack_require__("./client/src/types/elementTypeType.js");
 
-var _reactRedux = __webpack_require__(8);
+var _reactRedux = __webpack_require__(9);
 
 var _loadElementFormStateName = __webpack_require__("./client/src/state/editor/loadElementFormStateName.js");
 
-var _reactDnd = __webpack_require__(9);
+var _reactDnd = __webpack_require__(10);
 
 var _sortBlockMutation = __webpack_require__("./client/src/state/editor/sortBlockMutation.js");
 
@@ -2124,7 +2207,7 @@ var _withDragDropContext = __webpack_require__(21);
 
 var _withDragDropContext2 = _interopRequireDefault(_withDragDropContext);
 
-var _Backend = __webpack_require__(12);
+var _Backend = __webpack_require__(8);
 
 var _Backend2 = _interopRequireDefault(_Backend);
 
@@ -2222,6 +2305,9 @@ var ElementEditor = function (_PureComponent) {
           contentBlocks: responseJson,
           isLoading: false
         }));
+
+        var preview = window.jQuery('.cms-preview');
+        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
       });
     }
   }, {
@@ -2384,7 +2470,7 @@ var _i18n = __webpack_require__(2);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _reactDnd = __webpack_require__(9);
+var _reactDnd = __webpack_require__(10);
 
 var _dragHelpers = __webpack_require__("./client/src/lib/dragHelpers.js");
 
@@ -2621,7 +2707,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactstrap = __webpack_require__(10);
+var _reactstrap = __webpack_require__(11);
 
 var _elementType = __webpack_require__("./client/src/types/elementType.js");
 
@@ -2629,7 +2715,7 @@ var _elementTypeType = __webpack_require__("./client/src/types/elementTypeType.j
 
 var _redux = __webpack_require__(4);
 
-var _reactRedux = __webpack_require__(8);
+var _reactRedux = __webpack_require__(9);
 
 var _Injector = __webpack_require__(3);
 
@@ -2643,9 +2729,9 @@ var _classnames2 = _interopRequireDefault(_classnames);
 
 var _loadElementFormStateName = __webpack_require__("./client/src/state/editor/loadElementFormStateName.js");
 
-var _reduxForm = __webpack_require__(11);
+var _reduxForm = __webpack_require__(12);
 
-var _reactDnd = __webpack_require__(9);
+var _reactDnd = __webpack_require__(10);
 
 var _getFormState = __webpack_require__(16);
 
@@ -3060,7 +3146,7 @@ var _classnames = __webpack_require__(7);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _FormBuilderLoader = __webpack_require__(18);
+var _FormBuilderLoader = __webpack_require__(19);
 
 var _FormBuilderLoader2 = _interopRequireDefault(_FormBuilderLoader);
 
@@ -3072,7 +3158,7 @@ var _i18n2 = _interopRequireDefault(_i18n);
 
 var _loadElementFormStateName = __webpack_require__("./client/src/state/editor/loadElementFormStateName.js");
 
-var _reactRedux = __webpack_require__(8);
+var _reactRedux = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3296,7 +3382,7 @@ var _Injector = __webpack_require__(3);
 
 var _elementTypeType = __webpack_require__("./client/src/types/elementTypeType.js");
 
-var _reactDnd = __webpack_require__(9);
+var _reactDnd = __webpack_require__(10);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3502,9 +3588,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactstrap = __webpack_require__(10);
+var _reactstrap = __webpack_require__(11);
 
-var _FieldHolder = __webpack_require__(17);
+var _FieldHolder = __webpack_require__(18);
 
 var _FieldHolder2 = _interopRequireDefault(_FieldHolder);
 
@@ -3561,7 +3647,7 @@ exports.default = (0, _FieldHolder2.default)(TextCheckboxGroupField);
 "use strict";
 
 
-var _jquery = __webpack_require__(20);
+var _jquery = __webpack_require__(17);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -3577,7 +3663,7 @@ var _Injector = __webpack_require__(3);
 
 var _elementConfig = __webpack_require__("./client/src/state/editor/elementConfig.js");
 
-var _reduxForm = __webpack_require__(11);
+var _reduxForm = __webpack_require__(12);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4634,21 +4720,21 @@ module.exports = PropTypes;
 /***/ 10:
 /***/ (function(module, exports) {
 
-module.exports = Reactstrap;
+module.exports = ReactDND;
 
 /***/ }),
 
 /***/ 11:
 /***/ (function(module, exports) {
 
-module.exports = ReduxForm;
+module.exports = Reactstrap;
 
 /***/ }),
 
 /***/ 12:
 /***/ (function(module, exports) {
 
-module.exports = Backend;
+module.exports = ReduxForm;
 
 /***/ }),
 
@@ -4683,21 +4769,21 @@ module.exports = getFormState;
 /***/ 17:
 /***/ (function(module, exports) {
 
-module.exports = FieldHolder;
+module.exports = jQuery;
 
 /***/ }),
 
 /***/ 18:
 /***/ (function(module, exports) {
 
-module.exports = FormBuilderLoader;
+module.exports = FieldHolder;
 
 /***/ }),
 
 /***/ 19:
 /***/ (function(module, exports) {
 
-module.exports = TabsActions;
+module.exports = FormBuilderLoader;
 
 /***/ }),
 
@@ -4711,7 +4797,7 @@ module.exports = i18n;
 /***/ 20:
 /***/ (function(module, exports) {
 
-module.exports = jQuery;
+module.exports = TabsActions;
 
 /***/ }),
 
@@ -4760,14 +4846,14 @@ module.exports = classnames;
 /***/ 8:
 /***/ (function(module, exports) {
 
-module.exports = ReactRedux;
+module.exports = Backend;
 
 /***/ }),
 
 /***/ 9:
 /***/ (function(module, exports) {
 
-module.exports = ReactDND;
+module.exports = ReactRedux;
 
 /***/ })
 

@@ -70,17 +70,11 @@ class ElementEditor extends PureComponent {
         preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
       });
     } else {
-      // # rpc
-      // make a call to a sort endpoint with (ID, afterBlocKID)
-      // after sort there is NOT a call to readAll elements, GraphQL will only do a fairly pointless
-      // call to read the element that was moved
-      // (strange code for sorting is in this component and not ElementList, however do not refator it)
-      // update the preview via jquery/entwine (see graphql code above)
       backend.post(`/admin/elemental-area/sort`, {
         ID: sourceId,
         afterBlockID: afterId,
       })
-        .then(() => this.fetchBlocks())
+        .then(() => this.fetchBlocks());
     }
 
     this.setState({
@@ -108,6 +102,9 @@ class ElementEditor extends PureComponent {
           contentBlocks: responseJson,
           isLoading: false,
         })
+        // refresh preview
+        const preview = window.jQuery('.cms-preview');
+        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
       });
   }
 

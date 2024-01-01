@@ -59,7 +59,7 @@ class ElementalAreaController extends CMSMain
         'apiArchive',
         'apiPublish',
         'apiUnpublish',
-        'revert', // ???? todo there is a revert mutation, though not sure it's actually used?
+        'revert', // todo - revert mutation is used in history viewer (versioned-admin)
     ];
 
     private function jsonResponse(int $statusCode = 200, ?array $data = null, string $message = ''): HTTPResponse
@@ -132,7 +132,7 @@ class ElementalAreaController extends CMSMain
     public function apiDuplicate(): HTTPResponse
     {
         $id = $this->getPostData()['ID'] ?? '';
-                $element = BaseElement::get()->byID($id);
+         $element = BaseElement::get()->byID($id);
         if (!$element) {
             return $this->jsonResponse(400, null, "Element with ID $id does not exist");
         }
@@ -257,8 +257,7 @@ class ElementalAreaController extends CMSMain
         $postData = json_decode($request->getBody(), true);
         $elementClass = $postData['elementClass'];
         $elementalAreaID = $postData['elementalAreaID'];
-        $afterElementID = $postData['afterElementID'] ?? null;
-
+        $afterElementID = $postData['insertAfterElementID'] ?? null;
         // validate post vars
         if (!is_subclass_of($elementClass, BaseElement::class)) {
             throw new InvalidArgumentException("$elementClass is not a subclass of " . BaseElement::class);
@@ -267,7 +266,6 @@ class ElementalAreaController extends CMSMain
         if (!$elementalArea) {
             throw new InvalidArgumentException("Invalid ElementalAreaID: $elementalAreaID");
         }
-
         // permission checks
         if (!$elementalArea->canEdit()) {
             throw new InvalidArgumentException("The current user has insufficient permission to edit ElementalAreas");
@@ -279,13 +277,11 @@ class ElementalAreaController extends CMSMain
                 'The current user has insufficient permission to edit Elements'
             );
         }
-
         // Assign the parent ID directly rather than via HasManyList to prevent multiple writes.
         // See BaseElement::$has_one for the "Parent" naming.
         $newElement->ParentID = $elementalArea->ID;
         // Ensure that a sort order is assigned - see BaseElement::onBeforeWrite()
         $newElement->onBeforeWrite();
-
         if ($afterElementID !== null) {
             /** @var ReorderElements $reorderer */
             $reorderer = Injector::inst()->create(ReorderElements::class, $newElement);
@@ -293,7 +289,6 @@ class ElementalAreaController extends CMSMain
         } else {
             $newElement->write();
         }
-
         $response = $this->getResponse();
         $response->setStatusCode(201);
         return $response;

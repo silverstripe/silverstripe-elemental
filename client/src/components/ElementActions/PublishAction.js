@@ -1,5 +1,5 @@
 /* global window */
-import React from 'react';
+import React, { useContext } from 'react';
 import { compose } from 'redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import publishBlockMutation from 'state/editor/publishBlockMutation';
@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { initialize } from 'redux-form';
+import { ElementEditorContext } from 'components/ElementEditor/ElementEditor';
 
 /**
  * Show a toast message reporting whether publication of Element was successful
@@ -76,6 +77,8 @@ const performSaveForElementWithFormData = (id, formData, securityId) => {
  * Adds the elemental menu action to publish a draft/modified block
  */
 const PublishAction = (MenuComponent) => (props) => {
+  const { fetchBlocks } = useContext(ElementEditorContext);
+
   if (props.type.broken) {
     // Don't allow this action for a broken element.
     return (
@@ -84,6 +87,20 @@ const PublishAction = (MenuComponent) => (props) => {
   }
 
   const { element, formDirty } = props;
+
+  const publishElement = () => {
+    const globalUseGraphqQL = false;
+    if (globalUseGraphqQL) {
+      const { element: { id }, actions: { handleArchiveBlock } } = props;
+      return handleArchiveBlock(id);
+    } else {
+      const id = props.element.id;
+      return backend.post('/admin/elemental-area/publish', {
+        ID: id,
+      })
+        .then(() => fetchBlocks());
+    }
+  }
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -96,7 +113,6 @@ const PublishAction = (MenuComponent) => (props) => {
       type,
       securityId,
       formData,
-      actions: { handlePublishBlock },
       reinitialiseForm,
     } = props;
 
@@ -113,7 +129,8 @@ const PublishAction = (MenuComponent) => (props) => {
 
     // Perform publish. Data is assumed to be up to date
     actionFlow
-      .then(() => handlePublishBlock(id))
+      // .then(() => handlePublishBlock(id))
+      .then(() => publishElement())
       .then(() => reportPublicationStatus(type.title, title, true))
       .catch(() => reportPublicationStatus(type.title, title, false));
   };
@@ -169,7 +186,7 @@ function mapDispatchToProps(dispatch, ownProps) {
 export { PublishAction as Component };
 
 export default compose(
-  publishBlockMutation,
+  publishBlockMutation, // todo
   connect(mapStateToProps, mapDispatchToProps),
   PublishAction
 );

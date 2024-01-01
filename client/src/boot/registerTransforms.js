@@ -11,6 +11,9 @@ import SaveAction from 'components/ElementActions/SaveAction';
 import UnpublishAction from 'components/ElementActions/UnpublishAction';
 
 export default () => {
+
+  const globalUseGraphqQL = false;
+
   Injector.transform(
     'elemental-fieldgroup',
     (updater) => {
@@ -49,7 +52,6 @@ export default () => {
     }
   );
 
-  const globalUseGraphqQL = false;
   if (globalUseGraphqQL) {
     Injector.transform(
       'cms-element-editor',
@@ -64,17 +66,19 @@ export default () => {
     );
   }
 
-  Injector.transform(
-    'cms-element-adder',
-    (updater) => {
-      // Add GraphQL query for adding elements to an ElementEditor (ElementalArea)
-      updater.component(
-        'AddElementPopover',
-        addElementToArea,
-        'ElementAddButton'
-      );
-    }
-  );
+  if (globalUseGraphqQL) {
+    Injector.transform(
+      'cms-element-adder',
+      (updater) => {
+        // Add GraphQL query for adding elements to an ElementEditor (ElementalArea)
+        updater.component(
+          'AddElementPopover',
+          addElementToArea,
+          'ElementAddButton'
+        );
+      }
+    );
+  }
 
   // Add elemental editor actions
   Injector.transform('element-actions', (updater) => {
