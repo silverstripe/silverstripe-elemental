@@ -15,6 +15,10 @@ use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\Form;
 use SilverStripe\Security\SecurityToken;
+use InvalidArgumentException;
+use DNADesign\Elemental\Models\ElementalArea;
+use SilverStripe\GraphQL\QueryHandler\UserContextProvider;
+use DNADesign\Elemental\Services\ReorderElements;
 
 /**
  * Controller for "ElementalArea" - handles loading and saving of in-line edit forms in an elemental area in admin
@@ -31,6 +35,8 @@ class ElementalAreaController extends CMSMain
         // API access points with structured data
         'POST api/saveForm/$ID' => 'apiSaveForm',
         '$FormName/field/$FieldName' => 'formAction',
+        //
+        'POST add' => 'add',
     ];
 
     private static $allowed_actions = [
@@ -38,7 +44,62 @@ class ElementalAreaController extends CMSMain
         'schema',
         'apiSaveForm',
         'formAction',
+        //a
+        'add',
     ];
+
+    // ===
+
+    // Resolver.php resolveAddElementToArea()
+    public function add()
+    {
+        $request = $this->getRequest();
+        $postVars = json_decode($request->getBody(), true);
+        $elementClass = $postVars['elementClass'];
+        $elementalAreaID = $postVars['elementalAreaID'];
+        $afterElementID = $postVars['afterElementID'] ?? null;
+
+        // validate post vars
+        if (!is_subclass_of($elementClass, BaseElement::class)) {
+            throw new InvalidArgumentException("$elementClass is not a subclass of " . BaseElement::class);
+        }
+        $elementalArea = ElementalArea::get()->byID($elementalAreaID);
+        if (!$elementalArea) {
+            throw new InvalidArgumentException("Invalid ElementalAreaID: $elementalAreaID");
+        }
+
+        // permission checks
+        if (!$elementalArea->canEdit()) {
+            throw new InvalidArgumentException("The current user has insufficient permission to edit ElementalAreas");
+        }
+        /** @var BaseElement $newElement */
+        $newElement = Injector::inst()->create($elementClass);
+        if (!$newElement->canEdit()) {
+            throw new InvalidArgumentException(
+                'The current user has insufficient permission to edit Elements'
+            );
+        }
+
+        // Assign the parent ID directly rather than via HasManyList to prevent multiple writes.
+        // See BaseElement::$has_one for the "Parent" naming.
+        $newElement->ParentID = $elementalArea->ID;
+        // Ensure that a sort order is assigned - see BaseElement::onBeforeWrite()
+        $newElement->onBeforeWrite();
+
+        if ($afterElementID !== null) {
+            /** @var ReorderElements $reorderer */
+            $reorderer = Injector::inst()->create(ReorderElements::class, $newElement);
+            $reorderer->reorder($afterElementID); // also writes the element
+        } else {
+            $newElement->write();
+        }
+
+        $response = $this->getResponse();
+        $response->setStatusCode(201);
+        // return $newElement;
+    }
+
+    // ===
 
     public function getClientConfig()
     {

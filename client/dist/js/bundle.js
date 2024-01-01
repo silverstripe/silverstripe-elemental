@@ -539,7 +539,7 @@ var _i18n = __webpack_require__(2);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _Backend = __webpack_require__(13);
+var _Backend = __webpack_require__(12);
 
 var _Backend2 = _interopRequireDefault(_Backend);
 
@@ -708,7 +708,7 @@ var _AbstractAction = __webpack_require__("./client/src/components/ElementAction
 
 var _AbstractAction2 = _interopRequireDefault(_AbstractAction);
 
-var _Backend = __webpack_require__(13);
+var _Backend = __webpack_require__(12);
 
 var _Backend2 = _interopRequireDefault(_Backend);
 
@@ -949,6 +949,10 @@ var _i18n = __webpack_require__(2);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
+var _Backend = __webpack_require__(12);
+
+var _Backend2 = _interopRequireDefault(_Backend);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -981,7 +985,6 @@ var AddElementPopover = function (_Component) {
 
 
         event.preventDefault();
-
         handleAddElementToArea(elementType.class, insertAfterElement).then(function () {
           var preview = window.jQuery('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -991,7 +994,22 @@ var AddElementPopover = function (_Component) {
     }
   }, {
     key: 'getElementButtonClickHandler',
-    value: function getElementButtonClickHandler(elementType) {}
+    value: function getElementButtonClickHandler(elementType) {
+      var _this3 = this;
+
+      return function (event) {
+        event.preventDefault();
+        _Backend2.default.post('/admin/elemental-area/add/', {
+          elementClass: elementType.class,
+          elementalAreaID: _this3.props.areaId,
+          insertAfterElementID: _this3.props.insertAfterElement
+        }).then(function () {}).then(function () {
+          var preview = window.jQuery('.cms-preview');
+          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+        });
+        _this3.handleToggle();
+      };
+    }
   }, {
     key: 'handleToggle',
     value: function handleToggle() {
@@ -1003,7 +1021,7 @@ var AddElementPopover = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       var _props2 = this.props,
           PopoverOptionSetComponent = _props2.PopoverOptionSetComponent,
@@ -1017,14 +1035,14 @@ var AddElementPopover = function (_Component) {
 
       var popoverClassNames = (0, _classnames2.default)('element-editor-add-element', extraClass);
 
-      var globalUseGraphQL = true;
+      var globalUseGraphQL = false;
 
       var buttons = elementTypes.map(function (elementType) {
         return {
           content: elementType.title,
           key: elementType.name,
           className: (0, _classnames2.default)(elementType.icon, 'btn--icon-xl', 'element-editor-add-element__button'),
-          onClick: globalUseGraphQL ? _this3.getGraphQLElementButtonClickHandler(elementType) : _this3.getElementButtonClickHandler(elementType)
+          onClick: globalUseGraphQL ? _this4.getGraphQLElementButtonClickHandler(elementType) : _this4.getElementButtonClickHandler(elementType)
         };
       });
 
@@ -3912,7 +3930,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getElementTypeConfig = exports.getConfig = undefined;
 
-var _Config = __webpack_require__(12);
+var _Config = __webpack_require__(13);
 
 var _Config2 = _interopRequireDefault(_Config);
 
@@ -3951,7 +3969,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.loadElementFormStateName = undefined;
 
-var _Config = __webpack_require__(12);
+var _Config = __webpack_require__(13);
 
 var _Config2 = _interopRequireDefault(_Config);
 
@@ -3983,7 +4001,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.loadElementSchemaValue = undefined;
 
-var _Config = __webpack_require__(12);
+var _Config = __webpack_require__(13);
 
 var _Config2 = _interopRequireDefault(_Config);
 
@@ -4561,14 +4579,14 @@ module.exports = ReduxForm;
 /***/ 12:
 /***/ (function(module, exports) {
 
-module.exports = Config;
+module.exports = Backend;
 
 /***/ }),
 
 /***/ 13:
 /***/ (function(module, exports) {
 
-module.exports = Backend;
+module.exports = Config;
 
 /***/ }),
 
