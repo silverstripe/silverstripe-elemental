@@ -19,6 +19,7 @@ use InvalidArgumentException;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Services\ReorderElements;
 use SilverStripe\Control\Controller;
+use SilverStripe\Control\Director;
 
 /**
  * Controller for "ElementalArea" - handles loading and saving of in-line edit forms in an elemental area in admin
@@ -71,19 +72,22 @@ class ElementalAreaController extends CMSMain
             if (!$element->canView()) {
                 continue;
             }
-            $typeName = str_replace('//', '_', get_class($element)); // todo obsolete class name
+            $typeName = str_replace('\\', '_', get_class($element)); // todo obsolete class name
             // should probably be able to just red rid of this
             $blockSchema = [
                 'typeName' => $typeName,
                 'actions' => [
-                    'edit' => Controller::join_links(BASE_URL, "/admin/pages/edit/show/4") // todo pageID
+                    'edit' => Controller::join_links(
+                        Director::absoluteBaseURL(),
+                        "/admin/pages/edit/show/4" // todo pageID
+                    )
                 ],
                 'content' => '',
             ];
             $json[] = [
-                'id' => $element->ID,
+                'id' => (string) $element->ID,
                 'title' => $element->Title,
-                'type' => $element->Type,
+                '__typename' => 'Block', // todo
                 'blockSchema' => $blockSchema,
                 'obsoleteClassName' => null, // todo
                 'version' => 1, // todo
@@ -96,6 +100,7 @@ class ElementalAreaController extends CMSMain
                 'canCreate' => $element->canCreate(),
             ];
         }
+        // $json['__typename'] = 'ElementalArea'; // this should get removed
         $response = $this->getResponse();
         $response->setStatusCode(200);
         $response->addHeader('Content-Type', 'application/json');

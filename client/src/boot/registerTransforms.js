@@ -49,17 +49,20 @@ export default () => {
     }
   );
 
-  Injector.transform(
-    'cms-element-editor',
-    (updater) => {
-      // Add GraphQL query for reading elements on a page for the ElementEditor
-      updater.component(
-        'ElementList',
-        readBlocksForAreaQuery,
-        'PageElements'
-      );
-    }
-  );
+  const globalUseGraphqQL = false;
+  if (globalUseGraphqQL) {
+    Injector.transform(
+      'cms-element-editor',
+      (updater) => {
+        // Add GraphQL query for reading elements on a page for the ElementEditor
+        updater.component(
+          'ElementList',
+          readBlocksForAreaQuery,
+          'PageElements'
+        );
+      }
+    );
+  }
 
   Injector.transform(
     'cms-element-adder',

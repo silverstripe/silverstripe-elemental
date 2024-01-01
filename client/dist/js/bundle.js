@@ -255,9 +255,12 @@ exports.default = function () {
     updater.component('HistoryViewerToolbar.VersionedAdmin.HistoryViewer.Element.HistoryViewerVersionDetail', _revertToBlockVersionMutation2.default, 'BlockRevertMutation');
   });
 
-  _Injector2.default.transform('cms-element-editor', function (updater) {
-    updater.component('ElementList', _readBlocksForAreaQuery2.default, 'PageElements');
-  });
+  var globalUseGraphqQL = false;
+  if (globalUseGraphqQL) {
+    _Injector2.default.transform('cms-element-editor', function (updater) {
+      updater.component('ElementList', _readBlocksForAreaQuery2.default, 'PageElements');
+    });
+  }
 
   _Injector2.default.transform('cms-element-adder', function (updater) {
     updater.component('AddElementPopover', _addElementMutation2.default, 'ElementAddButton');
@@ -953,6 +956,8 @@ var _Backend = __webpack_require__(12);
 
 var _Backend2 = _interopRequireDefault(_Backend);
 
+var _ElementEditor = __webpack_require__("./client/src/components/ElementEditor/ElementEditor.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -970,6 +975,7 @@ var AddElementPopover = function (_Component) {
     var _this = _possibleConstructorReturn(this, (AddElementPopover.__proto__ || Object.getPrototypeOf(AddElementPopover)).call(this, props));
 
     _this.handleToggle = _this.handleToggle.bind(_this);
+    AddElementPopover.contextType = _ElementEditor.ElementEditorContext;
     return _this;
   }
 
@@ -1003,7 +1009,11 @@ var AddElementPopover = function (_Component) {
           elementClass: elementType.class,
           elementalAreaID: _this3.props.areaId,
           insertAfterElementID: _this3.props.insertAfterElement
-        }).then(function () {}).then(function () {
+        }).then(function () {
+          var fetchBlocks = _this3.context.fetchBlocks;
+
+          fetchBlocks();
+        }).then(function () {
           var preview = window.jQuery('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
         });
@@ -2076,7 +2086,7 @@ exports.default = (0, _reactDnd.DragLayer)(function (monitor) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Component = undefined;
+exports.Component = exports.ElementEditorContext = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -2128,6 +2138,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var ElementEditorContext = exports.ElementEditorContext = (0, _react.createContext)(null);
+
 var ElementEditor = function (_PureComponent) {
   _inherits(ElementEditor, _PureComponent);
 
@@ -2138,11 +2150,14 @@ var ElementEditor = function (_PureComponent) {
 
     _this.state = {
       dragTargetElementId: null,
-      dragSpot: null
+      dragSpot: null,
+      contentBlocks: null,
+      isLoading: false
     };
 
     _this.handleDragOver = _this.handleDragOver.bind(_this);
     _this.handleDragEnd = _this.handleDragEnd.bind(_this);
+    _this.fetchBlocks = _this.fetchBlocks.bind(_this);
     return _this;
   }
 
@@ -2183,8 +2198,18 @@ var ElementEditor = function (_PureComponent) {
   }, {
     key: 'fetchBlocks',
     value: function fetchBlocks() {
+      var _this2 = this;
+
+      this.setState(_extends({}, this.state, {
+        isLoading: true
+      }));
       _Backend2.default.get('/admin/elemental-area/readBlocks/' + this.props.areaId).then(function (response) {
-        console.log('readBlocks', response);
+        return response.json();
+      }).then(function (responseJson) {
+        _this2.setState(_extends({}, _this2.state, {
+          contentBlocks: responseJson,
+          isLoading: false
+        }));
       });
     }
   }, {
@@ -2202,11 +2227,12 @@ var ElementEditor = function (_PureComponent) {
           allowedElements = _props2.allowedElements;
       var _state = this.state,
           dragTargetElementId = _state.dragTargetElementId,
-          dragSpot = _state.dragSpot;
+          dragSpot = _state.dragSpot,
+          contentBlocks = _state.contentBlocks;
 
 
-      var globalUseGraphqQL = true;
-      if (globalUseGraphqQL) {
+      var globalUseGraphqQL = false;
+      if (!globalUseGraphqQL && contentBlocks === null) {
         this.fetchBlocks();
       }
 
@@ -2219,29 +2245,34 @@ var ElementEditor = function (_PureComponent) {
       return connectDropTarget(_react2.default.createElement(
         'div',
         { className: 'element-editor' },
-        _react2.default.createElement(ToolbarComponent, {
-          elementTypes: allowedElementTypes,
-          areaId: areaId,
-          onDragOver: this.handleDragOver
-        }),
-        _react2.default.createElement(ListComponent, {
-          allowedElementTypes: allowedElementTypes,
-          elementTypes: elementTypes,
-          areaId: areaId,
-          onDragOver: this.handleDragOver,
-          onDragStart: this.handleDragStart,
-          onDragEnd: this.handleDragEnd,
-          dragSpot: dragSpot,
-          isDraggingOver: isDraggingOver,
-          dragTargetElementId: dragTargetElementId
-        }),
-        _react2.default.createElement(_ElementDragPreview2.default, { elementTypes: elementTypes }),
-        _react2.default.createElement('input', {
-          name: fieldName,
-          type: 'hidden',
-          value: JSON.stringify(formState) || '',
-          className: 'no-change-track'
-        })
+        _react2.default.createElement(
+          ElementEditorContext.Provider,
+          { value: { fetchBlocks: this.fetchBlocks } },
+          _react2.default.createElement(ToolbarComponent, {
+            elementTypes: allowedElementTypes,
+            areaId: areaId,
+            onDragOver: this.handleDragOver
+          }),
+          _react2.default.createElement(ListComponent, {
+            allowedElementTypes: allowedElementTypes,
+            elementTypes: elementTypes,
+            areaId: areaId,
+            onDragOver: this.handleDragOver,
+            onDragStart: this.handleDragStart,
+            onDragEnd: this.handleDragEnd,
+            dragSpot: dragSpot,
+            isDraggingOver: isDraggingOver,
+            dragTargetElementId: dragTargetElementId,
+            contentBlocks: contentBlocks
+          }),
+          _react2.default.createElement(_ElementDragPreview2.default, { elementTypes: elementTypes }),
+          _react2.default.createElement('input', {
+            name: fieldName,
+            type: 'hidden',
+            value: JSON.stringify(formState) || '',
+            className: 'no-change-track'
+          })
+        )
       ));
     }
   }]);
@@ -2351,33 +2382,22 @@ var ElementList = function (_Component) {
   function ElementList(props) {
     _classCallCheck(this, ElementList);
 
-    var _this = _possibleConstructorReturn(this, (ElementList.__proto__ || Object.getPrototypeOf(ElementList)).call(this, props));
-
-    _this.state = {
-      isLoading: true,
-      contentBlocks: []
-    };
-    return _this;
+    return _possibleConstructorReturn(this, (ElementList.__proto__ || Object.getPrototypeOf(ElementList)).call(this, props));
   }
 
   _createClass(ElementList, [{
-    key: 'fetchContentBlocks',
-    value: function fetchContentBlocks() {
-      var globalUseGraphQL = true;
-      if (globalUseGraphQL) {
-        return;
-      }
-    }
-  }, {
     key: 'getDragIndicatorIndex',
     value: function getDragIndicatorIndex() {
       var _props = this.props,
           dragTargetElementId = _props.dragTargetElementId,
           draggedItem = _props.draggedItem,
           blocks = _props.blocks,
+          contentBlocks = _props.contentBlocks,
           dragSpot = _props.dragSpot;
 
-      return (0, _dragHelpers.getDragIndicatorIndex)(blocks.map(function (element) {
+      var globalUseGraphQL = false;
+      var elements = globalUseGraphQL ? blocks : contentBlocks;
+      return (0, _dragHelpers.getDragIndicatorIndex)(elements.map(function (element) {
         return element.id;
       }), dragTargetElementId, draggedItem && draggedItem.id, dragSpot);
     }
@@ -2389,6 +2409,7 @@ var ElementList = function (_Component) {
           HoverBarComponent = _props2.HoverBarComponent,
           DragIndicatorComponent = _props2.DragIndicatorComponent,
           blocks = _props2.blocks,
+          contentBlocks = _props2.contentBlocks,
           allowedElementTypes = _props2.allowedElementTypes,
           elementTypes = _props2.elementTypes,
           areaId = _props2.areaId,
@@ -2398,14 +2419,14 @@ var ElementList = function (_Component) {
           isDraggingOver = _props2.isDraggingOver;
 
 
-      var globalUseGraphQL = true;
-      var contentBlocks = globalUseGraphQL ? blocks : this.state.contentBlocks;
+      var globalUseGraphQL = false;
+      var elements = globalUseGraphQL ? blocks : contentBlocks;
 
-      if (!contentBlocks) {
+      if (!elements) {
         return null;
       }
 
-      if (contentBlocks && !contentBlocks.length) {
+      if (elements && !elements.length) {
         return _react2.default.createElement(
           'div',
           null,
@@ -2413,7 +2434,7 @@ var ElementList = function (_Component) {
         );
       }
 
-      var output = contentBlocks.map(function (element) {
+      var output = elements.map(function (element) {
         return _react2.default.createElement(
           'div',
           { key: element.id },
@@ -2456,12 +2477,13 @@ var ElementList = function (_Component) {
     value: function renderLoading() {
       var _props3 = this.props,
           loading = _props3.loading,
+          isLoading = _props3.isLoading,
           LoadingComponent = _props3.LoadingComponent;
 
-      var globalUseGraphQL = true;
-      var isLoading = globalUseGraphQL ? loading : this.state.isLoading;
+      var globalUseGraphQL = false;
+      var loadingValue = globalUseGraphQL ? loading : isLoading;
 
-      if (isLoading) {
+      if (loadingValue) {
         return _react2.default.createElement(LoadingComponent, null);
       }
       return null;
@@ -2469,12 +2491,14 @@ var ElementList = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var blocks = this.props.blocks;
+      var _props4 = this.props,
+          blocks = _props4.blocks,
+          contentBlocks = _props4.contentBlocks;
 
-      var globalUseGraphQL = true;
-      var contentBlocks = globalUseGraphQL ? blocks : this.state.contentBlocks;
+      var globalUseGraphQL = false;
+      var elements = globalUseGraphQL ? blocks : contentBlocks;
 
-      var listClassNames = (0, _classnames2.default)('elemental-editor-list', { 'elemental-editor-list--empty': !contentBlocks || !contentBlocks.length });
+      var listClassNames = (0, _classnames2.default)('elemental-editor-list', { 'elemental-editor-list--empty': !elements || !elements.length });
 
       return this.props.connectDropTarget(_react2.default.createElement(
         'div',
@@ -2491,6 +2515,8 @@ var ElementList = function (_Component) {
 ElementList.propTypes = {
   blocks: _propTypes2.default.arrayOf(_elementType.elementType),
   loading: _propTypes2.default.bool,
+
+  contentBlocks: _propTypes2.default.arrayOf(_elementType.elementType),
 
   elementTypes: _propTypes2.default.arrayOf(_elementTypeType.elementTypeType).isRequired,
   allowedElementTypes: _propTypes2.default.arrayOf(_elementTypeType.elementTypeType).isRequired,

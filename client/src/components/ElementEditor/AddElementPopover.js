@@ -7,16 +7,19 @@ import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
 import i18n from 'i18n';
 import backend from 'lib/Backend';
+import { ElementEditorContext } from 'components/ElementEditor/ElementEditor';
 
 /**
  * The AddElementPopover component used in the context of an ElementEditor shows the
  * available elements that can be added to an ElementalArea.
  */
 class AddElementPopover extends Component {
+
   constructor(props) {
     super(props);
 
     this.handleToggle = this.handleToggle.bind(this);
+    AddElementPopover.contextType = ElementEditorContext;
   }
 
   /**
@@ -61,6 +64,8 @@ class AddElementPopover extends Component {
       })
         .then(() => {
           // todo call read blocks from area endpoint (areaID)
+          const { fetchBlocks } = this.context;
+          fetchBlocks();
         })
         .then(() => {
             const preview = window.jQuery('.cms-preview');

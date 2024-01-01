@@ -13,29 +13,14 @@ import { getElementTypeConfig } from 'state/editor/elementConfig';
 class ElementList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isLoading: true,
-      contentBlocks: [],
-    };
-  }
-
-  // #RPC
-  // it should make an ajax call to the server and do the equivalent of readBlocksForAreaQuery
-  // it should the call this.setState `contentBlocks` with the result
-  // this will cause a re-render of the component
-  // this callback should be passed to other components via context and get called after doing mutations
-  fetchContentBlocks() {
-    const globalUseGraphQL = true;
-    if (globalUseGraphQL) {
-      return;
-    }
-    // TODO: implement
   }
 
   getDragIndicatorIndex() {
-    const { dragTargetElementId, draggedItem, blocks, dragSpot } = this.props;
+    const { dragTargetElementId, draggedItem, blocks, contentBlocks, dragSpot } = this.props;
+    const globalUseGraphQL = false;
+    const elements = globalUseGraphQL ? blocks : contentBlocks;
     return getDragIndicatorIndex(
-      blocks.map(element => element.id),
+      elements.map(element => element.id),
       dragTargetElementId,
       draggedItem && draggedItem.id,
       dragSpot
@@ -53,6 +38,7 @@ class ElementList extends Component {
       HoverBarComponent,
       DragIndicatorComponent,
       blocks, // graphql - comes from readBlocksForAreaQuery
+      contentBlocks, // rpc, passed in as prop from ElementEditor
       allowedElementTypes,
       elementTypes,
       areaId,
@@ -62,19 +48,19 @@ class ElementList extends Component {
       isDraggingOver,
     } = this.props;
 
-    const globalUseGraphQL = true;
-    const contentBlocks = globalUseGraphQL ? blocks : this.state.contentBlocks;
+    const globalUseGraphQL = false;
+    const elements = globalUseGraphQL ? blocks : contentBlocks;
 
     // Blocks can be either null or an empty array
-    if (!contentBlocks) {
+    if (!elements) {
       return null;
     }
 
-    if (contentBlocks && !contentBlocks.length) {
+    if (elements && !elements.length) {
       return <div>{i18n._t('ElementList.ADD_BLOCKS', 'Add blocks to place your content')}</div>;
     }
 
-    let output = contentBlocks.map((element) => (
+    let output = elements.map((element) => (
       <div key={element.id}>
         <ElementComponent
           element={element}
@@ -120,24 +106,28 @@ class ElementList extends Component {
    * @returns {LoadingComponent|null}
    */
   renderLoading() {
-    const { loading, LoadingComponent } = this.props;
-    const globalUseGraphQL = true;
-    const isLoading = globalUseGraphQL ? loading : this.state.isLoading;
+    const {
+      loading, // graphql - see readBlocksForAreaQuery
+      isLoading, // rpc - passed in from ElementEditor
+      LoadingComponent
+    } = this.props;
+    const globalUseGraphQL = false;
+    const loadingValue = globalUseGraphQL ? loading : isLoading;
 
-    if (isLoading) {
+    if (loadingValue) {
       return <LoadingComponent />;
     }
     return null;
   }
 
   render() {
-    const { blocks } = this.props;
-    const globalUseGraphQL = true;
-    const contentBlocks = globalUseGraphQL ? blocks : this.state.contentBlocks;
+    const { blocks, contentBlocks } = this.props;
+    const globalUseGraphQL = false;
+    const elements = globalUseGraphQL ? blocks : contentBlocks;
 
     const listClassNames = classNames(
       'elemental-editor-list',
-      { 'elemental-editor-list--empty': !contentBlocks || !contentBlocks.length }
+      { 'elemental-editor-list--empty': !elements || !elements.length }
     );
 
     return this.props.connectDropTarget(
@@ -150,9 +140,12 @@ class ElementList extends Component {
 }
 
 ElementList.propTypes = {
+  // graphql
   // blocks and loading come from readBlocksForAreaQuery
   blocks: PropTypes.arrayOf(elementType),
   loading: PropTypes.bool,
+  // rpc
+  contentBlocks: PropTypes.arrayOf(elementType),
   //
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   allowedElementTypes: PropTypes.arrayOf(elementTypeType).isRequired,

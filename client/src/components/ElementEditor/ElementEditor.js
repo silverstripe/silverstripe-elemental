@@ -1,5 +1,5 @@
 /* global window */
-import React, { PureComponent } from 'react';
+import React, { PureComponent, createContext } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'lib/Injector';
 import { compose } from 'redux';
@@ -12,6 +12,8 @@ import ElementDragPreview from 'components/ElementEditor/ElementDragPreview';
 import withDragDropContext from 'lib/withDragDropContext';
 import backend from 'lib/Backend';
 
+export const ElementEditorContext = createContext(null);
+
 /**
  * The ElementEditor is used in the CMS to manage a list or nested lists of
  * elements for a page or other DataObject.
@@ -23,10 +25,13 @@ class ElementEditor extends PureComponent {
     this.state = {
       dragTargetElementId: null,
       dragSpot: null,
+      contentBlocks: null,
+      isLoading: false,
     };
 
     this.handleDragOver = this.handleDragOver.bind(this);
     this.handleDragEnd = this.handleDragEnd.bind(this);
+    this.fetchBlocks = this.fetchBlocks.bind(this);
   }
 
   /**
@@ -80,13 +85,23 @@ class ElementEditor extends PureComponent {
     });
   }
 
+  /**
+   * # rpc
+   * make a call to readAll elements endpoint (areaID)
+   */
   fetchBlocks() {
-    // # rpc
-    // todo
-    // make a call to readAll elements endpoint (areaID)
+    this.setState({
+      ...this.state,
+      isLoading: true
+    });
     backend.get(`/admin/elemental-area/readBlocks/${this.props.areaId}`)
-      .then((response) => {
-        console.log('readBlocks', response);
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({
+          ...this.state,
+          contentBlocks: responseJson,
+          isLoading: false,
+        })
       });
   }
 
@@ -102,10 +117,10 @@ class ElementEditor extends PureComponent {
       connectDropTarget,
       allowedElements,
     } = this.props;
-    const { dragTargetElementId, dragSpot } = this.state;
+    const { dragTargetElementId, dragSpot, contentBlocks } = this.state;
 
-    const globalUseGraphqQL = true;
-    if (globalUseGraphqQL) {
+    const globalUseGraphqQL = false;
+    if (!globalUseGraphqQL && contentBlocks === null) {
       this.fetchBlocks();
     }
 
@@ -116,29 +131,32 @@ class ElementEditor extends PureComponent {
 
     return connectDropTarget(
       <div className="element-editor">
-        <ToolbarComponent
-          elementTypes={allowedElementTypes}
-          areaId={areaId}
-          onDragOver={this.handleDragOver}
-        />
-        <ListComponent
-          allowedElementTypes={allowedElementTypes}
-          elementTypes={elementTypes}
-          areaId={areaId}
-          onDragOver={this.handleDragOver}
-          onDragStart={this.handleDragStart}
-          onDragEnd={this.handleDragEnd}
-          dragSpot={dragSpot}
-          isDraggingOver={isDraggingOver}
-          dragTargetElementId={dragTargetElementId}
-        />
-        <ElementDragPreview elementTypes={elementTypes} />
-        <input
-          name={fieldName}
-          type="hidden"
-          value={JSON.stringify(formState) || ''}
-          className="no-change-track"
-        />
+        <ElementEditorContext.Provider value={{ fetchBlocks: this.fetchBlocks }}>
+          <ToolbarComponent
+            elementTypes={allowedElementTypes}
+            areaId={areaId}
+            onDragOver={this.handleDragOver}
+          />
+          <ListComponent
+            allowedElementTypes={allowedElementTypes}
+            elementTypes={elementTypes}
+            areaId={areaId}
+            onDragOver={this.handleDragOver}
+            onDragStart={this.handleDragStart}
+            onDragEnd={this.handleDragEnd}
+            dragSpot={dragSpot}
+            isDraggingOver={isDraggingOver}
+            dragTargetElementId={dragTargetElementId}
+            contentBlocks={contentBlocks}
+          />
+          <ElementDragPreview elementTypes={elementTypes} />
+          <input
+            name={fieldName}
+            type="hidden"
+            value={JSON.stringify(formState) || ''}
+            className="no-change-track"
+          />
+        </ElementEditorContext.Provider>
       </div>
     );
   }
