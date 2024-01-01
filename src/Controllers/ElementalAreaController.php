@@ -39,6 +39,7 @@ class ElementalAreaController extends CMSMain
         //
         'GET readBlocks/$elementalAreaID!' => 'readBlocks',
         'POST add' => 'add',
+        'POST sort' => 'sort',
     ];
 
     private static $allowed_actions = [
@@ -49,9 +50,39 @@ class ElementalAreaController extends CMSMain
         //a
         'readBlocks',
         'add',
+        'sort'
     ];
 
+    private function jsonResponse(?array $data = null)
+    {
+        $response = $this->getResponse();
+        $response->setStatusCode(200);
+        $response->addHeader('Content-Type', 'application/json');
+        $body = $data ? json_encode($data) : '';
+        $response->setBody($body);
+        return $response;
+    }
+
     // ===
+
+    public function sort()
+    {
+        $request = $this->getRequest();
+        $postVars = json_decode($request->getBody(), true);
+        $id = $postVars['ID'];
+        $afterBlockID = $postVars['afterBlockID'];
+        $element = BaseElement::get()->byID($id);
+        if (!$element) {
+            throw new InvalidArgumentException(sprintf('%s#%s not found', BaseElement::class, $id));
+        }
+        if (!$element->canEdit()) {
+            $message = 'Changing the sort order of blocks is not allowed for the current user';
+            throw new InvalidArgumentException($message);
+        }
+        $reorderingService = Injector::inst()->create(ReorderElements::class, $element);
+        $reorderingService->reorder($afterBlockID);
+        return $this->jsonResponse(null);
+    }
 
     public function readBlocks()
     {
@@ -67,7 +98,7 @@ class ElementalAreaController extends CMSMain
         if (!$elementalArea->canView()) {
             throw new InvalidArgumentException("The current user has insufficient permission to view ElementalArea");
         }
-        $json = [];
+        $data = [];
         foreach ($elementalArea->Elements() as $element) {
             if (!$element->canView()) {
                 continue;
@@ -84,7 +115,7 @@ class ElementalAreaController extends CMSMain
                 ],
                 'content' => '',
             ];
-            $json[] = [
+            $data[] = [
                 'id' => (string) $element->ID,
                 'title' => $element->Title,
                 '__typename' => 'Block', // todo
@@ -100,12 +131,7 @@ class ElementalAreaController extends CMSMain
                 'canCreate' => $element->canCreate(),
             ];
         }
-        // $json['__typename'] = 'ElementalArea'; // this should get removed
-        $response = $this->getResponse();
-        $response->setStatusCode(200);
-        $response->addHeader('Content-Type', 'application/json');
-        $response->setBody(json_encode($json));
-        return $response;
+        return $this->jsonResponse($data);
     }
 
     // Resolver.php resolveAddElementToArea()

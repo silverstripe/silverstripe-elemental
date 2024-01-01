@@ -26,7 +26,7 @@ class ElementEditor extends PureComponent {
       dragTargetElementId: null,
       dragSpot: null,
       contentBlocks: null,
-      isLoading: false,
+      isLoading: true,
     };
 
     this.handleDragOver = this.handleDragOver.bind(this);
@@ -61,11 +61,10 @@ class ElementEditor extends PureComponent {
    * @param afterId
    */
   handleDragEnd(sourceId, afterId) {
-    const { actions: { handleSortBlock }, areaId } = this.props;
-
-    const globalUseGraphQL = true;
+    const globalUseGraphQL = false;
     if (globalUseGraphQL) {
       // see sortBlockMutation.js for reference
+      const { actions: { handleSortBlock }, areaId } = this.props;
       handleSortBlock(sourceId, afterId, areaId).then(() => {
         const preview = window.jQuery('.cms-preview');
         preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -77,6 +76,19 @@ class ElementEditor extends PureComponent {
       // call to read the element that was moved
       // (strange code for sorting is in this component and not ElementList, however do not refator it)
       // update the preview via jquery/entwine (see graphql code above)
+      backend.post(`/admin/elemental-area/sort`, {
+        ID: sourceId,
+        afterBlockID: afterId,
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log(responseJson);
+          // this.setState({
+          //   ...this.state,
+          //   contentBlocks: responseJson,
+          //   isLoading: false,
+          // })
+        });
     }
 
     this.setState({
@@ -89,11 +101,13 @@ class ElementEditor extends PureComponent {
    * # rpc
    * make a call to readAll elements endpoint (areaID)
    */
-  fetchBlocks() {
-    this.setState({
-      ...this.state,
-      isLoading: true
-    });
+  fetchBlocks(doSetLoadingState = true) {
+    if (doSetLoadingState) {
+      this.setState({
+        ...this.state,
+        isLoading: true,
+      });
+    }
     backend.get(`/admin/elemental-area/readBlocks/${this.props.areaId}`)
       .then(response => response.json())
       .then(responseJson => {
@@ -116,12 +130,13 @@ class ElementEditor extends PureComponent {
       isDraggingOver,
       connectDropTarget,
       allowedElements,
+      isLoading,
     } = this.props;
     const { dragTargetElementId, dragSpot, contentBlocks } = this.state;
 
     const globalUseGraphqQL = false;
     if (!globalUseGraphqQL && contentBlocks === null) {
-      this.fetchBlocks();
+      this.fetchBlocks(false);
     }
 
     // Map the allowed elements because we want to retain the sort order provided by that array.
@@ -148,6 +163,7 @@ class ElementEditor extends PureComponent {
             isDraggingOver={isDraggingOver}
             dragTargetElementId={dragTargetElementId}
             contentBlocks={contentBlocks}
+            isLoading={isLoading}
           />
           <ElementDragPreview elementTypes={elementTypes} />
           <input
@@ -191,7 +207,8 @@ function mapStateToProps(state) {
 }
 
 export { ElementEditor as Component };
-export default compose(
+
+const params = [
   withDragDropContext,
   DropTarget('element', {}, (connector, monitor) => ({
     connectDropTarget: connector.dropTarget(),
@@ -205,7 +222,12 @@ export default compose(
       ListComponent,
     }),
     () => 'ElementEditor'
-  ),
-  sortBlockMutation
-)(ElementEditor);
+  )
+];
+const globalUseGraphQL = false;
+if (globalUseGraphQL) {
+  params.push(sortBlockMutation);
+}
+
+export default compose(...params)(ElementEditor);
 

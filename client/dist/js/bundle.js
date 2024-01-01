@@ -2152,7 +2152,7 @@ var ElementEditor = function (_PureComponent) {
       dragTargetElementId: null,
       dragSpot: null,
       contentBlocks: null,
-      isLoading: false
+      isLoading: true
     };
 
     _this.handleDragOver = _this.handleDragOver.bind(_this);
@@ -2177,18 +2177,26 @@ var ElementEditor = function (_PureComponent) {
   }, {
     key: 'handleDragEnd',
     value: function handleDragEnd(sourceId, afterId) {
-      var _props = this.props,
-          handleSortBlock = _props.actions.handleSortBlock,
-          areaId = _props.areaId;
-
-
-      var globalUseGraphQL = true;
+      var globalUseGraphQL = false;
       if (globalUseGraphQL) {
+        var _props = this.props,
+            handleSortBlock = _props.actions.handleSortBlock,
+            areaId = _props.areaId;
+
         handleSortBlock(sourceId, afterId, areaId).then(function () {
           var preview = window.jQuery('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
         });
-      } else {}
+      } else {
+        _Backend2.default.post('/admin/elemental-area/sort', {
+          ID: sourceId,
+          afterBlockID: afterId
+        }).then(function (response) {
+          return response.json();
+        }).then(function (responseJson) {
+          console.log(responseJson);
+        });
+      }
 
       this.setState({
         dragTargetElementId: null,
@@ -2200,9 +2208,13 @@ var ElementEditor = function (_PureComponent) {
     value: function fetchBlocks() {
       var _this2 = this;
 
-      this.setState(_extends({}, this.state, {
-        isLoading: true
-      }));
+      var doSetLoadingState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      if (doSetLoadingState) {
+        this.setState(_extends({}, this.state, {
+          isLoading: true
+        }));
+      }
       _Backend2.default.get('/admin/elemental-area/readBlocks/' + this.props.areaId).then(function (response) {
         return response.json();
       }).then(function (responseJson) {
@@ -2224,7 +2236,8 @@ var ElementEditor = function (_PureComponent) {
           elementTypes = _props2.elementTypes,
           isDraggingOver = _props2.isDraggingOver,
           connectDropTarget = _props2.connectDropTarget,
-          allowedElements = _props2.allowedElements;
+          allowedElements = _props2.allowedElements,
+          isLoading = _props2.isLoading;
       var _state = this.state,
           dragTargetElementId = _state.dragTargetElementId,
           dragSpot = _state.dragSpot,
@@ -2233,7 +2246,7 @@ var ElementEditor = function (_PureComponent) {
 
       var globalUseGraphqQL = false;
       if (!globalUseGraphqQL && contentBlocks === null) {
-        this.fetchBlocks();
+        this.fetchBlocks(false);
       }
 
       var allowedElementTypes = allowedElements.map(function (className) {
@@ -2263,7 +2276,8 @@ var ElementEditor = function (_PureComponent) {
             dragSpot: dragSpot,
             isDraggingOver: isDraggingOver,
             dragTargetElementId: dragTargetElementId,
-            contentBlocks: contentBlocks
+            contentBlocks: contentBlocks,
+            isLoading: isLoading
           }),
           _react2.default.createElement(_ElementDragPreview2.default, { elementTypes: elementTypes }),
           _react2.default.createElement('input', {
@@ -2308,7 +2322,9 @@ function mapStateToProps(state) {
 }
 
 exports.Component = ElementEditor;
-exports.default = (0, _redux.compose)(_withDragDropContext2.default, (0, _reactDnd.DropTarget)('element', {}, function (connector, monitor) {
+
+
+var params = [_withDragDropContext2.default, (0, _reactDnd.DropTarget)('element', {}, function (connector, monitor) {
   return {
     connectDropTarget: connector.dropTarget(),
     isDraggingOver: monitor.isOver() };
@@ -2319,7 +2335,13 @@ exports.default = (0, _redux.compose)(_withDragDropContext2.default, (0, _reactD
   };
 }, function () {
   return 'ElementEditor';
-}), _sortBlockMutation2.default)(ElementEditor);
+})];
+var globalUseGraphQL = false;
+if (globalUseGraphQL) {
+  params.push(_sortBlockMutation2.default);
+}
+
+exports.default = _redux.compose.apply(undefined, params)(ElementEditor);
 
 /***/ }),
 
@@ -2537,7 +2559,11 @@ exports.Component = ElementList;
 
 var elementListTarget = {
   drop: function drop(props, monitor) {
-    var blocks = props.blocks;
+    var blocks = props.blocks,
+        contentBlocks = props.contentBlocks;
+
+    var globalUseGraphQL = false;
+    var elements = globalUseGraphQL ? blocks : contentBlocks;
 
     var elementTargetDropResult = monitor.getDropResult();
 
@@ -2545,10 +2571,10 @@ var elementListTarget = {
       return {};
     }
 
-    var dropIndex = (0, _dragHelpers.getDragIndicatorIndex)(blocks.map(function (element) {
+    var dropIndex = (0, _dragHelpers.getDragIndicatorIndex)(elements.map(function (element) {
       return element.id;
     }), elementTargetDropResult.target, monitor.getItem(), elementTargetDropResult.dropSpot);
-    var dropAfterID = blocks[dropIndex - 1] ? blocks[dropIndex - 1].id : '0';
+    var dropAfterID = elements[dropIndex - 1] ? elements[dropIndex - 1].id : '0';
 
     return _extends({}, elementTargetDropResult, {
       dropAfterID: dropAfterID

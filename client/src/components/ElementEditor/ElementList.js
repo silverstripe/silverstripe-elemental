@@ -165,7 +165,10 @@ export { ElementList as Component };
 
 const elementListTarget = {
   drop(props, monitor) {
-    const { blocks } = props;
+    const { blocks, contentBlocks } = props;
+    const globalUseGraphQL = false;
+    const elements = globalUseGraphQL ? blocks : contentBlocks;
+
     const elementTargetDropResult = monitor.getDropResult();
 
     if (!elementTargetDropResult) {
@@ -173,12 +176,12 @@ const elementListTarget = {
     }
 
     const dropIndex = getDragIndicatorIndex(
-      blocks.map(element => element.id),
+      elements.map(element => element.id),
       elementTargetDropResult.target,
       monitor.getItem(),
       elementTargetDropResult.dropSpot,
     );
-    const dropAfterID = blocks[dropIndex - 1] ? blocks[dropIndex - 1].id : '0';
+    const dropAfterID = elements[dropIndex - 1] ? elements[dropIndex - 1].id : '0';
 
     return {
       ...elementTargetDropResult,
