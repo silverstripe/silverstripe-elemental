@@ -2,10 +2,14 @@
 
 namespace DNADesign\Elemental\Extensions;
 
+use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\Core\Extension;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\Form;
 
+/**
+ * @extends Extension<CMSMain>
+ */
 class ElementalCMSMainExtension extends Extension
 {
     /**

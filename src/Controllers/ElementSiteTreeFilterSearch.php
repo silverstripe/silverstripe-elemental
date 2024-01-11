@@ -45,7 +45,6 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
         }
 
         // Get an array of SiteTree record IDs that match the search term in nested element data
-        /** @var ArrayList $siteTrees */
         $siteTrees = $query->filterByCallback(function (SiteTree $siteTree) {
             // Filter by elemental PHP
             if (!$siteTree->hasExtension(ElementalPageExtension::class)) {

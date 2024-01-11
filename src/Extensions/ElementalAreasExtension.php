@@ -42,7 +42,8 @@ use SilverStripe\View\ViewableData;
  *     'ElementalArea2'
  * );
  *
- * @package elemental
+ * @template T of DataObject
+ * @extends DataExtension<T&static>
  */
 class ElementalAreasExtension extends DataExtension
 {

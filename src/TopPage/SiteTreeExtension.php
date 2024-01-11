@@ -3,7 +3,6 @@
 namespace DNADesign\Elemental\TopPage;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
-use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Model\SiteTreeExtension as BaseSiteTreeExtension;
 use SilverStripe\ORM\DataObject;
@@ -15,8 +14,7 @@ use SilverStripe\ORM\ValidationException;
  * This extension must be present on pagetypes that need to support Elemental TopPage functionality.
  * It can be applied directly to Page, as it only takes effect in the presence of a ElementalArea.
  *
- * @property SiteTree|$this $owner
- * @package DNADesign\Elemental\TopPage
+ * @extends BaseSiteTreeExtension<SiteTree&ElementalPageExtension&static>
  */
 class SiteTreeExtension extends BaseSiteTreeExtension
 {
@@ -177,7 +175,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function processDuplicationFromOriginal(): void
     {
-        /** @var SiteTree|ElementalPageExtension $owner */
         $owner = $this->owner;
 
         if (!isset($owner->duplicationOriginal)) {
@@ -230,7 +227,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      */
     protected function setTopPageForElementalArea(): void
     {
-        /** @var SiteTree|ElementalPageExtension $owner */
         $owner = $this->owner;
 
         if (!$owner->hasExtension(ElementalPageExtension::class)) {
@@ -241,7 +237,6 @@ class SiteTreeExtension extends BaseSiteTreeExtension
             return;
         }
 
-        /** @var ElementalArea|DataExtension $area */
         $area = $owner->ElementalArea();
 
         if (!$area->exists()) {

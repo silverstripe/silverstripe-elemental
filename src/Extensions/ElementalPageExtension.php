@@ -12,6 +12,8 @@ use SilverStripe\View\SSViewer;
 /**
  * @property int ElementalAreaID
  * @method ElementalArea ElementalArea()
+ *
+ * @extends ElementalAreasExtension<SiteTree>
  */
 class ElementalPageExtension extends ElementalAreasExtension
 {

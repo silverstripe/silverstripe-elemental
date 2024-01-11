@@ -6,7 +6,11 @@ use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
+use SilverStripe\CMS\Controllers\ContentController;
 
+/**
+ * @extends Extension<ContentController>
+ */
 class ElementalContentControllerExtension extends Extension
 {
     /**
@@ -25,7 +29,6 @@ class ElementalContentControllerExtension extends Extension
             return false;
         }
 
-        /** @var DataObject $elementOwner */
         $elementOwner = $this->owner->data();
 
         if (!$elementOwner->hasExtension(ElementalAreasExtension::class)) {
