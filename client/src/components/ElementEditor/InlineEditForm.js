@@ -53,7 +53,12 @@ class InlineEditForm extends PureComponent {
       schemaUrl,
       identifier: 'element',
       refetchSchemaOnMount: !formHasState,
-      onLoadingError: this.handleLoadingError
+      onLoadingError: this.handleLoadingError,
+      // This null submit handler is used to prevent the FormBuilder form from submitting when any nested
+      // FormBuilder forms, such as LinkField v4+, are themselves submitted
+      // This FormBuilder form is not submitted in the traditional sense i.e. there is no rendered submit button
+      // instead the inline save button will do its own submission in SaveAction.js
+      onSubmit: () => new Promise(resolve => resolve),
     };
 
     if (loadingError) {
