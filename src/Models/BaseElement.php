@@ -441,7 +441,7 @@ JS
     {
         $default = $this->i18n_singular_name() ?: 'Block';
 
-        return _t(__CLASS__ . '.BlockType', $default);
+        return _t(static::class . '.BlockType', $default);
     }
 
     /**
