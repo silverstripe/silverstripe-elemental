@@ -4,8 +4,12 @@ namespace DNADesign\Elemental\Extensions;
 
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Core\Extension;
+use SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest;
 use SilverStripe\ORM\FieldType\DBField;
 
+/**
+ * @extends Extension<GridFieldDetailForm_ItemRequest>
+ */
 class GridFieldDetailFormItemRequestExtension extends Extension
 {
     public function updateBreadcrumbs($crumbs)

@@ -28,7 +28,6 @@ class ElementsInUseReport extends Report
 
     public function sourceRecords($params = [])
     {
-        /** @var DataList $elements */
         $elements = BaseElement::get()->exclude(['ClassName' => BaseElement::class]);
 
         if (isset($params[static::CLASS_NAME_FILTER_KEY])) {

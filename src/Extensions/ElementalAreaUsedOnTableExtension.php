@@ -8,10 +8,13 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationException;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\BaseElement;
+use SilverStripe\Admin\Forms\UsedOnTable;
 
+/**
+ * @extends DataExtension<UsedOnTable>
+ */
 class ElementalAreaUsedOnTableExtension extends DataExtension
 {
-
     /**
      * Hides ElementalArea's from the "Used On" tab when viewing files
      *
@@ -56,7 +59,6 @@ class ElementalAreaUsedOnTableExtension extends DataExtension
         try {
             // BaseElement::getPage() caches results so there's no performance decrease from
             // also calling it in updateUsageExcludeDataObject()
-            /** @var SiteTree $page */
             if ($page = $dataObject->getPage()) {
                 $ancestorDataObjects[] = $page;
             }

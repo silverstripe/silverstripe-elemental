@@ -17,8 +17,8 @@ use SilverStripe\Forms\FieldList;
  *
  * @link https://github.com/tractorcow-farm/silverstripe-fluent
  * @property string $TopPageLocale
- * @property BaseElement|ElementalArea|$this $owner
- * @package DNADesign\Elemental\TopPage
+ *
+ * @extends DataExtension<DataObject&static>
  */
 class FluentExtension extends DataExtension
 {
@@ -70,9 +70,7 @@ class FluentExtension extends DataExtension
      */
     protected function saveChanges(array $extraData = []): void
     {
-        /** @var DataObject|FluentExtension $owner */
-        $owner = $this->owner;
-        $extraData['"TopPageLocale"'] = $owner->TopPageLocale;
+        $extraData['"TopPageLocale"'] = $this->owner->TopPageLocale;
 
         parent::saveChanges($extraData);
     }

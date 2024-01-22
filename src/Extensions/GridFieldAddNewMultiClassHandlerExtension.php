@@ -5,10 +5,10 @@ namespace DNADesign\Elemental\Extensions;
 use SilverStripe\Core\Extension;
 use SilverStripe\Forms\Form;
 use DNADesign\Elemental\Models\BaseElement;
+use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClassHandler;
 
 /**
- * Class GridFieldAddNewMultiClassHandlerExtension
- * @package DNADesign\Elemental\Extensions
+ * @extends Extension<GridFieldAddNewMultiClassHandler>
  */
 class GridFieldAddNewMultiClassHandlerExtension extends Extension
 {

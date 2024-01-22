@@ -10,7 +10,6 @@ use SilverStripe\ORM\DataExtension as BaseDataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
 use SilverStripe\ORM\ValidationException;
-use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ViewableData;
 use SilverStripe\Forms\FieldList;
 
@@ -21,9 +20,9 @@ use SilverStripe\Forms\FieldList;
  * with deeply nested block structures. Apply to @see BaseElement and @see ElementalArea.
  *
  * @property int $TopPageID
- * @property BaseElement|ElementalArea|$this $owner
- * @package DNADesign\Elemental\TopPage
  * @method SiteTree TopPage()
+ *
+ * @extends BaseDataExtension<BaseElement|ElementalArea|static>
  */
 class DataExtension extends BaseDataExtension
 {
@@ -90,7 +89,6 @@ class DataExtension extends BaseDataExtension
         $list = [$this->owner];
 
         while (count($list ?? []) > 0) {
-            /** @var DataObject|DataExtension $item */
             $item = array_shift($list);
 
             if (!$item->exists()) {
@@ -148,7 +146,6 @@ class DataExtension extends BaseDataExtension
      */
     public function setTopPage(?SiteTree $page = null): void
     {
-        /** @var BaseElement|ElementalArea|Versioned|DataExtension $owner */
         $owner = $this->owner;
 
         if (!$owner->hasExtension(DataExtension::class)) {
@@ -222,7 +219,6 @@ class DataExtension extends BaseDataExtension
      */
     protected function updateTopPage(): void
     {
-        /** @var SiteTreeExtension $extension */
         $extension = singleton(SiteTreeExtension::class);
         $extension->addDuplicatedObject($this->owner);
     }
@@ -268,7 +264,6 @@ class DataExtension extends BaseDataExtension
      */
     protected function saveChanges(array $extraData = []): void
     {
-        /** @var DataObject|DataExtension $owner */
         $owner = $this->owner;
         $table = $this->getTopPageTable();
 
