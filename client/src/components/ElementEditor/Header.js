@@ -122,6 +122,45 @@ class Header extends Component {
     );
   }
 
+  renderStatusBadge() {
+    const {
+      element: { isLiveVersion, isPublished },
+      formDirty,
+    } = this.props;
+
+    // No indication required for published elements
+    if (!formDirty && isPublished && isLiveVersion) {
+      return null;
+    }
+
+    let versionStateTitle = '';
+    let versionStateButtonTitle = '';
+    const stateClassNames = ['badge'];
+
+    if (formDirty) {
+      versionStateTitle = i18n._t('ElementHeader.BADGE_UNSAVED', 'Unsaved');
+      versionStateButtonTitle = i18n._t('ElementHeader.STATE_UNSAVED', 'Item has unsaved changes');
+      stateClassNames.push('status-unsaved');
+    } else if (!isPublished) {
+      versionStateTitle = i18n._t('ElementHeader.BADGE_DRAFT', 'Draft');
+      versionStateButtonTitle = i18n._t('ElementHeader.STATE_DRAFT', 'Item has not been published yet');
+      stateClassNames.push('status-addedtodraft');
+    } else if (!isLiveVersion) {
+      versionStateTitle = i18n._t('ElementHeader.BADGE_MODIFIED', 'Modified');
+      versionStateButtonTitle = i18n._t('ElementHeader.STATE_MODIFIED', 'Item has unpublished changes');
+      stateClassNames.push('status-modified');
+    }
+
+    return (
+      <span
+        className={classNames(stateClassNames)}
+        title={versionStateButtonTitle}
+      >
+        {versionStateTitle}
+      </span>
+    );
+  }
+
   render() {
     const {
       connectDragSource,
@@ -183,6 +222,7 @@ class Header extends Component {
             </Tooltip>}
           </div>
           <h3 className={titleClasses}>{title}</h3>
+          {this.renderStatusBadge()}
         </div>
         {!simple && <div className="element-editor-header__actions">
           <div role="none" onClick={(event) => event.stopPropagation()}>
