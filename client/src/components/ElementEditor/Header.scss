@@ -32,7 +32,7 @@
       color: $state-draft;
       background-color: $state-modified-bg;
       padding: 2px 3px 2px 4px;
-      margin-left: 0.2rem;
+      margin-left: 0.5rem;
     }
   }
 
@@ -75,10 +75,6 @@
     position: relative;
     width: 8px;
     z-index: 1;
-
-    &--unsaved {
-      background-color: $state-draft-bg;
-    }
 
     &--draft {
       background-color: $state-draft-bg;

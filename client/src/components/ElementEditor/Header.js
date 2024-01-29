@@ -4,14 +4,10 @@ import { Tooltip } from 'reactstrap';
 import { elementType } from 'types/elementType';
 import { elementTypeType } from 'types/elementTypeType';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
 import classNames from 'classnames';
-import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
-import { isDirty } from 'redux-form';
 import { DragSource } from 'react-dnd';
-import getFormState from 'lib/getFormState';
 import { elementDragSource } from 'lib/dragHelpers';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
@@ -92,21 +88,17 @@ class Header extends Component {
   renderVersionedStateMessage() {
     const {
       element: { isLiveVersion, isPublished },
-      formDirty,
     } = this.props;
 
     // No indication required for published elements
-    if (!formDirty && isPublished && isLiveVersion) {
+    if (isPublished && isLiveVersion) {
       return null;
     }
 
     let versionStateButtonTitle = '';
     const stateClassNames = ['element-editor-header__version-state'];
 
-    if (formDirty) {
-      versionStateButtonTitle = i18n._t('ElementHeader.STATE_UNSAVED', 'Item has unsaved changes');
-      stateClassNames.push('element-editor-header__version-state--unsaved');
-    } else if (!isPublished) {
+    if (!isPublished) {
       versionStateButtonTitle = i18n._t('ElementHeader.STATE_DRAFT', 'Item has not been published yet');
       stateClassNames.push('element-editor-header__version-state--draft');
     } else if (!isLiveVersion) {
@@ -125,11 +117,10 @@ class Header extends Component {
   renderStatusBadge() {
     const {
       element: { isLiveVersion, isPublished },
-      formDirty,
     } = this.props;
 
     // No indication required for published elements
-    if (!formDirty && isPublished && isLiveVersion) {
+    if (isPublished && isLiveVersion) {
       return null;
     }
 
@@ -137,11 +128,7 @@ class Header extends Component {
     let versionStateButtonTitle = '';
     const stateClassNames = ['badge'];
 
-    if (formDirty) {
-      versionStateTitle = i18n._t('ElementHeader.BADGE_UNSAVED', 'Unsaved');
-      versionStateButtonTitle = i18n._t('ElementHeader.STATE_UNSAVED', 'Item has unsaved changes');
-      stateClassNames.push('status-unsaved');
-    } else if (!isPublished) {
+    if (!isPublished) {
       versionStateTitle = i18n._t('ElementHeader.BADGE_DRAFT', 'Draft');
       versionStateButtonTitle = i18n._t('ElementHeader.STATE_DRAFT', 'Item has not been published yet');
       stateClassNames.push('status-addedtodraft');
@@ -258,7 +245,6 @@ Header.propTypes = {
   ElementActionsComponent: PropTypes.elementType,
   previewExpanded: PropTypes.bool,
   disableTooltip: PropTypes.bool,
-  formDirty: PropTypes.bool,
   connectDragSource: PropTypes.func.isRequired,
   connectDragPreview: PropTypes.func.isRequired,
   onDragEnd: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
@@ -268,14 +254,6 @@ Header.defaultProps = {
   expandable: true,
 };
 
-function mapStateToProps(state, ownProps) {
-  const formName = loadElementFormStateName(ownProps.element.id);
-
-  return {
-    formDirty: isDirty(`element.${formName}`, getFormState)(state),
-  };
-}
-
 export { Header as Component };
 
 export default compose(
@@ -283,7 +261,6 @@ export default compose(
     connectDragSource: connector.dragSource(),
     connectDragPreview: connector.dragPreview(),
   })),
-  connect(mapStateToProps),
   inject(
     ['ElementActions'],
     (ElementActionsComponent) => ({

@@ -22,7 +22,6 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementHeader.STATE_MODIFIED": "Item has unpublished changes",
     "ElementHeader.BADGE_DRAFT": "Draft",
     "ElementHeader.BADGE_MODIFIED": "Modified",
-    "ElementHeader.BADGE_UNSAVED": "Unsaved",
     "ElementList.ADD_BLOCKS": "Add blocks to place your content",
     "ElementPublishAction.ERROR_NOTIFICATION": "Error publishing '{title}'",
     "ElementPublishAction.PUBLISH": "Publish",
