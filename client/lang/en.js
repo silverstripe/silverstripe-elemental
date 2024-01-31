@@ -20,6 +20,8 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementHeader.NOTITLE": "Untitled {type} block",
     "ElementHeader.STATE_DRAFT": "Item has not been published yet",
     "ElementHeader.STATE_MODIFIED": "Item has unpublished changes",
+    "ElementHeader.BADGE_DRAFT": "Draft",
+    "ElementHeader.BADGE_MODIFIED": "Modified",
     "ElementList.ADD_BLOCKS": "Add blocks to place your content",
     "ElementPublishAction.ERROR_NOTIFICATION": "Error publishing '{title}'",
     "ElementPublishAction.PUBLISH": "Publish",

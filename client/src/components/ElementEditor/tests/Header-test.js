@@ -219,3 +219,37 @@ test('Header should not render a versioned state message when the element is pub
   />);
   expect(container.querySelectorAll('.element-editor-header__version-state')).toHaveLength(0);
 });
+
+test('Header should render a versioned draft badge when the element is not published', () => {
+  const { container } = render(<Header {...makeProps({
+    element: {
+      id: '14',
+      isPublished: false,
+      liveVersion: false
+    }
+  })}
+  />);
+  expect(
+    container
+      .querySelector('.element-editor-header__info')
+      .querySelector('.badge.status-addedtodraft')
+      .getAttribute('title')
+  ).toContain('Item has not been published yet');
+});
+
+test('Header should render a versioned modified badge when the element is modified and not published', () => {
+  const { container } = render(<Header {...makeProps({
+    element: {
+      id: '14',
+      isPublished: true,
+      isLiveVersion: false
+    }
+  })}
+  />);
+  expect(
+    container
+      .querySelector('.element-editor-header__info')
+      .querySelector('.badge.status-modified')
+      .getAttribute('title')
+  ).toContain('Item has unpublished changes');
+});

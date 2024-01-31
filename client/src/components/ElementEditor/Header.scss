@@ -27,6 +27,13 @@
 
   &__info {
     max-width: calc(100% - 60px);
+
+    .badge {
+      color: $state-draft;
+      background-color: $state-modified-bg;
+      padding: 2px 3px 2px 4px;
+      margin-left: 0.5rem;
+    }
   }
 
   &__actions {
@@ -68,11 +75,6 @@
     position: relative;
     width: 8px;
     z-index: 1;
-
-    &--unsaved {
-      background-color: $link-color;
-      border: 1px solid $link-hover-color;
-    }
 
     &--draft {
       background-color: $state-draft-bg;

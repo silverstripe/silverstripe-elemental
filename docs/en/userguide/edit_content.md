@@ -49,8 +49,7 @@ An **Add block** button shown as a bar and plus icon can be activated by moving 
 
 States are shown on the block type icon as coloured indicators. Each represents the current workflow status your content block is in.
 
-Blue - The block has unsaved changes.
-Orange full - The block state is **Draft** and not publicly visible.
+Orange full - The block state is **Draft** if the block has unsaved changes or it is not publicly visible.
 Orange outline - The block is **Modified** where it has been published but has some additional draft changes.
 No state - The block is published.
 
