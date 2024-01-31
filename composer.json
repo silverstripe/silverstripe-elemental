@@ -29,8 +29,10 @@
         "silverstripe/vendor-plugin": "^2"
     },
     "require-dev": {
-      "silverstripe/recipe-testing": "^3",
-      "silverstripe/frameworktest": "^1"
+        "silverstripe/recipe-testing": "^3",
+        "silverstripe/frameworktest": "^1",
+        "silverstripe/standards": "^1",
+        "phpstan/extension-installer": "^1.3"
     },
     "suggest": {
         "silverstripe/elemental-blocks": "Adds a set of common SilverStripe content block types",
