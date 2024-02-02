@@ -24,7 +24,6 @@ use SilverStripe\View\ViewableData;
  * @property string $OwnerClassName
  *
  * @mixin Versioned
- * @method HasManyList<BaseElement> Elements()
  */
 class ElementalArea extends DataObject
 {
