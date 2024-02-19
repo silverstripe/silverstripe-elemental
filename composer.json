@@ -19,18 +19,18 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.1",
-        "silverstripe/framework": "^5",
-        "silverstripe/cms": "^5",
-        "silverstripe/admin": "^2.0.1",
-        "silverstripe/versioned": "^2",
-        "silverstripe/versioned-admin": "^2",
-        "silverstripe/graphql": "^5",
-        "symbiote/silverstripe-gridfieldextensions": "^4",
+        "silverstripe/framework": "^6",
+        "silverstripe/cms": "^6",
+        "silverstripe/admin": "^3",
+        "silverstripe/versioned": "^3",
+        "silverstripe/versioned-admin": "^3",
+        "silverstripe/graphql": "^6",
+        "symbiote/silverstripe-gridfieldextensions": "^5",
         "silverstripe/vendor-plugin": "^2"
     },
     "require-dev": {
-        "silverstripe/recipe-testing": "^3",
-        "silverstripe/frameworktest": "^1",
+        "silverstripe/recipe-testing": "^4",
+        "silverstripe/frameworktest": "^2",
         "silverstripe/standards": "^1",
         "phpstan/extension-installer": "^1.3"
     },
