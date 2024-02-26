@@ -22,6 +22,7 @@ class Content extends PureComponent {
       handleLoadingError,
       formDirty,
       broken,
+      formSchema,
     } = this.props;
 
     return (
@@ -44,6 +45,7 @@ class Content extends PureComponent {
             activeTab={activeTab}
             onFormInit={onFormInit}
             handleLoadingError={handleLoadingError}
+            formSchema={formSchema}
           />
         }
         {formDirty &&
@@ -69,6 +71,7 @@ Content.propTypes = {
   InlineEditFormComponent: PropTypes.elementType,
   handleLoadingError: PropTypes.func,
   broken: PropTypes.bool,
+  formSchema: PropTypes.object,
 };
 
 Content.defaultProps = {};

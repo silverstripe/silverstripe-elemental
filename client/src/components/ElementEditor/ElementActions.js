@@ -115,7 +115,7 @@ ElementActions.propTypes = {
     name: PropTypes.string,
   })),
   handleEditTabsClick: PropTypes.func.isRequired,
-  expandable: PropTypes.bool
+  expandable: PropTypes.bool,
 };
 
 ElementActions.defaultProps = {

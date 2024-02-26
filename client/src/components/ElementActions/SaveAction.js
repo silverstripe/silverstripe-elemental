@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
@@ -7,12 +7,18 @@ import i18n from 'i18n';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { initialize } from 'redux-form';
+import { ElementContext } from 'components/ElementEditor/Element';
+import { submit } from 'redux-form'
+
+
 
 /**
  * Using a REST backend, serialize the current form data and post it to the backend endpoint to save
  * the inline edit form's data for the current block.
  */
 const SaveAction = (MenuComponent) => (props) => {
+  const failureHandlers = useContext(ElementContext);
+
   if (!props.expandable || props.type.broken) {
     // Some elemental blocks can not be edited inline (e.g. User form blocks)
     // We don't want to add a "Save" action for those blocks.
@@ -24,7 +30,7 @@ const SaveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { element, type, securityId, formData, reinitialiseForm } = props;
+    const { element, type, securityId, formData, reinitialiseForm, submitForm } = props;
     const { jQuery: $ } = window;
     const noTitle = i18n.inject(
       i18n._t(
@@ -33,6 +39,14 @@ const SaveAction = (MenuComponent) => (props) => {
       ),
       { type: type.title }
     );
+
+    // https://redux-form.com/8.3.0/examples/remotesubmit/
+    submitForm();
+
+    return;
+
+    // === The following is wrong, should using the Formbuilder to submit the form ===
+    // === instead of doing a submissions from the button ==
 
     const endpointSpec = {
       url: loadElementSchemaValue('saveUrl', element.id),
@@ -70,7 +84,7 @@ const SaveAction = (MenuComponent) => (props) => {
           type: 'success'
         });
       })
-      .catch(() => {
+      .catch(e => {
         $.noticeAdd({
           text: i18n.inject(
             i18n._t(
@@ -82,6 +96,11 @@ const SaveAction = (MenuComponent) => (props) => {
           stay: false,
           type: 'error'
         });
+        e.response.json()
+          .then(formSchema => {
+            // failurreHandlers is defined in Element.js and passed via ElementContext
+            failureHandlers.onFailedSave(formSchema);
+          });
       });
   };
 
@@ -121,6 +140,12 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     reinitialiseForm(savedData) {
       dispatch(initialize(`element.${formName}`, savedData));
+    },
+    submitForm() {
+      console.log('submitting form for elmenet with ID 1 - THIS IS HARDCODED TO element #1');
+      // dispatch() is a param of mapDispatchToProps()
+      // submit() is an imported function from 'redux-form'
+      dispatch(submit('element.ElementForm_1'));
     }
   };
 }

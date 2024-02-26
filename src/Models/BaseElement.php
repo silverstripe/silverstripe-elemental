@@ -7,6 +7,7 @@ use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use DNADesign\Elemental\ORM\FieldType\DBObjectType;
 use DNADesign\Elemental\TopPage\DataExtension;
 use Exception;
+use PHPUnit\Util\Xml\ValidationResult;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
@@ -34,6 +35,8 @@ use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\CompositeValidator;
+use SilverStripe\Forms\RequiredFields;
 use SilverStripe\ORM\DataObjectSchema;
 
 /**
@@ -53,6 +56,26 @@ use SilverStripe\ORM\DataObjectSchema;
  */
 class BaseElement extends DataObject implements CMSPreviewable
 {
+    // public function getCMSCompositeValidator(): CompositeValidator
+    // {
+    //     return new CompositeValidator([
+    //         new RequiredFields('Title')
+    //     ]);
+    // }
+
+    public function validate()
+    {
+        $result = parent::validate();
+        if ($this->Title == 'x') {
+            $result->addFieldError('Title', 'Title cannot be x', 'validation');
+        }
+        $c = trim(strip_tags($this->HTML ?? ''));
+        if ($c == 'x') {
+            $result->addFieldError('HTML', 'HTML cannot be x', 'validation');
+        }
+        return $result;
+    }
+
     /**
      * Override this on your custom elements to specify a CSS icon class
      *

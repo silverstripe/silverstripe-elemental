@@ -11,10 +11,21 @@ use SilverStripe\ORM\FieldType\DBField;
  */
 class ElementContent extends BaseElement
 {
+
+    public function validate()
+    {
+        $result = parent::validate();
+        if ($this->MyField == 'x') {
+            $result->addFieldError('MyField', 'MyField cannot be x');
+        }
+        return $result;
+    }
+
     private static $icon = 'font-icon-block-content';
 
     private static $db = [
-        'HTML' => 'HTMLText'
+        'HTML' => 'HTMLText',
+        'MyField' => 'Varchar(255)',
     ];
 
     private static $table_name = 'ElementContent';
