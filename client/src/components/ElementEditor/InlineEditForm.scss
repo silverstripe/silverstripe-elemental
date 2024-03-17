@@ -25,4 +25,25 @@
       max-width: 900px;
     }
   }
+
+  // Render the form off the screen so that it's not visible
+  // Note that using display:none will mean the form is not rendered at all and cannot be submitted
+  &--rendered-not-visible {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .btn--hidden {
+    display: none;
+  }
+
+  .text-checkbox-group-field {
+    align-items: flex-start;
+  }
+
+  .text-checkbox-group-field .form-group {
+    margin-bottom: 0;
+    flex: auto;
+  }
 }

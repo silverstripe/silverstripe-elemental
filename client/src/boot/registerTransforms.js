@@ -6,8 +6,8 @@ import readBlocksForAreaQuery from 'state/editor/readBlocksForAreaQuery';
 import addElementToArea from 'state/editor/addElementMutation';
 import ArchiveAction from 'components/ElementActions/ArchiveAction';
 import DuplicateAction from 'components/ElementActions/DuplicateAction';
-import PublishAction from 'components/ElementActions/PublishAction';
 import SaveAction from 'components/ElementActions/SaveAction';
+import PublishAction from 'components/ElementActions/PublishAction';
 import UnpublishAction from 'components/ElementActions/UnpublishAction';
 
 export default () => {

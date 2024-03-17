@@ -1,20 +1,25 @@
 /* global window */
 
-import React, { Component } from 'react';
+import React, { Component, createContext } from 'react';
 import PropTypes from 'prop-types';
 import { elementType } from 'types/elementType';
 import { elementTypeType } from 'types/elementTypeType';
-import { compose } from 'redux';
+import { bindActionCreators, compose } from 'redux';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { submit } from 'redux-form';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import * as TabsActions from 'state/tabs/TabsActions';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { elementDragSource, isOverTop } from 'lib/dragHelpers';
+import * as toastsActions from 'state/toasts/ToastsActions';
+import { addFormChanged } from 'state/unsavedForms/UnsavedFormsActions';
+
+export const ElementContext = createContext(null);
 
 /**
  * The Element component used in the context of an ElementEditor shows the summary
@@ -28,17 +33,32 @@ class Element extends Component {
   constructor(props) {
     super(props);
 
+    this.showSavedElementToast = this.showSavedElementToast.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleExpand = this.handleExpand.bind(this);
     this.handleLoadingError = this.handleLoadingError.bind(this);
     this.handleTabClick = this.handleTabClick.bind(this);
     this.updateFormTab = this.updateFormTab.bind(this);
+    this.handleFormSchemaFetchResponse = this.handleFormSchemaFetchResponse.bind(this);
+    this.handleFormSchemaSubmitResponse = this.handleFormSchemaSubmitResponse.bind(this);
+    this.handleSaveButtonClick = this.handleSaveButtonClick.bind(this);
+    this.handlePublishButtonClick = this.handlePublishButtonClick.bind(this);
+    this.handleAfterSave = this.handleAfterSave.bind(this);
+    this.handleAfterPublish = this.handleAfterPublish.bind(this);
 
     this.state = {
       previewExpanded: false,
       initialTab: '',
       loadingError: false,
       childRenderingError: false,
+      newTitle: '',
+      justSavedElement: false,
+      justClickedPublishButton: false,
+      doSaveElement: false,
+      doPublishElement: false,
+      ensureFormRendered: false,
+      formHasRendered: false,
+      doSetFormChanged: false,
     };
   }
 
@@ -53,6 +73,69 @@ class Element extends Component {
         captureDraggingState: true,
       });
     }
+    // Check if formSchema state has already been loaded before opening a block
+    // This can happen if there was a validation error on a block after performing a Page save
+    if (this.props.formStateExists) {
+      this.setState({
+        formHasRendered: true
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.justSavedElement) {
+      this.setState({
+        justSavedElement: false,
+      });
+      if (!this.state.doPublishElement) {
+        // Showing a toast here instead of at the end of a promise because we're saving data
+        // via a remote submit of redux-form which does not return a promise
+        this.showSavedElementToast();
+      }
+      // This will trigger a graphql readOneElementalArea request that will cause this
+      // element to re-render including any updated title and versioned badge
+      window.ss.apolloClient.queryManager.reFetchObservableQueries();
+    }
+    if (this.state.doSetFormChanged) {
+      this.setState({
+        doSetFormChanged: false,
+      });
+      this.props.setFormChanged();
+    }
+  }
+
+  showSavedElementToast() {
+    const title = this.state.newTitle || this.getNoTitle();
+    const message = i18n.inject(
+      i18n._t('ElementSaveAction.SUCCESS_NOTIFICATION', 'Saved \'{title}\' successfully'),
+      { title }
+    );
+    this.props.actions.toasts.success(message);
+  }
+
+  showPublishedElementToast(wasError) {
+    const noTitle = this.getNoTitle();
+    const title = this.state.newTitle || noTitle;
+    if (wasError) {
+      const message = i18n.inject(
+        i18n._t('ElementPublishAction.ERROR_NOTIFICATION', 'Error publishing \'{title}\''),
+        { title }
+      );
+      this.props.actions.toasts.error(message);
+    } else {
+      const message = i18n.inject(
+        i18n._t('ElementPublishAction.SUCCESS_NOTIFICATION', 'Published \'{title}\' successfully'),
+        { title }
+      );
+      this.props.actions.toasts.success(message);
+    }
+  }
+
+  getNoTitle() {
+    return i18n.inject(
+      i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
+      { type: this.props.type.title }
+    );
   }
 
   /**
@@ -215,6 +298,81 @@ class Element extends Component {
     }
   }
 
+  handleSaveButtonClick() {
+    this.setState({
+      ensureFormRendered: true,
+      doSaveElement: true,
+    });
+  }
+
+  handlePublishButtonClick() {
+    this.setState({
+      justClickedPublishButton: true,
+      ensureFormRendered: true,
+    });
+    if (this.props.formDirty) {
+      // Save the element first before publishing, which may trigger validation errors
+      this.props.submitForm();
+    } else {
+      // Just publish the element straight away without saving first
+      this.setState({
+        doPublishElement: true,
+      });
+    }
+  }
+
+  handleAfterSave() {
+    this.setState({
+      doSaveElement: false,
+    });
+  }
+
+  handleAfterPublish(wasError) {
+    this.showPublishedElementToast(wasError);
+    this.setState({
+      doPublishElement: false,
+    });
+  }
+
+  handleFormSchemaFetchResponse() {
+    this.setState({
+      formHasRendered: true,
+    });
+  }
+
+  handleFormSchemaSubmitResponse(formSchema, title) {
+    // Slightly annoyingly, on validation error formSchema at this point will not have an errors node
+    // Instead it will have the original formSchema id used for the GET request to get the formSchema i.e.
+    // admin/elemental-area/schema/<ItemID>
+    // Instead of the one used by the POST submission i.e.
+    // admin/elemental-area/elementForm/<LinkID>
+    const hasValidationErrors = formSchema.id.match(/\/schema\/elemental-area\/([0-9]+)/);
+    if (hasValidationErrors) {
+      if (this.props.type.inlineEditable) {
+        this.setState({
+          previewExpanded: true,
+        });
+      }
+      // Ensure that formDirty remains truthy
+      // Note we need to call this.props.setFormChanged() on the next render rather than straight away
+      // or it will get unset by core code
+      this.setState({
+        doSetFormChanged: true,
+      });
+      return;
+    }
+    this.setState({
+      justSavedElement: true,
+      newTitle: title,
+    });
+    if (this.state.justClickedPublishButton) {
+      this.setState({
+        justClickedPublishButton: false,
+        doPublishElement: true,
+      });
+    }
+  }
+
   render() {
     const {
       element,
@@ -229,6 +387,8 @@ class Element extends Component {
       isDragging,
       isOver,
       onDragEnd,
+      submitForm,
+      formDirty,
     } = this.props;
 
     const { childRenderingError, previewExpanded } = this.state;
@@ -248,6 +408,19 @@ class Element extends Component {
       this.getVersionedStateClassName()
     );
 
+    // eslint-disable-next-line react/jsx-no-constructed-context-values
+    const providerValue = {
+      formDirty,
+      formHasRendered: this.state.formHasRendered,
+      onPublishButtonClick: this.handlePublishButtonClick,
+      doPublishElement: this.state.doPublishElement,
+      onSaveButtonClick: this.handleSaveButtonClick,
+      doSaveElement: this.state.doSaveElement,
+      onAfterSave: this.handleAfterSave,
+      onAfterPublish: this.handleAfterPublish,
+      submitForm,
+    };
+
     const content = connectDropTarget(<div
       className={elementClassNames}
       onClick={this.handleExpand}
@@ -257,40 +430,46 @@ class Element extends Component {
       title={this.getLinkTitle(type)}
       key={element.id}
     >
-      <HeaderComponent
-        element={element}
-        type={type}
-        areaId={areaId}
-        expandable={type.inlineEditable}
-        link={link}
-        previewExpanded={previewExpanded && !childRenderingError}
-        handleEditTabsClick={this.handleTabClick}
-        activeTab={activeTab}
-        disableTooltip={isDragging}
-        onDragEnd={onDragEnd}
-      />
-
-      {
-        !childRenderingError &&
-        <ContentComponent
-          id={element.id}
-          fileUrl={element.blockSchema.fileURL}
-          fileTitle={element.blockSchema.fileTitle}
-          content={this.getSummary(element, type)}
-          previewExpanded={previewExpanded && !isDragging}
+      <ElementContext.Provider value={providerValue}>
+        <HeaderComponent
+          element={element}
+          type={type}
+          areaId={areaId}
+          expandable={type.inlineEditable}
+          link={link}
+          previewExpanded={previewExpanded && !childRenderingError}
+          handleEditTabsClick={this.handleTabClick}
           activeTab={activeTab}
-          onFormInit={() => this.updateFormTab(activeTab)}
-          handleLoadingError={this.handleLoadingError}
-          broken={type.broken}
+          disableTooltip={isDragging}
+          onDragEnd={onDragEnd}
         />
-      }
 
-      {
-        childRenderingError &&
-        <div className="alert alert-danger mt-2">
-          {i18n._t('ElementalElement.CHILD_RENDERING_ERROR', 'Something went wrong with this block. Please try saving and refreshing the CMS.')}
-        </div>
-      }
+        {
+          !childRenderingError &&
+          <ContentComponent
+            id={element.id}
+            fileUrl={element.blockSchema.fileURL}
+            fileTitle={element.blockSchema.fileTitle}
+            content={this.getSummary(element, type)}
+            previewExpanded={previewExpanded && !isDragging}
+            ensureFormRendered={this.state.ensureFormRendered}
+            formHasRendered={this.state.formHasRendered}
+            activeTab={activeTab}
+            onFormInit={() => this.updateFormTab(activeTab)}
+            handleLoadingError={this.handleLoadingError}
+            broken={type.broken}
+            onFormSchemaFetchResponse={this.handleFormSchemaFetchResponse}
+            onFormSchemaSubmitResponse={this.handleFormSchemaSubmitResponse}
+          />
+        }
+
+        {
+          childRenderingError &&
+          <div className="alert alert-danger mt-2">
+            {i18n._t('ElementalElement.CHILD_RENDERING_ERROR', 'Something went wrong with this block. Please try saving and refreshing the CMS.')}
+          </div>
+        }
+      </ElementContext.Provider>
     </div>);
 
     if (!previewExpanded) {
@@ -305,7 +484,6 @@ function mapStateToProps(state, ownProps) {
   const elementId = ownProps.element.id;
   const elementName = loadElementFormStateName(elementId);
   const elementFormSchema = loadElementSchemaValue('schemaUrl', elementId);
-
   const filterFieldsForTabs = (field) => field.component === 'Tabs';
 
   // Find name of the first Tabs component in the form
@@ -318,6 +496,11 @@ function mapStateToProps(state, ownProps) {
 
   const tabSetName = tabSet && tabSet.id;
   const uniqueFieldId = `element.${elementName}__${tabSetName}`;
+  const formDirty = state.unsavedForms.find((unsaved) => unsaved.name === `element.${elementName}`);
+  const formStateExists = state.form
+    && state.form.formState
+    && state.form.formState.element
+    && state.form.formState.element.hasOwnProperty(elementName);
 
   // Find name of the active tab in the tab set
   // Only defined once an element form is expanded for the first time
@@ -329,6 +512,8 @@ function mapStateToProps(state, ownProps) {
   return {
     tabSetName,
     activeTab,
+    formDirty,
+    formStateExists,
   };
 }
 
@@ -338,6 +523,18 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     onActivateTab(tabSetName, activeTabName) {
       dispatch(TabsActions.activateTab(`element.${elementName}__${tabSetName}`, activeTabName));
+    },
+    submitForm() {
+      // Perform a redux-form remote-submit
+      dispatch(submit(`element.${elementName}`));
+    },
+    setFormChanged() {
+      // Ensures the form identifier is in unsavedForms in the global redux state
+      // This is used to derive the formDirty prop in mapStateToProps
+      dispatch(addFormChanged(`element.${elementName}`));
+    },
+    actions: {
+      toasts: bindActionCreators(toastsActions, dispatch),
     },
   };
 }

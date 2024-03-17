@@ -185,6 +185,50 @@ class BlockPage extends Page
 }
 ```
 
+## Validation
+
+Custom elemental blocks can have validation set using standard [model validation](https://docs.silverstripe.org/en/developer_guides/model/validation/#model-validation).
+
+For example to make ensure your elemental block has populated its `has_one` relation using a `RequiredFields` validator, and validate the value of a field:
+
+```php
+namespace App\Model;
+
+use DNADesign\Elemental\Models\BaseElement;
+use SilverStripe\Assets\File;
+use SilverStripe\Forms\CompositeValidator;
+use SilverStripe\Forms\RequiredFields;
+
+class MyBlock extends BaseElement
+{
+    private static array $db = [
+        'Postcode' => 'Varchar',
+    ];
+
+    private static array $has_one = [
+        'MyFile' => File::class,
+    ];
+
+    // ...
+
+    public function getCMSCompositeValidator(): CompositeValidator
+    {
+        $validator = parent::getCMSCompositeValidator();
+        $validator->addValidator(RequiredFields::create(['MyFile']));
+        return $validator;
+    }
+    
+    public function validate()
+    {
+        $result = parent::validate();
+        if ($this->Postcode && strlen($this->Postcode) < 3) {
+            $result->addFieldError('Postcode', 'Postcode must be at least 3 characters');
+        }
+        return $result;
+    }
+}
+```
+
 ## Elemental with fluent setup
 
 The [`Fluent`](https://github.com/tractorcow-farm/silverstripe-fluent) module provides multiple options how to localise your content, but there is one option which is the best on average: `indirect localisation`.

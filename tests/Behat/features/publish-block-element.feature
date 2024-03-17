@@ -33,3 +33,25 @@ Feature: Publish elements in the CMS
       And I press the "View actions" button
     Then I should see the unpublish button for block 1
       But I should not see the publish button for block 1
+
+  Scenario: Correct toast notification shows when saving or publishing block will show new title
+
+    # Changing title, saving and then publishing
+    When I click on the caret button for block 1
+    And I fill in "New title" for "Title" for block 1
+    When I press the "View actions" button
+    And I press the "Save" button
+    And I wait 1 second
+    Then I should see a "Saved 'New title' successfully" success toast
+    When I click on the ".toast__close" element
+    And I press the "View actions" button
+    And I press the "Publish" button
+    And I wait 1 second
+    Then I should see a "Published 'New title' successfully" success toast
+
+    # Changing title and publishing straight away
+    When I fill in "Great title" for "Title" for block 1
+    And I press the "View actions" button
+    And I press the "Publish" button
+    And I wait 1 second
+    Then I should see a "Published 'Great title' successfully" success toast
