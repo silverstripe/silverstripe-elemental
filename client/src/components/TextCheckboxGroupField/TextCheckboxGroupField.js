@@ -8,10 +8,13 @@ const TextCheckboxGroupField = (props) => {
   // Map out the children and clone to set the "noHolder" prop on them.
   const childrenWithProps = React.Children.toArray(
     React.Children.map(children, (child, index) => {
-      const additionalProps = { noHolder: true };
+      const additionalProps = {};
 
       if (index === 0) {
         additionalProps.id = props.id;
+        additionalProps.title = null;
+      } else if (index === 1) {
+        additionalProps.noHolder = true;
       }
 
       return React.cloneElement(child, additionalProps);
