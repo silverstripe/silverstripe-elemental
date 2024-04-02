@@ -1,0 +1,3 @@
+export default {
+  UPDATE_VERSION_STATE: 'UPDATE_VERSION_STATE',
+};

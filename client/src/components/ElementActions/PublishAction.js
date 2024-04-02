@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { initialize } from 'redux-form';
+import * as elementActions from 'state/reducer/ElementActions';
 
 /**
  * Show a toast message reporting whether publication of Element was successful
@@ -98,6 +99,7 @@ const PublishAction = (MenuComponent) => (props) => {
       formData,
       actions: { handlePublishBlock },
       reinitialiseForm,
+      handleVersionStatus,
     } = props;
 
     let actionFlow = new Promise((resolve) => resolve());
@@ -114,6 +116,10 @@ const PublishAction = (MenuComponent) => (props) => {
     // Perform publish. Data is assumed to be up to date
     actionFlow
       .then(() => handlePublishBlock(id))
+      .then((data) => {
+        const newData = data.data.publishBlock;
+        handleVersionStatus(newData.isPublished, newData.isLiveVersion);
+      })
       .then(() => reportPublicationStatus(type.title, title, true))
       .catch(() => reportPublicationStatus(type.title, title, false));
   };
@@ -162,7 +168,10 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     reinitialiseForm(savedData) {
       dispatch(initialize(`element.${formName}`, savedData));
-    }
+    },
+    handleVersionStatus(isPublished, isLiveVersion) {
+      dispatch(elementActions.changeVersionState(`element.${formName}`, { isPublished, isLiveVersion }));
+    },
   };
 }
 

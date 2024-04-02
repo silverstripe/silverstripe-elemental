@@ -1,9 +1,12 @@
 /* global window */
 import React from 'react';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import unpublishBlockMutation from 'state/editor/unpublishBlockMutation';
+import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import i18n from 'i18n';
+import * as elementActions from 'state/reducer/ElementActions';
 
 /**
  * Adds the elemental menu action to unpublish a published block
@@ -16,7 +19,7 @@ const UnpublishAction = (MenuComponent) => (props) => {
     );
   }
 
-  const { element, type, actions: { handleUnpublishBlock } } = props;
+  const { element, type, actions: { handleUnpublishBlock }, handleVersionStatus } = props;
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -31,6 +34,10 @@ const UnpublishAction = (MenuComponent) => (props) => {
 
     if (handleUnpublishBlock) {
       handleUnpublishBlock(element.id)
+        .then((data) => {
+          const newData = data.data.unpublishBlock;
+          handleVersionStatus(newData.isPublished, newData.isLiveVersion);
+        })
         .then(() => {
           const preview = $('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
@@ -85,6 +92,19 @@ const UnpublishAction = (MenuComponent) => (props) => {
   );
 };
 
+function mapDispatchToProps(dispatch, ownProps) {
+  const formName = loadElementFormStateName(ownProps.element.id);
+
+  return {
+    handleVersionStatus(isPublished, isLiveVersion) {
+      dispatch(elementActions.changeVersionState(`element.${formName}`, { isPublished, isLiveVersion }));
+    },
+  };
+}
+
 export { UnpublishAction as Component };
 
-export default compose(unpublishBlockMutation, UnpublishAction);
+export default compose(
+  unpublishBlockMutation,
+  connect(null, mapDispatchToProps),
+  UnpublishAction);

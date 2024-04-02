@@ -7,6 +7,7 @@ import i18n from 'i18n';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { initialize } from 'redux-form';
+import * as elementActions from 'state/reducer/ElementActions';
 
 /**
  * Using a REST backend, serialize the current form data and post it to the backend endpoint to save
@@ -24,7 +25,7 @@ const SaveAction = (MenuComponent) => (props) => {
   const handleClick = (event) => {
     event.stopPropagation();
 
-    const { element, type, securityId, formData, reinitialiseForm } = props;
+    const { element, type, securityId, formData, reinitialiseForm, handleVersionStatus } = props;
     const { jQuery: $ } = window;
     const noTitle = i18n.inject(
       i18n._t(
@@ -68,6 +69,7 @@ const SaveAction = (MenuComponent) => (props) => {
           type: 'success'
         });
       })
+      .then(() => handleVersionStatus(element.isPublished, element.isLiveVersion))
       .catch(() => {
         $.noticeAdd({
           text: i18n.inject(
@@ -119,7 +121,10 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     reinitialiseForm(savedData) {
       dispatch(initialize(`element.${formName}`, savedData));
-    }
+    },
+    handleVersionStatus(isPublished, isLiveVersion) {
+      dispatch(elementActions.changeVersionState(`element.${formName}`, { isPublished, isLiveVersion }));
+    },
   };
 }
 
