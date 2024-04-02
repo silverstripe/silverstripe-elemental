@@ -8,7 +8,9 @@ mutation UnpublishBlock($blockId:ID!) {
   unpublishBlock(
     id: $blockId
       ) {
-    id
+    id,
+    isPublished,
+    isLiveVersion,
   }
 }
 `;

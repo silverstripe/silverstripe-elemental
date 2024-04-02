@@ -6,7 +6,9 @@ import { config as readBlocksConfig, query as readBlocksQuery } from './readBloc
 const mutation = gql`
 mutation PublishBlock($blockId:ID!) {
   publishBlock(id: $blockId) {
-    id
+    id,
+    isPublished,
+    isLiveVersion
   }
 }
 `;

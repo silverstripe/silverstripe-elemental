@@ -22,6 +22,7 @@ function makeProps(obj = {}) {
       handleUnpublishBlock: () => {}
     },
     toggle: false,
+    handleVersionStatus: () => {},
     ...obj,
   };
 }
