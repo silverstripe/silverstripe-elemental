@@ -15,6 +15,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\RelatedData\StandardRelatedDataService;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ViewableData;
 
@@ -328,15 +329,9 @@ class ElementalAreasExtension extends DataExtension
                 }
             }
 
-            $needsPublishing = ViewableData::has_extension($elementalObject, Versioned::class)
-                && $elementalObject->isPublished();
-
             /** @var ElementalAreasExtension $elementalObject */
             $elementalObject->ensureElementalAreasExist($elementalAreas);
             $elementalObject->write();
-            if ($needsPublishing) {
-                $elementalObject->publishRecursive();
-            }
         }
 
         $this->owner->extend('onAfterRequireDefaultElementalRecords');
