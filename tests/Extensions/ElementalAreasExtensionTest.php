@@ -2,15 +2,18 @@
 
 namespace DNADesign\Elemental\Tests\Extensions;
 
-use DNADesign\Elemental\Extensions\ElementalAreasExtension;
+use SilverStripe\Dev\SapphireTest;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\LiteralField;
+use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestElement;
-use DNADesign\Elemental\Tests\Src\TestUnusedElement;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Dev\SapphireTest;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
-use SilverStripe\Forms\LiteralField;
+use DNADesign\Elemental\Tests\Src\TestUnusedElement;
+use DNADesign\Elemental\Tests\Src\TestVersionedDataObject;
+use DNADesign\Elemental\Extensions\ElementalAreasExtension;
+use SilverStripe\ORM\DB;
 
 class ElementalAreasExtensionTest extends SapphireTest
 {
@@ -18,11 +21,15 @@ class ElementalAreasExtensionTest extends SapphireTest
         SiteTree::class => [
             ElementalAreasExtension::class,
         ],
+        TestVersionedDataObject::class => [
+            ElementalAreasExtension::class,
+        ],
     ];
 
     protected static $extra_dataobjects = [
         TestElement::class,
         TestUnusedElement::class,
+        TestVersionedDataObject::class,
     ];
 
     protected function setUp(): void
@@ -109,5 +116,31 @@ class ElementalAreasExtensionTest extends SapphireTest
             [false, true, HTMLEditorField::class],
             [true, true, HTMLEditorField::class],
         ];
+    }
+
+    public function testRequireDefaultRecords()
+    {
+        /** @var TestVersionedDataObject|ElementalAreasExtension|Versioned $object */
+        $object = new TestVersionedDataObject();
+        $object->Title = 'abc';
+        $id = $object->write();
+        $object->publishSingle();
+        $object->Title = 'def';
+        $object->write();
+        $this->assertTrue($object->isModifiedOnDraft());
+        $tableName = $object->getSchema()->tableName(TestVersionedDataObject::class);
+        $tableNameLive = $tableName . '_Live';
+        // Explicitly set ElementalAreaID to null to simulate a fresh object that
+        // has the ElementalAreasExtension applied to it
+        // There's an onBeforeWrite() hook that will set ElementalAreaID so update DB directly
+        DB::query("UPDATE $tableName SET ElementalAreaID = NULL WHERE ID = $id");
+        DB::query("UPDATE $tableNameLive SET ElementalAreaID = NULL WHERE ID = $id");
+        $object->requireDefaultRecords();
+        // refetch object to ensure we're not using a cached version
+        $object = TestVersionedDataObject::get()->byID($id);
+        // assert that an ElementalID was set on the object
+        $this->assertSame(ElementalArea::get()->max('ID'), $object->ElementalAreaID);
+        // assert that we didn't accidentally publish the modified object
+        $this->assertTrue($object->isModifiedOnDraft());
     }
 }
