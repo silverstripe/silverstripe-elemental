@@ -1,25 +1,30 @@
-# Elemental - advanced setup
+---
+title: Advanced setup
+---
+
+# Advanced setup
 
 This documentation assumes that the reader is already familiar with basic concepts
 of the [Elemental module](https://github.com/dnadesign/silverstripe-elemental) and the [Fluent module](https://github.com/tractorcow-farm/silverstripe-fluent).
 This document provides an advanced setup guide for enterprise scale projects using these modules.
 
 Table of Contents:
-* [Elemental setup](#elemental-setup)
-    * [Page setup](#page-setup)
-    * [Block setup](#block-setup)
-    * [Adding additional Elemental Areas](#adding-additional-elemental-areas)
-        * [Allowing different Block types for different Elemental Areas](#adding-additional-elemental-areas)
-* [Elemental with Fluent setup](#elemental-with-fluent-setup)
-	* [Types of localisation](#types-of-localisation)
-		* [Benefits of indirect localisation](#benefits-of-indirect-localisation)
-		* [Downsides of indirect localisation](#downsides-of-indirect-localisation)
-	* [Unit tests](#unit-tests)
-		* [Make sure your fixture has some locales setup](#make-sure-your-fixture-has-some-locales-setup)
-		* [Localised fixture data (automatic, single locale)](#localised-fixture-data-automatic-single-locale)
-		* [Localised fixture data (manual, single or multiple locales)](#localised-fixture-data-manual-single-or-multiple-locales)
-	* [Working with Fluent state](#working-with-fluent-state)
-* [Top Page reference performance enhancement](#top-page-reference-performance-enhancement)
+
+- [Elemental setup](#elemental-setup)
+  - [Page setup](#page-setup)
+  - [Block setup](#block-setup)
+  - [Adding additional Elemental Areas](#adding-additional-elemental-areas)
+    - [Allowing different Block types for different Elemental Areas](#adding-additional-elemental-areas)
+- [Elemental with Fluent setup](#elemental-with-fluent-setup)
+  - [Types of localisation](#types-of-localisation)
+    - [Benefits of indirect localisation](#benefits-of-indirect-localisation)
+    - [Downsides of indirect localisation](#downsides-of-indirect-localisation)
+  - [Unit tests](#unit-tests)
+    - [Make sure your fixture has some locales setup](#make-sure-your-fixture-has-some-locales-setup)
+    - [Localised fixture data (automatic, single locale)](#localised-fixture-data-automatic-single-locale)
+    - [Localised fixture data (manual, single or multiple locales)](#localised-fixture-data-manual-single-or-multiple-locales)
+  - [Working with Fluent state](#working-with-fluent-state)
+- [Top Page reference performance enhancement](#top-page-reference-performance-enhancement)
 
 ## Elemental setup
 
@@ -30,6 +35,8 @@ This allows more flexibility as other page types can subclass `Page` without inh
 This is useful for covering edge cases that may appear during projects (i.e. not all pages may need blocks).
 
 ```php
+namespace App\PageTypes;
+
 class BlockPage extends Page
 {
     /**
@@ -57,7 +64,7 @@ The main benefit of using blocks is to reuse patterns and functionality across p
 It's possible to add functionality which allows content authors to copy specific blocks to other pages for a quick
 transfer of content data.
 
-Elemental editor `GridField` needs to be adjusted accordingly:
+The elemental editor's [`GridField`](api:SilverStripe\Forms\GridField\GridField) needs to be adjusted accordingly:
 
 ```php
 /**
@@ -93,15 +100,17 @@ Note that we also want to remove `publish` and `archive` actions from blocks.
 These actions will be done only on page level and will cascade down to blocks.
 Make sure to properly configure your objects with the `owns` and `cascade_deletes`.
 
-### Adding additional Elemental Areas
+### Adding additional elemental areas
 
 To keep things simple, we'll assume that you already have one Elemental Area available from applying the default
-`ElementalPageExtension` to your page. This extension is important, as it contains a bunch of required functionality to
-support us adding additional Elemental Areas.
+[`ElementalPageExtension`](api:DNADesign\Elemental\Extensions\ElementalPageExtension) to your page. This extension is important, as it contains a bunch of required functionality to
+support us adding additional `ElementalArea`'s.
 
 Consider the following default page set up.
 
 ```php
+namespace App\PageTypes;
+
 class BlockPage extends Page
 {
     private static $extensions = [
@@ -115,6 +124,8 @@ class BlockPage extends Page
 In order to add additional Elemental Areas to the page, we can add three very important configurations.
 
 ```php
+namespace App\PageTypes;
+
 class BlockPage extends Page
 {
     private static $extensions = [
@@ -142,12 +153,14 @@ class BlockPage extends Page
 
 And that's actually all you need to get started with multiple Elemental Areas.
 
-#### Allowing different Block types for different Elemental Areas
+#### Allowing different block types for different elemental areas
 
 To restrict different Elemental Areas to different Block types, you need to (manually) manipulate the `types` allowed
-for the Gridfield.
+for the [`GridField`](api:SilverStripe\Forms\GridField\GridField).
 
 ```php
+namespace App\PageTypes;
+
 class BlockPage extends Page
 {
     // ...
@@ -172,12 +185,14 @@ class BlockPage extends Page
 }
 ```
 
-## Elemental with Fluent setup
+## Elemental with fluent setup
 
-`Fluent` module provides multiple options how to localise your content, but there is one option which is the best on average: `indirect localisation`.
-The only thing that will be localised directly is the `ElementalArea`relation.
+The [`Fluent`](https://github.com/tractorcow-farm/silverstripe-fluent) module provides multiple options how to localise your content, but there is one option which is the best on average: `indirect localisation`.
+The only thing that will be localised directly is the [`ElementalArea`](api:DNADesign\Elemental\Models\ElementalArea) relation.
 
 ```php
+namespace App\PageTypes;
+
 class BlockPage extends Page
 {
     /**
@@ -195,6 +210,8 @@ This configuration allows us to have different `ElementalArea` for different loc
 We also need to create a copy of the `ElementalArea` when content is being localised.
 
 ```php
+namespace App\PageTypes;
+
 class BlockPage extends Page
 {
     public function onBeforeWrite()
@@ -215,13 +232,15 @@ class BlockPage extends Page
 }
 ```
 
-Note that it's important to have the [cascade_duplicates setting](https://docs.silverstripe.org/en/4/developer_guides/model/relations/#cascading-duplications) present on all the relevant objects so they would copy as well.
+> [!NOTE] It's important to have the [cascade_duplicates setting](https://docs.silverstripe.org/en/4/developer_guides/model/relations/#cascading-duplications) present on all the relevant objects so they would copy as well.
 
 Furthermore, we also need to disable the inheritance for blocks.
 The Fluent module provides multiple extension points, one of them being the `updateLocaliseSelect`.
 We need to create an `Extension` with the following code and apply it to the `BlockPage`:
 
 ```php
+namespace App\Extensions;
+
 class BlockPageFluentExtension extends Extension
 {
     /**
@@ -242,8 +261,9 @@ class BlockPageFluentExtension extends Extension
 }
 ```
 
-
 ```php
+namespace App\PageTypes;
+
 class BlockPage extends Page
 {
     /**
@@ -262,14 +282,14 @@ class BlockPage extends Page
 
 #### Benefits of indirect localisation
 
-* different localisation of pages can have completely different set of blocks which allows greater flexibility
-* localisation is only on page level, so any functionality on block level does not need to care about localisation
-* this is especially useful when writing unit tests as it is significantly easier to set up tests without localisation
+- different localisation of pages can have completely different set of blocks which allows greater flexibility
+- localisation is only on page level, so any functionality on block level does not need to care about localisation
+- this is especially useful when writing unit tests as it is significantly easier to set up tests without localisation
 
 #### Downsides of indirect localisation
 
-* the blocks are unaware of their locales which makes bottom up relation lookup slower
-* this can be remedied by some extra data stored in blocks (see notes below)
+- the blocks are unaware of their locales which makes bottom up relation lookup slower
+- this can be remedied by some extra data stored in blocks (see notes below)
 
 ### Unit tests
 
@@ -308,7 +328,6 @@ protected function setUp(): void
         parent::setUp();
     });
 }
-
 ```
 
 This will localise all your data so you don't need to worry about that in your fixtures. The following fixture will produce a page localised in `en_NZ`:
@@ -326,7 +345,7 @@ In some cases you want to have multiple locales of one page set up in your fixtu
 This means you need to specify localised data manually.
 Example below shows how to specify localised `Title` for two locales of one page.
 Note that each localised field has to be specified for the table that actually holds the field.
-In this case, it's `SiteTree`.
+In this case, it's [`SiteTree`](api:SilverStripe\CMS\Model\SiteTree).
 If you are unsure where your field sits it may be a good idea to check your database structure first and find the relevant table.
 
 ```yml
@@ -346,7 +365,7 @@ SiteTree_Localised:
     Title: ArticlePage1 AU
 ```
 
-### Working with Fluent state
+### Working with fluent state
 
 Make sure you always use the `FluentState` callback to change the global state like this:
 
@@ -361,11 +380,11 @@ FluentState::singleton()->withState(function (FluentState $state) {
 This is very important as global state is reverted back after the callback is executed so it's safe to be used.
 Unit tests benefit mostly from this as this makes sure that there are no dependencies between unit tests as the global state is always changed only locally in one test.
 
-## Top Page reference performance enhancement
+## Top page reference performance enhancement
 
 In some cases your project setup may have deeply nested blocks, for example:
 
-```
+```text
 Page
   ElementalArea
     RowBlock (represents grid row on frontend)
@@ -386,7 +405,7 @@ than using `$Page`.
 If your project makes use of the Fluent module, it is recommended to use the following extensions in place of the ones
 above:
 
-```yaml
+```yml
 DNADesign\Elemental\Models\BaseElement:
   extensions:
     topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
