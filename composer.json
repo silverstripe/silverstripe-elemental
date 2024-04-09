@@ -29,6 +29,7 @@
         "silverstripe/vendor-plugin": "^2"
     },
     "require-dev": {
+        "silverstripe/documentation-lint": "^1",
         "silverstripe/recipe-testing": "^3",
         "silverstripe/frameworktest": "^1",
         "silverstripe/standards": "^1",
@@ -46,6 +47,11 @@
             "client/dist",
             "client/lang"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     },
     "autoload": {
         "psr-4": {

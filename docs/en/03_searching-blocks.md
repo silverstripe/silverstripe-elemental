@@ -1,10 +1,22 @@
-# Searching Blocks
+---
+title: Searching blocks
+---
+
+# Searching blocks
 
 ## Overview
 
-Content created through SilverStripe can be searched in various ways.
+Content created through Silverstripe CMS can be searched in various ways.
 A popular option is the [silverstripe/fulltextsearch](https://github.com/silverstripe/silverstripe-fulltextsearch)
 module, which integrates with search services such as Solr.
+
+For information on configuring Solr please see [the fulltextsearch documentation](https://github.com/silverstripe/silverstripe-fulltextsearch).
+
+> [!NOTE]
+> If using this indexer, be aware that HTML tags will be stripped from the content before it is indexed.
+> The Solr search results may add in emphasis tags or other formatting around matched key words, so you may need
+> to allow unescaped HTML in your search results template. You should use the `$Excerpt` property (see
+> `SolrIndex::search` for more) to display the relevant search matches.
 
 ## Usage
 
