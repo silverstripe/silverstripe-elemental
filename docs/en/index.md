@@ -1,8 +1,8 @@
 ---
-title: Silverstripe elemental
+title: Elemental blocks
 ---
 
-# Silverstripe elemental
+# Elemental blocks
 
 ## Introduction
 
