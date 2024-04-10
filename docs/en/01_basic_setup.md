@@ -105,6 +105,6 @@ module which helps to achieve this.
 
 ## Screenshots
 
-![Elemental content block overview](docs/en/userguide/_images/content-block-overview.png)
+![Elemental content block overview](_images/content-block-overview.png)
 
 [CHILDREN includeFolders]
