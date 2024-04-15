@@ -5,7 +5,7 @@ summary: Learn how to edit content in a content block
 
 # Before we begin
 
-To get started, create a new page in the CMS. See [Pages and content](https://userhelp.silverstripe.org/en/5/creating_pages_and_content/) to learn more.
+To get started, create a new page in the CMS. See [Pages and content](https://userhelp.silverstripe.org/en/creating_pages_and_content/) to learn more.
 
 ## Creating and editing content {#creating-blocks}
 
@@ -23,7 +23,8 @@ To edit, select the content block or click the ***Expand*** button shown as a dr
 
 Enter your content as required, provide a title for the block and choose whether you want the title to be shown on the page or not via the ***Displayed*** checkbox field.
 
-<div class="note" markdown="1"> The content block will remain open until collapsed or the page is reloaded. </div>
+> [!NOTE]
+> The content block will remain open until collapsed or the page is reloaded.
 
 ![Expanded content block](_images/inline_editing.png)
 
@@ -31,13 +32,15 @@ Enter your content as required, provide a title for the block and choose whether
 
 To change the order of content blocks in a page, simply click and hold anywhere on the block, then drag and release to reorder the item.
 
-<div class="note" markdown="1"> Expanded blocks will collapse upon pick up.</div>
+> [!NOTE]
+> Expanded blocks will collapse upon pick up.
 
 ![Reordering content blocks](_images/reorder_blocks.png)
 
 When you release the block will automatically save their new positions, however you may need to publish the page to see the new order.
 
-<div class="note" markdown="1">Similar to the reorganisation of pages, the state of a block is changed after it is relocated and a new version is created.</div>
+> [!NOTE]
+> Similar to the reorganisation of pages, the state of a block is changed after it is relocated and a new version is created.
 
 ## Adding blocks between existing blocks {#adding-between-blocks}
 
@@ -75,8 +78,8 @@ In ***Settings*** your developer may also choose to add ***Style Variants*** to 
 
 Pages with content blocks allow you to perform actions like publish at a page level, but you also have access to perform similar actions on individual blocks. Allowing the ability for blocks to be managed and edited by multiple CMS authors while remaining in draft while other blocks get published. This allows for more flexibility of individual blocks for example if a block has user permissions.
 
-To save or publish an individual content block select the ***More options*** dropdown. To save or publish the whole page select from the Action toolbar of the CMS. See [Saving changes and publishing](https://userhelp.silverstripe.org/en/5/creating_pages_and_content/creating_and_editing_content/saving_changes_and_publishing/) for more information.
+To save or publish an individual content block select the ***More options*** dropdown. To save or publish the whole page select from the Action toolbar of the CMS. See [Saving changes and publishing](https://userhelp.silverstripe.org/en/creating_pages_and_content/creating_and_editing_content/saving_changes_and_publishing/) for more information.
 
 ### Archiving blocks
 
-To Archive a block select *Archive* in the ***More options*** dropdown. See [Archiving](https://userhelp.silverstripe.org/en/5/creating_pages_and_content/archive/) for more information.
+To Archive a block select *Archive* in the ***More options*** dropdown. See [Archiving](https://userhelp.silverstripe.org/en/creating_pages_and_content/archive/) for more information.
