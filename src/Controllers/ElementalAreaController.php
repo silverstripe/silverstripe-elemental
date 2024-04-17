@@ -6,9 +6,7 @@ use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Services\ElementTypeRegistry;
 use SilverStripe\CMS\Controllers\CMSMain;
-use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
-use SilverStripe\Control\HTTPResponse_Exception;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\Form;
 use SilverStripe\ORM\ValidationException;
@@ -17,7 +15,6 @@ use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Control\Controller;
-use SilverStripe\Dev\Deprecation;
 
 /**
  * Controller for "ElementalArea" - handles loading and saving of in-line edit forms in an elemental area in admin
@@ -59,20 +56,10 @@ class ElementalAreaController extends CMSMain
      * - GET requests to get the FormSchema via getElementForm() called from LeftAndMain::schema()
      * - POST Requests to save the Form. Will be handled by to FormRequestHandler::httpSubmission()
      * /admin/linkfield/elementForm/<ElementID>
-     *
-     * @param HTTPRequest $request - deprecated 5.3.0 Will be removed without equivalent functionality to replace it
-     * @return Form
      */
-    public function elementForm(HTTPRequest $request = null)
+    public function elementForm(HTTPRequest $request): Form
     {
-        $id = $this->getRequest()->param('ItemID');
-
-        // Respect previous behaviour
-        // This should just be removed later and so that it 404's below when BaseElement::get()->byID($id) fails
-        if (!$id) {
-            $this->jsonError(400);
-        }
-
+        $id = $request->param('ItemID');
         // Note that new elements are added via graphql, so only using this endpoint for editing existing
         $element = BaseElement::get()->byID($id);
         if (!$element) {
@@ -87,17 +74,9 @@ class ElementalAreaController extends CMSMain
     /**
      * This method is called from LeftAndMain::schema()
      * /admin/linkfield/schema/elementForm/<ElementID>
-     *
-     * @param int $elementID
-     * @return Form|null Returns null if no element exists for the given ID
      */
-    public function getElementForm($elementID)
+    public function getElementForm(): Form
     {
-        $element = BaseElement::get()->byID($elementID);
-        // This is returning null to match legacy behaviour
-        if (!$element) {
-            return null;
-        }
         return $this->elementForm();
     }
 
@@ -178,49 +157,6 @@ class ElementalAreaController extends CMSMain
             $output[$fieldName] = $value;
         }
         return $output;
-    }
-
-    /**
-     * This method should not be used and will be removed
-     *
-     * Save an inline edit form for a block
-     *
-     * @param HTTPRequest $request
-     * @return HTTPResponse|null JSON encoded string or null if an exception is thrown
-     * @throws HTTPResponse_Exception
-     *
-     * @deprecated 5.3.0 Send a POST request to elementForm/$ItemID instead
-     */
-    public function apiSaveForm(HTTPRequest $request)
-    {
-        Deprecation::notice('5.3.0', 'Send a POST request to elementForm/$ItemID instead');
-        throw new HTTPResponse_Exception('This endpoint should not be used');
-    }
-
-    /**
-     * Provides action control for form fields that are request handlers when they're used in an in-line edit form.
-     *
-     * Eg. UploadField
-     *
-     * @param HTTPRequest $request
-     * @return array|HTTPResponse|\SilverStripe\Control\RequestHandler|string
-     *
-     * @deprecated 5.3.0 Will be removed without equivalent functionality to replace it
-     */
-    public function formAction(HTTPRequest $request)
-    {
-        // This method no longer appears to be needed, Form fields on blocks that use nested request handlers
-        // such as UploadField do no use this method.
-        Deprecation::notice('5.3.0', 'This method will be removed without equivalent functionality to replace it');
-        $formName = $request->param('FormName');
-
-        // Get the element ID from the form name
-        $id = substr($formName ?? '', strlen(sprintf(self::FORM_NAME_TEMPLATE, '')));
-        $form = $this->getElementForm($id);
-
-        $field = $form->getRequestHandler()->handleField($request);
-
-        return $field->handleRequest($request);
     }
 
     /**
