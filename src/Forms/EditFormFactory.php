@@ -8,6 +8,9 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Forms\DefaultFormFactory;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Forms\CompositeValidator;
 
 class EditFormFactory extends DefaultFormFactory
 {
@@ -55,6 +58,31 @@ class EditFormFactory extends DefaultFormFactory
         return $fields;
     }
 
+    protected function getFormValidator(RequestHandler $controller = null, $name, $context = [])
+    {
+        /** @var CompositeValidator $compositeValidator */
+        $compositeValidator = parent::getFormValidator($controller, $name, $context);
+        if (!$compositeValidator) {
+            return null;
+        }
+        $id = $context['Record']->ID;
+        foreach ($compositeValidator->getValidatorsByType(RequiredFields::class) as $validator) {
+            $requiredFields = $validator->getRequired();
+            foreach ($requiredFields as $requiredField) {
+                // Add more required fields with appendend field prefixes
+                // this is done so that front end validation works, at least for RequiredFields
+                // you'll end up with two sets of required fields:
+                // - Title -- used for backend validation when inline saving an element
+                // - PageElements_<ElementID>_Title -- used for frontend js validation onchange()
+                // note that if a required field is "missing" from submitted data, this is not a
+                // problem so it's OK to add extra fields here just for frontend validation
+                $prefixedRequiredField = "PageElements_{$id}_$requiredField";
+                $validator->addRequiredField($prefixedRequiredField);
+            }
+        }
+        return $compositeValidator;
+    }
+
     /**
      * Given a {@link FieldList}, give all fields a unique name so they can be used in the same context as
      * other elemental edit forms and the page (or other DataObject) that owns them.
@@ -71,7 +99,7 @@ class EditFormFactory extends DefaultFormFactory
                 // Apply audo-detection of multi-upload before changing the name.
                 $field->setIsMultiUpload($field->getIsMultiUpload());
             }
-            $namespacedName = sprintf(self::FIELD_NAMESPACE_TEMPLATE ?? '', $elementID, $field->getName());
+            $namespacedName = sprintf(self::FIELD_NAMESPACE_TEMPLATE, $elementID, $field->getName());
             $field->setName($namespacedName);
         }
     }

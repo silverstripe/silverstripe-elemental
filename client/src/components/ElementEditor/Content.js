@@ -22,7 +22,19 @@ class Content extends PureComponent {
       handleLoadingError,
       formDirty,
       broken,
+      onFormSchemaSubmitResponse,
+      ensureFormRendered,
+      formHasRendered,
     } = this.props;
+
+    // The '*-rendered-not-visible` class is used to hide the form when it's not visible
+    // It will be rendered off screen via css rather than using display: none because
+    // the form needs to be rendered in order to be submitted
+    const notVisible = !previewExpanded && (ensureFormRendered || formHasRendered);
+    const extraClass = {
+      'element-editor-editform--collapsed': !previewExpanded,
+      'element-editor-editform--rendered-not-visible': notVisible,
+    };
 
     return (
       <div className="element-editor-content">
@@ -35,15 +47,17 @@ class Content extends PureComponent {
             broken={broken}
           />
         }
-        {previewExpanded &&
+        {(previewExpanded || ensureFormRendered || formHasRendered) &&
           // Show inline editable fields
           <InlineEditFormComponent
-            extraClass={{ 'element-editor-editform--collapsed': !previewExpanded }}
+            extraClass={extraClass}
             onClick={(event) => event.stopPropagation()}
             elementId={id}
             activeTab={activeTab}
             onFormInit={onFormInit}
             handleLoadingError={handleLoadingError}
+            onFormSchemaSubmitResponse={onFormSchemaSubmitResponse}
+            notVisible={notVisible}
           />
         }
         {formDirty &&
@@ -69,6 +83,10 @@ Content.propTypes = {
   InlineEditFormComponent: PropTypes.elementType,
   handleLoadingError: PropTypes.func,
   broken: PropTypes.bool,
+  onFormSchemaSubmitResponse: PropTypes.func,
+  onFormInit: PropTypes.func,
+  ensureFormRendered: PropTypes.bool,
+  formHasRendered: PropTypes.bool,
 };
 
 Content.defaultProps = {};

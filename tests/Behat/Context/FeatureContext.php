@@ -44,10 +44,13 @@ class FeatureContext extends SilverStripeContext
         $form = $block->find('css', '.element-editor-editform');
 
         if ($iShouldNotSee) {
-            Assert::assertTrue(!$form || !$form->isVisible(), 'I see the form! Try again later.');
+            Assert::assertTrue(
+                !$form || !$form->isVisible() || $form->hasAttribute('aria-hidden'),
+                'I see the form! Try again later.'
+            );
         } else {
             Assert::assertNotNull($form, 'Edit form not found');
-            Assert::assertTrue($form->isVisible());
+            Assert::assertTrue($form->isVisible() && !$form->hasAttribute('aria-hidden'));
         }
     }
 
