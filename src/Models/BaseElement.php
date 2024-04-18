@@ -35,6 +35,7 @@ use SilverStripe\View\Requirements;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataObjectSchema;
+use SilverStripe\ORM\ValidationResult;
 
 /**
  * Class BaseElement
@@ -304,13 +305,18 @@ class BaseElement extends DataObject implements CMSPreviewable
         return Permission::check('CMS_ACCESS', 'any', $member);
     }
 
-    public function write($showDebug = false, $forceInsert = false, $forceWrite = false, $writeComponents = false)
-    {
+    public function write(
+        $showDebug = false,
+        $forceInsert = false,
+        $forceWrite = false,
+        $writeComponents = false,
+        bool $skipValidation = false
+    ) {
         // Skips writes for broken blocks, so that we can still publish the page to allow all other blocks to publish.
         if ($this->ObsoleteClassName) {
             return $this->ID;
         }
-        return parent::write($showDebug, $forceInsert, $forceWrite, $writeComponents);
+        return parent::write($showDebug, $forceInsert, $forceWrite, $writeComponents, $skipValidation);
     }
 
     /**
@@ -553,7 +559,7 @@ JS
         }
         // Allow projects to update contents of third-party elements.
         $this->extend('updateContentForCmsSearch', $contents);
-        
+
         // Use |#| to delimit different fields rather than space so that you don't
         // accidentally join results of two columns that are next to each other in a table
         $content = implode('|#|', array_filter($contents));

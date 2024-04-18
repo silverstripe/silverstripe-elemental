@@ -94,10 +94,10 @@ class Resolver
 
         if ($afterElementID !== null) {
             /** @var ReorderElements $reorderer */
-            $reorderer = Injector::inst()->create(ReorderElements::class, $newElement);
+            $reorderer = Injector::inst()->create(ReorderElements::class, $newElement, true);
             $reorderer->reorder($afterElementID); // also writes the element
         } else {
-            $newElement->write();
+            $newElement->write(skipValidation: true);
         }
 
         return $newElement;
