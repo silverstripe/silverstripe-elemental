@@ -50,3 +50,13 @@ Feature: Don't lose content when page or block is invalid
     Then the "Content" field for block 1 should contain "New sample content"
       And the "Title" field for block 1 should contain "Charlie's Block"
       And I should see the ".element-editor-header__version-state--draft" element
+
+  Scenario: New blocks don't automatically trigger validation errors
+    Given I add an extension "DNADesign\Elemental\Tests\Src\ValidationFailedExtension" to the "DNADesign\Elemental\Models\BaseElement" class
+      And I go to "/admin/pages"
+      And I left click on "Blocks Page" in the tree
+    Then I should see a list of blocks
+    When I press the "Add block" button
+    Then I press the "Content" button in the add block popover
+    Then I should see "Untitled Content block" as the title for block 1
+    And I should see "Alice's Block" as the title for block 2
