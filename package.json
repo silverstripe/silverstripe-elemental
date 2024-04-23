@@ -39,6 +39,7 @@
     "classnames": "^2.3.2",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
+    "md5": "^2.3.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dnd": "^5.0.0",

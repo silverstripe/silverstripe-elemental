@@ -25,6 +25,7 @@ class Content extends PureComponent {
       onFormSchemaSubmitResponse,
       ensureFormRendered,
       formHasRendered,
+      innerRef,
     } = this.props;
 
     // The '*-rendered-not-visible` class is used to hide the form when it's not visible
@@ -35,6 +36,19 @@ class Content extends PureComponent {
       'element-editor-editform--collapsed': !previewExpanded,
       'element-editor-editform--rendered-not-visible': notVisible,
     };
+
+    // console.log([
+    //   'notVisible', notVisible,
+    //   'previewExpanded', previewExpanded,
+    //   'ensureFormRendered', ensureFormRendered,
+    //   'formHasRendered', formHasRendered,
+    //   'extraClass', extraClass
+    // ])
+    console.log('&& Content.formDirty', formDirty);
+    console.log('&& Content.ensureFormRendered', ensureFormRendered);
+    console.log('&& Content.formHasRendered', formHasRendered);
+    console.log('&& Content.previewExpanded', previewExpanded);
+    console.log('&& Content.notVisible', notVisible);
 
     return (
       <div className="element-editor-content">
@@ -49,16 +63,19 @@ class Content extends PureComponent {
         }
         {(previewExpanded || ensureFormRendered || formHasRendered) &&
           // Show inline editable fields
-          <InlineEditFormComponent
-            extraClass={extraClass}
-            onClick={(event) => event.stopPropagation()}
-            elementId={id}
-            activeTab={activeTab}
-            onFormInit={onFormInit}
-            handleLoadingError={handleLoadingError}
-            onFormSchemaSubmitResponse={onFormSchemaSubmitResponse}
-            notVisible={notVisible}
-          />
+          <>
+            <InlineEditFormComponent
+              extraClass={extraClass}
+              onClick={(event) => event.stopPropagation()}
+              elementId={id}
+              activeTab={activeTab}
+              onFormInit={onFormInit}
+              handleLoadingError={handleLoadingError}
+              onFormSchemaSubmitResponse={onFormSchemaSubmitResponse}
+              notVisible={notVisible}
+            />
+            <div ref={innerRef}></div>
+          </>
         }
         {formDirty &&
           <input
@@ -91,13 +108,13 @@ Content.propTypes = {
 
 Content.defaultProps = {};
 
-function mapStateToProps(state, ownProps) {
-  const formName = loadElementFormStateName(ownProps.id);
+// function mapStateToProps(state, ownProps) {
+//   const formName = loadElementFormStateName(ownProps.id);
 
-  return {
-    formDirty: isDirty(`element.${formName}`, getFormState)(state),
-  };
-}
+//   return {
+//     formDirty: isDirty(`element.${formName}`, getFormState)(state),
+//   };
+// }
 
 export { Content as Component };
 
@@ -108,6 +125,7 @@ export default compose(
       SummaryComponent, InlineEditFormComponent,
     }),
     () => 'ElementEditor.ElementList.Element'
-  ),
-  connect(mapStateToProps)
+  )
+  // ,
+  // connect(mapStateToProps)
 )(Content);

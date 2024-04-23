@@ -72,6 +72,7 @@ Feature: Blocks are validated when inline saving individual blocks
     # Need to save the whole page to stop the alert
     And I press the "Save" button
 
+@sboyd
   Scenario: I can save a closed block after saving a page with a validation error
     When I fill in "x" for "My Field" for block 1
     And I press the "Save" button

@@ -11,6 +11,7 @@ import sortBlockMutation from 'state/editor/sortBlockMutation';
 import ElementDragPreview from 'components/ElementEditor/ElementDragPreview';
 import withDragDropContext from 'lib/withDragDropContext';
 import { createSelector } from 'reselect';
+import md5 from 'md5';
 
 /**
  * The ElementEditor is used in the CMS to manage a list or nested lists of
@@ -83,6 +84,10 @@ class ElementEditor extends PureComponent {
     } = this.props;
     const { dragTargetElementId, dragSpot } = this.state;
 
+    console.log('ElementEditor.render()');
+    console.log('ElementEditor.props ##', md5(JSON.stringify(this.props)));
+    console.log('ElementEditor.state @@', md5(JSON.stringify(this.state)));
+
     // Map the allowed elements because we want to retain the sort order provided by that array.
     const allowedElementTypes = allowedElements.map(className =>
       elementTypes.find(type => type.class === className)
@@ -128,6 +133,7 @@ ElementEditor.propTypes = {
   }),
 };
 
+const filteredElementFormStates = {};
 const defaultElementFormState = {};
 
 // Use a memoization to prevent mapStateToProps() re-rendering on formstate changes
@@ -154,12 +160,19 @@ const elementFormSelector = createSelector([
       [key]: elementFormState[key].values
     }), {});
 
+  const key = md5(JSON.stringify(filteredElementFormState));
+  if (filteredElementFormStates.hasOwnProperty(key)) {
+    return filteredElementFormStates[key];
+  }
+  filteredElementFormStates[key] = filteredElementFormState;
+
   return filteredElementFormState;
 });
 
 function mapStateToProps(state) {
   // Memoize form state and value changes
   const formState = elementFormSelector(state);
+  console.log('ElementEditor.redux.formState !!', md5(JSON.stringify(formState)));
 
   return { formState };
 }

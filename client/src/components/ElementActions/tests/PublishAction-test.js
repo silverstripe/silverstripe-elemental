@@ -3,7 +3,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { Component as PublishAction } from '../PublishAction';
-import { ElementContext } from '../../ElementEditor/Element';
+import { ElementContext } from '../../ElementEditor/ElementContext';
 
 window.jQuery = {
   noticeAdd: () => null
@@ -101,22 +101,7 @@ test('Clicking button calls onPublishButtonClick', () => {
   expect(onPublishButtonClick).toHaveBeenCalled();
 });
 
-test('Do trigger graphql mutation if doPublishElement is true and formHasRendered is true', () => {
-  const handlePublishBlock = jest.fn(() => Promise.resolve());
-  render(
-    <ElementContext.Provider value={makeProviderValue({
-      doPublishElement: true,
-      formHasRendered: true,
-    })}
-    >
-      <ActionComponent {...makeProps({ actions: { handlePublishBlock } })}/>
-    </ElementContext.Provider>
-  );
-  expect(handlePublishBlock).toHaveBeenCalledWith(123);
-});
-
 test('Do not trigger graphql mutation if doPublishElement is true and formHasRendered is false', () => {
-  // handlePublishBlock is a graphql mutation defined in publishBlockMutation.js
   const handlePublishBlock = jest.fn(() => Promise.resolve());
   render(
     <ElementContext.Provider value={makeProviderValue({
@@ -142,30 +127,4 @@ test('Do not trigger graphql mutation if doPublishElement is false and formHasRe
     </ElementContext.Provider>
   );
   expect(handlePublishBlock).not.toHaveBeenCalled();
-});
-
-test('onAfterPublish is called after graphql mutation', async () => {
-  let value = 1;
-  const handlePublishBlock = jest.fn(() => {
-    value = 2;
-    return Promise.resolve();
-  });
-  const onAfterPublish = jest.fn(() => {
-    value = 3;
-  });
-  render(
-    <ElementContext.Provider value={makeProviderValue({
-      doPublishElement: true,
-      formHasRendered: true,
-      onAfterPublish,
-    })}
-    >
-      <ActionComponent {...makeProps({ actions: { handlePublishBlock } })}/>
-    </ElementContext.Provider>
-  );
-  // This is required to ensure the resolved promised returned by handlePublishBlock is handled
-  await new Promise(resolve => setTimeout(resolve, 0));
-  expect(handlePublishBlock).toHaveBeenCalled();
-  expect(onAfterPublish).toHaveBeenCalled();
-  expect(value).toBe(3);
 });

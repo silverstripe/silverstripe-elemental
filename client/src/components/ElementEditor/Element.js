@@ -1,6 +1,7 @@
 /* global window */
 
-import React, { createContext, useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useMutation } from '@apollo/client';
 import PropTypes from 'prop-types';
 import { elementType } from 'types/elementType';
 import { elementTypeType } from 'types/elementTypeType';
@@ -12,14 +13,16 @@ import { connect } from 'react-redux';
 import { submit } from 'redux-form';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
+import { publishBlockMutation } from 'state/editor/publishBlockMutation';
+import { query as readBlocksQuery } from 'state/editor/readBlocksForAreaQuery';
 import * as TabsActions from 'state/tabs/TabsActions';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { elementDragSource, isOverTop } from 'lib/dragHelpers';
 import * as toastsActions from 'state/toasts/ToastsActions';
 import { addFormChanged, removeFormChanged } from 'state/unsavedForms/UnsavedFormsActions';
-
-export const ElementContext = createContext(null);
+import { ElementContext } from 'components/ElementEditor/ElementContext';
+import md5 from 'md5';
 
 /**
  * The Element component used in the context of an ElementEditor shows the summary
@@ -37,6 +40,19 @@ const Element = (props) => {
   const [ensureFormRendered, setEnsureFormRendered] = useState(false);
   const [formHasRendered, setFormHasRendered] = useState(false);
   const [doDispatchAddFormChanged, setDoDispatchAddFormChanged] = useState(false);
+  const [publishBlock] = useMutation(publishBlockMutation);
+  const [forceRerender, setForceRerender] = useState('r');
+
+  const myRef = useRef(null);
+
+  console.log('* Element.props', md5(JSON.stringify(props)));
+  // Object.keys(props).forEach((key) => {
+  //   console.log('- props.' + key, md5(props[key] ?? ''));
+  // });
+  console.log('* Element.props.formDirty', props.formDirty);
+  console.log('@ Element.state.ensureFormRendered', ensureFormRendered);
+  console.log('@ Element.state.formHasRendered', formHasRendered);
+  console.log('@ Element.state.previewExpanded', previewExpanded);
 
   useEffect(() => {
     if (props.connectDragPreview) {
@@ -67,25 +83,19 @@ const Element = (props) => {
         setDoPublishElement(true);
       }
     }
+  }, [justClickedPublishButton, formHasRendered]);
+
+  useEffect(() => {
     if (doDispatchAddFormChanged) {
       setDoDispatchAddFormChanged(false);
       props.dispatchAddFormChanged();
     }
-  }, [justClickedPublishButton, formHasRendered]);
+  }, [doDispatchAddFormChanged]);
 
   const getNoTitle = () => i18n.inject(
     i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
     { type: props.type.title }
   );
-
-  const showSavedElementToast = (elementTitle) => {
-    const title = elementTitle || getNoTitle();
-    const message = i18n.inject(
-      i18n._t('ElementSaveAction.SUCCESS_NOTIFICATION', 'Saved \'{title}\' successfully'),
-      { title }
-    );
-    props.actions.toasts.success(message);
-  };
 
   const showPublishedElementToast = (wasError) => {
     const title = newTitle || getNoTitle();
@@ -102,6 +112,52 @@ const Element = (props) => {
       );
       props.actions.toasts.success(message);
     }
+  };
+
+  // This will trigge a graphql request that will cause this
+  // element to re-render including any updated title and versioned badge
+  const refetchElementalArea = () => window.ss.apolloClient.queryManager.refetchQueries({
+    include: [{
+      query: readBlocksQuery,
+      variables: { id: props.areaId }
+    }]
+  });
+
+  const handleAfterPublish = (wasError) => {
+    showPublishedElementToast(wasError);
+    setDoPublishElement(false);
+    setDoPublishElementAfterSave(false);
+    // Ensure that formDirty becomes falsey after publishing
+    // We need to call at a later render rather than straight away or redux-form may override this
+    // and set the form state to dirty under certain conditions
+    Promise.all(refetchElementalArea())
+      .then(() => props.dispatchRemoveFormChanged());
+  };
+
+  // Save action
+  useEffect(() => {
+    if (formHasRendered && doSaveElement) {
+      props.submitForm();
+      setDoSaveElement(false);
+    }
+  }, [formHasRendered, doSaveElement]);
+
+  // Publish action
+  useEffect(() => {
+    if (formHasRendered && doPublishElement) {
+      publishBlock({ variables: { blockId: props.element.id } })
+        .then(() => handleAfterPublish(false))
+        .catch(() => handleAfterPublish(true));
+    }
+  }, [formHasRendered, doPublishElement]);
+
+  const showSavedElementToast = (elementTitle) => {
+    const title = elementTitle || getNoTitle();
+    const message = i18n.inject(
+      i18n._t('ElementSaveAction.SUCCESS_NOTIFICATION', 'Saved \'{title}\' successfully'),
+      { title }
+    );
+    props.actions.toasts.success(message);
   };
 
   /**
@@ -188,12 +244,6 @@ const Element = (props) => {
     }
   };
 
-  const refetchElementalArea = () => {
-    // This will trigger a graphql readOneElementalArea request that will cause this
-    // element to re-render including any updated title and versioned badge
-    window.ss.apolloClient.queryManager.reFetchObservableQueries();
-  };
-
   /**
    * Update the active tab on tab actions menu button click event. Is passed down to InlineEditForm.
    *
@@ -248,33 +298,13 @@ const Element = (props) => {
   const handleSaveButtonClick = () => {
     setEnsureFormRendered(true);
     setDoSaveElement(true);
+    setForceRerender(forceRerender + 'r');
   };
 
   const handlePublishButtonClick = () => {
     setJustClickedPublishButton(true);
     setEnsureFormRendered(true);
-  };
-
-  const handleAfterSave = () => {
-    setDoSaveElement(false);
-  };
-
-  const handleAfterPublish = (wasError) => {
-    showPublishedElementToast(wasError);
-    setDoPublishElement(false);
-    setDoPublishElementAfterSave(false);
-    // Ensure that formDirty becomes falsey after publishing
-    // We need to call at a later render rather than straight away or redux-form may override this
-    // and set the form state to dirty under certain conditions
-    // setTimeout is a hackish way to do this, though I'm not sure how else we can do this
-    // The core issue is that redux-form will detect changes when a form is hydrated for the first
-    // time under certain conditions, specifically during a behat test when trying to publish a closed
-    // block when presumably the apollo cache is empty (or something like that). This happens late and
-    // there are no hooks/callbacks available after this happens the input onchange handlers are fired
-    setTimeout(() => {
-      props.dispatchRemoveFormChanged();
-    }, 500);
-    refetchElementalArea();
+    setForceRerender(forceRerender + 'r');
   };
 
   const handleFormInit = (activeTab) => {
@@ -288,11 +318,14 @@ const Element = (props) => {
     // admin/elemental-area/schema/<ItemID>
     // Instead of the one used by the POST submission i.e.
     // admin/elemental-area/elementForm/<LinkID>
+    console.log('Element.handleFormSchemaSubmitResponse()');
     const hasValidationErrors = formSchema.id.match(/\/schema\/elemental-area\/([0-9]+)/);
     if (hasValidationErrors) {
       if (props.type.inlineEditable) {
+        console.log('&&& Element.handleFormSchemaSubmitResponse() validation errors inlineEditable');
         setPreviewExpanded(true);
       }
+
       // Ensure that formDirty remains truthy
       // Note we need to call props.dispatchAddFormChanged() on the next render rather than straight away
       // or it will get unset by code somewhere else, probably redux-form
@@ -328,9 +361,10 @@ const Element = (props) => {
     isDragging,
     isOver,
     onDragEnd,
-    submitForm,
     formDirty,
   } = props;
+
+  console.log('element.id', element.id, 'forceRerender', forceRerender);
 
   if (!element.id) {
     return null;
@@ -350,15 +384,11 @@ const Element = (props) => {
   // eslint-disable-next-line react/jsx-no-constructed-context-values
   const providerValue = {
     formDirty,
-    formHasRendered,
     onPublishButtonClick: handlePublishButtonClick,
-    doPublishElement,
     onSaveButtonClick: handleSaveButtonClick,
-    doSaveElement,
-    onAfterSave: handleAfterSave,
-    onAfterPublish: handleAfterPublish,
-    submitForm,
   };
+
+  console.log('# Element.isDragging', isDragging);
 
   const content = connectDropTarget(<div
     className={elementClassNames}
@@ -395,9 +425,13 @@ const Element = (props) => {
         broken={type.broken}
         onFormSchemaSubmitResponse={handleFormSchemaSubmitResponse}
         onFormInit={() => handleFormInit(activeTab)}
+        formDirty={formDirty}
+        innerRef={myRef}
       />
     </ElementContext.Provider>
   </div>);
+
+  console.log('myRef', myRef.current);
 
   if (!previewExpanded) {
     return connectDragSource(content);

@@ -1,15 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import i18n from 'i18n';
-import { ElementContext } from 'components/ElementEditor/Element';
+import { ElementContext } from 'components/ElementEditor/ElementContext';
 
 const SaveAction = (MenuComponent) => (props) => {
   const {
-    doSaveElement,
     onSaveButtonClick,
-    onAfterSave,
-    submitForm,
-    formHasRendered,
     formDirty,
   } = useContext(ElementContext);
 
@@ -18,23 +14,12 @@ const SaveAction = (MenuComponent) => (props) => {
     onSaveButtonClick();
   };
 
-  const saveElement = () => {
-    submitForm();
-    onAfterSave();
-  };
-
   const newProps = {
     title: i18n._t('ElementSaveAction.SAVE', 'Save'),
     className: 'element-editor__actions-save',
     onClick: handleClick,
     toggle: props.toggle,
   };
-
-  useEffect(() => {
-    if (formHasRendered && doSaveElement) {
-      saveElement();
-    }
-  }, [formHasRendered, doSaveElement]);
 
   if (!props.expandable || props.type.broken) {
     // Some elemental blocks can not be edited inline (e.g. User form blocks)

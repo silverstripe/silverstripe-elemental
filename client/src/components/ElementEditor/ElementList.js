@@ -105,6 +105,7 @@ class ElementList extends Component {
   }
 
   render() {
+    console.log('%%% ElementList.render()');
     const { blocks } = this.props;
     const listClassNames = classNames(
       'elemental-editor-list',

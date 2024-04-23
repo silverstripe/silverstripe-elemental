@@ -61,6 +61,7 @@ jQuery.entwine('ss', ($) => {
         root = createRoot(this[0]);
         this.setReactRoot(root);
       }
+      console.log('* elemental entwine.js onmatch()');
       root.render(<ElementEditorComponent {...props} />);
     },
 
@@ -90,6 +91,7 @@ jQuery.entwine('ss', ($) => {
           $('.cms-edit-form').data('hasValidationErrors', false);
           resetStores();
         } else {
+          console.log('* entwine.js from .cms-edit-form not isValid');
           $('.cms-edit-form').data('hasValidationErrors', true);
         }
       }
@@ -98,6 +100,7 @@ jQuery.entwine('ss', ($) => {
 
   $('.js-injector-boot .element-editor__container .element-form-dirty-state').entwine({
     onmatch() {
+      console.log('* entwine.js dirty state onmatch()');
       $('.cms-edit-form').trigger('change');
     },
     onunmatch() {
