@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import publishBlockMutation from 'state/editor/publishBlockMutation';
 import i18n from 'i18n';
-import { ElementContext } from 'components/ElementEditor/Element';
+import { ElementContext } from 'components/ElementEditor/ElementContext';
 
 /**
  * Adds the elemental menu action to publish a draft/modified block

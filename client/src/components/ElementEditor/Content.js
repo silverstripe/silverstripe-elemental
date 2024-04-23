@@ -2,10 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'lib/Injector';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
-import { isDirty } from 'redux-form';
-import getFormState from 'lib/getFormState';
 
 class Content extends PureComponent {
   render() {
@@ -87,17 +83,10 @@ Content.propTypes = {
   onFormInit: PropTypes.func,
   ensureFormRendered: PropTypes.bool,
   formHasRendered: PropTypes.bool,
+  formDirty: PropTypes.object,
 };
 
 Content.defaultProps = {};
-
-function mapStateToProps(state, ownProps) {
-  const formName = loadElementFormStateName(ownProps.id);
-
-  return {
-    formDirty: isDirty(`element.${formName}`, getFormState)(state),
-  };
-}
 
 export { Content as Component };
 
@@ -108,6 +97,5 @@ export default compose(
       SummaryComponent, InlineEditFormComponent,
     }),
     () => 'ElementEditor.ElementList.Element'
-  ),
-  connect(mapStateToProps)
+  )
 )(Content);

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import AbstractAction from 'components/ElementActions/AbstractAction';
 import i18n from 'i18n';
-import { ElementContext } from 'components/ElementEditor/Element';
+import { ElementContext } from 'components/ElementEditor/ElementContext';
 
 const SaveAction = (MenuComponent) => (props) => {
   const {

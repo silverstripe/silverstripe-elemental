@@ -3,7 +3,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { Component as PublishAction } from '../PublishAction';
-import { ElementContext } from '../../ElementEditor/Element';
+import { ElementContext } from '../../ElementEditor/ElementContext';
 
 window.jQuery = {
   noticeAdd: () => null

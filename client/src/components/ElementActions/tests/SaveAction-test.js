@@ -4,7 +4,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { Component as SaveAction } from '../SaveAction';
-import { ElementContext } from '../../ElementEditor/Element';
+import { ElementContext } from '../../ElementEditor/ElementContext';
 
 function makeProps(obj = {}) {
   return {

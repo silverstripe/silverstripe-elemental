@@ -1,6 +1,6 @@
 /* global window */
 
-import React, { createContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { elementType } from 'types/elementType';
 import { elementTypeType } from 'types/elementTypeType';
@@ -12,14 +12,14 @@ import { connect } from 'react-redux';
 import { submit } from 'redux-form';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
+import { query as readBlocksForAreaQuery } from 'state/editor/readBlocksForAreaQuery';
 import * as TabsActions from 'state/tabs/TabsActions';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { elementDragSource, isOverTop } from 'lib/dragHelpers';
 import * as toastsActions from 'state/toasts/ToastsActions';
 import { addFormChanged, removeFormChanged } from 'state/unsavedForms/UnsavedFormsActions';
-
-export const ElementContext = createContext(null);
+import { ElementContext } from 'components/ElementEditor/ElementContext';
 
 /**
  * The Element component used in the context of an ElementEditor shows the summary
@@ -188,11 +188,14 @@ const Element = (props) => {
     }
   };
 
-  const refetchElementalArea = () => {
-    // This will trigger a graphql readOneElementalArea request that will cause this
-    // element to re-render including any updated title and versioned badge
-    window.ss.apolloClient.queryManager.reFetchObservableQueries();
-  };
+  // This will triggre a graphql request that will cause this
+  // element to re-render including any updated title and versioned badge
+  const refetchElementalArea = () => window.ss.apolloClient.queryManager.refetchQueries({
+    include: [{
+      query: readBlocksForAreaQuery,
+      variables: { id: props.areaId }
+    }]
+  });
 
   /**
    * Update the active tab on tab actions menu button click event. Is passed down to InlineEditForm.
@@ -271,10 +274,10 @@ const Element = (props) => {
     // time under certain conditions, specifically during a behat test when trying to publish a closed
     // block when presumably the apollo cache is empty (or something like that). This happens late and
     // there are no hooks/callbacks available after this happens the input onchange handlers are fired
-    setTimeout(() => {
-      props.dispatchRemoveFormChanged();
-    }, 500);
-    refetchElementalArea();
+    Promise.all(refetchElementalArea())
+      .then(() => {
+        setTimeout(() => props.dispatchRemoveFormChanged(), 500);
+      });
   };
 
   const handleFormInit = (activeTab) => {
