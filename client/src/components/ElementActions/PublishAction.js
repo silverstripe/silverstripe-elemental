@@ -1,8 +1,6 @@
 /* global window */
-import React, { useContext, useEffect } from 'react';
-import { compose } from 'redux';
+import React, { useContext } from 'react';
 import AbstractAction from 'components/ElementActions/AbstractAction';
-import publishBlockMutation from 'state/editor/publishBlockMutation';
 import i18n from 'i18n';
 import { ElementContext } from 'components/ElementEditor/Element';
 
@@ -11,21 +9,11 @@ import { ElementContext } from 'components/ElementEditor/Element';
  */
 const PublishAction = (MenuComponent) => (props) => {
   const {
-    doPublishElement,
     formDirty,
-    formHasRendered,
-    onAfterPublish,
     onPublishButtonClick,
   } = useContext(ElementContext);
 
-  const { element, actions } = props;
-
-  const publishElement = () => {
-    // handlePublishBlock is a graphql mutation defined in publishBlockMutation.js
-    actions.handlePublishBlock(element.id)
-      .then(() => onAfterPublish(false))
-      .catch(() => onAfterPublish(true));
-  };
+  const { element } = props;
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -46,12 +34,6 @@ const PublishAction = (MenuComponent) => (props) => {
     toggle: props.toggle,
   };
 
-  useEffect(() => {
-    if (formHasRendered && doPublishElement) {
-      publishElement();
-    }
-  }, [formHasRendered, doPublishElement]);
-
   if (props.type.broken) {
     // Don't allow this action for a broken element.
     return (
@@ -69,7 +51,4 @@ const PublishAction = (MenuComponent) => (props) => {
 
 export { PublishAction as Component };
 
-export default compose(
-  publishBlockMutation,
-  PublishAction
-);
+export default PublishAction;
