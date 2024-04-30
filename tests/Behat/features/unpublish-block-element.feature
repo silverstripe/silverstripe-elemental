@@ -20,7 +20,6 @@ Feature: Unpublish elements in the CMS
     Then I should see "Block A"
     And I should see "Block B"
 
-@xsboyd
   @modal
   Scenario: I can unpublish a block
     Given I see a list of blocks

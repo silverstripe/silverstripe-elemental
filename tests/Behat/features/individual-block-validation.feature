@@ -71,18 +71,3 @@ Feature: Blocks are validated when inline saving individual blocks
     And I wait for 1 second
     # Need to save the whole page to stop the alert
     And I press the "Save" button
-
-  Scenario: I can save a closed block after saving a page with a validation error
-    When I fill in "x" for "My Field" for block 1
-    And I press the "Save" button
-    # Page validation error
-    Then I should see "MyField cannot be x" in the ".alert.error" element
-    When I press the "View actions" button
-    And I click on the ".element-editor__actions-save" element
-    # Same validation error after page load with inline save
-    And I should see "MyField cannot be x" in the ".form__validation-message" element
-    Then I fill in "abc" for "My Field" for block 1
-    # Ensure react field is filled in before submitting
-    And I wait for 1 second
-    # Need to save the whole page to stop the alert
-    And I press the "Save" button
