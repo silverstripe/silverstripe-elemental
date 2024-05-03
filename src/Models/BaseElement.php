@@ -553,7 +553,7 @@ JS
         }
         // Allow projects to update contents of third-party elements.
         $this->extend('updateContentForCmsSearch', $contents);
-        
+
         // Use |#| to delimit different fields rather than space so that you don't
         // accidentally join results of two columns that are next to each other in a table
         $content = implode('|#|', array_filter($contents));
@@ -841,12 +841,14 @@ JS
     {
         $link = null;
         if ($page = $this->getPage()) {
-            if (ClassInfo::hasMethod($page, 'Link')) {
-                $link = $page->Link($action);
-            }
-            if (!$link && ($page instanceof CMSPreviewable)) {
+            if ($page instanceof CMSPreviewable) {
                 $link = $page->PreviewLink($action);
             }
+
+            if (!$link && ClassInfo::hasMethod($page, 'Link')) {
+                $link = $page->Link($action);
+            }
+
             if ($link) {
                 // The ElementalPreview getvar is used in ElementalPageExtension
                 // The anchor must be at the end of the URL to function correctly

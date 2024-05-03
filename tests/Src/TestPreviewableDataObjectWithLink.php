@@ -16,6 +16,11 @@ class TestPreviewableDataObjectWithLink extends TestPreviewableDataObject implem
         'LinkData' => 'base-link',
     ];
 
+    public function PreviewLink($action = null)
+    {
+        return null;
+    }
+
     public function Link($action = null)
     {
         return $this->LinkData;
