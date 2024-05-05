@@ -2,6 +2,7 @@
 /* global jest, test, describe, it, expect */
 
 import React from 'react';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { render } from '@testing-library/react';
 import { Component as Element } from '../Element';
 
@@ -40,74 +41,80 @@ function makeProps(obj = {}) {
 }
 
 test('Element should render the HeaderComponent and the ContentComponent', () => {
-  const { container } = render(<Element {...makeProps()}/>);
+  const client = new ApolloClient({ cache: new InMemoryCache() });
+  const { container } = render(<ApolloProvider client={client}><Element {...makeProps()}/></ApolloProvider>);
   expect(container.querySelectorAll('.element-editor__element .test-header')).toHaveLength(1);
   expect(container.querySelectorAll('.element-editor__element .test-content')).toHaveLength(1);
 });
 
 test('Element should not render at all if no ID is given', () => {
+  const client = new ApolloClient({ cache: new InMemoryCache() });
   const { container } = render(
-    <Element {...makeProps({
+    <ApolloProvider client={client}><Element {...makeProps({
       element: {
         ...makeProps().element,
         id: ''
       }
     })}
-    />
+    /></ApolloProvider>
   );
   expect(container.querySelectorAll('.element-editor__element')).toHaveLength(0);
 });
 
 test('Element should render even if the element is broken', () => {
+  const client = new ApolloClient({ cache: new InMemoryCache() });
   const { container } = render(
-    <Element {...makeProps({
+    <ApolloProvider client={client}><Element {...makeProps({
       type: {
         broken: true
       }
     })}
-    />
+    /></ApolloProvider>
   );
   expect(container.querySelectorAll('.element-editor__element .test-header')).toHaveLength(1);
   expect(container.querySelectorAll('.element-editor__element .test-content')).toHaveLength(1);
 });
 
 test('Element getVersionedStateClassName() should identify draft elements', () => {
+  const client = new ApolloClient({ cache: new InMemoryCache() });
   const { container } = render(
-    <Element {...makeProps({
+    <ApolloProvider client={client}><Element {...makeProps({
       element: {
         ...makeProps().element,
         isPublished: false
       }
     })}
-    />
+    /></ApolloProvider>
   );
   expect(container.querySelector('.element-editor__element').classList.contains('element-editor__element--draft')).toBe(true);
 });
 
 test('Element getVersionedStateClassName() should identify modified elements', () => {
+  const client = new ApolloClient({ cache: new InMemoryCache() });
   const { container } = render(
-    <Element {...makeProps({
+    <ApolloProvider client={client}><Element {...makeProps({
       element: {
         ...makeProps().element,
         isPublished: true,
         isLiveVersion: false
       }
     })}
-    />
+    /></ApolloProvider>
   );
   expect(container.querySelectorAll('.element-editor__element--modified')).toHaveLength(1);
 });
 
 test('Element getVersionedStateClassName() should identify published elements', () => {
+  const client = new ApolloClient({ cache: new InMemoryCache() });
   const { container } = render(
-    <Element {...makeProps({
+    <ApolloProvider client={client}><Element {...makeProps({
       element: {
         ...makeProps().element,
         isPublished: true,
         isLiveVersion: true
       }
     })}
-    />
+    /></ApolloProvider>
   );
   expect(container.querySelectorAll('.element-editor__element--published')).toHaveLength(1);
 });
