@@ -34,7 +34,7 @@ it:
     PLURALNAME: 'Aree Elementi'
     PLURALS:
       many: '{count} Aree Elementali'
-      one: 'Un''Area Elementi'
+      one: "Un'Area Elementi"
       other: '{count} Aree Elementali'
     SINGULARNAME: 'Area Elementi'
   DNADesign\Elemental\Reports\ElementTypeReport:
