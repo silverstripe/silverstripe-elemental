@@ -8,14 +8,9 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
   ss.i18n.addDictionary('fr', {
     "ElementAddElementPopover.SEARCH_BLOCKS": "Chercher blocs",
     "ElementAddNewButton.ADD_BLOCK": "Ajouter bloc",
-    "ElementArchiveAction.ARCHIVE": "Archive",
-    "ElementArchiveAction.ARCHIVE_PERMISSION_DENY": "Archive, insufficient permissions",
     "ElementArchiveAction.CONFIRM_DELETE": "Êtes-vous sûr de vouloir envoyer ce bloc aux archives ?",
     "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Attention: Ce bloc sera dépublié avant d'être envoyé aux archives. Êtes-vous sûr de vouloir continuer ?",
-    "ElementArchiveAction.DUPLICATE": "Duplicate",
-    "ElementArchiveAction.DUPLICATE_PERMISSION_DENY": "Duplicate, insufficient permissions",
     "ElementEditForm.ERROR_NOTIFICATION": "Erreur à l'affichage du formulaire d'édition pour ce bloc",
-    "ElementHeader.BROKEN": "This element is of obsolete type {type}.",
     "ElementHeader.EXPAND": "Montrer les champs éditables",
     "ElementHeader.NOTITLE": "Bloc {type} sans titre",
     "ElementHeader.STATE_DRAFT": "L'élément n'a pas encore été publié",
@@ -23,7 +18,6 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementList.ADD_BLOCKS": "Ajouter des blocs pour placer votre contenu",
     "ElementPublishAction.ERROR_NOTIFICATION": "Erreur à la publication de '{title}'",
     "ElementPublishAction.PUBLISH": "Publier",
-    "ElementPublishAction.PUBLISH_PERMISSION_DENY": "Publish, insufficient permissions",
     "ElementPublishAction.SUCCESS_NOTIFICATION": "'{title}' publié avec succès",
     "ElementSaveAction.ERROR_NOTIFICATION": "Erreur à la sauvegarde de '{title}'",
     "ElementSaveAction.SAVE": "Sauvegarder",
@@ -32,13 +26,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementUnpublishAction.ERROR_NOTIFICATION": "Erreur à la dépublication de '{title}'",
     "ElementUnpublishAction.SUCCESS_NOTIFICATION": "'{title}' retiré de la page publiée",
     "ElementUnpublishAction.UNPUBLISH": "Dépublier",
-    "ElementUnpublishAction.UNPUBLISH_PERMISSION_DENY": "Unpublish, insufficient permissions",
-    "ElementalElement.ARCHIVE_BROKEN": "Archive this block",
-    "ElementalElement.BROKEN_DESCRIPTION": "This block is broken and will not display on the front-end. You can archive it to remove it from this elemental area.",
-    "ElementalElement.BROKEN_DESCRIPTION_TITLE": "This block had the title \"{title}\". It is broken and will not display on the front-end. You can archive it to remove it from this elemental area.",
-    "ElementalElement.CHILD_RENDERING_ERROR": "Something went wrong with this block. Please try saving and refreshing the CMS.",
     "ElementalElement.TITLE": "Éditer ce bloc {type}",
-    "HistoricElementView.BLOCK_HISTORY": "Voir bloc",
-    "HistoricElementView.VIEW_BLOCK_HISTORY": "Block history"
+    "HistoricElementView.BLOCK_HISTORY": "Voir bloc"
 });
 }

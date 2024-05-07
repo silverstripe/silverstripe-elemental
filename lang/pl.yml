@@ -11,7 +11,6 @@ pl:
     BlockType: Blok
     CUSTOM_STYLES: 'Wybierz styl...'
     ExtraCssClassesLabel: 'Dodaj niestandardowe klasy CSS'
-    ExtraCssClassesPlaceholder: 'my_class another_class'
     MainTabLabel: Zawartość
     PLURALNAME: bloki
     PLURALS:
@@ -34,19 +33,16 @@ pl:
       other: 'Bloki treści {count}'
     SINGULARNAME: zawartość
   DNADesign\Elemental\Models\ElementalArea:
-    PLURALNAME: 'Elemental Areas'
     PLURALS:
       few: 'Kilka Elemental Areas {count}'
       many: 'Wiele Elemental Areas {count}'
       one: 'Elemental Areas'
       other: 'Inne Elemental Areas {count}'
-    SINGULARNAME: 'Elemental Area'
   DNADesign\Elemental\Reports\ElementTypeReport:
     Title: 'Typy zawartość bloków '
     Total: Razem
     Type: 'Typ zawartości'
   DNADesign\Elemental\Reports\ElementsInUseReport:
-    None: None
     Page: Strona
     ReportTitle: 'Bloki treści w użyciu'
     Summary: Podsumowanie
