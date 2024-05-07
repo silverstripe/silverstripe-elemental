@@ -32,6 +32,49 @@ class TextCheckboxGroupField extends CompositeField
         $this->setTitle($title);
     }
 
+    public function getMessage()
+    {
+        $message = parent::getMessage();
+        if ($message) {
+            return $message;
+        }
+        foreach ($this->getChildren() as $field) {
+            $message = $field->getMessage();
+            if ($message) {
+                return $message;
+            }
+        }
+        return '';
+    }
+
+    public function getMessageType()
+    {
+        $message = parent::getMessage();
+        if ($message) {
+            return parent::getMessageType();
+        }
+        foreach ($this->getChildren() as $field) {
+            if ($field->getMessage()) {
+                return $field->getMessageType();
+            }
+        }
+        return '';
+    }
+
+    public function getMessageCast()
+    {
+        $message = parent::getMessage();
+        if ($message) {
+            return parent::getMessageCast();
+        }
+        foreach ($this->getChildren() as $field) {
+            if ($field->getMessage()) {
+                return $field->getMessageCast();
+            }
+        }
+        return '';
+    }
+
     /**
      * Don't use the custom template for readonly states
      *

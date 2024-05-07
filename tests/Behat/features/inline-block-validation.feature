@@ -1,3 +1,4 @@
+@retry
 Feature: Blocks are validated when inline saving individual blocks
   As a CMS user
   I want to blocks have be validating when individual saving them
@@ -14,6 +15,10 @@ Feature: Blocks are validated when inline saving individual blocks
     And I go to "/admin/pages"
     And I follow "Blocks Page"
     And I click on the caret button for block 1
+    And I click on the "#Form_ElementForm_1_PageElements_1_MyPageID" element
+    And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
+    And I press the "View actions" button
+    And I click on the ".element-editor__actions-save" element
 
   # Note that each test is split into a seperate scenario instead a large single scenario which would
   # be faster due to a limitation with behat testing react where changing the value of a field can
@@ -26,6 +31,7 @@ Feature: Blocks are validated when inline saving individual blocks
     # Will not be an inline save button because formDirty not set yet, intercepted by JS validation
     Then I should not see a ".element-editor__actions-save" element
 
+@sboyd
   Scenario: Field validation error
     When I fill in "x" for "Title" for block 1
     When I press the "View actions" button
