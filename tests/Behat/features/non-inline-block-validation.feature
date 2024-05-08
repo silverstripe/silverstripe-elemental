@@ -8,6 +8,7 @@ Feature: Blocks are validated when non-inline saving blocks
     Given I add an extension "DNADesign\Elemental\Extensions\ElementalPageExtension" to the "Page" class
     And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\ElementContentExtension" to the "DNADesign\Elemental\Models\ElementContent" class
     And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\NumericFieldExtension" to the "SilverStripe\Forms\NumericField" class
+    And a "image" "file1.jpg"
     And content blocks are not in-line editable
     And I go to "/dev/build?flush"
     And a "page" "Blocks Page" with a "My title" content element with "My content" content
@@ -19,11 +20,18 @@ Feature: Blocks are validated when non-inline saving blocks
 
   Scenario: Non-inline block validation
     
-    # Related has_one RequiredFields
+    # Related has_one RequiredFields with ID suffix (MyPageID)
     When I press the "Save" button
     Then I should see "\"My page\" is required" in the "#message-Form_ItemEditForm_MyPageID" element
     And I click on the "#Form_ItemEditForm_MyPageID" element
     And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
+
+    # Related has_one RequiredFields without ID suffix (MyFile)
+    Then I should see "\"My file\" is required" in the "#message-Form_ItemEditForm_MyFile" element
+    When I click "Choose existing" in the ".uploadfield" element
+    And I press the "Back" HTML field button
+    And I click on the file named "file1" in the gallery
+    And I press the "Insert" button
 
     # RequiredFields on TextCheckboxGroupField (composite) field
     When I fill in "Title" with ""
@@ -54,3 +62,5 @@ Feature: Blocks are validated when non-inline saving blocks
     # Success message
     When I press the "Save" button
     Then I should see "Saved content block \"My title\"" in the "#Form_ItemEditForm_error" element
+    Then I should see "Home" in the "#Form_ItemEditForm_MyPageID" element
+    And I should see "file1" in the ".uploadfield-item__title" element
