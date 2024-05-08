@@ -8,6 +8,7 @@ Feature: Blocks are validated when page saving blocks
     Given I add an extension "DNADesign\Elemental\Extensions\ElementalPageExtension" to the "Page" class
     And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\ElementContentExtension" to the "DNADesign\Elemental\Models\ElementContent" class
     And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\NumericFieldExtension" to the "SilverStripe\Forms\NumericField" class
+    And a "image" "file1.jpg"
     And I go to "/dev/build?flush"
     And a "page" "Blocks Page" with a "My title" content element with "My content" content
     And the "group" "EDITOR" has permissions "Access to 'Pages' section"
@@ -17,10 +18,16 @@ Feature: Blocks are validated when page saving blocks
     And I click on the caret button for block 1
     And I click on the "#Form_ElementForm_1_PageElements_1_MyPageID" element
     And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
+    And I click "Choose existing" in the ".uploadfield" element
+    And I press the "Back" HTML field button
+    And I click on the file named "file1" in the gallery
+    And I press the "Insert" button
+    And I press the "Save" button
+    And I click on the caret button for block 1
 
   Scenario: Validation when page saving inline blocks
 
-    # Related has_one RequiredFields
+    # Related has_one RequiredFields with ID suffix (MyPageID)
     When I click on the "#Form_ElementForm_1_PageElements_1_MyPageID" element
     And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(1)" element
     And I press the "Save" button
@@ -28,6 +35,13 @@ Feature: Blocks are validated when page saving blocks
     When I click on the caret button for block 1
     And I click on the "#Form_ElementForm_1_PageElements_1_MyPageID" element
     And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
+
+    # Related has_one RequiredFields without ID suffix (MyFile)
+    When I click on the ".uploadfield-item__remove-btn" element
+    And I press the "Save" button
+    Then I should see "\"My file\" is required" in the "#Form_EditForm_error" element
+    # Old file will be selected at this point, so don't need to reselect
+    And I click on the caret button for block 1
 
     # FormField::validate()
     And I fill in "1" for "My Int" for block 1
@@ -58,3 +72,8 @@ Feature: Blocks are validated when page saving blocks
     # Success message
     When I press the "Save" button
     Then I should see a "Saved 'Blocks Page' successfully." success toast
+
+    # Validate that related data saved correctly
+    When I click on the caret button for block 1
+    Then I should see "Home" in the "#Form_ElementForm_1_PageElements_1_MyPageID" element
+    And I should see "file1" in the ".uploadfield-item__title" element

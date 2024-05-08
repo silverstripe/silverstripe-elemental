@@ -4,6 +4,7 @@ namespace DNADesign\Elemental\Tests\Behat\Context;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
+use PHPUnit\Framework\Assert;
 use SilverStripe\CMS\Tests\Behaviour\FixtureContext as BaseFixtureContext;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DB;
@@ -110,5 +111,56 @@ YAML;
         }
 
         return $page->ElementalArea();
+    }
+
+    /**
+     * The method is copied from asset-admin SilverStripe\AssetAdmin\Tests\Behat\Context\FixtureContext
+     * Behat does not seem to allow two different FixtureContext files to be added in the
+     * same behat.yml config file
+     *
+     * Select a gallery item by type and name
+     *
+     * @Given /^I (?:(?:click on)|(?:select)) the (?:file|folder) named "([^"]+)" in the gallery$/
+     * @param string $name
+     */
+    public function stepISelectGalleryItem($name)
+    {
+        $item = $this->getGalleryItem($name);
+        Assert::assertNotNull($item, "File named $name could not be found");
+        $item->click();
+    }
+
+    /**
+     * The method is copied from asset-admin SilverStripe\AssetAdmin\Tests\Behat\Context\FixtureContext
+     * Behat does not seem to allow two different FixtureContext files to be added in the
+     * same behat.yml config file
+     *
+     * Helper for finding items in the visible gallery view
+     *
+     * @param string $name Title of item
+     * @param int $timeout
+     * @return NodeElement
+     */
+    protected function getGalleryItem($name, $timeout = 3)
+    {
+        /** @var DocumentElement $page */
+        $page = $this->getMainContext()->getSession()->getPage();
+        // Find by cell
+        $cell = $page->find(
+            'xpath',
+            "//div[contains(@class, 'gallery-item')]//div[contains(text(), '{$name}')]"
+        );
+        if ($cell) {
+            return $cell;
+        }
+        // Find by row
+        $row = $page->find(
+            'xpath',
+            "//tr[contains(@class, 'gallery__table-row')]//div[contains(text(), '{$name}')]"
+        );
+        if ($row) {
+            return $row;
+        }
+        return null;
     }
 }
