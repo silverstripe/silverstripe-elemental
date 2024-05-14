@@ -8,7 +8,6 @@ de:
     Title: Titel
     TitleLabel: 'Titel (angezeigt, wenn ausgewählt)'
   DNADesign\Elemental\Models\BaseElement:
-    BlockType: Block
     CUSTOM_STYLES: 'Stil auswählen...'
     ExtraCssClassesLabel: 'Benutzerdefinierte CSS Klassen'
     ExtraCssClassesPlaceholder: 'meine_klasse andere_klasse'

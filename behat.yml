@@ -17,7 +17,7 @@ default:
         - SilverStripe\BehatExtension\Context\LoginContext
         -
           DNADesign\Elemental\Tests\Behat\Context\FixtureContext:
-            - '%paths.modules.silverstripe-elemental%/tests/Behat'
+            - '%paths.modules.silverstripe-elemental%/tests/Behat/files'
         -
           SilverStripe\Framework\Tests\Behaviour\ConfigContext:
             - '%paths.modules.silverstripe-elemental%/tests/Behat/config'

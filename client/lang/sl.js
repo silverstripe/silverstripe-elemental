@@ -9,13 +9,9 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementAddElementPopover.SEARCH_BLOCKS": "Najdi gradnik",
     "ElementAddNewButton.ADD_BLOCK": "Dodaj gradnik",
     "ElementArchiveAction.ARCHIVE": "Arhiv",
-    "ElementArchiveAction.ARCHIVE_PERMISSION_DENY": "Archive, insufficient permissions",
     "ElementArchiveAction.CONFIRM_DELETE": "Želite arhivirati izbrani gradnik?",
     "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Opozorilo: Gradnik bo umaknjen iz objave preden ga bomo arhivirali. Želite nadaljevati?",
-    "ElementArchiveAction.DUPLICATE": "Duplicate",
-    "ElementArchiveAction.DUPLICATE_PERMISSION_DENY": "Duplicate, insufficient permissions",
     "ElementEditForm.ERROR_NOTIFICATION": "Napaka pri prikazu obrazca za urejanje tega gradnika",
-    "ElementHeader.BROKEN": "This element is of obsolete type {type}.",
     "ElementHeader.EXPAND": "Prikaži polja, ki jih je mogoče urejati",
     "ElementHeader.NOTITLE": "{type} gradnik brez naslova",
     "ElementHeader.STATE_DRAFT": "Ta gradnik še ni objavljen",
@@ -23,7 +19,6 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementList.ADD_BLOCKS": "Dodajte gradnik z vsebino",
     "ElementPublishAction.ERROR_NOTIFICATION": "Napaka pri objavi '{title}'",
     "ElementPublishAction.PUBLISH": "Objavi",
-    "ElementPublishAction.PUBLISH_PERMISSION_DENY": "Publish, insufficient permissions",
     "ElementPublishAction.SUCCESS_NOTIFICATION": "Objavili smo '{title}'",
     "ElementSaveAction.ERROR_NOTIFICATION": "Napaka pri shranjevanju '{title}'",
     "ElementSaveAction.SAVE": "Shrani",
@@ -32,13 +27,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementUnpublishAction.ERROR_NOTIFICATION": "Napaka pri umiku '{title}' iz objave",
     "ElementUnpublishAction.SUCCESS_NOTIFICATION": "Z objavljene strani smo odstranili '{title}'",
     "ElementUnpublishAction.UNPUBLISH": "Umakni iz objave",
-    "ElementUnpublishAction.UNPUBLISH_PERMISSION_DENY": "Unpublish, insufficient permissions",
-    "ElementalElement.ARCHIVE_BROKEN": "Archive this block",
-    "ElementalElement.BROKEN_DESCRIPTION": "This block is broken and will not display on the front-end. You can archive it to remove it from this elemental area.",
-    "ElementalElement.BROKEN_DESCRIPTION_TITLE": "This block had the title \"{title}\". It is broken and will not display on the front-end. You can archive it to remove it from this elemental area.",
-    "ElementalElement.CHILD_RENDERING_ERROR": "Something went wrong with this block. Please try saving and refreshing the CMS.",
     "ElementalElement.TITLE": "Urejanje gradnika {type}",
-    "HistoricElementView.BLOCK_HISTORY": "Prikaži gradnik",
-    "HistoricElementView.VIEW_BLOCK_HISTORY": "Block history"
+    "HistoricElementView.BLOCK_HISTORY": "Prikaži gradnik"
 });
 }

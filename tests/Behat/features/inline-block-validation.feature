@@ -1,3 +1,4 @@
+@retry
 Feature: Blocks are validated when inline saving individual blocks
   As a CMS user
   I want to blocks have be validating when individual saving them
@@ -7,6 +8,7 @@ Feature: Blocks are validated when inline saving individual blocks
     Given I add an extension "DNADesign\Elemental\Extensions\ElementalPageExtension" to the "Page" class
     And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\ElementContentExtension" to the "DNADesign\Elemental\Models\ElementContent" class
     And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\NumericFieldExtension" to the "SilverStripe\Forms\NumericField" class
+    And a "image" "file1.jpg"
     And I go to "/dev/build?flush"
     And a "page" "Blocks Page" with a "My title" content element with "My content" content
     And the "group" "EDITOR" has permissions "Access to 'Pages' section"
@@ -14,6 +16,14 @@ Feature: Blocks are validated when inline saving individual blocks
     And I go to "/admin/pages"
     And I follow "Blocks Page"
     And I click on the caret button for block 1
+    And I click on the "#Form_ElementForm_1_PageElements_1_MyPageID" element
+    And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
+    And I click "Choose existing" in the ".uploadfield" element
+    And I press the "Back" HTML field button
+    And I click on the file named "file1" in the gallery
+    And I press the "Insert" button
+    And I press the "View actions" button
+    And I click on the ".element-editor__actions-save" element
 
   # Note that each test is split into a seperate scenario instead a large single scenario which would
   # be faster due to a limitation with behat testing react where changing the value of a field can
@@ -50,6 +60,30 @@ Feature: Blocks are validated when inline saving individual blocks
     And I wait for 1 second
     # Need to save the whole page to stop the alert
     And I press the "Save" button
+
+  Scenario: Related data validation error with ID suffix (MyPageID)
+    When I click on the "#Form_ElementForm_1_PageElements_1_MyPageID" element
+    And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(1)" element
+    And I press the "View actions" button
+    And I click on the ".element-editor__actions-save" element
+    Then I should see "\"My page\" is required" in the ".form__validation-message" element
+    When I click on the "#Form_ElementForm_1_PageElements_1_MyPageID" element
+    And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
+    And I press the "View actions" button
+    And I click on the ".element-editor__actions-save" element
+    Then I should see a "Saved 'My title' successfully" success toast
+
+  Scenario: Related data validation error without ID suffix (MyFile)
+    When I click on the ".uploadfield-item__remove-btn" element
+    And I press the "View actions" button
+    And I click on the ".element-editor__actions-save" element
+    Then I should see "\"My File\" is required" in the ".form__validation-message" element
+    When I click "Choose existing" in the ".uploadfield" element
+    And I click on the file named "file1" in the gallery
+    And I press the "Insert" button
+    And I press the "View actions" button
+    And I click on the ".element-editor__actions-save" element
+    Then I should see a "Saved 'My title' successfully" success toast
 
   Scenario: Publishing triggers validation error
     When I fill in "x" for "Title" for block 1

@@ -10,11 +10,14 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\FieldGroup;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\ORM\DataObjectInterface;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest;
 
 class ElementalAreaField extends GridField
 {
@@ -214,33 +217,84 @@ class ElementalAreaField extends GridField
         return $this->setValue(json_decode($value ?? '', true));
     }
 
+    /**
+     * This will perform FormField validation
+     * DataObject validation will happen in saveInto() as part of $element->write()
+     */
+    public function validate($validator)
+    {
+        $result = true;
+        foreach ($this->getElementData() as $arr) {
+            /** @var BaseElement $element */
+            /** @var array $data */
+            $element = $arr['element'];
+            $data = $arr['data'];
+            $elementForm = $this->getElementForm($element);
+            if (!$elementForm) {
+                continue;
+            }
+            $elementForm->loadDataFrom($data);
+            $formValidatorResult = $elementForm->getValidator()->validate();
+            if (!$formValidatorResult->isValid()) {
+                $validator->getResult()->combineAnd($formValidatorResult);
+                $result = false;
+            }
+        }
+        return $this->extendValidationResult($result, $validator);
+    }
+
     public function saveInto(DataObjectInterface $dataObject)
     {
         parent::saveInto($dataObject);
-
-        $elementData = $this->Value();
-        $idPrefixLength = strlen(sprintf(ElementalAreaController::FORM_NAME_TEMPLATE ?? '', ''));
-
-        if (!$elementData) {
-            return;
+        foreach ($this->getElementData() as $arr) {
+            /** @var BaseElement $element */
+            /** @var array $data */
+            $element = $arr['element'];
+            $data = $arr['data'];
+            $element->updateFromFormData($data);
+            $element->write();
         }
+    }
 
-        foreach ($elementData as $form => $data) {
+    private function getElementData(): array
+    {
+        $elementData = [];
+        $value = $this->Value();
+        if (!$value) {
+            return [];
+        }
+        $idPrefixLength = strlen(sprintf(ElementalAreaController::FORM_NAME_TEMPLATE ?? '', ''));
+        foreach ($value as $form => $data) {
             // Extract the ID
             $elementId = (int) substr($form ?? '', $idPrefixLength ?? 0);
-
-            /** @var BaseElement $element */
             $element = $this->getArea()->Elements()->byID($elementId);
-
             if (!$element) {
                 // Ignore invalid elements
                 continue;
             }
-
             $data = ElementalAreaController::removeNamespacesFromFields($data, $element->ID);
-
-            $element->updateFromFormData($data);
-            $element->write();
+            $elementData[] = ['element' => $element, 'data' => $data];
         }
+        return $elementData;
+    }
+
+    private function getElementForm(BaseElement $element): ?Form
+    {
+        // This is essentially the same method used to generate a form to edit an element
+        // that a non-inline edit form will use - see GridFieldDetailForm::handleItem()
+        $requestHandler = $requestHandler = $this->getForm()->getController();
+        $gridFieldDetailForm = new GridFieldDetailForm();
+        // The validator needs to be explicitly copied from the element to the form
+        $validator = $element->getCMSCompositeValidator();
+        $gridFieldDetailForm->setValidator($validator);
+        $gridFieldDetailFormItemRequest = new GridFieldDetailForm_ItemRequest(
+            $this,
+            $gridFieldDetailForm,
+            $element,
+            $requestHandler,
+            ''
+        );
+        $form = $gridFieldDetailFormItemRequest->ItemEditForm();
+        return $form;
     }
 }

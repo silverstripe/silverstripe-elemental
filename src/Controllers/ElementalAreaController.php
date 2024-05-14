@@ -118,7 +118,7 @@ class ElementalAreaController extends CMSMain
         $dataWithoutNamespaces = static::removeNamespacesFromFields($data, $element->ID);
 
         // Update and write the data object which will trigger model validation
-        $element->update($dataWithoutNamespaces);
+        $element->updateFromFormData($dataWithoutNamespaces);
         if ($element->isChanged()) {
             try {
                 $element->write();

@@ -28,20 +28,15 @@ fr:
       other: '{count} blocs contenu'
     SINGULARNAME: 'bloc contenu'
   DNADesign\Elemental\Models\ElementalArea:
-    PLURALNAME: 'Elemental Areas'
     PLURALS:
       many: '{count} Elemental Areas'
       one: 'An Elemental Area'
       other: '{count} Elemental Areas'
-    SINGULARNAME: 'Elemental Area'
   DNADesign\Elemental\Reports\ElementTypeReport:
     Title: 'Types de blocs'
-    Total: Total
     Type: 'Type de bloc'
   DNADesign\Elemental\Reports\ElementsInUseReport:
     None: Aucun
-    Page: Page
     ReportTitle: 'Blocs utilisés'
     Summary: Résumé
     Title: Titre
-    Type: Type
