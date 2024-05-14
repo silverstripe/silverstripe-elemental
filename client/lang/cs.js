@@ -9,13 +9,9 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementAddElementPopover.SEARCH_BLOCKS": "Prohledat bloky",
     "ElementAddNewButton.ADD_BLOCK": "Přidat blok",
     "ElementArchiveAction.ARCHIVE": "Archiv",
-    "ElementArchiveAction.ARCHIVE_PERMISSION_DENY": "Archive, insufficient permissions",
     "ElementArchiveAction.CONFIRM_DELETE": "Jste si jistí, že chcete blok odeslat do archivu?",
     "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Varování: Tento blok bude před odesláním do archivu označen jako nezveřejněný. Opravdu chcete pokračovat?",
-    "ElementArchiveAction.DUPLICATE": "Duplicate",
-    "ElementArchiveAction.DUPLICATE_PERMISSION_DENY": "Duplicate, insufficient permissions",
     "ElementEditForm.ERROR_NOTIFICATION": "Chyba při zobrazení formuláře úprav tohoto bloku",
-    "ElementHeader.BROKEN": "This element is of obsolete type {type}.",
     "ElementHeader.EXPAND": "Zobrazit editovatelná pole",
     "ElementHeader.NOTITLE": "Nepojmenovaný {type} blok",
     "ElementHeader.STATE_DRAFT": "Položka dosud nebyla zveřejněna",
@@ -23,7 +19,6 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementList.ADD_BLOCKS": "Přidat bloky a umístit obsah",
     "ElementPublishAction.ERROR_NOTIFICATION": "Chyba při zveřejnění '{title}'",
     "ElementPublishAction.PUBLISH": "Zveřejnit",
-    "ElementPublishAction.PUBLISH_PERMISSION_DENY": "Publish, insufficient permissions",
     "ElementPublishAction.SUCCESS_NOTIFICATION": "Úspěšně zveřejněno '{title}'",
     "ElementSaveAction.ERROR_NOTIFICATION": "Chyba při ukládání '{title}'",
     "ElementSaveAction.SAVE": "Uložit",
@@ -32,13 +27,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementUnpublishAction.ERROR_NOTIFICATION": "Chyba při zrušení zveřejnění '{title}'",
     "ElementUnpublishAction.SUCCESS_NOTIFICATION": "'{title}' odstraněno ze zveřejněných stránek",
     "ElementUnpublishAction.UNPUBLISH": "Nezveřejnit",
-    "ElementUnpublishAction.UNPUBLISH_PERMISSION_DENY": "Unpublish, insufficient permissions",
-    "ElementalElement.ARCHIVE_BROKEN": "Archive this block",
-    "ElementalElement.BROKEN_DESCRIPTION": "This block is broken and will not display on the front-end. You can archive it to remove it from this elemental area.",
-    "ElementalElement.BROKEN_DESCRIPTION_TITLE": "This block had the title \"{title}\". It is broken and will not display on the front-end. You can archive it to remove it from this elemental area.",
-    "ElementalElement.CHILD_RENDERING_ERROR": "Something went wrong with this block. Please try saving and refreshing the CMS.",
     "ElementalElement.TITLE": "Upravit blok {type}",
-    "HistoricElementView.BLOCK_HISTORY": "Zobrazit blok",
-    "HistoricElementView.VIEW_BLOCK_HISTORY": "Block history"
+    "HistoricElementView.BLOCK_HISTORY": "Zobrazit blok"
 });
 }
