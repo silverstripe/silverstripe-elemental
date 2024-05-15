@@ -184,7 +184,7 @@ class ElementalAreaField extends GridField
     public function performReadonlyTransformation()
     {
         /** @var CompositeField $readOnlyField */
-        $readOnlyField = $this->castedCopy(CompositeField::class);
+        $readOnlyField = $this->castedCopy(CompositeField::create());
         $blockReducer = $this->getReadOnlyBlockReducer();
         $readOnlyField->setChildren(
             FieldList::create(array_map($blockReducer, $this->getArea()->Elements()->toArray() ?? []))
