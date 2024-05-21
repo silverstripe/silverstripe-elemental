@@ -256,7 +256,7 @@ namespace App\PageTypes;
 
 class BlockPage extends Page
 {
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
 
@@ -293,7 +293,7 @@ class BlockPageFluentExtension extends Extension
      * @param string $field
      * @param Locale $locale
      */
-    public function updateLocaliseSelect(&$query, $table, $field, Locale $locale)
+    protected function updateLocaliseSelect(&$query, $table, $field, Locale $locale)
     {
         // disallow elemental data inheritance in the case that published localised page instance already exists
         if ($field == 'ElementalAreaID' && $this->owner->isPublishedInLocale()) {
