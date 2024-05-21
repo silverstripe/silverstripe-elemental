@@ -14,7 +14,7 @@ use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
  */
 class UniqueHtmlEditorConfigExtension extends Extension implements TestOnly
 {
-    public function updateCMSFields(FieldList $fields)
+    protected function updateCMSFields(FieldList $fields)
     {
         $wysiwyg = $fields->dataFieldByName('HTML');
         if ($wysiwyg instanceof HTMLEditorField) {

@@ -29,7 +29,7 @@ class FluentExtension extends DataExtension
         'TopPageLocale' => 'Varchar',
     ];
 
-    public function updateCMSFields(FieldList $fields)
+    protected function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName('TopPageID');
         $fields->removeByName('TopPageLocale');

@@ -18,7 +18,7 @@ class ElementalCMSMainExtension extends Extension
      *
      * @param Form $form
      */
-    public function updateSearchForm(Form $form)
+    protected function updateSearchForm(Form $form)
     {
         /** @var DropdownField $filterField */
         $filterField = $form->Fields()->fieldByName('Search__FilterClass');

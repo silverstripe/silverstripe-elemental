@@ -12,7 +12,7 @@ use SilverStripe\ORM\FieldType\DBField;
  */
 class GridFieldDetailFormItemRequestExtension extends Extension
 {
-    public function updateBreadcrumbs($crumbs)
+    protected function updateBreadcrumbs($crumbs)
     {
         $record = $this->owner->getRecord();
 

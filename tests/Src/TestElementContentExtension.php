@@ -13,7 +13,7 @@ class TestElementContentExtension extends DataExtension implements TestOnly
         'MyEnum' => 'Enum("Sunny, Cloudy", "Sunny")'
     ];
 
-    public function updateContentForCmsSearch(array &$contents)
+    protected function updateContentForCmsSearch(array &$contents)
     {
         $contents[] = 'This content is from an extension hook';
     }

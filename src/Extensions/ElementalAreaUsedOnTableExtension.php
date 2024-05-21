@@ -20,7 +20,7 @@ class ElementalAreaUsedOnTableExtension extends DataExtension
      *
      * @var array $excludedClasses
      */
-    public function updateUsageExcludedClasses(array &$excludedClasses)
+    protected function updateUsageExcludedClasses(array &$excludedClasses)
     {
         $excludedClasses[] = ElementalArea::class;
     }
@@ -31,7 +31,7 @@ class ElementalAreaUsedOnTableExtension extends DataExtension
      * @param bool $excludeDataObject
      * @param DataObject $dataObject|null
      */
-    public function updateUsageDataObject(?DataObject &$dataObject)
+    protected function updateUsageDataObject(?DataObject &$dataObject)
     {
         if (!($dataObject instanceof BaseElement)) {
             return;
@@ -51,7 +51,7 @@ class ElementalAreaUsedOnTableExtension extends DataExtension
      * @param array $ancestorDataObjects
      * @param DataObject $dataObject
      */
-    public function updateUsageAncestorDataObjects(array &$ancestorDataObjects, DataObject $dataObject)
+    protected function updateUsageAncestorDataObjects(array &$ancestorDataObjects, DataObject $dataObject)
     {
         if (!($dataObject instanceof BaseElement)) {
             return;
