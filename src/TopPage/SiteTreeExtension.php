@@ -37,7 +37,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      *
      * @throws ValidationException
      */
-    public function onAfterWrite(): void
+    protected function onAfterWrite(): void
     {
         $this->setTopPageForElementalArea();
         $this->processDuplicationFromOriginal();
@@ -48,7 +48,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      *
      * @param SiteTree $original
      */
-    public function onBeforeDuplicate(SiteTree $original): void
+    protected function onBeforeDuplicate(SiteTree $original): void
     {
         $this->initDuplication($original);
     }
@@ -60,7 +60,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      * @param bool $doWrite
      * @throws ValidationException
      */
-    public function onAfterDuplicate(SiteTree $original, $doWrite): void
+    protected function onAfterDuplicate(SiteTree $original, $doWrite): void
     {
         $this->processDuplication($original, (bool) $doWrite);
     }

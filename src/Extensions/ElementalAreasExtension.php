@@ -175,7 +175,7 @@ class ElementalAreasExtension extends DataExtension
      *
      * @param FieldList
      */
-    public function updateCMSFields(FieldList $fields)
+    protected function updateCMSFields(FieldList $fields)
     {
         if (!$this->supportsElemental()) {
             return;
@@ -218,7 +218,7 @@ class ElementalAreasExtension extends DataExtension
     /**
      * Make sure there is always an ElementalArea for adding Elements
      */
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
 

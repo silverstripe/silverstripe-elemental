@@ -7,7 +7,7 @@ use SilverStripe\Dev\TestOnly;
 
 class TestContentForSearchIndexExtension extends Extension implements TestOnly
 {
-    public function updateContentForSearchIndex(&$content)
+    protected function updateContentForSearchIndex(&$content)
     {
         $content = 'This is the updated content.';
     }

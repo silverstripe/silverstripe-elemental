@@ -15,7 +15,7 @@ class GridFieldAddNewMultiClassHandlerExtension extends Extension
     /**
      * @param Form $form
      */
-    public function updateItemEditForm(Form $form)
+    protected function updateItemEditForm(Form $form)
     {
         // NOTE: this extension is applied to new item edit form only
 

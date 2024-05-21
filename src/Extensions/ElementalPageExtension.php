@@ -103,7 +103,7 @@ class ElementalPageExtension extends ElementalAreasExtension
     /**
      * @see SiteTree::getAnchorsOnPage()
      */
-    public function updateAnchorsOnPage(array &$anchors): void
+    protected function updateAnchorsOnPage(array &$anchors): void
     {
         if (!($this->owner instanceof SiteTree)) {
             return;

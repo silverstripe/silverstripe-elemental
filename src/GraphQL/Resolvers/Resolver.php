@@ -89,8 +89,8 @@ class Resolver
         // Assign the parent ID directly rather than via HasManyList to prevent multiple writes.
         // See BaseElement::$has_one for the "Parent" naming.
         $newElement->ParentID = $elementalArea->ID;
-        // Ensure that a sort order is assigned - see BaseElement::onBeforeWrite()
-        $newElement->onBeforeWrite();
+        // Ensure that a sort order is assigned
+        $newElement->ensureSortSet();
 
         if ($afterElementID !== null) {
             /** @var ReorderElements $reorderer */

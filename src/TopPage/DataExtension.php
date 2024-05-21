@@ -56,7 +56,7 @@ class DataExtension extends BaseDataExtension
      *
      * @throws ValidationException
      */
-    public function onAfterWrite(): void
+    protected function onAfterWrite(): void
     {
         $this->setTopPage();
     }
@@ -64,7 +64,7 @@ class DataExtension extends BaseDataExtension
     /**
      * Extension point in @see DataObject::duplicate()
      */
-    public function onBeforeDuplicate(): void
+    protected function onBeforeDuplicate(): void
     {
         $this->clearTopPage();
     }
@@ -72,7 +72,7 @@ class DataExtension extends BaseDataExtension
     /**
      * Extension point in @see DataObject::duplicate()
      */
-    public function onAfterDuplicate(): void
+    protected function onAfterDuplicate(): void
     {
         $this->updateTopPage();
     }
@@ -198,7 +198,7 @@ class DataExtension extends BaseDataExtension
         }
     }
 
-    public function updateCMSFields(FieldList $fields)
+    protected function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName('TopPageID');
     }
