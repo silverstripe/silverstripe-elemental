@@ -19,7 +19,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.1",
-        "silverstripe/framework": "^5",
+        "silverstripe/framework": "^5.1",
         "silverstripe/cms": "^5",
         "silverstripe/admin": "^2.0.1",
         "silverstripe/versioned": "^2",
