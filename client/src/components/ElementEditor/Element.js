@@ -1,5 +1,4 @@
 /* global window */
-
 import React, { useState, useEffect, createContext } from 'react';
 import { useMutation } from '@apollo/client';
 import PropTypes from 'prop-types';
@@ -10,7 +9,6 @@ import { inject } from 'lib/Injector';
 import i18n from 'i18n';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { submit } from 'redux-form';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import { publishBlockMutation } from 'state/editor/publishBlockMutation';
@@ -40,7 +38,12 @@ const Element = (props) => {
   const [ensureFormRendered, setEnsureFormRendered] = useState(false);
   const [formHasRendered, setFormHasRendered] = useState(false);
   const [doDispatchAddFormChanged, setDoDispatchAddFormChanged] = useState(false);
+  const [formHandleSubmit, setFormHandleSubmit] = useState(null);
   const [publishBlock] = useMutation(publishBlockMutation);
+
+  const submitForm = () => {
+    formHandleSubmit(new Event('remote-submit'));
+  };
 
   useEffect(() => {
     if (props.connectDragPreview) {
@@ -64,7 +67,8 @@ const Element = (props) => {
       setJustClickedPublishButton(false);
       if (props.formDirty) {
         // Save the element first before publishing, which may trigger validation errors
-        props.submitForm();
+        // props.submitForm();
+        submitForm();
         setDoPublishElementAfterSave(true);
       } else {
         // Just publish the element straight away without saving first
@@ -124,6 +128,8 @@ const Element = (props) => {
     showPublishedElementToast(wasError);
     setDoPublishElement(false);
     setDoPublishElementAfterSave(false);
+    // TODO: try removing the setTimeout and see if it still works
+    //
     // Ensure that formDirty becomes falsey after publishing
     // We need to call at a later render rather than straight away or redux-form may override this
     // and set the form state to dirty under certain conditions
@@ -141,7 +147,7 @@ const Element = (props) => {
   // Save action
   useEffect(() => {
     if (formHasRendered && doSaveElement) {
-      props.submitForm();
+      submitForm();
       setDoSaveElement(false);
     }
   }, [formHasRendered, doSaveElement]);
@@ -374,6 +380,8 @@ const Element = (props) => {
     formDirty,
     onPublishButtonClick: handlePublishButtonClick,
     onSaveButtonClick: handleSaveButtonClick,
+    formHandleSubmit,
+    setFormHandleSubmit,
   };
 
   const content = connectDropTarget(<div
@@ -465,10 +473,6 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     onActivateTab(tabSetName, activeTabName) {
       dispatch(TabsActions.activateTab(`element.${elementName}__${tabSetName}`, activeTabName));
-    },
-    submitForm() {
-      // Perform a redux-form remote-submit
-      dispatch(submit(`element.${elementName}`));
     },
     dispatchAddFormChanged() {
       // Ensures the form identifier is in unsavedForms in the global redux state

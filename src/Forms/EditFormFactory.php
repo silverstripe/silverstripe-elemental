@@ -39,6 +39,7 @@ class EditFormFactory extends DefaultFormFactory
         // Namespace all fields - do this after getting getFormFields so they still get populated
         $formFields = $form->Fields();
         $this->namespaceFields($formFields, $context);
+        $formFields->add(ContextShareField::create('ContextShareField'));
         $form->setFields($formFields);
 
         return $form;
