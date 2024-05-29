@@ -34,6 +34,7 @@ use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\ORM\DataObjectSchema;
 use SilverStripe\ORM\ValidationResult;
 
@@ -1150,10 +1151,13 @@ JS
     /**
      * Get a description for this content element, if available
      *
+     * @deprecated 5.3.0 Use the description configuration property and localisation API directly instead.
+     *
      * @return string
      */
     public function getDescription()
     {
+        Deprecation::notice('5.3.0', 'Use getTypeNice() or the description configuration property directly instead.');
         $description = $this->config()->uninherited('description');
         if ($description) {
             return _t(__CLASS__ . '.Description', $description);
@@ -1169,7 +1173,7 @@ JS
      */
     public function getTypeNice()
     {
-        $description = $this->getDescription();
+        $description = Deprecation::withNoReplacement(fn () => $this->getDescription());
         $desc = ($description) ? ' <span class="element__note"> &mdash; ' . $description . '</span>' : '';
 
         return DBField::create_field(
