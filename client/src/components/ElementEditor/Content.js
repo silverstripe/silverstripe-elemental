@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { elementType } from 'types/elementType';
 import { inject } from 'lib/Injector';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -10,7 +11,7 @@ import getFormState from 'lib/getFormState';
 class Content extends PureComponent {
   render() {
     const {
-      id,
+      element,
       fileUrl,
       fileTitle,
       content,
@@ -40,7 +41,7 @@ class Content extends PureComponent {
           <InlineEditFormComponent
             extraClass={{ 'element-editor-editform--collapsed': !previewExpanded }}
             onClick={(event) => event.stopPropagation()}
-            elementId={id}
+            element={element}
             activeTab={activeTab}
             onFormInit={onFormInit}
             handleLoadingError={handleLoadingError}
@@ -60,7 +61,7 @@ class Content extends PureComponent {
 }
 
 Content.propTypes = {
-  id: PropTypes.string,
+  element: elementType,
   content: PropTypes.string,
   fileUrl: PropTypes.string,
   fileTitle: PropTypes.string,

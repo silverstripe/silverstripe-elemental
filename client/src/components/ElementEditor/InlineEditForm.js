@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { elementType } from 'types/elementType';
 import FormBuilderLoader from 'containers/FormBuilderLoader/FormBuilderLoader';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import i18n from 'i18n';
@@ -42,17 +43,20 @@ class InlineEditForm extends PureComponent {
   }
 
   render() {
-    const { elementId, extraClass, onClick, onFormInit, formHasState } = this.props;
+    const { element, extraClass, onClick, onFormInit, formHasState } = this.props;
     const { loadingError } = this.state;
 
     const classNames = classnames('element-editor-editform', extraClass);
-    const schemaUrl = loadElementSchemaValue('schemaUrl', elementId);
+    const schemaUrl = loadElementSchemaValue('schemaUrl', element.id);
 
     const formProps = {
       formTag: 'div',
       schemaUrl,
       identifier: 'element',
       refetchSchemaOnMount: !formHasState,
+      // Reload the form any time the element version changes, so other react components
+      // within the form have their state completely recreated
+      refetchSchemaCriteria: JSON.stringify([element.version, element.isPublished, element.isLiveVersion]),
       onLoadingError: this.handleLoadingError,
     };
 
@@ -75,12 +79,12 @@ class InlineEditForm extends PureComponent {
 InlineEditForm.propTypes = {
   extraClass: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   onClick: PropTypes.func,
-  elementId: PropTypes.string,
+  element: elementType,
   handleLoadingError: PropTypes.func,
 };
 
 function mapStateToProps(state, ownProps) {
-  const formName = loadElementFormStateName(ownProps.elementId);
+  const formName = loadElementFormStateName(ownProps.element.id);
 
   return {
     formHasState: state.form.formState && state.form.formState.element &&

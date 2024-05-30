@@ -273,7 +273,7 @@ class Element extends Component {
       {
         !childRenderingError &&
         <ContentComponent
-          id={element.id}
+          element={element}
           fileUrl={element.blockSchema.fileURL}
           fileTitle={element.blockSchema.fileTitle}
           content={this.getSummary(element, type)}
