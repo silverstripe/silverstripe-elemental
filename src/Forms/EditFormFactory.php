@@ -26,7 +26,7 @@ class EditFormFactory extends DefaultFormFactory
      */
     const FIELD_NAMESPACE_TEMPLATE = 'PageElements_%d_%s';
 
-    public function getForm(RequestHandler $controller = null, $name = self::DEFAULT_NAME, $context = [])
+    public function getForm(RequestHandler $controller = null, $name = EditFormFactory::DEFAULT_NAME, $context = [])
     {
         $form = parent::getForm($controller, $name, $context);
 
@@ -71,7 +71,7 @@ class EditFormFactory extends DefaultFormFactory
                 // Apply audo-detection of multi-upload before changing the name.
                 $field->setIsMultiUpload($field->getIsMultiUpload());
             }
-            $namespacedName = sprintf(self::FIELD_NAMESPACE_TEMPLATE ?? '', $elementID, $field->getName());
+            $namespacedName = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE ?? '', $elementID, $field->getName());
             $field->setName($namespacedName);
         }
     }

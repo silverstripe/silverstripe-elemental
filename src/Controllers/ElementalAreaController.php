@@ -186,7 +186,7 @@ class ElementalAreaController extends CMSMain
         $formName = $request->param('FormName');
 
         // Get the element ID from the form name
-        $id = substr($formName ?? '', strlen(sprintf(self::FORM_NAME_TEMPLATE ?? '', '')));
+        $id = substr($formName ?? '', strlen(sprintf(ElementalAreaController::FORM_NAME_TEMPLATE ?? '', '')));
         $form = $this->getElementForm($id);
 
         $field = $form->getRequestHandler()->handleField($request);
