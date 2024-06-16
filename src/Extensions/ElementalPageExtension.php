@@ -135,10 +135,10 @@ class ElementalPageExtension extends ElementalAreasExtension
     private function getEagerLoadedElements(): array
     {
         $elements = [];
-        if (is_null(self::$elementalAreas)) {
-            self::$elementalAreas = [];
+        if (is_null(ElementalPageExtension::$elementalAreas)) {
+            ElementalPageExtension::$elementalAreas = [];
             foreach (ElementalArea::get()->eagerLoad('Elements') as $elementalArea) {
-                self::$elementalAreas[$elementalArea->ID] = $elementalArea;
+                ElementalPageExtension::$elementalAreas[$elementalArea->ID] = $elementalArea;
             }
         }
         foreach ($this->owner->hasOne() as $relation => $class) {
@@ -146,8 +146,8 @@ class ElementalPageExtension extends ElementalAreasExtension
                 continue;
             }
             $elementalAreaID = $this->owner->{"{$relation}ID"};
-            if ($elementalAreaID && array_key_exists($elementalAreaID, self::$elementalAreas)) {
-                $elementalArea = self::$elementalAreas[$elementalAreaID];
+            if ($elementalAreaID && array_key_exists($elementalAreaID, ElementalPageExtension::$elementalAreas)) {
+                $elementalArea = ElementalPageExtension::$elementalAreas[$elementalAreaID];
             } else {
                 $elementalArea = $this->owner->$relation();
             }

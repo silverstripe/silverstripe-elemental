@@ -140,7 +140,7 @@ class ElementTypeRegistry
         $registry = static::create();
 
         // Look in a cache (if provided) for type details
-        if (static::$cache && ($types = static::$cache->get(self::CACHE_KEY))) {
+        if (static::$cache && ($types = static::$cache->get(ElementTypeRegistry::CACHE_KEY))) {
             $registry->elementTypes = $types;
             return $registry;
         }
