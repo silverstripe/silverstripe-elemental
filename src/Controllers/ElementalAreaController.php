@@ -157,9 +157,6 @@ class ElementalAreaController extends CMSMain
     }
 
     /**
-<<<<<<< HEAD
-     * Remove the namespace prefixes that were added to form fields by the form factory
-=======
      * Provides action control for form fields that are request handlers when they're used in an in-line edit form.
      *
      * Eg. UploadField
@@ -182,7 +179,6 @@ class ElementalAreaController extends CMSMain
 
     /**
      * Remove the pseudo namespaces that were added to form fields by the form factory
->>>>>>> 5.2
      *
      * @param array $data
      * @param int $elementID

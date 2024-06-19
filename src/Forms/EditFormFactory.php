@@ -99,11 +99,7 @@ class EditFormFactory extends DefaultFormFactory
                 // Apply audo-detection of multi-upload before changing the name.
                 $field->setIsMultiUpload($field->getIsMultiUpload());
             }
-<<<<<<< HEAD
-            $namespacedName = sprintf(self::FIELD_NAMESPACE_TEMPLATE, $elementID, $field->getName());
-=======
             $namespacedName = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE ?? '', $elementID, $field->getName());
->>>>>>> 5.2
             $field->setName($namespacedName);
         }
     }
