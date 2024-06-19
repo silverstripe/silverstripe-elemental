@@ -157,27 +157,6 @@ class ElementalAreaController extends CMSMain
     }
 
     /**
-     * Provides action control for form fields that are request handlers when they're used in an in-line edit form.
-     *
-     * Eg. UploadField
-     *
-     * @param HTTPRequest $request
-     * @return array|HTTPResponse|\SilverStripe\Control\RequestHandler|string
-     */
-    public function formAction(HTTPRequest $request)
-    {
-        $formName = $request->param('FormName');
-
-        // Get the element ID from the form name
-        $id = substr($formName ?? '', strlen(sprintf(ElementalAreaController::FORM_NAME_TEMPLATE ?? '', '')));
-        $form = $this->getElementForm($id);
-
-        $field = $form->getRequestHandler()->handleField($request);
-
-        return $field->handleRequest($request);
-    }
-
-    /**
      * Remove the pseudo namespaces that were added to form fields by the form factory
      *
      * @param array $data
@@ -235,7 +214,7 @@ class ElementalAreaController extends CMSMain
         $formName = $request->param('FormName');
 
         // Get the element ID from the form name
-        $id = substr($formName ?? '', strlen(sprintf(self::FORM_NAME_TEMPLATE, '')));
+        $id = substr($formName ?? '', strlen(sprintf(ElementalAreaController::FORM_NAME_TEMPLATE, '')));
         $form = $this->getElementForm($id);
 
         $field = $form->getRequestHandler()->handleField($request);
