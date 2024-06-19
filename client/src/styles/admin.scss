@@ -64,7 +64,7 @@
 
 .ss-gridfield-orderable.elemental-editor .col-reorder .handle {
   opacity: .5;
-  padding: 22px 0 0 0;
+  padding: 22px 0 0;
 
   .icon {
     font-size: 1.3em;
@@ -108,7 +108,6 @@
 
   .form__field-label,
   .form__field-holder {
-
     @include media-breakpoint-up(lg) {
       @include make-col(10);
       // To bring checkboxes and radio buttons into alignment

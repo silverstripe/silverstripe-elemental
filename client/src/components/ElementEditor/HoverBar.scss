@@ -16,7 +16,7 @@ $transition: all ease .2s;
     width: 100%;
     margin: 0;
     padding: 0;
-    border: none;
+    border: 0;
     outline: none;
     transition: $transition;
     position: relative;
@@ -40,7 +40,7 @@ $transition: all ease .2s;
   }
 
   &__hover-bar-area-inner {
-    margin: 0 0;
+    margin: 0;
     display: block;
     position: relative;
     transition: $transition;
@@ -73,7 +73,6 @@ $transition: all ease .2s;
       display: block;
       height: 1em;
       // IE-11 fallback
-      transform: translateY(-35%);
       transform: translateY(calc(-1px + -50%)) scale(0);
       transition: $transition;
       color: $blue;
