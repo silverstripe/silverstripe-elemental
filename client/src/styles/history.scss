@@ -58,8 +58,7 @@ div.elemental-area__element--historic.elemental-area__element--historic-inner {
 
 .elemental-area--read-only {
   border-bottom: 1px solid $border-color-light;
-  /* stylelint-disable-next-line scss/operator-no-unspaced */
-  margin: ($panel-padding-y * 1.5) -$panel-padding-x;
+  margin: ($panel-padding-y * 1.5) (-$panel-padding-x);
 }
 
 .history-viewer__version-detail fieldset {
