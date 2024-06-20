@@ -20,7 +20,7 @@
   // Designs mandate that we're going with a "stacked" style here which doesn't currently
   // translate very well to higher width
   & &__form {
-    & .form-group .form__field-holder {
+    .form-group .form__field-holder {
       flex: 1 0 100%;
       max-width: 900px;
     }

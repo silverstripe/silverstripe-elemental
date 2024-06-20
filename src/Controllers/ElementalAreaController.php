@@ -136,7 +136,7 @@ class ElementalAreaController extends CMSMain
     }
 
     /**
-     * Remove the namespace prefixes that were added to form fields by the form factory
+     * Remove the pseudo namespaces that were added to form fields by the form factory
      *
      * @param array $data
      * @param int $elementID

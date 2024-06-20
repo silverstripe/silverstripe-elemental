@@ -182,7 +182,7 @@ class ElementalAreasExtension extends DataExtension
         }
 
         // add an empty holder for content as some module explicitly use insert after content
-        $globalReplace = !Config::inst()->get(self::class, 'keep_content_fields');
+        $globalReplace = !Config::inst()->get(ElementalAreasExtension::class, 'keep_content_fields');
         $classOverride = Config::inst()->get(get_class($this->owner), 'elemental_keep_content_field');
         if ($globalReplace && !$classOverride || $classOverride === false) {
             $fields->replaceField('Content', new LiteralField('Content', ''));
@@ -241,7 +241,7 @@ class ElementalAreasExtension extends DataExtension
             }
         }
 
-        if (Config::inst()->get(self::class, 'clear_contentfield')) {
+        if (Config::inst()->get(ElementalAreasExtension::class, 'clear_contentfield')) {
             $this->owner->Content = '';
         }
     }

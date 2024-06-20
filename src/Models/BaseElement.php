@@ -485,7 +485,7 @@ JS
             return $this->controller;
         }
 
-        $controllerClass = self::config()->controller_class;
+        $controllerClass = static::config()->controller_class;
 
         if (!class_exists($controllerClass ?? '')) {
             throw new Exception(
@@ -759,11 +759,11 @@ JS
         // ie. If two elemental blocks have the same title, it'll append '-2', '-3'
         $result = $titleAsURL;
         $count = 1;
-        while (isset(self::$used_anchors[$result]) && self::$used_anchors[$result] !== $this->ID) {
+        while (isset(BaseElement::$used_anchors[$result]) && BaseElement::$used_anchors[$result] !== $this->ID) {
             ++$count;
             $result = $titleAsURL . '-' . $count;
         }
-        self::$used_anchors[$result] = $this->ID;
+        BaseElement::$used_anchors[$result] = $this->ID;
         return $this->anchor = $result;
     }
 
@@ -1277,7 +1277,7 @@ JS
     public static function getGraphQLTypeName(): string
     {
         // For GraphQL 3, use the static schema type name - except for BaseElement for which this is inconsistent.
-        if (class_exists(StaticSchema::class) && static::class !== self::class) {
+        if (class_exists(StaticSchema::class) && static::class !== BaseElement::class) {
             return StaticSchema::inst()->typeNameForDataObject(static::class);
         }
         return str_replace('\\', '_', static::class);
