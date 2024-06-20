@@ -55,10 +55,7 @@
     },
     "autoload": {
         "psr-4": {
-            "DNADesign\\Elemental\\": [
-                "src/",
-                "_legacy/"
-            ],
+            "DNADesign\\Elemental\\": "src/",
             "DNADesign\\Elemental\\Tests\\": "tests/"
         }
     }
