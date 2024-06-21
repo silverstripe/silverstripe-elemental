@@ -445,7 +445,7 @@ class BaseElementTest extends FunctionalTest
             [
                 ElementContent::class,
                 'content1',
-                '/test-elemental',
+                'test-elemental',
             ],
             // Element in DataObject WITHOUT PreviewLink or Link
             [
@@ -492,8 +492,9 @@ class BaseElementTest extends FunctionalTest
             // Note that the preview link is suffixed with forward slash when subsites is installed
             // because of BaseElementSubsites::updatePreviewLink() use of HTTP::setGetVar()
             // which turns relative urls to absolute urls
-            $regex = '/^\/?' . preg_quote($link, '/') . '[?&]' . preg_quote('ElementalPreview=', '/')
+            $regex = '/' . preg_quote($link, '/') . '[?&]' . preg_quote('ElementalPreview=', '/')
                 .'\d*#' . $element->getAnchor() . '$/';
+
             $this->assertMatchesRegularExpression($regex, $previewLink);
             // Doesn't try to blindly append query string and anchor - but instead merges intelligently with
             // whatever's already there
