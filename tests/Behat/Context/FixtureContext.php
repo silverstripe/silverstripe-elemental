@@ -8,6 +8,7 @@ use SilverStripe\CMS\Tests\Behaviour\FixtureContext as BaseFixtureContext;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\Queries\SQLInsert;
+use SilverStripe\FrameworkTest\Elemental\Model\ElementalSearchableFieldsBlock;
 
 /**
  * Context used to create fixtures in the SilverStripe ORM.
@@ -42,6 +43,24 @@ class FixtureContext extends BaseFixtureContext
             ]);
             $element->write();
         }
+    }
+
+    /**
+     * @Given /a "([^"]+)" "([^"]+)" with a "([^"]+)" element titled "([^"]+)"/
+     *
+     * e.g. Given a "page" "My page" with a "My\App\MyBlock" element titled "Some block"
+     *
+     * @param string $type - will be converted to a class name
+     * @param string $pageTitle
+     * @param string $elementClass
+     * @param string $elementTitle
+     */
+    public function theDataObjectWithAnElement($type, $pageTitle, $elementClass, $elementTitle)
+    {
+        $elementalArea = $this->getElementalArea($type, $pageTitle);
+        $elementalArea->Elements()->add(
+            $this->getFixtureFactory()->createObject($elementClass, $elementTitle)
+        );
     }
 
     /**
