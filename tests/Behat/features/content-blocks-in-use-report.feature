@@ -1,3 +1,4 @@
+@retry @job2
 Feature: View the report for content blocks in use
   As a CMS user
   I want to view a report of all created content blocks

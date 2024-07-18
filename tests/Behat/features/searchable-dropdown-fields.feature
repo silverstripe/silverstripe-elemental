@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job6
 Feature: Searchable fields
   As a CMS user
   I want searchable dropdown fields to function when used in a content block

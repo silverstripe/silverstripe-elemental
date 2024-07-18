@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job6
 Feature: Add elements in the CMS and see currunt status of elements
   As a CMS user
   I want to see versined status of Element blocks

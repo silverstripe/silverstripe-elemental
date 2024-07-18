@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job6
 Feature: Unpublish elements in the CMS
   As a CMS user
   I want to unpublish elements in the CMS
