@@ -1,3 +1,4 @@
+@retry @job1
 Feature: Link to anchors in elements
 As a cms author
 I want to link to anchors in my content

@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job6
 Feature: Restore to draft
   As a CMS author
   I want to restore archived element to draft version

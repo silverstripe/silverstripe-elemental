@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job1
 Feature: Archive elements in the CMS
   As a CMS user
   I want to archive elements in the CMS
