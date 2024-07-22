@@ -1,4 +1,4 @@
-@retry
+@retry @job7
 Feature: Blocks are validated when inline saving individual blocks
   As a CMS user
   I want to blocks have be validating when individual saving them
