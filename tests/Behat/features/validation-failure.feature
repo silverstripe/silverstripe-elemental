@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job6
 Feature: Don't lose content when page or block is invalid
   As a CMS user
   I want to retain my unsaved content when a validation error occurs

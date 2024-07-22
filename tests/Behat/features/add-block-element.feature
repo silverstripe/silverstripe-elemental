@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job1
 Feature: Add elements in the CMS
   As a CMS user
   I want to add elements in the CMS
