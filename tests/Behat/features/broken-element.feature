@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job2
 Feature: Broken element in CMS
   As a CMS user
   I want elemental areas to function correctly even with a broken block

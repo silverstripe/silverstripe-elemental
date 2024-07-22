@@ -1,3 +1,4 @@
+@retry @job5
 Feature: Preview a non-inline-editable block
   As an author
   I want to preview the parent page of the non-inline-editable block I'm editing in the CMS

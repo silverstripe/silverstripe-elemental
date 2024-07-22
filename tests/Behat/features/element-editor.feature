@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job4
 Feature: View types of elements in an area on a page
   As a CMS user
   I want to view a list of elements that I have on a page

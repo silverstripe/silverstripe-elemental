@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job5
 Feature: View an elemental area with no blocks on a page
   As a CMS user
   I want to be visually alerted in case there are not yet any blocks on my  page

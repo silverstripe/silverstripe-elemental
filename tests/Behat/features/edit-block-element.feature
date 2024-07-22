@@ -1,4 +1,4 @@
-@javascript
+@javascript @retry @job3
 Feature: Edit elements in the CMS
   As a CMS user
   I want to edit elements in the CMS
