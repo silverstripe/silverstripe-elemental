@@ -1,4 +1,4 @@
-@retry
+@retry @job7
 Feature: Blocks are validated when non-inline saving blocks
   As a CMS user
   I want to blocks have be validating when non-inline saving them
@@ -19,7 +19,7 @@ Feature: Blocks are validated when non-inline saving blocks
     And I click on the caret button for block 1
 
   Scenario: Non-inline block validation
-    
+
     # Related has_one RequiredFields with ID suffix (MyPageID)
     When I press the "Save" button
     Then I should see "\"My page\" is required" in the "#message-Form_ItemEditForm_MyPageID" element
@@ -38,7 +38,7 @@ Feature: Blocks are validated when non-inline saving blocks
     And I press the "Save" button
     Then I should see "\"Title\" is required" in the "#message-Form_ItemEditForm_Title" element
     And I fill in "Title" with "My title"
-    
+
     # FormField::validate()
     When I fill in "My Int" with "1"
     And I press the "Save" button

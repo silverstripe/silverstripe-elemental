@@ -1,4 +1,4 @@
-@retry
+@retry @job1
 Feature: Blocks are validated when page saving blocks
   As a CMS user
   I want to blocks be validated when page saving blocks
