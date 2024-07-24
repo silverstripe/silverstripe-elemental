@@ -29,13 +29,6 @@ Feature: Blocks are validated when inline saving individual blocks
   # be faster due to a limitation with behat testing react where changing the value of a field can
   # sometimes lead to the value of field being suffixed rather than replaced
 
-  Scenario: Required field validation error with javascript
-    When I fill in "" for "Title" for block 1
-    Then I should see "Title is required" in the ".form__validation-message" element
-    When I press the "View actions" button
-    # Will not be an inline save button because formDirty not set yet, intercepted by JS validation
-    Then I should not see a ".element-editor__actions-save" element
-
   Scenario: Field validation error
     When I fill in "x" for "Title" for block 1
     When I press the "View actions" button

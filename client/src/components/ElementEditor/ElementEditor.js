@@ -4,13 +4,10 @@ import PropTypes from 'prop-types';
 import { inject } from 'lib/Injector';
 import { compose } from 'redux';
 import { elementTypeType } from 'types/elementTypeType';
-import { connect } from 'react-redux';
-import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { DropTarget } from 'react-dnd';
 import sortBlockMutation from 'state/editor/sortBlockMutation';
 import ElementDragPreview from 'components/ElementEditor/ElementDragPreview';
 import withDragDropContext from 'lib/withDragDropContext';
-import { createSelector } from 'reselect';
 
 /**
  * The ElementEditor is used in the CMS to manage a list or nested lists of
@@ -71,8 +68,6 @@ class ElementEditor extends PureComponent {
 
   render() {
     const {
-      fieldName,
-      formState,
       ToolbarComponent,
       ListComponent,
       areaId,
@@ -80,6 +75,7 @@ class ElementEditor extends PureComponent {
       isDraggingOver,
       connectDropTarget,
       allowedElements,
+      sharedObject,
     } = this.props;
     const { dragTargetElementId, dragSpot } = this.state;
 
@@ -105,21 +101,15 @@ class ElementEditor extends PureComponent {
           dragSpot={dragSpot}
           isDraggingOver={isDraggingOver}
           dragTargetElementId={dragTargetElementId}
+          sharedObject={sharedObject}
         />
         <ElementDragPreview elementTypes={elementTypes} />
-        <input
-          name={fieldName}
-          type="hidden"
-          value={JSON.stringify(formState) || ''}
-          className="no-change-track"
-        />
       </div>
     );
   }
 }
 
 ElementEditor.propTypes = {
-  fieldName: PropTypes.string,
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   allowedElements: PropTypes.arrayOf(PropTypes.string).isRequired,
   areaId: PropTypes.number.isRequired,
@@ -128,42 +118,6 @@ ElementEditor.propTypes = {
   }),
 };
 
-const defaultElementFormState = {};
-
-// Use a memoization to prevent mapStateToProps() re-rendering on formstate changes
-// Any formstate change, including unrelated ones such as from another FormBuilderLoader component
-// will trigger the ElementalEditor to re-render
-const elementFormSelector = createSelector([
-  (state) => {
-    const elementFormState = state.form.formState.element;
-
-    if (!elementFormState) {
-      // This needs to a reference to the defaultElementFormState variable rather than a new object
-      // or redux will think the state has changed and cause the component to re-render
-      return defaultElementFormState;
-    }
-
-    return elementFormState;
-  }], (elementFormState) => {
-  const formNamePattern = loadElementFormStateName('[0-9]+');
-
-  const filteredElementFormState = Object.keys(elementFormState)
-    .filter(key => key.match(formNamePattern))
-    .reduce((accumulator, key) => ({
-      ...accumulator,
-      [key]: elementFormState[key].values
-    }), {});
-
-  return filteredElementFormState;
-});
-
-function mapStateToProps(state) {
-  // Memoize form state and value changes
-  const formState = elementFormSelector(state);
-
-  return { formState };
-}
-
 export { ElementEditor as Component };
 export default compose(
   withDragDropContext,
@@ -171,7 +125,6 @@ export default compose(
     connectDropTarget: connector.dropTarget(),
     isDraggingOver: monitor.isOver(), // isDragging is not available on DropTargetMonitor
   })),
-  connect(mapStateToProps),
   inject(
     ['ElementToolbar', 'ElementList'],
     (ToolbarComponent, ListComponent) => ({
