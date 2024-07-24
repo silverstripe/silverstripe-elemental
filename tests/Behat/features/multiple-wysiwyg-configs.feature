@@ -1,4 +1,4 @@
-@retry @job5
+@retry @job2
 Feature: multiple elemental blocks with different HTMLEditorConfig instances
   As a developer
   I want my elemental blocks to have different HTMLEditorConfig instances

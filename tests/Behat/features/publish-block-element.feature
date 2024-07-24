@@ -1,4 +1,4 @@
-@javascript @retry @job5
+@javascript @retry @job6
 Feature: Publish elements in the CMS
   As a CMS user
   I want to publish elements in the CMS
