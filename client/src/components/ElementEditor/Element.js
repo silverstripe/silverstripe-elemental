@@ -40,7 +40,29 @@ const Element = (props) => {
   const [ensureFormRendered, setEnsureFormRendered] = useState(false);
   const [formHasRendered, setFormHasRendered] = useState(false);
   const [doDispatchAddFormChanged, setDoDispatchAddFormChanged] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [publishBlock] = useMutation(publishBlockMutation);
+
+  useEffect(() => {
+    // Note that formDirty from redux can be set to undefined after failed validation
+    // which is confusing as the block still has unsaved changes, hence why we create
+    // this state variable to track this instead
+    // props.formDirty is either undefined (when pristine) or an object (when dirty)
+    const formDirty = typeof props.formDirty !== 'undefined';
+    if (formDirty && !hasUnsavedChanges) {
+      setHasUnsavedChanges(true);
+    }
+  }, [props.formDirty]);
+
+  useEffect(() => {
+    props.onChangeHasUnsavedChanges(hasUnsavedChanges);
+  }, [hasUnsavedChanges]);
+
+  useEffect(() => {
+    if (props.saveElement && hasUnsavedChanges && !doSaveElement) {
+      setDoSaveElement(true);
+    }
+  }, [props.saveElement, hasUnsavedChanges, props.increment]);
 
   useEffect(() => {
     if (props.connectDragPreview) {
@@ -52,17 +74,12 @@ const Element = (props) => {
         captureDraggingState: true,
       });
     }
-    // Check if formSchema state has already been loaded before opening a block
-    // This can happen if there was a validation error on a block after performing a Page save
-    if (props.formStateExists) {
-      setFormHasRendered(true);
-    }
   }, []);
 
   useEffect(() => {
     if (justClickedPublishButton && formHasRendered) {
       setJustClickedPublishButton(false);
-      if (props.formDirty) {
+      if (hasUnsavedChanges) {
         // Save the element first before publishing, which may trigger validation errors
         props.submitForm();
         setDoPublishElementAfterSave(true);
@@ -324,9 +341,11 @@ const Element = (props) => {
       if (doPublishElementAfterSave) {
         setDoPublishElementAfterSave(false);
       }
+      props.onAfterSubmitResponse(false);
       return;
     }
     // Form is valid
+    setHasUnsavedChanges(false);
     setNewTitle(title);
     if (doPublishElementAfterSave) {
       setDoPublishElementAfterSave(false);
@@ -336,6 +355,7 @@ const Element = (props) => {
       showSavedElementToast(title);
     }
     refetchElementalArea();
+    props.onAfterSubmitResponse(true);
   };
 
   const {
@@ -439,10 +459,6 @@ function mapStateToProps(state, ownProps) {
   const tabSetName = tabSet && tabSet.id;
   const uniqueFieldId = `element.${elementName}__${tabSetName}`;
   const formDirty = state.unsavedForms.find((unsaved) => unsaved.name === `element.${elementName}`);
-  const formStateExists = state.form
-    && state.form.formState
-    && state.form.formState.element
-    && state.form.formState.element.hasOwnProperty(elementName);
 
   // Find name of the active tab in the tab set
   // Only defined once an element form is expanded for the first time
@@ -455,7 +471,6 @@ function mapStateToProps(state, ownProps) {
     tabSetName,
     activeTab,
     formDirty,
-    formStateExists,
   };
 }
 
@@ -467,6 +482,7 @@ function mapDispatchToProps(dispatch, ownProps) {
       dispatch(TabsActions.activateTab(`element.${elementName}__${tabSetName}`, activeTabName));
     },
     submitForm() {
+      ownProps.onBeforeSubmitForm(ownProps.element.id);
       // Perform a redux-form remote-submit
       dispatch(submit(`element.${elementName}`));
     },
@@ -503,6 +519,11 @@ Element.propTypes = {
   onDragOver: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
   onDragEnd: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
   onDragStart: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
+  saveElement: PropTypes.bool.isRequired,
+  onBeforeSubmitForm: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+  onAfterSubmitResponse: PropTypes.func.isRequired,
+  // Used to ensure form gets re-rendered on submission so it can be submitted again if there are validation errors
+  increment: PropTypes.number.isRequired,
 };
 
 Element.defaultProps = {

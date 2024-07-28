@@ -86,7 +86,10 @@ Feature: Edit elements in the CMS
       Then I fill in "<p>Alternate HTML within element 2</p>" for "Content" for block 2
       And I fill in "Bob's Radically Redesigned Revolutionary Element" for "Title" for block 2
     When I press the "Save" button
-    Then I should see a "Saved 'Blocks Page' successfully" success toast
+    Then I should see a "Saved 'Alice's Much Improved Block' successfully" success toast
+    And I should see a "Saved 'Bob's Radically Redesigned Revolutionary Element' successfully" success toast
+    And I should see a "Saved 'Blocks Page' successfully." success toast
+    When I dismiss all toasts
       And I should see "Alice's Much Improved Block"
       And I should see "New content for block 1"
       And I should see "Bob's Radically Redesigned Revolutionary Element"
@@ -95,5 +98,3 @@ Feature: Edit elements in the CMS
       And I click on block 2
       Then the "Content" field for block 2 should contain "<p>Alternate HTML within element 2</p>"
       And the "Title" field for block 2 should contain "Alice's Much Improved Block"
-
-

@@ -1,4 +1,4 @@
-@retry @job5
+@retry @job4
 Feature: View types of elements in a report
   As a CMS user
   I want to view a report of element types in the CMS

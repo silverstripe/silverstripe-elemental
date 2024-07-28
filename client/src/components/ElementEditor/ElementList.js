@@ -11,6 +11,105 @@ import { getDragIndicatorIndex } from 'lib/dragHelpers';
 import { getElementTypeConfig } from 'state/editor/elementConfig';
 
 class ElementList extends Component {
+  constructor(props) {
+    super(props);
+    this.resetState = this.resetState.bind(this);
+    this.handleBeforeSubmitForm = this.handleBeforeSubmitForm.bind(this);
+    this.handleAfterSubmitResponse = this.handleAfterSubmitResponse.bind(this);
+    this.state = {
+      // saveAllElements will be set to true in entwine.js in the 'onbeforesubmitform' "hook"
+      // which is triggered by LeftAndMain submitForm()
+      saveAllElements: false,
+      // increment is also set in entwine.js in the 'onbeforesubmitform' "hook"
+      increment: 0,
+      hasUnsavedChangesBlockIDs: {},
+      validBlockIDs: {},
+    };
+    // Update the sharedObject so that setState() can be called from entwine.js
+    this.props.sharedObject.setState = this.setState.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // Scenario: blocks props just changed after a graphql query response updated it
+    if (this.props.blocks !== prevProps.blocks) {
+      this.resetState(prevState, false);
+      return;
+    }
+    // Scenario Saving all elements and state has just updated because of a formSchema response from
+    // an inline save - see Element.js handleFormSchemaSubmitResponse()
+    if (this.state.saveAllElements) {
+      const unsavedChangesBlockIDs = this.props.blocks
+        .map(block => parseInt(block.id, 10))
+        .filter(blockID => this.state.hasUnsavedChangesBlockIDs[blockID]);
+      const allValidated = unsavedChangesBlockIDs.every(blockID => this.state.validBlockIDs[blockID] !== null);
+      if (allValidated) {
+        const allValid = unsavedChangesBlockIDs.every(blockID => this.state.validBlockIDs[blockID]);
+        // entwineResolve is bound in entwine.js
+        const result = {
+          success: allValid,
+          reason: allValid ? '' : 'invalid',
+        };
+        this.props.sharedObject.entwineResolve(result);
+        this.resetState(prevState, allValid);
+        this.setState({ saveAllElements: false });
+      }
+    }
+  }
+
+  resetState(prevState, resetHasUnsavedChangesBlockIDs) {
+    // hasUnsavedChangesBlockIDs is the block dirty state and uses a boolean
+    const hasUnsavedChangesBlockIDs = {};
+    // validBlockIDs is the block validation state and uses a tri-state
+    // - null: not saved
+    // - true: saved, valid
+    // - false: attempted save, invalid
+    const validBlockIDs = {};
+    const blocks = this.props.blocks || [];
+    blocks.forEach(block => {
+      const blockID = parseInt(block.id, 10);
+      if (resetHasUnsavedChangesBlockIDs) {
+        hasUnsavedChangesBlockIDs[blockID] = false;
+      } else if (prevState.hasUnsavedChangesBlockIDs.hasOwnProperty(blockID)) {
+        hasUnsavedChangesBlockIDs[blockID] = prevState.hasUnsavedChangesBlockIDs[blockID];
+      } else {
+        hasUnsavedChangesBlockIDs[blockID] = false;
+      }
+      validBlockIDs[blockID] = null;
+    });
+    this.setState({ hasUnsavedChangesBlockIDs, validBlockIDs });
+  }
+
+  handleChangeHasUnsavedChanges(elementID, hasUnsavedChanges) {
+    this.setState(prevState => ({
+      hasUnsavedChangesBlockIDs: {
+        ...prevState.hasUnsavedChangesBlockIDs,
+        [elementID]: hasUnsavedChanges,
+      },
+    }));
+  }
+
+  handleBeforeSubmitForm(elementID) {
+    this.setState(prevState => ({
+      validBlockIDs: {
+        ...prevState.validBlockIDs,
+        [elementID]: null,
+      },
+    }));
+  }
+
+  handleAfterSubmitResponse(elementID, valid) {
+    this.setState(prevState => ({
+      hasUnsavedChangesBlockIDs: {
+        ...prevState.hasUnsavedChangesBlockIDs,
+        [elementID]: !valid,
+      },
+      validBlockIDs: {
+        ...prevState.validBlockIDs,
+        [elementID]: valid,
+      },
+    }));
+  }
+
   getDragIndicatorIndex() {
     const { dragTargetElementId, draggedItem, blocks, dragSpot } = this.props;
     return getDragIndicatorIndex(
@@ -50,8 +149,11 @@ class ElementList extends Component {
       return <div>{i18n._t('ElementList.ADD_BLOCKS', 'Add blocks to place your content')}</div>;
     }
 
-    let output = blocks.map((element) => (
-      <div key={element.id}>
+    let output = blocks.map(element => {
+      const saveElement = this.state.saveAllElements
+        && this.state.hasUnsavedChangesBlockIDs[element.id]
+        && this.state.validBlockIDs[element.id] === null;
+      return <div key={element.id}>
         <ElementComponent
           element={element}
           areaId={areaId}
@@ -60,6 +162,11 @@ class ElementList extends Component {
           onDragOver={onDragOver}
           onDragEnd={onDragEnd}
           onDragStart={onDragStart}
+          saveElement={saveElement}
+          onChangeHasUnsavedChanges={(hasUnsavedChanges) => this.handleChangeHasUnsavedChanges(element.id, hasUnsavedChanges)}
+          onBeforeSubmitForm={() => this.handleBeforeSubmitForm(element.id)}
+          onAfterSubmitResponse={(valid) => this.handleAfterSubmitResponse(element.id, valid)}
+          increment={this.state.increment}
         />
         {isDraggingOver || <HoverBarComponent
           key={`create-after-${element.id}`}
@@ -67,8 +174,8 @@ class ElementList extends Component {
           elementId={element.id}
           elementTypes={allowedElementTypes}
         />}
-      </div>
-    ));
+      </div>;
+    });
 
     // Add a insert point above the first block for consistency
     if (!isDraggingOver) {
@@ -130,11 +237,16 @@ ElementList.propTypes = {
   onDragOver: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragEnd: PropTypes.func,
+  sharedObject: PropTypes.object.isRequired,
 };
 
 ElementList.defaultProps = {
   blocks: [],
   loading: false,
+  sharedObject: {
+    entwineResolve: () => {},
+    setState: null,
+  },
 };
 
 export { ElementList as Component };

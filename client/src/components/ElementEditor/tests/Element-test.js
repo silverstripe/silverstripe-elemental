@@ -36,6 +36,11 @@ function makeProps(obj = {}) {
     connectDropTarget: (el) => el,
     isDragging: false,
     isOver: false,
+    onChangeHasUnsavedChanges: () => {},
+    onBeforeSubmitForm: () => {},
+    onAfterSubmitResponse: () => {},
+    saveElement: false,
+    increment: 0,
     ...obj,
   };
 }

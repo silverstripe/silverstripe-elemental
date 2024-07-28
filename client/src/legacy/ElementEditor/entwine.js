@@ -43,19 +43,37 @@ jQuery.entwine('ss', ($) => {
   $('.js-injector-boot .element-editor__container').entwine({
     ReactRoot: null,
 
+    // This object is shared between entwine.js and the ElementList react component. It allows:
+    // - entwine to call setState() on ElementList
+    // - ElementList to call entwineResolve() on entwine
+    AreaIDsSharedObject: {},
+
+    // Increment is in Element.js to force subsequent form submissions on failed client-side validation
+    // If elements fail client-side validation in Validator.js e.g. RequiredFields then
+    // they'll end up in a state where they need to re-render in order to re-submit
+    // because the form submission is blocked by the client-side validation, meaning that
+    // no formSchema response is received which is normally used to trigger a state update
+    Increment: 0,
+
     onmatch() {
       const context = {};
       const ElementEditorComponent = loadComponent('ElementEditor', context);
       const schemaData = this.data('schema');
       const elementTypes = getConfig().elementTypes;
-
+      const areaID = schemaData['elemental-area-id'];
+      const areaIDsSharedObject = this.getAreaIDsSharedObject();
+      if (!areaIDsSharedObject.hasOwnProperty(areaID)) {
+        areaIDsSharedObject[areaID] = {
+          entwineResolve: null,
+          setState: null,
+        };
+      }
       const props = {
-        fieldName: this.attr('name'),
-        areaId: schemaData['elemental-area-id'],
+        areaId: areaID,
         allowedElements: schemaData['allowed-elements'],
         elementTypes,
+        sharedObject: areaIDsSharedObject[areaID],
       };
-
       let root = this.getReactRoot();
       if (!root) {
         root = createRoot(this[0]);
@@ -70,6 +88,10 @@ jQuery.entwine('ss', ($) => {
       if (!$('.cms-edit-form').data('hasValidationErrors')) {
         resetStores();
       }
+      this.unmountComponent();
+    },
+
+    unmountComponent() {
       const root = this.getReactRoot();
       if (root) {
         root.unmount();
@@ -78,6 +100,35 @@ jQuery.entwine('ss', ($) => {
     },
 
     'from .cms-edit-form': {
+      onbeforesubmitform(event, data) {
+        if (!data) {
+          return;
+        }
+        // Create a promise and expose the resolve function
+        // The promise is added to the data object when is used in LeftAndMain submitForm()
+        // as a condition for submitting the form
+        // The resolve function is called from the ElementList react component once all
+        // dirty element forms have been validated and saved
+        let entwineResolve;
+        const entwinePromise = new Promise((resolve) => {
+          entwineResolve = resolve;
+        });
+        data.promises.push(entwinePromise);
+        data.onAjaxSuccessCallbacks.push(this.unmountComponent.bind(this));
+        const areaID = this.data('schema')['elemental-area-id'];
+        const areaIDsSharedObject = this.getAreaIDsSharedObject();
+        const sharedObject = areaIDsSharedObject[areaID];
+        const increment = this.getIncrement() + 1;
+        this.setIncrement(increment);
+        sharedObject.entwineResolve = entwineResolve;
+        // setState() is bound in the constructor of the ElementList react component
+        // setting saveAllElementst to true will trigger a re-render in the react component
+        sharedObject.setState({
+          saveAllElements: true,
+          increment
+        });
+      },
+
       onaftersubmitform(event, data) {
         const validationResultPjax = JSON.parse(data.xhr.responseText).ValidationResult;
         const validationResult = JSON.parse(validationResultPjax.replace(/<\/?script[^>]*?>/g, ''));
