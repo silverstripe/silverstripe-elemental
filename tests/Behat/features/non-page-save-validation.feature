@@ -7,12 +7,13 @@ Feature: Blocks are validated when saving blocks on a non-page dataobject
   Background:
     And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\ElementContentExtension" to the "DNADesign\Elemental\Models\ElementContent" class
     And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\NumericFieldExtension" to the "SilverStripe\Forms\NumericField" class
+    And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\MultiElementalAreasExtension" to the "SilverStripe\FrameworkTest\Model\Company" class
     And a "image" "file1.jpg"
     And I go to "/dev/build?flush"
-    And the "SilverStripe\FrameworkTest\Elemental\Model\MultiElementalBehatTestObject" "Blocks Object"
+    And the "SilverStripe\FrameworkTest\Model\Company" "Blocks Object"
     And the "group" "EDITOR" has permissions "Access to 'Pages' section"
     And I am logged in as a member of "EDITOR" group
-    And I go to "/admin/multi-elemental-behat-test-admin"
+    And I go to "/admin/test"
     And I click "Blocks Object" in the ".ss-gridfield-items" element
 
   Scenario: Validation when parent saving inline blocks
@@ -84,6 +85,6 @@ Feature: Blocks are validated when saving blocks on a non-page dataobject
     # Now should see 2x success toast messages, one for the block, the other for the parent object
     Then I should see a "Saved 'Valid block one' successfully" success toast
     When I click on the ".toast__close" element
-    Then I should see a "Saved Multi Elemental Behat Test Object "Blocks Object" successfully." success toast
+    Then I should see a "Saved Company "Blocks Object" successfully." success toast
     When I click on the ".toast__close" element
     Then I should not see a ".toast__close" element
