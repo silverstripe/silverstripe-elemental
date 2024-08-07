@@ -11,6 +11,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementArchiveAction.ARCHIVE": "Archiv",
     "ElementArchiveAction.CONFIRM_DELETE": "Sind Sie sicher, dass Sie diesen Block archivieren wollen?",
     "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Warnung: Dieser Block wird von der veröffentlichten Seite entfernt, bevor er archiviert wird. Wollen Sie fortfahren?",
+    "ElementArchiveAction.DUPLICATE": "Duplizieren",
     "ElementEditForm.ERROR_NOTIFICATION": "Fehler beim Bearbeitungsformular für diesen Block",
     "ElementHeader.EXPAND": "Zeige editierbare Felder",
     "ElementHeader.NOTITLE": "{type} block ohne Titel",
@@ -27,7 +28,11 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementUnpublishAction.ERROR_NOTIFICATION": "Fehler beim zurücknehmen der Veröffentlichung von '{title}'",
     "ElementUnpublishAction.SUCCESS_NOTIFICATION": "'{title}' wurde von der veröffentlichten Seite entfernt.",
     "ElementUnpublishAction.UNPUBLISH": "Veröffentlichung zurücknehmen",
+    "ElementalElement.ARCHIVE_BROKEN": "Dieses Element archivieren",
+    "ElementalElement.BROKEN_DESCRIPTION": "Dieses Element ist kaputt und wird im Frontend nicht ausgegeben. Sie können es archivieren um es aus diesem Element Bereich zu entfernen.",
+    "ElementalElement.CHILD_RENDERING_ERROR": "Es ist etwas schiefgelaufen. Bitte versuchen Sie erneut zu speichern und laden Sie das CMS neu.",
     "ElementalElement.TITLE": "Diesen {type} Block bearbeiten",
-    "HistoricElementView.BLOCK_HISTORY": "Block anzeigen"
+    "HistoricElementView.BLOCK_HISTORY": "Block anzeigen",
+    "HistoricElementView.VIEW_BLOCK_HISTORY": "Element Verlauf"
 });
 }

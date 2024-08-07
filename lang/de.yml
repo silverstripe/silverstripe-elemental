@@ -1,6 +1,8 @@
 de:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Seite bearbeiten'
+  DNADesign\Elemental\Extensions\ElementalPageExtension:
+    has_one_ElementalArea: 'Elemental Bereich'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: 'Wird angezeigt'
     NOT_DISPLAYED: 'Wird nicht angezeigt'
@@ -19,6 +21,10 @@ de:
     SINGULARNAME: Block
     STYLE: Stilvariation
     SettingsTabLabel: Einstellungen
+    db_ExtraClass: 'Zusätzliche Klasse'
+    db_ShowTitle: 'Titel anzeigen'
+    db_Sort: Sortierung
+    db_Style: Layout
     db_Title: Titel
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Inhalt
@@ -28,12 +34,15 @@ de:
       one: 'Ein Inhaltsblock'
       other: '{count} Inhaltsblöcke'
     SINGULARNAME: Inhaltsblock
+    db_HTML: Inhalt
   DNADesign\Elemental\Models\ElementalArea:
     PLURALNAME: 'Elemental Bereiche'
     PLURALS:
       one: 'Ein Elemental Bereich'
       other: '{count} Elemental Bereiche'
     SINGULARNAME: 'Elemental Bereich'
+    db_Version: VersionVersion
+    has_many_Elements: Elemente
   DNADesign\Elemental\Reports\ElementTypeReport:
     Title: 'Inhaltsblöcke -  Typen'
     Total: Gesamt
@@ -45,3 +54,5 @@ de:
     Summary: Zusammenfassung
     Title: Titel
     Type: Typ
+  SilverStripe\CMS\Controllers\CMSPageHistoryController:
+    PREVIEW: 'Webseiten Vorschau'
