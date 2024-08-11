@@ -29,6 +29,12 @@ class ElementalPageExtension extends ElementalAreasExtension
         'ElementalArea',
     ];
 
+    private static array $scaffold_cms_fields_settings = [
+        'ignoreFields' => [
+            'ElementalArea',
+        ],
+    ];
+
     /**
      * The delimiter to separate distinct elements in indexed content.
      *
