@@ -276,11 +276,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
         if ($this->hasMethod('getPage')) {
             if ($page = $this->getPage()) {
-                if ($page->hasExtension(Versioned::class)) {
-                    return Deprecation::withNoReplacement(fn() => $page->canArchive($member));
-                } else {
-                    return $page->canDelete($member);
-                }
+                return $page->canDelete($member);
             }
         }
 
