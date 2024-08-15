@@ -119,7 +119,7 @@ class ElementalPageExtension extends ElementalAreasExtension
         });
     }
 
-    public function MetaTags(&$tags)
+    protected function updateMetaTags(&$tags)
     {
         if (!Controller::has_curr()) {
             return;
