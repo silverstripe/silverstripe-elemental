@@ -19,7 +19,7 @@ class TestPreviewableDataObject extends TestDataObject implements TestOnly, CMSP
         return null;
     }
 
-    public function CMSEditLink()
+    public function getCMSEditLink(): ?string
     {
         return null;
     }

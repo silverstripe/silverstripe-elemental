@@ -342,7 +342,7 @@ class BaseElementTest extends FunctionalTest
                 'admin/pages/edit/EditForm/1/field/ElementalArea/item/1/edit',
                 true
             ],
-            // DataObject without CMSEditLink method
+            // DataObject without getCMSEditLink method implemented
             'element6' => [
                 TestElement::class,
                 'elementDataObject2',
@@ -354,10 +354,10 @@ class BaseElementTest extends FunctionalTest
     /**
      * @dataProvider getElementCMSLinkDataProvider
      */
-    public function testCMSEditLink(string $class, string $element, ?string $link, bool $directLink = false)
+    public function testGetCMSEditLink(string $class, string $element, ?string $link, bool $directLink = false)
     {
         $object = $this->objFromFixture($class, $element);
-        $editLink = $object->CMSEditLink($directLink);
+        $editLink = $object->getCMSEditLink($directLink);
 
         if ($link) {
             $this->assertStringContainsString($link, $editLink);

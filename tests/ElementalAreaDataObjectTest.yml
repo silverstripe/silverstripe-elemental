@@ -17,12 +17,12 @@ DNADesign\Elemental\Models\ElementalArea:
 
 DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink:
   dataObject1:
-    Title: DataObject with CMSEditLink method
+    Title: DataObject with getCMSEditLink method
     ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject1
 
 DNADesign\Elemental\Tests\Src\TestDataObject:
   dataObject2:
-    Title: DataObject without CMSEditLink, Link, or PreviewLink methods
+    Title: DataObject without getCMSEditLink, Link, or PreviewLink methods
     ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject2
 
 DNADesign\Elemental\Tests\Src\TestPreviewableDataObject:
