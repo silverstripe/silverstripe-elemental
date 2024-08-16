@@ -6,6 +6,7 @@ use DNADesign\Elemental\Models\BaseElement;
 use InvalidArgumentException;
 use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\DB;
 use SilverStripe\ORM\Queries\SQLUpdate;
 use SilverStripe\Versioned\Versioned;
 
@@ -61,7 +62,8 @@ class ReorderElements
     }
 
     /**
-     * Set the ordering of Elements in relation to sibling Elements in the parent {@see ElementalArea}
+     * Set the ordering of Elements in relation to sibling Elements in the parent {@see ElementalArea}.
+     * This only affects the sort order in draft.
      *
      * @param int $elementToBeAfterID ID of the Element to be ordered after
      */
@@ -97,39 +99,45 @@ class ReorderElements
         // We are updating records with SQL queries to avoid the ORM triggering the creation of new versions
         // for each element that is affected by this reordering.
         $baseTableName = Convert::raw2sql(DataObject::getSchema()->tableName(BaseElement::class));
+        $tableName = sprintf('"%s"', $baseTableName);
 
-        // Update both the draft and live versions of the records
-        $tableNames = [$baseTableName];
-        if (BaseElement::has_extension(Versioned::class)) {
-            /** @var BaseElement&Versioned $element */
-            $tableNames[] = $element->stageTable($baseTableName, Versioned::LIVE);
+        if ($sortAfterPosition < $currentPosition) {
+            $operator = '+';
+            $filter = "$tableName.\"Sort\" > $sortAfterPosition AND $tableName.\"Sort\" < $currentPosition";
+            $newBlockPosition = $sortAfterPosition + 1;
+        } else {
+            $operator = '-';
+            $filter = "$tableName.\"Sort\" <= $sortAfterPosition AND $tableName.\"Sort\" > $currentPosition";
+            $newBlockPosition = $sortAfterPosition;
         }
 
-        foreach ($tableNames as $tableName) {
-            $tableName = sprintf('"%s"', $tableName);
-
-            if ($sortAfterPosition < $currentPosition) {
-                $operator = '+';
-                $filter = "$tableName.\"Sort\" > $sortAfterPosition AND $tableName.\"Sort\" < $currentPosition";
-                $newBlockPosition = $sortAfterPosition + 1;
-            } else {
-                $operator = '-';
-                $filter = "$tableName.\"Sort\" <= $sortAfterPosition AND $tableName.\"Sort\" > $currentPosition";
-                $newBlockPosition = $sortAfterPosition;
-            }
-
-            $query = SQLUpdate::create()
-                ->setTable("$tableName")
-                ->assignSQL('"Sort"', "$tableName.\"Sort\" $operator 1")
-                ->addWhere([$filter, "$tableName.\"ParentID\"" => $parentId]);
-
-            $query->execute();
-        }
+        $query = SQLUpdate::create()
+            ->setTable("$tableName")
+            ->assignSQL('"Sort"', "$tableName.\"Sort\" $operator 1")
+            ->addWhere([$filter, "$tableName.\"ParentID\"" => $parentId]);
+        $query->execute();
 
         // Now use the ORM to write a new version of the record that we are directly reordering
         $element->Sort = $newBlockPosition;
         $element->write(skipValidation: $this->elementIsNew);
 
         return $element;
+    }
+
+    /**
+     * Force live sort order to match stage sort order
+     */
+    public function publishSortOrder()
+    {
+        $baseTableName = Convert::raw2sql(DataObject::getSchema()->tableName(BaseElement::class));
+        $live = Versioned::LIVE;
+        $sql = sprintf(
+            'UPDATE "%2$s"
+			SET "Sort" = (SELECT "%1$s"."Sort" FROM "%1$s" WHERE "%2$s"."ID" = "%1$s"."ID")
+			WHERE EXISTS (SELECT "%1$s"."Sort" FROM "%1$s" WHERE "%2$s"."ID" = "%1$s"."ID") AND "ParentID" = ?',
+            $baseTableName,
+            "{$baseTableName}_{$live}"
+        );
+        DB::prepared_query($sql, [$this->getElement()->ParentID]);
     }
 }
