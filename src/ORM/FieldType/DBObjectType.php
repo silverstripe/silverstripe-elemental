@@ -3,9 +3,21 @@ namespace DNADesign\Elemental\ORM\FieldType;
 
 use SilverStripe\GraphQL\Manager;
 use SilverStripe\ORM\FieldType\DBField;
+use SilverStripe\Dev\Deprecation;
 
+/**
+ * @deprecated 5.3.0 Will be removed without equivalent functionality to replace it
+ */
 class DBObjectType extends DBField
 {
+    public function __construct()
+    {
+        Deprecation::withNoReplacement(function () {
+            $message = 'Will be removed without equivalent functionality to replace it';
+            Deprecation::notice('5.3.0', $message, Deprecation::SCOPE_CLASS);
+        });
+    }
+
     /**
      * Add the field to the underlying database.
      */
