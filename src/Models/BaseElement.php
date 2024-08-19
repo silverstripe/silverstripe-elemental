@@ -1270,9 +1270,13 @@ JS
 
     /**
      * @return string
+     * @deprecated 5.3.0 Will be replaced with getTypeName()
      */
     public static function getGraphQLTypeName(): string
     {
+        Deprecation::withNoReplacement(function () {
+            Deprecation::notice('5.3.0', 'Will be replaced with getTypeName()');
+        });
         // For GraphQL 3, use the static schema type name - except for BaseElement for which this is inconsistent.
         if (class_exists(StaticSchema::class) && static::class !== BaseElement::class) {
             return StaticSchema::inst()->typeNameForDataObject(static::class);

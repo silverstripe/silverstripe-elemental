@@ -12,9 +12,21 @@ use SilverStripe\GraphQL\QueryHandler\UserContextProvider;
 use SilverStripe\ORM\ValidationException;
 use InvalidArgumentException;
 use Exception;
+use SilverStripe\Dev\Deprecation;
 
+/**
+ * @deprecated 5.3.0 Will be removed without equivalent functionality to replace it
+ */
 class Resolver
 {
+    public function __construct()
+    {
+        Deprecation::withNoReplacement(function () {
+            $message = 'Will be removed without equivalent functionality to replace it';
+            Deprecation::notice('5.3.0', $message, Deprecation::SCOPE_CLASS);
+        });
+    }
+
     /**
      * @param $value
      * @return object
