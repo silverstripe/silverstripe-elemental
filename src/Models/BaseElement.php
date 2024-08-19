@@ -37,6 +37,7 @@ use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataObjectSchema;
 use SilverStripe\ORM\ValidationResult;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Class BaseElement
