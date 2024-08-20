@@ -4,19 +4,17 @@ namespace DNADesign\Elemental\TopPage;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\CMS\Model\SiteTreeExtension as BaseSiteTreeExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationException;
+use SilverStripe\Core\Extension;
 
 /**
  * Class SiteTreeExtension
  *
  * This extension must be present on pagetypes that need to support Elemental TopPage functionality.
  * It can be applied directly to Page, as it only takes effect in the presence of a ElementalArea.
- *
- * @extends BaseSiteTreeExtension<SiteTree&ElementalPageExtension&static>
  */
-class SiteTreeExtension extends BaseSiteTreeExtension
+class SiteTreeExtension extends Extension
 {
     /**
      * List of pages currently undergoing duplication

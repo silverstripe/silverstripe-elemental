@@ -6,12 +6,12 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
-use SilverStripe\ORM\DataExtension as BaseDataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\View\ViewableData;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Core\Extension;
 
 /**
  * Class DataExtension
@@ -22,9 +22,9 @@ use SilverStripe\Forms\FieldList;
  * @property int $TopPageID
  * @method SiteTree TopPage()
  *
- * @extends BaseDataExtension<BaseElement|ElementalArea|static>
+ * @extends Extension<BaseElement|ElementalArea|static>
  */
-class DataExtension extends BaseDataExtension
+class DataExtension extends Extension
 {
     /**
      * @config

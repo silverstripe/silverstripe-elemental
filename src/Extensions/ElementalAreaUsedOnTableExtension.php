@@ -3,17 +3,17 @@
 namespace DNADesign\Elemental\Extensions;
 
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationException;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Admin\Forms\UsedOnTable;
+use SilverStripe\Core\Extension;
 
 /**
- * @extends DataExtension<UsedOnTable>
+ * @extends Extension<UsedOnTable>
  */
-class ElementalAreaUsedOnTableExtension extends DataExtension
+class ElementalAreaUsedOnTableExtension extends Extension
 {
     /**
      * Hides ElementalArea's from the "Used On" tab when viewing files

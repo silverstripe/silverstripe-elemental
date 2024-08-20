@@ -2,10 +2,10 @@
 
 namespace DNADesign\Elemental\Tests\Src;
 
-use SilverStripe\ORM\DataExtension;
 use SilverStripe\Dev\TestOnly;
+use SilverStripe\Core\Extension;
 
-class TestElementContentExtension extends DataExtension implements TestOnly
+class TestElementContentExtension extends Extension implements TestOnly
 {
     private static $db = [
         'UnrenderedField' => 'Varchar(255)',
