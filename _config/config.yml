@@ -7,8 +7,8 @@ SilverStripe\Admin\LeftAndMain:
     - 'dnadesign/silverstripe-elemental:client/dist/js/bundle.js'
   extra_requirements_css:
     - 'dnadesign/silverstripe-elemental:client/dist/styles/bundle.css'
-  extensions:
-    - DNADesign\Elemental\Extensions\ElementalLeftAndMainExtension
+  extra_requirements_i18n:
+    - 'dnadesign/silverstripe-elemental:client/lang'
 
 SilverStripe\Admin\Forms\UsedOnTable:
   extensions:
