@@ -90,10 +90,7 @@ class ElementalArea extends DataObject
         return $elementalClasses;
     }
 
-    /**
-     * @return DBHTMLText
-     */
-    public function forTemplate()
+    public function forTemplate(): string
     {
         return $this->renderWith(static::class);
     }

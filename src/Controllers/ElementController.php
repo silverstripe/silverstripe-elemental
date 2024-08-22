@@ -67,10 +67,8 @@ class ElementController extends Controller
     /**
      * Renders the managed {@link BaseElement} wrapped with the current
      * {@link ElementController}.
-     *
-     * @return string HTML
      */
-    public function forTemplate()
+    public function forTemplate(): string
     {
         $defaultStyles = $this->config()->get('default_styles');
         $this->extend('updateForTemplateDefaultStyles', $defaultStyles);
