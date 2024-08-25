@@ -27,7 +27,7 @@ class TestDataObjectWithCMSEditLink extends DataObject implements TestOnly
         'ElementalArea',
     ];
 
-    public function CMSEditLink()
+    public function getCMSEditLink(): ?string
     {
         $link = Controller::join_links(
             'admin/',

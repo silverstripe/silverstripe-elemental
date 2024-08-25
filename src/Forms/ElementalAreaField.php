@@ -167,7 +167,7 @@ class ElementalAreaField extends GridField
                     'ElementTitle' => $element->Title,
                     'ElementEditLink' => Controller::join_links(
                         // Always get the edit link for the block directly, not the in-line edit form if supported
-                        $element->CMSEditLink(true),
+                        $element->getCMSEditLink(true),
                         '#Root_History'
                     ),
                 ],

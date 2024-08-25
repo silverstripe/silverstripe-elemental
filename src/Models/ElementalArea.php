@@ -147,7 +147,7 @@ class ElementalArea extends DataObject
         if ($owner = $ownerClassName::get()->filter('ElementalAreaID', $this->ID)->first()) {
             return DBField::create_field('HTMLText', sprintf(
                 '<a href="%s">%s</a>',
-                $owner->CMSEditLink(),
+                $owner->getCMSEditLink(),
                 $owner->Title
             ));
         }

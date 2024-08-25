@@ -886,7 +886,7 @@ JS
      * @return null|string
      * @throws \SilverStripe\ORM\ValidationException
      */
-    public function CMSEditLink($directLink = false)
+    public function getCMSEditLink($directLink = false): ?string
     {
         // Allow for repeated calls to be returned from cache
         if (isset($this->cacheData['cms_edit_link'])) {
@@ -919,10 +919,14 @@ JS
         }
 
         if ($page instanceof SiteTree) {
-            $link = $page->CMSEditLink();
-        } elseif (ClassInfo::hasMethod($page, 'CMSEditLink')) {
-            $link = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
+            $link = $page->getCMSEditLink();
+        } else {
+            $baseLink = $page->getCMSEditLink();
+            if ($baseLink) {
+                $link = Controller::join_links($baseLink, 'ItemEditForm');
+            }
         }
+
         // In-line editable blocks should just take you to the page.
         // Editable ones should add the suffix for detail form.
         if (!$this->inlineEditable() || $directLink) {
@@ -937,7 +941,7 @@ JS
                     'edit'
                 );
             } else {
-                // If $page is not a Page, then generate $link base on $page->CMSEditLink()
+                // If $page is not a Page, then generate $link base on $page->getCMSEditLink()
                 return Controller::join_links(
                     $link,
                     'field',
@@ -1015,7 +1019,7 @@ JS
      */
     public function getEditLink()
     {
-        return Director::absoluteURL((string) $this->CMSEditLink());
+        return Director::absoluteURL((string) $this->getCMSEditLink());
     }
 
     /**
@@ -1028,7 +1032,7 @@ JS
         if ($page = $this->getPage()) {
             return DBField::create_field('HTMLText', sprintf(
                 '<a href="%s">%s</a>',
-                $page->CMSEditLink(),
+                $page->getCMSEditLink(),
                 $page->Title
             ));
         }

@@ -55,8 +55,8 @@ class BlogPost extends DataObject
 }
  ```
 
-If you are using `ElementalArea` together with `DataObject`, it is important to define the `CMSEditLink()` method in the class.
-[`BaseElement::CMSEditLink()`](api:DNADesign\Elemental\Models\BaseElement::CMSEditLink()) relies on a valid CMS link being available in the parent `DataObject` - in this case, `BlogPost`. It is used to navigate directly to the editing section of the particular element.
+If you are using `ElementalArea` together with `DataObject`, it is important to define the `getCMSEditLink()` method in the class.
+[`BaseElement::getCMSEditLink()`](api:DNADesign\Elemental\Models\BaseElement::getCMSEditLink()) relies on a valid CMS link being available in the parent `DataObject` - in this case, `BlogPost`. It is used to navigate directly to the editing section of the particular element.
 
 > [!NOTE]
 > If you have a nested [`GridField`](api:SilverStripe\Forms\GridField\GridField) this method can get more complicated. Similarly, if your class is used in multiple admins, you will have to choose one to be the canonical admin section for the purposes of this method. This example only shows the simplest case, where the `BlogPost` class is used directly in `BlogPostsAdmin`.
@@ -68,7 +68,7 @@ class BlogPost extends DataObject
 {
     // ...
 
-    public function CMSEditLink()
+    public function getCMSEditLink(): ?string
     {
         // In this example we use BlogPostsAdmin class as Controller
         $admin = BlogPostsAdmin::singleton();

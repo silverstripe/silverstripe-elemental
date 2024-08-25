@@ -53,7 +53,7 @@ class ElementsInUseReport extends Report
                     $value = $item->Title;
 
                     if (!empty($value)) {
-                        if ($link = $item->CMSEditLink()) {
+                        if ($link = $item->getCMSEditLink()) {
                             return $this->getEditLink($value, $link);
                         }
                         return $value;
@@ -88,7 +88,7 @@ class ElementsInUseReport extends Report
                 'title' => _t(__CLASS__ . '.Page', 'Page'),
                 'formatting' => function ($value, BaseElement $item) {
                     if ($value) {
-                        if ($link = $item->getPage()->CMSEditLink()) {
+                        if ($link = $item->getPage()->getCMSEditLink()) {
                             return $this->getEditLink($value, $link);
                         }
                     }
