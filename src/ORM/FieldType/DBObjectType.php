@@ -21,7 +21,7 @@ class DBObjectType extends DBField
     /**
      * Add the field to the underlying database.
      */
-    public function requireField()
+    public function requireField(): void
     {
         // noop - This class exists only to bind to a custom GraphQL type
     }

@@ -600,10 +600,8 @@ JS
      * Default way to render element in templates. Note that all blocks should
      * be rendered through their {@link ElementController} class as this
      * contains the holder styles.
-     *
-     * @return string|null HTML
      */
-    public function forTemplate($holder = true)
+    public function forTemplate($holder = true): string
     {
         $templates = $this->getRenderTemplates();
 
@@ -611,7 +609,7 @@ JS
             return $this->renderWith($templates);
         }
 
-        return null;
+        return '';
     }
 
     /**
