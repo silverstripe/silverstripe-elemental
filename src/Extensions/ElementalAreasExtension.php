@@ -298,7 +298,7 @@ class ElementalAreasExtension extends DataExtension
      *
      * @return void
      */
-    public function requireDefaultRecords()
+    protected function onRequireDefaultRecords()
     {
         if (!$this->supportsElemental()) {
             return;
