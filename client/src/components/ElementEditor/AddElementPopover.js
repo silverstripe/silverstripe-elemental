@@ -2,10 +2,17 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
 import classNames from 'classnames';
+import * as toastsActions from 'state/toasts/ToastsActions';
 import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
 import i18n from 'i18n';
+import backend from 'lib/Backend';
+import Config from 'lib/Config';
+import { ElementEditorContext } from 'components/ElementEditor/ElementEditor';
+import getJsonErrorMessage from 'lib/getJsonErrorMessage';
 
 /**
  * The AddElementPopover component used in the context of an ElementEditor shows the
@@ -16,27 +23,38 @@ class AddElementPopover extends Component {
     super(props);
 
     this.handleToggle = this.handleToggle.bind(this);
+    AddElementPopover.contextType = ElementEditorContext;
   }
 
   /**
-   * click handler that preserves the details of what was clicked
-   * @param {object} elementType in the shape of types/elmementTypeType
-   * @returns {function}
+   * - Call add element to area endpoint (areaID, elementType, insertAfterElementID)
+   * - Then call read blocks from area endpoint (areaID)
+   * - Then update the preview via jquery/entwine
    */
   getElementButtonClickHandler(elementType) {
     return (event) => {
-      const {
-        actions: { handleAddElementToArea },
-        insertAfterElement
-      } = this.props;
-
       event.preventDefault();
-      handleAddElementToArea(elementType.class, insertAfterElement).then(
-        () => {
+      const sectionConfigKey = 'DNADesign\\Elemental\\Controllers\\ElementalAreaController';
+      const url = `${Config.getSection(sectionConfigKey).controllerLink}/api/create`;
+      backend.post(url, {
+        elementClass: elementType.class,
+        elementalAreaID: this.props.areaId,
+        insertAfterElementID: this.props.insertAfterElement,
+      }, {
+        'X-SecurityID': Config.get('SecurityID')
+      })
+        .then(() => {
+          const { fetchElements } = this.context;
+          return fetchElements();
+        })
+        .then(() => {
           const preview = window.jQuery('.cms-preview');
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
-        }
-      );
+        })
+        .catch(async (err) => {
+          const message = await getJsonErrorMessage(err);
+          this.props.actions.toasts.error(message);
+        });
       this.handleToggle();
     };
   }
@@ -100,10 +118,24 @@ AddElementPopover.propTypes = {
   insertAfterElement: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-export default inject(
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      toasts: bindActionCreators(toastsActions, dispatch),
+    },
+  };
+}
+
+export { AddElementPopover as Component };
+
+const InjectedComponent = inject(
   ['PopoverOptionSet'],
   (PopoverOptionSetComponent) => ({
     PopoverOptionSetComponent,
   }),
   () => 'ElementEditor'
 )(AddElementPopover);
+
+export default compose(
+  connect(null, mapDispatchToProps),
+)(InjectedComponent);

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 // Describes the structure of an element type:
 const elementTypeType = PropTypes.shape({
-  // The GraphQL typeName of the element
+  // The typeName of the element
   name: PropTypes.string,
   // The "name" of the type (eg. "Content")
   title: PropTypes.string,

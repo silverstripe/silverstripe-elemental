@@ -9,7 +9,6 @@ use DNADesign\Elemental\Reports\ElementsInUseReport;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use SilverStripe\Dev\FunctionalTest;
-use SilverStripe\GraphQL\Tests\Schema\NaiveSchemaBuilder;
 use SilverStripe\ORM\DataList;
 
 class ElementsInUseReportTest extends FunctionalTest
@@ -26,26 +25,6 @@ class ElementsInUseReportTest extends FunctionalTest
         TestElement::class,
         TestPage::class,
     ];
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // GraphQL 4 only
-        if (class_exists(NaiveSchemaBuilder::class)) {
-            NaiveSchemaBuilder::activate();
-        }
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        
-        // GraphQL 4 only
-        if (class_exists(NaiveSchemaBuilder::class)) {
-            NaiveSchemaBuilder::deactivate();
-        }
-    }
 
     public function testReportShowsElementsInUse()
     {

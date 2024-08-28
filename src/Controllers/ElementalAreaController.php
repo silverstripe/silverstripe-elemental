@@ -15,6 +15,11 @@ use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Control\Controller;
+use DNADesign\Elemental\Models\ElementalArea;
+use DNADesign\Elemental\Services\ReorderElements;
+use Exception;
+use SilverStripe\Control\HTTPRequest;
+use InvalidArgumentException;
 
 /**
  * Controller for "ElementalArea" - handles loading and saving of in-line edit forms in an elemental area in admin
@@ -29,16 +34,227 @@ class ElementalAreaController extends CMSMain
 
     private static $url_handlers = [
         'elementForm/$ItemID' => 'elementForm',
-        'POST api/saveForm/$ID' => 'apiSaveForm',
         '$FormName/field/$FieldName' => 'formAction',
+        'GET api/readElements/$elementalAreaID!' => 'apiReadElements',
+        'POST api/create' => 'apiCreate',
+        'POST api/delete' => 'apiDelete',
+        'POST api/duplicate' => 'apiDuplicate',
+        'POST api/publish' => 'apiPublish',
+        'POST api/saveForm/$ID' => 'apiSaveForm',
+        'POST api/sort' => 'apiSort',
+        'POST api/unpublish' => 'apiUnpublish',
     ];
 
     private static $allowed_actions = [
         'elementForm',
-        'apiSaveForm',
         'formAction',
+        'apiCreate',
+        'apiDelete',
+        'apiDuplicate',
+        'apiPublish',
+        'apiReadElements',
+        'apiSaveForm',
+        'apiSort',
+        'apiUnpublish',
     ];
 
+    /**
+     * JSON endpoint to create a new element in an ElementalArea
+     */
+    public function apiCreate(HTTPRequest $request): HTTPResponse
+    {
+        if (!SecurityToken::inst()->checkRequest($request)) {
+            $this->jsonError(400);
+        }
+        $elementClass = $this->getPostedJsonValue($request, 'elementClass');
+        $elementalAreaID = $this->getPostedJsonValue($request, 'elementalAreaID');
+        // $afterElementID can be null, so do not error if it's missing
+        $data = json_decode($request->getBody(), true);
+        $afterElementID = $data['insertAfterElementID'] ?? null;
+        if (!is_subclass_of($elementClass, BaseElement::class)) {
+            $this->jsonError(400);
+        }
+        $elementalArea = ElementalArea::get()->byID($elementalAreaID);
+        if (!$elementalArea) {
+            $this->jsonError(400);
+        }
+        if (!$elementalArea->canEdit()) {
+            $this->jsonError(403);
+        }
+        /** @var BaseElement $newElement */
+        $newElement = Injector::inst()->create($elementClass);
+        if (!$newElement->canCreate()) {
+            $this->jsonError(403);
+        }
+        // Assign the parent ID directly rather than via HasManyList to prevent multiple writes.
+        // See BaseElement::$has_one for the "Parent" naming.
+        $newElement->ParentID = $elementalArea->ID;
+        $newElement->ensureSortSet();
+        if ($afterElementID !== null) {
+            $this->reorderElements($newElement, $afterElementID);
+        } else {
+            $newElement->write();
+        }
+        return $this->jsonSuccess(204);
+    }
+
+    /**
+     * JSON endpoint to delete an element
+     */
+    public function apiDelete(HTTPRequest $request): HTTPResponse
+    {
+        if (!SecurityToken::inst()->checkRequest($request)) {
+            $this->jsonError(400);
+        }
+        $id = $this->getPostedJsonValue($request, 'id');
+        $element = BaseElement::get()->byID($id);
+        if (!$element) {
+            $this->jsonError(400);
+        }
+        if (!$element->canDelete()) {
+            $this->jsonError(403);
+        }
+        // Elemental does not officially support unversioned elements so always call doArchive()
+        $element->doArchive();
+        return $this->jsonSuccess(204);
+    }
+
+    /**
+     * JSON endpoint to duplicate an element
+     */
+    public function apiDuplicate(HTTPRequest $request): HTTPResponse
+    {
+        if (!SecurityToken::inst()->checkRequest($request)) {
+            $this->jsonError(400);
+        }
+        $id = $this->getPostedJsonValue($request, 'id');
+         $element = BaseElement::get()->byID($id);
+        if (!$element) {
+            $this->jsonError(400);
+        }
+        if (!$element->canCreate()) {
+            $this->jsonError(403);
+        }
+        // check can edit the elemental area
+        $areaID = $element->ParentID;
+        $area = ElementalArea::get()->byID($areaID);
+        if (!$area) {
+            $this->jsonError(400);
+        }
+        if (!$area->canEdit()) {
+            $this->jsonError(403);
+        }
+        // clone element
+        $clone = $element->duplicate(false);
+        $clone->Title = $this->getNewTitle($clone->Title ?? '');
+        $clone->Sort = 0; // must be zeroed for reorder to work
+        $area->Elements()->add($clone);
+        // reorder
+        $this->reorderElements($clone, $id);
+        return $this->jsonSuccess(204);
+    }
+
+    /**
+     * JSON endpoint to publish an element
+     */
+    public function apiPublish(HTTPRequest $request): HTTPResponse
+    {
+        if (!SecurityToken::inst()->checkRequest($request)) {
+            $this->jsonError(400);
+        }
+        $id = $this->getPostedJsonValue($request, 'id');
+        $element = BaseElement::get()->byID($id);
+        if (!$element) {
+            $this->jsonError(400);
+        }
+        if (!$element->canPublish()) {
+            $this->jsonError(403);
+        }
+        $element->publishRecursive();
+        return $this->jsonSuccess(204);
+    }
+
+    /**
+     * JSON endpoint to read elements on an ElementalArea
+     */
+    public function apiReadElements(HTTPRequest $request): HTTPResponse
+    {
+        $request = $this->getRequest();
+        $elementalAreaID = $request->param('elementalAreaID');
+        $elementalArea = ElementalArea::get()->byID($elementalAreaID);
+        if (!$elementalArea) {
+            $this->jsonError(404);
+        }
+        if (!$elementalArea->canView()) {
+            $this->jsonError(403);
+        }
+        $data = [];
+        foreach ($elementalArea->Elements() as $element) {
+            if (!$element->canView()) {
+                continue;
+            }
+            $data[] = [
+                'id' => $element->ID,
+                'title' => $element->Title,
+                'blockSchema' => $element->getBlockSchema(),
+                'obsoleteClassName' => $element->getObsoleteClassName(),
+                'version' => $element->Version,
+                'isPublished' => $element->isPublished(),
+                'isLiveVersion' => $element->isLiveVersion(),
+                'canDelete' => $element->canDelete(),
+                'canPublish' => $element->canPublish(),
+                'canUnpublish' => $element->canUnpublish(),
+                'canCreate' => $element->canCreate(),
+            ];
+        }
+        $this->extend('updateApiReadElementalArea', $data, $request);
+        return $this->jsonSuccess(200, $data);
+    }
+
+    /**
+     * JSON endpoint to sort elements on an ElementalArea
+     */
+    public function apiSort(HTTPRequest $request): HTTPResponse
+    {
+        if (!SecurityToken::inst()->checkRequest($request)) {
+            $this->jsonError(400);
+        }
+        $id = $this->getPostedJsonValue($request, 'id');
+        $afterBlockID = $this->getPostedJsonValue($request, 'afterBlockID');
+        $element = BaseElement::get()->byID($id);
+        if (!$element) {
+            $this->jsonError(400);
+        }
+        if (!$element->canEdit()) {
+            $this->jsonError(403);
+        }
+        $this->reorderElements($element, $afterBlockID);
+        return $this->jsonSuccess(204);
+    }
+
+    /**
+     * JSON endpoint to unpublish an element
+     */
+    public function apiUnpublish(HTTPRequest $request): HTTPResponse
+    {
+        if (!SecurityToken::inst()->checkRequest($request)) {
+            $this->jsonError(400);
+        }
+        $id = $this->getPostedJsonValue($request, 'id');
+        $element = BaseElement::get()->byID($id);
+        if (!$element) {
+            $this->jsonError(400);
+        }
+        if (!$element->canUnpublish()) {
+            $this->jsonError(403);
+        }
+        $element->doUnpublish();
+        return $this->jsonSuccess(204);
+    }
+
+    /**
+     * Returns configuration required by the client app
+     */
     public function getClientConfig()
     {
         $clientConfig = parent::getClientConfig();
@@ -46,6 +262,8 @@ class ElementalAreaController extends CMSMain
             'schemaUrl' => $this->Link('schema/elementForm'),
             'formNameTemplate' => sprintf(static::FORM_NAME_TEMPLATE, '{id}'),
         ];
+        $clientConfig['controllerLink'] = $this->Link();
+
         // Configuration that is available per element type
         $clientConfig['elementTypes'] = ElementTypeRegistry::generate()->getDefinitions();
         return $clientConfig;
@@ -60,7 +278,6 @@ class ElementalAreaController extends CMSMain
     public function elementForm(): Form
     {
         $id = $this->getRequest()->param('ItemID');
-        // Note that new elements are added via graphql, so only using this endpoint for editing existing
         $element = BaseElement::get()->byID($id);
         if (!$element) {
             $this->jsonError(404);
@@ -89,7 +306,7 @@ class ElementalAreaController extends CMSMain
     {
         $request = $this->getRequest();
 
-        // Check security token for non-view operation
+        // Check security token for non-view operation - note token is pased in POST body, not headers
         if (!SecurityToken::inst()->checkRequest($request)) {
             $this->jsonError(400);
         }
@@ -156,6 +373,38 @@ class ElementalAreaController extends CMSMain
             $output[$fieldName] = $value;
         }
         return $output;
+    }
+
+    private function reorderElements(BaseElement $element, int $afterElementID): void
+    {
+        if ($afterElementID < 0) {
+            $this->jsonError(400);
+        }
+        /** @var ReorderElements $reorderer */
+        $reorderer = Injector::inst()->create(ReorderElements::class, $element);
+        $reorderer->reorder($afterElementID);
+    }
+
+    private function getNewTitle(string $title = ''): ?string
+    {
+        $hasCopyPattern = '/^.*(\scopy($|\s[0-9]+$))/';
+        $hasNumPattern = '/^.*(\s[0-9]+$)/';
+        $parts = [];
+        // does $title end with 'copy' (ignoring numbers for now)?
+        if (preg_match($hasCopyPattern ?? '', $title ?? '', $parts)) {
+            $copy = $parts[1];
+            // does $title end with numbers?
+            if (preg_match($hasNumPattern ?? '', $copy ?? '', $parts)) {
+                $num = trim($parts[1] ?? '');
+                $len = strlen($num ?? '');
+                $inc = (int)$num + 1;
+                return substr($title ?? '', 0, -$len) . "$inc";
+            } else {
+                return $title . ' 2';
+            }
+        } else {
+            return $title . ' copy';
+        }
     }
 
     /**

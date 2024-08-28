@@ -1,7 +1,6 @@
 /* global window */
 
-import React, { useState, useEffect, createContext } from 'react';
-import { useMutation } from '@apollo/client';
+import React, { useState, useEffect, useContext, createContext } from 'react';
 import PropTypes from 'prop-types';
 import { elementType } from 'types/elementType';
 import { elementTypeType } from 'types/elementTypeType';
@@ -13,14 +12,16 @@ import { connect } from 'react-redux';
 import { submit } from 'redux-form';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
-import { publishBlockMutation } from 'state/editor/publishBlockMutation';
-import { query as readBlocksForAreaQuery } from 'state/editor/readBlocksForAreaQuery';
 import * as TabsActions from 'state/tabs/TabsActions';
 import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { elementDragSource, isOverTop } from 'lib/dragHelpers';
 import * as toastsActions from 'state/toasts/ToastsActions';
 import { addFormChanged, removeFormChanged } from 'state/unsavedForms/UnsavedFormsActions';
+import { ElementEditorContext } from 'components/ElementEditor/ElementEditor';
+import { getConfig } from 'state/editor/elementConfig';
+import backend from 'lib/Backend';
+import Config from 'lib/Config';
 
 export const ElementContext = createContext(null);
 
@@ -41,7 +42,7 @@ const Element = (props) => {
   const [formHasRendered, setFormHasRendered] = useState(false);
   const [doDispatchAddFormChanged, setDoDispatchAddFormChanged] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [publishBlock] = useMutation(publishBlockMutation);
+  const { fetchElements } = useContext(ElementEditorContext);
 
   useEffect(() => {
     // Note that formDirty from redux can be set to undefined after failed validation
@@ -128,29 +129,20 @@ const Element = (props) => {
     }
   };
 
-  // This will trigger a graphql request that will cause this
-  // element to re-render including any updated title and versioned badge
-  const refetchElementalArea = () => window.ss.apolloClient.queryManager.refetchQueries({
-    include: [{
-      query: readBlocksForAreaQuery,
-      variables: { id: props.areaId }
-    }]
-  });
-
   const handleAfterPublish = (wasError) => {
     showPublishedElementToast(wasError);
     setDoPublishElement(false);
     setDoPublishElementAfterSave(false);
-    // Ensure that formDirty becomes falsey after publishing
-    // We need to call at a later render rather than straight away or redux-form may override this
-    // and set the form state to dirty under certain conditions
-    // setTimeout is a hackish way to do this, though I'm not sure how else we can do this
-    // The core issue is that redux-form will detect changes when a form is hydrated for the first
-    // time under certain conditions, specifically during a behat test when trying to publish a closed
-    // block when presumably the apollo cache is empty (or something like that). This happens late and
-    // there are no hooks/callbacks available after this happens the input onchange handlers are fired
-    Promise.all(refetchElementalArea())
+    fetchElements()
       .then(() => {
+        // Ensure that formDirty becomes falsey after publishing
+        // We need to call at a later render rather than straight away or redux-form may override this
+        // and set the form state to dirty under certain conditions
+        // setTimeout is a hackish way to do this, though I'm not sure how else we can do this
+        // The core issue is that redux-form will detect changes when a form is hydrated for the first
+        // time under certain conditions, specifically during a behat test when trying to publish a closed
+        // block when presumably the old apollo cache was empty (or something like that). This happens late and
+        // there are no hooks/callbacks available after this happens the input onchange handlers are fired
         setTimeout(() => props.dispatchRemoveFormChanged(), 250);
       });
   };
@@ -166,7 +158,12 @@ const Element = (props) => {
   // Publish action
   useEffect(() => {
     if (formHasRendered && doPublishElement) {
-      publishBlock({ variables: { blockId: props.element.id } })
+      const url = `${getConfig().controllerLink.replace(/\/$/, '')}/api/publish`;
+      backend.post(url, {
+        id: props.element.id,
+      }, {
+        'X-SecurityID': Config.get('SecurityID')
+      })
         .then(() => handleAfterPublish(false))
         .catch(() => handleAfterPublish(true));
     }
@@ -354,8 +351,8 @@ const Element = (props) => {
     if (!doPublishElement && !doPublishElementAfterSave) {
       showSavedElementToast(title);
     }
-    refetchElementalArea();
     props.onAfterSubmitResponse(true);
+    fetchElements();
   };
 
   const {

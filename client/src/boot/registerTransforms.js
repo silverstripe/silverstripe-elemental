@@ -1,9 +1,6 @@
 import Injector from 'lib/Injector';
-import readOneBlockQuery from 'state/history/readOneBlockQuery';
 import HistoricElementViewFactory from 'components/HistoricElementView/HistoricElementView';
-import revertToBlockVersionMutation from 'state/history/revertToBlockVersionMutation';
-import readBlocksForAreaQuery from 'state/editor/readBlocksForAreaQuery';
-import addElementToArea from 'state/editor/addElementMutation';
+import revertToBlockVersionRequest from 'state/history/revertToBlockVersionRequest';
 import ArchiveAction from 'components/ElementActions/ArchiveAction';
 import DuplicateAction from 'components/ElementActions/DuplicateAction';
 import SaveAction from 'components/ElementActions/SaveAction';
@@ -26,49 +23,13 @@ export default () => {
   );
 
   Injector.transform(
-    'elements-history',
-    (updater) => {
-      // Add content block history to the HistoryViewer
-      updater.component(
-        'HistoryViewer.Form_ItemEditForm',
-        readOneBlockQuery,
-        'ElementHistoryViewer'
-      );
-    }
-  );
-
-  Injector.transform(
     'blocks-history-revert',
     (updater) => {
-      // Add block element revert GraphQL mutation to the HistoryViewerToolbar
+      // Add revertToVersion() to props.actions on HistoryViewerToolbar
       updater.component(
         'HistoryViewerToolbar.VersionedAdmin.HistoryViewer.Element.HistoryViewerVersionDetail',
-        revertToBlockVersionMutation,
-        'BlockRevertMutation'
-      );
-    }
-  );
-
-  Injector.transform(
-    'cms-element-editor',
-    (updater) => {
-      // Add GraphQL query for reading elements on a page for the ElementEditor
-      updater.component(
-        'ElementList',
-        readBlocksForAreaQuery,
-        'PageElements'
-      );
-    }
-  );
-
-  Injector.transform(
-    'cms-element-adder',
-    (updater) => {
-      // Add GraphQL query for adding elements to an ElementEditor (ElementalArea)
-      updater.component(
-        'AddElementPopover',
-        addElementToArea,
-        'ElementAddButton'
+        revertToBlockVersionRequest,
+        'BlockRevertRequest'
       );
     }
   );

@@ -1,14 +1,19 @@
 /* global window */
-import React from 'react';
-import { compose } from 'redux';
+import React, { useContext } from 'react';
 import AbstractAction from 'components/ElementActions/AbstractAction';
-import duplicateBlockMutation from 'state/editor/duplicateBlockMutation';
 import i18n from 'i18n';
+import { ElementEditorContext } from 'components/ElementEditor/ElementEditor';
+import backend from 'lib/Backend';
+import Config from 'lib/Config';
+import { getConfig } from 'state/editor/elementConfig';
+import getJsonErrorMessage from 'lib/getJsonErrorMessage';
 
 /**
  * Adds the elemental menu action to duplicate a block
  */
 const DuplicateAction = (MenuComponent) => (props) => {
+  const { fetchElements } = useContext(ElementEditorContext);
+
   if (props.type.broken) {
     // Don't allow this action for a broken element.
     return (
@@ -18,15 +23,23 @@ const DuplicateAction = (MenuComponent) => (props) => {
 
   const handleClick = (event) => {
     event.stopPropagation();
-
-    const { element: { id }, actions: { handleDuplicateBlock } } = props;
-
-    if (handleDuplicateBlock) {
-      handleDuplicateBlock(id).then(() => {
-        const preview = window.jQuery('.cms-preview');
-        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+    const id = props.element.id;
+    const url = `${getConfig().controllerLink.replace(/\/$/, '')}/api/duplicate`;
+    backend.post(url, {
+      id,
+    }, {
+      'X-SecurityID': Config.get('SecurityID')
+    })
+      .then(() => fetchElements())
+      .catch(async (err) => {
+        const message = await getJsonErrorMessage(err);
+        // Using jquery instead of redux toasts because redux won't connect to an AbstractAction
+        window.jQuery.noticeAdd({
+          text: message,
+          stay: true,
+          type: 'error',
+        });
       });
-    }
   };
 
   const disabled = props.element.canCreate !== undefined && !props.element.canCreate;
@@ -53,4 +66,4 @@ const DuplicateAction = (MenuComponent) => (props) => {
 
 export { DuplicateAction as Component };
 
-export default compose(duplicateBlockMutation, DuplicateAction);
+export default DuplicateAction;
