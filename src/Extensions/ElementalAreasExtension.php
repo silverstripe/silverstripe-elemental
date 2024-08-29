@@ -13,11 +13,11 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\RelatedData\StandardRelatedDataService;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ViewableData;
+use SilverStripe\Core\Extension;
 
 /**
  * This extension handles most of the relationships between pages and element
@@ -44,9 +44,9 @@ use SilverStripe\View\ViewableData;
  * );
  *
  * @template T of DataObject
- * @extends DataExtension<T&static>
+ * @extends Extension<T&static>
  */
-class ElementalAreasExtension extends DataExtension
+class ElementalAreasExtension extends Extension
 {
     use Extensible;
 
@@ -220,8 +220,6 @@ class ElementalAreasExtension extends DataExtension
      */
     protected function onBeforeWrite()
     {
-        parent::onBeforeWrite();
-
         if (!$this->supportsElemental()) {
             return;
         }
