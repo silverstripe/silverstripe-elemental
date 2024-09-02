@@ -48,11 +48,10 @@ class ElementTypeRegistry
         }
 
         // Get the GraphQL type name
-        $typeName = $singleton->getGraphQLTypeName();
 
         $this->elementTypes[] = [
             'icon' => $singleton::config()->get('icon'),
-            'name' => $typeName,
+            'name' => $singleton->getTypeName(),
             'class' => $elementClass,
             'title' => $singleton->getType(),
             'inlineEditable' => $singleton->inlineEditable(),
@@ -70,7 +69,7 @@ class ElementTypeRegistry
         $singleton = singleton(BaseElement::class);
         $this->elementTypes[] = [
             'icon' => 'font-icon-block',
-            'name' => $singleton->getGraphQLTypeName(),
+            'name' => $singleton->getTypeName(),
             'class' => BaseElement::class,
             'title' => '',
             'inlineEditable' => false,

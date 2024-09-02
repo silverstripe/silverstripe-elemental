@@ -1,4 +1,4 @@
-DNADesign\Elemental\Models\ElementalArea:
+DNADesign\Elemental\Tests\Blocks\TestElementalArea:
   blocks_page_area:
     Title: Area 1
 
@@ -6,12 +6,27 @@ DNADesign\Elemental\Tests\Src\TestPage:
   blocks_page:
     Title: Content blocks page
     URLSegment: blocks-page
-    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.blocks_page_area
+    ElementalAreaID: =>DNADesign\Elemental\Tests\Blocks\TestElementalArea.blocks_page_area
 
 DNADesign\Elemental\Tests\Blocks\TestElementContent:
-  blocks_page_content:
-    Title: My title
+  TestElementContent01:
+    Title: TestElementContent01 Title
     HTML: Some HTML
-    ParentID: =>DNADesign\Elemental\Models\ElementalArea.blocks_page_area
+    ParentID: =>DNADesign\Elemental\Tests\Blocks\TestElementalArea.blocks_page_area
     MyInt: 123
     MyEnum: Cloudy
+    Sort: 1
+  TestElementContent02:
+    Title: TestElementContent02 Title
+    HTML: Some HTML
+    ParentID: =>DNADesign\Elemental\Tests\Blocks\TestElementalArea.blocks_page_area
+    MyInt: 456
+    MyEnum: Cloudy
+    Sort: 2
+  TestElementContent03:
+    Title: TestElementContent03 Title
+    HTML: Some HTML
+    ParentID: =>DNADesign\Elemental\Tests\Blocks\TestElementalArea.blocks_page_area
+    MyInt: 789
+    MyEnum: Cloudy
+    Sort: 3

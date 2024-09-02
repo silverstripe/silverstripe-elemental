@@ -4,7 +4,6 @@ namespace DNADesign\Elemental\Models;
 
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
-use DNADesign\Elemental\ORM\FieldType\DBObjectType;
 use DNADesign\Elemental\Services\ReorderElements;
 use DNADesign\Elemental\TopPage\DataExtension;
 use Exception;
@@ -19,8 +18,6 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\TextField;
-use SilverStripe\GraphQL\Scaffolding\StaticSchema;
-use SilverStripe\GraphQL\Schema\Exception\SchemaBuilderException;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
@@ -35,7 +32,6 @@ use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\ORM\DataObjectSchema;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\Dev\Deprecation;
 
@@ -96,7 +92,6 @@ class BaseElement extends DataObject implements CMSPreviewable
     ];
 
     private static $casting = [
-        'BlockSchema' => DBObjectType::class,
         'IsLiveVersion' => DBBoolean::class,
         'IsPublished' => DBBoolean::class,
         'canCreate' => DBBoolean::class,
@@ -1049,7 +1044,7 @@ JS
     /**
      * This can be overridden on child elements to create a summary for display in GridFields.
      * The react Summary component takes `content` (html) and/or `fileUrl` & `fileTitle` (image) props,
-     * which have to be added to the graphql output in `provideBlockSchema()`.
+     * which have to be added to the output in `provideBlockSchema()`.
      *
      * @return string
      */
@@ -1070,27 +1065,17 @@ JS
     }
 
     /**
-     * The block actions is an associative array available for providing data to the client side to be used to describe
-     * actions that may be performed. This is available as a plain "ObjectType" in the GraphQL schema.
-     *
-     * By default the only action is "edit" which is simply the URL where the block may be edited.
-     *
-     * To modify the actions, either use the extension point or overload the `provideBlockSchema` method.
-     *
-     * @internal This API may change in future. Treat this as a `final` method.
-     * @return array
+     * Get the block schema data which will be sent to the editor client
      */
-    public function getBlockSchema()
+    public function getBlockSchema(): array
     {
         $blockSchema = $this->provideBlockSchema();
-
         $this->extend('updateBlockSchema', $blockSchema);
-
         return $blockSchema;
     }
 
     /**
-     * Provide block schema data, which will be serialised and sent via GraphQL to the editor client.
+     * Provide block schema data which will be sent to the editor client.
      *
      * Overload this method in child element classes to augment, or use the extension point on `getBlockSchema`
      * to update it from an `Extension`.
@@ -1102,7 +1087,7 @@ JS
     protected function provideBlockSchema()
     {
         return [
-            'typeName' => static::getGraphQLTypeName(),
+            'typeName' => str_replace('\\', '_', get_class($this)),
             'actions' => [
                 'edit' => $this->getEditLink(),
             ],
@@ -1110,7 +1095,7 @@ JS
         ];
     }
 
-    /**
+     /**
      * Generate markup for element type icons suitable for use in GridFields.
      *
      * @return null|DBHTMLText
@@ -1273,17 +1258,9 @@ JS
 
     /**
      * @return string
-     * @deprecated 5.3.0 Will be replaced with getTypeName()
      */
-    public static function getGraphQLTypeName(): string
+    public function getTypeName(): string
     {
-        Deprecation::withNoReplacement(function () {
-            Deprecation::notice('5.3.0', 'Will be replaced with getTypeName()');
-        });
-        // For GraphQL 3, use the static schema type name - except for BaseElement for which this is inconsistent.
-        if (class_exists(StaticSchema::class) && static::class !== BaseElement::class) {
-            return StaticSchema::inst()->typeNameForDataObject(static::class);
-        }
         return str_replace('\\', '_', static::class);
     }
 

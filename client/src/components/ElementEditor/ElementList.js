@@ -29,19 +29,35 @@ class ElementList extends Component {
     this.props.sharedObject.setState = this.setState.bind(this);
   }
 
+  componentDidMount() {
+    this.resetState({}, true);
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    // Scenario: blocks props just changed after a graphql query response updated it
-    if (this.props.blocks !== prevProps.blocks) {
+    // Don't do anything if elements have not yet been recieved from xhr request
+    if (!this.props.elements) {
+      return;
+    }
+    // Scenario: elements props just changed after an xhr response updated it
+    if (this.props.elements !== prevProps.elements) {
       this.resetState(prevState, false);
       return;
     }
     // Scenario Saving all elements and state has just updated because of a formSchema response from
     // an inline save - see Element.js handleFormSchemaSubmitResponse()
     if (this.state.saveAllElements) {
-      const unsavedChangesBlockIDs = this.props.blocks
+      const unsavedChangesBlockIDs = this.props.elements
         .map(block => parseInt(block.id, 10))
         .filter(blockID => this.state.hasUnsavedChangesBlockIDs[blockID]);
-      const allValidated = unsavedChangesBlockIDs.every(blockID => this.state.validBlockIDs[blockID] !== null);
+      // const allValidated = unsavedChangesBlockIDs.every(blockID => this.state.validBlockIDs[blockID] !== null);
+      let allValidated = true;
+      for (let i = 0; i < unsavedChangesBlockIDs.length; i++) {
+        const blockID = unsavedChangesBlockIDs[i];
+        if (this.state.validBlockIDs[blockID] === null) {
+          allValidated = false;
+          break;
+        }
+      }
       if (allValidated) {
         const allValid = unsavedChangesBlockIDs.every(blockID => this.state.validBlockIDs[blockID]);
         // entwineResolve is bound in entwine.js
@@ -64,9 +80,9 @@ class ElementList extends Component {
     // - true: saved, valid
     // - false: attempted save, invalid
     const validBlockIDs = {};
-    const blocks = this.props.blocks || [];
-    blocks.forEach(block => {
-      const blockID = parseInt(block.id, 10);
+    const elements = this.props.elements || [];
+    elements.forEach(element => {
+      const blockID = parseInt(element.id, 10);
       if (resetHasUnsavedChangesBlockIDs) {
         hasUnsavedChangesBlockIDs[blockID] = false;
       } else if (prevState.hasUnsavedChangesBlockIDs.hasOwnProperty(blockID)) {
@@ -111,9 +127,9 @@ class ElementList extends Component {
   }
 
   getDragIndicatorIndex() {
-    const { dragTargetElementId, draggedItem, blocks, dragSpot } = this.props;
+    const { dragTargetElementId, draggedItem, elements, dragSpot } = this.props;
     return getDragIndicatorIndex(
-      blocks.map(element => element.id),
+      elements.map(element => element.id),
       dragTargetElementId,
       draggedItem && draggedItem.id,
       dragSpot
@@ -122,15 +138,14 @@ class ElementList extends Component {
 
   /**
    * Renders a list of Element components, each with an elementType object
-   * of data mapped into it. The data is provided by a GraphQL HOC registered
-   * in registerTransforms.js.
+   * of data mapped into it.
    */
   renderBlocks() {
     const {
       ElementComponent,
       HoverBarComponent,
       DragIndicatorComponent,
-      blocks,
+      elements,
       allowedElementTypes,
       elementTypes,
       areaId,
@@ -140,16 +155,11 @@ class ElementList extends Component {
       isDraggingOver,
     } = this.props;
 
-    // Blocks can be either null or an empty array
-    if (!blocks) {
-      return null;
-    }
-
-    if (blocks && !blocks.length) {
+    if (elements.length === 0) {
       return <div>{i18n._t('ElementList.ADD_BLOCKS', 'Add blocks to place your content')}</div>;
     }
 
-    let output = blocks.map(element => {
+    let output = elements.map(element => {
       const saveElement = this.state.saveAllElements
         && this.state.hasUnsavedChangesBlockIDs[element.id]
         && this.state.validBlockIDs[element.id] === null;
@@ -203,19 +213,23 @@ class ElementList extends Component {
    * @returns {LoadingComponent|null}
    */
   renderLoading() {
-    const { loading, LoadingComponent } = this.props;
+    const {
+      isLoading,
+      LoadingComponent
+    } = this.props;
 
-    if (loading) {
+    if (isLoading) {
       return <LoadingComponent />;
     }
     return null;
   }
 
   render() {
-    const { blocks } = this.props;
+    const { elements } = this.props;
+
     const listClassNames = classNames(
       'elemental-editor-list',
-      { 'elemental-editor-list--empty': !blocks || !blocks.length }
+      { 'elemental-editor-list--empty': !elements || !elements.length }
     );
 
     return this.props.connectDropTarget(
@@ -228,12 +242,11 @@ class ElementList extends Component {
 }
 
 ElementList.propTypes = {
-  blocks: PropTypes.arrayOf(elementType),
+  elements: PropTypes.arrayOf(elementType).isRequired,
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   allowedElementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
-  loading: PropTypes.bool,
   areaId: PropTypes.number.isRequired,
-  dragTargetElementId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  dragTargetElementId: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   onDragOver: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragEnd: PropTypes.func,
@@ -241,19 +254,19 @@ ElementList.propTypes = {
 };
 
 ElementList.defaultProps = {
-  blocks: [],
-  loading: false,
   sharedObject: {
     entwineResolve: () => {},
     setState: null,
   },
+  elements: [],
+  isLoading: false,
 };
 
 export { ElementList as Component };
 
 const elementListTarget = {
   drop(props, monitor) {
-    const { blocks } = props;
+    const { elements } = props;
     const elementTargetDropResult = monitor.getDropResult();
 
     if (!elementTargetDropResult) {
@@ -261,12 +274,12 @@ const elementListTarget = {
     }
 
     const dropIndex = getDragIndicatorIndex(
-      blocks.map(element => element.id),
+      elements.map(element => element.id),
       elementTargetDropResult.target,
       monitor.getItem(),
       elementTargetDropResult.dropSpot,
     );
-    const dropAfterID = blocks[dropIndex - 1] ? blocks[dropIndex - 1].id : '0';
+    const dropAfterID = elements[dropIndex - 1] ? elements[dropIndex - 1].id : '0';
 
     return {
       ...elementTargetDropResult,

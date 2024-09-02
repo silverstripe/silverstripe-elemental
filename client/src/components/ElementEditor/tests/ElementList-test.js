@@ -17,9 +17,9 @@ const elementTypes = [
 function makeProps(obj = {}) {
   return {
     key: '1',
-    blocks: [
+    elements: [
       {
-        id: '1',
+        id: 1,
         title: 'Title',
         blockSchema: {
           actions: { edit: '' }
@@ -30,7 +30,7 @@ function makeProps(obj = {}) {
         version: 6
       },
       {
-        id: '2',
+        id: 2,
         title: 'Title II',
         blockSchema: {
           actions: { edit: '' }
@@ -53,7 +53,7 @@ function makeProps(obj = {}) {
   };
 }
 
-test('ElementList renders elements when blocks are provided as props', () => {
+test('ElementList renders elements when elements are provided as props', () => {
   const { container } = render(<ElementList {...makeProps()}/>);
   expect(container.querySelectorAll('.test-element')).toHaveLength(2);
   expect(container.querySelectorAll('.test-loading')).toHaveLength(0);
@@ -63,8 +63,8 @@ test('ElementList renders a loading component', () => {
   const { container } = render(
     <ElementList {...makeProps({
       key: '2',
-      blocks: [],
-      loading: true
+      elements: [],
+      isLoading: true
     })}
     />
   );
@@ -76,8 +76,8 @@ test('ElementList renders a placeholder message when no elements are provided as
   const { container } = render(
     <ElementList {...makeProps({
       key: '3',
-      blocks: [],
-      loading: false
+      elements: [],
+      isLoading: false
     })}
     />
   );

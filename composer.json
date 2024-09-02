@@ -24,7 +24,6 @@
         "silverstripe/admin": "^3",
         "silverstripe/versioned": "^3",
         "silverstripe/versioned-admin": "^3",
-        "silverstripe/graphql": "^6",
         "symbiote/silverstripe-gridfieldextensions": "^5",
         "silverstripe/vendor-plugin": "^2"
     },
