@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\TopPage;
+namespace DNADesign\Elemental\Extensions;
 
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
@@ -9,21 +9,16 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
 use TractorCow\Fluent\State\FluentState;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Dev\Deprecation;
 
 /**
- * Class FluentExtension
- *
- * Use in place of @see DataExtension if you use the Fluent module for page localisation.
+ * Use in place of @see TopPageElementExtension if you use the Fluent module for page localisation.
  *
  * @link https://github.com/tractorcow-farm/silverstripe-fluent
  * @property string $TopPageLocale
  *
- * @extends DataExtension<DataObject&static>
- *
- * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\Extensions\TopPageFluentElementExtension
+ * @extends TopPageElementExtension<DataObject&static>
  */
-class FluentExtension extends DataExtension
+class TopPageFluentElementExtension extends TopPageElementExtension
 {
     /**
      * @var array
@@ -31,17 +26,6 @@ class FluentExtension extends DataExtension
     private static $db = [
         'TopPageLocale' => 'Varchar',
     ];
-
-    public function __construct()
-    {
-        Deprecation::withNoReplacement(function () {
-            Deprecation::notice(
-                '5.4.0',
-                'Will be replaced with DNADesign\Elemental\Extensions\TopPageFluentElementExtension',
-                Deprecation::SCOPE_CLASS
-            );
-        });
-    }
 
     protected function updateCMSFields(FieldList $fields)
     {
