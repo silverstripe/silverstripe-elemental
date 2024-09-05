@@ -9,6 +9,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
 use TractorCow\Fluent\State\FluentState;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Class FluentExtension
@@ -19,6 +20,8 @@ use SilverStripe\Forms\FieldList;
  * @property string $TopPageLocale
  *
  * @extends DataExtension<DataObject&static>
+ *
+ * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\Extensions\TopPageFluentElementExtension
  */
 class FluentExtension extends DataExtension
 {
@@ -28,6 +31,17 @@ class FluentExtension extends DataExtension
     private static $db = [
         'TopPageLocale' => 'Varchar',
     ];
+
+    public function __construct()
+    {
+        Deprecation::withNoReplacement(function () {
+            Deprecation::notice(
+                '5.4.0',
+                'Will be replaced with DNADesign\Elemental\Extensions\TopPageFluentElementExtension',
+                Deprecation::SCOPE_CLASS
+            );
+        });
+    }
 
     public function updateCMSFields(FieldList $fields)
     {
