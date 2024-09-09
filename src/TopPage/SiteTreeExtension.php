@@ -7,6 +7,7 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\CMS\Model\SiteTreeExtension as BaseSiteTreeExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationException;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Class SiteTreeExtension
@@ -15,6 +16,8 @@ use SilverStripe\ORM\ValidationException;
  * It can be applied directly to Page, as it only takes effect in the presence of a ElementalArea.
  *
  * @extends BaseSiteTreeExtension<SiteTree&ElementalPageExtension&static>
+ *
+ * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\Extensions\TopPageSiteTreeExtension
  */
 class SiteTreeExtension extends BaseSiteTreeExtension
 {
@@ -31,6 +34,17 @@ class SiteTreeExtension extends BaseSiteTreeExtension
      * @var array
      */
     protected $duplicatedObjects = [];
+
+    public function __construct()
+    {
+        Deprecation::withNoReplacement(function () {
+            Deprecation::notice(
+                '5.4.0',
+                'Will be replaced with DNADesign\Elemental\Extensions\TopPageSiteTreeExtension',
+                Deprecation::SCOPE_CLASS
+            );
+        });
+    }
 
     /**
      * Extension point in @see DataObject::onAfterWrite()
