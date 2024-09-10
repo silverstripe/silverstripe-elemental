@@ -12,6 +12,7 @@ use SilverStripe\ORM\ValidationException;
 use SilverStripe\View\ViewableData;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Core\Extension;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Class DataExtension
@@ -23,6 +24,8 @@ use SilverStripe\Core\Extension;
  * @method SiteTree TopPage()
  *
  * @extends Extension<BaseElement|ElementalArea|static>
+ *
+ * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\Extensions\TopPageElementExtension
  */
 class DataExtension extends Extension
 {
@@ -50,6 +53,17 @@ class DataExtension extends Extension
      * @var int
      */
     private $fixedTopPageID = 0;
+
+    public function __construct()
+    {
+        Deprecation::withNoReplacement(function () {
+            Deprecation::notice(
+                '5.4.0',
+                'Will be replaced with DNADesign\Elemental\Extensions\TopPageElementExtension',
+                Deprecation::SCOPE_CLASS
+            );
+        });
+    }
 
     /**
      * Extension point in @see DataObject::onAfterWrite()
