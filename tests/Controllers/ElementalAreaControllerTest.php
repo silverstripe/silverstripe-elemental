@@ -7,6 +7,7 @@ use SilverStripe\Security\SecurityToken;
 use DNADesign\Elemental\Tests\Blocks\TestElementContent;
 use DNADesign\Elemental\Tests\Blocks\TestElementalArea;
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElementalAreaControllerTest extends FunctionalTest
 {
@@ -40,7 +41,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         }
     }
 
-    public function provideElementFormGetSchema(): array
+    public static function provideElementFormGetSchema(): array
     {
         // There specifically isn't an 'invalid / missing' record test here with $idType, as existing behaviour
         // is to return a 200 with a basically empty schema response.
@@ -57,9 +58,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideElementFormGetSchema
-     */
+    #[DataProvider('provideElementFormGetSchema')]
     public function testElementFormGetSchema(
         string $fail,
         int $expectedCode,
@@ -89,7 +88,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         $this->assertFalse(array_key_exists('errors', $formSchema));
     }
 
-    public function provideElementFormPost(): array
+    public static function provideElementFormPost(): array
     {
         return [
             'Valid update existing record' => [
@@ -149,9 +148,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideElementFormPost
-     */
+    #[DataProvider('provideElementFormPost')]
     public function testElementFormPost(string $idType, string $dataType, string $fail, int $expectedCode): void
     {
         TestElementContent::$fail = $fail;
@@ -232,7 +229,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         }
     }
 
-    public function provideElementFormReadonly(): array
+    public static function provideElementFormReadonly(): array
     {
         return [
             'Can edit' => [
@@ -246,9 +243,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideElementFormReadonly
-     */
+    #[DataProvider('provideElementFormReadonly')]
     public function testElementFormReadonly(string $fail, bool $expected): void
     {
         TestElementContent::$fail = $fail;
@@ -262,7 +257,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         $this->assertSame($expected, $actual);
     }
 
-    public function provideApiDelete(): array
+    public static function provideApiDelete(): array
     {
         return [
             'Valid' => [
@@ -303,9 +298,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideApiDelete
-     */
+    #[DataProvider('provideApiDelete')]
     public function testApiDelete(
         string $idType,
         string $fail,
@@ -330,7 +323,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         }
     }
 
-    public function provideApiCreate(): array
+    public static function provideApiCreate(): array
     {
         return [
             'Valid' => [
@@ -386,9 +379,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideApiCreate
-     */
+    #[DataProvider('provideApiCreate')]
     public function testApiCreate(
         string $fail,
         ?int $insertAfterElementID,
@@ -449,7 +440,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         $this->assertSame($expected, $map);
     }
 
-    public function provideApiDuplicate(): array
+    public static function provideApiDuplicate(): array
     {
         return [
             'Valid' => [
@@ -500,9 +491,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideApiDuplicate
-     */
+    #[DataProvider('provideApiDuplicate')]
     public function testApiDuplicate(
         string $idType,
         string $fail,
@@ -547,7 +536,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         }
     }
 
-    public function provideApiPublish(): array
+    public static function provideApiPublish(): array
     {
         return [
             'Valid' => [
@@ -588,9 +577,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideApiPublish
-     */
+    #[DataProvider('provideApiPublish')]
     public function testApiPublish(
         string $idType,
         string $fail,
@@ -627,7 +614,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         }
     }
 
-    public function provideApiRead(): array
+    public static function provideApiRead(): array
     {
         return [
             'Valid' => [
@@ -668,9 +655,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideApiRead
-     */
+    #[DataProvider('provideApiRead')]
     public function testApiRead(
         string $idType,
         string $fail,
@@ -762,7 +747,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         }
     }
 
-    public function provideApiSort(): array
+    public static function provideApiSort(): array
     {
         return [
             'Valid move from first' => [
@@ -816,9 +801,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideApiSort
-     */
+    #[DataProvider('provideApiSort')]
     public function testApiSort(
         string $idType,
         string $fail,
@@ -866,7 +849,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         $this->assertSame($expected, $map);
     }
 
-    public function provideApiUnpublish(): array
+    public static function provideApiUnpublish(): array
     {
         return [
             'Valid' => [
@@ -907,9 +890,7 @@ class ElementalAreaControllerTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideApiUnpublish
-     */
+    #[DataProvider('provideApiUnpublish')]
     public function testApiUnpublish(
         string $idType,
         string $fail,
