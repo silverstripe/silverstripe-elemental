@@ -1,6 +1,6 @@
 <?php
 
-namespace DNADesign\Elemental\TopPage;
+namespace DNADesign\Elemental\Extensions;
 
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
@@ -12,11 +12,8 @@ use SilverStripe\ORM\ValidationException;
 use SilverStripe\View\ViewableData;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Core\Extension;
-use SilverStripe\Dev\Deprecation;
 
 /**
- * Class DataExtension
- *
  * Provides a db-cached reference to the top-level page for improved read performance on projects
  * with deeply nested block structures. Apply to @see BaseElement and @see ElementalArea.
  *
@@ -24,10 +21,8 @@ use SilverStripe\Dev\Deprecation;
  * @method SiteTree TopPage()
  *
  * @extends Extension<BaseElement|ElementalArea|static>
- *
- * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\Extensions\TopPageElementExtension
  */
-class DataExtension extends Extension
+class TopPageElementExtension extends Extension
 {
     /**
      * @config
@@ -49,21 +44,10 @@ class DataExtension extends Extension
      * Global flag which indicates that automatic page determination is enabled or not
      * If this is set to a page ID it will be used instead of trying to determine the top page
      *
-     * @see DataExtension::withFixedTopPage()
+     * @see TopPageElementExtension::withFixedTopPage()
      * @var int
      */
     private $fixedTopPageID = 0;
-
-    public function __construct()
-    {
-        Deprecation::withNoReplacement(function () {
-            Deprecation::notice(
-                '5.4.0',
-                'Will be replaced with DNADesign\Elemental\Extensions\TopPageElementExtension',
-                Deprecation::SCOPE_CLASS
-            );
-        });
-    }
 
     /**
      * Extension point in @see DataObject::onAfterWrite()
@@ -114,7 +98,7 @@ class DataExtension extends Extension
                 return $item;
             }
 
-            if ($item->hasExtension(DataExtension::class) && $item->TopPageID > 0) {
+            if ($item->hasExtension(TopPageElementExtension::class) && $item->TopPageID > 0) {
                 // top page is stored inside data object - just fetch it via cached call
                 $page = $this->getTopPageFromCachedData((int) $item->TopPageID);
 
@@ -151,7 +135,7 @@ class DataExtension extends Extension
 
     /**
      * Set top page to an object
-     * If no page is provided as an argument nor as a fixed id via @see DataExtension::withFixedTopPage()
+     * If no page is provided as an argument nor as a fixed id via @see TopPageElementExtension::withFixedTopPage()
      * automatic page determination will be attempted
      * Note that this may not always succeed as your model may not be attached to parent object at the time of this call
      *
@@ -162,7 +146,7 @@ class DataExtension extends Extension
     {
         $owner = $this->owner;
 
-        if (!$owner->hasExtension(DataExtension::class)) {
+        if (!$owner->hasExtension(TopPageElementExtension::class)) {
             return;
         }
 
@@ -233,7 +217,7 @@ class DataExtension extends Extension
      */
     protected function updateTopPage(): void
     {
-        $extension = singleton(SiteTreeExtension::class);
+        $extension = singleton(TopPageSiteTreeExtension::class);
         $extension->addDuplicatedObject($this->owner);
     }
 
@@ -259,7 +243,7 @@ class DataExtension extends Extension
     /**
      * Assigns top page relation based on fixed id
      *
-     * @see DataExtension::withFixedTopPage()
+     * @see TopPageElementExtension::withFixedTopPage()
      */
     protected function assignFixedTopPage(): void
     {

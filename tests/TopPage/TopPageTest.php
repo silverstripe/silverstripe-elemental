@@ -6,10 +6,11 @@ use DNADesign\Elemental\Extensions\ElementalAreasExtension;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
-use DNADesign\Elemental\TopPage;
 use Page;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
+use DNADesign\Elemental\Extensions\TopPageElementExtension;
+use DNADesign\Elemental\Extensions\TopPageSiteTreeExtension;
 
 class TopPageTest extends SapphireTest
 {
@@ -29,13 +30,13 @@ class TopPageTest extends SapphireTest
             ElementalPageExtension::class,
         ],
         Page::class => [
-            TopPage\SiteTreeExtension::class,
+            TopPageSiteTreeExtension::class,
         ],
         ElementalArea::class => [
-            TopPage\DataExtension::class,
+            TopPageElementExtension::class,
         ],
         BaseElement::class => [
-            TopPage\DataExtension::class,
+            TopPageElementExtension::class,
         ],
         TestList::class => [
             ElementalAreasExtension::class,
@@ -65,10 +66,10 @@ class TopPageTest extends SapphireTest
         string $objectIdentifier,
         string $objectClass
     ): void {
-        /** @var Page|TopPage\SiteTreeExtension $content */
+        /** @var Page|TopPageSiteTreeExtension $content */
         $page = $this->objFromFixture($pageClass, $pageIdentifier);
 
-        /** @var DataObject|TopPage\DataExtension $object */
+        /** @var DataObject|TopPageElementExtension $object */
         $object = $this->objFromFixture($objectClass, $objectIdentifier);
 
         $topPage = $object->getTopPage();
@@ -90,10 +91,10 @@ class TopPageTest extends SapphireTest
         string $objectIdentifier,
         string $objectClass
     ): void {
-        /** @var Page|TopPage\SiteTreeExtension $content */
+        /** @var Page|TopPageSiteTreeExtension $content */
         $page = $this->objFromFixture($pageClass, $pageIdentifier);
 
-        /** @var DataObject|TopPage\DataExtension $object */
+        /** @var DataObject|TopPageElementExtension $object */
         $object = $this->objFromFixture($objectClass, $objectIdentifier);
         $initialObj = $objectClass::get()->sort('ID', 'DESC');
 
@@ -119,7 +120,7 @@ class TopPageTest extends SapphireTest
         $page->Title = 'New page test';
         $page->write();
 
-        /** @var ElementalArea|TopPage\DataExtension $area */
+        /** @var ElementalArea|TopPageElementExtension $area */
         $area = $page->ElementalArea();
         $this->assertEquals((int) $page->ID, (int) $area->TopPageID);
     }
@@ -140,7 +141,7 @@ class TopPageTest extends SapphireTest
         /** @var ElementalArea $area */
         $area = $this->objFromFixture(ElementalArea::class, 'area3');
 
-        /** @var TestContent|TopPage\DataExtension $content */
+        /** @var TestContent|TopPageElementExtension $content */
         $content = TestContent::create();
         $content->Title = 'Fresh block';
 

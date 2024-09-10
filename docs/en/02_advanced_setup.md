@@ -450,11 +450,11 @@ above:
 ```yml
 DNADesign\Elemental\Models\BaseElement:
   extensions:
-    topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
+    topPageFluentElementExtension: DNADesign\Elemental\Extensions\TopPageFluentElementExtension
 
 DNADesign\Elemental\Models\ElementalArea:
   extensions:
-    topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
+    topPageFluentElementExtension: DNADesign\Elemental\Extensions\TopPageFluentElementExtension
 ```
 
 These variants will also store the locale of the top page on blocks, which simplifies top page lookup in case the locale

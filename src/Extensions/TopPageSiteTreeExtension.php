@@ -1,25 +1,20 @@
 <?php
 
-namespace DNADesign\Elemental\TopPage;
+namespace DNADesign\Elemental\Extensions;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\ValidationException;
 use SilverStripe\Core\Extension;
-use SilverStripe\Dev\Deprecation;
 
 /**
- * Class SiteTreeExtension
- *
  * This extension must be present on pagetypes that need to support Elemental TopPage functionality.
  * It can be applied directly to Page, as it only takes effect in the presence of a ElementalArea.
  *
  * @extends Extension<SiteTree&static>
- * 
- * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\Extensions\TopPageSiteTreeExtension
  */
-class SiteTreeExtension extends Extension
+class TopPageSiteTreeExtension extends Extension
 {
     /**
      * List of pages currently undergoing duplication
@@ -34,17 +29,6 @@ class SiteTreeExtension extends Extension
      * @var array
      */
     protected $duplicatedObjects = [];
-
-    public function __construct()
-    {
-        Deprecation::withNoReplacement(function () {
-            Deprecation::notice(
-                '5.4.0',
-                'Will be replaced with DNADesign\Elemental\Extensions\TopPageSiteTreeExtension',
-                Deprecation::SCOPE_CLASS
-            );
-        });
-    }
 
     /**
      * Extension point in @see DataObject::onAfterWrite()
@@ -106,7 +90,7 @@ class SiteTreeExtension extends Extension
      */
     public function addDuplicatedObject(DataObject $object): void
     {
-        if (!$object->hasExtension(DataExtension::class)) {
+        if (!$object->hasExtension(TopPageElementExtension::class)) {
             return;
         }
 
@@ -143,7 +127,7 @@ class SiteTreeExtension extends Extension
     }
 
     /**
-     * @param SiteTree|SiteTreeExtension $original
+     * @param SiteTree|TopPageSiteTreeExtension $original
      */
     protected function initDuplication(SiteTree $original): void
     {
@@ -206,7 +190,7 @@ class SiteTreeExtension extends Extension
     }
 
     /**
-     * @param SiteTree|SiteTreeExtension $original
+     * @param SiteTree|TopPageSiteTreeExtension $original
      * @throws ValidationException
      */
     protected function writeDuplication(SiteTree $original): void
@@ -222,7 +206,7 @@ class SiteTreeExtension extends Extension
         if (array_key_exists($key, $this->duplicatedObjects ?? [])) {
             $objects = $this->duplicatedObjects[$key];
 
-            /** @var DataObject|DataExtension $object */
+            /** @var DataObject|TopPageElementExtension $object */
             foreach ($objects as $object) {
                 // attach current page ID to the object
                 $object->setTopPage($this->owner);
@@ -257,7 +241,7 @@ class SiteTreeExtension extends Extension
             return;
         }
 
-        if (!$area->hasExtension(DataExtension::class)) {
+        if (!$area->hasExtension(TopPageElementExtension::class)) {
             return;
         }
 

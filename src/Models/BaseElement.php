@@ -5,7 +5,7 @@ namespace DNADesign\Elemental\Models;
 use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use DNADesign\Elemental\Services\ReorderElements;
-use DNADesign\Elemental\TopPage\DataExtension;
+use DNADesign\Elemental\Extensions\TopPageElementExtension;
 use Exception;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\CMS\Model\SiteTree;
@@ -88,7 +88,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
     private static $extensions = [
         Versioned::class,
-        DataExtension::class,
+        TopPageElementExtension::class,
     ];
 
     private static $casting = [
