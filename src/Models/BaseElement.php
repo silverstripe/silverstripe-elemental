@@ -22,17 +22,17 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\ORM\ValidationException;
+use SilverStripe\Core\Validation\ValidationException;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
-use SilverStripe\View\ArrayData;
+use SilverStripe\Model\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\ORM\ValidationResult;
+use SilverStripe\Core\Validation\ValidationResult;
 use SilverStripe\Dev\Deprecation;
 
 /**
@@ -693,7 +693,7 @@ JS
      *
      * @return null|DataObject
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function getPage()
     {
@@ -794,7 +794,7 @@ JS
      * @param string|null $action
      * @return string|null
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function AbsoluteLink($action = null)
     {
@@ -814,7 +814,7 @@ JS
      * @param string|null $action
      * @return string|null
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function Link($action = null)
     {
@@ -834,7 +834,7 @@ JS
      * @param string|null $action
      * @return string|null
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function PreviewLink($action = null)
     {
@@ -877,7 +877,7 @@ JS
      * @param bool $directLink Indicates that the GridFieldDetailEdit form link should be given even if the block can be
      *                         edited in-line.
      * @return null|string
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function getCMSEditLink($directLink = false): ?string
     {
@@ -954,7 +954,7 @@ JS
      *
      * @return int|string The name of a valid elemental area relation
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function getAreaRelationName()
     {
@@ -1008,7 +1008,7 @@ JS
     /**
      * @return null|string
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function getEditLink()
     {
@@ -1018,7 +1018,7 @@ JS
     /**
      * @return DBField|null
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function PageCMSEditLink()
     {
@@ -1199,7 +1199,7 @@ JS
     /**
      * @return mixed|null
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function getPageTitle()
     {

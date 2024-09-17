@@ -5,7 +5,7 @@ namespace DNADesign\Elemental\Extensions;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\ValidationException;
+use SilverStripe\Core\Validation\ValidationException;
 use SilverStripe\Core\Extension;
 
 /**

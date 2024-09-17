@@ -5,7 +5,7 @@ namespace DNADesign\Elemental\Tests\Src;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Extension;
 use SilverStripe\Dev\TestOnly;
-use SilverStripe\ORM\ValidationResult;
+use SilverStripe\Core\Validation\ValidationResult;
 
 class ValidationFailedExtension extends Extension implements TestOnly
 {
