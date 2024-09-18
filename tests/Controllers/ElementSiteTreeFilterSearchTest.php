@@ -13,6 +13,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataObjectSchema;
 use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestElementContentExtension;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElementSiteTreeFilterSearchTest extends SapphireTest
 {
@@ -34,8 +35,8 @@ class ElementSiteTreeFilterSearchTest extends SapphireTest
     /**
      * @param string $searchTerm
      * @param array $expected
-     * @dataProvider searchProvider
      */
+    #[DataProvider('searchProvider')]
     public function testElementalPageDataMatchesInCmsSearch($searchTerm, $expected)
     {
         $filter = CMSSiteTreeFilter_Search::create(['Term' => $searchTerm]);
@@ -47,7 +48,7 @@ class ElementSiteTreeFilterSearchTest extends SapphireTest
     /**
      * @return array[]
      */
-    public function searchProvider()
+    public static function searchProvider()
     {
         return [
             'Nested block data' => ['specifically', [
@@ -63,9 +64,7 @@ class ElementSiteTreeFilterSearchTest extends SapphireTest
         ];
     }
 
-    /**
-     * @dataProvider provideApplyDefaultFilters
-     */
+    #[DataProvider('provideApplyDefaultFilters')]
     public function testApplyDefaultFilters(bool $renderElements, string $term, array $expected): void
     {
         // Set protected method visibility - applyDefaultFilters() is essentially an
@@ -78,57 +77,57 @@ class ElementSiteTreeFilterSearchTest extends SapphireTest
         $this->assertSame($expected, $ret->column('Title'));
     }
 
-    public function provideApplyDefaultFilters(): array
+    public static function provideApplyDefaultFilters(): array
     {
 
         return [
             'render_elements true - text search' => [
-                'render_elements' => true,
+                'renderElements' => true,
                 'term' => 'This content is rendered',
                 'expected' => ['Content blocks page']
             ],
             'render_elements true - unrendered search' => [
-                'render_elements' => true,
+                'renderElements' => true,
                 'term' => 'This field is unrendered',
                 'expected' => []
             ],
             'render_elements true - extended search' => [
-                'render_elements' => true,
+                'renderElements' => true,
                 'term' => 'This content is from an extension hook',
                 'expected' => []
             ],
             'render_elements true - int search' => [
-                'render_elements' => true,
+                'renderElements' => true,
                 'term' => '456',
                 'expected' => []
             ],
             'render_elements true - enum search' => [
-                'render_elements' => true,
+                'renderElements' => true,
                 'term' => 'Sunny',
                 'expected' => []
             ],
             'render_elements false - text search' => [
-                'render_elements' => false,
+                'renderElements' => false,
                 'term' => 'This content is rendered',
                 'expected' => ['Content blocks page']
             ],
             'render_elements false - unrendered search' => [
-                'render_elements' => false,
+                'renderElements' => false,
                 'term' => 'This field is unrendered',
                 'expected' => ['Content blocks page']
             ],
             'render_elements false - extended search' => [
-                'render_elements' => false,
+                'renderElements' => false,
                 'term' => 'This content is from an extension hook',
                 'expected' => ['Content blocks page']
             ],
             'render_elements false - int search' => [
-                'render_elements' => false,
+                'renderElements' => false,
                 'term' => '456',
                 'expected' => []
             ],
             'render_elements false - enum search' => [
-                'render_elements' => false,
+                'renderElements' => false,
                 'term' => 'Sunny',
                 'expected' => []
             ],

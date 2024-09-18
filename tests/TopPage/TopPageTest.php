@@ -11,6 +11,7 @@ use SilverStripe\Dev\SapphireTest;
 use SilverStripe\ORM\DataObject;
 use DNADesign\Elemental\Extensions\TopPageElementExtension;
 use DNADesign\Elemental\Extensions\TopPageSiteTreeExtension;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TopPageTest extends SapphireTest
 {
@@ -58,8 +59,8 @@ class TopPageTest extends SapphireTest
      * @param string $pageClass
      * @param string $objectIdentifier
      * @param string $objectClass
-     * @dataProvider objectsProvider
      */
+    #[DataProvider('objectsProvider')]
     public function testTestGetTopPage(
         string $pageIdentifier,
         string $pageClass,
@@ -83,8 +84,8 @@ class TopPageTest extends SapphireTest
      * @param string $pageClass
      * @param string $objectIdentifier
      * @param string $objectClass
-     * @dataProvider objectsProvider
      */
+    #[DataProvider('objectsProvider')]
     public function testTestUpdateTopPageEmptyCache(
         string $pageIdentifier,
         string $pageClass,
@@ -127,8 +128,8 @@ class TopPageTest extends SapphireTest
 
     /**
      * @param bool $populateTopPage
-     * @dataProvider populateTopPageProvider
      */
+    #[DataProvider('populateTopPageProvider')]
     public function testNewBlock(bool $populateTopPage): void
     {
         if ($populateTopPage) {
@@ -151,7 +152,7 @@ class TopPageTest extends SapphireTest
         $this->assertEquals((int) $page->ID, (int) $content->TopPageID);
     }
 
-    public function objectsProvider(): array
+    public static function objectsProvider(): array
     {
         return [
             [
@@ -205,7 +206,7 @@ class TopPageTest extends SapphireTest
         ];
     }
 
-    public function populateTopPageProvider(): array
+    public static function populateTopPageProvider(): array
     {
         return [
             [true],

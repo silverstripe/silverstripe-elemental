@@ -14,6 +14,7 @@ use DNADesign\Elemental\Tests\Src\TestUnusedElement;
 use DNADesign\Elemental\Tests\Src\TestVersionedDataObject;
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
 use SilverStripe\ORM\DB;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElementalAreasExtensionTest extends SapphireTest
 {
@@ -83,9 +84,7 @@ class ElementalAreasExtensionTest extends SapphireTest
         $this->assertSame($expected, $matches);
     }
 
-    /**
-     * @dataProvider provideContentFieldPreservationSettings
-     */
+    #[DataProvider('provideContentFieldPreservationSettings')]
     public function testContentFieldsAreRemovedByDefault($keepGlobal, $keepClass, $expectedType)
     {
         Config::inst()->set(ElementalAreasExtension::class, 'keep_content_fields', $keepGlobal);
@@ -104,7 +103,7 @@ class ElementalAreasExtensionTest extends SapphireTest
      *
      * @return array
      */
-    public function provideContentFieldPreservationSettings()
+    public static function provideContentFieldPreservationSettings()
     {
         // Test both unset (null) and explicitly declined (false) where applicable.
         return [

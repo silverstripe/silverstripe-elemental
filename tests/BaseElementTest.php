@@ -22,6 +22,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BaseElementTest extends FunctionalTest
 {
@@ -275,7 +276,7 @@ class BaseElementTest extends FunctionalTest
         ElementContent::remove_extension(TestContentForSearchIndexExtension::class);
     }
 
-    public function getElementAnchorDataProvider(): array
+    public static function getElementAnchorDataProvider(): array
     {
         return [
             [
@@ -296,9 +297,7 @@ class BaseElementTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider getElementAnchorDataProvider
-     */
+    #[DataProvider('getElementAnchorDataProvider')]
     public function testGetAnchorsInContent(string $elementClass, string $elementName, array $expectedAnchors): void
     {
         $element = $this->objFromFixture($elementClass, $elementName);
@@ -307,7 +306,7 @@ class BaseElementTest extends FunctionalTest
         $this->assertSame($expectedAnchors, array_values($element->getAnchorsInContent()));
     }
 
-    public function getElementCMSLinkDataProvider()
+    public static function getElementCMSLinkDataProvider()
     {
         return [
             // Element in DataObject with $directLink === true
@@ -351,9 +350,7 @@ class BaseElementTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider getElementCMSLinkDataProvider
-     */
+    #[DataProvider('getElementCMSLinkDataProvider')]
     public function testGetCMSEditLink(string $class, string $element, ?string $link, bool $directLink = false)
     {
         $object = $this->objFromFixture($class, $element);
@@ -366,7 +363,7 @@ class BaseElementTest extends FunctionalTest
         }
     }
 
-    public function canDeleteProvider()
+    public static function canDeleteProvider()
     {
         return [
             // Element on Page
@@ -384,9 +381,7 @@ class BaseElementTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider canDeleteProvider
-     */
+    #[DataProvider('canDeleteProvider')]
     public function testCanDelete(
         string $class,
         string $element,
@@ -400,7 +395,7 @@ class BaseElementTest extends FunctionalTest
         $this->assertTrue($canDelete);
     }
 
-    public function linksProvider()
+    public static function linksProvider()
     {
         return [
             // Element on Page
@@ -418,18 +413,14 @@ class BaseElementTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider linksProvider
-     */
+    #[DataProvider('linksProvider')]
     public function testLinkWithDataObject(string $class, string $element, ?string $link)
     {
         $object = $this->objFromFixture($class, $element);
         $this->assertEquals($link, $object->Link());
     }
 
-    /**
-     * @dataProvider linksProvider
-     */
+    #[DataProvider('linksProvider')]
     public function testAbsoluteLink(string $class, string $element, ?string $link)
     {
         $link = $link ? Director::absoluteURL($link) : $link;
@@ -438,7 +429,7 @@ class BaseElementTest extends FunctionalTest
         $this->assertEquals($link, $absoluteLink);
     }
 
-    public function previewLinksProvider()
+    public static function previewLinksProvider()
     {
         return [
             // Element on Page
@@ -474,9 +465,7 @@ class BaseElementTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider previewLinksProvider
-     */
+    #[DataProvider('previewLinksProvider')]
     public function testPreviewLink(string $class, string $elementIdentifier, ?string $link)
     {
         /** @var BaseElement $element */
