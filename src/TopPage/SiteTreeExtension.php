@@ -37,7 +37,7 @@ class SiteTreeExtension extends BaseSiteTreeExtension
 
     public function __construct()
     {
-        Deprecation::withNoReplacement(function () {
+        Deprecation::withSuppressedNotice(function () {
             Deprecation::notice(
                 '5.4.0',
                 'Will be replaced with DNADesign\Elemental\Extensions\TopPageSiteTreeExtension',

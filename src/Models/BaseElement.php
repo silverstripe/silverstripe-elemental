@@ -278,7 +278,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         if ($this->hasMethod('getPage')) {
             if ($page = $this->getPage()) {
                 if ($page->hasExtension(Versioned::class)) {
-                    return Deprecation::withNoReplacement(fn() => $page->canArchive($member));
+                    return Deprecation::withSuppressedNotice(fn() => $page->canArchive($member));
                 } else {
                     return $page->canDelete($member);
                 }
@@ -1166,7 +1166,7 @@ JS
      */
     public function getTypeNice()
     {
-        $description = Deprecation::withNoReplacement(fn () => $this->getDescription());
+        $description = Deprecation::withSuppressedNotice(fn () => $this->getDescription());
         $desc = ($description) ? ' <span class="element__note"> &mdash; ' . $description . '</span>' : '';
 
         return DBField::create_field(
@@ -1285,7 +1285,7 @@ JS
      */
     public static function getGraphQLTypeName(): string
     {
-        Deprecation::withNoReplacement(function () {
+        Deprecation::withSuppressedNotice(function () {
             Deprecation::notice('5.3.0', 'Will be replaced with getTypeName()');
         });
         // For GraphQL 3, use the static schema type name - except for BaseElement for which this is inconsistent.

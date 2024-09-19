@@ -12,7 +12,7 @@ class DBObjectType extends DBField
 {
     public function __construct()
     {
-        Deprecation::withNoReplacement(function () {
+        Deprecation::withSuppressedNotice(function () {
             $message = 'Will be removed without equivalent functionality to replace it';
             Deprecation::notice('5.3.0', $message, Deprecation::SCOPE_CLASS);
         });
