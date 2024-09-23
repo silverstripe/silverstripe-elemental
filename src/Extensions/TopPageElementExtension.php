@@ -8,8 +8,8 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\Queries\SQLUpdate;
-use SilverStripe\ORM\ValidationException;
-use SilverStripe\View\ViewableData;
+use SilverStripe\Core\Validation\ValidationException;
+use SilverStripe\Model\ModelData;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Core\Extension;
 
@@ -320,7 +320,7 @@ class TopPageElementExtension extends Extension
         // Find the first ancestor table which has the extension applied
         // Note that this extension is expected to be subclassed
         foreach ($classes as $class) {
-            if (!ViewableData::has_extension($class, static::class)) {
+            if (!ModelData::has_extension($class, static::class)) {
                 continue;
             }
 

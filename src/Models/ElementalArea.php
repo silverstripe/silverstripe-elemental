@@ -8,14 +8,14 @@ use DNADesign\Elemental\Extensions\TopPageElementExtension;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\TestOnly;
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\HasManyList;
 use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\ViewableData;
+use SilverStripe\Model\ModelData;
 
 /**
  * Class ElementalArea
@@ -82,7 +82,7 @@ class ElementalArea extends DataObject
         $elementalClasses = [];
 
         foreach (ClassInfo::getValidSubClasses(DataObject::class) as $class) {
-            if (ViewableData::has_extension($class, ElementalAreasExtension::class)) {
+            if (ModelData::has_extension($class, ElementalAreasExtension::class)) {
                 $elementalClasses[] = $class;
             }
         }
@@ -185,7 +185,7 @@ class ElementalArea extends DataObject
     /**
      * @return null|DataObject
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function getOwnerPage()
     {
@@ -273,7 +273,7 @@ class ElementalArea extends DataObject
      * @param null $member
      * @return bool
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function canEdit($member = null)
     {
@@ -293,7 +293,7 @@ class ElementalArea extends DataObject
      * @param null $member
      * @return bool
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \SilverStripe\ORM\ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function canView($member = null)
     {
