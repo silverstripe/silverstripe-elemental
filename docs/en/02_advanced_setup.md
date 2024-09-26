@@ -444,21 +444,28 @@ directly on the block as a performance enhancement for this query. A set of exte
 of the box for elements on pages. You can use `$TopPage` in your template to get access to the page, which is more performant
 than using `$Page`.
 
-If your project makes use of the Fluent module, it is recommended to use the following extensions in place of the ones
-above:
-
-```yml
-DNADesign\Elemental\Models\BaseElement:
-  extensions:
-    topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
-
-DNADesign\Elemental\Models\ElementalArea:
-  extensions:
-    topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
-```
+If your project makes use of the Fluent module, this feature will automatically replace `DNADesign\Elemental\TopPage\DataExtension` with `DNADesign\Elemental\TopPage\FluentExtension`.
 
 These variants will also store the locale of the top page on blocks, which simplifies top page lookup in case the locale
 is unknown at the time of page lookup from block context.
 
 The page reference on the blocks can also be useful for maintenance dev tasks, as it's easy to identify which blocks
 belong to which pages in which locale.
+
+In case you need to further customise this setup with your own extension override, one way how to do this is shown below:
+
+```yml
+---
+Name: my-elemental-config
+After:
+    - elemental-top-page-fluent
+---
+
+DNADesign\Elemental\Models\BaseElement:
+  extensions:
+    topPageDataExtension: App\MyExtension
+
+DNADesign\Elemental\Models\ElementalArea:
+  extensions:
+    topPageDataExtension: App\MyExtension
+```
