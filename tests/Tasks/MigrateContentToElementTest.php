@@ -6,11 +6,13 @@ use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tasks\MigrateContentToElement;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
-use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\PolyExecution\PolyOutput;
 use SilverStripe\ORM\HasManyList;
 use SilverStripe\Versioned\Versioned;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 class MigrateContentToElementTest extends SapphireTest
 {
@@ -42,9 +44,12 @@ class MigrateContentToElementTest extends SapphireTest
         $page = $this->objFromFixture(TestPage::class, 'page3');
         $page->publishSingle();
 
-        ob_start();
-        $task->run(new HTTPRequest('GET', ''));
-        $output = ob_get_clean();
+        $buffer = new BufferedOutput();
+        $output = new PolyOutput(PolyOutput::FORMAT_ANSI, wrappedOutput: $buffer);
+        $input = new ArrayInput([]);
+        $input->setInteractive(false);
+        $task->run($input, $output);
+        $output = $buffer->fetch();
 
         $this->assertStringContainsString('Finished migrating 1 pages\' content', $output);
 
@@ -72,9 +77,12 @@ class MigrateContentToElementTest extends SapphireTest
 
         $task = new MigrateContentToElement();
 
-        ob_start();
-        $task->run(new HTTPRequest('GET', ''));
-        $output = ob_get_clean();
+        $buffer = new BufferedOutput();
+        $polyOutput = new PolyOutput(PolyOutput::FORMAT_ANSI, wrappedOutput: $buffer);
+        $input = new ArrayInput([]);
+        $input->setInteractive(false);
+        $task->run($input, $polyOutput);
+        $output = $buffer->fetch();
 
         $this->assertStringContainsString('Finished migrating 1 pages\' content', $output);
 
@@ -85,9 +93,8 @@ class MigrateContentToElementTest extends SapphireTest
         $this->assertStringContainsString('This is page 3', $element->HTML, 'Content is still added to a new element');
 
         // Run the task again and assert the page is not picked up again
-        ob_start();
-        $task->run(new HTTPRequest('GET', ''));
-        $output = ob_get_clean();
+        $task->run($input, $polyOutput);
+        $output = $buffer->fetch();
 
         $this->assertStringContainsString('Finished migrating 0 pages\' content', $output);
         $page = $this->objFromFixture(TestPage::class, 'page3');
@@ -101,9 +108,12 @@ class MigrateContentToElementTest extends SapphireTest
 
         $task = new MigrateContentToElement();
 
-        ob_start();
-        $task->run(new HTTPRequest('GET', ''));
-        $output = ob_get_clean();
+        $buffer = new BufferedOutput();
+        $output = new PolyOutput(PolyOutput::FORMAT_ANSI, wrappedOutput: $buffer);
+        $input = new ArrayInput([]);
+        $input->setInteractive(false);
+        $task->run($input, $output);
+        $output = $buffer->fetch();
 
         $this->assertStringContainsString('Finished migrating 1 pages\' content', $output);
 
@@ -125,9 +135,12 @@ class MigrateContentToElementTest extends SapphireTest
 
         $task = new MigrateContentToElement();
 
-        ob_start();
-        $task->run(new HTTPRequest('GET', ''));
-        $output = ob_get_clean();
+        $buffer = new BufferedOutput();
+        $output = new PolyOutput(PolyOutput::FORMAT_ANSI, wrappedOutput: $buffer);
+        $input = new ArrayInput([]);
+        $input->setInteractive(false);
+        $task->run($input, $output);
+        $output = $buffer->fetch();
 
         $this->assertStringContainsString('Finished migrating 1 pages\' content', $output);
 
@@ -152,9 +165,12 @@ class MigrateContentToElementTest extends SapphireTest
     {
         $task = new MigrateContentToElement();
 
-        ob_start();
-        $task->run(new HTTPRequest('GET', ''));
-        $output = ob_get_clean();
+        $buffer = new BufferedOutput();
+        $output = new PolyOutput(PolyOutput::FORMAT_ANSI, wrappedOutput: $buffer);
+        $input = new ArrayInput([]);
+        $input->setInteractive(false);
+        $task->run($input, $output);
+        $output = $buffer->fetch();
 
         $this->assertStringContainsString('Finished migrating 1 pages\' content', $output);
 
@@ -187,9 +203,12 @@ class MigrateContentToElementTest extends SapphireTest
         $page = $this->objFromFixture(TestPage::class, 'page3');
         $page->publishSingle();
 
-        ob_start();
-        $task->run(new HTTPRequest('GET', ''));
-        $output = ob_get_clean();
+        $buffer = new BufferedOutput();
+        $output = new PolyOutput(PolyOutput::FORMAT_ANSI, wrappedOutput: $buffer);
+        $input = new ArrayInput([]);
+        $input->setInteractive(false);
+        $task->run($input, $output);
+        $output = $buffer->fetch();
 
         $this->assertStringContainsString('Finished migrating 0 pages\' content', $output);
 

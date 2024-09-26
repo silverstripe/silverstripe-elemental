@@ -12,7 +12,9 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\BuildTask;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\PolyExecution\PolyOutput;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
 
 class MigrateContentToElement extends BuildTask
 {
@@ -49,12 +51,14 @@ class MigrateContentToElement extends BuildTask
      */
     private static $publish_changes = true;
 
-    protected $title = 'MigrateContentToElement';
+    protected static string $commandName = 'elemental-migrate-content';
 
-    protected $description = 'When installing Elemental this task converts content in the $Content '
+    protected string $title = 'MigrateContentToElement';
+
+    protected static string $description = 'When installing Elemental this task converts content in the $Content '
         . 'field to an ElementContent';
 
-    public function run($request)
+    protected function execute(InputInterface $input, PolyOutput $output): int
     {
         $pageTypes = singleton(ElementalArea::class)->supportedPageTypes();
         $count = 0;
@@ -91,10 +95,12 @@ class MigrateContentToElement extends BuildTask
                     try {
                         $page->write();
                     } catch (Exception $e) {
-                        echo sprintf(
-                            'Could not clear content on page %s: %s',
-                            $page->ID,
-                            $e->getMessage()
+                        $output->writeln(
+                            '<comment>' . sprintf(
+                                'Could not clear content on page %s: %s',
+                                $page->ID,
+                                $e->getMessage()
+                            ) . '</>'
                         );
                     }
 
@@ -125,9 +131,10 @@ class MigrateContentToElement extends BuildTask
                 $pageTypeCount++;
             }
             $count += $pageTypeCount;
-            echo 'Migrated ' . $pageTypeCount . ' ' . $pageType . ' pages\' content<br>';
+            $output->writeln('Migrated ' . $pageTypeCount . ' ' . $pageType . ' pages\' content');
         }
-        echo 'Finished migrating ' . $count . ' pages\' content<br>';
+        $output->writeln('Finished migrating ' . $count . ' pages\' content');
+        return Command::SUCCESS;
     }
 
     /**
