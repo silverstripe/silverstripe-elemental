@@ -24,10 +24,6 @@ SilverStripe\CMS\Controllers\CMSMain:
   extensions:
     - DNADesign\Elemental\Extensions\ElementalCMSMainExtension
 
-SilverStripe\CMS\Model\SiteTree:
-  extensions:
-    topPageSiteTreeExtension: DNADesign\Elemental\TopPage\SiteTreeExtension
-
 SilverStripe\Versioned\VersionedGridFieldItemRequest:
   extensions:
     - 'DNADesign\Elemental\Extensions\GridFieldDetailFormItemRequestExtension'
@@ -39,3 +35,35 @@ Symbiote\GridFieldExtensions\GridFieldAddNewMultiClassHandler:
 SilverStripe\Core\Injector\Injector:
   SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search:
     class: DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch
+
+---
+Name: elemental-top-page-default
+---
+
+DNADesign\Elemental\Models\BaseElement:
+  extensions:
+    topPageDataExtension: DNADesign\Elemental\TopPage\DataExtension
+
+DNADesign\Elemental\Models\ElementalArea:
+  extensions:
+    topPageDataExtension: DNADesign\Elemental\TopPage\DataExtension
+
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    topPageSiteTreeExtension: DNADesign\Elemental\TopPage\SiteTreeExtension
+
+---
+Name: elemental-top-page-fluent
+After:
+  - elemental-top-page-default
+Only:
+  moduleexists: 'tractorcow/silverstripe-fluent'
+---
+
+DNADesign\Elemental\Models\BaseElement:
+  extensions:
+    topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
+
+DNADesign\Elemental\Models\ElementalArea:
+  extensions:
+    topPageDataExtension: DNADesign\Elemental\TopPage\FluentExtension
