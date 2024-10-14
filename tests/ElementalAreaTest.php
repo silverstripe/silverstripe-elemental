@@ -78,8 +78,8 @@ class ElementalAreaTest extends SapphireTest
         // OwnerClassName set
         $ownerpage2 = $area2->getOwnerPage();
 
-        $this->assertEquals("DNADesign\Elemental\Tests\Src\TestPage", $ownerpage1);
-        $this->assertEquals("DNADesign\Elemental\Tests\Src\TestPage", $ownerpage2);
+        $this->assertInstanceOf(TestPage::class, $ownerpage1);
+        $this->assertInstanceOf(TestPage::class, $ownerpage2);
 
         // if ownerpage1 has draft changes then getOwnerPage() should return the
         // live version of the owner page, since the draft record will be
