@@ -255,7 +255,7 @@ class ElementalAreaController extends CMSMain
     /**
      * Returns configuration required by the client app
      */
-    public function getClientConfig()
+    public function getClientConfig(): array
     {
         $clientConfig = parent::getClientConfig();
         $clientConfig['form']['elementForm'] = [
