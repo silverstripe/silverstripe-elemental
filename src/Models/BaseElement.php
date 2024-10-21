@@ -1239,11 +1239,12 @@ JS
     /**
      * Returns the position of the current element.
      *
+     * @param int $startIndex Number to start count from.
      * @return int
      */
-    public function Pos()
+    public function Pos($startIndex = 1)
     {
-        return ($this->Parent()->Elements()->filter('Sort:LessThan', $this->Sort)->count() + 1);
+        return ($this->Parent()->Elements()->filter('Sort:LessThan', $this->Sort)->count() + $startIndex);
     }
 
     /**
