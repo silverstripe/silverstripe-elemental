@@ -7,7 +7,7 @@ use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestElementController;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use SilverStripe\Dev\FunctionalTest;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 
 class ElementControllerTest extends FunctionalTest
 {

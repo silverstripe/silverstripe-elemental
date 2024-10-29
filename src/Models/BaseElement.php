@@ -25,7 +25,7 @@ use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Core\Validation\ValidationException;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use SilverStripe\Model\ArrayData;
 use SilverStripe\View\Parsers\URLSegmentFilter;

@@ -28,7 +28,7 @@ SilverStripe\CMS\Model\SiteTree:
   extensions:
     topPageSiteTreeExtension: DNADesign\Elemental\Extensions\TopPageSiteTreeExtension
 
-SilverStripe\Versioned\VersionedGridFieldItemRequest:
+SilverStripe\Versioned\Versioned\VersionedGridFieldItemRequest:
   extensions:
     - 'DNADesign\Elemental\Extensions\GridFieldDetailFormItemRequestExtension'
 

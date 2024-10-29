@@ -6,7 +6,7 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Services\ReorderElements;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use SilverStripe\Dev\SapphireTest;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 
 class ReorderElementsTest extends SapphireTest
 {

@@ -5,7 +5,7 @@ namespace DNADesign\Elemental\Tests\Src;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Dev\TestOnly;
-use SilverStripe\Versioned\Versioned;
+use SilverStripe\Versioned\Mode\Versioned;
 
 class TestVersionedDataObject extends DataObject implements TestOnly
 {
