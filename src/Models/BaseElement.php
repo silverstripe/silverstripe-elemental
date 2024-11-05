@@ -656,15 +656,9 @@ JS
      */
     public function updateFromFormData($data)
     {
-        $cmsFields = $this->getCMSFields();
-
-        foreach ($data as $field => $datum) {
-            $field = $cmsFields->dataFieldByName($field);
-
-            if (!$field) {
-                continue;
-            }
-
+        $cmsFields = $this->getCMSFields()->saveableFields();
+        foreach ($cmsFields as $fieldName => $field) {
+            $datum = $data[$fieldName] ?? null;
             $field->setSubmittedValue($datum);
             $field->saveInto($this);
         }
