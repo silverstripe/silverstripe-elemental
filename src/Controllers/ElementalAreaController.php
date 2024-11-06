@@ -162,9 +162,11 @@ class ElementalAreaController extends CMSMain
      * @param array $data
      * @param int $elementID
      * @return array
+     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it.
      */
     public static function removeNamespacesFromFields(array $data, $elementID)
     {
+        Deprecation::noticeWithNoReplacment('5.4.0');
         $output = [];
         $template = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementID, '');
         foreach ($data as $key => $value) {

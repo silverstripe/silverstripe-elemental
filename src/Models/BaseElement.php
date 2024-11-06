@@ -653,9 +653,11 @@ JS
      * Given form data (wit
      *
      * @param $data
+     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it.
      */
     public function updateFromFormData($data)
     {
+        Deprecation::noticeWithNoReplacment('5.4.0');
         $cmsFields = $this->getCMSFields();
 
         foreach ($data as $field => $datum) {
