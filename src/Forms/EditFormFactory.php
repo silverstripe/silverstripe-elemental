@@ -86,11 +86,8 @@ class EditFormFactory extends DefaultFormFactory
     /**
      * Given a {@link FieldList}, give all fields a unique name so they can be used in the same context as
      * other elemental edit forms and the page (or other DataObject) that owns them.
-     *
-     * @param FieldList $fields
-     * @param array $context
      */
-    protected function namespaceFields(FieldList $fields, array $context)
+    public function namespaceFields(FieldList $fields, array $context): void
     {
         $elementID = $context['Record']->ID;
 
@@ -101,6 +98,24 @@ class EditFormFactory extends DefaultFormFactory
             }
             $namespacedName = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE ?? '', $elementID, $field->getName());
             $field->setName($namespacedName);
+        }
+    }
+
+    /**
+     * Remove the pseudo namespaces that were added in namespaceFields()
+     */
+    public function removeNamespaceFromFields(FieldList $fields, array $context): void
+    {
+        $elementID = $context['Record']->ID;
+        $template = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementID, '');
+
+        foreach ($fields->dataFields() as $namespacedName => $field) {
+            // Only look at fields that match the namespace template
+            if (substr($namespacedName, 0, strlen($template)) !== $template) {
+                continue;
+            }
+            $newName = substr($namespacedName, strlen($template));
+            $field->setName($newName);
         }
     }
 }

@@ -647,23 +647,6 @@ JS
     }
 
     /**
-     * Given form data (wit
-     *
-     * @param $data
-     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it.
-     */
-    public function updateFromFormData($data)
-    {
-        Deprecation::noticeWithNoReplacment('5.4.0');
-        $cmsFields = $this->getCMSFields()->saveableFields();
-        foreach ($cmsFields as $fieldName => $field) {
-            $datum = $data[$fieldName] ?? null;
-            $field->setSubmittedValue($datum);
-            $field->saveInto($this);
-        }
-    }
-
-    /**
      * Strip all namespaces from class namespace.
      *
      * @param string $classname e.g. "\Fully\Namespaced\Class"
