@@ -334,7 +334,9 @@ class ElementalAreaController extends CMSMain
         // Remove the namespace prefixes that were added by EditFormFactory
         $dataWithoutNamespaces = static::removeNamespacesFromFields($data, $element->ID);
 
-        // Update and write the data object which will trigger model validation
+        // Update and write the data object which will trigger model validation.
+        // Would usually be handled by $form->saveInto($element) but since the field names
+        // in the form have been namespaced, we need to handle it ourselves.
         $element->updateFromFormData($dataWithoutNamespaces);
         if ($element->isChanged()) {
             try {
@@ -358,9 +360,11 @@ class ElementalAreaController extends CMSMain
      * @param array $data
      * @param int $elementID
      * @return array
+     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it.
      */
     public static function removeNamespacesFromFields(array $data, $elementID)
     {
+        Deprecation::noticeWithNoReplacment('5.4.0');
         $output = [];
         $template = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementID, '');
         foreach ($data as $key => $value) {
