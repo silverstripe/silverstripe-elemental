@@ -298,8 +298,7 @@ class ElementalAreaController extends CMSMain
     }
 
     /**
-     * Arrive here from FormRequestHandler::httpSubmission() during a POST request to
-     * /admin/linkfield/linkForm/<LinkID>
+     * Arrive here from FormRequestHandler::httpSubmission() during a POST request.
      * The 'save' method is called because it is the FormAction set on the Form
      */
     public function save(array $data, Form $form): HTTPResponse
@@ -331,13 +330,15 @@ class ElementalAreaController extends CMSMain
             $this->jsonError(403);
         }
 
-        // Remove the namespace prefixes that were added by EditFormFactory
-        $dataWithoutNamespaces = static::removeNamespacesFromFields($data, $element->ID);
+        // Remove the namespace prefixes
+        $factory = Injector::inst()->get(EditFormFactory::class);
+        $factory->removeNamespaceFromFields($form->Fields(), ['Record' => $element]);
+        // Update the record
+        $form->saveInto($element);
+        // Add the namespace prefixes back - this is necessary for the response to be handled correctly
+        $factory->namespaceFields($form->Fields(), ['Record' => $element]);
 
-        // Update and write the data object which will trigger model validation.
-        // Would usually be handled by $form->saveInto($element) but since the field names
-        // in the form have been namespaced, we need to handle it ourselves.
-        $element->updateFromFormData($dataWithoutNamespaces);
+        // Write the data object which will trigger model validation
         if ($element->isChanged()) {
             try {
                 $element->write();
@@ -352,31 +353,6 @@ class ElementalAreaController extends CMSMain
         $response = $this->getSchemaResponse($schemaID, $form);
 
         return $response;
-    }
-
-    /**
-     * Remove the pseudo namespaces that were added to form fields by the form factory
-     *
-     * @param array $data
-     * @param int $elementID
-     * @return array
-     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it.
-     */
-    public static function removeNamespacesFromFields(array $data, $elementID)
-    {
-        Deprecation::noticeWithNoReplacment('5.4.0');
-        $output = [];
-        $template = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementID, '');
-        foreach ($data as $key => $value) {
-            // Only look at fields that match the namespace template
-            if (substr($key ?? '', 0, strlen($template ?? '')) !== $template) {
-                continue;
-            }
-
-            $fieldName = substr($key ?? '', strlen($template ?? ''));
-            $output[$fieldName] = $value;
-        }
-        return $output;
     }
 
     private function reorderElements(BaseElement $element, int $afterElementID): void
