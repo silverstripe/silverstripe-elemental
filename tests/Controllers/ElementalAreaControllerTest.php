@@ -702,6 +702,12 @@ class ElementalAreaControllerTest extends FunctionalTest
                         'canPublish' => true,
                         'canUnpublish' => true,
                         'canCreate' => true,
+                        'statusFlags' => [
+                            'addedtodraft' => [
+                                'text' => 'Draft',
+                                'title' => 'Item has not been published yet',
+                            ],
+                        ],
                     ],
                     [
                         'id' => 2,
@@ -721,6 +727,12 @@ class ElementalAreaControllerTest extends FunctionalTest
                         'canPublish' => true,
                         'canUnpublish' => true,
                         'canCreate' => true,
+                        'statusFlags' => [
+                            'addedtodraft' => [
+                                'text' => 'Draft',
+                                'title' => 'Item has not been published yet',
+                            ],
+                        ],
                     ],
                     [
                         'id' => 3,
@@ -740,6 +752,12 @@ class ElementalAreaControllerTest extends FunctionalTest
                         'canPublish' => true,
                         'canUnpublish' => true,
                         'canCreate' => true,
+                        'statusFlags' => [
+                            'addedtodraft' => [
+                                'text' => 'Draft',
+                                'title' => 'Item has not been published yet',
+                            ],
+                        ],
                     ],
                 ];
             }

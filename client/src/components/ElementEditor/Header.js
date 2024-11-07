@@ -114,38 +114,24 @@ class Header extends Component {
     );
   }
 
-  renderStatusBadge() {
-    const {
-      element: { isLiveVersion, isPublished },
-    } = this.props;
-
-    // No indication required for published elements
-    if (isPublished && isLiveVersion) {
+  renderStatusFlagBadges() {
+    const statusFlags = this.props.element.statusFlags;
+    if (!statusFlags) {
       return null;
     }
-
-    let versionStateTitle = '';
-    let versionStateButtonTitle = '';
-    const stateClassNames = ['badge'];
-
-    if (!isPublished) {
-      versionStateTitle = i18n._t('ElementHeader.BADGE_DRAFT', 'Draft');
-      versionStateButtonTitle = i18n._t('ElementHeader.STATE_DRAFT', 'Item has not been published yet');
-      stateClassNames.push('status-addedtodraft');
-    } else if (!isLiveVersion) {
-      versionStateTitle = i18n._t('ElementHeader.BADGE_MODIFIED', 'Modified');
-      versionStateButtonTitle = i18n._t('ElementHeader.STATE_MODIFIED', 'Item has unpublished changes');
-      stateClassNames.push('status-modified');
+    const badges = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (let [cssClasses, data] of Object.entries(statusFlags)) {
+      cssClasses = `badge status-${cssClasses}`;
+      if (typeof data === 'string') {
+        data = { text: data };
+      }
+      if (!data.title) {
+        data.title = '';
+      }
+      badges.push(<span key={cssClasses} className={cssClasses} title={data.title}>{data.text}</span>);
     }
-
-    return (
-      <span
-        className={classNames(stateClassNames)}
-        title={versionStateButtonTitle}
-      >
-        {versionStateTitle}
-      </span>
-    );
+    return badges;
   }
 
   render() {
@@ -209,7 +195,7 @@ class Header extends Component {
             </Tooltip>}
           </div>
           <h3 className={titleClasses}>{title}</h3>
-          {this.renderStatusBadge()}
+          {this.renderStatusFlagBadges()}
         </div>
         {!simple && <div className="element-editor-header__actions">
           <div role="none" onClick={(event) => event.stopPropagation()}>

@@ -22,7 +22,7 @@ class MyElement extends BaseElement
 
     private static $plural_name = 'my elements';
 
-    private static $description = 'What my custom element does';
+    private static $class_description = 'What my custom element does';
 
     public function getCMSFields()
     {

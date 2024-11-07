@@ -205,6 +205,7 @@ class ElementalAreaController extends FormSchemaController
                 'canPublish' => $element->canPublish(),
                 'canUnpublish' => $element->canUnpublish(),
                 'canCreate' => $element->canCreate(),
+                'statusFlags' => $element->getStatusFlags(),
             ];
         }
         $this->extend('updateApiReadElementalArea', $data, $request);

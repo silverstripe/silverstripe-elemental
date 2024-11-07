@@ -225,7 +225,13 @@ test('Header should render a versioned draft badge when the element is not publi
     element: {
       id: 14,
       isPublished: false,
-      liveVersion: false
+      liveVersion: false,
+      statusFlags: {
+        addedtodraft: {
+          text: 'Draft',
+          title: 'Item has not been published yet'
+        }
+      }
     }
   })}
   />);
@@ -242,7 +248,13 @@ test('Header should render a versioned modified badge when the element is modifi
     element: {
       id: 14,
       isPublished: true,
-      isLiveVersion: false
+      isLiveVersion: false,
+      statusFlags: {
+        modified: {
+          text: 'Modified',
+          title: 'Item has unpublished changes'
+        }
+      }
     }
   })}
   />);
