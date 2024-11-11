@@ -66,8 +66,11 @@ class BaseElement extends DataObject implements CMSPreviewable
      *
      * @config
      * @var string
+     * @deprecated 5.4.0 use class_description instead.
      */
     private static $description = 'Base element class';
+
+    private static $class_description = 'Base element class';
 
     /**
      * List of fields to exclude from CMS SiteTree seatch
@@ -1140,18 +1143,14 @@ JS
     /**
      * Get a description for this content element, if available
      *
-     * @deprecated 5.3.0 Use the description configuration property and localisation API directly instead.
+     * @deprecated 5.3.0 Use i18n_classDescription() instead.
      *
      * @return string
      */
     public function getDescription()
     {
-        Deprecation::notice('5.3.0', 'Use getTypeNice() or the description configuration property directly instead.');
-        $description = $this->config()->uninherited('description');
-        if ($description) {
-            return _t(__CLASS__ . '.Description', $description);
-        }
-        return '';
+        Deprecation::notice('5.3.0', 'Use i18n_classDescription() instead.');
+        return $this->i18n_classDescription() ?? '';
     }
 
     /**
