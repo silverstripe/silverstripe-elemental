@@ -5,7 +5,6 @@ namespace DNADesign\Elemental\Controllers;
 use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Services\ElementTypeRegistry;
-use SilverStripe\CMS\Controllers\CMSMain;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\Form;
@@ -20,17 +19,18 @@ use DNADesign\Elemental\Services\ReorderElements;
 use Exception;
 use SilverStripe\Control\HTTPRequest;
 use InvalidArgumentException;
+use SilverStripe\Admin\FormSchemaController;
 
 /**
  * Controller for "ElementalArea" - handles loading and saving of in-line edit forms in an elemental area in admin
  */
-class ElementalAreaController extends CMSMain
+class ElementalAreaController extends FormSchemaController
 {
     const FORM_NAME_TEMPLATE = 'ElementForm_%s';
 
     private static $url_segment = 'elemental-area';
 
-    private static $ignore_menuitem = true;
+    private static string $required_permission_codes = 'CMS_ACCESS';
 
     private static $url_handlers = [
         'elementForm/$ItemID' => 'elementForm',

@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class ElementalAreaControllerTest extends FunctionalTest
 {
     protected static $fixture_file = 'ElementalAreaControllerTest.yml';
-    
+
     protected static $extra_dataobjects = [
         TestElementContent::class,
         TestElementalArea::class,
@@ -180,9 +180,9 @@ class ElementalAreaControllerTest extends FunctionalTest
         $response = $this->post($url, $data, $headers);
         $this->assertSame($expectedCode, $response->getStatusCode());
         if ($fail === 'csrf-token') {
-            // Will end up at an HTML page with "Silverstripe - Bad Request"
-            $this->assertSame('text/html; charset=utf-8', $response->getHeader('Content-type'));
-            $this->assertStringContainsString('Silverstripe - Bad Request', $response->getBody());
+            // Gives suitable error message for XHR request
+            $this->assertStringStartsWith('text/plain', $response->getHeader('Content-type'));
+            $this->assertStringContainsString('There seems to have been a technical problem', $response->getBody());
             return;
         }
         $this->assertSame($expectedCode, $response->getStatusCode());
