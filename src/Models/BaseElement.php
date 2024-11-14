@@ -63,8 +63,11 @@ class BaseElement extends DataObject implements CMSPreviewable
      *
      * @config
      * @var string
+     * @deprecated 5.4.0 use class_description instead.
      */
     private static $description = 'Base element class';
+
+    private static $class_description = 'Base element class';
 
     /**
      * List of fields to exclude from CMS SiteTree seatch
