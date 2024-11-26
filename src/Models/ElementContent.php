@@ -23,11 +23,6 @@ class ElementContent extends BaseElement
 
     private static $plural_name = 'content blocks';
 
-    /**
-     * @deprecated 5.4.0 use class_description instead.
-     */
-    private static $description = 'HTML text block';
-
     private static $class_description = 'HTML text block';
 
     /**

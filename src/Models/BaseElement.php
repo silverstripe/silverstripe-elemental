@@ -60,13 +60,7 @@ class BaseElement extends DataObject implements CMSPreviewable
 
     /**
      * Describe the purpose of this element
-     *
-     * @config
-     * @var string
-     * @deprecated 5.4.0 use class_description instead.
      */
-    private static $description = 'Base element class';
-
     private static $class_description = 'Base element class';
 
     /**
@@ -1122,10 +1116,7 @@ JS
      */
     public function getTypeNice()
     {
-        $description = $this->config()->uninherited('description');
-        if ($description) {
-            $description = _t(__CLASS__ . '.Description', $description);
-        }
+        $description = $this->i18n_classDescription();
         $markup = ($description) ? ' <span class="element__note"> &mdash; ' . $description . '</span>' : '';
 
         return DBField::create_field(

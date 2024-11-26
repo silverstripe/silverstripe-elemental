@@ -26,8 +26,10 @@ Feature: Restore to draft
     And I click on the ".element-editor__actions-archive" element, confirming the dialog
     And I go to "/admin/archive"
     Then I click "Blocks" in the ".ui-tabs-nav" element
-    And I should see "MyBlock" in the "#Form_EditForm" element
-    Then I click "MyBlock" in the "#Form_EditForm" element
+    And I should see "MyBlock" in the "#Form_EditForm .col-Title" element
+    # Need to use "directly" here or it will think the badge is part of the text in the element
+    # which results in thinking it's not a match ("MyBlockArchived" !== "MyBlock")
+    Then I click "MyBlock" directly in the "#Form_EditForm .col-Title" element
     When I press the "Restore to draft" button
     Then I should see "Successfully restored the content block" in the "#Form_EditForm" element
     And I go to "/admin/pages"
