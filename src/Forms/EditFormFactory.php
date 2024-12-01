@@ -44,7 +44,7 @@ class EditFormFactory extends DefaultFormFactory
         return $form;
     }
 
-    protected function getFormFields(?RequestHandler $controller = null, $name, $context = [])
+    protected function getFormFields(?RequestHandler $controller, $name, $context = [])
     {
         $fields = parent::getFormFields($controller, $name, $context);
 
@@ -58,7 +58,7 @@ class EditFormFactory extends DefaultFormFactory
         return $fields;
     }
 
-    protected function getFormValidator(?RequestHandler $controller = null, $name, $context = [])
+    protected function getFormValidator(?RequestHandler $controller, $name, $context = [])
     {
         /** @var CompositeValidator $compositeValidator */
         $compositeValidator = parent::getFormValidator($controller, $name, $context);
