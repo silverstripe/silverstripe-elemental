@@ -5,7 +5,7 @@ namespace DNADesign\Elemental\Controllers;
 use DNADesign\Elemental\Forms\EditFormFactory;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Services\ElementTypeRegistry;
-use SilverStripe\Control\HTTPResponse;
+use SilverStripe\Admin\AdminRootController;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\Form;
 use SilverStripe\Core\Validation\ValidationException;
@@ -17,6 +17,7 @@ use SilverStripe\Control\Controller;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Services\ReorderElements;
 use Exception;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\HTTPRequest;
 use InvalidArgumentException;
 use SilverStripe\Admin\FormSchemaController;
@@ -404,7 +405,7 @@ class ElementalAreaController extends FormSchemaController
         );
 
         $urlSegment = $this->config()->get('url_segment');
-        $form->setFormAction("admin/$urlSegment/elementForm/$id");
+        $form->setFormAction(AdminRootController::admin_url("$urlSegment/elementForm/$id"));
 
         if (!$element->canEdit()) {
             $form->makeReadonly();
