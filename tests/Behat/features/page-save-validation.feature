@@ -18,7 +18,7 @@ Feature: Blocks are validated when page saving blocks
 
   Scenario: Validation when page saving inline blocks
 
-    # ElementalArea 1 - Blank title - RequiredFields
+    # ElementalArea 1 - Blank title - RequiredFieldsValidator
     # Click "Add element" button
     And I click on the "#Form_EditForm_ElementalArea1 .element-editor__toolbar button" element
     # Select ElementContent block type
@@ -54,7 +54,7 @@ Feature: Blocks are validated when page saving blocks
     And I click on the caret button for block 2
 
     # Save the page
-    # Check that that client side validation for RequiredFields has been disabled
+    # Check that that client side validation for RequiredFieldsValidator has been disabled
     # and that an error response triggers a single validation error toast
     When I press the "Save" button
     When I click on the ".toast__close" element
@@ -77,7 +77,7 @@ Feature: Blocks are validated when page saving blocks
     When I click on the ".toast__close" element
     Then I should not see a ".toast__close" element
 
-    # Provide a valid value for the RequiredFields test
+    # Provide a valid value for the RequiredFieldsValidator test
     # The page will save after this is resolved
     When I scroll to the top of the edit form panel
     And I fill in "Valid block one" for "Title" for block 1

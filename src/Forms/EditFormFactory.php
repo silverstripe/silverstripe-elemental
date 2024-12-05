@@ -9,8 +9,8 @@ use SilverStripe\Forms\DefaultFormFactory;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Forms\RequiredFields;
-use SilverStripe\Forms\CompositeValidator;
+use SilverStripe\Forms\Validation\RequiredFieldsValidator;
+use SilverStripe\Forms\Validation\CompositeValidator;
 
 class EditFormFactory extends DefaultFormFactory
 {
@@ -66,11 +66,11 @@ class EditFormFactory extends DefaultFormFactory
             return null;
         }
         $id = $context['Record']->ID;
-        foreach ($compositeValidator->getValidatorsByType(RequiredFields::class) as $validator) {
+        foreach ($compositeValidator->getValidatorsByType(RequiredFieldsValidator::class) as $validator) {
             $requiredFields = $validator->getRequired();
             foreach ($requiredFields as $requiredField) {
                 // Add more required fields with appendend field prefixes
-                // this is done so that front end validation works, at least for RequiredFields
+                // this is done so that front end validation works, at least for RequiredFieldsValidator
                 // you'll end up with two sets of required fields:
                 // - Title -- used for backend validation when inline saving an element
                 // - PageElements_<ElementID>_Title -- used for frontend js validation onchange()
