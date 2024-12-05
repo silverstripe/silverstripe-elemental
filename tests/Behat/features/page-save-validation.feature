@@ -86,6 +86,6 @@ Feature: Blocks are validated when page saving blocks
     # Now should see 2x success toast messages, one for the block, the other for the page
     Then I should see a "Saved 'Valid block one' successfully" success toast
     When I click on the ".toast__close" element
-    Then I should see a "Saved 'Blocks Page' successfully." success toast
+    Then I should see a "Saved Page "Blocks Page"" success toast
     When I click on the ".toast__close" element
     Then I should not see a ".toast__close" element

@@ -88,7 +88,7 @@ Feature: Edit elements in the CMS
     When I press the "Save" button
     Then I should see a "Saved 'Alice's Much Improved Block' successfully" success toast
     And I should see a "Saved 'Bob's Radically Redesigned Revolutionary Element' successfully" success toast
-    And I should see a "Saved 'Blocks Page' successfully." success toast
+    And I should see a "Saved Page "Blocks Page"" success toast
     When I dismiss all toasts
       And I should see "Alice's Much Improved Block"
       And I should see "New content for block 1"
