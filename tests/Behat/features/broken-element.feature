@@ -43,6 +43,6 @@ Feature: Broken element in CMS
   Scenario: I can publish the page
     Given I see a list of blocks
     When I press the "Publish" button
-    Then I should see a "Published 'Blocks Page' successfully." success toast
+    Then I should see a "Published Page "Blocks Page"" success toast
       # This message displays if the ObsoleteClass check is not present in BaseElement::write()
       And I should not see "you need to change the ClassName before you can write it"

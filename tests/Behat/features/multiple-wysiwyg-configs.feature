@@ -29,7 +29,7 @@ Feature: multiple elemental blocks with different HTMLEditorConfig instances
     When I click on block 2
     # In CI, the mouse position just happens to produce a tooltip that stops us clicking on the insert link button
     # so we have to move the mouse somewhere else to avoid that
-    And I click on the "input[type='text']" element
+    And I click on the ".element-editor-editform input[type='text']" element
     And I click on the "#Form_ElementForm_2 button[aria-label^='Insert link']" element
     Then I should see "Page on this site" in the ".tox-menu" element
     And I should see "Link to a file" in the ".tox-menu" element
