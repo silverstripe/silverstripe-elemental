@@ -4,9 +4,9 @@ namespace DNADesign\Elemental\Tests\Blocks;
 
 use SilverStripe\Dev\TestOnly;
 use DNADesign\Elemental\Models\ElementContent;
-use SilverStripe\Forms\CompositeValidator;
+use SilverStripe\Forms\Validation\CompositeValidator;
 use SilverStripe\Core\Validation\ValidationResult;
-use SilverStripe\Forms\Validator;
+use SilverStripe\Forms\Validation\Validator;
 
 class TestElementContent extends ElementContent implements TestOnly
 {

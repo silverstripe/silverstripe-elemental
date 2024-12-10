@@ -189,15 +189,15 @@ class BlockPage extends Page
 
 Custom elemental blocks can have validation set using standard [model validation](https://docs.silverstripe.org/en/developer_guides/model/validation/#model-validation).
 
-For example to make ensure your elemental block has populated its `has_one` relation using a `RequiredFields` validator, and validate the value of a field:
+For example to make ensure your elemental block has populated its `has_one` relation using a `RequiredFieldsValidator` validator, and validate the value of a field:
 
 ```php
 namespace App\Model;
 
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Assets\File;
-use SilverStripe\Forms\CompositeValidator;
-use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Forms\Validation\CompositeValidator;
+use SilverStripe\Forms\Validation\RequiredFieldsValidator;
 
 class MyBlock extends BaseElement
 {
@@ -212,7 +212,7 @@ class MyBlock extends BaseElement
     public function getCMSCompositeValidator(): CompositeValidator
     {
         $validator = parent::getCMSCompositeValidator();
-        $validator->addValidator(RequiredFields::create(['MyFile']));
+        $validator->addValidator(RequiredFieldsValidator::create(['MyFile']));
         return $validator;
     }
 

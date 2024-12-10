@@ -20,20 +20,20 @@ Feature: Blocks are validated when non-inline saving blocks
 
   Scenario: Non-inline block validation
 
-    # Related has_one RequiredFields with ID suffix (MyPageID)
+    # Related has_one RequiredFieldsValidator with ID suffix (MyPageID)
     When I press the "Save" button
     Then I should see "\"My page\" is required" in the "#message-Form_ItemEditForm_MyPageID" element
     And I click on the "#Form_ItemEditForm_MyPageID" element
     And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
 
-    # Related has_one RequiredFields without ID suffix (MyFile)
+    # Related has_one RequiredFieldsValidator without ID suffix (MyFile)
     Then I should see "\"My file\" is required" in the "#message-Form_ItemEditForm_MyFile" element
     When I click "Choose existing" in the ".uploadfield" element
     And I press the "Back" HTML field button
     And I click on the file named "file1" in the gallery
     And I press the "Insert" button
 
-    # RequiredFields on TextCheckboxGroupField (composite) field
+    # RequiredFieldsValidator on TextCheckboxGroupField (composite) field
     When I fill in "Title" with ""
     And I press the "Save" button
     Then I should see "\"Title\" is required" in the "#message-Form_ItemEditForm_Title" element

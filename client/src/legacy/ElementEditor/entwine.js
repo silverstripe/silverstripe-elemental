@@ -44,7 +44,7 @@ jQuery.entwine('ss', ($) => {
     AreaIDsSharedObject: {},
 
     // Increment is in Element.js to force subsequent form submissions on failed client-side validation
-    // If elements fail client-side validation in Validator.js e.g. RequiredFields then
+    // If elements fail client-side validation in Validator.js e.g. RequiredFieldsValidator then
     // they'll end up in a state where they need to re-render in order to re-submit
     // because the form submission is blocked by the client-side validation, meaning that
     // no formSchema response is received which is normally used to trigger a state update
