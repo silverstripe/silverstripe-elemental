@@ -101,7 +101,7 @@ jQuery.entwine('ss', ($) => {
 
     'from .cms-edit-form': {
       onbeforesubmitform(event, data) {
-        if (!data) {
+        if (!data || this.is('.elemental-area--read-only')) {
           return;
         }
         // Create a promise and expose the resolve function
