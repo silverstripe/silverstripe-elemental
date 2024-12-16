@@ -7,9 +7,6 @@ import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import i18n from 'i18n';
 import classNames from 'classnames';
-import { DragSource } from 'react-dnd';
-import { elementDragSource } from 'lib/dragHelpers';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 
 class Header extends Component {
   constructor(props) {
@@ -20,19 +17,6 @@ class Header extends Component {
     this.state = {
       tooltipOpen: false,
     };
-  }
-
-  componentDidMount() {
-    const { connectDragPreview } = this.props;
-    if (connectDragPreview) {
-      // Use empty image as a drag preview so browsers don't draw it
-      // and we can draw whatever we want on the custom drag layer instead.
-      connectDragPreview(getEmptyImage(), {
-        // IE fallback: specify that we'd rather screenshot the node
-        // when it already knows it's being dragged so we can hide it with CSS.
-        captureDraggingState: true,
-      });
-    }
   }
 
   componentDidUpdate() {
@@ -136,7 +120,6 @@ class Header extends Component {
 
   render() {
     const {
-      connectDragSource,
       element,
       type,
       areaId,
@@ -214,10 +197,6 @@ class Header extends Component {
       </div>
     );
 
-    if (previewExpanded) {
-      return connectDragSource(content);
-    }
-
     return content;
   }
 }
@@ -231,9 +210,6 @@ Header.propTypes = {
   ElementActionsComponent: PropTypes.elementType,
   previewExpanded: PropTypes.bool,
   disableTooltip: PropTypes.bool,
-  connectDragSource: PropTypes.func.isRequired,
-  connectDragPreview: PropTypes.func.isRequired,
-  onDragEnd: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
 };
 
 Header.defaultProps = {
@@ -243,10 +219,6 @@ Header.defaultProps = {
 export { Header as Component };
 
 export default compose(
-  DragSource('element', elementDragSource, connector => ({
-    connectDragSource: connector.dragSource(),
-    connectDragPreview: connector.dragPreview(),
-  })),
   inject(
     ['ElementActions'],
     (ElementActionsComponent) => ({

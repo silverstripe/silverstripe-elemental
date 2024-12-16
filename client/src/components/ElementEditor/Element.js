@@ -13,9 +13,8 @@ import { submit } from 'redux-form';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import * as TabsActions from 'state/tabs/TabsActions';
-import { DragSource, DropTarget } from 'react-dnd';
-import { getEmptyImage } from 'react-dnd-html5-backend';
-import { elementDragSource, isOverTop } from 'lib/dragHelpers';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import * as toastsActions from 'state/toasts/ToastsActions';
 import { addFormChanged, removeFormChanged } from 'state/unsavedForms/UnsavedFormsActions';
 import { ElementEditorContext } from 'components/ElementEditor/ElementEditor';
@@ -43,6 +42,20 @@ const Element = (props) => {
   const [doDispatchAddFormChanged, setDoDispatchAddFormChanged] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const { fetchElements } = useContext(ElementEditorContext);
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+    isOver,
+  } = useSortable({ id: props.element.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   useEffect(() => {
     // Note that formDirty from redux can be set to undefined after failed validation
@@ -64,18 +77,6 @@ const Element = (props) => {
       setDoSaveElement(true);
     }
   }, [props.saveElement, hasUnsavedChanges, props.increment]);
-
-  useEffect(() => {
-    if (props.connectDragPreview) {
-      // Use empty image as a drag preview so browsers don't draw it
-      // and we can draw whatever we want on the custom drag layer instead.
-      props.connectDragPreview(getEmptyImage(), {
-        // IE fallback: specify that we'd rather screenshot the node
-        // when it already knows it's being dragged so we can hide it with CSS.
-        captureDraggingState: true,
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (justClickedPublishButton && formHasRendered) {
@@ -363,11 +364,6 @@ const Element = (props) => {
     ContentComponent,
     link,
     activeTab,
-    connectDragSource,
-    connectDropTarget,
-    isDragging,
-    isOver,
-    onDragEnd,
     formDirty,
   } = props;
 
@@ -393,7 +389,7 @@ const Element = (props) => {
     onSaveButtonClick: handleSaveButtonClick,
   };
 
-  const content = connectDropTarget(<div
+  const content = <div
     className={elementClassNames}
     onClick={handleExpand}
     onKeyUp={handleKeyUp}
@@ -401,6 +397,11 @@ const Element = (props) => {
     tabIndex={0}
     title={getLinkTitle(type)}
     key={element.id}
+    // sortable properties
+    ref={setNodeRef}
+    {...attributes}
+    {...listeners}
+    style={style}
   >
     <ElementContext.Provider value={providerValue}>
       <HeaderComponent
@@ -413,7 +414,6 @@ const Element = (props) => {
         handleEditTabsClick={handleTabClick}
         activeTab={activeTab}
         disableTooltip={isDragging}
-        onDragEnd={onDragEnd}
       />
       <ContentComponent
         id={element.id}
@@ -430,11 +430,7 @@ const Element = (props) => {
         onFormInit={() => handleFormInit(activeTab)}
       />
     </ElementContext.Provider>
-  </div>);
-
-  if (!previewExpanded) {
-    return connectDragSource(content);
-  }
+  </div>;
 
   return content;
 };
@@ -508,14 +504,7 @@ Element.propTypes = {
   activeTab: PropTypes.string,
   tabSetName: PropTypes.string,
   onActivateTab: PropTypes.func,
-  connectDragSource: PropTypes.func.isRequired,
-  connectDragPreview: PropTypes.func.isRequired,
-  connectDropTarget: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired,
   isOver: PropTypes.bool.isRequired,
-  onDragOver: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
-  onDragEnd: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
-  onDragStart: PropTypes.func, // eslint-disable-line react/no-unused-prop-types
   saveElement: PropTypes.bool.isRequired,
   onBeforeSubmitForm: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
   onAfterSubmitResponse: PropTypes.func.isRequired,
@@ -529,35 +518,7 @@ Element.defaultProps = {
 
 export { Element as Component };
 
-const elementTarget = {
-  drop(props, monitor, component) {
-    const { element } = props;
-
-    return {
-      target: element.id,
-      dropSpot: isOverTop(monitor, component) ? 'top' : 'bottom',
-    };
-  },
-
-  hover(props, monitor, component) {
-    const { element, onDragOver } = props;
-
-    if (onDragOver) {
-      onDragOver(element, isOverTop(monitor, component));
-    }
-  },
-};
-
 export default compose(
-  DropTarget('element', elementTarget, (connector, monitor) => ({
-    connectDropTarget: connector.dropTarget(),
-    isOver: monitor.isOver(),
-  })),
-  DragSource('element', elementDragSource, (connector, monitor) => ({
-    connectDragSource: connector.dragSource(),
-    connectDragPreview: connector.dragPreview(),
-    isDragging: monitor.isDragging(),
-  })),
   connect(mapStateToProps, mapDispatchToProps),
   inject(
     ['ElementHeader', 'ElementContent'],

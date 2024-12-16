@@ -92,11 +92,16 @@ function createJsonError(message) {
 const jQuery = jest.fn();
 window.jQuery = jQuery;
 
+const mockEvent = {
+  active: { id: 1 },
+  over: { id: 2 },
+};
+
 function makeProps(obj = {}) {
   return {
     ToolbarComponent: ({ elementTypes }) => <div data-testid="test-toolbar" data-elementtypes={elementTypes.map(type => type.class).join(',')} />,
     ListComponent: ({ elements, onDragEnd }) => <div className="test-list">
-      {elements.map(element => <div id={`Element${element.id}`} key={element.id} onClick={() => onDragEnd(1, 2)}>{element.title}</div>)}
+      {elements.map(element => <div id={`Element${element.id}`} key={element.id} onClick={() => onDragEnd(mockEvent)}>{element.title}</div>)}
     </div>,
     areaId: 8,
     elementTypes: [
