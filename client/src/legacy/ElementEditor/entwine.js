@@ -39,7 +39,7 @@ jQuery.entwine('ss', ($) => {
     ReactRoot: null,
 
     // This object is shared between entwine.js and the ElementList react component. It allows:
-    // - entwine to call setState() on ElementList
+    // - entwine to set state on ElementList
     // - ElementList to call entwineResolve() on entwine
     AreaIDsSharedObject: {},
 
@@ -60,7 +60,8 @@ jQuery.entwine('ss', ($) => {
       if (!areaIDsSharedObject.hasOwnProperty(areaID)) {
         areaIDsSharedObject[areaID] = {
           entwineResolve: null,
-          setState: null,
+          setIncrement: null,
+          setSaveAllElements: null,
         };
       }
       const props = {
@@ -116,12 +117,10 @@ jQuery.entwine('ss', ($) => {
         const increment = this.getIncrement() + 1;
         this.setIncrement(increment);
         sharedObject.entwineResolve = entwineResolve;
-        // setState() is bound in the constructor of the ElementList react component
-        // setting saveAllElementst to true will trigger a re-render in the react component
-        sharedObject.setState({
-          saveAllElements: true,
-          increment
-        });
+        // These state setting methods are set by the ElementList react component
+        // setting saveAllElements state to true will trigger a re-render in the react component
+        sharedObject.setIncrement(increment);
+        sharedObject.setSaveAllElements(true);
       },
 
       onaftersubmitform(event, data) {
