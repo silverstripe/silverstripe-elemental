@@ -25,8 +25,8 @@ Feature: Restore to draft
     And I click "More options" in the "#ActionMenus" element
     And I press the "Unpublish and archive" button, confirming the dialog
     And I go to "/admin/archive"
-    Then I should see "MyPage" in the "#Form_EditForm" element
-    Then I click "MyPage" in the "#Form_EditForm" element
+    Then I should see "MyPage" in the "#Form_EditForm .col-Title" element
+    Then I click "MyPage" directly in the "#Form_EditForm .col-Title" element
     When I press the "Restore to draft" button
     Then I should see "Successfully restored the page" in the "#Form_EditForm" element
     And I go to "/admin/pages"
