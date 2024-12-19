@@ -6,27 +6,22 @@ import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import classNames from 'classnames';
 import i18n from 'i18n';
-import { DropTarget } from 'react-dnd';
-import { getDragIndicatorIndex } from 'lib/dragHelpers';
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers';
 import { getElementTypeConfig } from 'state/editor/elementConfig';
 
 function ElementList({
   elements,
   sharedObject,
-  connectDropTarget,
   ElementComponent,
   HoverBarComponent,
-  DragIndicatorComponent,
   allowedElementTypes,
   elementTypes,
   areaId,
   onDragEnd,
-  onDragOver,
   onDragStart,
-  isDraggingOver,
-  dragTargetElementId,
-  draggedItem,
-  dragSpot,
+  dragging,
   isLoading,
   LoadingComponent,
 }) {
@@ -116,6 +111,16 @@ function ElementList({
     setSaveAllElements(false);
   }, [saveAllElements, hasUnsavedChangesBlockIDs]);
 
+  const sensors = useSensors(
+    // Pointer sensor is for touch and mouse.
+    // The activation constraint allows clicking and small twitches without starting a "drag".
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 10
+      }
+    }),
+  );
+
   const handleChangeHasUnsavedChanges = (elementID, hasUnsavedChanges) => {
     setHasUnsavedChangesBlockIDs({
       ...hasUnsavedChangesBlockIDs,
@@ -141,13 +146,6 @@ function ElementList({
     });
   };
 
-  const getCurrentDragIndicatorIndex = () => getDragIndicatorIndex(
-    elements.map(element => element.id),
-    dragTargetElementId,
-    draggedItem && draggedItem.id,
-    dragSpot
-  );
-
   /**
    * Renders a list of Element components, each with an elementType object
    * of data mapped into it.
@@ -161,32 +159,30 @@ function ElementList({
       const saveElement = saveAllElements
         && hasUnsavedChangesBlockIDs[element.id]
         && validBlockIDs[element.id] === null;
-      return <div key={element.id}>
+      return <>
         <ElementComponent
+          key={element.id}
           element={element}
           areaId={areaId}
           type={getElementTypeConfig(element, elementTypes)}
           link={element.blockSchema.actions.edit}
-          onDragOver={onDragOver}
-          onDragEnd={onDragEnd}
-          onDragStart={onDragStart}
           saveElement={saveElement}
           onChangeHasUnsavedChanges={(hasUnsavedChanges) => handleChangeHasUnsavedChanges(element.id, hasUnsavedChanges)}
           onBeforeSubmitForm={() => handleBeforeSubmitForm(element.id)}
           onAfterSubmitResponse={(valid) => handleAfterSubmitResponse(element.id, valid)}
           increment={increment}
         />
-        {isDraggingOver || <HoverBarComponent
+        {dragging === false && <HoverBarComponent
           key={`create-after-${element.id}`}
           areaId={areaId}
           elementId={element.id}
           elementTypes={allowedElementTypes}
         />}
-      </div>;
+      </>;
     });
 
     // Add a insert point above the first block for consistency
-    if (!isDraggingOver) {
+    if (dragging === false) {
       output = [
         <HoverBarComponent
           key={0}
@@ -197,12 +193,20 @@ function ElementList({
       ].concat(output);
     }
 
-    const dragIndicatorIndex = getCurrentDragIndicatorIndex();
-    if (isDraggingOver && dragIndicatorIndex !== null) {
-      output.splice(dragIndicatorIndex, 0, <DragIndicatorComponent key="DropIndicator" />);
-    }
-
-    return output;
+    return <DndContext
+      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    >
+      <SortableContext
+        items={elements.map(element => element.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        {output}
+      </SortableContext>
+    </DndContext>;
   };
 
   /**
@@ -221,12 +225,11 @@ function ElementList({
     'elemental-editor-list',
     { 'elemental-editor-list--empty': !elements || !elements.length }
   );
-  return connectDropTarget(
-    <div className={listClassNames}>
-      {renderLoading()}
-      {renderBlocks()}
-    </div>
-  );
+
+  return <div className={listClassNames}>
+    {renderLoading()}
+    {renderBlocks()}
+  </div>;
 }
 
 ElementList.propTypes = {
@@ -234,10 +237,9 @@ ElementList.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   allowedElementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   areaId: PropTypes.number.isRequired,
-  dragTargetElementId: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-  onDragOver: PropTypes.func,
   onDragStart: PropTypes.func,
   onDragEnd: PropTypes.func,
+  dragging: PropTypes.oneOf([PropTypes.bool, PropTypes.number]),
   sharedObject: PropTypes.object.isRequired,
 };
 
@@ -252,35 +254,7 @@ ElementList.defaultProps = {
 
 export { ElementList as Component };
 
-const elementListTarget = {
-  drop(props, monitor) {
-    const { elements } = props;
-    const elementTargetDropResult = monitor.getDropResult();
-
-    if (!elementTargetDropResult) {
-      return {};
-    }
-
-    const dropIndex = getDragIndicatorIndex(
-      elements.map(element => element.id),
-      elementTargetDropResult.target,
-      monitor.getItem(),
-      elementTargetDropResult.dropSpot,
-    );
-    const dropAfterID = elements[dropIndex - 1] ? elements[dropIndex - 1].id : '0';
-
-    return {
-      ...elementTargetDropResult,
-      dropAfterID,
-    };
-  },
-};
-
 export default compose(
-  DropTarget('element', elementListTarget, (connector, monitor) => ({
-    connectDropTarget: connector.dropTarget(),
-    draggedItem: monitor.getItem(),
-  })),
   inject(
     ['Element', 'Loading', 'HoverBar', 'DragPositionIndicator'],
     (ElementComponent, LoadingComponent, HoverBarComponent, DragIndicatorComponent) => ({
