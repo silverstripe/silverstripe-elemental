@@ -18,7 +18,6 @@ Feature: Files can be saved in and removed from elemental blocks
     # Add a file to the block
     Given I click on the caret button for block 1
     Then I should not see "file1"
-    Given I take a screenshot after every step
     When I click "Choose existing" in the "#Form_ElementForm_1 .uploadfield" element
     And I press the "Back" HTML field button
     And I click on the file named "file1" in the gallery
