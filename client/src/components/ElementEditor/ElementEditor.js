@@ -5,14 +5,12 @@ import { connect } from 'react-redux';
 import { inject } from 'lib/Injector';
 import { bindActionCreators, compose } from 'redux';
 import { elementTypeType } from 'types/elementTypeType';
-import { DropTarget } from 'react-dnd';
-import ElementDragPreview from 'components/ElementEditor/ElementDragPreview';
-import withDragDropContext from 'lib/withDragDropContext';
 import backend from 'lib/Backend';
 import Config from 'lib/Config';
 import { getConfig } from 'state/editor/elementConfig';
 import * as toastsActions from 'state/toasts/ToastsActions';
 import getJsonErrorMessage from 'lib/getJsonErrorMessage';
+import { arrayMove } from '@dnd-kit/sortable';
 
 export const ElementEditorContext = createContext(null);
 
@@ -29,42 +27,49 @@ class ElementEditor extends PureComponent {
       dragSpot: null,
       elements: null,
       isLoading: true,
+      dragging: false,
     };
 
-    this.handleDragOver = this.handleDragOver.bind(this);
+    this.handleDragStart = this.handleDragStart.bind(this);
     this.handleDragEnd = this.handleDragEnd.bind(this);
     this.fetchElements = this.fetchElements.bind(this);
   }
 
   /**
-   * Hook for ReactDND triggered by hovering over a drag _target_.
-   *
-   * This tracks the current hover target and whether it's above the top half of the target
-   * or the bottom half.
-   *
-   * @param element
-   * @param isOverTop
+   * Hook triggered when a draggable is picked up.
    */
-  handleDragOver(element = null, isOverTop = null) {
-    const id = element ? element.id : false;
-
+  handleDragStart(event) {
+    const { active } = event;
     this.setState({
-      dragTargetElementId: id,
-      dragSpot: isOverTop === false ? 'bottom' : 'top',
+      dragging: active.id,
     });
   }
 
   /**
-   * Hook for ReactDND triggered when a drag source is dropped onto a drag target.
-   *
-   * @param sourceId
-   * @param afterId
+   * Hook triggered when a draggable is dropped onto a drop target.
    */
-  handleDragEnd(sourceId, afterId) {
+  handleDragEnd(event) {
+    const { active, over } = event;
+    const { elements } = this.state;
+
+    // This happens if letting go of the draggable where it started.
+    if (active.id === over.id) {
+      this.setState({
+        dragging: false,
+      });
+      return;
+    }
+
+    const elementIDs = elements.map(e => e.id);
+    const fromIndex = elementIDs.indexOf(active.id);
+    const toIndex = elementIDs.indexOf(over.id);
+    const sortedElements = arrayMove(elements, fromIndex, toIndex);
+    const afterBlockID = toIndex > 0 ? sortedElements[toIndex - 1].id : 0;
+
     const url = `${getConfig().controllerLink.replace(/\/$/, '')}/api/sort`;
     backend.post(url, {
-      id: sourceId,
-      afterBlockID: afterId,
+      id: active.id,
+      afterBlockID,
     }, {
       'X-SecurityID': Config.get('SecurityID')
     })
@@ -75,8 +80,10 @@ class ElementEditor extends PureComponent {
       });
 
     this.setState({
-      dragTargetElementId: null,
-      dragSpot: null,
+      dragging: false,
+      // Setting elements ensures there is no "pop" between dropping the element and reloading
+      // the list with fetchElements above, as the elements will already be rendered in the new order.
+      elements: sortedElements,
     });
   }
 
@@ -121,13 +128,11 @@ class ElementEditor extends PureComponent {
       ListComponent,
       areaId,
       elementTypes,
-      isDraggingOver,
-      connectDropTarget,
       allowedElements,
       sharedObject,
       isLoading,
     } = this.props;
-    const { dragTargetElementId, dragSpot, elements } = this.state;
+    const { dragging, elements } = this.state;
 
     if (elements === null) {
       this.fetchElements(false);
@@ -146,32 +151,25 @@ class ElementEditor extends PureComponent {
       fetchElements: this.fetchElements,
     };
 
-    return connectDropTarget(
-      <div className="element-editor">
-        <ElementEditorContext.Provider value={providerValue}>
-          <ToolbarComponent
-            elementTypes={allowedElementTypes}
-            areaId={areaId}
-            onDragOver={this.handleDragOver}
-          />
-          <ListComponent
-            allowedElementTypes={allowedElementTypes}
-            elementTypes={elementTypes}
-            areaId={areaId}
-            onDragOver={this.handleDragOver}
-            onDragStart={this.handleDragStart}
-            onDragEnd={this.handleDragEnd}
-            dragSpot={dragSpot}
-            isDraggingOver={isDraggingOver}
-            dragTargetElementId={dragTargetElementId}
-            sharedObject={sharedObject}
-            elements={elements}
-            isLoading={isLoading}
-          />
-          <ElementDragPreview elementTypes={elementTypes} />
-        </ElementEditorContext.Provider>
-      </div>
-    );
+    return <div className="element-editor">
+      <ElementEditorContext.Provider value={providerValue}>
+        <ToolbarComponent
+          elementTypes={allowedElementTypes}
+          areaId={areaId}
+        />
+        <ListComponent
+          allowedElementTypes={allowedElementTypes}
+          elementTypes={elementTypes}
+          areaId={areaId}
+          onDragStart={this.handleDragStart}
+          onDragEnd={this.handleDragEnd}
+          dragging={dragging}
+          sharedObject={sharedObject}
+          elements={elements}
+          isLoading={isLoading}
+        />
+      </ElementEditorContext.Provider>
+    </div>;
   }
 }
 
@@ -187,11 +185,6 @@ ElementEditor.propTypes = {
 export { ElementEditor as Component };
 
 const params = [
-  withDragDropContext,
-  DropTarget('element', {}, (connector, monitor) => ({
-    connectDropTarget: connector.dropTarget(),
-    isDraggingOver: monitor.isOver(), // isDragging is not available on DropTargetMonitor
-  })),
   inject(
     ['ElementToolbar', 'ElementList'],
     (ToolbarComponent, ListComponent) => ({
