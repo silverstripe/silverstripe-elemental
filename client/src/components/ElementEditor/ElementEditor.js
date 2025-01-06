@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { inject } from 'lib/Injector';
 import { bindActionCreators, compose } from 'redux';
 import { elementTypeType } from 'types/elementTypeType';
-import withDragDropContext from 'lib/withDragDropContext';
 import backend from 'lib/Backend';
 import Config from 'lib/Config';
 import { getConfig } from 'state/editor/elementConfig';
@@ -186,7 +185,6 @@ ElementEditor.propTypes = {
 export { ElementEditor as Component };
 
 const params = [
-  withDragDropContext,
   inject(
     ['ElementToolbar', 'ElementList'],
     (ToolbarComponent, ListComponent) => ({
