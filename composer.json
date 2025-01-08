@@ -24,8 +24,7 @@
         "silverstripe/admin": "^3",
         "silverstripe/versioned": "^3",
         "silverstripe/versioned-admin": "^3",
-        "symbiote/silverstripe-gridfieldextensions": "^5",
-        "silverstripe/vendor-plugin": "^2"
+        "symbiote/silverstripe-gridfieldextensions": "^5"
     },
     "require-dev": {
         "silverstripe/documentation-lint": "^1",
