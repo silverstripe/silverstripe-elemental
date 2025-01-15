@@ -63,8 +63,7 @@ class TextCheckboxGroupField extends CompositeField
 
     public function getMessageCast()
     {
-        $message = parent::getMessage();
-        if ($message) {
+        if ($this->message) {
             return parent::getMessageCast();
         }
         foreach ($this->getChildren() as $field) {
