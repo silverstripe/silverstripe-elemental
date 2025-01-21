@@ -23,7 +23,7 @@ So that I can direct users directly to the relevant information
       And I select "element-anchor" in the "#Form_linkModalFormeditorAnchorLink_Anchor_Holder" anchor dropdown
     Then I should see "element-anchor" in the "#Form_linkModalFormeditorAnchorLink_Anchor_Holder .anchorselectorfield__value-container" element
     # Close the dialog now that we're done with it.
-    When I click on the "button.close" element
+    When I click on the "button.btn-close" element
 
   Scenario: I can link to anchors on a normal page from an elemental block
     Given I left click on "Elemental" in the tree
@@ -40,7 +40,7 @@ So that I can direct users directly to the relevant information
       And I select "normal-anchor" in the "#Form_linkModalFormeditorAnchorLink_Anchor_Holder" anchor dropdown
     Then I should see "normal-anchor" in the "#Form_linkModalFormeditorAnchorLink_Anchor_Holder .anchorselectorfield__value-container" element
     # Close the dialog now that we're done with it.
-    When I click on the "button.close" element
+    When I click on the "button.btn-close" element
 
   Scenario: I can link to anchors in an elemental block from another elemental block
     Given I left click on "Elemental" in the tree
@@ -56,4 +56,4 @@ So that I can direct users directly to the relevant information
     When I select "another-anchor" in the "#Form_linkModalFormeditorAnchorLink_Anchor_Holder" anchor dropdown
     Then I should see "another-anchor" in the "#Form_linkModalFormeditorAnchorLink_Anchor_Holder .anchorselectorfield__value-container" element
     # Close the dialog now that we're done with it.
-    When I click on the "button.close" element
+    When I click on the "button.btn-close" element

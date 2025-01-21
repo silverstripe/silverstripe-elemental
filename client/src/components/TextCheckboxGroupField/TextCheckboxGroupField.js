@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { InputGroup, InputGroupText } from 'reactstrap';
 import fieldHolder from 'components/FieldHolder/FieldHolder';
 
 const TextCheckboxGroupField = (props) => {
@@ -38,9 +38,7 @@ const TextCheckboxGroupField = (props) => {
   return (
     <InputGroup className="text-checkbox-group-field">
       {childrenWithProps[0]}
-      <InputGroupAddon addonType="append">
-        <InputGroupText>{childrenWithProps[1]}</InputGroupText>
-      </InputGroupAddon>
+      <InputGroupText>{childrenWithProps[1]}</InputGroupText>
     </InputGroup>
   );
 };
