@@ -22,7 +22,7 @@
   & &__form {
     .form-group .form__field-holder {
       flex: 1 0 100%;
-      max-width: 900px;
+      width: 900px;
     }
   }
 
@@ -43,7 +43,9 @@
   }
 
   .text-checkbox-group-field .form-group {
-    margin-bottom: 0;
+    // We have to use !important here to override bootstrap's "mb-3" class (which uses !important)
+    // We can't just remove the "mb-3" class because that's added via reactstrap
+    margin-bottom: 0 !important;
     flex: auto;
   }
 }
