@@ -5,23 +5,6 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Component as Header } from '../Header';
 
-// Fixes issue when rendering reactstrap tooltip
-// Warning: `NaN` is an invalid value for the `left` css style property.
-// https://stackoverflow.com/a/70157330
-// Have refactored to not use an anonymous class with a static property being assigned
-// so that it passed eslint
-jest.mock('popper.js', () => {
-  const PopperJS = jest.requireActual('popper.js');
-  return {
-    __esModule: true,
-    default: jest.fn(() => ({
-      placements: PopperJS.placements,
-      destroy: () => {},
-      scheduleUpdate: () => {},
-    })),
-  };
-});
-
 function makeProps(obj = {}) {
   return {
     element: {
