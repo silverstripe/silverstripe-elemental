@@ -456,10 +456,10 @@ class ElementalAreaController extends FormSchemaController
             $messageCast = $message['messageCast'] ?? ValidationResult::CAST_TEXT;
             if ($messageFieldName) {
                 $fieldName = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $element->ID, $messageFieldName);
-                $params = [$fieldName, $messageText, $messageType, null, $messageCast];
+                $params = [$fieldName, $messageText, $messageType, '', $messageCast];
                 $validationResultWithNameSpaces->addFieldError(...$params);
             } else {
-                $validationResultWithNameSpaces->addError($messageText, $messageType, null, $messageCast);
+                $validationResultWithNameSpaces->addError($messageText, $messageType, '', $messageCast);
             }
             $signatures[$signature] = $message;
         }
