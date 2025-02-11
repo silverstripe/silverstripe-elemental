@@ -1162,7 +1162,7 @@ JS
     public function getTypeNice()
     {
         $description = Deprecation::withSuppressedNotice(fn () => $this->getDescription());
-        $desc = ($description) ? ' <span class="element__note"> &mdash; ' . $description . '</span>' : '';
+        $desc = $description ? " <span class=\"element__note\"> — {$description}</span>" : '';
 
         return DBField::create_field(
             'HTMLVarchar',
