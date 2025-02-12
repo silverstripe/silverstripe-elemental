@@ -14,7 +14,6 @@ use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\TabSet;
-use SilverStripe\ORM\DataObjectInterface;
 use Symbiote\GridFieldExtensions\GridFieldAddNewMultiClass;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest;
