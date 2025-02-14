@@ -1,8 +1,11 @@
 it:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Modifica Pagina'
+  DNADesign\Elemental\Extensions\ElementalPageExtension:
+    has_one_ElementalArea: 'Area elementi'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
-    DISPLAYED: Visualizza
+    DISPLAYED: Visualizzato
+    NOT_DISPLAYED: 'Non visualizzato'
     ShowTitleLabel: Visualizza
     Title: Titolo
     TitleLabel: 'Titolo (visualizzato se si seleziona la checkbox)'
@@ -20,7 +23,14 @@ it:
     SINGULARNAME: blocco
     STYLE: 'Variazione di stile'
     SettingsTabLabel: Impostazioni
+    db_ExtraClass: 'Classe aggiuntiva'
+    db_ShowTitle: 'Mostra titolo'
+    db_Sort: Ordina
+    db_Style: Stile
     db_Title: Titolo
+    db_Version: Versione
+    has_one_Parent: Genitore
+    has_one_TopPage: 'Pagina iniziale'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Contenuto
     ContentLabel: Contenuto
@@ -37,6 +47,10 @@ it:
       one: "Un'Area Elementi"
       other: '{count} Aree Elementali'
     SINGULARNAME: 'Area Elementi'
+    db_OwnerClassName: 'Nome classe proprietaria'
+    db_Version: Versione
+    has_many_Elements: Elementi
+    has_one_TopPage: 'Pagina iniziale'
   DNADesign\Elemental\Reports\ElementTypeReport:
     Title: 'Tipi di blocchi dei contenuti'
     Total: Totale
@@ -48,3 +62,9 @@ it:
     Summary: Sommario
     Title: Titolo
     Type: Tipo
+  DNADesign\Elemental\TopPage\DataExtension:
+    has_one_TopPage: 'Pagina iniziale'
+  DNADesign\Elemental\TopPage\FluentExtension:
+    db_TopPageLocale: 'Lingua pagina iniziale'
+  SilverStripe\CMS\Controllers\CMSPageHistoryController:
+    PREVIEW: 'Anteprima sito'
