@@ -121,10 +121,10 @@ class ElementalPageExtension extends ElementalAreasExtension
 
     protected function updateMetaTags(&$tags)
     {
-        if (!Controller::has_curr()) {
+        $controller = Controller::curr();
+        if ($controller === null) {
             return;
         }
-        $controller = Controller::curr();
         $request = $controller->getRequest();
         if ($request->getVar('ElementalPreview') !== null) {
             $html = HTMLValue::create($tags);
