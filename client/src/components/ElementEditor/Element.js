@@ -57,6 +57,8 @@ const Element = (props) => {
     transition,
   };
 
+  const formRenderedIfNeeded = formHasRendered || !props.type.inlineEditable;
+
   useEffect(() => {
     // Note that formDirty from redux can be set to undefined after failed validation
     // which is confusing as the block still has unsaved changes, hence why we create
@@ -79,7 +81,7 @@ const Element = (props) => {
   }, [props.saveElement, hasUnsavedChanges, props.increment]);
 
   useEffect(() => {
-    if (justClickedPublishButton && formHasRendered) {
+    if (justClickedPublishButton && formRenderedIfNeeded) {
       setJustClickedPublishButton(false);
       if (hasUnsavedChanges) {
         // Save the element first before publishing, which may trigger validation errors
@@ -90,7 +92,7 @@ const Element = (props) => {
         setDoPublishElement(true);
       }
     }
-  }, [justClickedPublishButton, formHasRendered]);
+  }, [justClickedPublishButton, formRenderedIfNeeded]);
 
   useEffect(() => {
     if (doDispatchAddFormChanged) {
@@ -158,7 +160,7 @@ const Element = (props) => {
 
   // Publish action
   useEffect(() => {
-    if (formHasRendered && doPublishElement) {
+    if (doPublishElement && formRenderedIfNeeded) {
       const url = `${getConfig().controllerLink.replace(/\/$/, '')}/api/publish`;
       backend.post(url, {
         id: props.element.id,
@@ -168,7 +170,7 @@ const Element = (props) => {
         .then(() => handleAfterPublish(false))
         .catch(() => handleAfterPublish(true));
     }
-  }, [formHasRendered, doPublishElement]);
+  }, [doPublishElement, formHasRendered]);
 
   /**
    * Returns the applicable versioned state class names for the element
@@ -312,7 +314,9 @@ const Element = (props) => {
 
   const handlePublishButtonClick = () => {
     setJustClickedPublishButton(true);
-    setEnsureFormRendered(true);
+    if (props.type.inlineEditable) {
+      setEnsureFormRendered(true);
+    }
   };
 
   const handleFormInit = (activeTab) => {

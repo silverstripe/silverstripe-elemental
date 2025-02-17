@@ -499,12 +499,9 @@ JS
         return $this;
     }
 
-    /**
-     * @return Controller
-     */
-    public function Top()
+    public function Top(): ?Controller
     {
-        return (Controller::has_curr()) ? Controller::curr() : null;
+        return Controller::curr();
     }
 
     /**
@@ -832,19 +829,12 @@ JS
         return $link;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isCMSPreview()
+    public function isCMSPreview(): bool
     {
-        if (Controller::has_curr()) {
-            $controller = Controller::curr();
-
-            if ($controller->getRequest()->requestVar('CMSPreview')) {
-                return true;
-            }
+        $controller = Controller::curr();
+        if ($controller && $controller->getRequest()->requestVar('CMSPreview')) {
+            return true;
         }
-
         return false;
     }
 
@@ -1116,7 +1106,7 @@ JS
     public function getTypeNice()
     {
         $description = $this->i18n_classDescription();
-        $markup = ($description) ? ' <span class="element__note"> &mdash; ' . $description . '</span>' : '';
+        $markup = ($description) ? " <span class=\"element__note\"> — {$description}</span>" : '';
 
         return DBField::create_field(
             'HTMLVarchar',

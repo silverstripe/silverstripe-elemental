@@ -93,7 +93,7 @@ class TextCheckboxGroupField extends CompositeField
             if ($titleField) {
                 $field->replaceField('Title', LiteralField::create(
                     'Title',
-                    $titleField->Value()
+                    $titleField->getFormattedValue()
                 ));
             }
 
@@ -103,7 +103,8 @@ class TextCheckboxGroupField extends CompositeField
             if ($showTitle) {
                 $field->replaceField('ShowTitle', LiteralField::create(
                     'ShowTitle',
-                    $showTitle->Value() === 'Yes' ? $displayedText : $notDisplayedText
+                    // Intentionally using getValue() instead of getFormattedValue() to get the raw value
+                    $showTitle->getValue() === 1 ? $displayedText : $notDisplayedText
                 )->addExtraClass('show-title'));
             }
         }
