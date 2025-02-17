@@ -11,6 +11,7 @@ en:
     TitleLabel: 'Title (displayed if checked)'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Block
+    CLASS_DESCRIPTION: 'Base element class'
     CUSTOM_STYLES: 'Select a style..'
     ExtraCssClassesLabel: 'Custom CSS classes'
     ExtraCssClassesPlaceholder: 'my_class another_class'
@@ -32,6 +33,7 @@ en:
     has_one_TopPage: 'Top page'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Content
+    CLASS_DESCRIPTION: 'HTML text block'
     ContentLabel: Content
     PLURALNAME: 'content blocks'
     PLURALS:

@@ -1106,7 +1106,7 @@ JS
     public function getTypeNice()
     {
         $description = $this->i18n_classDescription();
-        $markup = ($description) ? ' <span class="element__note"> &mdash; ' . $description . '</span>' : '';
+        $markup = ($description) ? " <span class=\"element__note\"> — {$description}</span>" : '';
 
         return DBField::create_field(
             'HTMLVarchar',

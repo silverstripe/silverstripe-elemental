@@ -9,7 +9,6 @@ use SilverStripe\CMS\Tests\Behaviour\FixtureContext as BaseFixtureContext;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\Queries\SQLInsert;
-use SilverStripe\FrameworkTest\Elemental\Model\ElementalSearchableFieldsBlock;
 
 /**
  * Context used to create fixtures in the SilverStripe ORM.
@@ -47,7 +46,7 @@ class FixtureContext extends BaseFixtureContext
     }
 
     /**
-     * @Given /a "([^"]+)" "([^"]+)" with a "([^"]+)" element titled "([^"]+)"/
+     * @Given /(?:the|a) "([^"]+)" "([^"]+)" (?:with|has) a "([^"]+)" element titled "([^"]+)"/
      *
      * e.g. Given a "page" "My page" with a "My\App\MyBlock" element titled "Some block"
      *

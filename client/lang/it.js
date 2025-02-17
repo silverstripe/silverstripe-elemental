@@ -9,9 +9,13 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementAddElementPopover.SEARCH_BLOCKS": "Cerca blocchi",
     "ElementAddNewButton.ADD_BLOCK": "Aggiungi blocco",
     "ElementArchiveAction.ARCHIVE": "Archivio",
+    "ElementArchiveAction.ARCHIVE_PERMISSION_DENY": "Archiviazione, permessi insufficienti",
     "ElementArchiveAction.CONFIRM_DELETE": "Sei sicuro di voler inviare questo blocco all'archivio?",
     "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Attenzione: questo blocco non sarà pubblicato prima di essere inviato all'archivio. Sei sicuro di voler procedere?",
+    "ElementArchiveAction.DUPLICATE": "Duplica",
+    "ElementArchiveAction.DUPLICATE_PERMISSION_DENY": "Duplicazione, permessi insufficienti",
     "ElementEditForm.ERROR_NOTIFICATION": "Errore durante la visualizzazione del modulo di modifica per questo blocco",
+    "ElementHeader.BROKEN": "Questo elemento è di tipo obsoleto {type}.",
     "ElementHeader.EXPAND": "Mostra campi modificabili",
     "ElementHeader.NOTITLE": "Blocco {type} senza titolo",
     "ElementHeader.STATE_DRAFT": "L'articolo non è stato ancora pubblicato",
@@ -19,6 +23,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementList.ADD_BLOCKS": "Aggiungi blocchi per posizionare il tuo contenuto",
     "ElementPublishAction.ERROR_NOTIFICATION": "Errore di pubblicazione '{title}'",
     "ElementPublishAction.PUBLISH": "Pubblica",
+    "ElementPublishAction.PUBLISH_PERMISSION_DENY": "Pubblicazione, permessi insufficienti",
     "ElementPublishAction.SUCCESS_NOTIFICATION": "Pubblicato '{title}' con successo",
     "ElementSaveAction.ERROR_NOTIFICATION": "Errore durante il salvataggio '{title}'",
     "ElementSaveAction.SAVE": "Salva",
@@ -26,8 +31,14 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementSummary.NO_PREVIEW": "Nessuna anteprima disponibile",
     "ElementUnpublishAction.ERROR_NOTIFICATION": "Errore di annullamento della pubblicazione '{title}'",
     "ElementUnpublishAction.SUCCESS_NOTIFICATION": "Rimosso '{title}' dalla pagina pubblicata",
-    "ElementUnpublishAction.UNPUBLISH": "Non pubblicato",
+    "ElementUnpublishAction.UNPUBLISH": "Nascondi",
+    "ElementUnpublishAction.UNPUBLISH_PERMISSION_DENY": "Nascondimento, permessi insufficienti",
+    "ElementalElement.ARCHIVE_BROKEN": "Archivia questo blocco",
+    "ElementalElement.BROKEN_DESCRIPTION": "Questo blocco non è corretto e non sarà mostrato nel front-end. Puoi archiviarlo per rimuoverlo da questa area elementi.",
+    "ElementalElement.BROKEN_DESCRIPTION_TITLE": "Il titolo di questo blocco è \"{title}\". Non è corretto e non sarà mostrato nel front-end. Puoi archiviarlo per rimuoverlo da questa area elementi.",
+    "ElementalElement.CHILD_RENDERING_ERROR": "Qualcosa è andato storto con questo blocco. Provare a salvare e ricaricare il CMS.",
     "ElementalElement.TITLE": "Modifica questo blocco {type} ",
-    "HistoricElementView.BLOCK_HISTORY": "Visualizza il blocco"
+    "HistoricElementView.BLOCK_HISTORY": "Visualizza il blocco",
+    "HistoricElementView.VIEW_BLOCK_HISTORY": "Cronologia blocco"
 });
 }
