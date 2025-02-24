@@ -771,7 +771,11 @@ JS
      */
     public function getAnchorsInContent(): array
     {
-        $anchors = [$this->getAnchor()];
+        $anchors = [
+            $this->getAnchor() => 
+            ($this->Title ?: _t(__CLASS__ . '.NoTitleSet', '[NO TITLE SET]') . 
+            ' (' . $this->getType() . '#' . $this->ID . ')'
+        ];
         $anchorRegex = "/\\s+(name|id)\\s*=\\s*([\"'])([^\\2\\s>]*?)\\2|\\s+(name|id)\\s*=\\s*([^\"']+)[\\s +>]/im";
         $allFields = DataObject::getSchema()->fieldSpecs($this);
         foreach ($allFields as $field => $fieldSpec) {
