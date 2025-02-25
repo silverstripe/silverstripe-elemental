@@ -171,6 +171,8 @@ class ElementalArea extends DataObject
             }
         }
 
+        $this->extend('updateElementControllers', $controllers);
+
         return $controllers;
     }
 
