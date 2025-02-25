@@ -60,10 +60,14 @@ CMS page search will include search results for pages with elements that match t
 By default it uses the same method as the search indexing where it will fully render every element that is
 being searched. This is an expensive operation and can cause performance issues if you have a large site with a lot of elements.
 
+> [!WARNING]
+> This functionality does not scale well - the larger your site, the worse it will perform.
+> Carefully consider the size of your site and how likely it is to grow when determining what configuration to use.
+
 To increase performance by a large amount, likely more than doubling it, you can disable the rendering of elements and instead just look at the database values of the elements directly.
 
 ```yml
-DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch:
+DNADesign\Elemental\ORM\Search\ElementalSiteTreeSearchContext:
   render_elements: false
 ```
 
@@ -79,6 +83,6 @@ App\MyElement:
 If the above is still not performant enough, searching elements for content in CMS page search can be disabled entirely:
 
 ```yml
-DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch:
+DNADesign\Elemental\ORM\Search\ElementalSiteTreeSearchContext:
   search_for_term_in_content: false
 ```

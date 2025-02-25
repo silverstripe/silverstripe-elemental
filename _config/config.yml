@@ -20,10 +20,6 @@ SilverStripe\CMS\Controllers\ContentController:
   url_handlers:
     'element/$ID!': 'handleElement'
 
-SilverStripe\CMS\Controllers\CMSMain:
-  extensions:
-    - DNADesign\Elemental\Extensions\ElementalCMSMainExtension
-
 SilverStripe\CMS\Model\SiteTree:
   extensions:
     topPageSiteTreeExtension: DNADesign\Elemental\Extensions\TopPageSiteTreeExtension
@@ -37,5 +33,5 @@ Symbiote\GridFieldExtensions\GridFieldAddNewMultiClassHandler:
     - DNADesign\Elemental\Extensions\GridFieldAddNewMultiClassHandlerExtension
 
 SilverStripe\Core\Injector\Injector:
-  SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search:
-    class: DNADesign\Elemental\Controllers\ElementSiteTreeFilterSearch
+  SilverStripe\CMS\Search\SiteTreeSearchContext:
+    class: DNADesign\Elemental\ORM\Search\ElementalSiteTreeSearchContext
