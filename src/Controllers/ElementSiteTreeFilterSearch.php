@@ -7,10 +7,14 @@ use SilverStripe\CMS\Controllers\CMSSiteTreeFilter_Search;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\DateField;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
 
+/**
+ * @deprecated 5.4.0 Will be removed without equivalent functionality
+ */
 class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
 {
     use Configurable;
@@ -29,6 +33,12 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
      * @var array
      */
     private $extraTermFilters = [];
+
+    public function __construct($params = null)
+    {
+        Deprecation::noticeWithNoReplacment('5.4.0', scope: Deprecation::SCOPE_CLASS);
+        parent::__construct($params);
+    }
 
     /**
      * We can't use ORM filtering for PHP methods, so we'll perform our own PHP "search" and get a list of
