@@ -10,7 +10,7 @@ import { inject } from 'lib/Injector';
 import i18n from 'i18n';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { submit } from 'redux-form';
+import { submit, isDirty } from 'redux-form';
 import { loadElementFormStateName } from 'state/editor/loadElementFormStateName';
 import { loadElementSchemaValue } from 'state/editor/loadElementSchemaValue';
 import { publishBlockMutation } from 'state/editor/publishBlockMutation';
@@ -20,7 +20,7 @@ import { DragSource, DropTarget } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { elementDragSource, isOverTop } from 'lib/dragHelpers';
 import * as toastsActions from 'state/toasts/ToastsActions';
-import { addFormChanged, removeFormChanged } from 'state/unsavedForms/UnsavedFormsActions';
+import getFormState from 'lib/getFormState';
 
 export const ElementContext = createContext(null);
 
@@ -39,32 +39,19 @@ const Element = (props) => {
   const [doPublishElementAfterSave, setDoPublishElementAfterSave] = useState(false);
   const [ensureFormRendered, setEnsureFormRendered] = useState(false);
   const [formHasRendered, setFormHasRendered] = useState(false);
-  const [doDispatchAddFormChanged, setDoDispatchAddFormChanged] = useState(false);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [publishBlock] = useMutation(publishBlockMutation);
 
   const formRenderedIfNeeded = formHasRendered || !props.type.inlineEditable;
 
   useEffect(() => {
-    // Note that formDirty from redux can be set to undefined after failed validation
-    // which is confusing as the block still has unsaved changes, hence why we create
-    // this state variable to track this instead
-    // props.formDirty is either undefined (when pristine) or an object (when dirty)
-    const formDirty = typeof props.formDirty !== 'undefined';
-    if (formDirty && !hasUnsavedChanges) {
-      setHasUnsavedChanges(true);
-    }
+    props.onChangeHasUnsavedChanges(props.formDirty);
   }, [props.formDirty]);
 
   useEffect(() => {
-    props.onChangeHasUnsavedChanges(hasUnsavedChanges);
-  }, [hasUnsavedChanges]);
-
-  useEffect(() => {
-    if (props.saveElement && hasUnsavedChanges && !doSaveElement) {
+    if (props.saveElement && props.formDirty && !doSaveElement) {
       setDoSaveElement(true);
     }
-  }, [props.saveElement, hasUnsavedChanges, props.increment]);
+  }, [props.saveElement, props.formDirty, props.increment]);
 
   useEffect(() => {
     if (props.connectDragPreview) {
@@ -81,7 +68,7 @@ const Element = (props) => {
   useEffect(() => {
     if (justClickedPublishButton && formRenderedIfNeeded) {
       setJustClickedPublishButton(false);
-      if (hasUnsavedChanges) {
+      if (props.formDirty) {
         // Save the element first before publishing, which may trigger validation errors
         props.submitForm();
         setDoPublishElementAfterSave(true);
@@ -91,13 +78,6 @@ const Element = (props) => {
       }
     }
   }, [justClickedPublishButton, formHasRendered]);
-
-  useEffect(() => {
-    if (doDispatchAddFormChanged) {
-      setDoDispatchAddFormChanged(false);
-      props.dispatchAddFormChanged();
-    }
-  }, [doDispatchAddFormChanged]);
 
   const getNoTitle = () => i18n.inject(
     i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
@@ -143,18 +123,7 @@ const Element = (props) => {
     showPublishedElementToast(wasError);
     setDoPublishElement(false);
     setDoPublishElementAfterSave(false);
-    // Ensure that formDirty becomes falsey after publishing
-    // We need to call at a later render rather than straight away or redux-form may override this
-    // and set the form state to dirty under certain conditions
-    // setTimeout is a hackish way to do this, though I'm not sure how else we can do this
-    // The core issue is that redux-form will detect changes when a form is hydrated for the first
-    // time under certain conditions, specifically during a behat test when trying to publish a closed
-    // block when presumably the apollo cache is empty (or something like that). This happens late and
-    // there are no hooks/callbacks available after this happens the input onchange handlers are fired
-    Promise.all(refetchElementalArea())
-      .then(() => {
-        setTimeout(() => props.dispatchRemoveFormChanged(), 250);
-      });
+    refetchElementalArea();
   };
 
   // Save action
@@ -337,10 +306,6 @@ const Element = (props) => {
       if (props.type.inlineEditable) {
         setPreviewExpanded(true);
       }
-      // Ensure that formDirty remains truthy
-      // Note we need to call props.dispatchAddFormChanged() on the next render rather than straight away
-      // or it will get unset by code somewhere else, probably redux-form
-      setDoDispatchAddFormChanged(true);
       // Don't accidentally auto publish the element once validation errors are fixed
       if (doPublishElementAfterSave) {
         setDoPublishElementAfterSave(false);
@@ -349,7 +314,6 @@ const Element = (props) => {
       return;
     }
     // Form is valid
-    setHasUnsavedChanges(false);
     setNewTitle(title);
     if (doPublishElementAfterSave) {
       setDoPublishElementAfterSave(false);
@@ -435,6 +399,7 @@ const Element = (props) => {
         broken={type.broken}
         onFormSchemaSubmitResponse={handleFormSchemaSubmitResponse}
         onFormInit={() => handleFormInit(activeTab)}
+        formDirty={formDirty}
       />
     </ElementContext.Provider>
   </div>);
@@ -462,7 +427,9 @@ function mapStateToProps(state, ownProps) {
 
   const tabSetName = tabSet && tabSet.id;
   const uniqueFieldId = `element.${elementName}__${tabSetName}`;
-  const formDirty = state.unsavedForms.find((unsaved) => unsaved.name === `element.${elementName}`);
+
+  const formName = loadElementFormStateName(ownProps.element.id);
+  const formDirty = isDirty(`element.${formName}`, getFormState)(state);
 
   // Find name of the active tab in the tab set
   // Only defined once an element form is expanded for the first time
@@ -489,16 +456,6 @@ function mapDispatchToProps(dispatch, ownProps) {
       ownProps.onBeforeSubmitForm(ownProps.element.id);
       // Perform a redux-form remote-submit
       dispatch(submit(`element.${elementName}`));
-    },
-    dispatchAddFormChanged() {
-      // Ensures the form identifier is in unsavedForms in the global redux state
-      // This is used to derive the formDirty prop in mapStateToProps
-      dispatch(addFormChanged(`element.${elementName}`));
-    },
-    dispatchRemoveFormChanged() {
-      // Removes the form identifier from unsavedForms in the global redux store
-      // Opposite of beheaviour of dispatchAddFormChanged()
-      dispatch(removeFormChanged(`element.${elementName}`));
     },
     actions: {
       toasts: bindActionCreators(toastsActions, dispatch),
