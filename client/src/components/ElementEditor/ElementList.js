@@ -39,6 +39,13 @@ class ElementList extends Component {
       this.resetState(prevState, false);
       return;
     }
+    // Scenario we've just clicked "save" or "submit" on the form
+    if (this.state.saveAllElements && !prevState.saveAllElements) {
+      // Reset the validation state of all blocks.
+      // This mirrors handleBeforeSubmitForm() for individual blocks.
+      this.resetState(prevState, false);
+      return;
+    }
     // Scenario Saving all elements and state has just updated because of a formSchema response from
     // an inline save - see Element.js handleFormSchemaSubmitResponse()
     if (this.state.saveAllElements) {
@@ -154,9 +161,7 @@ class ElementList extends Component {
     }
 
     let output = blocks.map(element => {
-      const saveElement = this.state.saveAllElements
-        && this.state.hasUnsavedChangesBlockIDs[element.id]
-        && this.state.validBlockIDs[element.id] === null;
+      const saveElement = this.state.saveAllElements && this.state.hasUnsavedChangesBlockIDs[element.id];
       return <div key={element.id}>
         <ElementComponent
           element={element}

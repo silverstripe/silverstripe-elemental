@@ -9,6 +9,7 @@ Feature: Blocks are validated when inline saving individual blocks
     And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\ElementContentExtension" to the "DNADesign\Elemental\Models\ElementContent" class
     And I add an extension "SilverStripe\FrameworkTest\Elemental\Extension\NumericFieldExtension" to the "SilverStripe\Forms\NumericField" class
     And a "image" "file1.jpg"
+    And a "image" "file2.jpg"
     And I go to "/dev/build?flush"
     And a "page" "Blocks Page" with a "My title" content element with "My content" content
     And the "group" "EDITOR" has permissions "Access to 'Pages' section"
@@ -24,6 +25,7 @@ Feature: Blocks are validated when inline saving individual blocks
     And I press the "Insert" button
     And I press the "View actions" button
     And I click on the ".element-editor__actions-save" element
+    And I dismiss all toasts
 
   # Note that each test is split into a seperate scenario instead a large single scenario which would
   # be faster due to a limitation with behat testing react where changing the value of a field can
@@ -33,56 +35,97 @@ Feature: Blocks are validated when inline saving individual blocks
     When I fill in "x" for "Title" for block 1
     When I press the "View actions" button
     And I click on the ".element-editor__actions-save" element
-    Then I should see "Title cannot be x" in the ".form__validation-message" element
+    Then I should not see a "Saved 'x' successfully" success toast
+    And I should see "Title cannot be x" in the ".form__validation-message" element
+    # Reset value to something valid and resave - validates saving after validation message works
+    # and avoids an alert after the test ends
+    # Specifically swapping back to the original value - we don't actually save the block so not block save toast
+    And I fill in "My title" for "Title" for block 1
+    And I wait for 1 second
+    And I press the "Save" button
+    # We didn't actually make any changes in the end so the block doesn't actually get saved
+    Then I should not see a "Saved 'My title' successfully" success toast
+    Then I should see a "Saved 'Blocks Page' successfully" success toast
+    And I should not see a "Validation Error" error toast
 
   Scenario: General validation error
     When I fill in "z" for "Title" for block 1
     And I fill in "z" for "My Field" for block 1
     When I press the "View actions" button
     And I click on the ".element-editor__actions-save" element
-    Then I should see "This is a general error message" in the ".message-box.alert" element
+    Then I should not see a "Saved 'z' successfully" success toast
+    And I should see "This is a general error message" in the ".message-box.alert" element
+    # Reset value to something valid and resave - validates saving after validation message works
+    # and avoids an alert after the test ends
+    # Specifically swapping to a new value
+    And I fill in "some value" for "Title" for block 1
+    And I wait for 1 second
+    And I press the "Save" button
+    Then I should see a "Saved 'some value' successfully" success toast
+    And I should not see a "Saved 'Blocks Page' successfully" success toast
+    And I should not see a "Validation Error" error toast
 
   Scenario: FormField validation error
     When I fill in "1" for "My Int" for block 1
     When I press the "View actions" button
     And I click on the ".element-editor__actions-save" element
-    Then I should see "This field cannot be 1" in the ".form__validation-message" element
-    # Reset value to something valid to prevent "unsaved changes" alert
+    Then I should not see a "Saved 'My title' successfully" success toast
+    And I should see "This field cannot be 1" in the ".form__validation-message" element
+    # Reset value to something valid and resave - validates saving after validation message works
+    # and avoids an alert after the test ends
     Then I fill in "2" for "My Int" for block 1
-    # Ensure react field is filled in before submitting
     And I wait for 1 second
-    # Need to save the whole page to stop the alert
     And I press the "Save" button
+    Then I should see a "Saved 'My title' successfully" success toast
+    And I should not see a "Saved 'Blocks Page' successfully" success toast
+    And I should not see a "Validation Error" error toast
 
   Scenario: Related data validation error with ID suffix (MyPageID)
     When I click on the "#Form_ElementForm_1_PageElements_1_MyPageID" element
     And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(1)" element
     And I press the "View actions" button
     And I click on the ".element-editor__actions-save" element
-    Then I should see "\"My page\" is required" in the ".form__validation-message" element
+    Then I should not see a "Saved 'My title' successfully" success toast
+    And I should see "\"My page\" is required" in the ".form__validation-message" element
     When I click on the "#Form_ElementForm_1_PageElements_1_MyPageID" element
     And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
     And I press the "View actions" button
     And I click on the ".element-editor__actions-save" element
     Then I should see a "Saved 'My title' successfully" success toast
+    And I should not see a "Saved 'Blocks Page' successfully" success toast
+    And I should not see a "Validation Error" error toast
 
   Scenario: Related data validation error without ID suffix (MyFile)
     When I click on the ".uploadfield-item__remove-btn" element
     And I press the "View actions" button
     And I click on the ".element-editor__actions-save" element
-    Then I should see "\"My File\" is required" in the ".form__validation-message" element
+    Then I should not see a "Saved 'My title' successfully" success toast
+    And I should see "\"My File\" is required" in the ".form__validation-message" element
     When I click "Choose existing" in the ".uploadfield" element
-    And I click on the file named "file1" in the gallery
+    And I click on the file named "file2" in the gallery
     And I press the "Insert" button
     And I press the "View actions" button
     And I click on the ".element-editor__actions-save" element
     Then I should see a "Saved 'My title' successfully" success toast
+    And I should not see a "Saved 'Blocks Page' successfully" success toast
+    And I should not see a "Validation Error" error toast
 
   Scenario: Publishing triggers validation error
     When I fill in "x" for "Title" for block 1
     When I press the "View actions" button
     And I click on the ".element-editor__actions-publish" element
-    Then I should see "Title cannot be x" in the ".form__validation-message" element
+    Then I should not see a "Published 'x' successfully" success toast
+    And I should see "Title cannot be x" in the ".form__validation-message" element
+    # Reset value to something valid and resave - validates saving after validation message works
+    # and avoids an alert after the test ends
+    Then I fill in "My Title" for "Title" for block 1
+    And I wait for 1 second
+    And I press the "Publish" button
+    Then I should see a "Saved 'My Title' successfully" success toast
+    And I should not see a "Validation Error" error toast
+    # The page is published, which recursive publishes the blocks rather than doing them individually
+    And I should not see a "Published 'My Title' successfully" success toast
+    And I should see a "Published 'Blocks Page' successfully" success toast
 
   Scenario: Saving closed block triggers validation error
     When I fill in "x" for "My Field" for block 1
@@ -90,11 +133,14 @@ Feature: Blocks are validated when inline saving individual blocks
     Then I should not see "My Field"
     When I press the "View actions" button
     And I click on the ".element-editor__actions-save" element
+    Then I should not see a "Saved 'My title'" success toast
     Then I should see "My Field"
     And I should see "MyField cannot be x" in the ".form__validation-message" element
-    # Reset value to something valid to prevent "unsaved changes" alert
+    # Reset value to something valid and resave - validates saving after validation message works
+    # and avoids an alert after the test ends
     Then I fill in "abc" for "My Field" for block 1
-    # Ensure react field is filled in before submitting
     And I wait for 1 second
-    # Need to save the whole page to stop the alert
     And I press the "Save" button
+    Then I should see a "Saved 'My title' successfully" success toast
+    And I should not see a "Saved 'Blocks Page' successfully" success toast
+    And I should not see a "Validation Error" error toast
