@@ -6,7 +6,6 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
-use SilverStripe\Dev\Deprecation;
 use SilverStripe\View\Parsers\HTMLValue;
 use SilverStripe\View\SSViewer;
 
@@ -81,11 +80,9 @@ class ElementalPageExtension extends ElementalAreasExtension
 
     /**
      * Returns the contents of all Elements on the pages ElementalAreas for use in CMS search
-     * @deprecated 5.4.0 Will be removed without equivalent functionality
      */
     public function getContentFromElementsForCmsSearch(): string
     {
-        Deprecation::noticeWithNoReplacment('5.4.0');
         $output = [];
         $elements = $this->getEagerLoadedElements();
         /** @var BaseElement $element */
