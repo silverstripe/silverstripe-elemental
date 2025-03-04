@@ -33,6 +33,7 @@ use SilverStripe\View\Requirements;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Validation\ValidationResult;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Class BaseElement
