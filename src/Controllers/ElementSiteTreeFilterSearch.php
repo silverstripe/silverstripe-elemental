@@ -13,7 +13,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataList;
 
 /**
- * @deprecated 5.4.0 Will be removed without equivalent functionality
+ * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\ORM\Search\ElementalSiteTreeSearchContext
  */
 class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
 {
@@ -36,7 +36,11 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
 
     public function __construct($params = null)
     {
-        Deprecation::noticeWithNoReplacment('5.4.0', scope: Deprecation::SCOPE_CLASS);
+        Deprecation::noticeWithNoReplacment(
+            '5.4.0',
+            'Will be replaced with DNADesign\Elemental\ORM\Search\ElementalSiteTreeSearchContext',
+            Deprecation::SCOPE_CLASS
+        );
         parent::__construct($params);
     }
 
