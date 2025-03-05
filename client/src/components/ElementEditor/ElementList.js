@@ -72,8 +72,25 @@ function ElementList({
     resetState(hasUnsavedChangesBlockIDs, false);
   }, [elements]);
 
+  let skipRemainingEffects = false;
+  useEffect(() => {
+    // Scenario we've just clicked "save" or "submit" on the form
+    if (saveAllElements) {
+      // Reset the validation state of all blocks.
+      // This mirrors handleBeforeSubmitForm() for individual blocks.
+      resetState(hasUnsavedChangesBlockIDs, false);
+      // We need the state change to take effect before continuing,
+      // so skip remaining effects until the next event cycle.
+      skipRemainingEffects = true;
+    }
+  }, [saveAllElements]);
+
   // Replaces componentDidUpdate for everything else
   useEffect(() => {
+    if (skipRemainingEffects) {
+      return;
+    }
+
     // Don't do anything if elements have not yet been recieved from xhr request
     if (!elements) {
       return;
@@ -156,9 +173,7 @@ function ElementList({
     }
 
     let output = elements.map(element => {
-      const saveElement = saveAllElements
-        && hasUnsavedChangesBlockIDs[element.id]
-        && validBlockIDs[element.id] === null;
+      const saveElement = saveAllElements && hasUnsavedChangesBlockIDs[element.id];
       return <>
         <ElementComponent
           key={element.id}
