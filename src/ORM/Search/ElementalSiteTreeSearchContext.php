@@ -27,8 +27,11 @@ class ElementalSiteTreeSearchContext extends SiteTreeSearchContext
      */
     private static bool $render_elements = true;
 
-    protected function generalSearchAcrossFields(string|array $searchPhrase, DataQuery $subGroup, array $searchableFields): void
-    {
+    protected function generalSearchAcrossFields(
+        string|array $searchPhrase,
+        DataQuery $subGroup,
+        array $searchableFields
+    ): void {
         parent::generalSearchAcrossFields($searchPhrase, $subGroup, $searchableFields);
 
         if (static::config()->get('search_for_term_in_content') === false) {
@@ -42,7 +45,11 @@ class ElementalSiteTreeSearchContext extends SiteTreeSearchContext
         $pageIDs = [];
         // The same extension can't be applied to the multiple classes in the same hierarchy
         // without causing a host of problems, so we can be confident that we're not getting any double ups here.
-        $pageClassesWithExtension = ClassInfo::classesWithExtension(ElementalPageExtension::class, SiteTree::class, true);
+        $pageClassesWithExtension = ClassInfo::classesWithExtension(
+            ElementalPageExtension::class,
+            SiteTree::class,
+            true
+        );
         // Get a list of classes that can't have elemental blocks despite having the extension to reduce the amount of
         // records we're filtering through needlessly
         $ignoredClasses = Config::forClass(ElementalPageExtension::class)->get('ignored_classes');
