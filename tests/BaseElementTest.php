@@ -501,7 +501,6 @@ class BaseElementTest extends FunctionalTest
         $this->assertSame('Hello Test|#|Element 3', $element->getContentForCmsSearch());
     }
 
-
     public function testGetPage()
     {
         $element = $this->objFromFixture(ElementContent::class, 'content1');
