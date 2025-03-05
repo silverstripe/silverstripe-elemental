@@ -33,6 +33,7 @@ use SilverStripe\View\Requirements;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Validation\ValidationResult;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Class BaseElement
@@ -65,7 +66,6 @@ class BaseElement extends DataObject implements CMSPreviewable
     /**
      * List of fields to exclude from CMS SiteTree seatch
      * @see ElementSiteTreeFilterSearch::applyDefaultFilters()
-     * @deprecated 5.4.0 Will be removed without equivalent functionality
      */
     private static array $fields_excluded_from_cms_search = [
         'ExtraClass',
@@ -534,11 +534,9 @@ JS
 
     /**
      * Provides content for CMS search if ElementSiteTreeFilterSearch.render_elements is false
-     * @deprecated 5.4.0 Will be removed without equivalent functionality
      */
     public function getContentForCmsSearch(): string
     {
-        Deprecation::noticeWithNoReplacment('5.4.0');
         $fieldNames = $this->getTextualDatabaseFieldNames();
         $excludedFieldNames = $this->getFieldNamesExcludedFromCmsSearch();
         $contents = [];
