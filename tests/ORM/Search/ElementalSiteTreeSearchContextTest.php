@@ -30,8 +30,11 @@ class ElementalSiteTreeSearchContextTest extends SapphireTest
     ];
 
     #[DataProvider('searchProvider')]
-    public function testElementalPageDataMatchesInCmsSearch(bool $renderElements, string $searchTerm, array $expected): void
-    {
+    public function testElementalPageDataMatchesInCmsSearch(
+        bool $renderElements,
+        string $searchTerm,
+        array $expected
+    ): void {
         Config::modify()->set(ElementalSiteTreeSearchContext::class, 'render_elements', $renderElements);
         $page = new SiteTree();
         $context = new ElementalSiteTreeSearchContext(
