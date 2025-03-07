@@ -33,7 +33,6 @@ use SilverStripe\View\Requirements;
 use SilverStripe\ORM\CMSPreviewable;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Validation\ValidationResult;
-use SilverStripe\Dev\Deprecation;
 
 /**
  * Class BaseElement
@@ -64,8 +63,8 @@ class BaseElement extends DataObject implements CMSPreviewable
     private static $class_description = 'Base element class';
 
     /**
-     * List of fields to exclude from CMS SiteTree seatch
-     * @see ElementSiteTreeFilterSearch::applyDefaultFilters()
+     * List of fields to exclude from CMS SiteTree search
+     * @see ElementalSiteTreeSearchContext
      */
     private static array $fields_excluded_from_cms_search = [
         'ExtraClass',
@@ -533,7 +532,7 @@ JS
     }
 
     /**
-     * Provides content for CMS search if ElementSiteTreeFilterSearch.render_elements is false
+     * Provides content for CMS search if ElementalSiteTreeSearchContext.render_elements is false
      */
     public function getContentForCmsSearch(): string
     {
