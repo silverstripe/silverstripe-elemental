@@ -31,7 +31,8 @@
         "silverstripe/recipe-testing": "^4",
         "silverstripe/frameworktest": "^2",
         "silverstripe/standards": "^1",
-        "phpstan/extension-installer": "^1.3"
+        "phpstan/extension-installer": "^1.3",
+        "silverstripe/htmleditor-tinymce": "^1"
     },
     "suggest": {
         "silverstripe/elemental-blocks": "Adds a set of common SilverStripe content block types",

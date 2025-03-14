@@ -15,6 +15,7 @@ default:
         - SilverStripe\Framework\Tests\Behaviour\CmsUiContext
         - SilverStripe\BehatExtension\Context\BasicContext
         - SilverStripe\BehatExtension\Context\LoginContext
+        - SilverStripe\CMS\Tests\Behaviour\AnchorContext
         -
           DNADesign\Elemental\Tests\Behat\Context\FixtureContext:
             - '%paths.modules.silverstripe-elemental%/tests/Behat/files'
