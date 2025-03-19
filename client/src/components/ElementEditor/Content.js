@@ -44,17 +44,21 @@ class Content extends PureComponent {
           />
         }
         {(previewExpanded || ensureFormRendered || formHasRendered) &&
-          // Show inline editable fields
-          <InlineEditFormComponent
-            extraClass={extraClass}
-            onClick={(event) => event.stopPropagation()}
-            elementId={id}
-            activeTab={activeTab}
-            onFormInit={onFormInit}
-            handleLoadingError={handleLoadingError}
-            onFormSchemaSubmitResponse={onFormSchemaSubmitResponse}
-            notVisible={notVisible}
-          />
+          // This <div> is used to stop the "onPointerDown" event from bubbling up to the parent element.
+          // This is done to prevent thigs like <input> fields from starting element drag and drop sorting
+          // The "PointerDown" event is added by dnd-kit in ElementList.js
+          <div onPointerDown={(evt) => evt.stopPropagation()}>
+            <InlineEditFormComponent
+              extraClass={extraClass}
+              onClick={(event) => event.stopPropagation()}
+              elementId={id}
+              activeTab={activeTab}
+              onFormInit={onFormInit}
+              handleLoadingError={handleLoadingError}
+              onFormSchemaSubmitResponse={onFormSchemaSubmitResponse}
+              notVisible={notVisible}
+            />
+          </div>
         }
         {formDirty &&
           <input
