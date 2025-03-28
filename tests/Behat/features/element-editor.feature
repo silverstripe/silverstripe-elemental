@@ -104,6 +104,14 @@ Feature: View types of elements in an area on a page
     And I click on the ".dropdown-item[name='Settings']" element
     Then I should see "Custom CSS classes"
 
+  Scenario: I can click the settings tab before the inline edit form has been expanded
+    Given I am logged in as a member of "AUTHOR" group
+    When I go to "/admin/pages"
+    And I follow "Blocks Page"
+    When I click on the ".element-editor-header__actions-toggle" element
+    And I click on the ".dropdown-item[name='Settings']" element
+    Then I should see "Custom CSS classes"
+
   @unsavedChanges
   Scenario: I can operate blocks with a keyboard
     Given I am logged in as a member of "AUTHOR" group
