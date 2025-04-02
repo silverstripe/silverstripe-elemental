@@ -29,6 +29,9 @@ class ElementalAreaController extends CMSMain
 
     private static $url_segment = 'elemental-area';
 
+    /**
+     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it
+     */
     private static $ignore_menuitem = true;
 
     private static $url_handlers = [
