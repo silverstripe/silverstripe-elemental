@@ -44,6 +44,11 @@ class FluentExtension extends DataExtension
         DataObject $localisedOwner,
         ?DataObject &$duplicate
     ): void {
+        // Some other extension already populated the duplicate so it doesn't have to be actioned here
+        if ($duplicate) {
+            return;
+        }
+
         $originalRelation = $this->getOwner();
         $localisedRelation = $localisedOwner->getComponent($relation);
 
