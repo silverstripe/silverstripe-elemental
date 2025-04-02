@@ -6,6 +6,7 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\View\Parsers\HTMLValue;
 use SilverStripe\View\SSViewer;
 
@@ -113,8 +114,12 @@ class ElementalPageExtension extends ElementalAreasExtension
         });
     }
 
+    /**
+     * @deprecated 5.4.0 Will be renamed to updateMetaTags()
+     */
     public function MetaTags(&$tags)
     {
+        Deprecation::noticeWithNoReplacment('5.4.0', 'Will be renamed to updateMetaTags()');
         if (!Controller::has_curr()) {
             return;
         }
