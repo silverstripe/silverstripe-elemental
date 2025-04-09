@@ -4,13 +4,16 @@ namespace DNADesign\Elemental\Tests\Reports;
 
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
 use DNADesign\Elemental\Models\BaseElement;
+use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Reports\ElementsInUseReport;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\GraphQL\Tests\Schema\NaiveSchemaBuilder;
 use SilverStripe\ORM\DataList;
+use SilverStripe\Forms\GridField\GridField;
 
 class ElementsInUseReportTest extends FunctionalTest
 {
@@ -107,5 +110,52 @@ class ElementsInUseReportTest extends FunctionalTest
             $records->toArray(),
             'Only contains filtered element type'
         );
+    }
+
+    public function provideXssEscaped(): array
+    {
+        return [
+            'xss' => [
+                'pageTitle' => "<script>alert('xss-page-title');</script>",
+                'elementTitle' => "<script>alert('xss-element-title');</script>",
+                'elementHtml' => "<script>alert('xss-element-html');</script>",
+                'expectTitle' => '&lt;script&gt;alert(&#039;xss-element-title&#039;);&lt;/script&gt;',
+                'expectSummary' => 'alert(&#039;xss-element-html&#039;);',
+                'expectPageTitle' => '&lt;script&gt;alert(&#039;xss-page-title&#039;);&lt;/script&gt;',
+            ],
+            'xss-escaped' => [
+                'pageTitle' => "&lt;script&gt;alert('xss-page-title');&lt;/script&gt;",
+                'elementTitle' => "&lt;script&gt;alert('xss-element-title');&lt;/script&gt;",
+                'elementHtml' => "&lt;script&gt;alert('xss-element-html');&lt;/script&gt;",
+                'expectTitle' => '&amp;lt;script&amp;gt;alert(&#039;xss-element-title&#039;);&amp;lt;/script&amp;gt;',
+                'expectSummary' => 'alert(&#039;xss-element-html&#039;);',
+                'expectPageTitle' => '&amp;lt;script&amp;gt;alert(&#039;xss-page-title&#039;);&amp;lt;/script&amp;gt;',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideXssEscaped
+     */
+    public function testXssEscaped(
+        string $pageTitle,
+        string $elementTitle,
+        string $elementHtml,
+        string $expectTitle,
+        string $expectSummary,
+        string $expectPageTitle
+    ): void {
+        $area = new ElementalArea();
+        $areaID = $area->write();
+        (new TestPage(['Title' => $pageTitle, 'ElementalAreaID' => $areaID]))->write();
+        $element = new ElementContent(['Title' => $elementTitle, 'HTML' => $elementHtml, 'ParentID' => $areaID]);
+        $elementID = $element->write();
+        $element = ElementContent::get()->byID($elementID);
+        $report = new ElementsInUseReport();
+        /** @var GridField $gridField */
+        $gridField = $report->getReportField();
+        $this->assertStringContainsString($expectTitle, $gridField->getColumnContent($element, 'Title'));
+        $this->assertStringContainsString($expectSummary, $gridField->getColumnContent($element, 'ElementSummary'));
+        $this->assertStringContainsString($expectPageTitle, $gridField->getColumnContent($element, 'Page.Title'));
     }
 }
