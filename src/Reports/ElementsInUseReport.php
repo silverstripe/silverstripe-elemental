@@ -11,6 +11,7 @@ use SilverStripe\ORM\DataList;
 use SilverStripe\Reports\Report;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
+use SilverStripe\Core\Convert;
 
 class ElementsInUseReport extends Report
 {
@@ -50,8 +51,6 @@ class ElementsInUseReport extends Report
             'Title' => [
                 'title' => _t(__CLASS__ . '.Title', 'Title'),
                 'formatting' => function ($value, BaseElement $item) {
-                    $value = $item->Title;
-
                     if (!empty($value)) {
                         if ($link = $item->CMSEditLink()) {
                             return $this->getEditLink($value, $link);
@@ -66,7 +65,7 @@ class ElementsInUseReport extends Report
                 'casting' => 'HTMLText->RAW',
                 'formatting' => function ($value, BaseElement $item) {
                     try {
-                        return $item->getSummary();
+                        return Convert::raw2xml($item->getSummary());
                     } catch (InvalidArgumentException $exception) {
                          // Don't break the report, just continue. Image manipulation is an example which may
                          // throw exceptions here.
@@ -92,7 +91,7 @@ class ElementsInUseReport extends Report
                             return $this->getEditLink($value, $link);
                         }
                     }
-                    return $item->getPageTitle();
+                    return Convert::raw2xml($item->getPageTitle());
                 },
             ],
         ];
