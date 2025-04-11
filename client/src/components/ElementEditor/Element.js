@@ -39,6 +39,7 @@ const Element = (props) => {
   const [doPublishElementAfterSave, setDoPublishElementAfterSave] = useState(false);
   const [ensureFormRendered, setEnsureFormRendered] = useState(false);
   const [formHasRendered, setFormHasRendered] = useState(false);
+  const [formActiveTab, setFormActiveTab] = useState(null);
   const { fetchElements } = useContext(ElementEditorContext);
   const {
     attributes,
@@ -80,6 +81,23 @@ const Element = (props) => {
       }
     }
   }, [justClickedPublishButton, formRenderedIfNeeded]);
+
+  // When setting the active tab, ensure the form is rendered first so that the form schema is available
+  useEffect(() => {
+    if (!formHasRendered) {
+      return;
+    }
+    const { tabSetName, onActivateTab } = props;
+    if (!initialTab) {
+      setInitialTab(formActiveTab);
+    }
+    if (formActiveTab || initialTab) {
+      onActivateTab(tabSetName, formActiveTab || initialTab);
+    } else {
+      const defaultFirstTab = 'Main';
+      onActivateTab(tabSetName, defaultFirstTab);
+    }
+  }, [formActiveTab, formHasRendered]);
 
   const getNoTitle = () => i18n.inject(
     i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
@@ -208,24 +226,6 @@ const Element = (props) => {
   };
 
   /**
-   * Dispatcher to Tabs redux store for this element's tabset
-   *
-   * @param {string} activeTab Name prop of the active tab
-   */
-  const updateFormTab = (activeTab) => {
-    const { tabSetName, onActivateTab } = props;
-    if (!initialTab) {
-      setInitialTab(activeTab);
-    }
-    if (activeTab || initialTab) {
-      onActivateTab(tabSetName, activeTab || initialTab);
-    } else {
-      const defaultFirstTab = 'Main';
-      onActivateTab(tabSetName, defaultFirstTab);
-    }
-  };
-
-  /**
    * Update the active tab on tab actions menu button click event. Is passed down to InlineEditForm.
    *
    * @param {string} toBeActiveTab
@@ -234,7 +234,7 @@ const Element = (props) => {
     const { activeTab } = props;
     if (toBeActiveTab !== activeTab && !loadingError) {
       setPreviewExpanded(true);
-      updateFormTab(toBeActiveTab);
+      setFormActiveTab(toBeActiveTab);
     }
   };
 
@@ -289,7 +289,9 @@ const Element = (props) => {
   };
 
   const handleFormInit = (activeTab) => {
-    updateFormTab(activeTab);
+    if (activeTab) {
+      setFormActiveTab(activeTab);
+    }
     setFormHasRendered(true);
   };
 
