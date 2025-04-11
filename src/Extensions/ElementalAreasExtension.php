@@ -11,6 +11,7 @@ use SilverStripe\CMS\Model\VirtualPage;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Extensible;
+use SilverStripe\Dev\Deprecation;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataObject;
@@ -295,9 +296,11 @@ class ElementalAreasExtension extends Extension
      * Extension hook {@see DataObject::requireDefaultRecords}
      *
      * @return void
+     * @deprecated 5.4.0 Will be renamed to onRequireDefaultRecords()
      */
     protected function onRequireDefaultRecords()
     {
+        Deprecation::noticeWithNoReplacment('5.4.0', 'Will be renamed to onRequireDefaultRecords()');
         if (!$this->supportsElemental()) {
             return;
         }

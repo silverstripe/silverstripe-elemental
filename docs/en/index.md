@@ -1,5 +1,6 @@
 ---
 title: Elemental blocks
+summary: Replace the content field with a flexible, versioned block-based system to compose pages using modular elements
 ---
 
 # Elemental blocks

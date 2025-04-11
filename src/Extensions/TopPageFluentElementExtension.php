@@ -33,6 +33,42 @@ class TopPageFluentElementExtension extends TopPageElementExtension
         $fields->removeByName('TopPageLocale');
     }
 
+    /**
+     * Covers the case where top page metadata is populated during duplication process of localised data
+     */
+    public function onBeforeDuplicateToLocale(
+        string $relation,
+        string $relationIDField,
+        DataObject $localisedOwner,
+        ?DataObject &$duplicate
+    ): void {
+        // Some other extension already populated the duplicate so it doesn't have to be actioned here
+        if ($duplicate) {
+            return;
+        }
+
+        $originalRelation = $this->getOwner();
+        $localisedRelation = $localisedOwner->getComponent($relation);
+
+        // Determine if Top page ID information is available
+        $topPageID = (int) $localisedRelation->hasField('TopPageID')
+            ? $localisedRelation->TopPageID
+            : 0;
+
+        if (!$topPageID) {
+            return;
+        }
+
+        // Assign the duplicate so we can return it as a value
+        $duplicate = $originalRelation->withFixedTopPage(
+            $topPageID,
+            static function () use ($originalRelation): DataObject {
+                // Duplicate needs to include write to store the top page data
+                return $originalRelation->duplicate();
+            }
+        );
+    }
+
     /*
      * @inheritdoc
      */
