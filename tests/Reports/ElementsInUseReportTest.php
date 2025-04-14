@@ -9,6 +9,7 @@ use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Reports\ElementsInUseReport;
 use DNADesign\Elemental\Tests\Src\TestElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\ORM\DataList;
@@ -91,7 +92,7 @@ class ElementsInUseReportTest extends FunctionalTest
         );
     }
 
-    public function provideXssEscaped(): array
+    public static function provideXssEscaped(): array
     {
         return [
             'xss' => [
@@ -113,9 +114,7 @@ class ElementsInUseReportTest extends FunctionalTest
         ];
     }
 
-    /**
-     * @dataProvider provideXssEscaped
-     */
+    #[DataProvider('provideXssEscaped')]
     public function testXssEscaped(
         string $pageTitle,
         string $elementTitle,
