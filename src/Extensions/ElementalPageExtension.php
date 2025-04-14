@@ -6,7 +6,6 @@ use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
-use SilverStripe\Dev\Deprecation;
 use SilverStripe\View\Parsers\HTMLValue;
 use SilverStripe\View\SSViewer;
 
