@@ -10,7 +10,7 @@ use SilverStripe\Forms\Form;
 
 /**
  * @extends Extension<CMSMain>
- * @deprecated 5.4.0 Will be removed without equivalent functionality
+ * @deprecated 5.4.0 Will be removed without equivalent functionality in a future major release
  */
 class ElementalCMSMainExtension extends Extension
 {

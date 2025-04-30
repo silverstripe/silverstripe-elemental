@@ -30,7 +30,7 @@ class ElementalAreaController extends CMSMain
     private static $url_segment = 'elemental-area';
 
     /**
-     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it
+     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it in a future major release
      */
     private static $ignore_menuitem = true;
 
@@ -168,7 +168,7 @@ class ElementalAreaController extends CMSMain
      * @param array $data
      * @param int $elementID
      * @return array
-     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it.
+     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it in a future major release.
      */
     public static function removeNamespacesFromFields(array $data, $elementID)
     {
@@ -212,13 +212,16 @@ class ElementalAreaController extends CMSMain
      * @param HTTPRequest $request
      * @return array|HTTPResponse|\SilverStripe\Control\RequestHandler|string
      *
-     * @deprecated 5.3.0 Will be removed without equivalent functionality to replace it
+     * @deprecated 5.3.0 Will be removed without equivalent functionality to replace it in a future major release
      */
     public function formAction(HTTPRequest $request)
     {
         // This method no longer appears to be needed, Form fields on blocks that use nested request handlers
         // such as UploadField do no use this method.
-        Deprecation::notice('5.3.0', 'This method will be removed without equivalent functionality to replace it');
+        Deprecation::notice(
+            '5.3.0',
+            'This method will be removed without equivalent functionality to replace it in a future major release'
+        );
         $formName = $request->param('FormName');
 
         // Get the element ID from the form name

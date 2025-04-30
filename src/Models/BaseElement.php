@@ -656,7 +656,7 @@ JS
      * Given form data (wit
      *
      * @param $data
-     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it.
+     * @deprecated 5.4.0 Will be removed without equivalent functionality to replace it in a future major release.
      */
     public function updateFromFormData($data)
     {
@@ -1276,12 +1276,12 @@ JS
 
     /**
      * @return string
-     * @deprecated 5.3.0 Will be replaced with getTypeName()
+     * @deprecated 5.3.0 Will be replaced with getTypeName() in a future major release
      */
     public static function getGraphQLTypeName(): string
     {
         Deprecation::withSuppressedNotice(function () {
-            Deprecation::notice('5.3.0', 'Will be replaced with getTypeName()');
+            Deprecation::notice('5.3.0', 'Will be replaced with getTypeName() in a future major release');
         });
         // For GraphQL 3, use the static schema type name - except for BaseElement for which this is inconsistent.
         if (class_exists(StaticSchema::class) && static::class !== BaseElement::class) {
