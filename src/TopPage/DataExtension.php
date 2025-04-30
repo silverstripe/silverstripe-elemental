@@ -26,6 +26,7 @@ use SilverStripe\Dev\Deprecation;
  * @extends BaseDataExtension<BaseElement|ElementalArea|static>
  *
  * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\Extensions\TopPageElementExtension
+ * in a future major release
  */
 class DataExtension extends BaseDataExtension
 {
@@ -59,7 +60,8 @@ class DataExtension extends BaseDataExtension
         Deprecation::withSuppressedNotice(function () {
             Deprecation::notice(
                 '5.4.0',
-                'Will be replaced with DNADesign\Elemental\Extensions\TopPageElementExtension',
+                'Will be replaced with DNADesign\Elemental\Extensions\TopPageElementExtension'
+                . ' in a future major release',
                 Deprecation::SCOPE_CLASS
             );
         });

@@ -14,6 +14,7 @@ use SilverStripe\ORM\DataList;
 
 /**
  * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\ORM\Search\ElementalSiteTreeSearchContext
+ * in a future major release
  */
 class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
 {
@@ -38,7 +39,8 @@ class ElementSiteTreeFilterSearch extends CMSSiteTreeFilter_Search
     {
         Deprecation::noticeWithNoReplacment(
             '5.4.0',
-            'Will be replaced with DNADesign\Elemental\ORM\Search\ElementalSiteTreeSearchContext',
+            'Will be replaced with DNADesign\Elemental\ORM\Search\ElementalSiteTreeSearchContext'
+            . ' in a future major release',
             Deprecation::SCOPE_CLASS
         );
         parent::__construct($params);
