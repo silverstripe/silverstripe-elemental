@@ -22,6 +22,7 @@ use SilverStripe\Dev\Deprecation;
  * @extends DataExtension<DataObject&static>
  *
  * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\Extensions\TopPageFluentElementExtension
+ * in a future major release
  */
 class FluentExtension extends DataExtension
 {
@@ -37,7 +38,8 @@ class FluentExtension extends DataExtension
         Deprecation::withSuppressedNotice(function () {
             Deprecation::notice(
                 '5.4.0',
-                'Will be replaced with DNADesign\Elemental\Extensions\TopPageFluentElementExtension',
+                'Will be replaced with DNADesign\Elemental\Extensions\TopPageFluentElementExtension'
+                . ' in a future major release',
                 Deprecation::SCOPE_CLASS
             );
         });

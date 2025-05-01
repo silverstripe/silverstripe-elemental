@@ -18,6 +18,7 @@ use SilverStripe\Dev\Deprecation;
  * @extends BaseSiteTreeExtension<SiteTree&ElementalPageExtension&static>
  *
  * @deprecated 5.4.0 Will be replaced with DNADesign\Elemental\Extensions\TopPageSiteTreeExtension
+ * in a future major release
  */
 class SiteTreeExtension extends BaseSiteTreeExtension
 {
@@ -40,7 +41,8 @@ class SiteTreeExtension extends BaseSiteTreeExtension
         Deprecation::withSuppressedNotice(function () {
             Deprecation::notice(
                 '5.4.0',
-                'Will be replaced with DNADesign\Elemental\Extensions\TopPageSiteTreeExtension',
+                'Will be replaced with DNADesign\Elemental\Extensions\TopPageSiteTreeExtension'
+                . 'in a future major release',
                 Deprecation::SCOPE_CLASS
             );
         });

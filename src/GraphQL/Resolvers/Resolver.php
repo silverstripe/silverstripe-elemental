@@ -15,7 +15,7 @@ use Exception;
 use SilverStripe\Dev\Deprecation;
 
 /**
- * @deprecated 5.3.0 Will be removed without equivalent functionality to replace it
+ * @deprecated 5.3.0 Will be removed without equivalent functionality to replace it in a future major release
  */
 class Resolver
 {
