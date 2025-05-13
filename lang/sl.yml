@@ -68,7 +68,7 @@ sl:
     Type: 'Tip gradnika'
   DNADesign\Elemental\Extensions\TopPageElementExtension:
     has_one_TopPage: 'Vrhnja stran'
-  DNADesign\Elemental\Extensions\TopPageFluentElementExtension
+  DNADesign\Elemental\Extensions\TopPageFluentElementExtension:
     db_TopPageLocale: 'Lokalizacija vrhnje strani '
   SilverStripe\CMS\Controllers\CMSPageHistoryController:
     PREVIEW: Predogled
