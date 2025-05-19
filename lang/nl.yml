@@ -43,3 +43,6 @@ nl:
     ReportTitle: 'Inhoud blokken in gebruik'
     Summary: Samenvatting
     Title: Titel
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: 'Item is nog niet gepubliceerd'
+    MODIFIEDONDRAFTHELP: 'Item heeft ongepubliceerde veranderingen'
