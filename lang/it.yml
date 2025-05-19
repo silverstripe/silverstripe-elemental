@@ -3,6 +3,10 @@ it:
     MENUTITLE: 'Modifica Pagina'
   DNADesign\Elemental\Extensions\ElementalPageExtension:
     has_one_ElementalArea: 'Area elementi'
+  DNADesign\Elemental\Extensions\TopPageElementExtension:
+    has_one_TopPage: 'Pagina iniziale'
+  DNADesign\Elemental\Extensions\TopPageFluentElementExtension:
+    db_TopPageLocale: 'Lingua pagina iniziale'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Visualizzato
     NOT_DISPLAYED: 'Non visualizzato'
@@ -68,3 +72,6 @@ it:
     db_TopPageLocale: 'Lingua pagina iniziale'
   SilverStripe\CMS\Controllers\CMSPageHistoryController:
     PREVIEW: 'Anteprima sito'
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: "L'articolo non è stato ancora pubblicato"
+    MODIFIEDONDRAFTHELP: "L'articolo ha modifiche non pubblicate"

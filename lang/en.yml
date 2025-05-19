@@ -3,6 +3,10 @@ en:
     MENUTITLE: 'Edit Page'
   DNADesign\Elemental\Extensions\ElementalPageExtension:
     has_one_ElementalArea: 'Elemental area'
+  DNADesign\Elemental\Extensions\TopPageElementExtension:
+    has_one_TopPage: 'Top page'
+  DNADesign\Elemental\Extensions\TopPageFluentElementExtension:
+    db_TopPageLocale: 'Top page locale'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Displayed
     NOT_DISPLAYED: 'Not displayed'
@@ -68,3 +72,6 @@ en:
     db_TopPageLocale: 'Top page locale'
   SilverStripe\CMS\Controllers\CMSPageHistoryController:
     PREVIEW: 'Website preview'
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: 'Item has not been published yet'
+    MODIFIEDONDRAFTHELP: 'Item has unpublished changes'

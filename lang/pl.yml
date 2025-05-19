@@ -48,3 +48,6 @@ pl:
     Summary: Podsumowanie
     Title: Tytuł
     Type: Typ
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: 'Przedmiot nie został jeszcze opublikowany'
+    MODIFIEDONDRAFTHELP: 'Element ma nieopublikowane zmiany'

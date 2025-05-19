@@ -3,6 +3,10 @@ sl:
     MENUTITLE: 'Uredi stran'
   DNADesign\Elemental\Extensions\ElementalPageExtension:
     has_one_ElementalArea: Blok
+  DNADesign\Elemental\Extensions\TopPageElementExtension:
+    has_one_TopPage: 'Vrhnja stran'
+  DNADesign\Elemental\Extensions\TopPageFluentElementExtension:
+    db_TopPageLocale: 'Lokalizacija vrhnje strani '
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Prikazano
     NOT_DISPLAYED: Skrito
@@ -72,3 +76,6 @@ sl:
     db_TopPageLocale: 'Lokalizacija vrhnje strani '
   SilverStripe\CMS\Controllers\CMSPageHistoryController:
     PREVIEW: Predogled
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: 'Ta gradnik še ni objavljen'
+    MODIFIEDONDRAFTHELP: 'Spremembe za ta gradnik še niso shranjene '

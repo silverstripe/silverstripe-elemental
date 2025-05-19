@@ -51,3 +51,6 @@ cs:
     Summary: Shrnutí
     Title: Titulek
     Type: Typ
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: 'Položka dosud nebyla zveřejněna'
+    MODIFIEDONDRAFTHELP: 'Položka obsahuje nezveřejněné úpravy'
