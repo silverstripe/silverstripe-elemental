@@ -46,3 +46,6 @@ fi:
     Summary: Yhteenveto
     Title: Otsikko
     Type: Tyyppi
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: 'Kohdetta ei ole vielä julkaistu'
+    MODIFIEDONDRAFTHELP: 'Kohteella on tallentamattomia muutoksia'

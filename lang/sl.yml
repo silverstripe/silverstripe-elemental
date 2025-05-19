@@ -72,3 +72,6 @@ sl:
     Type: 'Tip gradnika'
   SilverStripe\CMS\Controllers\CMSPageHistoryController:
     PREVIEW: Predogled
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: 'Ta gradnik še ni objavljen'
+    MODIFIEDONDRAFTHELP: 'Spremembe za ta gradnik še niso shranjene '
