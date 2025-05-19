@@ -1,0 +1,59 @@
+sv:
+  DNADesign\Elemental\Controllers\ElementalAreaController:
+    MENUTITLE: 'Redigera sida'
+  DNADesign\Elemental\Extensions\ElementalPageExtension:
+    has_one_ElementalArea: Blockområde
+  DNADesign\Elemental\Extensions\TopPageElementExtension:
+    has_one_TopPage: 'Översta sidan'
+  DNADesign\Elemental\Extensions\TopPageFluentElementExtension:
+    db_TopPageLocale: 'Översta sidans språk'
+  DNADesign\Elemental\Forms\TextCheckboxGroupField:
+    DISPLAYED: Visas
+    NOT_DISPLAYED: 'Visas inte'
+    ShowTitleLabel: Visas
+    Title: Titel
+    TitleLabel: 'Titel (visas ifall ikryssad)'
+  DNADesign\Elemental\Models\BaseElement:
+    CLASS_DESCRIPTION: Baselementklass
+    CUSTOM_STYLES: 'Välj en stil..'
+    ExtraCssClassesLabel: 'Anpassade CSS-klasser'
+    ExtraCssClassesPlaceholder: min_klass_annan_klass
+    MainTabLabel: Innehåll
+    PLURALNAME: block
+    STYLE: Stilvariation
+    SettingsTabLabel: Inställningar
+    db_ExtraClass: Extraklasser
+    db_ShowTitle: 'Visa titel'
+    db_Sort: Sortering
+    db_Style: Stil
+    db_Title: Titel
+    has_one_Parent: Förälder
+    has_one_TopPage: 'Översta sidan'
+  DNADesign\Elemental\Models\ElementContent:
+    BlockType: Innehåll
+    CLASS_DESCRIPTION: 'HTML textblock'
+    ContentLabel: Innehåll
+    PLURALNAME: innehållsblock
+    SINGULARNAME: innehållsblock
+  DNADesign\Elemental\Models\ElementalArea:
+    PLURALNAME: Blockområden
+    SINGULARNAME: Blockområde
+    db_OwnerClassName: 'Ägarklassens namn'
+    has_many_Elements: Element
+    has_one_TopPage: 'Översta sidan'
+  DNADesign\Elemental\Reports\ElementTypeReport:
+    Title: 'Innehållsblock typer'
+    Total: Totalt
+    Type: Innehållstyp
+  DNADesign\Elemental\Reports\ElementsInUseReport:
+    None: Ingen
+    Page: Sida
+    ReportTitle: 'Innehållsblock i användning'
+    Summary: Sammanfattning
+    Title: Titel
+    Type: Typ
+  SilverStripe\CMS\Controllers\CMSPageHistoryController:
+    PREVIEW: Webbsidsförhandsgranskning
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: 'Detta är inte publicerat ännu'
+    MODIFIEDONDRAFTHELP: 'Detta har opublicerade ändringar'

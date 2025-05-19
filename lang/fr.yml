@@ -40,3 +40,6 @@ fr:
     ReportTitle: 'Blocs utilisés'
     Summary: Résumé
     Title: Titre
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: "L'élément n'a pas encore été publié"
+    MODIFIEDONDRAFTHELP: "L'élément a des changements non publiés"
