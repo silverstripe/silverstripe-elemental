@@ -56,3 +56,6 @@ de:
     Type: Typ
   SilverStripe\CMS\Controllers\CMSPageHistoryController:
     PREVIEW: 'Webseiten Vorschau'
+  SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState:
+    ADDEDTODRAFTHELP: 'Dieses Element wurde noch nicht veröffentlicht'
+    MODIFIEDONDRAFTHELP: 'Dieses Element hat noch nicht veröffentlichte Änderungen'
