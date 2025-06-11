@@ -14,10 +14,8 @@ use SilverStripe\Core\Extensible;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\ORM\RelatedData\StandardRelatedDataService;
-use SilverStripe\Versioned\Versioned;
-use SilverStripe\Model\ModelData;
 use SilverStripe\Core\Extension;
+use DNADesign\Elemental\Extensions\TopPageElementExtension;
 
 /**
  * This extension handles most of the relationships between pages and element
@@ -278,17 +276,25 @@ class ElementalAreasExtension extends Extension
      */
     public function ensureElementalAreasExist($elementalAreaRelations)
     {
+        $owner = $this->getOwner();
         foreach ($elementalAreaRelations as $eaRelationship) {
             $areaID = $eaRelationship . 'ID';
-
-            if (!$this->owner->$areaID) {
+            if (!$owner->$areaID) {
                 $area = ElementalArea::create();
                 $area->OwnerClassName = get_class($this->owner);
-                $area->write();
-                $this->owner->$areaID = $area->ID;
+                // Do not attempt to set the ElementalArea.TopPageID if the owner (e.g. Page)
+                // has not yet been persisted to the database, as this will cause a potentially
+                // large number of unneccessary database queries
+                if (!$owner->isInDB() && $area::has_extension(TopPageElementExtension::class)) {
+                    /** @var ElementalArea&TopPageElementExtension $area */
+                    $area->withoutCallingSetTopPage(fn() => $area->write());
+                } else {
+                    $area->write();
+                }
+                $owner->$areaID = $area->ID;
             }
         }
-        return $this->owner;
+        return $owner;
     }
 
     /**
