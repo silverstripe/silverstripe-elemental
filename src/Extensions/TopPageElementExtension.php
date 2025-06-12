@@ -41,6 +41,11 @@ class TopPageElementExtension extends Extension
     ];
 
     /**
+     * Whether to call setTopPage() when onAfterWrite() is called
+     */
+    private bool $doCallSetTopPage = true;
+
+    /**
      * Global flag which indicates that automatic page determination is enabled or not
      * If this is set to a page ID it will be used instead of trying to determine the top page
      *
@@ -56,7 +61,9 @@ class TopPageElementExtension extends Extension
      */
     protected function onAfterWrite(): void
     {
-        $this->setTopPage();
+        if ($this->doCallSetTopPage) {
+            $this->setTopPage();
+        }
     }
 
     /**
@@ -194,6 +201,20 @@ class TopPageElementExtension extends Extension
         } finally {
             $this->fixedTopPageID = $original;
         }
+    }
+
+    /**
+     * Prevents onAfterWrite() from calling setTopPage() for the duration of the callback
+     *
+     * @return mixed The value returned by $callback or null if $callback has no return value
+     */
+    public function withoutCallingSetTopPage(callable $callback): mixed
+    {
+        $orig = $this->doCallSetTopPage;
+        $this->doCallSetTopPage = false;
+        $ret = call_user_func($callback);
+        $this->doCallSetTopPage = $orig;
+        return $ret;
     }
 
     protected function updateCMSFields(FieldList $fields)
