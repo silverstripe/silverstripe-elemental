@@ -676,7 +676,7 @@ JS
         }
 
         $class = DataObject::getSchema()->hasOneComponent($this, 'Parent');
-        $area = ($this->ParentID) ? DataObject::get_by_id($class, $this->ParentID) : null;
+        $area = ($this->ParentID) ? DataObject::get($class)->setUseCache(true)->byID($this->ParentID) : null;
 
         if ($area instanceof ElementalArea && $area->exists()) {
             $page = $area->getOwnerPage();
@@ -934,7 +934,7 @@ JS
 
         if ($page) {
             $class = DataObject::getSchema()->hasOneComponent($this, 'Parent');
-            $area = $this->ParentID ? DataObject::get_by_id($class, $this->ParentID) : null;
+            $area = $this->ParentID ? DataObject::get($class)->setUseCache(true)->byID($this->ParentID) : null;
 
             if ($area) {
                 $has_one = $page->config()->get('has_one');
