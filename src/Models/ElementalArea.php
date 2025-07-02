@@ -204,14 +204,10 @@ class ElementalArea extends DataObject
             $elementalAreaRelations = $instance->getElementalRelations();
 
             foreach ($elementalAreaRelations as $eaRelationship) {
-                $areaID = $eaRelationship . 'ID';
-
-                $table = DataObject::getSchema()->tableForField($class, $areaID);
-                $baseTable = DataObject::getSchema()->baseDataTable($class);
-                $page = DataObject::get_one($class, [
-                    "\"{$table}\".\"{$areaID}\" = ?" => $this->ID,
-                    "\"{$baseTable}\".\"ClassName\" = ?" => $class
-                ]);
+                $page = DataObject::get($class)->setUseCache(true)->filter([
+                    $eaRelationship . 'ID' => $this->ID,
+                    'ClassName' => $class,
+                ])->first();
 
                 if ($page) {
                     $this->setOwnerPageCached($page);

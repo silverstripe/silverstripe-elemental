@@ -319,7 +319,7 @@ class TopPageElementExtension extends Extension
      */
     protected function getTopPageFromCachedData(int $id): ?SiteTree
     {
-        $page = SiteTree::get_by_id($id);
+        $page = SiteTree::get()->setUseCache(true)->byID($id);
 
         if (!$page || !$page->exists()) {
             return null;
