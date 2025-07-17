@@ -15,6 +15,7 @@ use DNADesign\Elemental\Tests\Src\TestVersionedDataObject;
 use DNADesign\Elemental\Extensions\ElementalAreasExtension;
 use SilverStripe\ORM\DB;
 use PHPUnit\Framework\Attributes\DataProvider;
+use SilverStripe\ORM\DataObject;
 
 class ElementalAreasExtensionTest extends SapphireTest
 {
@@ -46,6 +47,22 @@ class ElementalAreasExtensionTest extends SapphireTest
                 TestUnusedElement::class,
             ])
             ->set('disallowed_elements', []);
+    }
+
+    protected function tearDown(): void
+    {
+        // For whatever reason, tables are not being properly cleaned between tests
+        // This was noticed when asserting an empty database table in testSingleElementalAreaCreated()
+        // where there was still data in it from testRequireDefaultRecords()
+        $schema = DataObject::getSchema();
+        $dataClasses = [TestVersionedDataObject::class, ElementalArea::class];
+        foreach ($dataClasses as $dataClass) {
+            $draftTable = $schema->baseDataTable($dataClass);
+            $liveTable = "{$draftTable}_Live";
+            DB::query("TRUNCATE $draftTable");
+            DB::query("TRUNCATE $liveTable");
+        }
+        parent::tearDown();
     }
 
     public function testGetElementalTypesSortsAlphabetically()
@@ -141,5 +158,46 @@ class ElementalAreasExtensionTest extends SapphireTest
         $this->assertSame(ElementalArea::get()->max('ID'), $object->ElementalAreaID);
         // assert that we didn't accidentally publish the modified object
         $this->assertTrue($object->isModifiedOnDraft());
+    }
+
+    /**
+     * Tests that only a single elemental area is created during ElementalAreasExtension::onBeforeWrite()
+     */
+    public function testSingleElementalAreaCreated(): void
+    {
+        $this->assertCountsForTestSingleElementalAreaCreated(0, 0, 0, 0, 0);
+        $object = new TestVersionedDataObject();
+        $object->Title = 'abc';
+        $object->write();
+        $areaID = $object->ElementalAreaID;
+        $this->assertTrue($areaID > 0);
+        $this->assertCountsForTestSingleElementalAreaCreated(1, 0, 1, 0, $areaID);
+        $object->publishSingle();
+        $this->assertCountsForTestSingleElementalAreaCreated(1, 1, 1, 1, $areaID);
+    }
+
+    private function assertCountsForTestSingleElementalAreaCreated(
+        int $expectedDraftTotalCount,
+        int $expectedLiveTotalCount,
+        int $expectedDraftCount,
+        int $expectedLiveCount,
+        int $areaID,
+    ): void {
+        $schema = (new DataObject)->getSchema();
+        $draftAreaTable = $schema->baseDataTable(TestVersionedDataObject::class);
+        $liveAreaTable = "{$draftAreaTable}_Live";
+        $draftTotalCount = DB::query("SELECT COUNT(*) as c FROM $draftAreaTable")->record()['c'];
+        $liveTotalCount = DB::query("SELECT COUNT(*) as c FROM $liveAreaTable")->record()['c'];
+        $this->assertSame($expectedDraftTotalCount, $draftTotalCount);
+        $this->assertSame($expectedLiveTotalCount, $liveTotalCount);
+        if ($areaID === 0) {
+            return;
+        }
+        $sql = "SELECT COUNT(*) as c FROM $draftAreaTable WHERE ID = ?";
+        $draftCount = DB::prepared_query($sql, [$areaID])->record()['c'];
+        $sql = "SELECT COUNT(*) as c FROM $liveAreaTable WHERE ID = ?";
+        $liveCount = DB::prepared_query($sql, [$areaID])->record()['c'];
+        $this->assertSame($expectedDraftCount, $draftCount);
+        $this->assertSame($expectedLiveCount, $liveCount);
     }
 }
