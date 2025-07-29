@@ -51,17 +51,12 @@ class ElementalAreasExtensionTest extends SapphireTest
 
     protected function tearDown(): void
     {
-        // For whatever reason, tables are not being properly cleaned between tests
-        // This was noticed when asserting an empty database table in testSingleElementalAreaCreated()
-        // where there was still data in it from testRequireDefaultRecords()
-        $schema = DataObject::getSchema();
-        $dataClasses = [TestVersionedDataObject::class, ElementalArea::class];
-        foreach ($dataClasses as $dataClass) {
-            $draftTable = $schema->baseDataTable($dataClass);
-            $liveTable = "{$draftTable}_Live";
-            DB::query("TRUNCATE $draftTable");
-            DB::query("TRUNCATE $liveTable");
-        }
+        // Tables are not cleared between tests within a test class, instead they are normally
+        // only cleared as part of SapphireTest::tearDownAfterClass(). The assumption is that
+        // it is done done this way for performance reasons as clearAllData() is a slow operation.
+        // We need to remove the data on tables between tests because some of these tests will
+        // assert counts of table rows
+        static::$tempDB->clearAllData();
         parent::tearDown();
     }
 
