@@ -50,6 +50,12 @@ class BlockPage extends Page
 }
 ```
 
+> [!IMPORTANT]
+> If you programatically publish a `Page` or a `DataObject` that has [`ElementalPageExtension`](api:DNADesign\Elemental\Extensions\ElementalPageExtension)
+> applied to it, ensure that you call [`RecursivePublishable::publishRecursive()`](api:SilverStripe\Versioned\RecursivePublishable::publishRecursive())
+> and not [`Versioned::publishSingle()`](api:SilverStripe\Versioned\Versioned::publishSingle())
+> to ensure the `ElementalArea` and its child elements are published correctly.
+
 ### Block setup
 
 It is possible to share blocks between pages, but this may be a little bit tricky when it comes to content editing.

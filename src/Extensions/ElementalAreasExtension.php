@@ -223,24 +223,22 @@ class ElementalAreasExtension extends Extension
         if (!$this->supportsElemental()) {
             return;
         }
-
-        $elementalAreaRelations = $this->owner->getElementalRelations();
-
+        $owner = $this->getOwner();
+        $elementalAreaRelations = $owner->getElementalRelations();
         $this->ensureElementalAreasExist($elementalAreaRelations);
 
-        $ownerClassName = get_class($this->owner);
-
-        // Update the OwnerClassName on EA if the class has changed
-        foreach ($elementalAreaRelations as $eaRelation) {
-            $ea = $this->owner->$eaRelation();
-            if ($ea->OwnerClassName !== $ownerClassName) {
-                $ea->OwnerClassName = $ownerClassName;
-                $ea->write();
+        if ($this->allowAlteringElementalArea()) {
+            $ownerClassName = $owner->ClassName;
+            foreach ($elementalAreaRelations as $relation) {
+                $area = $owner->$relation();
+                if ($area->OwnerClassName !== $ownerClassName) {
+                    $area->OwnerClassName = $ownerClassName;
+                    $area->write();
+                }
             }
         }
-
         if (Config::inst()->get(ElementalAreasExtension::class, 'clear_contentfield')) {
-            $this->owner->Content = '';
+            $owner->Content = '';
         }
     }
 
@@ -278,17 +276,22 @@ class ElementalAreasExtension extends Extension
      */
     public function ensureElementalAreasExist($elementalAreaRelations)
     {
-        foreach ($elementalAreaRelations as $eaRelationship) {
-            $areaID = $eaRelationship . 'ID';
-
-            if (!$this->owner->$areaID) {
-                $area = ElementalArea::create();
-                $area->OwnerClassName = get_class($this->owner);
-                $area->write();
-                $this->owner->$areaID = $area->ID;
-            }
+        $owner = $this->getOwner();
+        if (!$this->allowAlteringElementalArea()) {
+            return $owner;
         }
-        return $this->owner;
+        foreach ($elementalAreaRelations as $relation) {
+            // Note that $owner will always refer to the draft record regardless of the reading mode
+            $field = "{$relation}ID";
+            if ($owner->$field) {
+                continue;
+            }
+            $area = ElementalArea::create();
+            $area->OwnerClassName = $owner->ClassName;
+            $area->write();
+            $owner->$relation = $area;
+        }
+        return $owner;
     }
 
     /**
@@ -334,5 +337,14 @@ class ElementalAreasExtension extends Extension
         }
 
         $this->owner->extend('onAfterRequireDefaultElementalRecords');
+    }
+
+    /**
+     * Whether it's OK to alter the ElementalArea based the current versioned reading mode
+     * This is check is done to ensure that duplicate ElementalAreas are not created
+     */
+    private function allowAlteringElementalArea(): bool
+    {
+        return Versioned::get_stage() === Versioned::DRAFT;
     }
 }

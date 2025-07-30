@@ -33,6 +33,10 @@ class MigrateContentToElementTest extends SapphireTest
     {
         TestPage::create()->flushCache();
         parent::setUp();
+        // Explicity set the reading mode to Stage.Stage because there is logic in
+        // ElementalAreasExtension::allowAlteringElementalArea() that requires it,
+        // and the default reading mode for unit tests is blank string
+        Versioned::set_stage(Versioned::DRAFT);
     }
 
     public function testContentIsMigratedFromPagesToNewElements()

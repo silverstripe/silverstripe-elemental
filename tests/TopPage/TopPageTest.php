@@ -12,6 +12,7 @@ use SilverStripe\ORM\DataObject;
 use DNADesign\Elemental\Extensions\TopPageElementExtension;
 use DNADesign\Elemental\Extensions\TopPageSiteTreeExtension;
 use PHPUnit\Framework\Attributes\DataProvider;
+use SilverStripe\Versioned\Versioned;
 
 class TopPageTest extends SapphireTest
 {
@@ -117,6 +118,11 @@ class TopPageTest extends SapphireTest
 
     public function testNewPage(): void
     {
+        // Explicity set the reading mode to Stage.Stage because there is logic in
+        // ElementalAreasExtension::allowAlteringElementalArea() that requires it,
+        // and the default reading mode for unit tests is blank string
+        Versioned::set_stage(Versioned::DRAFT);
+
         $page = TestBlockPage::create();
         $page->Title = 'New page test';
         $page->write();
