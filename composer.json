@@ -22,7 +22,7 @@
         "silverstripe/framework": "^5.4",
         "silverstripe/cms": "^5",
         "silverstripe/admin": "^2.0.1",
-        "silverstripe/versioned": "^2",
+        "silverstripe/versioned": "^2.4.5",
         "silverstripe/versioned-admin": "^2",
         "silverstripe/graphql": "^5",
         "symbiote/silverstripe-gridfieldextensions": "^4",
@@ -31,6 +31,7 @@
     "require-dev": {
         "silverstripe/documentation-lint": "^1",
         "silverstripe/recipe-testing": "^3",
+        "silverstripe/behat-extension": "^5.6.1",
         "silverstripe/frameworktest": "^1",
         "silverstripe/standards": "^1",
         "phpstan/extension-installer": "^1.3"
