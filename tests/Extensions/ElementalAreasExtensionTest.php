@@ -54,7 +54,7 @@ class ElementalAreasExtensionTest extends SapphireTest
     {
         // Tables are not cleared between tests within a test class, instead they are normally
         // only cleared as part of SapphireTest::tearDownAfterClass(). The assumption is that
-        // it is done done this way for performance reasons as clearAllData() is a slow operation.
+        // it is done this way for performance reasons as clearAllData() is a slow operation.
         // We need to remove the data on tables between tests because some of these tests will
         // assert counts of table rows
         static::$tempDB->clearAllData();
