@@ -32,7 +32,7 @@ function makeProps(obj = {}) {
 
 test('Header should render the icon', () => {
   const { container } = render(<Header {...makeProps()}/>);
-  expect(container.querySelectorAll('i.font-icon-block-file')).toHaveLength(1);
+  expect(container.querySelectorAll('span.font-icon-block-file')).toHaveLength(1);
 });
 
 test('Header should render the title', () => {
