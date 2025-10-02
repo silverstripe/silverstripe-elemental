@@ -43,6 +43,8 @@ Feature: Files can be saved in and removed from elemental blocks
     And I press the "View actions" button
     # same file, so we shouldn't see the button
     Then I should not see the save button for block 1
+    # Close menu
+    When I press the "View actions" button
     # Add a different file
     And I click on the "#Form_ElementForm_1 .uploadfield-item__remove-btn" element
     When I click "Choose existing" in the "#Form_ElementForm_1 .uploadfield" element
