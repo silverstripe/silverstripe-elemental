@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
+import Button from 'components/Button/Button';
 import i18n from 'i18n';
 import { elementTypeType } from 'types/elementTypeType';
 import { inject } from 'lib/Injector';
@@ -32,7 +32,7 @@ class AddNewButton extends Component {
       id: `ElementalArea${areaId}_AddButton`,
       color: 'primary',
       onClick: this.toggle,
-      className: 'font-icon-plus',
+      icon: 'plus',
     };
 
     return (

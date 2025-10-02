@@ -162,11 +162,11 @@ class Header extends Component {
     const content = (
       <div className={containerClasses}>
         <div className="element-editor-header__drag-handle">
-          <i className="font-icon-drag-handle" />
+          <span className="font-icon-drag-handle" aria-hidden="true" />
         </div>
         <div className="element-editor-header__info">
           <div className={iconContainerClasses}>
-            <i className={type.icon} id={blockIconId} />
+            <span className={type.icon} id={blockIconId} aria-hidden="true" />
             {this.renderVersionedStateMessage()}
             {!type.broken && !simple && <Tooltip
               placement="top"
@@ -192,7 +192,7 @@ class Header extends Component {
               expandable={expandable}
             />
           </div>
-          {!type.broken && <i className={expandCaretClasses} title={expandTitle} />}
+          {!type.broken && <span className={expandCaretClasses} aria-label={expandTitle} title={expandTitle} />}
         </div>}
       </div>
     );

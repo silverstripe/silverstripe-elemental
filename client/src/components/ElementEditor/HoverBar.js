@@ -32,7 +32,7 @@ function StatelessHoverBar({
     <div className={classNames('')} id={`AddBlockHoverBar_${areaId}_${elementId}`}>
       <button {...btnProps}>
         <span className={classNames('-area-inner')}>
-          <span className={lineClasses} />
+          <span className={lineClasses} aria-hidden="true" />
         </span>
       </button>
       <AddElementPopoverComponent

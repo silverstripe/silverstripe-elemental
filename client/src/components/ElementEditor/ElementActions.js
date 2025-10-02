@@ -84,7 +84,6 @@ class ElementActions extends Component {
       'btn',
       'btn-sm',
       'btn--no-text',
-      'font-icon-dot-3',
     ];
 
     return (
