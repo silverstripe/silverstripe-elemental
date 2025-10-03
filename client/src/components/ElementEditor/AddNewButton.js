@@ -38,7 +38,7 @@ class AddNewButton extends Component {
     return (
       <div>
         <Button {...buttonAttributes}>
-          {i18n._t('ElementAddNewButton.ADD_BLOCK', 'Add block')}
+          {i18n._t('ElementAddNewButton.ADD_NEW_BLOCK', 'Add new block')}
         </Button>
         <AddElementPopoverComponent
           placement="bottom-start"

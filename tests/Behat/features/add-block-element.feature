@@ -21,7 +21,7 @@ Feature: Add elements in the CMS
 
   Scenario: I can add elements to the page
     When I see a list of blocks
-    Then I press the "Add block" button
+    Then I press the "Add new block" button
     Then I press the "Content" button in the add block popover
     Then I should see "Untitled Content block" as the title for block 1
 

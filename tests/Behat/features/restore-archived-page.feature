@@ -14,7 +14,7 @@ Feature: Restore to draft
       And I press the "Publish" button
 
   Scenario: I can restore archived elemental block to draft version
-    When I press the "Add block" button
+    When I press the "Add new block" button
     Then I click on the ".font-icon-block-content" element
     Then I should see "Untitled Content block" in the ".element-editor__element" element
     And I click on the ".element-editor__element" element

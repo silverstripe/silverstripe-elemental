@@ -69,7 +69,7 @@ Feature: View types of elements in an area on a page
 
     # Content blocks are not applied to other page types
     When I follow "Virtual Page"
-    Then I should not see "Add block"
+    Then I should not see "Add new block"
 
     # Publish to remove the draft icons
     # Would be used so that we could assert presence of modified icons to test drag and drop

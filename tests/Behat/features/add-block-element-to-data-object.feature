@@ -10,10 +10,10 @@ Feature: Add elements in the CMS DataObject
 
   Scenario: I can add inline-editable elements to the DataObject
     When I go to "/admin/elemental-behat-test-admin/"
-    Then I press the "Add Elemental Behat Test Object" button
+    Then I press the "Add new Elemental Behat Test Object" button
     Then I press the "Create" button
     Then I wait 1 second
-    Then I press the "Add block" button
+    Then I press the "Add new block" button
     Then I press the "Content" button in the add block popover
     Then I should see "Untitled Content block" as the title for block 1
     When I click on block 1
@@ -26,10 +26,10 @@ Feature: Add elements in the CMS DataObject
   Scenario: I can add non-inline-editable elements to the DataObject
     Given content blocks are not in-line editable
         When I go to "/admin/elemental-behat-test-admin/"
-        Then I press the "Add Elemental Behat Test Object" button
+        Then I press the "Add new Elemental Behat Test Object" button
         Then I press the "Create" button
         Then I wait 1 second
-        Then I press the "Add block" button
+        Then I press the "Add new block" button
         Then I press the "Content" button in the add block popover
         When I click on block 1
         And I should see "Title"

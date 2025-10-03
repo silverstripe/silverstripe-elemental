@@ -34,4 +34,4 @@ Feature: View types of elements in a report
 
     # Open links to page edit form
     When I follow "My page"
-    Then I should see "Add block"
+    Then I should see "Add new block"

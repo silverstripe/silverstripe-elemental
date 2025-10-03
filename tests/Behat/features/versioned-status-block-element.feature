@@ -15,7 +15,7 @@ Feature: Add elements in the CMS and see currunt status of elements
 
   # Test that the versioned badge is shown when there are some changes in the block
   Scenario: I can add elements to the page and see versioned badge
-    Then I press the "Add block" button
+    Then I press the "Add new block" button
     Then I press the "Content" button in the add block popover
     Then I should see "Untitled Content block" as the title for block 1
 
