@@ -57,6 +57,7 @@ class Content extends PureComponent {
               handleLoadingError={handleLoadingError}
               onFormSchemaSubmitResponse={onFormSchemaSubmitResponse}
               notVisible={notVisible}
+              previewExpanded={previewExpanded}
             />
           </div>
         }

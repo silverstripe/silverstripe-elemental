@@ -54,7 +54,7 @@ class InlineEditForm extends PureComponent {
   }
 
   render() {
-    const { elementId, extraClass, onClick, onFormInit, formHasState, notVisible } = this.props;
+    const { elementId, extraClass, onClick, onFormInit, formHasState, notVisible, previewExpanded } = this.props;
     const { loadingError } = this.state;
 
     const classNames = classnames('element-editor-editform', extraClass);
@@ -71,6 +71,7 @@ class InlineEditForm extends PureComponent {
       refetchSchemaOnMount: !formHasState,
       onLoadingError: this.handleLoadingError,
       onSubmit: this.handleSubmit,
+      fieldTabIndex: previewExpanded ? 0 : -1,
     };
 
     if (loadingError) {
@@ -101,6 +102,7 @@ InlineEditForm.propTypes = {
   handleLoadingError: PropTypes.func,
   onFormSchemaSubmitResponse: PropTypes.func,
   notVisible: PropTypes.bool,
+  previewExpanded: PropTypes.bool,
 };
 
 function mapStateToProps(state, ownProps) {
