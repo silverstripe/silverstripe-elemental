@@ -84,9 +84,10 @@ class AddElementPopover extends Component {
     );
 
     const buttons = elementTypes.map((elementType) => ({
-      content: elementType.title,
+      content: <span className="btn__title">{elementType.title}</span>,
       key: elementType.name,
-      className: classNames(elementType.icon, 'btn--icon-xl', 'element-editor-add-element__button'),
+      className: classNames('btn--icon-xl', 'element-editor-add-element__button'),
+      icon: elementType.icon.replace(/^(font-icon-)/g, ''),
       onClick: this.getElementButtonClickHandler(elementType),
     }));
 
