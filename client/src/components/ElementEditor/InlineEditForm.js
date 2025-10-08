@@ -84,6 +84,12 @@ class InlineEditForm extends PureComponent {
     const extraAttrs = {};
     if (notVisible) {
       extraAttrs['aria-hidden'] = 'true';
+      // Mark the element as inert so that it can't be focused or interacted with
+      // when the preview is collapsed - this means that users will (correctly) not
+      // be able to tab to fields that they can't see
+      // Note: We don't use `.inert` = true because this won't actually add the attribute
+      // Note: We don't use `extraAttrs['inert']` as this causes a linting error
+      extraAttrs.inert = 'inert';
     }
 
     return (
