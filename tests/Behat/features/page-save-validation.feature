@@ -40,7 +40,6 @@ Feature: Blocks are validated when page saving blocks
     # Click "Add element" button
     And I click on the "#Form_EditForm_ElementalArea2 .element-editor__toolbar button" element
     # Select ElementContent block type
-    # And I click on the ".font-icon-block-content" element
     And I click "Content" in the ".popover-option-set__button-container" element
     # Open the inline edit form for the newly added block
     And I click on the caret button for block 2

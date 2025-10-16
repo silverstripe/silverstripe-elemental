@@ -1,5 +1,5 @@
 <% if $IconClass %>
-    <i class="$IconClass"></i>
+    <span class="$IconClass" aria-hidden="true"></span>
 <% end_if %>
 
 <% if $IsVersioned && $VersionState %>
