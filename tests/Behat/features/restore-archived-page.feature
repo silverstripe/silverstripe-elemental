@@ -22,7 +22,7 @@ Feature: Restore to draft
     When I press the "View actions" button
     And I press the "Publish" button
     And I wait 1 second
-    And I click "More options" in the "#ActionMenus" element
+    And I press the "More options" button
     And I press the "Unpublish and archive" button, confirming the dialog
     And I go to "/admin/archive"
     Then I should see "MyPage" in the "#Form_EditForm .col-Title" element
