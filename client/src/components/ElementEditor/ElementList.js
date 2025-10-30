@@ -12,8 +12,11 @@ import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifi
 import { getElementTypeConfig } from 'state/editor/elementConfig';
 
 function ElementList({
-  elements,
-  sharedObject,
+  elements = [],
+  sharedObject = {
+    entwineResolve: () => {},
+    setState: null,
+  },
   ElementComponent,
   HoverBarComponent,
   allowedElementTypes,
@@ -22,7 +25,7 @@ function ElementList({
   onDragEnd,
   onDragStart,
   dragging,
-  isLoading,
+  isLoading = false,
   LoadingComponent,
 }) {
   // saveAllElements will be set to true in entwine.js in the 'onbeforesubmitform' "hook"
@@ -256,15 +259,6 @@ ElementList.propTypes = {
   onDragEnd: PropTypes.func,
   dragging: PropTypes.oneOf([PropTypes.bool, PropTypes.number]),
   sharedObject: PropTypes.object.isRequired,
-};
-
-ElementList.defaultProps = {
-  sharedObject: {
-    entwineResolve: () => {},
-    setState: null,
-  },
-  elements: [],
-  isLoading: false,
 };
 
 export { ElementList as Component };

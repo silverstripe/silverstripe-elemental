@@ -475,10 +475,6 @@ Element.propTypes = {
   increment: PropTypes.number.isRequired,
 };
 
-Element.defaultProps = {
-  element: null,
-};
-
 export { Element as Component };
 
 export default compose(
