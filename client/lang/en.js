@@ -8,6 +8,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
   ss.i18n.addDictionary('en', {
     "ElementAddElementPopover.SEARCH_BLOCKS": "Search blocks",
     "ElementAddNewButton.ADD_BLOCK": "Add block",
+    "ElementAddNewButton.ADD_NEW_BLOCK": "Add new block",
     "ElementArchiveAction.ARCHIVE": "Archive",
     "ElementArchiveAction.ARCHIVE_PERMISSION_DENY": "Archive, insufficient permissions",
     "ElementArchiveAction.CONFIRM_DELETE": "Are you sure you want to send this block to the archive?",
