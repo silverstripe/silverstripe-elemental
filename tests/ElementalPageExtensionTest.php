@@ -61,6 +61,8 @@ class ElementalPageExtensionTest extends FunctionalTest
         Config::modify()->set(TestPage::class, 'disallowed_elements', [
             ElementContent::class
         ]);
+        // Reset cache since we're updating config at runtime
+        ElementalPageExtension::reset();
 
         $types = $page->getElementalTypes();
         $this->assertArrayNotHasKey(ElementContent::class, $types, 'Disallowed items should not appear');
@@ -70,8 +72,10 @@ class ElementalPageExtensionTest extends FunctionalTest
         Config::modify()->set(TestPage::class, 'allowed_elements', [
             TestElement::class
         ]);
-
         Config::modify()->remove(TestPage::class, 'disallowed_elements');
+        // Reset cache since we're updating config at runtime
+        ElementalPageExtension::reset();
+
         $types = $page->getElementalTypes();
 
         $this->assertArrayNotHasKey(ElementContent::class, $types, 'Disallowed items should not appear');

@@ -19,9 +19,9 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.3",
-        "silverstripe/framework": "^6.1",
+        "silverstripe/framework": "^6.2",
         "silverstripe/cms": "^6",
-        "silverstripe/admin": "^3",
+        "silverstripe/admin": "^3.2",
         "silverstripe/versioned": "^3",
         "silverstripe/versioned-admin": "^3",
         "symbiote/silverstripe-gridfieldextensions": "^5"

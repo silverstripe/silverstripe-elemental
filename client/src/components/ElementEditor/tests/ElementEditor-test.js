@@ -13,6 +13,8 @@ let rejectBackendPost;
 let lastBackendPostEndpoint;
 let lastBackendPostData;
 let lastToastErrorMessage;
+let reloadedAreaId;
+let timesReloaded = 0;
 
 beforeEach(() => {
   resolveBackendGet = undefined;
@@ -23,6 +25,8 @@ beforeEach(() => {
   lastBackendPostEndpoint = undefined;
   lastBackendPostData = undefined;
   lastToastErrorMessage = undefined;
+  reloadedAreaId = undefined;
+  timesReloaded = 0;
 });
 
 jest.mock('lib/Backend', () => ({
@@ -149,6 +153,12 @@ function makeProps(obj = {}) {
           lastToastErrorMessage = message;
         }
       },
+      editor: {
+        reloadComplete: (areaId) => {
+          reloadedAreaId = areaId;
+          timesReloaded += 1;
+        }
+      },
     },
     ...obj,
   };
@@ -160,6 +170,8 @@ test('ElementEditor should render ElementList and Toolbar', async () => {
   await screen.findByTestId('test-toolbar');
   expect(container.querySelectorAll('.test-list')).toHaveLength(1);
   expect(container.querySelectorAll('[data-testid="test-toolbar"]')).toHaveLength(1);
+  expect(reloadedAreaId).toBe(8);
+  expect(timesReloaded).toBe(1);
 });
 
 test('ElementEditor should filter all element types by those allowed for this editor', async () => {
@@ -191,6 +203,8 @@ test('ElementEditor fetchElements success', async () => {
   resolveBackendGet(createJsonResponse());
   await screen.findByTestId('test-toolbar');
   expect(lastBackendGetEndpoint).toBe('my/test/endpoint/api/readElements/8');
+  expect(reloadedAreaId).toBe(8);
+  expect(timesReloaded).toBe(1);
 });
 
 test('ElementEditor fetchElements reject known error', async () => {
@@ -198,6 +212,8 @@ test('ElementEditor fetchElements reject known error', async () => {
   rejectBackendGet(createJsonError('Could not fetch elements'));
   await screen.findByTestId('test-toolbar');
   expect(lastToastErrorMessage).toBe('Could not fetch elements');
+  expect(reloadedAreaId).toBe(8);
+  expect(timesReloaded).toBe(1);
 });
 
 test('ElementEditor fetchElements reject unknown error', async () => {
@@ -205,6 +221,8 @@ test('ElementEditor fetchElements reject unknown error', async () => {
   rejectBackendGet();
   await screen.findByTestId('test-toolbar');
   expect(lastToastErrorMessage).toBe('An unknown error has occurred.');
+  expect(reloadedAreaId).toBe(8);
+  expect(timesReloaded).toBe(1);
 });
 
 test('ElementEditor sort success', async () => {
@@ -212,18 +230,23 @@ test('ElementEditor sort success', async () => {
   resolveBackendGet(createJsonResponse());
   await screen.findByTestId('test-toolbar');
   const element = container.querySelector('#Element1');
+  expect(reloadedAreaId).toBe(8);
+  expect(timesReloaded).toBe(1);
   fireEvent.click(element);
   resolveBackendPost();
-  // resolve the refetch of the elements after sort
-  resolveBackendGet(createJsonResponse());
   await screen.findByTestId('test-toolbar');
   // sleep for 0 seconds to get the next tick
   await new Promise(resolve => setTimeout(resolve, 0));
+  // resolve the refetch of the elements after sort
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
   expect(lastBackendPostEndpoint).toBe('my/test/endpoint/api/sort');
   expect(lastBackendPostData).toEqual({
     afterBlockID: 2,
     id: 1,
   });
+  expect(reloadedAreaId).toBe(8);
+  expect(timesReloaded).toBe(2);
 });
 
 test('ElementEditor sort reject known error', async () => {
@@ -231,14 +254,20 @@ test('ElementEditor sort reject known error', async () => {
   resolveBackendGet(createJsonResponse());
   await screen.findByTestId('test-toolbar');
   const element = container.querySelector('#Element1');
+  expect(reloadedAreaId).toBe(8);
+  expect(timesReloaded).toBe(1);
   fireEvent.click(element);
   rejectBackendPost(createJsonError('Could not sort elements'));
-  // resolve the refetch of the elements after sort
-  resolveBackendGet(createJsonResponse());
   await screen.findByTestId('test-toolbar');
   // sleep for 0 seconds to get the next tick
   await new Promise(resolve => setTimeout(resolve, 0));
+  // resolve the refetch of the elements after sort
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
   expect(lastToastErrorMessage).toBe('Could not sort elements');
+  // Doesn't try refetching if sort failed
+  expect(reloadedAreaId).toBe(8);
+  expect(timesReloaded).toBe(1);
 });
 
 test('ElementEditor sort reject unknown error', async () => {
@@ -246,12 +275,18 @@ test('ElementEditor sort reject unknown error', async () => {
   resolveBackendGet(createJsonResponse());
   await screen.findByTestId('test-toolbar');
   const element = container.querySelector('#Element1');
+  expect(reloadedAreaId).toBe(8);
+  expect(timesReloaded).toBe(1);
   fireEvent.click(element);
   rejectBackendPost();
-  // resolve the refetch of the elements after sort
-  resolveBackendGet(createJsonResponse());
   await screen.findByTestId('test-toolbar');
   // sleep for 0 seconds to get the next tick
   await new Promise(resolve => setTimeout(resolve, 0));
+  // resolve the refetch of the elements after sort
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
   expect(lastToastErrorMessage).toBe('An unknown error has occurred.');
+  // Doesn't try refetching if sort failed
+  expect(reloadedAreaId).toBe(8);
+  expect(timesReloaded).toBe(1);
 });

@@ -212,6 +212,33 @@ class TopPageTest extends SapphireTest
         ];
     }
 
+    public function testUpdateAfterMove(): void
+    {
+        $originalPage = $this->objFromFixture(TestBlockPage::class, 'block-page1');
+        $block = $this->objFromFixture(TestContent::class, 'content1');
+        $originalTopPageRelation = $block->TopPage();
+        $originalTopPage = $block->getTopPage();
+
+        // Assert original state is what we expect
+        $this->assertNotNull($originalTopPageRelation);
+        $this->assertNotNull($originalTopPage);
+        $this->assertEquals($originalPage->ID, $originalTopPageRelation->ID);
+        $this->assertEquals($originalPage->ID, $originalTopPage->ID);
+
+        // Move block to a new nested elemental area which is under a different page
+        $newArea = $this->objFromFixture(ElementalArea::class, 'area4');
+        $newPage = $this->objFromFixture(TestChildPage::class, 'child-page1');
+        $block->moveTo($newArea);
+        $newTopPageRelation = $block->TopPage();
+        $newTopPage = $block->getTopPage();
+
+        // Assert new top page is what we expect
+        $this->assertNotNull($newTopPageRelation);
+        $this->assertNotNull($newTopPage);
+        $this->assertEquals($newPage->ID, $newTopPageRelation->ID);
+        $this->assertEquals($newPage->ID, $newTopPage->ID);
+    }
+
     public static function populateTopPageProvider(): array
     {
         return [

@@ -55,7 +55,7 @@ class TopPageElementExtension extends Extension
     private $fixedTopPageID = 0;
 
     /**
-     * Extension point in @see DataObject::onAfterWrite()
+     * Extension point in {@see DataObject::onAfterWrite()}
      *
      * @throws ValidationException
      */
@@ -67,7 +67,7 @@ class TopPageElementExtension extends Extension
     }
 
     /**
-     * Extension point in @see DataObject::duplicate()
+     * Extension point in {@see DataObject::duplicate()}
      */
     protected function onBeforeDuplicate(): void
     {
@@ -75,11 +75,19 @@ class TopPageElementExtension extends Extension
     }
 
     /**
-     * Extension point in @see DataObject::duplicate()
+     * Extension point in {@see DataObject::duplicate()}
      */
     protected function onAfterDuplicate(): void
     {
         $this->updateTopPage();
+    }
+
+    /**
+     * Extension point in {@see DataObject::moveTo()}
+     */
+    protected function onBeforeMoveTo(): void
+    {
+        $this->clearTopPage();
     }
 
     /**

@@ -15,6 +15,7 @@ use DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink;
 use DNADesign\Elemental\Tests\Src\TestMultipleHtmlFieldsElement;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use DNADesign\Elemental\Tests\Src\TestPreviewableDataObjectWithLink;
+use InvalidArgumentException;
 use Page;
 use ReflectionClass;
 use SilverStripe\Control\Director;
@@ -511,5 +512,52 @@ class BaseElementTest extends FunctionalTest
         $element->ParentID = $newArea->ID;
 
         $this->assertStringContainsString($element->getPage()->Title, 'Page with one elements');
+    }
+
+    public function testMoveToNotStored(): void
+    {
+        $element = new BaseElement();
+        $element->write();
+        $element->publishSingle();
+        $parent = new ElementalArea();
+        $this->expectException(InvalidArgumentException::class);
+        $element->moveTo($parent);
+    }
+
+    public function testMoveToSameParent(): void
+    {
+        $parent = new ElementalArea();
+        $parentID = $parent->write();
+        $element = new BaseElement(['ParentID' => $parentID]);
+        $element->write();
+        $element->publishSingle();
+        $this->expectException(InvalidArgumentException::class);
+        $element->moveTo($parent);
+    }
+
+    public function testMoveToInvalidParent(): void
+    {
+        $parent = $this->objFromFixture(ElementalArea::class, 'areaDataObject1');
+        $element = new BaseElement(['ParentID' => 999999]);
+        $element->write();
+        $element->publishSingle();
+        TestDataObjectWithCMSEditLink::config()->set('disallowed_elements', [BaseElement::class]);
+        $this->expectException(InvalidArgumentException::class);
+        $element->moveTo($parent);
+    }
+
+    public function testMoveToValidParent(): void
+    {
+        $parent = $this->objFromFixture(ElementalArea::class, 'areaDataObject1');
+        $element = new BaseElement(['sort' => 56]);
+        $element->write();
+        $element->publishSingle();
+
+        $this->expectException(InvalidArgumentException::class);
+        $element->moveTo($parent);
+
+        $this->assertSame(1, $element->Sort);
+        $this->assertFalse($element->isPublished());
+        $this->assertSame($parent->ID, $element->ParentID);
     }
 }

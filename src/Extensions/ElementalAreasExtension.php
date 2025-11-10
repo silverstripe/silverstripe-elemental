@@ -16,6 +16,7 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Core\Extension;
 use DNADesign\Elemental\Extensions\TopPageElementExtension;
+use SilverStripe\Core\Resettable;
 use SilverStripe\Versioned\Versioned;
 
 /**
@@ -45,7 +46,7 @@ use SilverStripe\Versioned\Versioned;
  * @template T of DataObject
  * @extends Extension<T&static>
  */
-class ElementalAreasExtension extends Extension
+class ElementalAreasExtension extends Extension implements Resettable
 {
     use Extensible;
 
@@ -84,6 +85,21 @@ class ElementalAreasExtension extends Extension
     private static $keep_content_fields = false;
 
     /**
+     * Cache for {@link ElementalAreasExtension::getElementalTypes()}
+     *
+     * @internal
+     */
+    private static array $cachedElementalTypes = [];
+
+    /**
+     * @inheritDoc
+     */
+    public static function reset()
+    {
+        ElementalAreasExtension::$cachedElementalTypes = [];
+    }
+
+    /**
      * Get the available element types for this page type,
      *
      * Uses allowed_elements, stop_element_inheritance, disallowed_elements in
@@ -93,8 +109,12 @@ class ElementalAreasExtension extends Extension
      */
     public function getElementalTypes()
     {
-        $config = $this->owner->config();
+        $class = get_class($this->owner);
+        if (array_key_exists($class, ElementalAreasExtension::$cachedElementalTypes)) {
+            return ElementalAreasExtension::$cachedElementalTypes[$class];
+        }
 
+        $config = $this->owner->config();
         if (is_array($config->get('allowed_elements'))) {
             if ($config->get('stop_element_inheritance')) {
                 $availableClasses = $config->get('allowed_elements', Config::UNINHERITED);
@@ -133,9 +153,9 @@ class ElementalAreasExtension extends Extension
             unset($list[BaseElement::class]);
         }
 
-        $class = get_class($this->owner);
         $this->owner->invokeWithExtensions('updateAvailableTypesForClass', $class, $list);
 
+        ElementalAreasExtension::$cachedElementalTypes[$class] = $list;
         return $list;
     }
 

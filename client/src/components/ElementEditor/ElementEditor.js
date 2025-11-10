@@ -9,6 +9,7 @@ import backend from 'lib/Backend';
 import Config from 'lib/Config';
 import { getConfig } from 'state/editor/elementConfig';
 import * as toastsActions from 'state/toasts/ToastsActions';
+import * as editorActions from 'state/editor/editorActions';
 import getJsonErrorMessage from 'lib/getJsonErrorMessage';
 import { arrayMove } from '@dnd-kit/sortable';
 
@@ -33,6 +34,16 @@ class ElementEditor extends PureComponent {
     this.handleDragStart = this.handleDragStart.bind(this);
     this.handleDragEnd = this.handleDragEnd.bind(this);
     this.fetchElements = this.fetchElements.bind(this);
+  }
+
+  /**
+   * Fetch elements if forcing a refetch, e.g. if moving a block from one elemental area to another
+   * in the same parent DataObject record.
+   */
+  componentDidUpdate(prevProps) {
+    if (this.props.forceRefetchElements && !prevProps.forceRefetchElements) {
+      this.fetchElements();
+    }
   }
 
   /**
@@ -111,6 +122,7 @@ class ElementEditor extends PureComponent {
         if (preview) {
           preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
         }
+        this.props.actions.editor.reloadComplete(this.props.areaId);
       })
       .catch(async (err) => {
         this.setState({
@@ -119,6 +131,7 @@ class ElementEditor extends PureComponent {
         });
         const message = await getJsonErrorMessage(err);
         this.props.actions.toasts.error(message);
+        this.props.actions.editor.reloadComplete(this.props.areaId);
       });
   }
 
@@ -149,6 +162,7 @@ class ElementEditor extends PureComponent {
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     const providerValue = {
       fetchElements: this.fetchElements,
+      actions: this.props.actions,
     };
 
     return <div className="element-editor">
@@ -195,15 +209,24 @@ const params = [
   )
 ];
 
+function mapStateToProps(state, ownProps) {
+  const forceRefetch = state.elemental.editor.forceRefetchElements[ownProps.areaId] || false;
+  return { forceRefetchElements: forceRefetch };
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
       toasts: bindActionCreators(toastsActions, dispatch),
+      editor: bindActionCreators(editorActions, dispatch)
     },
   };
 }
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
   ...params,
 )(ElementEditor);

@@ -4,11 +4,12 @@ namespace DNADesign\Elemental\Tests\Blocks;
 
 use SilverStripe\Dev\TestOnly;
 use DNADesign\Elemental\Models\ElementContent;
+use SilverStripe\Core\Resettable;
 use SilverStripe\Forms\Validation\CompositeValidator;
 use SilverStripe\Core\Validation\ValidationResult;
 use SilverStripe\Forms\Validation\Validator;
 
-class TestElementContent extends ElementContent implements TestOnly
+class TestElementContent extends ElementContent implements TestOnly, Resettable
 {
     private static $table_name = 'TestElementContent';
 
@@ -68,5 +69,11 @@ class TestElementContent extends ElementContent implements TestOnly
             }
         });
         return $compositeValidator;
+    }
+
+    public static function reset()
+    {
+        self::$fail = '';
+        return parent::reset();
     }
 }

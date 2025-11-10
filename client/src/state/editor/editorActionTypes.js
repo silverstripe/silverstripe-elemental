@@ -1,0 +1,4 @@
+export default {
+  FORCE_RELOAD: 'FORCE_RELOAD',
+  RELOAD_COMPLETE: 'RELOAD_COMPLETE',
+};

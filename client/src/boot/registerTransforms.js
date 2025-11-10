@@ -3,6 +3,7 @@ import HistoricElementViewFactory from 'components/HistoricElementView/HistoricE
 import revertToBlockVersionRequest from 'state/history/revertToBlockVersionRequest';
 import ArchiveAction from 'components/ElementActions/ArchiveAction';
 import DuplicateAction from 'components/ElementActions/DuplicateAction';
+import MoveAction from 'components/ElementActions/MoveAction';
 import SaveAction from 'components/ElementActions/SaveAction';
 import PublishAction from 'components/ElementActions/PublishAction';
 import UnpublishAction from 'components/ElementActions/UnpublishAction';
@@ -41,5 +42,6 @@ export default () => {
     updater.component('ElementActions', UnpublishAction, 'ElementActionsWithUnpublish');
     updater.component('ElementActions', DuplicateAction, 'ElementActionsWithDuplicate');
     updater.component('ElementActions', ArchiveAction, 'ElementActionsWithArchive');
+    updater.component('ElementActions', MoveAction, 'ElementActionsWithMove');
   });
 };

@@ -8,6 +8,11 @@ DNADesign\Elemental\Tests\Src\TestPage:
     URLSegment: blocks-page
     ElementalAreaID: =>DNADesign\Elemental\Tests\Blocks\TestElementalArea.blocks_page_area
 
+SilverStripe\CMS\Model\SiteTree:
+  no-blocks_page:
+    Title: No blocks page
+    URLSegment: no-blocks-page
+
 DNADesign\Elemental\Tests\Blocks\TestElementContent:
   TestElementContent01:
     Title: TestElementContent01 Title

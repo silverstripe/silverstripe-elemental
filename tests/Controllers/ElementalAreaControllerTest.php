@@ -2,12 +2,23 @@
 
 namespace DNADesign\Elemental\Tests\Controllers;
 
+use DNADesign\Elemental\Controllers\ElementalAreaController;
+use DNADesign\Elemental\Extensions\ElementalPageExtension;
+use DNADesign\Elemental\Models\ElementalArea;
 use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Security\SecurityToken;
 use DNADesign\Elemental\Tests\Blocks\TestElementContent;
 use DNADesign\Elemental\Tests\Blocks\TestElementalArea;
+use DNADesign\Elemental\Tests\Src\TestPage;
 use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\HTTPResponse_Exception;
+use SilverStripe\Core\Validation\ValidationException;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\Form;
+use SilverStripe\Forms\HiddenField;
 
 class ElementalAreaControllerTest extends FunctionalTest
 {
@@ -16,6 +27,13 @@ class ElementalAreaControllerTest extends FunctionalTest
     protected static $extra_dataobjects = [
         TestElementContent::class,
         TestElementalArea::class,
+        TestPage::class,
+    ];
+
+    protected static $required_extensions = [
+        TestPage::class => [
+            ElementalPageExtension::class,
+        ],
     ];
 
     private $securityTokenWasEnabled = false;
@@ -944,6 +962,118 @@ class ElementalAreaControllerTest extends FunctionalTest
                 $fixture->doUnpublish();
             }
         }
+    }
+
+    public static function provideMoveElement(): array
+    {
+        return [
+            [
+                'fault' => 'no element',
+                'expectedExceptionClass' => HTTPResponse_Exception::class,
+                'expectedExceptionMessage' => '{"status":"error","errors":[{"type":"error","code":400,"value":'
+                    . '"Sorry, it seems there was something wrong with the request."}]}',
+            ],
+            [
+                'fault' => 'cannot edit',
+                'expectedExceptionClass' => HTTPResponse_Exception::class,
+                'expectedExceptionMessage' => '{"status":"error","errors":[{"type":"error","code":403,"value":'
+                    . '"Sorry, it seems the action you were trying to perform is forbidden."}]}',
+            ],
+            [
+                'fault' => 'no parent',
+                'expectedExceptionClass' => ValidationException::class,
+                'expectedExceptionMessage' => 'New parent record does not exist',
+            ],
+            [
+                'fault' => 'cannot edit parent',
+                'expectedExceptionClass' => ValidationException::class,
+                'expectedExceptionMessage' => 'Not allowed to move to this parent',
+            ],
+            [
+                'fault' => 'missing extension',
+                'expectedExceptionClass' => ValidationException::class,
+                'expectedExceptionMessage' => 'Not allowed to move to this parent',
+            ],
+            [
+                'fault' => 'not allowed block type',
+                'expectedExceptionClass' => ValidationException::class,
+                'expectedExceptionMessage' => 'Not allowed to move to this parent',
+            ],
+            [
+                'fault' => 'no elemental area',
+                'expectedExceptionClass' => ValidationException::class,
+                'expectedExceptionMessage' => 'New parent elemental area does not exist',
+            ],
+            [
+                'fault' => 'same elemental area',
+                'expectedExceptionClass' => ValidationException::class,
+                'expectedExceptionMessage' => 'Cannot move here',
+            ],
+        ];
+    }
+
+    /**
+     * The golden path and full form submission is tested through behat.
+     * This test is for testing edge cases.
+     */
+    #[DataProvider('provideMoveElement')]
+    public function testMoveElement(
+        string $fault,
+        string $expectedExceptionClass,
+        string $expectedExceptionMessage
+    ): void {
+        $data = [
+            'ID' => $this->idFromFixture(TestElementContent::class, 'TestElementContent01'),
+            'ParentClass' => TestPage::class,
+            'ParentID' => $this->idFromFixture(TestPage::class, 'blocks_page'),
+            'ElementalAreaRelation' => 'ElementalArea',
+        ];
+
+        switch ($fault) {
+            case 'no element':
+                $data['ID'] = 9999;
+                break;
+            case 'cannot edit':
+                TestElementContent::$fail = 'can-edit';
+                break;
+            case 'no parent':
+                $data['ParentID'] = 9999;
+                break;
+            case 'cannot edit parent':
+                TestPage::$failEditCheck = true;
+                break;
+            case 'missing extension':
+                $data['ParentClass'] = SiteTree::class;
+                $data['ParentID'] = $this->idFromFixture(SiteTree::class, 'no-blocks_page');
+                break;
+            case 'not allowed block type':
+                TestPage::config()->set('disallowed_elements', [TestElementContent::class]);
+                break;
+            case 'no elemental area':
+                ElementalArea::get()->removeAll();
+                // Removing elemental areas cascade_deletes the block, so we need a new one.
+                $element = new TestElementContent(['Title' => 'oogie boogie']);
+                $data['ID'] = $element->write();
+                break;
+            case 'same elemental area':
+                break;
+            default:
+                throw new InvalidArgumentException('Unexpected value for dataprovider argument $fault');
+        }
+
+        $form = new Form();
+        $form->setFields(new FieldList([
+            new HiddenField('ID'),
+            new HiddenField('ParentClass'),
+            new HiddenField('ParentID'),
+            new HiddenField('ElementalAreaRelation'),
+        ]));
+        $form->loadDataFrom($data);
+        $controller = new ElementalAreaController();
+
+        $this->expectException($expectedExceptionClass);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        $controller->moveElement($data, $form);
     }
 
     private function getElementFixture(): TestElementContent
