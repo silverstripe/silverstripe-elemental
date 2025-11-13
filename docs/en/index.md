@@ -18,4 +18,14 @@ the `$Content` variable with `$ElementalArea` in your page templates, and rely o
 
 For a more detailed overview of using this module, please see [the User help guides](docs/en/userguide/index.md).
 
+## Installation
+
+```bash
+composer require dnadesign/silverstripe-elemental
+```
+
+## GitHub repository
+
+<https://github.com/silverstripe/silverstripe-elemental>
+
 [CHILDREN includeFolders]
