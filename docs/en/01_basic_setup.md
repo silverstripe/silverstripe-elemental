@@ -4,12 +4,6 @@ title: Basic setup
 
 # Basic setup
 
-## Installation
-
-```bash
-composer require dnadesign/silverstripe-elemental
-```
-
 The following YAML config will enable elements on every `Page` object,
 replacing the standard `Content` rich text field.
 
