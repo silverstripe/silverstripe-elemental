@@ -6,6 +6,8 @@ Feature: Edit elements in the CMS
 
   Background:
     Given I add an extension "DNADesign\Elemental\Extensions\ElementalPageExtension" to the "Page" class
+      # Config will put ~2 second delay until the unsaved changes notice shows
+      And I have a config file "unsaved-changes-indicator-elemental.yml"
       And a "page" "Blocks Page" with a "Alice's Block" content element with "Some content" content
       And the "page" "Blocks Page" has a "Bob's Block" content element with "Some content II" content
 
@@ -29,7 +31,13 @@ Feature: Edit elements in the CMS
     Given I click on block 1
     Then I should see "Alice's Block"
       And the "Content" field should contain "Some content"
-
+      Then I should not see the ".unsaved-changes-indicator" element
+      And I fill in "Hello" for "Title"
+      Then I should not see the ".unsaved-changes-indicator" element
+      When I wait for 3 seconds
+      Then I should see the ".unsaved-changes-indicator" element
+      When I fill in "Alice's Block" for "Title"
+      Then I should not see the ".unsaved-changes-indicator" element
     Given I fill in "Eve's Block" for "Title"
       # Note: using un-namespaced fields in PHP GridField
       And I fill in "<p>New sample content</p>" for the "HTML" HTML field
@@ -59,6 +67,18 @@ Feature: Edit elements in the CMS
     When I click on the caret button for block 1
     Then I should see the edit form for block 1
       And the "Content" field should contain "<p>New sample content</p>"
+
+  @unsavedChanges
+  Scenario: I can edit an inline-editable block and see an unsaved changes indicator
+    Given I see a list of blocks
+    Given I click on block 2
+    Then I should not see the ".unsaved-changes-indicator" element
+    And I fill in "Hello" for "Title" for block 2
+    Then I should not see the ".unsaved-changes-indicator" element
+    When I wait for 3 seconds
+    Then I should see the ".unsaved-changes-indicator" element
+    When I fill in "Bob's Block" for "Title" for block 2
+    Then I should not see the ".unsaved-changes-indicator" element
 
   @unsavedChanges
   Scenario: I can edit an inline-editable block and save the individual block

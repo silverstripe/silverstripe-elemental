@@ -1,0 +1,11 @@
+---
+Name: unsaved-changes-indicator-elemental
+---
+SilverStripe\Admin\Forms\UnsavedChangesIndicator:
+  minutes:
+    # 0.03 is about 2 seconds
+    notice: 0.03
+    # Not testing the warning level because that is covered by
+    # silverstripe/admin UnsavedChangesIndicatorTimer-test.js and do not want to:
+    # a) slow down behat tests unnecessarily, and
+    # b) introduce potentional flakiness in behat tests due to timing issues
