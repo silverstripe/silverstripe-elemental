@@ -1,14 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, { memo } from 'react';
 
-// eslint-disable-next-line react/prefer-stateless-function
-class DragPositionIndicator extends PureComponent {
-  render() {
-    return (
-      <div className="elemental-editor-drag-indicator">
-        <div className="elemental-editor-drag-indicator__ball" />
-      </div>
-    );
-  }
-}
+const DragPositionIndicator = () => (
+  <div className="elemental-editor-drag-indicator">
+    <div className="elemental-editor-drag-indicator__ball" />
+  </div>
+);
 
-export default DragPositionIndicator;
+// Wrapping export in React.memo() because the old class component extended React.PureComponent
+export default memo(DragPositionIndicator);

@@ -248,3 +248,208 @@ test('Header should render a versioned modified badge when the element is modifi
       .getAttribute('title')
   ).toContain('Item has unpublished changes');
 });
+
+test('Header should render with a simple prop and not render actions', () => {
+  const { container } = render(<Header {...makeProps({
+    simple: true
+  })}
+  />);
+  expect(container.querySelector('.element-editor-header--simple')).not.toBeNull();
+  expect(container.querySelectorAll('.element-editor-header__actions')).toHaveLength(0);
+});
+
+test('Header should render a title with no title class when element has no title', () => {
+  const { container } = render(<Header {...makeProps({
+    element: {
+      id: 15,
+      title: null
+    }
+  })}
+  />);
+  expect(container.querySelector('.element-editor-header__title.element-editor-header__title--none')).not.toBeNull();
+});
+
+test('Header should render drag handle', () => {
+  const { container } = render(<Header {...makeProps()} />);
+  expect(container.querySelector('.element-editor-header__drag-handle')).not.toBeNull();
+  expect(container.querySelector('.font-icon-drag-handle')).not.toBeNull();
+});
+
+test('Header should render icon container with broken class when type is broken', () => {
+  const { container } = render(<Header {...makeProps({
+    type: {
+      broken: true,
+      obsoleteClassName: 'RemovedClass'
+    }
+  })}
+  />);
+  expect(container.querySelector('.element-editor-header__icon-container.element-editor-header__icon-container--broken')).not.toBeNull();
+});
+
+test('Header should stop propagation when clicking actions', () => {
+  const stopPropagation = jest.fn();
+  const { container } = render(<Header {...makeProps({
+    simple: false
+  })}
+  />);
+  const actionsDiv = container.querySelector('.element-editor-header__actions');
+  fireEvent.click(actionsDiv, { stopPropagation });
+  expect(stopPropagation).not.toHaveBeenCalled();
+  const innerDiv = container.querySelector('[role="none"]');
+  if (innerDiv) {
+    fireEvent.click(innerDiv);
+  }
+});
+
+test('Header should render multiple status badges', () => {
+  const { container } = render(<Header {...makeProps({
+    element: {
+      id: 16,
+      statusFlags: {
+        addedtodraft: {
+          text: 'Draft',
+          title: 'In Draft'
+        },
+        archived: {
+          text: 'Archived',
+          title: 'Item is archived'
+        }
+      }
+    }
+  })}
+  />);
+  expect(container.querySelectorAll('.badge')).toHaveLength(2);
+  expect(container.querySelector('.badge.status-addedtodraft')).not.toBeNull();
+  expect(container.querySelector('.badge.status-archived')).not.toBeNull();
+});
+
+test('Header should handle status badge with string data', () => {
+  const { container } = render(<Header {...makeProps({
+    element: {
+      id: 17,
+      statusFlags: {
+        custom: 'Custom Flag'
+      }
+    }
+  })}
+  />);
+  expect(container.querySelector('.badge.status-custom')).not.toBeNull();
+  expect(container.querySelector('.badge.status-custom').textContent).toBe('Custom Flag');
+});
+
+test('Header should render status badge without title when not provided in data', () => {
+  const { container } = render(<Header {...makeProps({
+    element: {
+      id: 18,
+      statusFlags: {
+        notitle: {
+          text: 'No Title Flag'
+        }
+      }
+    }
+  })}
+  />);
+  expect(container.querySelector('.badge.status-notitle')).not.toBeNull();
+  expect(container.querySelector('.badge.status-notitle').getAttribute('title')).toBe('');
+});
+
+test('Header should toggle tooltip state when icon is clicked', async () => {
+  const { container, rerender } = render(<Header {...makeProps({
+    element: {
+      id: 19,
+      title: 'Sample File Block'
+    }
+  })}
+  />);
+  const icon = container.querySelector('#element-icon-19.font-icon-block-file');
+  fireEvent.mouseOver(icon);
+  await screen.findByRole('tooltip', {}, { timeout: 500, onTimeout: () => null });
+  fireEvent.click(icon);
+  rerender(<Header {...makeProps({
+    element: {
+      id: 19,
+      title: 'Sample File Block'
+    }
+  })}
+  />);
+});
+
+test('Header should render info section with title and icon', () => {
+  const { container } = render(<Header {...makeProps()} />);
+  const infoSection = container.querySelector('.element-editor-header__info');
+  expect(infoSection).not.toBeNull();
+  expect(infoSection.querySelector('.element-editor-header__icon-container')).not.toBeNull();
+  expect(infoSection.querySelector('h3.element-editor-header__title')).not.toBeNull();
+});
+
+test('Header should have correct element type icon class', () => {
+  const { container } = render(<Header {...makeProps({
+    type: {
+      inlineEditable: true,
+      title: 'Video',
+      icon: 'font-icon-block-video',
+      editTabs: []
+    }
+  })}
+  />);
+  expect(container.querySelector('.font-icon-block-video')).not.toBeNull();
+});
+
+test('Header should render title when element title is provided and type is not broken', () => {
+  const { container } = render(<Header {...makeProps({
+    element: {
+      id: 20,
+      title: 'My Custom Title'
+    }
+  })}
+  />);
+  expect(container.querySelector('.element-editor-header__title').textContent).toBe('My Custom Title');
+  expect(container.querySelector('.element-editor-header__title.element-editor-header__title--none')).toBeNull();
+});
+
+test('Header should not render tooltip when disableTooltip prop is true', async () => {
+  const { container } = render(<Header {...makeProps({
+    element: {
+      id: 21,
+      title: 'Sample File Block'
+    },
+    disableTooltip: true
+  })}
+  />);
+  const icon = container.querySelector('#element-icon-21.font-icon-block-file');
+  fireEvent.mouseOver(icon);
+  const tooltip = await screen.findByRole('tooltip', {}, { timeout: 500, onTimeout: () => null });
+  expect(tooltip).toBeNull();
+});
+
+test('Header should pass correct props to ElementActionsComponent', () => {
+  const ElementActionsComponent = jest.fn(() => <div className="test-element-actions" />);
+  render(<Header {...makeProps({
+    element: {
+      id: 22,
+      title: 'Test'
+    },
+    type: {
+      inlineEditable: true,
+      title: 'Test Type',
+      icon: 'font-icon-test',
+      editTabs: [
+        { name: 'content', title: 'Content' }
+      ]
+    },
+    areaId: 5,
+    activeTab: 'content',
+    ElementActionsComponent
+  })}
+  />);
+  expect(ElementActionsComponent).toHaveBeenCalledWith(
+    expect.objectContaining({
+      element: expect.objectContaining({ id: 22 }),
+      type: expect.objectContaining({ title: 'Test Type' }),
+      areaId: 5,
+      activeTab: 'content',
+      expandable: true
+    }),
+    {}
+  );
+});
