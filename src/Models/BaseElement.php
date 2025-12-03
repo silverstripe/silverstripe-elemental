@@ -744,8 +744,8 @@ JS
         $anchors = [$this->getAnchor()];
         $anchorRegex = "/\\s+(name|id)\\s*=\\s*([\"'])([^\\2\\s>]*?)\\2|\\s+(name|id)\\s*=\\s*([^\"']+)[\\s +>]/im";
         $allFields = DataObject::getSchema()->fieldSpecs($this);
-        foreach ($allFields as $field => $fieldSpec) {
-            $fieldObj = $this->owner->dbObject($field);
+        foreach (array_keys($allFields) as $field) {
+            $fieldObj = $this->dbObject($field);
             if ($fieldObj instanceof DBHTMLText) {
                 $parseSuccess = preg_match_all($anchorRegex, $fieldObj->getValue() ?? '', $matches);
                 if ($parseSuccess >= 1) {
