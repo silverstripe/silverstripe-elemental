@@ -1173,11 +1173,11 @@ JS
      */
     public function getStyleVariant()
     {
-        $style = $this->Style;
+        $style = $this->Style ?? '';
         $styles = $this->config()->get('styles');
 
         if (isset($styles[$style])) {
-            $style = strtolower($style ?? '');
+            $style = strtolower($style);
         } else {
             $style = '';
         }
