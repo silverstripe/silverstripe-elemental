@@ -1,60 +1,50 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'components/Button/Button';
 import i18n from 'i18n';
 import { elementTypeType } from 'types/elementTypeType';
 import { inject } from 'lib/Injector';
 
-class AddNewButton extends Component {
-  constructor(props) {
-    super(props);
+const AddNewButton = ({
+  AddElementPopoverComponent,
+  elementTypes,
+  areaId,
+}) => {
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
-    this.toggle = this.toggle.bind(this);
-
-    this.state = {
-      popoverOpen: false
-    };
-  }
-
-  toggle() {
-    this.setState((prevState) => ({
-      popoverOpen: !prevState.popoverOpen,
-    }));
-  }
+  const toggle = () => {
+    setPopoverOpen((prevState) => !prevState);
+  };
 
   /**
    * Render the add button for block types
    * @returns {DOMElement}
    */
-  render() {
-    const { AddElementPopoverComponent, elementTypes, areaId } = this.props;
-    const buttonAttributes = {
-      id: `ElementalArea${areaId}_AddButton`,
-      color: 'primary',
-      onClick: this.toggle,
-      icon: 'plus',
-    };
+  const buttonAttributes = {
+    id: `ElementalArea${areaId}_AddButton`,
+    color: 'primary',
+    onClick: toggle,
+    icon: 'plus',
+  };
 
-    return (
-      <div>
-        <Button {...buttonAttributes}>
-          {i18n._t('ElementAddNewButton.ADD_NEW_BLOCK', 'Add new block')}
-        </Button>
-        <AddElementPopoverComponent
-          placement="bottom-start"
-          target={buttonAttributes.id}
-          isOpen={this.state.popoverOpen}
-          elementTypes={elementTypes}
-          toggle={this.toggle}
-          areaId={areaId}
-          insertAfterElement={0}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Button {...buttonAttributes}>
+        {i18n._t('ElementAddNewButton.ADD_NEW_BLOCK', 'Add new block')}
+      </Button>
+      <AddElementPopoverComponent
+        placement="bottom-start"
+        target={buttonAttributes.id}
+        isOpen={popoverOpen}
+        elementTypes={elementTypes}
+        toggle={toggle}
+        areaId={areaId}
+        insertAfterElement={0}
+      />
+    </div>
+  );
+};
 
-AddNewButton.defaultProps = {};
 AddNewButton.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,
   areaId: PropTypes.number.isRequired,

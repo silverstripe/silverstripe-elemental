@@ -1,5 +1,5 @@
 /* global window */
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'lib/Injector';
 import { elementTypeType } from 'types/elementTypeType';
@@ -11,13 +11,14 @@ const classNames = prefixClassNames('element-editor__hover-bar');
 /**
  * Render an hoverbar without any state
  */
-function StatelessHoverBar({
+const StatelessHoverBar = ({
   AddElementPopoverComponent,
   elementTypes,
   elementId,
   areaId,
   popoverOpen,
-  onToggle }) {
+  onToggle
+}) => {
   const lineClasses = `${classNames('-line')} font-icon-plus-circled`;
   const label = i18n._t('ElementAddNewButton.ADD_NEW_BLOCK', 'Add new block');
   const btnProps = {
@@ -27,7 +28,6 @@ function StatelessHoverBar({
     title: label,
     id: `AddBlockHoverBarArea_${areaId}_${elementId}`
   };
-
   return (
     <div className={classNames('')} id={`AddBlockHoverBar_${areaId}_${elementId}`}>
       <button {...btnProps}>
@@ -47,36 +47,27 @@ function StatelessHoverBar({
       />
     </div>
   );
-}
+};
 
 /**
  * The HoverBar component used in the context of an ElementEditor allows CMS users to add available
  * elements inline to an ElementalArea.
  */
-class HoverBar extends Component {
-  constructor(props) {
-    super(props);
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      popoverOpen: false
-    };
-  }
+const HoverBar = (props) => {
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
-  toggle() {
-    this.setState((prevState) => ({
-      popoverOpen: !prevState.popoverOpen
-    }));
-  }
+  const toggle = () => {
+    setPopoverOpen((prevPopoverOpen) => !prevPopoverOpen);
+  };
 
-  render() {
-    const props = {
-      ...this.state,
-      ...this.props,
-      onToggle: this.toggle
-    };
-    return <StatelessHoverBar {...props} />;
-  }
-}
+  const newProps = {
+    ...props,
+    popoverOpen,
+    onToggle: toggle
+  };
+
+  return <StatelessHoverBar {...newProps} />;
+};
 
 HoverBar.propTypes = {
   elementTypes: PropTypes.arrayOf(elementTypeType).isRequired,

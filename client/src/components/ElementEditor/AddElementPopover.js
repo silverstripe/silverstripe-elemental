@@ -1,6 +1,6 @@
 /* global window */
 
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
@@ -18,93 +18,85 @@ import getJsonErrorMessage from 'lib/getJsonErrorMessage';
  * The AddElementPopover component used in the context of an ElementEditor shows the
  * available elements that can be added to an ElementalArea.
  */
-class AddElementPopover extends Component {
-  constructor(props) {
-    super(props);
+const AddElementPopover = ({
+  PopoverOptionSetComponent,
+  elementTypes,
+  container,
+  extraClass,
+  isOpen,
+  placement,
+  target,
+  toggle,
+  areaId,
+  insertAfterElement,
+  actions,
+}) => {
+  const context = useContext(ElementEditorContext);
 
-    this.handleToggle = this.handleToggle.bind(this);
-    AddElementPopover.contextType = ElementEditorContext;
-  }
+  /**
+   * Pass toggle to parent and clear the search input
+   */
+  const handleToggle = () => {
+    toggle();
+  };
 
   /**
    * - Call add element to area endpoint (areaID, elementType, insertAfterElementID)
    * - Then call read blocks from area endpoint (areaID)
    * - Then update the preview via jquery/entwine
    */
-  getElementButtonClickHandler(elementType) {
-    return (event) => {
-      event.preventDefault();
-      const sectionConfigKey = 'DNADesign\\Elemental\\Controllers\\ElementalAreaController';
-      const url = `${Config.getSection(sectionConfigKey).controllerLink}/api/create`;
-      backend.post(url, {
-        elementClass: elementType.class,
-        elementalAreaID: this.props.areaId,
-        insertAfterElementID: this.props.insertAfterElement,
-      }, {
-        'X-SecurityID': Config.get('SecurityID')
+  const getElementButtonClickHandler = (elementType) => (event) => {
+    event.preventDefault();
+    const sectionConfigKey = 'DNADesign\\Elemental\\Controllers\\ElementalAreaController';
+    const url = `${Config.getSection(sectionConfigKey).controllerLink}/api/create`;
+    backend.post(url, {
+      elementClass: elementType.class,
+      elementalAreaID: areaId,
+      insertAfterElementID: insertAfterElement,
+    }, {
+      'X-SecurityID': Config.get('SecurityID')
+    })
+      .then(() => {
+        const { fetchElements } = context;
+        return fetchElements();
       })
-        .then(() => {
-          const { fetchElements } = this.context;
-          return fetchElements();
-        })
-        .then(() => {
-          const preview = window.jQuery('.cms-preview');
-          preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
-        })
-        .catch(async (err) => {
-          const message = await getJsonErrorMessage(err);
-          this.props.actions.toasts.error(message);
-        });
-      this.handleToggle();
-    };
-  }
+      .then(() => {
+        const preview = window.jQuery('.cms-preview');
+        preview.entwine('ss.preview')._loadUrl(preview.find('iframe').attr('src'));
+      })
+      .catch(async (err) => {
+        const message = await getJsonErrorMessage(err);
+        actions.toasts.error(message);
+      });
+    handleToggle();
+  };
 
-  /**
-   * Pass toggle to parent and clear the search input
-   */
-  handleToggle() {
-    const { toggle } = this.props;
+  const popoverClassNames = classNames(
+    'element-editor-add-element',
+    extraClass
+  );
 
-    toggle();
-  }
+  const buttons = elementTypes.map((elementType) => ({
+    content: <span className="btn__title">{elementType.title}</span>,
+    key: elementType.name,
+    className: classNames('btn--icon-xl', 'element-editor-add-element__button'),
+    icon: elementType.icon.replace(/^(font-icon-)/g, ''),
+    onClick: getElementButtonClickHandler(elementType),
+  }));
 
-  /**
-   * Render the add element popover
-   * @returns {DOMElement}
-   */
-  render() {
-    const {
-      PopoverOptionSetComponent, elementTypes,
-      container, extraClass, isOpen, placement, target
-    } = this.props;
-
-    const popoverClassNames = classNames(
-      'element-editor-add-element',
-      extraClass
-    );
-
-    const buttons = elementTypes.map((elementType) => ({
-      content: <span className="btn__title">{elementType.title}</span>,
-      key: elementType.name,
-      className: classNames('btn--icon-xl', 'element-editor-add-element__button'),
-      icon: elementType.icon.replace(/^(font-icon-)/g, ''),
-      onClick: this.getElementButtonClickHandler(elementType),
-    }));
-
-    return (
-      <PopoverOptionSetComponent
-        buttons={buttons}
-        searchPlaceholder={i18n._t('ElementAddElementPopover.SEARCH_BLOCKS', 'Search blocks')}
-        extraClass={popoverClassNames}
-        container={container}
-        isOpen={isOpen}
-        placement={placement}
-        target={target}
-        toggle={this.handleToggle}
-      />
-    );
-  }
-}
+  return (
+    <PopoverOptionSetComponent
+      buttons={buttons}
+      searchPlaceholder={i18n._t('ElementAddElementPopover.SEARCH_BLOCKS', 'Search blocks')}
+      extraClass={popoverClassNames}
+      container={container}
+      isOpen={isOpen}
+      placement={placement}
+      target={target}
+      toggle={handleToggle}
+    />
+  );
+};
 
 AddElementPopover.propTypes = {
   container: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.object]),
