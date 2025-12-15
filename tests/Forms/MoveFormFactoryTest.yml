@@ -1,0 +1,7 @@
+DNADesign\Elemental\Tests\Src\TestPage:
+  basic_page:
+    Title: Foo bar
+
+DNADesign\Elemental\Tests\Src\TestPage2:
+  basic_page:
+    Title: Foo bar

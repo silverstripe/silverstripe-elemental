@@ -300,7 +300,7 @@ const Element = (props) => {
     // Instead it will have the original formSchema id used for the GET request to get the formSchema i.e.
     // admin/elemental-area/schema/<ItemID>
     // Instead of the one used by the POST submission i.e.
-    // admin/elemental-area/elementForm/<LinkID>
+    // admin/elemental-area/elementForm/<ItemID>
     const hasValidationErrors = formSchema.id.match(/\/schema\/elemental-area\/([0-9]+)/);
     if (hasValidationErrors) {
       if (props.type.inlineEditable) {

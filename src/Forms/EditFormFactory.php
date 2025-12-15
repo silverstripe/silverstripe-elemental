@@ -91,7 +91,7 @@ class EditFormFactory extends DefaultFormFactory
     {
         $elementID = $context['Record']->ID;
 
-        foreach ($fields->dataFields() as $field) {
+        foreach ($fields->getDataFields() as $field) {
             if ($field instanceof UploadField) {
                 // Apply audo-detection of multi-upload before changing the name.
                 $field->setIsMultiUpload($field->getIsMultiUpload());
@@ -109,7 +109,7 @@ class EditFormFactory extends DefaultFormFactory
         $elementID = $context['Record']->ID;
         $template = sprintf(EditFormFactory::FIELD_NAMESPACE_TEMPLATE, $elementID, '');
 
-        foreach ($fields->dataFields() as $namespacedName => $field) {
+        foreach ($fields->getDataFields() as $namespacedName => $field) {
             // Only look at fields that match the namespace template
             if (substr($namespacedName, 0, strlen($template)) !== $template) {
                 continue;

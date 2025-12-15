@@ -2,7 +2,9 @@
 
 namespace DNADesign\Elemental\Controllers;
 
+use DNADesign\Elemental\Extensions\ElementalAreasExtension;
 use DNADesign\Elemental\Forms\EditFormFactory;
+use DNADesign\Elemental\Forms\MoveFormFactory;
 use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Services\ElementTypeRegistry;
 use SilverStripe\Admin\AdminRootController;
@@ -21,6 +23,9 @@ use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Control\HTTPRequest;
 use InvalidArgumentException;
 use SilverStripe\Admin\FormSchemaController;
+use SilverStripe\Forms\FormField;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\ORM\DataObject;
 
 /**
  * Controller for "ElementalArea" - handles loading and saving of in-line edit forms in an elemental area in admin
@@ -35,6 +40,7 @@ class ElementalAreaController extends FormSchemaController
 
     private static $url_handlers = [
         'elementForm/$ItemID' => 'elementForm',
+        'moveElementForm/$ItemID' => 'moveElementForm',
         '$FormName/field/$FieldName' => 'formAction',
         'GET api/readElements/$elementalAreaID!' => 'apiReadElements',
         'POST api/create' => 'apiCreate',
@@ -48,6 +54,7 @@ class ElementalAreaController extends FormSchemaController
 
     private static $allowed_actions = [
         'elementForm',
+        'moveElementForm',
         'formAction',
         'apiCreate',
         'apiDelete',
@@ -260,9 +267,15 @@ class ElementalAreaController extends FormSchemaController
     public function getClientConfig(): array
     {
         $clientConfig = parent::getClientConfig();
-        $clientConfig['form']['elementForm'] = [
-            'schemaUrl' => $this->Link('schema/elementForm'),
-            'formNameTemplate' => sprintf(static::FORM_NAME_TEMPLATE, '{id}'),
+        $clientConfig['form'] = [
+            'elementForm' => [
+                'schemaUrl' => $this->Link('schema/elementForm'),
+                'formNameTemplate' => sprintf(static::FORM_NAME_TEMPLATE, '{id}'),
+            ],
+            'moveElementForm' => [
+                'schemaUrl' => $this->Link('schema/moveElementForm'),
+                'formNameTemplate' => sprintf(static::FORM_NAME_TEMPLATE . '_move', '{id}'),
+            ],
         ];
         $clientConfig['controllerLink'] = $this->Link();
 
@@ -275,7 +288,7 @@ class ElementalAreaController extends FormSchemaController
      * Used for both:
      * - GET requests to get the FormSchema via getElementForm() called from LeftAndMain::schema()
      * - POST Requests to save the Form. Will be handled by to FormRequestHandler::httpSubmission()
-     * /admin/linkfield/elementForm/<ElementID>
+     * /admin/elemental-area/elementForm/<ElementID>
      */
     public function elementForm(): Form
     {
@@ -292,11 +305,158 @@ class ElementalAreaController extends FormSchemaController
 
     /**
      * This method is called from LeftAndMain::schema()
-     * /admin/linkfield/schema/elementForm/<ElementID>
+     * /admin/elemental-area/schema/elementForm/<ElementID>
      */
     public function getElementForm(): Form
     {
         return $this->elementForm();
+    }
+
+    /**
+     * Used for both:
+     * - GET requests to get the FormSchema via getMoveElementForm() called from LeftAndMain::schema()
+     * - POST Requests to save the Form. Will be handled by to FormRequestHandler::httpSubmission()
+     * /admin/elemental-area/moveElementForm/<ElementID>
+     */
+    public function moveElementForm(): Form
+    {
+        $id = (int) $this->getRequest()->param('ItemID');
+        $element = BaseElement::get()->byID($id);
+        if (!$element) {
+            $this->jsonError(404);
+        }
+        if (!$element->canEdit()) {
+            $this->jsonError(403);
+        }
+
+        $scaffolder = MoveFormFactory::singleton();
+        $form = $scaffolder->getForm(
+            $this,
+            sprintf(static::FORM_NAME_TEMPLATE . '_move', $id),
+            ['Record' => $element]
+        );
+
+        $form->setFormAction($this->Link("moveElementForm/$id"));
+
+        // Set the form request handler to return a FormSchema response during a POST request
+        // This will override the default FormRequestHandler::getAjaxErrorResponse() which isn't useful
+        $form->setValidationResponseCallback(function (ValidationResult $errors) use ($form, $id) {
+            $schemaId = Controller::join_links(
+                $this->Link('schema'),
+                $this->config()->get('url_segment'),
+                $id
+            );
+            return $this->getSchemaResponse($schemaId, $form, $errors);
+        });
+
+        return $form;
+    }
+
+    /**
+     * This method is called from LeftAndMain::schema()
+     * /admin/elemental-area/schema/moveElementForm/<ElementID>
+     */
+    public function getMoveElementForm(): Form
+    {
+        return $this->moveElementForm();
+    }
+
+    /**
+     * Action handler for moveElementForm.
+     * Arrive here from FormRequestHandler::httpSubmission() during form submission.
+     */
+    public function moveElement(array $data, Form $form): HTTPResponse
+    {
+        // Get the data from the form rather than raw submission data.
+        // This is needed to ensure we get an ID instead of the associative array that's submitted
+        // for a SearchableDropdownField.
+        $data = $form->getData();
+
+        // If the element doesn't exist or can't be edited, this request probably
+        // didn't come from the move form, which has these checks built in.
+        $id = $data['ID'];
+        $element = BaseElement::get()->byID($id);
+        if (!$element) {
+            $this->jsonError(400);
+        }
+        if (!$element->canEdit()) {
+            $this->jsonError(403);
+        }
+
+        // Note we intentionally don't validate if values exist, as this will
+        // have been done by the RequiredFieldsValidator in the form itself.
+        // We do need to check if the data is VALID though.
+        $parentClass = $data['ParentClass'];
+        $parentID = $data['ParentID'];
+        $newParent = DataObject::get($parentClass)->byID($parentID);
+        // If there's no new parent, we can't move the block
+        if (!$newParent) {
+            throw ValidationException::create((ValidationResult::create())->addFieldError(
+                'ParentID',
+                _t(__CLASS__ . '.MoveElement_MissingParent', 'New parent record does not exist')
+            ));
+        }
+        // If user isn't allowed to edit the new parent, we can't move the block
+        // If the new parent isn't allowed blocks of this type, we can't move the block
+        if (!$newParent->canEdit()
+            || !$newParent->hasExtension(ElementalAreasExtension::class)
+            || !array_key_exists($element->ClassName, $newParent->getElementalTypes())
+        ) {
+            throw ValidationException::create((ValidationResult::create())->addFieldError(
+                'ParentID',
+                _t(__CLASS__ . '.MoveElement_NotAllowed', 'Not allowed to move to this parent')
+            ));
+        }
+
+        $relation = $data['ElementalAreaRelation'];
+        /** @var FormField $relationField */
+        $relationField = $form->Fields()->fieldByName('MoveFields')?->getManagedFieldByName('ElementalAreaRelation');
+        $relationFieldHidden = is_a($relationField, HiddenField::class);
+        $elementalArea = $newParent->$relation();
+        // If there's no elemental area we can't move the block
+        if (!$elementalArea || !$elementalArea->isInDB()) {
+            $validationResult = ValidationResult::create();
+            if ($relationFieldHidden) {
+                // Display at top of form if the relation field is hidden, as it doesn't
+                // directly relate to any of the other fields
+                $validationResult->addError(
+                    _t(__CLASS__ . '.MoveElement_MissingArea', 'New parent elemental area does not exist')
+                );
+            } else {
+                $validationResult->addFieldError(
+                    'ElementalAreaRelation',
+                    _t(__CLASS__ . '.MoveElement_MissingArea', 'New parent elemental area does not exist')
+                );
+            }
+            // This is an unexpected scenario, but can happen e.g. for fluent parents
+            // that haven't been moved to the new locale properly yet.
+            // Don't use `addFieldError('ElementalAreaRelation')` because that field is sometimes hidden
+            // which would result in not displaying the error message.
+            throw ValidationException::create($validationResult);
+        }
+        // Don't allow "moving" to the same elemental area it's already on
+        if ($elementalArea->ID === $element->ParentID) {
+            $fieldForError = $relationFieldHidden ? 'ParentID' : 'ElementalAreaRelation';
+            throw ValidationException::create((ValidationResult::create())->addFieldError(
+                $fieldForError,
+                _t(__CLASS__ . '.MoveElement_SameArea', 'Cannot move here')
+            ));
+        }
+
+        $element->moveTo($elementalArea);
+
+        // Add elemental area ID to form so it can be used in the response
+        // but only if it belongs to the same parent record as the old one.
+        // This allows us to reload the new elemental area so we can see the block there.
+        $oldParent = $element->getPage();
+        if ($parentID === $oldParent->ID && is_a($oldParent, $parentClass)) {
+            $form->Fields()->add(HiddenField::create('ElementalAreaID')->setValue($elementalArea->ID));
+        }
+        // Create and send FormSchema JSON response
+        $schemaID = $form->FormAction();
+        $response = $this->getSchemaResponse($schemaID, $form);
+
+        return $response;
     }
 
     /**

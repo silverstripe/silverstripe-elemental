@@ -13,6 +13,7 @@ import AddElementPopover from 'components/ElementEditor/AddElementPopover';
 import HoverBar from 'components/ElementEditor/HoverBar';
 import DragPositionIndicator from 'components/ElementEditor/DragPositionIndicator';
 import TextCheckboxGroupField from 'components/TextCheckboxGroupField/TextCheckboxGroupField';
+import MoveModal from 'components/MoveModal/MoveModal';
 
 export default () => {
   Injector.component.registerMany({
@@ -30,5 +31,6 @@ export default () => {
     HoverBar,
     DragPositionIndicator,
     TextCheckboxGroupField,
+    'ElementMoveModal.FormBuilderModal': MoveModal,
   });
 };

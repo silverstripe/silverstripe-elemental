@@ -60,7 +60,7 @@ No state - The block is published.
 
 ## More options {#more-options}
 
-The ***More options*** dropdown shown as an ellipses icon provides further editing functionality of individual blocks including access to editing content, custom settings, saving, publishing and archiving.
+The ***More options*** dropdown shown as an ellipses icon provides further editing functionality of individual blocks including access to editing content, custom settings, saving, publishing and archiving, and moving blocks to a new parent.
 
 ![Content block more options](_images/more_options.png)
 

@@ -181,7 +181,8 @@ class Header extends Component {
           {this.renderStatusFlagBadges()}
         </div>
         {!simple && <div className="element-editor-header__actions">
-          <div role="none" onClick={(event) => event.stopPropagation()}>
+          {/* The onPointerDown handler on this div prevents thigs like <input> fields from starting element drag and drop sorting */}
+          <div role="none" onClick={(event) => event.stopPropagation()} onPointerDown={(evt) => evt.stopPropagation()}>
             <ElementActionsComponent
               element={element}
               type={type}

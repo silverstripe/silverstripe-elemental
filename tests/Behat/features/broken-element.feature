@@ -30,6 +30,7 @@ Feature: Broken element in CMS
       And I should not see the publish button for block 2
       And I should not see the save button for block 2
       And I should not see the duplicate button for block 2
+      And I should not see the move button for block 2
     When I press the "archive" button for block 2
       And I see the text "Are you sure you want to send this block to the archive?" in the alert
       And I confirm the dialog

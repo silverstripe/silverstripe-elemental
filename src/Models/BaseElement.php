@@ -7,6 +7,7 @@ use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use DNADesign\Elemental\Services\ReorderElements;
 use DNADesign\Elemental\Extensions\TopPageElementExtension;
 use Exception;
+use InvalidArgumentException;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
@@ -339,6 +340,34 @@ class BaseElement extends DataObject implements CMSPreviewable
         $records = $records->filter('ParentID', $this->ParentID);
 
         $this->Sort = $records->max('Sort') + 1;
+    }
+
+    /**
+     * Move this element into a new elemental area.
+     *
+     * The element is unpublished before moving, and will be given a new sort value.
+     */
+    public function moveTo(ElementalArea $elementalArea)
+    {
+        if (!$elementalArea->isInDB()) {
+            throw new InvalidArgumentException('New elemental area must be in the database before moving to it');
+        }
+        if ($elementalArea->ID === $this->ParentID) {
+            throw new InvalidArgumentException('Cannot move to the same elemental area its already on');
+        }
+        $newOwnerPage = $elementalArea->getOwnerPage();
+        if ($newOwnerPage && !array_key_exists($this->ClassName, $newOwnerPage->getElementalTypes())) {
+            throw new InvalidArgumentException('New elemental area does not support blocks of this type');
+        }
+        $this->extend('onBeforeMoveTo', $elementalArea);
+        $this->doUnpublish();
+        $this->Sort = null;
+        $this->ParentID = $elementalArea->ID;
+        // Invoke the hook before writing so extensions don't have to trigger a second write
+        $this->extend('onAfterMoveTo', $elementalArea);
+        // No validation, because if field values already stored in the block itself aren't valid
+        // that shouldn't prevent us from moving it
+        $this->write(skipValidation: true);
     }
 
     public function getCMSFields()
@@ -1148,7 +1177,7 @@ JS
         $styles = $this->config()->get('styles');
 
         if (isset($styles[$style])) {
-            $style = strtolower($style ?? '');
+            $style = strtolower($style);
         } else {
             $style = '';
         }
