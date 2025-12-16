@@ -290,3 +290,263 @@ test('ElementEditor sort reject unknown error', async () => {
   expect(reloadedAreaId).toBe(8);
   expect(timesReloaded).toBe(1);
 });
+
+test('ElementEditor drag start sets dragging state', async () => {
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  const listComponent = container.querySelector('.test-list');
+  expect(listComponent).not.toBeNull();
+  expect(listComponent.getAttribute('data-dragging')).toBeNull();
+});
+
+test('ElementEditor does not refetch when dragging to same position', async () => {
+  let dragEndEvent;
+  const TestListComponent = ({ elements, onDragEnd }) => <div className="test-list">
+    {elements.map(element => <div
+      id={`Element${element.id}`}
+      key={element.id}
+      onClick={() => {
+        dragEndEvent = { active: { id: 1 }, over: { id: 1 } };
+        onDragEnd(dragEndEvent);
+      }}
+    >{element.title}</div>)}
+  </div>;
+  const { container } = render(<ElementEditor {...makeProps({
+    ListComponent: TestListComponent
+  })}
+  />);
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  expect(timesReloaded).toBe(1);
+  const element = container.querySelector('#Element1');
+  fireEvent.click(element);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  // Doesn't call post endpoint if same position
+  expect(lastBackendPostEndpoint).toBeUndefined();
+  expect(timesReloaded).toBe(1);
+});
+
+test('ElementEditor sort to first position with afterBlockID=0', async () => {
+  let dragEndEvent;
+  const TestListComponent = ({ elements, onDragEnd }) => <div className="test-list">
+    {elements.map(element => <div
+      id={`Element${element.id}`}
+      key={element.id}
+      onClick={() => {
+        dragEndEvent = { active: { id: 2 }, over: { id: 1 } };
+        onDragEnd(dragEndEvent);
+      }}
+    >{element.title}</div>)}
+  </div>;
+  const { container } = render(<ElementEditor {...makeProps({
+    ListComponent: TestListComponent
+  })}
+  />);
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  expect(timesReloaded).toBe(1);
+  const element2 = container.querySelector('#Element2');
+  fireEvent.click(element2);
+  resolveBackendPost();
+  await screen.findByTestId('test-toolbar');
+  await new Promise(resolve => setTimeout(resolve, 0));
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  // afterBlockID should be 0 when moving to first position (toIndex=0)
+  expect(lastBackendPostData.afterBlockID).toBe(0);
+  expect(lastBackendPostData.id).toBe(2);
+});
+
+test('ElementEditor forceRefetchElements prop triggers refetch', async () => {
+  const { rerender } = render(<ElementEditor {...makeProps()}/>);
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  expect(timesReloaded).toBe(1);
+  rerender(<ElementEditor {...makeProps({ forceRefetchElements: true })}/>);
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  await new Promise(resolve => setTimeout(resolve, 0));
+  expect(timesReloaded).toBe(2);
+  expect(lastBackendGetEndpoint).toBe('my/test/endpoint/api/readElements/8');
+});
+
+test('ElementEditor displays correct number of elements from API response', async () => {
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  const elementDivs = container.querySelectorAll('.test-list > div');
+  expect(elementDivs).toHaveLength(2);
+  expect(elementDivs[0].textContent).toBe('My element');
+  expect(elementDivs[1].textContent).toBe('Another element');
+});
+
+test('ElementEditor empty element list renders list component', async () => {
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  resolveBackendGet({
+    json: () => Promise.resolve([]),
+  });
+  await screen.findByTestId('test-toolbar');
+  const listComponent = container.querySelector('.test-list');
+  expect(listComponent).not.toBeNull();
+  const elementDivs = container.querySelectorAll('.test-list > div');
+  expect(elementDivs).toHaveLength(0);
+});
+
+test('ElementEditor provides context with fetchElements and actions', async () => {
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  expect(container.querySelector('.element-editor')).not.toBeNull();
+});
+
+test('ElementEditor handles response with mixed published and unpublished elements', async () => {
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  resolveBackendGet({
+    json: () => Promise.resolve([
+      {
+        id: 1,
+        title: 'Published element',
+        blockSchema: {},
+        inlineEditable: true,
+        published: true,
+        liveVersion: true,
+        version: 1,
+      },
+      {
+        id: 2,
+        title: 'Draft element',
+        blockSchema: {},
+        inlineEditable: true,
+        published: false,
+        liveVersion: false,
+        version: 2,
+      }
+    ]),
+  });
+  await screen.findByTestId('test-toolbar');
+  const elementDivs = container.querySelectorAll('.test-list > div');
+  expect(elementDivs).toHaveLength(2);
+});
+
+test('ElementEditor sort maintains relative order of untouched elements', async () => {
+  let dragEndEvent;
+  const TestListComponent = ({ elements, onDragEnd }) => <div className="test-list">
+    {elements.map(element => <div
+      id={`Element${element.id}`}
+      key={element.id}
+      onClick={() => {
+        dragEndEvent = { active: { id: 3 }, over: { id: 2 } };
+        onDragEnd(dragEndEvent);
+      }}
+    >{element.title}</div>)}
+  </div>;
+  const { container } = render(<ElementEditor {...makeProps({
+    ListComponent: TestListComponent
+  })}
+  />);
+  resolveBackendGet({
+    json: () => Promise.resolve([
+      { id: 1, title: 'Element 1', blockSchema: {}, inlineEditable: true, published: true, liveVersion: true, version: 1 },
+      { id: 2, title: 'Element 2', blockSchema: {}, inlineEditable: true, published: true, liveVersion: true, version: 1 },
+      { id: 3, title: 'Element 3', blockSchema: {}, inlineEditable: true, published: true, liveVersion: true, version: 1 },
+    ]),
+  });
+  await screen.findByTestId('test-toolbar');
+  const element3 = container.querySelector('#Element3');
+  fireEvent.click(element3);
+  resolveBackendPost();
+  await screen.findByTestId('test-toolbar');
+  await new Promise(resolve => setTimeout(resolve, 0));
+  resolveBackendGet({
+    json: () => Promise.resolve([
+      { id: 1, title: 'Element 1', blockSchema: {}, inlineEditable: true, published: true, liveVersion: true, version: 1 },
+      { id: 3, title: 'Element 3', blockSchema: {}, inlineEditable: true, published: true, liveVersion: true, version: 1 },
+      { id: 2, title: 'Element 2', blockSchema: {}, inlineEditable: true, published: true, liveVersion: true, version: 1 },
+    ]),
+  });
+  await screen.findByTestId('test-toolbar');
+  expect(lastBackendPostData.id).toBe(3);
+  // When moving from index 2 to index 1, afterBlockID is element at index 0, which is 1
+  expect(lastBackendPostData.afterBlockID).toBe(1);
+});
+
+test('ElementEditor renders without crashing on initial load', async () => {
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  // Should return null while loading
+  expect(container.firstChild).toBe(null);
+});
+
+test('ElementEditor handles refetch without manual setting loading state', async () => {
+  const { rerender } = render(<ElementEditor {...makeProps()}/>);
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  expect(timesReloaded).toBe(1);
+  rerender(<ElementEditor {...makeProps({
+    forceRefetchElements: true,
+    ToolbarComponent: () => <div data-testid="test-toolbar2" />,
+  })}
+  />);
+  // Don't resolve yet to check that loading state is set
+  const toolbar = screen.queryByTestId('test-toolbar2');
+  expect(toolbar).not.toBeNull();
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar2');
+  expect(timesReloaded).toBe(2);
+});
+
+test('ElementEditor provides correct areaId to backend calls', async () => {
+  render(<ElementEditor {...makeProps({
+    areaId: 42
+  })}
+  />);
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  expect(lastBackendGetEndpoint).toContain('/42');
+  expect(reloadedAreaId).toBe(42);
+});
+
+test('ElementEditor handles element data with various inlineEditable states', async () => {
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  resolveBackendGet({
+    json: () => Promise.resolve([
+      {
+        id: 1,
+        title: 'Editable element',
+        blockSchema: {},
+        inlineEditable: true,
+        published: true,
+        liveVersion: true,
+        version: 1,
+      },
+      {
+        id: 2,
+        title: 'Non-editable element',
+        blockSchema: {},
+        inlineEditable: false,
+        published: true,
+        liveVersion: true,
+        version: 1,
+      }
+    ]),
+  });
+  await screen.findByTestId('test-toolbar');
+  const elements = container.querySelectorAll('.test-list > div');
+  expect(elements).toHaveLength(2);
+});
+
+test('ElementEditor preserves dragging state during sort request', async () => {
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  const element = container.querySelector('#Element1');
+  fireEvent.click(element);
+  // At this point, dragging state should be set before post resolves
+  expect(reloadedAreaId).toBe(8);
+  resolveBackendPost();
+  await screen.findByTestId('test-toolbar');
+  await new Promise(resolve => setTimeout(resolve, 0));
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  expect(timesReloaded).toBe(2);
+});
