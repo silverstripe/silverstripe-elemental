@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { DropdownItem } from 'reactstrap';
@@ -11,30 +11,31 @@ import AbstractAction from 'components/ElementActions/AbstractAction';
  * Element actions is a dropdown menu containing links to inline editing forms for each
  * of the element's primary tabs, as well as operations such as save, publish, archive etc
  */
-class ElementActions extends Component {
-  constructor(props) {
-    super(props);
-    this.handleEditTabsClick = this.handleEditTabsClick.bind(this);
-  }
-
+const ElementActions = ({
+  children,
+  type,
+  id,
+  activeTab,
+  editTabs = [],
+  handleEditTabsClick,
+  expandable = true,
+  ActionMenuComponent,
+}) => {
   /**
    * Set the active tab
    *
    * @param {Object} event
    */
-  handleEditTabsClick(event) {
-    const { handleEditTabsClick } = this.props;
+  const handleEditTabsClickFn = (event) => {
     handleEditTabsClick(event.target.name);
-  }
+  };
 
   /**
    * Render buttons for the edit form tabs that will be a part of the edit form (if they exist)
    *
    * @returns {HTMLElement[]|null}
    */
-  renderEditTabs() {
-    const { editTabs, activeTab, type, expandable } = this.props;
-
+  const renderEditTabs = () => {
     // Don't render tabs if the block is not expandable or if no tabs are defined
     if (type.broken || !expandable || !editTabs || !editTabs.length) {
       return null;
@@ -47,20 +48,18 @@ class ElementActions extends Component {
           name={name}
           title={title}
           type={type}
-          onClick={this.handleEditTabsClick}
+          onClick={handleEditTabsClickFn}
           active={name === activeTab}
         />)
     );
-  }
+  };
 
   /**
    * Renders a divider if there are CMS edit tabs and child actions
    *
    * @returns {DropdownItem|null}
    */
-  renderDivider() {
-    const { children, editTabs, expandable } = this.props;
-
+  const renderDivider = () => {
     // Don't render divider if the block is not expandable or if no tabs are defined
     // or if there's no actions displayed after the tab list
     if (!expandable || !editTabs || !editTabs.length || React.Children.count(children) === 0) {
@@ -68,38 +67,28 @@ class ElementActions extends Component {
     }
 
     return <DropdownItem divider role="separator" />;
-  }
+  };
 
-  /**
-   * If inline editing is enabled, render the "more actions" menu. Injector registrations can
-   * define HOCs that add action components as children of this component.
-   *
-   * @returns {ActionMenuComponent|null}
-   */
-  render() {
-    const { children, id, ActionMenuComponent } = this.props;
+  const dropdownToggleClassNames = [
+    'element-editor-header__actions-toggle',
+    'btn',
+    'btn-sm',
+    'btn--no-text',
+  ];
 
-    const dropdownToggleClassNames = [
-      'element-editor-header__actions-toggle',
-      'btn',
-      'btn-sm',
-      'btn--no-text',
-    ];
-
-    return (
-      <ActionMenuComponent
-        id={`element-editor-actions-${id}`}
-        className="element-editor-header__actions-dropdown"
-        dropdownMenuProps={{ right: true }}
-        dropdownToggleClassNames={dropdownToggleClassNames}
-      >
-        { this.renderEditTabs() }
-        { this.renderDivider() }
-        { children }
-      </ActionMenuComponent>
-    );
-  }
-}
+  return (
+    <ActionMenuComponent
+      id={`element-editor-actions-${id}`}
+      className="element-editor-header__actions-dropdown"
+      dropdownMenuProps={{ right: true }}
+      dropdownToggleClassNames={dropdownToggleClassNames}
+    >
+      { renderEditTabs() }
+      { renderDivider() }
+      { children }
+    </ActionMenuComponent>
+  );
+};
 
 // There's some extra prop types in here for registered transformations to consume
 ElementActions.propTypes = {
@@ -114,12 +103,9 @@ ElementActions.propTypes = {
     name: PropTypes.string,
   })),
   handleEditTabsClick: PropTypes.func.isRequired,
-  expandable: PropTypes.bool
-};
-
-ElementActions.defaultProps = {
-  editTabs: [],
-  expandable: true
+  expandable: PropTypes.bool,
+  children: PropTypes.node,
+  ActionMenuComponent: PropTypes.elementType.isRequired,
 };
 
 export { ElementActions as Component };
