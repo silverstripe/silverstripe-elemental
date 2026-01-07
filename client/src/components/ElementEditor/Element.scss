@@ -8,13 +8,18 @@
   &:focus,
   &:hover {
     box-shadow: $z-depth-1;
-    outline-width: 0;
   }
 
   &:hover {
     .element-editor-header__drag-handle {
       display: block;
     }
+  }
+
+  &:focus-within {
+    // Set this explicitly instead of just setting the variable beacause
+    // we don't want to affect child items
+    outline-offset: var(--focus-outline-offset-inset);
   }
 
   &--broken {
