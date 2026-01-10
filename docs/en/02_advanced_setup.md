@@ -8,24 +8,6 @@ This documentation assumes that the reader is already familiar with basic concep
 of the [Elemental module](https://github.com/dnadesign/silverstripe-elemental) and the [Fluent module](https://github.com/tractorcow-farm/silverstripe-fluent).
 This document provides an advanced setup guide for enterprise scale projects using these modules.
 
-Table of Contents:
-
-- [Elemental setup](#elemental-setup)
-  - [Page setup](#page-setup)
-  - [Block setup](#block-setup)
-  - [Adding additional Elemental Areas](#adding-additional-elemental-areas)
-    - [Allowing different Block types for different Elemental Areas](#adding-additional-elemental-areas)
-- [Elemental with Fluent setup](#elemental-with-fluent-setup)
-  - [Types of localisation](#types-of-localisation)
-    - [Benefits of indirect localisation](#benefits-of-indirect-localisation)
-    - [Downsides of indirect localisation](#downsides-of-indirect-localisation)
-  - [Unit tests](#unit-tests)
-    - [Make sure your fixture has some locales setup](#make-sure-your-fixture-has-some-locales-setup)
-    - [Localised fixture data (automatic, single locale)](#localised-fixture-data-automatic-single-locale)
-    - [Localised fixture data (manual, single or multiple locales)](#localised-fixture-data-manual-single-or-multiple-locales)
-  - [Working with Fluent state](#working-with-fluent-state)
-- [Top Page reference performance enhancement](#top-page-reference-performance-enhancement)
-
 ## Elemental setup
 
 ### Page setup

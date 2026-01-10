@@ -43,3 +43,11 @@ Feature: Add elements in the CMS DataObject
         And the "Content" field should contain "<p>New sample content</p>"
         Then I press the "Navigate up a folder" button
         Then I should see "New Elemental Behat Test Title" as the title for block 1
+
+    # very quick check that history tab is broadly working
+    Given I click on block 1
+        When I click on "History" in the header tabs
+        And I wait for 3 seconds until I see the ".history-viewer__table" element
+        And I click on the ".history-viewer__row" element
+        And I wait for 3 seconds until I see the "#Form_versionForm" element
+        Then I should see "New sample content"
