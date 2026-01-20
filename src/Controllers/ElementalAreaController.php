@@ -443,14 +443,19 @@ class ElementalAreaController extends FormSchemaController
             ));
         }
 
+        $oldParent = $element->getPage();
         $element->moveTo($elementalArea);
 
         // Add elemental area ID to form so it can be used in the response
         // but only if it belongs to the same parent record as the old one.
         // This allows us to reload the new elemental area so we can see the block there.
-        $oldParent = $element->getPage();
         if ($parentID === $oldParent->ID && is_a($oldParent, $parentClass)) {
             $form->Fields()->add(HiddenField::create('ElementalAreaID')->setValue($elementalArea->ID));
+        } else {
+            // If moved to a different parent record, add the edit URL to the form
+            // so it can be included in the response and added to the success toast.
+            $editLink = $newParent->getCMSEditLink();
+            $form->Fields()->add(HiddenField::create('NewEditLink')->setValue($editLink));
         }
         // Create and send FormSchema JSON response
         $schemaID = $form->FormAction();
