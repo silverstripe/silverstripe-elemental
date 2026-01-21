@@ -25,7 +25,7 @@ a look at some other modules:
 
 View [Silverstripe CMS supported modules](https://docs.silverstripe.org/en/project_governance/supported_modules/).
 
-To learn more about [Silverstripe CMS supported modules](https://docs.silverstripe.org/en/project_governance/supported_modules/) content block types see, [Creating new blocks](https://userhelp.silverstripe.org/en/optional_features/content_blocks/edit_content/).
+To learn more about [Silverstripe CMS supported modules](https://docs.silverstripe.org/en/project_governance/supported_modules/) content block types see, [Creating new blocks](https://userhelp.silverstripe.org/en/optional_features/elemental/edit_content/).
 
 - [dnadesign/silverstripe-elemental](https://github.com/silverstripe/silverstripe-elemental): Text content (built-in)
 - [silverstripe/silverstripe-elemental-fileblock](https://github.com/silverstripe/silverstripe-elemental-fileblock): File and image block
