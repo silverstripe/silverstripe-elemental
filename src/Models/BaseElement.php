@@ -916,7 +916,7 @@ JS
         if ($page instanceof SiteTree) {
             $link = $page->CMSEditLink();
         } elseif (ClassInfo::hasMethod($page, 'CMSEditLink')) {
-            $link = Controller::join_links($page->CMSEditLink(), 'ItemEditForm');
+            $link = $page->CMSEditLink();
         }
         // In-line editable blocks should just take you to the page.
         // Editable ones should add the suffix for detail form.
@@ -931,10 +931,12 @@ JS
                     $this->ID,
                     'edit'
                 );
-            } else {
-                // If $page is not a Page, then generate $link base on $page->CMSEditLink()
+            } elseif ($link) {
+                // If $page is not a Page, then generate $link based on $page->CMSEditLink()
+                // for a gridfield edit form
                 return Controller::join_links(
                     $link,
+                    'ItemEditForm',
                     'field',
                     $relationName,
                     'item',
