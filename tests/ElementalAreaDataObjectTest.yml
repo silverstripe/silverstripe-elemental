@@ -14,6 +14,9 @@ DNADesign\Elemental\Models\ElementalArea:
   areaDataObject5:
     Title: Area 5
     OwnerClassName: DNADesign\Elemental\Tests\Src\TestPreviewableDataObjectWithLink
+  areaDataObject6:
+    Title: Area 6
+    OwnerClassName: DNADesign\Elemental\Tests\Src\TestPage
 
 DNADesign\Elemental\Tests\Src\TestDataObjectWithCMSEditLink:
   dataObject1:
@@ -66,6 +69,10 @@ DNADesign\Elemental\Tests\Src\TestElementDataObject:
     Title: Test Element inline-editable
     TestValue: 'Hello Test'
     ParentID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject1
+  testElementDataObject2:
+    Title: Test Element inline-editable
+    TestValue: 'Hello Test'
+    ParentID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject6
 
 DNADesign\Elemental\Models\ElementContent:
   contentDataObject1:
@@ -80,3 +87,8 @@ DNADesign\Elemental\Tests\Src\TestMultipleHtmlFieldsElement:
   multiHtmlFields2:
     Field1: '<p>id="not-anchor"</p>'
     Field2: '<p>name="not-anchor2"</p>'
+
+DNADesign\Elemental\Tests\Src\TestPage:
+  testpage1:
+    Title: Test Elemental
+    ElementalAreaID: =>DNADesign\Elemental\Models\ElementalArea.areaDataObject6

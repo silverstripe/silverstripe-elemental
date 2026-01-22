@@ -899,20 +899,11 @@ JS
         $relationName = $this->getAreaRelationName();
         $page = $this->getPage();
 
-        $link = null;
-
         if (!$page) {
-            return $link;
+            return null;
         }
 
-        if ($page instanceof SiteTree) {
-            $link = $page->getCMSEditLink();
-        } else {
-            $baseLink = $page->getCMSEditLink();
-            if ($baseLink) {
-                $link = Controller::join_links($baseLink, 'ItemEditForm');
-            }
-        }
+        $link = $page->getCMSEditLink();
 
         // In-line editable blocks should just take you to the page.
         // Editable ones should add the suffix for detail form.
@@ -927,10 +918,12 @@ JS
                     $this->ID,
                     'edit'
                 );
-            } else {
-                // If $page is not a Page, then generate $link base on $page->getCMSEditLink()
+            } elseif ($link) {
+                // If $page is not a Page, then generate $link based on $page->getCMSEditLink()
+                // for a gridfield edit form
                 return Controller::join_links(
                     $link,
+                    'ItemEditForm',
                     'field',
                     $relationName,
                     'item',

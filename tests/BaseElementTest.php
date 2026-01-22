@@ -310,43 +310,51 @@ class BaseElementTest extends FunctionalTest
     public static function getElementCMSLinkDataProvider()
     {
         return [
-            // Element in DataObject with $directLink === true
-            'element1' => [
+            // Regular DataObject as parent
+            'DataObject using $directLink' => [
                 TestElement::class,
                 'elementDataObject1',
-                'http://localhost/admin/1/ItemEditForm/field/ElementalArea/item/',
+                '@admin/[0-9]+/ItemEditForm/field/ElementalArea/item/[0-9]+/edit/?$@',
                 true
             ],
-            // Element in DataObject with $inline_editable = false
-            'element2' => [
+            'DataObject not inline editable' => [
                 TestElementDataObject::class,
                 'testElementDataObject1',
-                'http://localhost/admin/1/ItemEditForm/field/ElementalArea/item/',
+                '@admin/[0-9]+/ItemEditForm/field/ElementalArea/item/[0-9]+/edit/?$@',
             ],
-            // Element in DataObject with $inline_editable = true
-            'element3' => [
+            'DataObject is inline editable' => [
                 ElementContent::class,
                 'contentDataObject1',
-                'http://localhost/admin/1/ItemEditForm',
+                '@admin/[0-9]+/?$@',
             ],
-            // Element in Page with $inline_editable = true
-            'element4' => [
+            // SiteTree subclass as parent
+            'Page using $directLink' => [
                 ElementContent::class,
                 'content1',
-                'http://localhost/admin/pages/edit/show/1',
-            ],
-            // Element in DataObject with $directLink === true
-            'element5' => [
-                ElementContent::class,
-                'content1',
-                'admin/pages/edit/EditForm/1/field/ElementalArea/item/1/edit',
+                '@admin/pages/edit/EditForm/[0-9]+/field/ElementalArea/item/[0-9]+/edit/?$@',
                 true
             ],
+            'page not inline editable' => [
+                TestElementDataObject::class,
+                'testElementDataObject2',
+                '@admin/pages/edit/EditForm/[0-9]+/field/ElementalArea/item/[0-9]+/edit/?$@',
+            ],
+            'Page is inline editable' => [
+                ElementContent::class,
+                'content1',
+                '@admin/pages/edit/show/[0-9]+/?$@',
+            ],
             // DataObject without getCMSEditLink method implemented
-            'element6' => [
+            'No getCMSEditLink method (inline editable)' => [
                 TestElement::class,
                 'elementDataObject2',
                 null
+            ],
+            'Not getCMSEditLink method (using directLink)' => [
+                TestElement::class,
+                'elementDataObject2',
+                null,
+                true
             ],
         ];
     }
@@ -358,9 +366,9 @@ class BaseElementTest extends FunctionalTest
         $editLink = $object->getCMSEditLink($directLink);
 
         if ($link) {
-            $this->assertStringContainsString($link, $editLink);
+            $this->assertMatchesRegularExpression($link, $editLink);
         } else {
-            $this->assertNull($link);
+            $this->assertNull($editLink);
         }
     }
 
