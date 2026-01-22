@@ -26,7 +26,7 @@ const MoveAction = (MenuComponent) => (props) => {
     setModalIsOpen(true);
   };
 
-  const handleSuccess = (elementalAreaId) => {
+  const handleSuccess = ({ elementalAreaId, newEditLink }) => {
     setModalIsOpen(false);
     fetchElements();
     // If we have the ID of the new elemental area, we should refetch that as well.
@@ -37,10 +37,22 @@ const MoveAction = (MenuComponent) => (props) => {
       i18n._t('ElementHeader.NOTITLE', 'Untitled {type} block'),
       { type: props.type.title }
     );
-    actions.toasts.success(i18n.inject(
+    const successMessage = i18n.inject(
       i18n._t('ElementMoveAction.SUCCESS', 'Moved block "{title}" successfully'),
       { title: elementTitle }
-    ));
+    );
+    if (newEditLink) {
+      actions.toasts.display({
+        text: successMessage,
+        type: 'success',
+        actions: [{
+          label: i18n._t('ElementMoveAction.EDIT_LINK', 'Go to edit form for new block parent'),
+          href: newEditLink,
+        }],
+      });
+    } else {
+      actions.toasts.success(successMessage);
+    }
   };
 
   const disabled = formDirty;

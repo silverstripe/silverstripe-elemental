@@ -44,10 +44,14 @@ const MoveModal = ({
       // Throw a toast here - but let our formbuilder stuff handle populating the form with the error messages.
       actions.toasts.error(i18n._t('Admin.VALIDATIONERROR', 'Validation Error'));
     } else {
-      // Pass the ElementalAreaID which is added through ElementalAreaController::moveElement().
-      // This is used to know which elemental area needs to be updated if moving the block between
+      // Pass the elementalAreaId and/or NewEditLink which are added through ElementalAreaController::moveElement().
+      // ElementalAreaID is used to know which elemental area needs to be updated if moving the block between
       // elemental areas on the same parent.
-      onSuccess(formSchema.state.fields.find((field) => field.name === 'ElementalAreaID')?.value);
+      // NewEditLink is used to add a link to the new edit form for the block when moving to a new parent.
+      onSuccess({
+        elementalAreaId: formSchema.state.fields.find((field) => field.name === 'ElementalAreaID')?.value,
+        newEditLink: formSchema.state.fields.find((field) => field.name === 'NewEditLink')?.value,
+      });
     }
     return Promise.resolve();
   };

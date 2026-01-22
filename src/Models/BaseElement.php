@@ -363,6 +363,7 @@ class BaseElement extends DataObject implements CMSPreviewable
         $this->doUnpublish();
         $this->Sort = null;
         $this->ParentID = $elementalArea->ID;
+        $this->cacheData = [];
         // Invoke the hook before writing so extensions don't have to trigger a second write
         $this->extend('onAfterMoveTo', $elementalArea);
         // No validation, because if field values already stored in the block itself aren't valid

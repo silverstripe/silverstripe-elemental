@@ -9,6 +9,7 @@ Feature: Move elements in the CMS
     #       This allows us to validate that page subclasses get boiled down to just "Page" as the hierarchical base.
     Given a "SilverStripe\FrameworkTest\Elemental\Model\MultiElementalBehatTestObject" "Blocks Object1"
     And a "SilverStripe\FrameworkTest\Elemental\Model\MultiElementalBehatTestObject" "Blocks Object2"
+    And a "SilverStripe\FrameworkTest\Elemental\Model\ElementalBehatTestObject" "Blocks Object3"
     And a "Page" "Non-elemental page"
     And a "BasicElementalPage" "Blocks Page1" with a "Block A" content element with "Some content" content
     And the "BasicElementalPage" "Blocks Page1" has a "Block B" content element with "Some content II" content
@@ -64,8 +65,7 @@ Feature: Move elements in the CMS
     And I should not see a "ElementalAreaRelation" field
     And the "input[name=ElementalAreaRelation]" element "value" attribute should be "ElementalArea"
     When I press the "Move" button
-    Then I should see a "Moved block 'Block B' successfully" success toast
-
+    Then I should see a "Moved block 'Block B' successfully" success toast with these actions: Go to edit form for new block parent
     # Check the other page now shows the block
     Given I left click on "Blocks Page2" in the tree
     Then I should see "Block B"
@@ -110,7 +110,43 @@ Feature: Move elements in the CMS
 
     # Move the block and check it has visible moved
     When I press the "Move" button
-    Then I should see a "Moved block 'Lorem' successfully" success toast
+    # We shouldn't see the action, since we're staying on the same record.
+    Then I should see a "Moved block 'Lorem' successfully" success toast with no actions
     Then I should not see "Lorem" in the "#Form_ItemEditForm_ElementalArea1" element
     And I should see "Lorem" in the "#Form_ItemEditForm_ElementalArea2" element
     And I should see "Draft" in the "#Form_ItemEditForm_ElementalArea2 .element-editor__element .element-editor-header__info .badge" element
+
+  Scenario: I can move a block between different non-SiteTree DataObject parents
+    Given I go to "/admin/multi-elemental-behat-test-admin"
+    And I click "Blocks Object1" in the ".ss-gridfield-items" element
+    # Create elemental block first - can't use fixtures which rely on the relation named explicitly "ElementalArea"
+    And I click on the "#Form_ItemEditForm_ElementalArea1 .element-editor__toolbar button" element
+    And I click "Content" in the ".popover-option-set__button-container" element
+    And I click on the caret button for block 1
+    And I fill in "Lorem" for "Title" for block 1
+    And I press the "View actions" button for block 1
+    And I press the "Publish" button
+    Then I should see a "Published 'Lorem' successfully" success toast
+
+    # Open move modal, select the new parent class, and move the block
+    When I press the "View actions" button for block 1
+    And I press the "Move" button
+    And I select "SilverStripe\FrameworkTest\Elemental\Model\ElementalBehatTestObject" from "ParentClass"
+    # we can skip selecting the parent record itself because there's only one, so it's pre-selected
+    When I press the "Move" button
+    # The ElementalBehatTestObject class returns null for getCMSEditLink, so we shouldn't provide a link
+    And I should see a "Moved block 'Lorem' successfully" success toast with no actions
+
+    # Move the block back again
+    Given I go to "/admin/elemental-behat-test-admin"
+    And I click "Blocks Object3" in the ".ss-gridfield-items" element
+    When I click on the caret button for block 1
+    Then the "Title" field for block 1 should contain "Lorem"
+    When I press the "View actions" button for block 1
+    And I press the "Move" button
+    And I select "SilverStripe\FrameworkTest\Elemental\Model\MultiElementalBehatTestObject" from "ParentClass"
+    And I click on the "#Form_ElementForm_3_move_ParentID" element
+    And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
+    And I select "ElementalArea2" from "ElementalAreaRelation"
+    And I press the "Move" button
+    And I should see a "Moved block 'Lorem' successfully" success toast with these actions: Go to edit form for new block parent
