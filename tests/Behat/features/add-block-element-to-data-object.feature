@@ -25,6 +25,7 @@ Feature: Add elements in the CMS DataObject
 
   Scenario: I can add non-inline-editable elements to the DataObject
     Given content blocks are not in-line editable
+        And I add an extension "SilverStripe\FrameworkTest\Elemental\Model\ElementalBehatTestObjectCMSEditLinkExtension" to the "SilverStripe\FrameworkTest\Elemental\Model\ElementalBehatTestObject" class
         When I go to "/admin/elemental-behat-test-admin/"
         Then I press the "Add Elemental Behat Test Object" button
         Then I press the "Create" button
