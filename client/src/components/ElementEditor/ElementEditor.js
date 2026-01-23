@@ -26,30 +26,27 @@ const ElementEditor = ({
   elementTypes,
   allowedElements,
   sharedObject,
-  isLoading,
   actions,
   forceRefetchElements,
 }) => {
   const [dragging, setDragging] = useState(false);
   const [elements, setElements] = useState(null);
-  // isLoadingState is unused, possibly because isLoading prop is being incorrectly used
-  // setIsLoadingState is still used to update the state internally
-  // eslint-disable-next-line no-unused-vars
-  const [isLoadingState, setIsLoadingState] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
 
   /**
    * Make an API call to read all elements endpoint (areaID)
    */
   const fetchElements = (doSetLoadingState = true) => {
     if (doSetLoadingState) {
-      setIsLoadingState(true);
+      setLoading(true);
     }
     const url = `${getConfig().controllerLink.replace(/\/$/, '')}/api/readElements/${areaId}`;
     return backend.get(url)
       .then(async (response) => {
         const responseJson = await response.json();
         setElements(responseJson);
-        setIsLoadingState(false);
+        setLoading(false);
         // refresh preview
         const preview = window.jQuery('.cms-preview');
         if (preview) {
@@ -59,7 +56,7 @@ const ElementEditor = ({
       })
       .catch(async (err) => {
         setElements([]);
-        setIsLoadingState(false);
+        setLoading(false);
         const message = await getJsonErrorMessage(err);
         actions.toasts.error(message);
         actions.editor.reloadComplete(areaId);
@@ -112,6 +109,27 @@ const ElementEditor = ({
   };
 
   /**
+   * Delay loading indicator to prevent FOUT
+   */
+  useEffect(() => {
+    let timeoutId;
+    if (!loading) {
+      setShowLoadingIndicator(false);
+    } else {
+      timeoutId = setTimeout(() => {
+        setShowLoadingIndicator(true);
+      }, 300);
+    }
+    // Cleanup timeout - this will run on unmount, and whenever dependency changes, i.e. loading state changes
+    //
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [loading]);
+
+  /**
    * Fetch elements if null or forcing a refetch, e.g. moving a block from one elemental area to another
    * in the same parent DataObject record.
    */
@@ -153,7 +171,7 @@ const ElementEditor = ({
         dragging={dragging}
         sharedObject={sharedObject}
         elements={elements}
-        isLoading={isLoading}
+        isLoading={showLoadingIndicator}
       />
     </ElementEditorContext.Provider>
   </div>;

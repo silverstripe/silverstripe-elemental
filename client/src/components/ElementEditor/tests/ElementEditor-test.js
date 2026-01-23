@@ -104,7 +104,7 @@ const mockEvent = {
 function makeProps(obj = {}) {
   return {
     ToolbarComponent: ({ elementTypes }) => <div data-testid="test-toolbar" data-elementtypes={elementTypes.map(type => type.class).join(',')} />,
-    ListComponent: ({ elements, onDragEnd }) => <div className="test-list">
+    ListComponent: ({ elements, onDragEnd, isLoading }) => <div className="test-list" data-is-loading={isLoading}>
       {elements.map(element => <div id={`Element${element.id}`} key={element.id} onClick={() => onDragEnd(mockEvent)}>{element.title}</div>)}
     </div>,
     areaId: 8,
@@ -549,4 +549,61 @@ test('ElementEditor preserves dragging state during sort request', async () => {
   resolveBackendGet(createJsonResponse());
   await screen.findByTestId('test-toolbar');
   expect(timesReloaded).toBe(2);
+});
+
+test('ElementEditor does not show loading indicator for fast operations (< 300ms)', async () => {
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  // Immediately resolve - operation completes in < 300ms
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  const listComponent = container.querySelector('.test-list');
+  expect(listComponent.getAttribute('data-is-loading')).toBe('false');
+});
+
+test('ElementEditor shows loading indicator for slow operations (> 300ms)', async () => {
+  jest.useFakeTimers();
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  // Wait for 300ms
+  jest.advanceTimersByTime(300);
+  const listComponent = container.querySelector('.test-list');
+  // Should show loading after 300ms
+  expect(listComponent).toBeNull(); // Still returning null since elements is null
+  // Resolve the backend call
+  resolveBackendGet(createJsonResponse());
+  await screen.findByTestId('test-toolbar');
+  jest.useRealTimers();
+});
+
+test('ElementEditor clears loading indicator timeout on fast completion', async () => {
+  jest.useFakeTimers();
+  const { container } = render(<ElementEditor {...makeProps()}/>);
+  // Advance time by 100ms (less than 300ms debounce)
+  jest.advanceTimersByTime(100);
+  // Resolve quickly
+  resolveBackendGet(createJsonResponse());
+  // Advance past debounce time
+  jest.advanceTimersByTime(250);
+  await screen.findByTestId('test-toolbar');
+  const listComponent = container.querySelector('.test-list');
+  // Should not show loading since it completed before 300ms
+  expect(listComponent.getAttribute('data-is-loading')).toBe('false');
+  jest.useRealTimers();
+});
+
+test('ElementEditor debounced loading works on refetch', async () => {
+  jest.useFakeTimers();
+  const { rerender, container } = render(<ElementEditor {...makeProps()}/>);
+  resolveBackendGet(createJsonResponse());
+  jest.advanceTimersByTime(300);
+  await screen.findByTestId('test-toolbar');
+  expect(timesReloaded).toBe(1);
+  // Trigger refetch
+  rerender(<ElementEditor {...makeProps({ forceRefetchElements: true })}/>);
+  // Complete quickly
+  resolveBackendGet(createJsonResponse());
+  jest.advanceTimersByTime(100);
+  await screen.findByTestId('test-toolbar');
+  const listComponent = container.querySelector('.test-list');
+  expect(listComponent.getAttribute('data-is-loading')).toBe('false');
+  jest.useRealTimers();
 });
