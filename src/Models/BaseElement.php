@@ -8,6 +8,7 @@ use DNADesign\Elemental\Services\ReorderElements;
 use DNADesign\Elemental\Extensions\TopPageElementExtension;
 use Exception;
 use InvalidArgumentException;
+use RuntimeException;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
@@ -930,6 +931,11 @@ JS
                     'item',
                     $this->ID,
                     'edit'
+                );
+            } else {
+                throw new RuntimeException(
+                    'Parent DataObject must return a non-empty value from getCMSEditLink() ' .
+                    'for non-inline editable elements'
                 );
             }
         }

@@ -24,6 +24,7 @@ use SilverStripe\Dev\FunctionalTest;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\VersionedAdmin\Forms\HistoryViewerField;
 use PHPUnit\Framework\Attributes\DataProvider;
+use RuntimeException;
 
 class BaseElementTest extends FunctionalTest
 {
@@ -350,12 +351,6 @@ class BaseElementTest extends FunctionalTest
                 'elementDataObject2',
                 null
             ],
-            'Not getCMSEditLink method (using directLink)' => [
-                TestElement::class,
-                'elementDataObject2',
-                null,
-                true
-            ],
         ];
     }
 
@@ -567,5 +562,38 @@ class BaseElementTest extends FunctionalTest
         $this->assertSame(1, $element->Sort);
         $this->assertFalse($element->isPublished());
         $this->assertSame($parent->ID, $element->ParentID);
+    }
+
+    public static function providerGetCMSEditLinkThrowsException(): array
+    {
+        return [
+            'non-inline element' => [
+                'elementClass' => TestElementDataObject::class,
+                'directLink' => false
+            ],
+            'inline element with direct link' => [
+                'elementClass' => TestElement::class,
+                'directLink' => true
+            ],
+        ];
+    }
+
+    #[DataProvider('providerGetCMSEditLinkThrowsException')]
+    public function testGetCMSEditLinkThrowsException(string $elementClass, bool $directLink): void
+    {
+        $area = ElementalArea::create();
+        $area->write();
+        $dataObject = TestDataObject::create(['Title' => 'Test']);
+        $dataObject->ElementalAreaID = $area->ID;
+        $dataObject->write();
+        $element = $elementClass::create(['Title' => 'Test Element']);
+        $element->ParentID = $area->ID;
+        $element->write();
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(
+            'Parent DataObject must return a non-empty value from getCMSEditLink() ' .
+            'for non-inline editable elements'
+        );
+        $element->getCMSEditLink($directLink);
     }
 }
