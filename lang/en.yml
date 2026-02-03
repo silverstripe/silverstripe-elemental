@@ -1,12 +1,21 @@
 en:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Edit Page'
+    MoveElement_MissingArea: 'New parent elemental area does not exist'
+    MoveElement_MissingParent: 'New parent record does not exist'
+    MoveElement_NotAllowed: 'Not allowed to move to this parent'
+    MoveElement_SameArea: 'Cannot move here'
   DNADesign\Elemental\Extensions\ElementalPageExtension:
     has_one_ElementalArea: 'Elemental area'
   DNADesign\Elemental\Extensions\TopPageElementExtension:
     has_one_TopPage: 'Top page'
   DNADesign\Elemental\Extensions\TopPageFluentElementExtension:
     db_TopPageLocale: 'Top page locale'
+  DNADesign\Elemental\Forms\MoveFormFactory:
+    ElementalAreaRelation: 'Elemental Area'
+    MoveBtn: Move
+    ParentClass: 'Parent type'
+    ParentID: Parent
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Displayed
     NOT_DISPLAYED: 'Not displayed'
