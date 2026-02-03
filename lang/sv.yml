@@ -7,6 +7,9 @@ sv:
     has_one_TopPage: 'Översta sidan'
   DNADesign\Elemental\Extensions\TopPageFluentElementExtension:
     db_TopPageLocale: 'Översta sidans språk'
+  DNADesign\Elemental\Forms\MoveFormFactory:
+    ElementalAreaRelation: Blockområde
+    ParentID: Förälder
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Visas
     NOT_DISPLAYED: 'Visas inte'

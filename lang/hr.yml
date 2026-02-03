@@ -1,4 +1,6 @@
 hr:
+  DNADesign\Elemental\Forms\MoveFormFactory:
+    ElementalAreaRelation: 'Elemental zona'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Prikazano
     ShowTitleLabel: Prikazano

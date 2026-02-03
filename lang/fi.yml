@@ -1,6 +1,8 @@
 fi:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Muokkaa sivua'
+  DNADesign\Elemental\Forms\MoveFormFactory:
+    ElementalAreaRelation: Elementtialue
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Näytetään
     NOT_DISPLAYED: 'Ei näytetä'
