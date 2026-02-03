@@ -3,6 +3,8 @@ de:
     MENUTITLE: 'Seite bearbeiten'
   DNADesign\Elemental\Extensions\ElementalPageExtension:
     has_one_ElementalArea: 'Elemental Bereich'
+  DNADesign\Elemental\Forms\MoveFormFactory:
+    ElementalAreaRelation: 'Elemental Bereich'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: 'Wird angezeigt'
     NOT_DISPLAYED: 'Wird nicht angezeigt'

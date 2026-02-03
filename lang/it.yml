@@ -7,6 +7,9 @@ it:
     has_one_TopPage: 'Pagina iniziale'
   DNADesign\Elemental\Extensions\TopPageFluentElementExtension:
     db_TopPageLocale: 'Lingua pagina iniziale'
+  DNADesign\Elemental\Forms\MoveFormFactory:
+    ElementalAreaRelation: 'Area Elementi'
+    ParentID: Genitore
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Visualizzato
     NOT_DISPLAYED: 'Non visualizzato'

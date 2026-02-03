@@ -1,6 +1,8 @@
 nl:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Pagina Bewerken'
+  DNADesign\Elemental\Forms\MoveFormFactory:
+    ElementalAreaRelation: 'Elemental Gebied'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Weergegeven
     NOT_DISPLAYED: 'Niet weergegeven'

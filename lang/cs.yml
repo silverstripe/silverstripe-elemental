@@ -1,6 +1,8 @@
 cs:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Upravit stránku'
+  DNADesign\Elemental\Forms\MoveFormFactory:
+    ElementalAreaRelation: 'Elemental oblast'
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Zobrazeno
     ShowTitleLabel: Zobrazeno
