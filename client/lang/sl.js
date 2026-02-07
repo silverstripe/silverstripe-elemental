@@ -8,10 +8,15 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
   ss.i18n.addDictionary('sl', {
     "ElementAddElementPopover.SEARCH_BLOCKS": "Najdi gradnik",
     "ElementAddNewButton.ADD_BLOCK": "Dodaj gradnik",
+    "ElementAddNewButton.ADD_NEW_BLOCK": "Dodaj gradnik",
     "ElementArchiveAction.ARCHIVE": "Arhiv",
+    "ElementArchiveAction.ARCHIVE_PERMISSION_DENY": "Arhiviranje ni dovoljeno",
     "ElementArchiveAction.CONFIRM_DELETE": "Želite arhivirati izbrani gradnik?",
     "ElementArchiveAction.CONFIRM_DELETE_AND_UNPUBLISH": "Opozorilo: Gradnik bo umaknjen iz objave preden ga bomo arhivirali. Želite nadaljevati?",
+    "ElementArchiveAction.DUPLICATE": "Podvoji",
+    "ElementArchiveAction.DUPLICATE_PERMISSION_DENY": "Podvojitev ni dovoljena",
     "ElementEditForm.ERROR_NOTIFICATION": "Napaka pri prikazu obrazca za urejanje tega gradnika",
+    "ElementHeader.BROKEN": "Tip gradnika \"{type}\" ne obstaja več.",
     "ElementHeader.EXPAND": "Prikaži polja, ki jih je mogoče urejati",
     "ElementHeader.NOTITLE": "{type} gradnik brez naslova",
     "ElementHeader.STATE_DRAFT": "Ta gradnik še ni objavljen",
@@ -19,6 +24,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementList.ADD_BLOCKS": "Dodajte gradnik z vsebino",
     "ElementPublishAction.ERROR_NOTIFICATION": "Napaka pri objavi '{title}'",
     "ElementPublishAction.PUBLISH": "Objavi",
+    "ElementPublishAction.PUBLISH_PERMISSION_DENY": "Objava ni dovoljena",
     "ElementPublishAction.SUCCESS_NOTIFICATION": "Objavili smo '{title}'",
     "ElementSaveAction.ERROR_NOTIFICATION": "Napaka pri shranjevanju '{title}'",
     "ElementSaveAction.SAVE": "Shrani",
@@ -27,7 +33,13 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementUnpublishAction.ERROR_NOTIFICATION": "Napaka pri umiku '{title}' iz objave",
     "ElementUnpublishAction.SUCCESS_NOTIFICATION": "Z objavljene strani smo odstranili '{title}'",
     "ElementUnpublishAction.UNPUBLISH": "Umakni iz objave",
+    "ElementUnpublishAction.UNPUBLISH_PERMISSION_DENY": "Umik iz objave ni dovoljen",
+    "ElementalElement.ARCHIVE_BROKEN": "Arhiviraj gradnik",
+    "ElementalElement.BROKEN_DESCRIPTION": "Ta gradnik je pokvarjen in se ne bo prikazal na spletni strani. Lahko ga arhivirate in ga tako odstranite iz tega bloka.",
+    "ElementalElement.BROKEN_DESCRIPTION_TITLE": "Gradnik z naslovom \"{title}\" je pokvarjen in se ne bo prikazal na spletni strani. Lahko ga arhivirate in ga tako odstranite iz tega bloka.",
+    "ElementalElement.CHILD_RENDERING_ERROR": "Nekaj je narobe s tem gradnikom. Poskusite shraniti in osvežiti vmesnik za urejanje.",
     "ElementalElement.TITLE": "Urejanje gradnika {type}",
-    "HistoricElementView.BLOCK_HISTORY": "Prikaži gradnik"
+    "HistoricElementView.BLOCK_HISTORY": "Prikaži gradnik",
+    "HistoricElementView.VIEW_BLOCK_HISTORY": "Zgodovina"
 });
 }
