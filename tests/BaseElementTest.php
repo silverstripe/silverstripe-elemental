@@ -190,6 +190,15 @@ class BaseElementTest extends FunctionalTest
         $this->assertEquals('', $element->getStyleVariant());
     }
 
+    public function testIsFirst()
+    {
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+        $element2 = $this->objFromFixture(ElementContent::class, 'content2');
+
+        $this->assertTrue($element->IsFirst());
+        $this->assertFalse($element2->IsFirst());
+    }
+
     public function testFirst()
     {
         $element = $this->objFromFixture(ElementContent::class, 'content1');
@@ -197,6 +206,15 @@ class BaseElementTest extends FunctionalTest
 
         $this->assertTrue($element->First());
         $this->assertFalse($element2->First());
+    }
+
+    public function testIsLast()
+    {
+        $element = $this->objFromFixture(ElementContent::class, 'content1');
+        $element2 = $this->objFromFixture(ElementContent::class, 'content2');
+
+        $this->assertFalse($element->Last());
+        $this->assertTrue($element2->Last());
     }
 
     public function testLast()

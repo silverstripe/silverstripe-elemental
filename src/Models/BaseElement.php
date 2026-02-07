@@ -1233,19 +1233,39 @@ JS
     }
 
     /**
-     * @return boolean
+     * Returns true if this is the first element rendered in the ElementalArea
+     * @return bool
      */
-    public function First()
+    public function IsFirst(): bool
     {
         return ($this->Parent()->Elements()->first()->ID === $this->ID);
     }
 
     /**
-     * @return boolean
+     * @deprecated 5.4.0 Use IsFirst() instead.
+     */
+    public function First()
+    {
+        Deprecation::notice('5.4.0', 'Use IsFirst() instead');
+        return $this->IsFirst();
+    }
+
+    /**
+     * Returns true if this is the last element rendered in the ElementalArea
+     * @return bool
+     */
+    public function IsLast(): bool
+    {
+        return ($this->Parent()->Elements()->last()->ID === $this->ID);
+    }
+
+    /**
+     * @deprecated 5.4.0 Use IsLast() instead.
      */
     public function Last()
     {
-        return ($this->Parent()->Elements()->last()->ID === $this->ID);
+        Deprecation::notice('5.4.0', 'Use IsLast() instead');
+        return $this->IsLast();
     }
 
     /**
