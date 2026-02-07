@@ -6,7 +6,6 @@ use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use DNADesign\Elemental\ORM\FieldType\DBObjectType;
 use DNADesign\Elemental\Services\ReorderElements;
-use DNADesign\Elemental\TopPage\DataExtension;
 use Exception;
 use SilverStripe\CMS\Controllers\CMSPageEditController;
 use SilverStripe\CMS\Model\SiteTree;
@@ -94,7 +93,6 @@ class BaseElement extends DataObject implements CMSPreviewable
 
     private static $extensions = [
         Versioned::class,
-        DataExtension::class,
     ];
 
     private static $casting = [
