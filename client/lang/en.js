@@ -22,6 +22,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementHeader.STATE_DRAFT": "Item has not been published yet",
     "ElementHeader.STATE_MODIFIED": "Item has unpublished changes",
     "ElementList.ADD_BLOCKS": "Add blocks to place your content",
+    "ElementMoveAction.EDIT_LINK": "Go to edit form for new block parent",
     "ElementMoveAction.FAILED": "Failed to move element",
     "ElementMoveAction.MODAL_TITLE": "Move block {title}",
     "ElementMoveAction.MOVE": "Move",
