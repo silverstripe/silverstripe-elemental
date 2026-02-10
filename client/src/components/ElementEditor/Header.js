@@ -19,6 +19,10 @@ const Header = ({
   expandable = true,
   ElementActionsComponent,
   handleEditTabsClick,
+  sortableListeners,
+  sortableAttributes,
+  sortableActivatorRef,
+  elementId,
 }) => {
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -138,10 +142,20 @@ const Header = ({
     }
   );
   const blockIconId = `element-icon-${element.id}`;
+  const dragHandleLabel = i18n._t('ElementHeader.DRAG_HANDLE', 'Reorder block');
 
   return (
     <div className={containerClasses}>
-      <div className="element-editor-header__drag-handle">
+      <div
+        className="element-editor-header__drag-handle"
+        ref={sortableActivatorRef}
+        {...sortableListeners}
+        {...sortableAttributes}
+        tabIndex={0}
+        role="button"
+        aria-label={dragHandleLabel}
+        aria-controls={elementId}
+      >
         <span className="font-icon-drag-handle" aria-hidden="true" />
       </div>
       <div className="element-editor-header__info">
@@ -188,6 +202,12 @@ Header.propTypes = {
   ElementActionsComponent: PropTypes.elementType,
   previewExpanded: PropTypes.bool,
   disableTooltip: PropTypes.bool,
+  sortableListeners: PropTypes.object,
+  sortableAttributes: PropTypes.object,
+  sortableActivatorRef: PropTypes.func,
+  elementId: PropTypes.string,
+  expandable: PropTypes.bool,
+  handleEditTabsClick: PropTypes.func,
 };
 
 export { Header as Component };

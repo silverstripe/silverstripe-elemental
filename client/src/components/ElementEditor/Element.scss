@@ -12,7 +12,8 @@
 
   &:hover {
     .element-editor-header__drag-handle {
-      display: block;
+      opacity: 1;
+      pointer-events: auto;
     }
   }
 
@@ -20,6 +21,11 @@
     // Set this explicitly instead of just setting the variable beacause
     // we don't want to affect child items
     outline-offset: var(--focus-outline-offset-inset);
+
+    .element-editor-header__drag-handle {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 
   &--broken {
@@ -29,5 +35,10 @@
   &--dragging {
     opacity: 0.3;
     cursor: grabbing;
+
+    .element-editor-header__drag-handle {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 }

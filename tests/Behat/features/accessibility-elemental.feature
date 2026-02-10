@@ -28,6 +28,7 @@ Feature: Accessibility
     And I press the "Tab" key globally
     And I press the "Tab" key globally
     And I press the "Tab" key globally
+    And I press the "Tab" key globally
     Then the "#Form_EditForm_Metadata .ui-accordion-header" element should have focus
 
     # Render the form
@@ -36,12 +37,14 @@ Feature: Accessibility
     # Do a quick check that we can tab to a field in the form
     And I press the "Tab" key globally
     And I press the "Tab" key globally
+    And I press the "Tab" key globally
     Then the ".element-editor__element input[type='text']" element should have focus
 
     # Tab through a rendered inline when collapsed (should be the same number of tabs as unrendered)
     When I click on the caret button for block 1
     Then I should not see "My file"
     When I click on the "#Form_EditForm_MenuTitle" element
+    And I press the "Tab" key globally
     And I press the "Tab" key globally
     And I press the "Tab" key globally
     And I press the "Tab" key globally

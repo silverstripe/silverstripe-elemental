@@ -25,15 +25,28 @@ Feature: View types of elements in an area on a page
     When I go to "/admin/pages"
     And I left click on "Blocks Page" in the tree
       Then I should see a list of blocks
-
     When I press the "View actions" button
       Then I should not see "Title"
+
+  Scenario: Clicking the drag handle will not expand a block
+    Given I am logged in as a member of "AUTHOR" group
+    When I go to "/admin/pages"
+    And I left click on "Blocks Page" in the tree
+    When I see a list of blocks
+    Then I should see "Alice's Block" as the title for block 1
+    And I should see "Bob's Block" as the title for block 2
+    # Tab to the block so that the drag handle show for the active block (hidden by default)
+    When I click on the "#Form_EditForm_MenuTitle" element
+    And I press the "Tab" key globally
+    And I press the "Tab" key globally
+    And I press the "Tab" key globally
+    When I click on the ".element-editor-header__drag-handle" element
+    Then I should not see the edit form for block 1
 
   Scenario: I can see the block type when I hover over an element's icon
     Given I am logged in as a member of "AUTHOR" group
     When I go to "/admin/pages"
       And I left click on "Blocks Page" in the tree
-
     When I see a list of blocks
       And I hover over the icon of block 1
       Then I should see text matching "Content"
@@ -127,6 +140,7 @@ Feature: View types of elements in an area on a page
     # More actions menu can be accessed and hidden with keyboard actions
     # Doing so does not collapse the block as a whole
     When I press the "tab" key globally
+    When I press the "tab" key globally
     Then I should not see "Duplicate"
     And I should see the edit form for block 1
     # open menu with space and close with escape
@@ -146,6 +160,7 @@ Feature: View types of elements in an area on a page
 
     # Block can be collapsed with keyboard actions
     When I press the "shift-tab" key globally
+    When I press the "shift-tab" key globally
     And I press the "space" key globally
     And I wait for 1 seconds
     Then I should not see the edit form for block 1
@@ -154,3 +169,76 @@ Feature: View types of elements in an area on a page
     When I press the "space" key globally
     And I wait for 1 seconds
     Then I should see the edit form for block 1
+
+  Scenario: Keyboard navigation for block reordering
+    Given a "page" "Blocky" with a "Block 1" content element with "My content" content
+    And the "page" "Blocky" has a "Block 2" content element with "My other" content
+    And I am logged in as a member of "AUTHOR" group
+    And I go to "/admin/pages"
+    And I follow "Blocky"
+    When I press the "Publish" button
+    Then I should see a "Published Page "Blocky"" success toast
+    And I wait for 1 seconds
+    # Note that :nth-of-type() selectors are x2 what you'd expect them to be, (2) is the 1st block
+    Then I should not see a ".element-editor__element:nth-of-type(2) .badge" element
+    # Assert the order is correct
+    Then the element order should be "Block 1,Block 2"
+    # Tab to the drag handle of the first block
+    When I click on the "#Form_EditForm_MenuTitle" element
+    And I press the "Tab" key globally
+    And I press the "Tab" key globally
+    And I press the "Tab" key globally
+    And I press the "Tab" key globally
+    Then the ".element-editor-header__drag-handle" element should have focus
+    # Move the element with space
+    When I press the "Space" key globally
+    And I press the "Down" key globally
+    When I press the "Space" key globally
+    Then the element order should be "Block 2,Block 1"
+    # Note that :nth-of-type() selectors are x2 what you'd expect them to be, (4) is the 2nd block
+    And I should see a ".element-editor__element:nth-of-type(4) .badge.status-modified" element
+    # Note that :nth-of-type() selectors are x2 what you'd expect them to be, (2) is the 1st block
+    And I should not see a ".element-editor__element:nth-of-type(2) .badge" element
+    # Move the element with enter
+    When I press the "Enter" key globally
+    When I press the "Up" key globally
+    When I press the "Enter" key globally
+    Then the element order should be "Block 1,Block 2"
+    # Move the element down and refresh the page to confirm it saved correctly after moving
+    When I press the "Enter" key globally
+    When I press the "Down" key globally
+    When I press the "Enter" key globally
+    Then the element order should be "Block 2,Block 1"
+    And I go to "/admin/pages"
+    And I follow "Blocky"
+    Then the element order should be "Block 2,Block 1"
+
+  @unsavedChanges @modal
+  Scenario: Moving a block with unsaved changes using keyboard keeps the inline form state
+    Given I am logged in as a member of "AUTHOR" group
+    When I go to "/admin/pages"
+    And I follow "Blocks Page"
+    When I see a list of blocks
+    And I click on the "#Form_EditForm_MenuTitle" element
+    And I press the "Tab" key globally
+    And I press the "Tab" key globally
+    And I press the "Tab" key globally
+    # Expand the block
+    And I press the "Space" key globally
+    And I fill in "<p>Unsaved change</p>" for the "Content" HTML field
+    And I press the "Tab" key globally
+    Then the ".element-editor-header__drag-handle" element should have focus
+    When I press the "Space" key globally
+    And I press the "Down" key globally
+    And I press the "Space" key globally
+    Then the element order should be "Bob's Block,Alice's Block"
+    # Expand the block again as it collapsed during move
+    And I press the "Shift-Tab" key globally
+    And I press the "Space" key globally
+    And the "Content" field for block 2 should contain "<p>Unsaved change</p>"
+    # Confirm content was not changed on page reload (only sort order was)
+    When I go to "/admin/pages"
+    # Bypass the "you have unsaved changes" dialog
+    And I confirm the dialog
+    And I follow "Blocks Page"
+    Then I should see "Some content" as the summary for block 2

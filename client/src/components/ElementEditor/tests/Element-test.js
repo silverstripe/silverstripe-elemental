@@ -2,7 +2,7 @@
 /* global jest, test, describe, it, expect */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { Component as Element } from '../Element';
 import { ElementEditorContext } from '../ElementEditor';
 
@@ -29,7 +29,7 @@ function makeProps(obj = {}) {
       title: 'Content'
     },
     link: 'admin/pages/edit/EditForm/7/field/ElementalArea/item/2/edit?stage=Stage',
-    HeaderComponent: () => <div className="test-header" />,
+    HeaderComponent: (props) => <div className="test-header" data-testid="header" {...props} />,
     ContentComponent: () => <div className="test-content" />,
     connectDragSource: (el) => el,
     connectDragPreview: (el) => el,
@@ -138,4 +138,74 @@ test('Element getVersionedStateClassName() should identify published elements', 
     </ElementEditorContext.Provider>
   );
   expect(container.querySelectorAll('.element-editor__element--published')).toHaveLength(1);
+});
+
+test('Element sets DOM id and passes elementId to header', () => {
+  const headerProps = {};
+  const TestHeader = (props) => {
+    Object.assign(headerProps, props);
+    return <div className="test-header" />;
+  };
+
+  const { container } = render(
+    <ElementEditorContext.Provider {...makeProviderProps()}>
+      <Element {...makeProps({
+        HeaderComponent: TestHeader,
+      })}
+      />
+    </ElementEditorContext.Provider>
+  );
+
+  expect(container.querySelector('.element-editor__element').id).toBe('element-2');
+  expect(headerProps.sortableListeners).toBeDefined();
+  expect(headerProps.sortableAttributes).toBeDefined();
+  expect(headerProps.elementId).toBe('element-2');
+});
+
+test('Element main div does not have sortable listeners and attributes spread directly', () => {
+  const { container } = render(
+    <ElementEditorContext.Provider {...makeProviderProps()}>
+      <Element {...makeProps()}/>
+    </ElementEditorContext.Provider>
+  );
+
+  const element = container.querySelector('.element-editor__element');
+  const attributes = element.attributes;
+  const attributeNames = Array.from(attributes).map(attr => attr.name);
+
+  expect(attributeNames.includes('data-sortable-id')).toBe(false);
+});
+
+test('Element keyup on drag handle child does not toggle preview', () => {
+  let lastPreviewExpanded = null;
+  const TestHeader = ({ previewExpanded }) => {
+    lastPreviewExpanded = previewExpanded;
+    return (
+      <div className="element-editor-header__drag-handle">
+        <span data-testid="drag-handle-child">Drag</span>
+      </div>
+    );
+  };
+  const TestContent = ({ previewExpanded }) => (
+    <div data-testid="preview-state">{previewExpanded ? 'expanded' : 'collapsed'}</div>
+  );
+  const { getByTestId } = render(
+    <ElementEditorContext.Provider {...makeProviderProps()}>
+      <Element {...makeProps({
+        HeaderComponent: TestHeader,
+        ContentComponent: TestContent,
+        type: {
+          icon: 'font-icon-block-content',
+          title: 'Content',
+          inlineEditable: true,
+        },
+      })}
+      />
+    </ElementEditorContext.Provider>
+  );
+
+  expect(getByTestId('preview-state').textContent).toBe('collapsed');
+  fireEvent.keyUp(getByTestId('drag-handle-child'), { key: 'Enter' });
+  expect(getByTestId('preview-state').textContent).toBe('collapsed');
+  expect(lastPreviewExpanded).toBe(false);
 });

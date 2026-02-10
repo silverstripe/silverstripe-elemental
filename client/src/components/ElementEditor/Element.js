@@ -45,6 +45,7 @@ const Element = (props) => {
     attributes,
     listeners,
     setNodeRef,
+    setActivatorNodeRef,
     transform,
     transition,
     isDragging,
@@ -55,6 +56,23 @@ const Element = (props) => {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
+  // Defensive fallback: useSortable() returns listeners as an object or undefined (not guaranteed
+  // to always be defined), so we normalise to {} to safely call Object.entries() below.
+  const sortableListeners = listeners || {};
+  // Split dnd-kit listeners into keyboard vs pointer groups so they can be attached to different
+  // DOM nodes: pointer listeners stay on the outer element container (for mouse/touch drag),
+  // while keyboard listeners are forwarded to the drag-handle button inside the header so that
+  // keyboard-initiated sorting activates only from the focused handle, not the whole block.
+  const keyboardListeners = {};
+  const pointerListeners = {};
+  Object.entries(sortableListeners).forEach(([key, value]) => {
+    if (key.startsWith('onKey')) {
+      keyboardListeners[key] = value;
+      return;
+    }
+    pointerListeners[key] = value;
+  });
 
   const formRenderedIfNeeded = formHasRendered || !props.type.inlineEditable;
 
@@ -247,6 +265,13 @@ const Element = (props) => {
     if (type.broken) {
       return;
     }
+    const dragHandle = event.target.closest
+      ? event.target.closest('.element-editor-header__drag-handle')
+      : null;
+    if (dragHandle) {
+      event.stopPropagation();
+      return;
+    }
     if (event.target.type === 'button') {
       // Stop bubbling if the click target was a button within this container
       event.stopPropagation();
@@ -268,9 +293,14 @@ const Element = (props) => {
    */
   const handleKeyUp = (event) => {
     const { nodeName } = event.target;
+    const dragHandle = event.target.closest
+      ? event.target.closest('.element-editor-header__drag-handle')
+      : null;
     if ((event.key === ' ' || event.key === 'Enter')
       // Ignore presses while focusing inputs and textareas
       && !['input', 'textarea'].includes(nodeName.toLowerCase())
+      // Ignore presses while focused on the drag handle
+      && !dragHandle
     ) {
       handleExpand(event);
     }
@@ -341,6 +371,7 @@ const Element = (props) => {
     return null;
   }
 
+  const elementDomId = `element-${element.id}`;
   const elementClassNames = classNames(
     'element-editor__element',
     {
@@ -360,6 +391,7 @@ const Element = (props) => {
   };
 
   const content = <div
+    id={elementDomId}
     className={elementClassNames}
     onClick={handleExpand}
     onKeyUp={handleKeyUp}
@@ -367,10 +399,8 @@ const Element = (props) => {
     tabIndex={0}
     title={getLinkTitle(type)}
     key={element.id}
-    // sortable properties
     ref={setNodeRef}
-    {...attributes}
-    {...listeners}
+    {...pointerListeners}
     style={style}
   >
     <ElementContext.Provider value={providerValue}>
@@ -384,6 +414,10 @@ const Element = (props) => {
         handleEditTabsClick={handleTabClick}
         activeTab={activeTab}
         disableTooltip={isDragging}
+        sortableListeners={keyboardListeners}
+        sortableAttributes={attributes}
+        sortableActivatorRef={setActivatorNodeRef}
+        elementId={elementDomId}
       />
       <ContentComponent
         id={element.id}
@@ -467,7 +501,7 @@ Element.propTypes = {
   activeTab: PropTypes.string,
   tabSetName: PropTypes.string,
   onActivateTab: PropTypes.func,
-  isOver: PropTypes.bool.isRequired,
+  onChangeHasUnsavedChanges: PropTypes.func.isRequired,
   saveElement: PropTypes.bool.isRequired,
   onBeforeSubmitForm: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
   onAfterSubmitResponse: PropTypes.func.isRequired,
