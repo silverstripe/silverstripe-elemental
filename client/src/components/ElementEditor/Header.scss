@@ -84,14 +84,21 @@
   }
 
   &__drag-handle {
-    display: none;
+    display: block;
+    opacity: 0;
+    pointer-events: none;
     position: absolute;
     left: 5px;
     cursor: grab;
+
+    &:focus-visible {
+      border-radius: 0.125rem;
+    }
   }
 
   &--simple &__drag-handle {
-    display: block;
+    opacity: 1;
+    pointer-events: auto;
   }
 
   &--simple &__info {

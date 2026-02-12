@@ -374,12 +374,50 @@ test('Header should toggle tooltip state when icon is clicked', async () => {
   />);
 });
 
-test('Header should render info section with title and icon', () => {
-  const { container } = render(<Header {...makeProps()} />);
-  const infoSection = container.querySelector('.element-editor-header__info');
-  expect(infoSection).not.toBeNull();
-  expect(infoSection.querySelector('.element-editor-header__icon-container')).not.toBeNull();
-  expect(infoSection.querySelector('h3.element-editor-header__title')).not.toBeNull();
+test('Header should render drag handle with accessibility attributes when sortable props are provided', () => {
+  const { container } = render(
+    <Header {...makeProps({
+      sortableListeners: {},
+      sortableAttributes: { 'data-test': 'test' },
+      elementId: 'element-123',
+    })}
+    />
+  );
+  const dragHandle = container.querySelector('.element-editor-header__drag-handle');
+  expect(dragHandle).not.toBeNull();
+  expect(dragHandle.getAttribute('tabindex')).toBe('0');
+  expect(dragHandle.getAttribute('role')).toBe('button');
+  expect(dragHandle.getAttribute('aria-label')).not.toBeNull();
+  expect(dragHandle.getAttribute('aria-controls')).toBe('element-123');
+});
+
+test('Header should have drag handle with correct aria-label text', () => {
+  const { container } = render(
+    <Header {...makeProps({
+      sortableListeners: {},
+      sortableAttributes: {},
+      elementId: 'element-456',
+    })}
+    />
+  );
+  const dragHandle = container.querySelector('.element-editor-header__drag-handle');
+  expect(dragHandle.getAttribute('aria-label')).toContain('Reorder block');
+});
+
+test('Header should receive onKeyDown handler from sortableListeners on drag handle', () => {
+  const mockOnKeyDown = jest.fn();
+  const { container } = render(
+    <Header {...makeProps({
+      sortableListeners: { onKeyDown: mockOnKeyDown },
+      sortableAttributes: {},
+      elementId: 'element-789',
+    })}
+    />
+  );
+  const dragHandle = container.querySelector('.element-editor-header__drag-handle');
+  const event = new KeyboardEvent('keydown', { key: ' ', bubbles: true });
+  dragHandle.dispatchEvent(event);
+  expect(mockOnKeyDown).toHaveBeenCalled();
 });
 
 test('Header should have correct element type icon class', () => {
@@ -452,4 +490,31 @@ test('Header should pass correct props to ElementActionsComponent', () => {
     }),
     {}
   );
+});
+
+test('Header drag handle should be focusable and have tabIndex', () => {
+  const { container } = render(
+    <Header {...makeProps({
+      sortableListeners: {},
+      sortableAttributes: {},
+      elementId: 'element-focus',
+    })}
+    />
+  );
+  const dragHandle = container.querySelector('.element-editor-header__drag-handle');
+  expect(dragHandle.getAttribute('tabindex')).toBe('0');
+});
+
+test('Header drag handle should be visible when focused', () => {
+  const { container } = render(
+    <Header {...makeProps({
+      sortableListeners: {},
+      sortableAttributes: {},
+      elementId: 'element-focus-visible',
+    })}
+    />
+  );
+  const dragHandle = container.querySelector('.element-editor-header__drag-handle');
+  fireEvent.focus(dragHandle);
+  expect(dragHandle.classList.contains('element-editor-header__drag-handle')).toBe(true);
 });

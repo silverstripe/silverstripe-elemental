@@ -6,10 +6,85 @@ import { compose } from 'redux';
 import { inject } from 'lib/Injector';
 import classNames from 'classnames';
 import i18n from 'i18n';
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  KeyboardSensor,
+  KeyboardCode,
+  useSensor,
+  useSensors
+} from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers';
 import { getElementTypeConfig } from 'state/editor/elementConfig';
+
+export const keyboardCoordinateGetter = (event, args) => {
+  event.preventDefault();
+  const { active, over, droppableContainers } = args.context;
+  if (!droppableContainers) {
+    return undefined;
+  }
+  if (!active || !active.data || !active.data.current) {
+    return undefined;
+  }
+  const { sortable } = active.data.current;
+  if (!sortable || !Array.isArray(sortable.items)) {
+    return undefined;
+  }
+  const items = sortable.items;
+  const overId = over ? over.id : active.id;
+  const overIndex = items.indexOf(overId);
+  const activeIndex = items.indexOf(active.id);
+  if (overIndex === -1 || activeIndex === -1) {
+    return undefined;
+  }
+  const directionUp = -1;
+  const directionDown = 1;
+  let nextIndex = overIndex;
+  let direction = directionDown;
+  switch (event.code) {
+    case KeyboardCode.Down:
+    case KeyboardCode.Right:
+      nextIndex = Math.min(overIndex + 1, items.length - 1);
+      break;
+    case KeyboardCode.Up:
+    case KeyboardCode.Left:
+      nextIndex = Math.max(0, overIndex - 1);
+      direction = directionUp;
+      break;
+    default:
+      return undefined;
+  }
+  if (overIndex === nextIndex) {
+    return undefined;
+  }
+  const sortedItems = arrayMove(items, activeIndex, overIndex);
+  const currentNodeIdAtNextIndex = sortedItems[nextIndex];
+  if (!droppableContainers.has(currentNodeIdAtNextIndex)) {
+    return undefined;
+  }
+  if (!droppableContainers.has(active.id)) {
+    return undefined;
+  }
+  const activeNode = droppableContainers.get(active.id).node?.current;
+  if (!activeNode) {
+    return undefined;
+  }
+  const newNode = droppableContainers.get(currentNodeIdAtNextIndex).node?.current;
+  if (!newNode) {
+    return undefined;
+  }
+  const activeRect = activeNode.getBoundingClientRect();
+  const newRect = newNode.getBoundingClientRect();
+  const offset = direction === directionDown
+    ? newRect.top - activeRect.bottom
+    : activeRect.top - newRect.bottom;
+  return {
+    x: 0,
+    y: activeRect.top + direction * (newRect.height + offset),
+  };
+};
 
 function ElementList({
   elements = [],
@@ -35,7 +110,6 @@ function ElementList({
   const [increment, setIncrement] = useState(0);
   const [hasUnsavedChangesBlockIDs, setHasUnsavedChangesBlockIDs] = useState({});
   const [validBlockIDs, setValidBlockIDs] = useState({});
-
   // Update the sharedObject so state can be set from entwine.js
   sharedObject.setIncrement = setIncrement;
   sharedObject.setSaveAllElements = setSaveAllElements;
@@ -139,7 +213,22 @@ function ElementList({
         distance: 10
       }
     }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: keyboardCoordinateGetter
+    })
   );
+
+  const handleDragStart = (event) => {
+    if (onDragStart) {
+      onDragStart(event);
+    }
+  };
+
+  const handleDragEnd = (event) => {
+    if (onDragEnd) {
+      onDragEnd(event);
+    }
+  };
 
   const handleChangeHasUnsavedChanges = (elementID, hasUnsavedChanges) => {
     setHasUnsavedChangesBlockIDs({
@@ -215,8 +304,8 @@ function ElementList({
       modifiers={[restrictToVerticalAxis, restrictToParentElement]}
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
     >
       <SortableContext
         items={elements.map(element => element.id)}
@@ -244,6 +333,7 @@ function ElementList({
     { 'elemental-editor-list--empty': !elements || !elements.length }
   );
 
+  // return <div className={listClassNames} ref={listRef}>
   return <div className={listClassNames}>
     {renderLoading()}
     {renderBlocks()}
