@@ -96,7 +96,7 @@ Feature: Edit elements in the CMS
       Then I should see "New sample content"
       And I should see "Charlie's Block"
 
-  @unsavedChanges @sboyd
+  @unsavedChanges
   Scenario: I can edit inline-editable blocks and save the page as a whole
     Given I see a list of blocks
     Given I click on block 1

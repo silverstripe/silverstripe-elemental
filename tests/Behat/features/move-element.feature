@@ -131,7 +131,7 @@ Feature: Move elements in the CMS
     # Open move modal, select the new parent class, and move the block
     When I press the "View actions" button for block 1
     And I press the "Move" button
-    And I select "SilverStripe\FrameworkTest\Elemental\Model\ElementalBehatTestObject" from "ParentClass"
+    And I select "SilverStripe\FrameworkTest\Elemental\Model\ElementalBehatTestObject" from "Parent type"
     # we can skip selecting the parent record itself because there's only one, so it's pre-selected
     When I press the "Move" button
     # The ElementalBehatTestObject class returns null for getCMSEditLink, so we shouldn't provide a link
@@ -144,9 +144,9 @@ Feature: Move elements in the CMS
     Then the "Title" field for block 1 should contain "Lorem"
     When I press the "View actions" button for block 1
     And I press the "Move" button
-    And I select "SilverStripe\FrameworkTest\Elemental\Model\MultiElementalBehatTestObject" from "ParentClass"
+    And I select "SilverStripe\FrameworkTest\Elemental\Model\MultiElementalBehatTestObject" from "Parent type"
     And I click on the "#Form_ElementForm_3_move_ParentID" element
     And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
-    And I select "ElementalArea2" from "ElementalAreaRelation"
+    And I select "ElementalArea2" from "Elemental Area"
     And I press the "Move" button
     And I should see a "Moved block 'Lorem' successfully" success toast with these actions: Go to edit form for new block parent
