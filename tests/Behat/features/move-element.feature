@@ -147,6 +147,7 @@ Feature: Move elements in the CMS
     And I select "SilverStripe\FrameworkTest\Elemental\Model\MultiElementalBehatTestObject" from "ParentClass"
     And I click on the "#Form_ElementForm_3_move_ParentID" element
     And I click on the ".ss-searchable-dropdown-field__option:nth-of-type(2)" element
+    And I wait for 1 second
     And I select "ElementalArea2" from "ElementalAreaRelation"
     And I press the "Move" button
     And I should see a "Moved block 'Lorem' successfully" success toast with these actions: Go to edit form for new block parent
