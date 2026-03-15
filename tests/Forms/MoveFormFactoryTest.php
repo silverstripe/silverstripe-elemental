@@ -410,7 +410,7 @@ class MoveFormFactoryTest extends SapphireTest
                     TestPreviewableDataObjectWithLink::class => TestPreviewableDataObjectWithLink::class,
                 ],
             ],
-            'ignore some classes incl implicity ignoring subclasses' => [
+            'ignore some classes incl implicitly ignoring subclasses' => [
                 'recordClass' => TestElementContent::class,
                 'configToSet' => [
                     ElementalAreasExtension::class => [
