@@ -308,7 +308,7 @@ class ElementalAreasExtension extends Extension implements Resettable
             $area->OwnerClassName = $owner->ClassName;
             // Do not attempt to set the ElementalArea.TopPageID if the owner (e.g. Page)
             // has not yet been persisted to the database, as this will cause a potentially
-            // large number of unneccessary database queries
+            // large number of unnecessary database queries
             if (!$owner->isInDB() && $area::has_extension(TopPageElementExtension::class)) {
                 /** @var ElementalArea&TopPageElementExtension $area */
                 $area->withoutCallingSetTopPage(fn() => $area->write());

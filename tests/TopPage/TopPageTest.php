@@ -118,7 +118,7 @@ class TopPageTest extends SapphireTest
 
     public function testNewPage(): void
     {
-        // Explicity set the reading mode to Stage.Stage because there is logic in
+        // Explicitly set the reading mode to Stage.Stage because there is logic in
         // ElementalAreasExtension::allowAlteringElementalArea() that requires it,
         // and the default reading mode for unit tests is blank string
         Versioned::set_stage(Versioned::DRAFT);
