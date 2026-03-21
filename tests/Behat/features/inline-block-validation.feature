@@ -27,7 +27,7 @@ Feature: Blocks are validated when inline saving individual blocks
     And I click on the ".element-editor__actions-save" element
     And I dismiss all toasts
 
-  # Note that each test is split into a seperate scenario instead a large single scenario which would
+  # Note that each test is split into a separate scenario instead a large single scenario which would
   # be faster due to a limitation with behat testing react where changing the value of a field can
   # sometimes lead to the value of field being suffixed rather than replaced
 

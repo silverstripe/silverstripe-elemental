@@ -182,7 +182,7 @@ class TopPageElementExtension extends Extension
             return;
         }
 
-        // set the page to properties in case this object is re-used later
+        // set the page to properties in case this object is reused later
         $this->assignTopPage($page);
         $this->saveChanges();
     }

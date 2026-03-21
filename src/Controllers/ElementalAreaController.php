@@ -472,7 +472,7 @@ class ElementalAreaController extends FormSchemaController
     {
         $request = $this->getRequest();
 
-        // Check security token for non-view operation - note token is pased in POST body, not headers
+        // Check security token for non-view operation - note token is passed in POST body, not headers
         if (!SecurityToken::inst()->checkRequest($request)) {
             $this->jsonError(400);
         }

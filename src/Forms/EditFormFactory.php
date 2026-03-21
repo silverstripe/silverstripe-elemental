@@ -69,7 +69,7 @@ class EditFormFactory extends DefaultFormFactory
         foreach ($compositeValidator->getValidatorsByType(RequiredFieldsValidator::class) as $validator) {
             $requiredFields = $validator->getRequired();
             foreach ($requiredFields as $requiredField) {
-                // Add more required fields with appendend field prefixes
+                // Add more required fields with appended field prefixes
                 // this is done so that front end validation works, at least for RequiredFieldsValidator
                 // you'll end up with two sets of required fields:
                 // - Title -- used for backend validation when inline saving an element

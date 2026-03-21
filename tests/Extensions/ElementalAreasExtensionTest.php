@@ -132,7 +132,7 @@ class ElementalAreasExtensionTest extends SapphireTest
 
     public function testRequireDefaultRecords()
     {
-        // Explicity set the reading mode to Stage.Stage because there is logic in
+        // Explicitly set the reading mode to Stage.Stage because there is logic in
         // ElementalAreasExtension::allowAlteringElementalArea() that requires it,
         // and the default reading mode for unit tests is blank string
         Versioned::set_stage(Versioned::DRAFT);
