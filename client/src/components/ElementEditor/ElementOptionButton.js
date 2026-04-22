@@ -16,7 +16,7 @@ const ElementOptionButton = ({
     {...props}
   >
     {icon && <span className={`btn__icon ${icon}`} aria-hidden="true" />}
-    {noText ? undefined : children}
+    {noText ? undefined : <span className="btn__title">{children}</span>}
   </BaseButton>);
 
 ElementOptionButton.propTypes = {

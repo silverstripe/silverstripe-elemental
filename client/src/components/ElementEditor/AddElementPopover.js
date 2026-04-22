@@ -78,7 +78,7 @@ const AddElementPopover = ({
   );
 
   const buttons = elementTypes.map((elementType) => ({
-    content: <span className="btn__title">{elementType.title}</span>,
+    content: elementType.title,
     key: elementType.name,
     className: classNames('btn--icon-xl', 'element-editor-add-element__button'),
     icon: elementType.icon,
