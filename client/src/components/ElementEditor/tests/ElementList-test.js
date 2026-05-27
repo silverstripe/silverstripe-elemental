@@ -2,7 +2,7 @@
 /* global jest, test, describe, it, expect, beforeEach, afterEach */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { KeyboardCode } from '@dnd-kit/core';
 import { Component as ElementList, keyboardCoordinateGetter } from '../ElementList';
 
@@ -238,4 +238,135 @@ test('keyboardCoordinateGetter returns undefined when node refs are missing', ()
     result = keyboardCoordinateGetter(event, args);
   }).not.toThrow();
   expect(result).toBeUndefined();
+});
+
+// Helpers for the batch-save tests below.
+function makeBatchElement(id) {
+  return {
+    id,
+    title: `Block ${id}`,
+    blockSchema: { actions: { edit: '' } },
+    inlineEditable: true,
+    published: true,
+    liveVersion: true,
+    version: 1,
+  };
+}
+
+function renderForBatchSave({ elements, sharedObject }) {
+  // Captures the latest per-element props per render so handler calls in the
+  // test hit the same closure that parallel XHR responses would see.
+  const latestPropsById = {};
+  const ElementComponent = (props) => {
+    latestPropsById[props.element.id] = props;
+    return <div className="test-batch-element" data-element-id={props.element.id} />;
+  };
+  render(<ElementList {...makeProps({
+    elements,
+    sharedObject,
+    ElementComponent,
+    HoverBarComponent: () => null,
+    LoadingComponent: () => null,
+    dragging: false,
+  })}/>);
+  return latestPropsById;
+}
+
+test('ElementList calls entwineResolve once when multiple inline forms save in parallel during a batch save', () => {
+  const sharedObject = {
+    entwineResolve: jest.fn(),
+    setIncrement: null,
+    setSaveAllElements: null,
+  };
+  const elements = [1, 2, 3, 4].map(makeBatchElement);
+  const propsById = renderForBatchSave({ elements, sharedObject });
+
+  // Mark each block dirty in its own act() so each commits independently
+  // (one act() would let the same stale-closure bug hide itself).
+  elements.forEach(({ id }) => {
+    act(() => {
+      propsById[id].onChangeHasUnsavedChanges(true);
+    });
+  });
+
+  // Parent form click — entwine.js writes these via sharedObject.
+  act(() => {
+    sharedObject.setIncrement(1);
+    sharedObject.setSaveAllElements(true);
+  });
+
+  // All four saves resolve in the same React batch (parallel XHRs).
+  act(() => {
+    elements.forEach(({ id }) => {
+      propsById[id].onBeforeSubmitForm();
+      propsById[id].onAfterSubmitResponse(true);
+    });
+  });
+
+  expect(sharedObject.entwineResolve).toHaveBeenCalledTimes(1);
+  expect(sharedObject.entwineResolve).toHaveBeenCalledWith({ success: true, reason: '' });
+});
+
+test('ElementList still resolves entwineResolve when the elements prop updates mid batch save', () => {
+  // An elements refetch during a batch must not reset validBlockIDs.
+  const sharedObject = {
+    entwineResolve: jest.fn(),
+    setIncrement: null,
+    setSaveAllElements: null,
+  };
+  const elements = [1, 2, 3, 4].map(makeBatchElement);
+
+  const latestPropsById = {};
+  const ElementComponent = (props) => {
+    latestPropsById[props.element.id] = props;
+    return <div className="test-batch-element" data-element-id={props.element.id} />;
+  };
+  const { rerender } = render(<ElementList {...makeProps({
+    elements,
+    sharedObject,
+    ElementComponent,
+    HoverBarComponent: () => null,
+    LoadingComponent: () => null,
+    dragging: false,
+  })}/>);
+
+  elements.forEach(({ id }) => {
+    act(() => {
+      latestPropsById[id].onChangeHasUnsavedChanges(true);
+    });
+  });
+
+  act(() => {
+    sharedObject.setIncrement(1);
+    sharedObject.setSaveAllElements(true);
+  });
+
+  act(() => {
+    [1, 2].forEach((id) => {
+      latestPropsById[id].onBeforeSubmitForm();
+      latestPropsById[id].onAfterSubmitResponse(true);
+    });
+  });
+
+  // Simulates an in-flight fetchElements() response landing mid-batch.
+  act(() => {
+    rerender(<ElementList {...makeProps({
+      elements: elements.map(e => ({ ...e })),
+      sharedObject,
+      ElementComponent,
+      HoverBarComponent: () => null,
+      LoadingComponent: () => null,
+      dragging: false,
+    })}/>);
+  });
+
+  act(() => {
+    [3, 4].forEach((id) => {
+      latestPropsById[id].onBeforeSubmitForm();
+      latestPropsById[id].onAfterSubmitResponse(true);
+    });
+  });
+
+  expect(sharedObject.entwineResolve).toHaveBeenCalledTimes(1);
+  expect(sharedObject.entwineResolve).toHaveBeenCalledWith({ success: true, reason: '' });
 });
