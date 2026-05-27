@@ -1,6 +1,6 @@
 /* global window */
 
-import React, { useState, useEffect, useContext, createContext } from 'react';
+import React, { useState, useEffect, useContext, useRef, createContext } from 'react';
 import PropTypes from 'prop-types';
 import { elementType } from 'types/elementType';
 import { elementTypeType } from 'types/elementTypeType';
@@ -40,6 +40,9 @@ const Element = (props) => {
   const [ensureFormRendered, setEnsureFormRendered] = useState(false);
   const [formHasRendered, setFormHasRendered] = useState(false);
   const [formActiveTab, setFormActiveTab] = useState(null);
+  // True while the in-flight save was triggered by saveAllElements; used to
+  // skip the per-element fetchElements() since the parent form remount refetches.
+  const isBatchSaveRef = useRef(false);
   const { fetchElements } = useContext(ElementEditorContext);
   const {
     attributes,
@@ -82,6 +85,7 @@ const Element = (props) => {
 
   useEffect(() => {
     if (props.saveElement && props.formDirty && !doSaveElement) {
+      isBatchSaveRef.current = true;
       setDoSaveElement(true);
     }
   }, [props.saveElement, props.formDirty, props.increment]);
@@ -307,6 +311,7 @@ const Element = (props) => {
   };
 
   const handleSaveButtonClick = () => {
+    isBatchSaveRef.current = false;
     setEnsureFormRendered(true);
     setDoSaveElement(true);
   };
@@ -340,6 +345,7 @@ const Element = (props) => {
       if (doPublishElementAfterSave) {
         setDoPublishElementAfterSave(false);
       }
+      isBatchSaveRef.current = false;
       props.onAfterSubmitResponse(false);
       return;
     }
@@ -353,7 +359,12 @@ const Element = (props) => {
       showSavedElementToast(title);
     }
     props.onAfterSubmitResponse(true);
-    fetchElements();
+    // During a batch save the parent form remount refetches — skip here to
+    // avoid N redundant readElements round-trips.
+    if (!isBatchSaveRef.current) {
+      fetchElements();
+    }
+    isBatchSaveRef.current = false;
   };
 
   const {
