@@ -13,6 +13,7 @@ import backend from 'lib/Backend';
 import Config from 'lib/Config';
 import { ElementEditorContext } from 'components/ElementEditor/ElementEditor';
 import getJsonErrorMessage from 'lib/getJsonErrorMessage';
+import ElementOptionButton from './ElementOptionButton';
 
 /**
  * The AddElementPopover component used in the context of an ElementEditor shows the
@@ -77,10 +78,10 @@ const AddElementPopover = ({
   );
 
   const buttons = elementTypes.map((elementType) => ({
-    content: <span className="btn__title">{elementType.title}</span>,
+    content: elementType.title,
     key: elementType.name,
     className: classNames('btn--icon-xl', 'element-editor-add-element__button'),
-    icon: elementType.icon.replace(/^(font-icon-)/g, ''),
+    icon: elementType.icon,
     onClick: getElementButtonClickHandler(elementType),
   }));
 
@@ -94,6 +95,7 @@ const AddElementPopover = ({
       placement={placement}
       target={target}
       toggle={handleToggle}
+      ButtonComponent={ElementOptionButton}
     />
   );
 };
