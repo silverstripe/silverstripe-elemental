@@ -1,8 +1,19 @@
 nl:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Pagina Bewerken'
+    MoveElement_MissingArea: 'Nieuwe bovenliggende area bestaat niet'
+    MoveElement_MissingParent: 'Nieuwe bovenliggende item bestaat niet'
+    MoveElement_NotAllowed: 'Niet toegestaan om naar dit blok te verplaatsen'
+    MoveElement_SameArea: 'Kan niet hierheen verplaatsen'
+  DNADesign\Elemental\Extensions\TopPageElementExtension:
+    has_one_TopPage: 'Bovenliggende pagina'
+  DNADesign\Elemental\Extensions\TopPageFluentElementExtension:
+    db_TopPageLocale: 'Taal bovenliggende pagina'
   DNADesign\Elemental\Forms\MoveFormFactory:
     ElementalAreaRelation: 'Elemental Gebied'
+    MoveBtn: Verplaats
+    ParentClass: 'Bovenliggende class'
+    ParentID: Boveliggend
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Weergegeven
     NOT_DISPLAYED: 'Niet weergegeven'
@@ -11,6 +22,7 @@ nl:
     TitleLabel: 'Titel (aanvinken om te tonen)'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Blok
+    CLASS_DESCRIPTION: Basisclass
     CUSTOM_STYLES: 'Selecteer een stijl...'
     ExtraCssClassesLabel: 'Aangepaste CSS klassen'
     MainTabLabel: Inhoud
@@ -21,9 +33,16 @@ nl:
     SINGULARNAME: blok
     STYLE: 'Stijl variatie'
     SettingsTabLabel: Instellingen
+    db_ShowTitle: 'Toon titel'
+    db_Sort: Sorteer
+    db_Style: Stijl
     db_Title: Titel
+    db_Version: Versie
+    has_one_Parent: Bovenliggend
+    has_one_TopPage: 'Bovenliggende pagina'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Inhoud
+    CLASS_DESCRIPTION: 'HTML tekstblok'
     ContentLabel: Inhoud
     PLURALNAME: 'inhoud blokken'
     PLURALS:
@@ -36,6 +55,10 @@ nl:
       one: 'Een Elemental Gebied'
       other: '{count} Elemental gebieden'
     SINGULARNAME: 'Elemental Gebied'
+    db_OwnerClassName: 'Eigenaar classe'
+    db_Version: Versie
+    has_many_Elements: Elementen
+    has_one_TopPage: 'Bovenliggende pagina'
   DNADesign\Elemental\Reports\ElementTypeReport:
     Title: 'Inhoud blokken typen'
     Total: Totaal

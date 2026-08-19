@@ -1,6 +1,10 @@
 it:
   DNADesign\Elemental\Controllers\ElementalAreaController:
     MENUTITLE: 'Modifica Pagina'
+    MoveElement_MissingArea: 'La nuova area elementi genitore non esiste'
+    MoveElement_MissingParent: 'Il nuovo record genitore non esiste'
+    MoveElement_NotAllowed: 'Spostamento a questo genitore non consentito'
+    MoveElement_SameArea: 'Non posso spostare qui'
   DNADesign\Elemental\Extensions\ElementalPageExtension:
     has_one_ElementalArea: 'Area elementi'
   DNADesign\Elemental\Extensions\TopPageElementExtension:
@@ -9,6 +13,8 @@ it:
     db_TopPageLocale: 'Lingua pagina iniziale'
   DNADesign\Elemental\Forms\MoveFormFactory:
     ElementalAreaRelation: 'Area Elementi'
+    MoveBtn: Sposta
+    ParentClass: 'Tipo genitore'
     ParentID: Genitore
   DNADesign\Elemental\Forms\TextCheckboxGroupField:
     DISPLAYED: Visualizzato
@@ -18,6 +24,7 @@ it:
     TitleLabel: 'Titolo (visualizzato se si seleziona la checkbox)'
   DNADesign\Elemental\Models\BaseElement:
     BlockType: Blocco
+    CLASS_DESCRIPTION: 'Classe base elemento'
     CUSTOM_STYLES: 'Seleziona uno stile..'
     ExtraCssClassesLabel: 'Classi CSS personalizzate'
     ExtraCssClassesPlaceholder: 'mia_classe altra_classe'
@@ -40,6 +47,7 @@ it:
     has_one_TopPage: 'Pagina iniziale'
   DNADesign\Elemental\Models\ElementContent:
     BlockType: Contenuto
+    CLASS_DESCRIPTION: 'Blocco testo HTML'
     ContentLabel: Contenuto
     PLURALNAME: 'blocchi dei contenuti'
     PLURALS:
