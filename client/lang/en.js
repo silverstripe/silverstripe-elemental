@@ -17,6 +17,7 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
     "ElementArchiveAction.DUPLICATE_PERMISSION_DENY": "Duplicate, insufficient permissions",
     "ElementEditForm.ERROR_NOTIFICATION": "Error displaying the edit form for this block",
     "ElementHeader.BROKEN": "This element is of obsolete type {type}.",
+    "ElementHeader.DRAG_HANDLE": "Reorder block",
     "ElementHeader.EXPAND": "Show editable fields",
     "ElementHeader.NOTITLE": "Untitled {type} block",
     "ElementHeader.STATE_DRAFT": "Item has not been published yet",
