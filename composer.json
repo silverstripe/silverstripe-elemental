@@ -27,7 +27,7 @@
         "symbiote/silverstripe-gridfieldextensions": "^5"
     },
     "require-dev": {
-        "silverstripe/documentation-lint": "^1",
+        "silverstripe/documentation-lint": "^2",
         "silverstripe/recipe-testing": "^4",
         "silverstripe/frameworktest": "^2",
         "silverstripe/standards": "^1",
