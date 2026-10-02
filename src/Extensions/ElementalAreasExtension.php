@@ -330,38 +330,44 @@ class ElementalAreasExtension extends Extension implements Resettable
             return;
         }
 
-        $this->owner->extend('onBeforeRequireDefaultElementalRecords');
+        // Force Draft stage - dev/build runs from CLI, which doesn't default to Draft, and
+        // ensureElementalAreasExist() silently no-ops outside of Draft stage.
+        Versioned::withVersionedMode(function () {
+            Versioned::set_stage(Versioned::DRAFT);
 
-        $ownerClass = get_class($this->owner);
-        $elementalAreas = $this->owner->getElementalRelations();
-        $schema = $this->owner->getSchema();
+            $this->owner->extend('onBeforeRequireDefaultElementalRecords');
 
-        // There is no inbuilt filter for null values
-        $where = [];
-        foreach ($elementalAreas as $areaName) {
-            $queryDetails = $schema->sqlColumnForField($ownerClass, $areaName . 'ID');
-            $where[] = $queryDetails . ' IS NULL OR ' . $queryDetails . ' = 0' ;
-        }
+            $ownerClass = get_class($this->owner);
+            $elementalAreas = $this->owner->getElementalRelations();
+            $schema = $this->owner->getSchema();
 
-        $records = $ownerClass::get()->where(implode(' OR ', $where));
-        if ($ignored_classes = Config::inst()->get(ElementalPageExtension::class, 'ignored_classes')) {
-            $records = $records->exclude('ClassName', $ignored_classes);
-        }
-
-        foreach ($records as $elementalObject) {
-            if ($elementalObject->hasMethod('includeElemental')) {
-                $res = $elementalObject->includeElemental();
-                if ($res === false) {
-                    continue;
-                }
+            // There is no inbuilt filter for null values
+            $where = [];
+            foreach ($elementalAreas as $areaName) {
+                $queryDetails = $schema->sqlColumnForField($ownerClass, $areaName . 'ID');
+                $where[] = $queryDetails . ' IS NULL OR ' . $queryDetails . ' = 0' ;
             }
 
-            /** @var ElementalAreasExtension $elementalObject */
-            $elementalObject->ensureElementalAreasExist($elementalAreas);
-            $elementalObject->write();
-        }
+            $records = $ownerClass::get()->where(implode(' OR ', $where));
+            if ($ignored_classes = Config::inst()->get(ElementalPageExtension::class, 'ignored_classes')) {
+                $records = $records->exclude('ClassName', $ignored_classes);
+            }
 
-        $this->owner->extend('onAfterRequireDefaultElementalRecords');
+            foreach ($records as $elementalObject) {
+                if ($elementalObject->hasMethod('includeElemental')) {
+                    $res = $elementalObject->includeElemental();
+                    if ($res === false) {
+                        continue;
+                    }
+                }
+
+                /** @var ElementalAreasExtension $elementalObject */
+                $elementalObject->ensureElementalAreasExist($elementalAreas);
+                $elementalObject->write();
+            }
+
+            $this->owner->extend('onAfterRequireDefaultElementalRecords');
+        });
     }
 
     /**
