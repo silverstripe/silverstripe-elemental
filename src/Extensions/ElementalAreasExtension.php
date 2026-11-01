@@ -296,7 +296,7 @@ class ElementalAreasExtension extends Extension implements Resettable
     public function ensureElementalAreasExist($elementalAreaRelations)
     {
         $owner = $this->getOwner();
-        if (!$this->allowAlteringElementalArea()) {
+        if (!$this->supportsElemental() || !$this->allowAlteringElementalArea()) {
             return $owner;
         }
         foreach ($elementalAreaRelations as $relation) {
@@ -317,6 +317,8 @@ class ElementalAreasExtension extends Extension implements Resettable
             }
             $owner->$relation = $area;
         }
+
+        return $owner;
     }
 
     /**
@@ -349,16 +351,29 @@ class ElementalAreasExtension extends Extension implements Resettable
         }
 
         foreach ($records as $elementalObject) {
-            if ($elementalObject->hasMethod('includeElemental')) {
-                $res = $elementalObject->includeElemental();
-                if ($res === false) {
-                    continue;
+            if (!$elementalObject->supportsElemental()) {
+                continue;
+            }
+
+            // Store a list of missing elemental area relations to later check if we need to write the record
+            $missingRelations = [];
+            foreach ($elementalAreas as $areaName) {
+                $field = "{$areaName}ID";
+                if (!$elementalObject->$field) {
+                    $missingRelations[] = $field;
                 }
             }
 
             /** @var ElementalAreasExtension $elementalObject */
             $elementalObject->ensureElementalAreasExist($elementalAreas);
-            $elementalObject->write();
+
+            // Only trigger write() if ensureElementalAreasExist created at least one new elemental area for the object
+            foreach ($missingRelations as $field) {
+                if ($elementalObject->$field) {
+                    $elementalObject->write();
+                    break;
+                }
+            }
         }
 
         $this->owner->extend('onAfterRequireDefaultElementalRecords');
