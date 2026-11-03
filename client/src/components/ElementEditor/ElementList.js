@@ -145,7 +145,11 @@ function ElementList({
 
   // Replaces componentDidUpdate for changed elements
   useEffect(() => {
-    // Scenario: elements props just changed after an xhr response updated it
+    // Skip during a batch save: an in-flight fetchElements() response would
+    // reset validBlockIDs and entwineResolve() would never fire.
+    if (saveAllElements) {
+      return;
+    }
     resetState(hasUnsavedChangesBlockIDs, false);
   }, [elements]);
 
@@ -230,29 +234,31 @@ function ElementList({
     }
   };
 
+  // Functional setState: batch-save responses fire in parallel and would
+  // otherwise overwrite each other via stale closures.
   const handleChangeHasUnsavedChanges = (elementID, hasUnsavedChanges) => {
-    setHasUnsavedChangesBlockIDs({
-      ...hasUnsavedChangesBlockIDs,
+    setHasUnsavedChangesBlockIDs(prev => ({
+      ...prev,
       [elementID]: hasUnsavedChanges,
-    });
+    }));
   };
 
   const handleBeforeSubmitForm = (elementID) => {
-    setValidBlockIDs({
-      ...validBlockIDs,
+    setValidBlockIDs(prev => ({
+      ...prev,
       [elementID]: null,
-    });
+    }));
   };
 
   const handleAfterSubmitResponse = (elementID, valid) => {
-    setHasUnsavedChangesBlockIDs({
-      ...hasUnsavedChangesBlockIDs,
+    setHasUnsavedChangesBlockIDs(prev => ({
+      ...prev,
       [elementID]: !valid,
-    });
-    setValidBlockIDs({
-      ...validBlockIDs,
+    }));
+    setValidBlockIDs(prev => ({
+      ...prev,
       [elementID]: valid,
-    });
+    }));
   };
 
   /**
