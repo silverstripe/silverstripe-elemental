@@ -3,6 +3,7 @@
 namespace DNADesign\Elemental\Tests\Extensions;
 
 use SilverStripe\Dev\SapphireTest;
+use SilverStripe\CMS\Model\RedirectorPage;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\LiteralField;
@@ -158,6 +159,30 @@ class ElementalAreasExtensionTest extends SapphireTest
         $this->assertSame(ElementalArea::get()->max('ID'), $object->ElementalAreaID);
         // assert that we didn't accidentally publish the modified object
         $this->assertTrue($object->isModifiedOnDraft());
+    }
+
+    public function testRequireDefaultRecordsSkipsRedirectorPage(): void
+    {
+        // Elemental areas may only be altered on Draft.
+        Versioned::set_stage(Versioned::DRAFT);
+
+        $redirector = RedirectorPage::create([
+            'Title' => 'Redirector',
+            'URLSegment' => 'redirector',
+        ]);
+        $redirector->write();
+
+        // RedirectorPage does not support Elemental, including during normal writes
+        $this->assertSame(0, (int) $redirector->ElementalAreaID);
+        $areaCount = ElementalArea::get()->count();
+
+        // Both SiteTree::get() and Page::get() return RedirectorPage rows,
+        // and RedirectorPage should not have an ElementalArea created
+        SiteTree::singleton()->requireDefaultRecords();
+
+        $redirector = RedirectorPage::get()->byID($redirector->ID);
+        $this->assertSame(0, (int) $redirector->ElementalAreaID);
+        $this->assertSame($areaCount, ElementalArea::get()->count());
     }
 
     public static function provideSingleElementalAreaCreated(): array
