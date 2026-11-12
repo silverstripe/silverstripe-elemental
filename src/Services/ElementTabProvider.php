@@ -9,6 +9,8 @@ use SilverStripe\Core\Flushable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
+use SilverStripe\View\Requirements;
+use SilverStripe\View\Requirements_Backend;
 
 /**
  * Provides top-level CMS field tab names for any element that extends BaseElement
@@ -112,9 +114,16 @@ class ElementTabProvider implements Flushable
         /** @var BaseElement $element */
         $element = Injector::inst()->create($elementClass);
 
-        // Generate CMS fields and grab the "Root" tabset.
-        /** @var TabSet $tabset */
-        $tabset = $element->getCMSFields()->fieldByName('Root');
+        // Generate CMS fields and grab the "Root" tabset. Only the tab names are wanted, so any requirements the
+        // fields add go to a throwaway backend rather than the current response.
+        $backend = Requirements::backend();
+        Requirements::set_backend(Requirements_Backend::create());
+        try {
+            /** @var TabSet $tabset */
+            $tabset = $element->getCMSFields()->fieldByName('Root');
+        } finally {
+            Requirements::set_backend($backend);
+        }
 
         // Get and map the tab names/titles into an associative array
         $tabs = [];
