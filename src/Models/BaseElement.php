@@ -529,6 +529,19 @@ JS
         return $this;
     }
 
+    /**
+     * Set the page this element belongs to, so getPage() does not look it up again
+     *
+     * @return $this
+     */
+    public function setPageCached(DataObject $page)
+    {
+        $this->cacheData['page'] = $page;
+        $this->cacheData['parent_id'] = $this->ParentID;
+
+        return $this;
+    }
+
     public function Top(): ?Controller
     {
         return Controller::curr();

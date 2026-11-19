@@ -9,13 +9,16 @@ use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\TestOnly;
 use SilverStripe\Model\List\ArrayList;
+use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\DataObjectSchema;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\HasManyList;
 use SilverStripe\ORM\UnsavedRelationList;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\Model\ModelData;
+use SilverStripe\Model\List\SS_List;
 
 /**
  * Class ElementalArea
@@ -57,6 +60,15 @@ class ElementalArea extends DataObject
     ];
 
     private static $table_name = 'ElementalArea';
+
+    /**
+     * Whether ElementControllers() reads the area's elements with all of their own columns in one
+     * query, and hands each element its page, rather than letting each element lazy-load its own
+     * columns and look up its area and page again.
+     *
+     * The list passed to updateElementControllers is the same either way.
+     */
+    private static bool $preload_elements_for_render = true;
 
     /**
      * Cache various data to improve CMS load time
@@ -160,7 +172,7 @@ class ElementalArea extends DataObject
         }
 
         $controllers = ArrayList::create();
-        $items = $this->Elements()->filterByCallback(function (BaseElement $item) {
+        $items = $this->getElementsForRender()->filterByCallback(function (BaseElement $item) {
             return $item->canView();
         });
 
@@ -174,6 +186,86 @@ class ElementalArea extends DataObject
         $this->extend('updateElementControllers', $controllers);
 
         return $controllers;
+    }
+
+    /**
+     * The elements to render, each loaded with all of its own columns and given its page
+     *
+     * Reading the has_many list through BaseElement selects only the base table, so each element
+     * lazy-loads its own columns (one query per element per subclass table) and then looks up its
+     * area and page again. Here the classes present are read first, then every element with the
+     * columns of those classes in one query. Each row is trimmed back to its own class's columns.
+     *
+     * Falls back to the relation list when preloading is disabled, the elements are already
+     * cached, or a stored class no longer exists.
+     */
+    protected function getElementsForRender(): SS_List
+    {
+        $elements = $this->Elements();
+
+        if (!$elements instanceof DataList || !static::config()->get('preload_elements_for_render')) {
+            return $elements;
+        }
+
+        $loaded = $this->loadElementsWithOwnColumns($elements);
+
+        if ($loaded === null) {
+            return $elements;
+        }
+
+        $page = $this->getOwnerPage();
+        $areaRelationName = null;
+
+        foreach ($loaded as $element) {
+            if (!$page) {
+                break;
+            }
+            $element->setPageCached($page);
+            // Every element in the area shares the relation name, so it is worked out once
+            $areaRelationName ??= $element->getAreaRelationName();
+            $element->setAreaRelationNameCache($areaRelationName);
+        }
+
+        return ArrayList::create($loaded);
+    }
+
+    /**
+     * @param DataList<BaseElement> $list
+     * @return BaseElement[]|null The elements in list order, or null if a stored class does not exist
+     */
+    private function loadElementsWithOwnColumns(DataList $list): ?array
+    {
+        $schema = DataObject::getSchema();
+        $columnsByClass = [];
+        $columns = [];
+
+        foreach ($list->columnUnique('ClassName') as $class) {
+            if (!ClassInfo::exists($class) || !is_a($class, BaseElement::class, true)) {
+                return null;
+            }
+            $columnsByClass[$class] = array_fill_keys(
+                array_keys($schema->fieldSpecs($class, DataObjectSchema::DB_ONLY)),
+                true
+            );
+            $columns += $columnsByClass[$class];
+        }
+
+        if (!$columns) {
+            return [];
+        }
+
+        $elements = [];
+
+        foreach ($list->setQueriedColumns(array_keys($columns))->dataQuery()->execute() as $row) {
+            $class = $row['RecordClassName'] ?? $row['ClassName'] ?? null;
+            if (isset($columnsByClass[$class])) {
+                // Keep only the element's own columns, so it carries no other class's (null) fields
+                $row = array_intersect_key($row, $columnsByClass[$class] + ['RecordClassName' => true]);
+            }
+            $elements[] = $list->createDataObject($row);
+        }
+
+        return $elements;
     }
 
     /**

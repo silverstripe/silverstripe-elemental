@@ -2,10 +2,13 @@
 
 namespace DNADesign\Elemental\Tests;
 
+use DNADesign\Elemental\Controllers\ElementController;
 use DNADesign\Elemental\Extensions\ElementalPageExtension;
+use DNADesign\Elemental\Models\BaseElement;
 use DNADesign\Elemental\Models\ElementalArea;
 use DNADesign\Elemental\Models\ElementContent;
 use DNADesign\Elemental\Tests\Src\TestElement;
+use DNADesign\Elemental\Tests\Src\TestElementDataObject;
 use DNADesign\Elemental\Tests\Src\TestPage;
 use Page;
 use SilverStripe\Dev\SapphireTest;
@@ -24,6 +27,8 @@ class ElementalAreaTest extends SapphireTest
 
     protected static $extra_dataobjects = [
         TestElement::class,
+        // Shares the TestValue column name with TestElement, so its table is joined when that column is read
+        TestElementDataObject::class,
         TestPage::class,
     ];
 
@@ -33,6 +38,54 @@ class ElementalAreaTest extends SapphireTest
         $controllers = $area->ElementControllers();
 
         $this->assertEquals(2, $controllers->count(), 'Should be a controller per element');
+    }
+
+    public function testElementControllersLoadEachElementWithItsOwnColumns()
+    {
+        $this->logInWithPermission('ADMIN');
+        $area = $this->objFromFixture(ElementalArea::class, 'area2');
+        $page = $this->objFromFixture(TestPage::class, 'page2');
+
+        $elements = array_map(
+            fn (ElementController $controller) => $controller->getElement(),
+            $area->ElementControllers()->toArray()
+        );
+
+        $this->assertSame(
+            $area->Elements()->column('ID'),
+            array_map(fn (BaseElement $element) => $element->ID, $elements),
+            'Elements should keep their sort order'
+        );
+
+        foreach ($elements as $element) {
+            // The element's own columns are already in its record, so none is lazy-loaded
+            $fields = $element->getQueriedDatabaseFields();
+            if ($element instanceof TestElement) {
+                $this->assertSame('Hello Test 3', $fields['TestValue'] ?? null);
+                $this->assertArrayNotHasKey('HTML', $fields, 'Another class\'s columns should be trimmed');
+            } else {
+                $this->assertInstanceOf(ElementContent::class, $element);
+                $this->assertSame('Some content', $fields['HTML'] ?? null);
+                $this->assertArrayNotHasKey('TestValue', $fields, 'Another class\'s columns should be trimmed');
+            }
+            $this->assertSame($page->ID, $element->getPage()->ID);
+            $this->assertSame('ElementalArea', $element->getAreaRelationName());
+        }
+    }
+
+    public function testElementControllersPreloadCanBeDisabled()
+    {
+        ElementalArea::config()->set('preload_elements_for_render', false);
+        $this->logInWithPermission('ADMIN');
+        $area = $this->objFromFixture(ElementalArea::class, 'area2');
+
+        foreach ($area->ElementControllers() as $controller) {
+            $element = $controller->getElement();
+            if ($element instanceof TestElement) {
+                $this->assertArrayNotHasKey('TestValue', $element->getQueriedDatabaseFields());
+                $this->assertSame('Hello Test 3', $element->TestValue);
+            }
+        }
     }
 
     public function testCanViewTestElementIsFalseWhenLoggedInAsCmsEditor()
