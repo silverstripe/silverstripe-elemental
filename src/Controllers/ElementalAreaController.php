@@ -175,8 +175,9 @@ class ElementalAreaController extends FormSchemaController
         if (!$element) {
             $this->jsonError(400);
         }
-        if (!$element->canPublish()) {
-            $this->jsonError(403);
+        $validation = $element->validatePublishRecursive();
+        if (!$validation->isValid()) {
+            $this->jsonError(403, implode(' ', array_column($validation->getMessages(), 'message')));
         }
         $element->publishRecursive();
         return $this->jsonSuccess(204);
